@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,6 +32,12 @@ public class MentorProfileRestController {
 		MentorProfileDTO mtp = mtpService.select_by_email_mentor_profile(mentor_email);
 		System.out.println(mtp);
 		return null;
+	}
+	
+	@PostMapping
+	public void insert_mentor_profile(@RequestBody MentorProfileDTO mtpDto){
+		System.out.println(mtpDto);
+		mtpService.insert_mentor_profile(mtpDto);
 	}
 	
 }

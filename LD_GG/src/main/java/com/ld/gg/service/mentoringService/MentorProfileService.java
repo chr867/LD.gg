@@ -23,6 +23,11 @@ public class MentorProfileService {
 		MentorProfileDTO mtp = mtpdao.select_by_email_mentor_profile(mentor_email);
 		return mtp;
 	}
+
+	public void insert_mentor_profile(MentorProfileDTO mtpDto) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 }
