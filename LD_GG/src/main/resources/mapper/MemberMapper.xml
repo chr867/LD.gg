@@ -19,7 +19,11 @@
 		VALUES(#{email},#{password},#{phone_num}
 		,#{lol_account},#{user_type},default)
 	</insert>
-
+	
+	<select id="getUserEmail" parameterType="member"
+		resultType="String">
+		SELECT email FROM MEMBER WHERE email=#{email}
+	</select>
 
 
 </mapper>

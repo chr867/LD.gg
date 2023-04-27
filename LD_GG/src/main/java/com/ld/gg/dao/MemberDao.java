@@ -9,5 +9,7 @@ public interface MemberDao {
 	String getLoginInfo(String email);
 
 	MemberDto getMemberInfo(String email);
+
+	MemberDto getUserEmail(String email);
 	
 }

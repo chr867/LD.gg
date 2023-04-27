@@ -17,6 +17,10 @@
 <script src="https://code.jquery.com/jquery-3.6.3.js"
 	integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
 	crossorigin="anonymous"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+	src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.0/jquery.validate.min.js"></script>
 </head>
 <body style="text-align: center; justify-content: center;">
 	<h1>join.jsp</h1>
@@ -32,6 +36,8 @@
 			<tr>
 				<td width="100">EMAIL</td>
 				<td><input class="input" type="email" id="email" name="email">
+					<input type="button" id="checkEmail" value="중복검사"> <span
+					id="result"></span>
 			</tr>
 			<tr>
 				<td width="100">PW</td>
@@ -50,10 +56,9 @@
 			</tr>
 			<tr>
 				<td width="100">TYPE</td>
-				<td>
-					<input class="radio_box" type="radio" value= 1 name="user_type">일반회원
-					<input class="radio_box" type="radio" value= 2 name="user_type">멘토회원
-				</td>
+				<td><input class="radio_box" type="radio" value=1
+					name="user_type">일반회원 <input class="radio_box" type="radio"
+					value=2 name="user_type">멘토회원</td>
 			</tr>
 			<tr>
 				<td colspan="2" class="subject"><input type="submit"
@@ -76,5 +81,26 @@
 		}
 		return true;//성공시 서버로 전송
 	}//end function
+	
+	$('#checkEmail').on('click',function(){
+		if($('#email').val() !=''){
+			$.ajax({
+				method: 'get',
+				url: '/check_email',
+				data: {email:$('#email').val()},
+				//dataType: 'html', //json,html(text)
+			}).done(res=>{
+				if(res == true){
+					$('#result').html("사용가능").css('color','blue');
+					console.log('res : '+res)
+				}else{
+					$('#result').html("사용불가").css('color','red');
+				}
+				
+			}).fail(err=>{
+				console.log(err);
+			})
+		}
+	})
 </script>
 </html>
