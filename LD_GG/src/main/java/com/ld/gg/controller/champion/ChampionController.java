@@ -1,4 +1,4 @@
-package com.ld.gg.controller;
+package com.ld.gg.controller.champion;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ld.gg.dto.champ.Champ_analytics;
 import com.ld.gg.service.Champion_Service;
 
 import lombok.extern.slf4j.Slf4j;
@@ -26,16 +27,8 @@ public class ChampionController {
 			@RequestParam(defaultValue = "platinum")String tier) {
 
 		ModelAndView mv = new ModelAndView();
-		ObjectMapper mapper = new ObjectMapper();
-		String json = null;
-		
-		try {
-			json = mapper.writeValueAsString(cs.champ_rank(lane, tier));
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
-		
-		mv.addObject("champ_rank", json);
+		Champ_analytics champ_rank = cs.champ_rank(lane, tier);
+		mv.addObject("champ_rank", champ_rank);
 		mv.setViewName("champion/championRank");
 		return mv;
 	}
