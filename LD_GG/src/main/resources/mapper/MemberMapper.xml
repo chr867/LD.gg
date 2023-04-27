@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ld.gg.dao.MemberDao">
+	
+	<select id="getLoginInfo" parameterType="member"
+		resultType="String">
+		SELECT M_PW FROM MEMBER WHERE email=#{email}
+	</select>
+
+	<insert id="join" parameterType="member">
+		INSERT ignore INTO MEMBER
+		VALUES(#{email},#{password},#{phone_num}
+		,#{lol_account},#{user_type},default)
+	</insert>
+
+</mapper>
