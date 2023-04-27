@@ -9,7 +9,6 @@ import lombok.experimental.Accessors;
 @Accessors(chain=true)
 //@Alias("champ")
 public class Champ_default {
-	
 	private int champion_id;
 	private String champion_en_name;
 	private String champion_kr_name;

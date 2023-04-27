@@ -7,6 +7,11 @@
 <title>Insert title here</title>
 </head>
 <body>
-championrank.jsp
+<h1>championRank.jsp</h1>
+
 </body>
+<script type="text/javascript">
+	let champ_rank = ${champ_rank}
+	console.log(champ_rank)
+</script>
 </html>

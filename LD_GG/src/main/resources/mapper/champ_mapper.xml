@@ -5,7 +5,7 @@
 
 <mapper namespace="com.ld.gg.dao.champ.Champ_dao">
 	<select id="champ_rank" resultType="champ_analytics">
-		select * from champ_analytics
+		select * from champion_analytics
 		where teamPosition = #{lane} and summonerTier = #{tier}
 		order by win desc;
 	</select>
