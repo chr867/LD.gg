@@ -6,9 +6,6 @@
 <configuration>
 	<!-- 알리아스 양식 -->
     <typeAliases>
-		<!-- <typeAlias type="com.board.icia.dto.MemberDto" alias="member"/> -->
-		<!-- <typeAlias type="com.board.icia.dto.BoardDto" alias="board"/> -->
-		<package name="com.test.project.dto" />
     	<package name="com.ld.gg.dto" />
     </typeAliases>
 </configuration>
