@@ -7,5 +7,7 @@ public interface MemberDao {
 	boolean join(MemberDto md);
 
 	String getLoginInfo(String email);
+
+	MemberDto getMemberInfo(String email);
 	
 }
