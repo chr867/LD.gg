@@ -1,12 +1,11 @@
 package com.ld.gg.dto.mentoringdto;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class MentorProfileDTO {
@@ -17,3 +16,5 @@ public class MentorProfileDTO {
     private String contact_time;
     
 }
+
+

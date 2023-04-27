@@ -18,6 +18,11 @@ public class MentorProfileService {
 		List<MentorProfileDTO> mtpdto =mtpdao.select_all_mentor_profiles();
 		return mtpdto;
 	}
+
+	public MentorProfileDTO select_by_email_mentor_profile(String mentor_email) {
+		MentorProfileDTO mtp = mtpdao.select_by_email_mentor_profile(mentor_email);
+		return mtp;
+	}
 	
 	
 }
