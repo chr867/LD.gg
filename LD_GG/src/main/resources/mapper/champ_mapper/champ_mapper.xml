@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ld.gg.dao.champ.Champ_dao">
+	<select id="champ_rank" resultType="champ_analytics">
+		select * from champ_analytics
+		where teamPosition = #{lane} and summonerTier = #{tier}
+		order by win desc;
+	</select>
+</mapper>
