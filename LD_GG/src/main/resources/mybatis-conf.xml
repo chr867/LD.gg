@@ -5,9 +5,7 @@
   
 <configuration>
 	<!-- 알리아스 양식 -->
-    <!--
     <typeAliases>
-        <typeAlias type="com.loldata.www.dto.DTO 이름" alias="알리아스 이름" />
+    		<package name="com.ld.gg.dto" />
     </typeAliases>
-    -->
 </configuration>

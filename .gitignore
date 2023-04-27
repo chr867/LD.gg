@@ -3,7 +3,7 @@
 .classpath
 .project
 Servers/
-
+jdbc.properties
 ### Eclipse ###
 .metadata
 bin/

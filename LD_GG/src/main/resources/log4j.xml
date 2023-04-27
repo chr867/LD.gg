@@ -11,7 +11,7 @@
 	</appender>
 	
 	<!-- Application Loggers -->
-	<logger name="com.loldata.www">
+	<logger name="com.ld.gg">
 		<level value="info" />
 	</logger>
 	
