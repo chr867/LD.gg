@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h1>home.jsp</h1>
+	<h1>홈이에용 메롱.jsp</h1>
 </body>
 </html>
