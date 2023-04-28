@@ -36,12 +36,14 @@ public class MemberController {
 	
 	@GetMapping("/check_email")
 	@ResponseBody
-	public boolean check_email(@RequestParam String email) {
-		MemberDto findResult = ms.findUserEmail(email);
+	public boolean check_email(String email) {
+		System.out.println(email);
+		String findResult = ms.findUserEmail(email);
+		log.info("{}",findResult);
 		if(findResult==null){
-			return false;
-		}else {
 			return true;
+		}else {
+			return false;
 		}
 	}
 
@@ -75,12 +77,10 @@ public class MemberController {
 	public String logout(HttpSession session) {
 		if (session.getAttribute("email") != null) {
 			session.invalidate(); // 세션 무효화
-			return "redirect:/"; // home.jsp
+			return "redirect:/"; 
 		} else {
-			log.info("비로그인 중..."); // 세션타임아웃(30분,초기화)후 redirect 에러남
-			return "forward:/"; // forward가 처리되지 않지만 에러는 안남
-										// get-->forward:/url-->get
-										// post-->forward:/url-->post
+			log.info("비로그인 중");
+			return "forward:/"; 
 		}
 	}
 	

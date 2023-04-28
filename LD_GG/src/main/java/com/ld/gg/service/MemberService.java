@@ -38,7 +38,8 @@ public class MemberService {
 		}
 	}
 
-	public MemberDto findUserEmail(String email) {
+	public String findUserEmail(String email) {
+
 		return mDao.getUserEmail(email);
 	}
 

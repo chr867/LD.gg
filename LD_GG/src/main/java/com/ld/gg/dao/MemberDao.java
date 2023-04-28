@@ -10,6 +10,6 @@ public interface MemberDao {
 
 	MemberDto getMemberInfo(String email);
 
-	MemberDto getUserEmail(String email);
+	String getUserEmail(String email);
 	
 }
