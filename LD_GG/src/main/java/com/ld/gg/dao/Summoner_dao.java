@@ -2,6 +2,8 @@ package com.ld.gg.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.ld.gg.dto.SummonerDto;
 
 public interface Summoner_dao {
@@ -13,6 +15,8 @@ public interface Summoner_dao {
 	List<SummonerDto> get_summoner_flex();
 
 	List<SummonerDto> get_summoner_level();
+
+	SummonerDto get_summoner_info(@Param("summoner_name") String summoner_name);
 	
 
 }

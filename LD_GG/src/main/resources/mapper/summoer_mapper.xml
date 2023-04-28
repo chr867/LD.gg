@@ -89,5 +89,11 @@
 		ORDER BY
 		si.s_level DESC;
 	</select>
+	
+	<select id="get_summoner_info" resultType = "summoner">
+		SELECT * FROM
+		SUMMONER_INFO
+		WHERE summoner_name = ${summoner_name}
+	</select>
 
 </mapper>
