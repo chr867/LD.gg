@@ -16,9 +16,19 @@ public class SummonerService {
 		return sd;
 	}
 
-	public SummonerDto get_summoner() {
-		SummonerDto summoner = SD.get_summoer();
-		return summoner;
+	public List<SummonerDto> get_summoner_solo() {
+		List<SummonerDto> sd = SD.get_summoer_solo();
+		return sd;
+	}
+
+	public List<SummonerDto> get_summoner_flex() {
+		List<SummonerDto> sd = SD.get_summoner_flex();
+		return sd;
+	}
+
+	public List<SummonerDto> get_summoner_level() {
+		List<SummonerDto> sd = SD.get_summoner_level();
+		return sd;
 	}
 	
 

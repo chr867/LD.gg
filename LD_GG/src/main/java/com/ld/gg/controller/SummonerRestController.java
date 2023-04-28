@@ -20,10 +20,22 @@ public class SummonerRestController {
 		return sd;
 	}
 	
-	@GetMapping("/search")
-	public SummonerDto search_summoner() {
-		SummonerDto summoner = ss.get_summoner();
-		return summoner;
+	@GetMapping("/solo")
+	public List<SummonerDto> summoner_solo_rank(){
+		List<SummonerDto> sd = ss.get_summoner_solo();
+		return sd;
 	}
-
+	
+	@GetMapping("/flex")
+	public List<SummonerDto> summoner_flex_rank(){
+		List<SummonerDto> sd = ss.get_summoner_flex();
+		return sd;
+	}
+	
+	@GetMapping("/level")
+	public List<SummonerDto> summoner_level(){
+		List<SummonerDto> sd = ss.get_summoner_level();
+		return sd;
+	}
+	
 }

@@ -21,4 +21,5 @@ public class SummonerDto {
 	private String most_champ_id2;
 	private String most_chamnp_id3;
 	private String tier;
+	private String game_mode;
 }

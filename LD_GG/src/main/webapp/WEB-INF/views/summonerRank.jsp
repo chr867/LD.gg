@@ -1,9 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
+<meta charset="UTF-8">
 <title>Insert title here</title>
 
 <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
@@ -13,58 +13,147 @@
 </head>
 <body>
 
-	<!-- ºÎ¸ğ div°¡ ÀüÃ¼ÀûÀ¸·Î °¨½Î¾È°í, ±× ¾È¿¡¼­ »ó´ÜºÎ¿¡ °Ë»öÃ¢, ±× ¹ØÀ¸·Î ·©Å· Á¤º¸¸¦ Å×ÀÌºí·Î Ç¥Çö -->
-	
-	<div class = "div" id = "rank_tool">	<!-- ¼ÒÈ¯»ç ·©Å· Á¤º¸ ÀüÃ¼ Ã¢ -->
-		
-		<div class = "div" id = "summoner_search">
-			<form action="/summoner/search" method = "GET">
-				<input type = "text" id = "search_summoner">
-			</form>
-			
-		</div>	<!-- ¼ÒÈ¯»ç °Ë»öÃ¢ -->
-		
-		<table id = "summnoner_rank_table">
+	<!-- ë¶€ëª¨ divê°€ ì „ì²´ì ìœ¼ë¡œ ê°ì‹¸ì•ˆê³ , ê·¸ ë°‘ìœ¼ë¡œ ë­í‚¹ ì •ë³´ë¥¼ í…Œì´ë¸”ë¡œ í‘œí˜„ -->
+
+	<div id="rank_tool">
+		<!-- ì†Œí™˜ì‚¬ ë­í‚¹ ì •ë³´ ì „ì²´ ì°½ -->
+
+		<div>
+			<!-- ì •ë ¬ í•„í„° -->
+			<p id="solo_rank">ì†”ë¡œë­í¬</p>
+			<p id="flex_rank">ììœ ë­í¬</p>
+			<p id="level">ë ˆë²¨</p>
+		</div>
+
+		<table id="summnoner_rank_table">
 			<tr>
-				<th>¼øÀ§</th>
-				<th>¼ÒÈ¯»ç</th>
-				<th>Æ¼¾î</th>
+				<th>ìˆœìœ„</th>
+				<th>ì†Œí™˜ì‚¬</th>
+				<th>í‹°ì–´</th>
 				<th>LP</th>
-				<th>·¹º§</th>
-				<th>¸ğ½ºÆ® Ã¨ÇÇ¾ğ1</th>
-				<th>¸ğ½ºÆ® Ã¨ÇÇ¾ğ2</th>
-				<th>¸ğ½ºÆ® Ã¨ÇÇ¾ğ3</th>
-				<th>½Â·ü</th>
+				<th>ë ˆë²¨</th>
+				<th>ì£¼ í¬ì§€ì…˜</th>
+				<th>ëª¨ìŠ¤íŠ¸ ì±”í”¼ì–¸1</th>
+				<th>ëª¨ìŠ¤íŠ¸ ì±”í”¼ì–¸2</th>
+				<th>ëª¨ìŠ¤íŠ¸ ì±”í”¼ì–¸3</th>
+				<th>ìŠ¹ë¥ </th>
 			</tr>
 		</table>
-		
+
 	</div>
-	
+
 	<script type="text/javascript">
 		$.ajax({
 			method : 'get',
 			url : '/ranking'
 		}).done(res=>{
 			let i = 1;
-			let slist = '<tbody>';
+			let sList = '<tbody>'
 			for(summoner of res){
 				sList += '<tr id = "'summoer.summoner_name'" onclick = "detail(this)">'
 				sList += '<td id = "idx">'i'</td>'
-				sList += '<td id = "icon">'summoner.profile_icon_id'</td>'
+				sList += '<td id = "icon"><img src = "https://ddragon.leagueoflegends.com/cdn/13.8.1/img/profileicon/'+summoner.profile_icon_id'.png"></td>'
 				sList += '<td id = "name">'summoner.summoner_name'</td>'
 				sList += '<td id = "tier">'summoer.tier'</td>'
 				sList += '<td id = "lp">'summoner.lp'</td>'
-				sList += '<td id = "level">'summoer.s_level'</td>'
+				sList += '<td id = "s_level">'summoer.s_level'</td>'
+				sList += '<td id = lane><img src = "https://ditoday.com/wp-content/uploads/2022/02/ps_'summoner.main_lane'.png"></td>'
 				sList += '<td><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+summoner.most_champ_id1+'.png" alt="#"></td>'
 				sList += '<td><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+summoner.most_champ_id2+'.png" alt="#"></td>'
 				sList += '<td><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+summoner.most_champ_id3+'.png" alt="#"></td>'
 				sList += '<td id = winrate>'summoner.winrate'</td>'
+			sList += '</tbody>'
+			$('#summoner_rank_table').html(sList)	//ì†Œí™˜ì‚¬ ë­í‚¹ í…Œì´ë¸” ê¸°ë³¸
 			}
 		}).fail(err=>{
 			console.log(err)
 		})
-	
+		
+		$('#solo_rank').click(function() {
+			$.ajax({
+				method : 'get',
+				url : '/solo',
+			}).done(res=>{
+				let i = 1
+				let sList = '<tbody>'
+				for(game of res){
+					sList += '<tr id = "'summoer.summoner_name'" onclick = "detail(this)">'
+					sList += '<td id = "idx">'i'</td>'
+					sList += '<td id = "icon"><img src = "https://ddragon.leagueoflegends.com/cdn/13.8.1/img/profileicon/'+summoner.profile_icon_id'.png"></td>'
+					sList += '<td id = "name">'summoner.summoner_name'</td>'
+					sList += '<td id = "tier">'summoer.tier'</td>'
+					sList += '<td id = "lp">'summoner.lp'</td>'
+					sList += '<td id = "s_level">'summoer.s_level'</td>'
+					sList += '<td id = lane><img src = "https://ditoday.com/wp-content/uploads/2022/02/ps_'summoner.main_lane'.png"></td>'
+					sList += '<td><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+summoner.most_champ_id1+'.png" alt="#"></td>'
+					sList += '<td><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+summoner.most_champ_id2+'.png" alt="#"></td>'
+					sList += '<td><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+summoner.most_champ_id3+'.png" alt="#"></td>'
+					sList += '<td id = winrate>'summoner.winrate'</td>'
+				sList += '</tbody>'
+				$('#summoner_rank_table').html(sList)
+				}
+			}).fail(err=>{
+				console.log(err)
+			})
+		})
+		
+		$('#flex_rank').click(function() {
+			$.ajax({
+				method : 'get',
+				url : '/flex',
+			}).done(res=>{
+				let i = 1
+				let sList = '<tbody>'
+				for(game of res){
+					sList += '<tr id = "'summoer.summoner_name'" onclick = "detail(this)">'
+					sList += '<td id = "idx">'i'</td>'
+					sList += '<td id = "icon"><img src = "https://ddragon.leagueoflegends.com/cdn/13.8.1/img/profileicon/'+summoner.profile_icon_id'.png"></td>'
+					sList += '<td id = "name">'summoner.summoner_name'</td>'
+					sList += '<td id = "tier">'summoer.tier'</td>'
+					sList += '<td id = "lp">'summoner.lp'</td>'
+					sList += '<td id = "s_level">'summoer.s_level'</td>'
+					sList += '<td id = lane><img src = "https://ditoday.com/wp-content/uploads/2022/02/ps_'summoner.main_lane'.png"></td>'
+					sList += '<td><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+summoner.most_champ_id1+'.png" alt="#"></td>'
+					sList += '<td><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+summoner.most_champ_id2+'.png" alt="#"></td>'
+					sList += '<td><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+summoner.most_champ_id3+'.png" alt="#"></td>'
+					sList += '<td id = winrate>'summoner.winrate'</td>'
+				sList += '</tbody>'
+				$('#summoner_rank_table').html(sList)
+				}
+			}).fail(err=>{
+				console.log(err)
+			})
+		})
+		
+		$('#level').click(function() {
+			$.ajax({
+				method : 'get',
+				url : '/level',
+			}).done(res=>{
+				let i = 1
+				let sList = '<tbody>'
+				for(game of res){
+					sList += '<tr id = "'summoer.summoner_name'" onclick = "detail(this)">'
+					sList += '<td id = "idx">'i'</td>'
+					sList += '<td id = "icon"><img src = "https://ddragon.leagueoflegends.com/cdn/13.8.1/img/profileicon/'+summoner.profile_icon_id'.png"></td>'
+					sList += '<td id = "name">'summoner.summoner_name'</td>'
+					sList += '<td id = "tier">'summoer.tier'</td>'
+					sList += '<td id = "lp">'summoner.lp'</td>'
+					sList += '<td id = "s_level">'summoer.s_level'</td>'
+					sList += '<td id = lane><img src = "https://ditoday.com/wp-content/uploads/2022/02/ps_'summoner.main_lane'.png"></td>'
+					sList += '<td><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+summoner.most_champ_id1+'.png" alt="#"></td>'
+					sList += '<td><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+summoner.most_champ_id2+'.png" alt="#"></td>'
+					sList += '<td><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+summoner.most_champ_id3+'.png" alt="#"></td>'
+					sList += '<td id = winrate>'summoner.winrate'</td>'
+				sList += '</tbody>'
+				$('#summoner_rank_table').html(sList)
+				}
+			}).fail(err=>{
+				console.log(err)
+			})
+		})
+		
 	</script>
-	
+
 </body>
 </html>
