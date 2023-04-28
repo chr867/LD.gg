@@ -8,7 +8,11 @@ public interface Summoner_dao {
 
 	List<SummonerDto> get_summoer_rank();
 
-	SummonerDto get_summoer();
+	List<SummonerDto> get_summoer_solo();
+
+	List<SummonerDto> get_summoner_flex();
+
+	List<SummonerDto> get_summoner_level();
 	
 
 }
