@@ -11,7 +11,8 @@
 	</select>
 
 	<select id="getMemberInfo" resultType="member">
-		SELECT * FROM MEMBER WHERE email=#{email}
+		SELECT * FROM MEMBER WHERE
+		email=#{email}
 	</select>
 
 	<insert id="join" parameterType="member">
@@ -19,16 +20,34 @@
 		VALUES(#{email},#{password},#{phone_num}
 		,#{lol_account},#{user_type},default)
 	</insert>
-	
+
 	<select id="getMemberEmail" parameterType="member"
 		resultType="String">
 		SELECT email FROM MEMBER WHERE email=#{email}
 	</select>
-	
+
 	<select id="getMemberLolAccount" parameterType="member"
 		resultType="member">
-		SELECT email,lol_account FROM MEMBER WHERE lol_account=#{lol_account}
+		SELECT email,lol_account FROM MEMBER WHERE
+		lol_account=#{lol_account}
 	</select>
 
+	<select id="getMemberPhoneNum" parameterType="member"
+		resultType="String">
+		SELECT phone_num FROM MEMBER WHERE phone_num=#{phone_num}
+	</select>
 
+	<select id="get_email" parameterType="member"
+		resultType="String">
+		SELECT email FROM MEMBER WHERE phone_num=#{phone_num}
+	</select>
+
+	<select id="check_account" parameterType="member"
+		resultType="member">
+		SELECT email,phone_num FROM MEMBER WHERE email=#{email} and phone_num=#{phone_num}
+	</select>	
+	
+	<update id="update_password" parameterType="member">
+		UPDATE MEMBER SET password = #{password} WHERE email = #{email}
+	</update>
 </mapper>
