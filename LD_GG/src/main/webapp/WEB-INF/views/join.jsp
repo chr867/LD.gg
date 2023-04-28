@@ -59,7 +59,7 @@
 			<tr>
 				<td width="100">TYPE</td>
 				<td><input class="radio_box" type="radio" value=1
-					name="user_type">일반회원 <input class="radio_box" type="radio"
+					name="user_type" checked="checked">일반회원 <input class="radio_box" type="radio"
 					value=2 name="user_type">멘토회원</td>
 			</tr>
 			<tr>
@@ -74,6 +74,7 @@
 	
 	let emailSubmit = false;
 	let accountSubmit = false;
+	let phoneSubmit = false;
 	
 	function check() {
 		let frm = document.joinFrm
@@ -103,7 +104,7 @@
 		if($('#summoner').val() !=''){
 			$.ajax({
 				method: 'get',
-				url: '/check_lolAccount',
+				url: '/check_lol_account',
 				data: {lol_account:$('#summoner').val()},
 			}).done(res=>{
 				if(res.length === 0){
@@ -151,18 +152,18 @@
 		if($('#phone').val() !=''){
 			$.ajax({
 				method: 'get',
-				url: '/check_email',
-				data: {email:$('#phone').val()},
+				url: '/check_phone_num',
+				data: {phone_num:$('#phone').val()},
 				//dataType: 'html', //json,html(text)
 			}).done(res=>{
 				if(res == true){
 					$('#result3').html("사용가능").css('color','blue');
 					console.log('res : '+res);
-					emailSubmit = true;
+					phoneSubmit = true;
 				}else{
 					$('#result3').html("사용불가").css('color','red');
 					$('#phone').val("");
-					emailSubmit = false;
+					phoneSubmit = false;
 				}
 				
 			}).fail(err=>{

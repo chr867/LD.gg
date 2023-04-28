@@ -35,22 +35,25 @@ public class MemberController {
 	public String test_main(Model model) {
 		return "testMain";
 	}
+	
+	@GetMapping("/check_phone_num")
+	@ResponseBody
+	public boolean check_phone_num(String phone_num) {
+		System.out.println(phone_num);
+		boolean findResult = ms.findMemberPhoneNum(phone_num);
+		return findResult;
+	}
 
 	@GetMapping("/check_email")
 	@ResponseBody
 	public boolean check_email(String email) {
 		System.out.println(email);
-		String findResult = ms.findUserEmail(email);
-		System.out.println(findResult);
-		if (findResult == null) {
-			return true;
-		} else {
-			return false;
-		}
+		boolean findResult = ms.findMemberEmail(email);
+		return findResult;
 	}
 
-	@GetMapping("/check_lolAccount")
-	public @ResponseBody List<MemberDto> check_lolAccount(String lol_account) {
+	@GetMapping("/check_lol_account")
+	public @ResponseBody List<MemberDto> check_lol_account(String lol_account) {
 		System.out.println(lol_account);
 		List<MemberDto> findResult = ms.findLolAccount(lol_account);
 		System.out.println(findResult);
@@ -99,5 +102,31 @@ public class MemberController {
 			return "forward:/";
 		}
 	}
-
+	
+	@GetMapping("/findEmail")
+	public String findEmail(Model model) {
+		return "findEmail";
+	}
+	
+	@GetMapping("/find_email")
+	@ResponseBody
+	public String find_email(String phone_num) {
+		String email = ms.find_email(phone_num);
+		if(email != null) {
+			return email;
+		}
+		return null;
+	}
+	
+	@GetMapping("/findPassword")
+	public String findPassword(Model model) {
+		return "findPassword";
+	}
+	
+	@PostMapping("/find_password")
+	public @ResponseBody String find_password(@RequestParam("email") String email, @RequestParam("phone_num") String phone_num) {
+		String password = ms.find_password(email,phone_num);
+		System.out.println("컨트롤러 반환결과"+password);
+		return password;
+	}
 }
