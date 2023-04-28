@@ -10,34 +10,37 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ld.gg.dto.mentoringdto.MentorProfileDTO;
 import com.ld.gg.service.mentoringService.MentorProfileService;
 
 @RestController
-@RequestMapping("/mentoring")
+@RequestMapping(value = "/mentor", produces = "text/html; charset=UTF-8")
 public class MentorProfileRestController {
 	
 	@Autowired
 	private MentorProfileService mtpService;
 	
 	@GetMapping("/find-mentor")
-	public List<MentorProfileDTO> select_all_mentor_profile(){
+	public String select_all_mentor_profile() throws JsonProcessingException{
 		List<MentorProfileDTO> mtpList = mtpService.select_all_mentor_profiles();
-		System.out.println(mtpList);
-		return null;
+		ObjectMapper objectMapper = new ObjectMapper();
+		String mtpListjson = objectMapper.writeValueAsString(mtpList);
+		System.out.println(mtpListjson);
+		return mtpListjson;
 	}
 	
-	@GetMapping("/find-mentor/{mentor_email}")
-	public MentorProfileDTO select_by_email_mentor_profile(@PathVariable String mentor_email){
-		MentorProfileDTO mtp = mtpService.select_by_email_mentor_profile(mentor_email);
-		System.out.println(mtp);
-		return null;
-	}
+//	@GetMapping("/profile/{mentor_email}")
+//	public MentorProfileDTO select_by_email_mentor_profile(@PathVariable String mentor_email){
+//		MentorProfileDTO mtp = mtpService.select_by_email_mentor_profile(mentor_email);
+//		System.out.println(mtp);
+//		return null;
+//	}
 	
-	@PostMapping
-	public void insert_mentor_profile(@RequestBody MentorProfileDTO mtpDto){
-		System.out.println(mtpDto);
-		mtpService.insert_mentor_profile(mtpDto);
+	@PostMapping("/renewal-mentor-list")
+	public void insert_mentor_profile(){
+		mtpService.insert_mentor_profile();
 	}
 	
 }
