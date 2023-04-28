@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ld.gg.dto.champ.Champ_default;
 import com.ld.gg.service.Champion_Service;
 
 import lombok.extern.slf4j.Slf4j;
