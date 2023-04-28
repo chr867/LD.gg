@@ -1,6 +1,10 @@
 package com.ld.gg.controller.mentoringController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,7 +44,7 @@ public class mentoringController {
 	
 	//멘토 프로필 작성 페이지로 이동
 	@GetMapping("/write-profile")
-    public String go_mentor_profile_edit() {
+    public String go_mentor_profile_edit(HttpServletRequest request, Model model) {
         return "mentoringView/mentorProfileForm";
     }
 }

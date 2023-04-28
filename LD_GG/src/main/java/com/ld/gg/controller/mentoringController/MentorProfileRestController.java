@@ -27,7 +27,6 @@ public class MentorProfileRestController {
 		List<MentorProfileDTO> mtpList = mtpService.select_all_mentor_profiles();
 		ObjectMapper objectMapper = new ObjectMapper();
 		String mtpListjson = objectMapper.writeValueAsString(mtpList);
-		System.out.println(mtpListjson);
 		return mtpListjson;
 	}
 	
@@ -41,6 +40,11 @@ public class MentorProfileRestController {
 	@PostMapping("/renewal-mentor-list")
 	public void insert_mentor_profile(){
 		mtpService.insert_mentor_profile();
+	}
+	
+	@PostMapping("/edit-profile")
+	public void update_mentor_profile(@RequestBody MentorProfileDTO mentor_profile){
+		mtpService.update_mentor_profile(mentor_profile);
 	}
 	
 }

@@ -28,5 +28,7 @@ public class MentorProfileService {
 		mtpdao.insert_mentor_profile();
 	}
 	
-	
+	public void update_mentor_profile(MentorProfileDTO mentor_profile) {
+		mtpdao.update_mentor_profile(mentor_profile);
+	}
 }

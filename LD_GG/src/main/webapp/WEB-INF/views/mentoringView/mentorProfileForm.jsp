@@ -7,6 +7,6 @@
 <title>멘토 프로필 작성</title>
 </head>
 <body>
-
+	<h2>멘토 프로필 작성 페이지입니다</h2>
 </body>
 </html>
