@@ -19,4 +19,7 @@ public interface Champ_dao {
 
 	List<Integer> champ_search(String champion_kr_name);
 
+	List<Champ_match_up_default> champ_recom(@Param("lane")String lane,
+			@Param("tag")String tag, @Param("right_champion")String right_champion);
+
 }

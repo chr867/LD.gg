@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class Champion_Service {
+public class Champion_service {
 	@Autowired
 	Champ_dao cd;
 	
@@ -44,6 +44,13 @@ public class Champion_Service {
 		log.info("c_list = {}", c_list);
 		
 		return c_list;
+	}
+
+	public List<Champ_match_up_default> champ_recom(String lane, String tag, String right_champion) {
+		List<Champ_match_up_default> cm_list = cd.champ_recom(lane, tag, right_champion);
+		log.info("cm_list = {}", cm_list);
+		
+		return cm_list;
 	}
 
 }
