@@ -9,4 +9,6 @@ import com.ld.gg.service.Champion_Service;
 public class ChampionRestController {
 	@Autowired
 	Champion_Service cs;
+	
+
 }
