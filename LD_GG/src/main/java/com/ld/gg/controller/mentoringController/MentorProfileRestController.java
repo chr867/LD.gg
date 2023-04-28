@@ -30,13 +30,7 @@ public class MentorProfileRestController {
 		return mtpListjson;
 	}
 	
-//	@GetMapping("/profile/{mentor_email}")
-//	public MentorProfileDTO select_by_email_mentor_profile(@PathVariable String mentor_email){
-//		MentorProfileDTO mtp = mtpService.select_by_email_mentor_profile(mentor_email);
-//		System.out.println(mtp);
-//		return null;
-//	}
-	
+	//회원정보에 회원타입이 멘토인 사람들 멘토프로필에 인서트
 	@PostMapping("/renewal-mentor-list")
 	public void insert_mentor_profile(){
 		mtpService.insert_mentor_profile();
@@ -44,6 +38,7 @@ public class MentorProfileRestController {
 	
 	@PostMapping("/edit-profile")
 	public void update_mentor_profile(@RequestBody MentorProfileDTO mentor_profile){
+		System.out.println(mentor_profile);
 		mtpService.update_mentor_profile(mentor_profile);
 	}
 	
