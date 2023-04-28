@@ -46,6 +46,11 @@ public class mentoringController {
     public String go_mentor_profile_edit(HttpServletRequest request, Model model) {
 		HttpSession session = request.getSession();
 		model.addAttribute("mentor_email", session.getAttribute("email"));
-        return "mentoringView/mentorProfileForm";
+		model.addAttribute("lol_account", session.getAttribute("lol_account"));
+		System.out.println(session.getAttribute("user_type"));
+		if (session.getAttribute("user_type")=="2") {
+			return "mentoringView/mentorProfileForm";
+		}
+		return null;
     }
 }

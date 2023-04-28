@@ -10,7 +10,7 @@
     <form id="mentorProfileForm" onsubmit="return submitForm()" method="post" action="/mentor/edit-profile">
       <h2>${email} 멘토님</h2>
       <label for="classInfo">수업 내용:</label>
-      <input type="text" id="classInfo" name="class_info" required><br><br>
+      <input type="text" id="classInfo" name="class_info" value="ddd" required><br><br>
       <label for="specializedPosition">특화 포지션:</label>
       <input type="text" id="specializedPosition" name="specialized_position" required><br><br>
       <label for="specializedChampion">특화 챔피언:</label>
