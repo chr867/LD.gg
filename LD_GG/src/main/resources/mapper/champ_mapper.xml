@@ -36,4 +36,28 @@
 			AND MATCH_UP_LANE = #{lane}
 		);
 	</select>
+	
+	<select id="build_recom_spell" resultType="champ_match_up_spell">
+		select * from champion_match_up_spell
+		where left_champion = #{left_champion}
+		and right_champion = #{right_champion}
+	</select>
+	
+	<select id="build_recom_item" resultType="champ_match_up_item">
+		select * from champion_match_up_item
+		where left_champion = #{left_champion}
+		and right_champion = #{right_champion}
+	</select>
+	
+	<select id="build_recom_rune" resultType="champ_match_up_rune">
+		select * from champion_match_up_rune
+		where left_champion = #{left_champion}
+		and right_champion = #{right_champion}
+	</select>
+	
+	<select id="build_recom_skill" resultType="champ_match_up_skill">
+		select * from champion_match_up_skill
+		where left_champion = #{left_champion}
+		and right_champion = #{right_champion}
+	</select>
 </mapper>

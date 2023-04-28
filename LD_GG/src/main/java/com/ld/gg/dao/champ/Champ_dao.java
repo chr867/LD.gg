@@ -7,6 +7,10 @@ import org.apache.ibatis.annotations.Param;
 import com.ld.gg.dto.champ.Champ_analytics;
 import com.ld.gg.dto.champ.Champ_default;
 import com.ld.gg.dto.champ.Champ_match_up_default;
+import com.ld.gg.dto.champ.Champ_match_up_item;
+import com.ld.gg.dto.champ.Champ_match_up_rune;
+import com.ld.gg.dto.champ.Champ_match_up_skill;
+import com.ld.gg.dto.champ.Champ_match_up_spell;
 
 public interface Champ_dao {
 
@@ -21,5 +25,13 @@ public interface Champ_dao {
 
 	List<Champ_match_up_default> champ_recom(@Param("lane")String lane,
 			@Param("tag")String tag, @Param("right_champion")String right_champion);
+
+	Champ_match_up_spell build_recom_spell(@Param("left_champion")String left_champion, @Param("right_champion")String right_champion);
+
+	Champ_match_up_item build_recom_item(@Param("left_champion")String left_champion, @Param("right_champion")String right_champion);
+
+	Champ_match_up_rune build_recom_rune(@Param("left_champion")String left_champion, @Param("right_champion")String right_champion);
+
+	Champ_match_up_skill build_recom_skill(@Param("left_champion")String left_champion, @Param("right_champion")String right_champion);
 
 }
