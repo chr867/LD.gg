@@ -36,7 +36,7 @@
 			<tr>
 				<td width="100">EMAIL</td>
 				<td><input class="input" type="email" id="email" name="email">
-					<input type="button" id="checkEmail" value="중복검사"> <span
+					<input type="button" id="check_email" value="중복검사"> <span
 					id="result"></span>
 			</tr>
 			<tr>
@@ -47,7 +47,8 @@
 			<tr>
 				<td width="100">PHONE</td>
 				<td><input class="input" type="text" id="phone"
-					name="phone_num"></td>
+					name="phone_num"><input type="button"
+					id="check_phone_num" value="중복검사"> <span id="result3"></span></td>
 			</tr>
 			<tr>
 				<td width="100">SUMMONER</td>
@@ -122,7 +123,7 @@
 		}
 	})
 	
-	$('#checkEmail').on('click',function(){
+	$('#check_email').on('click',function(){
 		if($('#email').val() !=''){
 			$.ajax({
 				method: 'get',
@@ -137,6 +138,30 @@
 				}else{
 					$('#result').html("사용불가").css('color','red');
 					$('#email').val("");
+					emailSubmit = false;
+				}
+				
+			}).fail(err=>{
+				console.log(err);
+			})
+		}
+	})
+	
+	$('#check_phone_num').on('click',function(){
+		if($('#phone').val() !=''){
+			$.ajax({
+				method: 'get',
+				url: '/check_email',
+				data: {email:$('#phone').val()},
+				//dataType: 'html', //json,html(text)
+			}).done(res=>{
+				if(res == true){
+					$('#result3').html("사용가능").css('color','blue');
+					console.log('res : '+res);
+					emailSubmit = true;
+				}else{
+					$('#result3').html("사용불가").css('color','red');
+					$('#phone').val("");
 					emailSubmit = false;
 				}
 				
