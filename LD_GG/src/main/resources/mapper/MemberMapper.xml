@@ -20,9 +20,14 @@
 		,#{lol_account},#{user_type},default)
 	</insert>
 	
-	<select id="getUserEmail" parameterType="member"
+	<select id="getMemberEmail" parameterType="member"
 		resultType="String">
 		SELECT email FROM MEMBER WHERE email=#{email}
+	</select>
+	
+	<select id="getMemberLolAccount" parameterType="member"
+		resultType="member">
+		SELECT email,lol_account FROM MEMBER WHERE lol_account=#{lol_account}
 	</select>
 
 
