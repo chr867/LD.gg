@@ -14,7 +14,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ld.gg.dto.champ.Champ_analytics;
 import com.ld.gg.dto.champ.Champ_match_up_default;
-import com.ld.gg.service.Champion_Service;
+import com.ld.gg.service.Champion_service;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/champion")
 public class ChampionController {
 	@Autowired
-	Champion_Service cs;
+	Champion_service cs;
 	
 	@GetMapping("/rank")
 	public String go_champion_rank(Model model, @RequestParam(defaultValue = "top")String lane,
@@ -46,4 +46,5 @@ public class ChampionController {
 		
 		return "/champion/championInfo";
 	}
+	
 }

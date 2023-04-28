@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ld.gg.dao.AdminDao">
+	<select id="get_notice_history" resultType="notice">
+		SELECT * FROM NOTICE_BOARD
+		ORDER BY t_b_num asc;
+	</select>
+</mapper>

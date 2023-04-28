@@ -15,4 +15,5 @@ public class Champ_match_up_default {
 //	상속 문제 발생시 한번 더 나눌 것
 	private double match_up_win_rate;
 	private double match_up_count;
+	private String match_up_lane;
 }
