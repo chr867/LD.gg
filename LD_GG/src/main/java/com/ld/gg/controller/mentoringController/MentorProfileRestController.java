@@ -16,7 +16,7 @@ import com.ld.gg.dto.mentoringdto.MentorProfileDTO;
 import com.ld.gg.service.mentoringService.MentorProfileService;
 
 @RestController
-@RequestMapping("/mentoring")
+@RequestMapping(value = "/mentor", produces = "text/html; charset=UTF-8")
 public class MentorProfileRestController {
 	
 	@Autowired
@@ -27,15 +27,16 @@ public class MentorProfileRestController {
 		List<MentorProfileDTO> mtpList = mtpService.select_all_mentor_profiles();
 		ObjectMapper objectMapper = new ObjectMapper();
 		String mtpListjson = objectMapper.writeValueAsString(mtpList);
+		System.out.println(mtpListjson);
 		return mtpListjson;
 	}
 	
-	@GetMapping("/find-mentor/{mentor_email}")
-	public MentorProfileDTO select_by_email_mentor_profile(@PathVariable String mentor_email){
-		MentorProfileDTO mtp = mtpService.select_by_email_mentor_profile(mentor_email);
-		System.out.println(mtp);
-		return null;
-	}
+//	@GetMapping("/profile/{mentor_email}")
+//	public MentorProfileDTO select_by_email_mentor_profile(@PathVariable String mentor_email){
+//		MentorProfileDTO mtp = mtpService.select_by_email_mentor_profile(mentor_email);
+//		System.out.println(mtp);
+//		return null;
+//	}
 	
 	@PostMapping
 	public void insert_mentor_profile(@RequestBody MentorProfileDTO mtpDto){

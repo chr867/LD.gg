@@ -25,8 +25,7 @@ public class MentorProfileService {
 	}
 
 	public void insert_mentor_profile(MentorProfileDTO mtpDto) {
-		// TODO Auto-generated method stub
-		
+		mtpdao.insert_mentor_profile(mtpDto);
 	}
 	
 	
