@@ -30,6 +30,11 @@ public class SummonerService {
 		List<SummonerDto> sd = SD.get_summoner_level();
 		return sd;
 	}
+
+	public SummonerDto get_summoner_info(String summoner_name) {
+		SummonerDto sd = SD.get_summoner_info(summoner_name);
+		return sd;
+	}
 	
 
 }

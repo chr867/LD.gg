@@ -50,7 +50,7 @@
 			let i = 1;
 			let sList = '<tbody>'
 			for(summoner of res){
-				sList += '<tr id = "'summoer.summoner_name'" onclick = "detail(this)">'
+				sList += '<tr id = "'summoer.summoner_name'" onclick = "info(this)">'
 				sList += '<td id = "idx">'i'</td>'
 				sList += '<td id = "icon"><img src = "https://ddragon.leagueoflegends.com/cdn/13.8.1/img/profileicon/'+summoner.profile_icon_id'.png"></td>'
 				sList += '<td id = "name">'summoner.summoner_name'</td>'
@@ -76,8 +76,8 @@
 			}).done(res=>{
 				let i = 1
 				let sList = '<tbody>'
-				for(game of res){
-					sList += '<tr id = "'summoer.summoner_name'" onclick = "detail(this)">'
+				for(summoner of res){
+					sList += '<tr id = "'summoer.summoner_name'" onclick = "info(this)">'
 					sList += '<td id = "idx">'i'</td>'
 					sList += '<td id = "icon"><img src = "https://ddragon.leagueoflegends.com/cdn/13.8.1/img/profileicon/'+summoner.profile_icon_id'.png"></td>'
 					sList += '<td id = "name">'summoner.summoner_name'</td>'
@@ -104,8 +104,8 @@
 			}).done(res=>{
 				let i = 1
 				let sList = '<tbody>'
-				for(game of res){
-					sList += '<tr id = "'summoer.summoner_name'" onclick = "detail(this)">'
+				for(summoner of res){
+					sList += '<tr id = "'summoer.summoner_name'" onclick = "info(this)">'
 					sList += '<td id = "idx">'i'</td>'
 					sList += '<td id = "icon"><img src = "https://ddragon.leagueoflegends.com/cdn/13.8.1/img/profileicon/'+summoner.profile_icon_id'.png"></td>'
 					sList += '<td id = "name">'summoner.summoner_name'</td>'
@@ -132,8 +132,8 @@
 			}).done(res=>{
 				let i = 1
 				let sList = '<tbody>'
-				for(game of res){
-					sList += '<tr id = "'summoer.summoner_name'" onclick = "detail(this)">'
+				for(summoner of res){
+					sList += '<tr id = "'summoer.summoner_name'" onclick = "info(this)">'
 					sList += '<td id = "idx">'i'</td>'
 					sList += '<td id = "icon"><img src = "https://ddragon.leagueoflegends.com/cdn/13.8.1/img/profileicon/'+summoner.profile_icon_id'.png"></td>'
 					sList += '<td id = "name">'summoner.summoner_name'</td>'
@@ -152,6 +152,11 @@
 				console.log(err)
 			})
 		})
+		
+		function info(summoner){
+			let summoner_name = summoner.getAttribute("summoner_name")
+			location.href = "/info/?summoner_name="+summoner_name
+		}
 		
 	</script>
 
