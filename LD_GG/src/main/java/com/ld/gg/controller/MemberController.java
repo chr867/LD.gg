@@ -1,5 +1,7 @@
 package com.ld.gg.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,23 +30,37 @@ public class MemberController {
 	public String join_page(Model model) {
 		return "join";
 	}
-	
+
 	@GetMapping("/testMain")
 	public String test_main(Model model) {
 		return "testMain";
 	}
-	
+
 	@GetMapping("/check_email")
 	@ResponseBody
 	public boolean check_email(String email) {
 		System.out.println(email);
 		String findResult = ms.findUserEmail(email);
-		log.info("{}",findResult);
-		if(findResult==null){
+		System.out.println(findResult);
+		if (findResult == null) {
 			return true;
-		}else {
+		} else {
 			return false;
 		}
+	}
+
+	@GetMapping("/check_lolAccount")
+	public @ResponseBody List<MemberDto> check_lolAccount(String lol_account) {
+		System.out.println(lol_account);
+		List<MemberDto> findResult = ms.findLolAccount(lol_account);
+		System.out.println(findResult);
+		if (findResult.isEmpty()) {
+			System.out.println("비어있음");
+			return null;
+		} else {
+			return findResult;
+		}
+		
 	}
 
 	@PostMapping("/join")
@@ -58,12 +74,12 @@ public class MemberController {
 			return new ModelAndView("join").addObject("msg", "회원가입 실패");
 		}
 	}
-	
+
 	@PostMapping(value = "/login")
 	public ModelAndView login(MemberDto md, HttpSession session) {
 		MemberDto member = ms.login(md);
 
-		if(member != null) {
+		if (member != null) {
 			session.setAttribute("email", md.getEmail());
 			session.setAttribute("lol_account", md.getLol_account());
 			session.setAttribute("user_type", md.getUser_type());
@@ -72,16 +88,16 @@ public class MemberController {
 		return new ModelAndView("home").addObject("msg", "로그인 실패").addObject("check", 2);
 
 	}
-	
+
 	@PostMapping(value = "/logout")
 	public String logout(HttpSession session) {
 		if (session.getAttribute("email") != null) {
 			session.invalidate(); // 세션 무효화
-			return "redirect:/"; 
+			return "redirect:/";
 		} else {
 			log.info("비로그인 중");
-			return "forward:/"; 
+			return "forward:/";
 		}
 	}
-	
+
 }

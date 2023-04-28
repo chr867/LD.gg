@@ -1,5 +1,7 @@
 package com.ld.gg.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +23,6 @@ public class MemberService {
 	}
 
 	public MemberDto login(MemberDto md) {
-		
 		String checkPw = mDao.getLoginInfo(md.getEmail());
 		log.info(checkPw);
 		if (checkPw != null) {
@@ -39,8 +40,13 @@ public class MemberService {
 	}
 
 	public String findUserEmail(String email) {
+		return mDao.getMemberEmail(email);
+	}
 
-		return mDao.getUserEmail(email);
+	public List<MemberDto> findLolAccount(String lol_account) {
+		System.out.println("서비스 결과리턴부");
+		System.out.println(mDao.getMemberLolAccount(lol_account));
+		return mDao.getMemberLolAccount(lol_account);
 	}
 
 }
