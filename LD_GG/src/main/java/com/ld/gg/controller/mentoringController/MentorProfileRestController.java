@@ -38,10 +38,9 @@ public class MentorProfileRestController {
 //		return null;
 //	}
 	
-	@PostMapping
-	public void insert_mentor_profile(@RequestBody MentorProfileDTO mtpDto){
-		System.out.println(mtpDto);
-		mtpService.insert_mentor_profile(mtpDto);
+	@PostMapping("/renewal-mentor-list")
+	public void insert_mentor_profile(){
+		mtpService.insert_mentor_profile();
 	}
 	
 }

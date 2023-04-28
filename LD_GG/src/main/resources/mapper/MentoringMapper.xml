@@ -13,19 +13,22 @@
   SELECT * FROM mentor_profile WHERE mentor_email = #{mentor_email};
 </select>
 
-<select id="insert_mentor_profile" resultType="com.ld.gg.dto.mentoringdto.MentorProfileDTO">
-  INSERT INTO mentor_profile (class_info, specialized_position, specialized_champion, contact_time) VALUES
-(#{class_info}, #{specialized_position}, #{specialized_champion}, #{contact_time});
-</select>
+<insert id="insert_mentor_profile">
+  INSERT INTO mentor_profile (mentor_email)
+  SELECT email FROM member
+  WHERE member.user_type = 2 AND NOT EXISTS (
+      SELECT 1 FROM mentor_profile WHERE mentor_profile.mentor_email = member.email
+  );
+</insert>
 
-<select id="update_mentor_profile" resultType="com.ld.gg.dto.mentoringdto.MentorProfileDTO">
+<update id="update_mentor_profile" parameterType="com.ld.gg.dto.mentoringdto.MentorProfileDTO">
   UPDATE mentor_profile SET class_info = #{class_info}, specialized_position = #{specialized_position}, 
   specialized_champion = #{specialized_champion}, contact_time = #{contact_time} WHERE mentor_email = #{mentor_email};
-</select>
+</update>
 
-<select id="delete_mentor_profile" resultType="com.ld.gg.dto.mentoringdto.MentorProfileDTO">
+<delete id="delete_mentor_profile" parameterType="com.ld.gg.dto.mentoringdto.MentorProfileDTO">
   DELETE FROM mentor_profile WHERE mentor_email = #{mentor_email};
-</select>
+</delete>
 
 
 

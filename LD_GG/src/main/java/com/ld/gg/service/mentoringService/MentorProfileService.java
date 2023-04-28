@@ -24,8 +24,8 @@ public class MentorProfileService {
 		return mtp;
 	}
 
-	public void insert_mentor_profile(MentorProfileDTO mtpDto) {
-		mtpdao.insert_mentor_profile(mtpDto);
+	public void insert_mentor_profile() {
+		mtpdao.insert_mentor_profile();
 	}
 	
 	

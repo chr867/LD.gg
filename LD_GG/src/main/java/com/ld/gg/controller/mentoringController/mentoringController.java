@@ -37,4 +37,10 @@ public class mentoringController {
 		}
 		return null;
     }
+	
+	//멘토 프로필 작성 페이지로 이동
+	@GetMapping("/write-profile")
+    public String go_mentor_profile_edit() {
+        return "mentoringView/mentorProfileForm";
+    }
 }
