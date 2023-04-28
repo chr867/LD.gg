@@ -8,6 +8,11 @@
 </head>
 <body>
 <h1>championInfo.jsp</h1>
+<div>
+	<form action="/champion/search.json" accept-charset="utf-8">
+		<input type="text" name = "champion_kr_name">
+	</form>
+</div>
 
 
 

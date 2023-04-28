@@ -44,4 +44,5 @@ public class Champ_analytics extends Champ_default {
 	private int g_22;
 	private int g_23;	
 	private int g_25;
+	private int champion_tier;
 }

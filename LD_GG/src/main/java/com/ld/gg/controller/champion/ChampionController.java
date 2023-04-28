@@ -35,7 +35,7 @@ public class ChampionController {
 	}
 	
 	@GetMapping("/info")
-	public String go_champion_info(Model model, int left_champion) throws Exception{
+	public String go_champion_info(Model model, Integer left_champion) throws Exception{
 		List<Champ_match_up_default> cm_list = cs.champ_match_up(left_champion);
 
 		ObjectMapper mapper = new ObjectMapper();

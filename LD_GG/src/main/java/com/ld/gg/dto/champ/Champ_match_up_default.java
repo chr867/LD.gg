@@ -11,6 +11,8 @@ import lombok.experimental.Accessors;
 public class Champ_match_up_default {
 	private int left_champion;
 	private int right_champion;
+	
+//	상속 문제 발생시 한번 더 나눌 것
 	private double match_up_win_rate;
 	private double match_up_count;
 }

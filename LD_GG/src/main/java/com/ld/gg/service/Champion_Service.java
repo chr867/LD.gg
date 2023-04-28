@@ -25,18 +25,25 @@ public class Champion_Service {
 		return champ_list;
 	}
 
-	public List<Champ_match_up_default> champ_match_up(int left_champion) {
+	public List<Champ_match_up_default> champ_match_up(Integer left_champion) {
 		List<Champ_match_up_default> cm_list = cd.champ_match_up(left_champion);
 		log.info("cm_list = {}", cm_list);
 		
 		return cm_list;
 	}
 	
-	public List<Champ_match_up_default> champ_match_up_both(int left_champion, int right_champion) {
+	public List<Champ_match_up_default> champ_match_up_both(Integer left_champion, Integer right_champion) {
 		List<Champ_match_up_default> cm_list = cd.champ_match_up_both(left_champion, right_champion);
 		log.info("cm_list = {}", cm_list);
 		
 		return cm_list;
+	}
+
+	public List<Integer> champ_search(String champion_kr_name) {
+		List<Integer> c_list = cd.champ_search(champion_kr_name);
+		log.info("c_list = {}", c_list);
+		
+		return c_list;
 	}
 
 }

@@ -12,7 +12,12 @@
 	
 	<select id="champ_match_up" resultType="champ_match_up">
 		select * from champion_match_up
-		where left_champion = ${left_champion}
+		where left_champion = #{left_champion}
 		order by match_up_win_rate desc;
+	</select>
+	
+	<select id="champ_search" resultType="Integer">
+		select champion_id from champion_info
+		where champion_kr_name = #{champion_kr_name}
 	</select>
 </mapper>
