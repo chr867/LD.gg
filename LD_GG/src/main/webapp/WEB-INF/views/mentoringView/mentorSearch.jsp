@@ -16,7 +16,6 @@
         fetch('/mentor/find-mentor/')
             .then(response => response.json())
             .then(data => {
-            	console.log(data);
                 const mentorList = document.getElementById("mentor-list");
                 for (let i = 0; i < data.length; i++) {
                     const mentor = data[i];

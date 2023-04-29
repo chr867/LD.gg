@@ -1,6 +1,7 @@
 package com.ld.gg.controller.mentoringController;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -38,10 +39,9 @@ public class MentorProfileRestController {
 	
 	//일반 회원이 멘토회원으로 전환 할때 멘토 프로필 추가
 	@PostMapping("/insert-mentor-list")
-	public void insert_mentor_profile(HttpServletRequest request, String mentor_email){
-		HttpSession session = request.getSession();
-		String email = (String) session.getAttribute("email");
-		mtpService.insert_mentor_profile(email);
+	public void insert_mentor_profile(@RequestBody Map<String, String> email){
+		String mentor_email = email.get("mentor_email");
+		mtpService.insert_mentor_profile(mentor_email);
 	}
 	
 	//회원정보에 회원타입이 멘토인 사람들 멘토프로필에 인서트
@@ -59,10 +59,9 @@ public class MentorProfileRestController {
 	
 	//멘토 회원이 일반회원으로 전환 할때 멘토 프로필 삭제
 	@DeleteMapping("/delete-mentor-profile")
-	public void delete_mentor_profile(HttpServletRequest request, String mentor_email) {
-		HttpSession session = request.getSession();
-		String email = (String) session.getAttribute("email");
-		mtpService.delete_mentor_profile(email);
+	public void delete_mentor_profile(@RequestBody Map<String, String> email) {
+		String mentor_email = email.get("mentor_email");
+		mtpService.delete_mentor_profile(mentor_email);
 	}
 }
 	

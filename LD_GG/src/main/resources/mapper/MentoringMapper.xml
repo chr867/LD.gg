@@ -31,7 +31,7 @@
 </update>
 
 <delete id="delete_mentor_profile" parameterType="String">
-  DELETE FROM mentor_profile WHERE mentor_email = #{mentor_email} CASCADE;
+  DELETE FROM mentor_profile WHERE mentor_email = #{mentor_email};
 </delete>
 
 

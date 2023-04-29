@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.ld.gg.dto.MemberDto;
 import com.ld.gg.dto.mentoringdto.MentorProfileDTO;
@@ -33,15 +34,11 @@ public class MentoringController {
 	
 	//멘토 아이디를 입력해서 멘토 프로필 페이지로 이동
 	@GetMapping("/profile/{mentor_email}")
-    public String go_mentor_profile(@PathVariable String mentor_email, Model model) {
+    public ModelAndView go_mentor_profile(@PathVariable String mentor_email) {
 		MentorProfileDTO mtp = mtpService.select_by_email_mentor_profile(mentor_email);
 		if (mtp!=null) {
-			model.addAttribute("mentor_email", mtp.getMentor_email());
-			model.addAttribute("class_info", mtp.getClass_info());
-			model.addAttribute("specialized_champion", mtp.getSpecialized_champion());
-			model.addAttribute("specialized_position", mtp.getSpecialized_position());
-			model.addAttribute("contact_time", mtp.getContact_time());
-			return "mentoringView/mentorInfo";
+			return new ModelAndView("mentoringView/mentorInfo")
+					.addObject("mentor_profile", mtp);
 		}
 		return null;
     }
