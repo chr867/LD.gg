@@ -16,6 +16,8 @@
 	<form id="logoutFrm" action="/logout" method="post">
 		<a href="javascript:logout()">로그아웃</a>
 	</form>
+	<br>
+	<a href="/dropMember">회원탈퇴</a>
 
 </body>
 <script type="text/javascript">

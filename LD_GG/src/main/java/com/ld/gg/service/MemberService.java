@@ -166,7 +166,7 @@ public class MemberService {
 			if (savedPassword.equals(password)) {
 				log.info("비밀번호 변경 패스워드 매치!");
 				boolean passwordChanged = updatePassword(email, changePw);
-				System.out.println("비밀번호 체인지 결과: " + passwordChanged);
+				log.info("비밀번호 체인지 결과: " + passwordChanged);
 				return passwordChanged;
 			} else {
 				return false;
@@ -174,6 +174,30 @@ public class MemberService {
 		} catch (NullPointerException e) {
 			System.out.println(e);
 			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public boolean dropMember(String email, String password) {
+		
+		// 사용자 정보 조회
+		String savedPassword = mDao.getLoginInfo(email);
+
+		// 비밀번호 매치 확인 후 결과 반환
+		if (savedPassword.equals(password)) {
+			log.info("회원탈퇴 패스워드 매치!");
+			boolean deleteResult = deleteAccount(email);
+			return deleteResult;
+		} else {
+			return false;
+		}
+	}
+	
+	private boolean deleteAccount(String email) {
+		int deleteResult = mDao.deleteAccount(email);
+		if(deleteResult != 0) {
+			return true;
+		}else {
 			return false;
 		}
 	}

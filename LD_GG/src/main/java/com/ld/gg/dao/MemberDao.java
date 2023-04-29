@@ -25,5 +25,7 @@ public interface MemberDao {
 	List<MemberDto> checkAccount(@Param("email") String email,@Param("phone_num") String phone_num);
 
 	int updatePassword(@Param("email") String email, @Param("password") String password);
+
+	int deleteAccount(String email);
 	
 }

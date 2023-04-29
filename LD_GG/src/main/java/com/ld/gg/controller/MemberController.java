@@ -103,7 +103,7 @@ public class MemberController {
 			return "redirect:/";
 		} else {
 			log.info("비로그인 중");
-			return "forward:/";
+			return "redirect:/";
 		}
 	}
 
@@ -143,10 +143,25 @@ public class MemberController {
 	@PostMapping("/change_password")
 	@ResponseBody
 	public boolean changePassword(String email, String password, String changePw) {
-		log.info("비밀번호 변경 비동기 메소드 실행");
 		boolean result = ms.changePassword(email,password,changePw);
 		log.info("비밀번호 변경 컨트롤러 반환부 : "+result);
 		return result;
 	}
+	@GetMapping("/dropMember")
+	public String moveDropMember(Model model) {
+		return "dropMember";
+	}
 	
+	@PostMapping("/drop_member")
+	@ResponseBody
+	public boolean dropMember(String email, String password, HttpSession session) {
+		boolean result = ms.dropMember(email,password);
+		if(result) {
+			log.info("탈퇴 완료");
+			session.invalidate(); // 세션 무효화
+			return true;
+		}
+		log.info("탈퇴 실패");
+		return false;
+	}
 }
