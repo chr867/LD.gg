@@ -7,10 +7,10 @@
   </head>
   <body>
     <h1>멘토 프로필 작성</h1>
-    <form id="mentorProfileForm" onsubmit="return submitForm()" method="post" action="/mentor/edit-profile">
+    <form id="mentorProfileForm" onsubmit="return submitForm()">
       <h2>${email} 멘토님</h2>
       <label for="classInfo">수업 내용:</label>
-      <input type="text" id="classInfo" name="class_info" value="ddd" required><br><br>
+      <input type="text" id="classInfo" name="class_info" required><br><br>
       <label for="specializedPosition">특화 포지션:</label>
       <input type="text" id="specializedPosition" name="specialized_position" required><br><br>
       <label for="specializedChampion">특화 챔피언:</label>
@@ -24,8 +24,16 @@
         let form = document.getElementById("mentorProfileForm");
         let formData = new FormData(form);
         let xhr = new XMLHttpRequest();
-        xhr.open("POST", "/mentor/edit-profile");
-        xhr.send(formData);
+        xhr.open("PUT", "/mentor/edit-profile/");
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        let mentorProfileDTO = {
+        	mentor_email: "${email}",
+            class_info: formData.get("class_info"),
+            specialized_position: formData.get("specialized_position"),
+            specialized_champion: formData.get("specialized_champion"),
+            contact_time: formData.get("contact_time")
+        };
+        xhr.send(JSON.stringify(mentorProfileDTO));
         return false;
       }
     </script>

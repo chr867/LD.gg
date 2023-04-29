@@ -3,9 +3,10 @@ package com.ld.gg.controller.mentoringController;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +23,7 @@ public class MentorProfileRestController {
 	@Autowired
 	private MentorProfileService mtpService;
 	
+	//멘토 회원 목록 가져오기
 	@GetMapping("/find-mentor")
 	public String select_all_mentor_profile() throws JsonProcessingException{
 		List<MentorProfileDTO> mtpList = mtpService.select_all_mentor_profiles();
@@ -36,10 +38,11 @@ public class MentorProfileRestController {
 		mtpService.insert_mentor_profile();
 	}
 	
-	@PostMapping("/edit-profile")
-	public void update_mentor_profile(@RequestBody MentorProfileDTO mentor_profile){
-		System.out.println(mentor_profile);
-		mtpService.update_mentor_profile(mentor_profile);
+	//mentorProfileForm.jsp에서 작성한 프로필 정보 등록
+	@PutMapping("/edit-profile")
+	public ResponseEntity<?> updateMentorProfile(@RequestBody MentorProfileDTO mentorProfileDTO){
+		mtpService.update_mentor_profile(mentorProfileDTO);
+	    return ResponseEntity.ok("Success");
 	}
-	
 }
+	

@@ -10,15 +10,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.ld.gg.dto.MemberDto;
 import com.ld.gg.dto.mentoringdto.MentorProfileDTO;
+import com.ld.gg.service.MemberService;
 import com.ld.gg.service.mentoringService.MentorProfileService;
 
 @Controller
 @RequestMapping("/mentor")
-public class mentoringController {
+public class MentoringController {
 	
 	@Autowired
 	private MentorProfileService mtpService;
+	
+	@Autowired
+	private MemberService ms;
 	
 	//멘토 찾기 페이지로 이동
 	@GetMapping("/list")
@@ -45,12 +50,13 @@ public class mentoringController {
 	@GetMapping("/write-profile")
     public String go_mentor_profile_edit(HttpServletRequest request, Model model) {
 		HttpSession session = request.getSession();
-		model.addAttribute("mentor_email", session.getAttribute("email"));
-		model.addAttribute("lol_account", session.getAttribute("lol_account"));
-		System.out.println(session.getAttribute("user_type"));
-		if (session.getAttribute("user_type")=="2") {
-			return "mentoringView/mentorProfileForm";
-		}
-		return null;
+		String email = (String) session.getAttribute("email");
+		Integer user_type = (Integer)session.getAttribute("user_type");
+		model.addAttribute("mentor_email", email);
+		System.out.println(user_type);
+		//if (user_type==2) {
+		return "mentoringView/mentorProfileForm";
+		//}
+		//return null;
     }
 }

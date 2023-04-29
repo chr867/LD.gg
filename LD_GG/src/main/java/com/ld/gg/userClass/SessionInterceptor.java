@@ -14,13 +14,11 @@ public class SessionInterceptor implements HandlerInterceptor {
 	
 	@Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-		System.out.println("프리핸들러 작동");
-		System.out.println(request.getSession().getAttribute("email"));
         if (request.getSession().getAttribute("email") == null) { // 로그인하지 않은 경우
-            response.sendRedirect("/"); // 로그인 페이지로 이동
+        	System.out.println("로그인을 해야합니다");
+            response.sendRedirect("/login"); // 로그인 페이지로 이동
             return false;
         }else {
-        	System.out.println("로그인 성공.");
         	return true; // 로그인한 경우
         }
     }

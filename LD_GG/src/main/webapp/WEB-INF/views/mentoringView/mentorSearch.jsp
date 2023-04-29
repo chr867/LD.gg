@@ -54,7 +54,7 @@
     	}
 
     window.onload = function() {
-        // 페이지 로드가 완료되면 멘토 리스트를 출력합니다.
+        // 페이지 로드가 완료되면 멘토 리스트를 출력
     	renewal_mentor_list()
         .then(() => get_mentor_list())
         .catch(error => console.error(error));

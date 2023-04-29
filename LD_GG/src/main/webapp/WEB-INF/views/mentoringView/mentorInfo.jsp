@@ -12,5 +12,14 @@
 	<h4>특화 챔피언: ${specialized_champion}</h4>
 	<h4>특화 포지션: ${specialized_position}</h4>
 	<h4>연락 가능 시간: ${contact_time}</h4>
+	
+	<button onclick="apply()">수업신청</button>
+	<a href="/mentor/list">목록</a>
+	
+	<script>
+		function apply() {
+			window.location.href = "/apply/" + "${mentor_email}";
+		}
+	</script>
 </body>
 </html>
