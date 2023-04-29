@@ -20,10 +20,9 @@
 </head>
 <body>
 	<h1>이메일 찾기~~~~~~</h1>
-	<input class="input" type="text" id="phone" name="phone_num">
+	<input class="input" type="text" id="phone" name="phone_num" placeholder="전화번호 적으라우">
 	<input type="button" id="find_email" value="이메일 찾기">
 	<span id="result"></span>
-	</td>
 </body>
 <script type="text/javascript">
 $('#find_email').on('click',function(){

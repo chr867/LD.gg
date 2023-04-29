@@ -8,7 +8,7 @@ import com.ld.gg.dto.MemberDto;
 
 public interface MemberDao {
 
-	boolean join(MemberDto md);
+	int join(MemberDto md);
 
 	String getLoginInfo(String email);
 
@@ -20,10 +20,10 @@ public interface MemberDao {
 
 	String getMemberPhoneNum(String phone_num);
 
-	String get_email(String phone_num);
+	String getUserEmail(String phone_num);
 
-	List<MemberDto> check_account(@Param("email") String email,@Param("phone_num") String phone_num);
+	List<MemberDto> checkAccount(@Param("email") String email,@Param("phone_num") String phone_num);
 
-	boolean update_password(@Param("email") String email,@Param("password") String password);
+	int updatePassword(@Param("email") String email, @Param("password") String password);
 	
 }

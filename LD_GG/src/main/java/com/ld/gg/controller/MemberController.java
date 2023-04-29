@@ -72,9 +72,9 @@ public class MemberController {
 		boolean result = ms.join(md);
 
 		if (result) {
-			return new ModelAndView("home").addObject("msg", "회원가입 성공").addObject("check", 1);
+			return new ModelAndView("redirect:/home").addObject("msg", "회원가입 성공").addObject("check", 1);
 		} else {
-			return new ModelAndView("join").addObject("msg", "회원가입 실패");
+			return new ModelAndView("redirect:/join").addObject("msg", "회원가입 실패");
 		}
 	}
 
@@ -93,7 +93,7 @@ public class MemberController {
 		}
 		ra.addFlashAttribute("msg", "로그인 실패");
 		ra.addFlashAttribute("check", 2);
-		return new ModelAndView("redirect:/home");
+		return new ModelAndView("redirect:/");
 	}
 
 	@PostMapping("/logout")
@@ -115,7 +115,7 @@ public class MemberController {
 	@GetMapping("/find_email")
 	@ResponseBody
 	public String find_email(String phone_num) throws Exception {
-		String email = ms.find_email(phone_num);
+		String email = ms.findEmail(phone_num);
 		if (email != null) {
 			return email;
 		}
@@ -123,15 +123,30 @@ public class MemberController {
 	}
 
 	@GetMapping("/findPassword")
-	public String findPassword(Model model) {
+	public String moveFindPassword(Model model) {
 		return "findPassword";
 	}
 
 	@PostMapping("/find_password")
-	public @ResponseBody String find_password(@RequestParam("email") String email,
+	public @ResponseBody String findPassword(@RequestParam("email") String email,
 			@RequestParam("phone_num") String phone_num) throws Exception {
-		String password = ms.find_password(email, phone_num);
+		String password = ms.findPassword(email, phone_num);
 		System.out.println("컨트롤러 반환결과" + password);
 		return password;
 	}
+	
+	@GetMapping("/changePassword")
+	public String moveChangePassword(String email, String password) {
+		return "changePassword";
+	}
+	
+	@PostMapping("/change_password")
+	@ResponseBody
+	public boolean changePassword(String email, String password, String changePw) {
+		log.info("비밀번호 변경 비동기 메소드 실행");
+		boolean result = ms.changePassword(email,password,changePw);
+		log.info("비밀번호 변경 컨트롤러 반환부 : "+result);
+		return result;
+	}
+	
 }
