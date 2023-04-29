@@ -78,21 +78,25 @@ public class MemberController {
 		}
 	}
 
-	@PostMapping(value = "/login")
-	public ModelAndView login(MemberDto md, HttpSession session) {
-		MemberDto member = ms.login(md);
+	@PostMapping("/login")
+	public ModelAndView login(MemberDto md, HttpSession session, RedirectAttributes ra) {
+	    MemberDto member = ms.login(md);
 
-		if (member != null) {
-			session.setAttribute("email", md.getEmail());
-			session.setAttribute("lol_account", md.getLol_account());
-			session.setAttribute("user_type", md.getUser_type());
-			return new ModelAndView("testMain").addObject("msg", "로그인 성공");
-		}
-		return new ModelAndView("home").addObject("msg", "로그인 실패").addObject("check", 2);
+	    if (member != null) {
+	        session.setAttribute("email", md.getEmail());
+	        session.setAttribute("lol_account", md.getLol_account());
+	        session.setAttribute("user_type", md.getUser_type());
 
+	        ra.addFlashAttribute("msg", "로그인 성공");
+	        return new ModelAndView("redirect:/testMain");
+	    }
+	    ra.addFlashAttribute("msg", "로그인 실패");
+	    ra.addFlashAttribute("check", 2);
+	    return new ModelAndView("redirect:/home");
 	}
 
-	@PostMapping(value = "/logout")
+
+	@PostMapping("/logout")
 	public String logout(HttpSession session) {
 		if (session.getAttribute("email") != null) {
 			session.invalidate(); // 세션 무효화

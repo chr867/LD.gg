@@ -11,7 +11,7 @@
 	</select>
 
 	<select id="getMemberInfo" resultType="member">
-		SELECT * FROM MEMBER WHERE
+		SELECT email,phone_num,lol_account,user_type,join_date FROM MEMBER WHERE
 		email=#{email}
 	</select>
 
