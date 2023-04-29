@@ -23,12 +23,20 @@ public class MentorProfileService {
 		MentorProfileDTO mtp = mtpdao.select_by_email_mentor_profile(mentor_email);
 		return mtp;
 	}
-
-	public void insert_mentor_profile() {
-		mtpdao.insert_mentor_profile();
+	
+	public void renewal_mentor_profile() {
+		mtpdao.renewal_mentor_profile();
+	}
+	
+	public void insert_mentor_profile(String mentor_email) {
+		mtpdao.insert_mentor_profile(mentor_email);
 	}
 	
 	public void update_mentor_profile(MentorProfileDTO mentor_profile) {
 		mtpdao.update_mentor_profile(mentor_profile);
+	}
+
+	public void delete_mentor_profile(String mentor_email) {
+		mtpdao.delete_mentor_profile(mentor_email);
 	}
 }

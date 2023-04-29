@@ -53,7 +53,7 @@ public class MentoringController {
 		String email = (String) session.getAttribute("email");
 		Integer user_type = (Integer)session.getAttribute("user_type");
 		model.addAttribute("mentor_email", email);
-		System.out.println(user_type);
+		System.out.println("유저타입: "+user_type);
 		//if (user_type==2) {
 		return "mentoringView/mentorProfileForm";
 		//}

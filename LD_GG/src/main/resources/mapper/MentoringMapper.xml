@@ -13,7 +13,11 @@
   SELECT * FROM mentor_profile WHERE mentor_email = #{mentor_email};
 </select>
 
-<insert id="insert_mentor_profile">
+<insert id="insert_mentor_profile" parameterType="String">
+  INSERT INTO mentor_profile (mentor_email) VALUES (#{mentor_email});
+</insert>
+
+<insert id="renewal_mentor_profile">
   INSERT INTO mentor_profile (mentor_email)
   SELECT email FROM member
   WHERE member.user_type = 2 AND NOT EXISTS (
@@ -26,8 +30,8 @@
   specialized_champion = #{specialized_champion}, contact_time = #{contact_time} WHERE mentor_email = #{mentor_email};
 </update>
 
-<delete id="delete_mentor_profile" parameterType="com.ld.gg.dto.mentoringdto.MentorProfileDTO">
-  DELETE FROM mentor_profile WHERE mentor_email = #{mentor_email};
+<delete id="delete_mentor_profile" parameterType="String">
+  DELETE FROM mentor_profile WHERE mentor_email = #{mentor_email} CASCADE;
 </delete>
 
 
