@@ -35,10 +35,10 @@ public class MemberController {
 	public String test_main(Model model) {
 		return "testMain";
 	}
-	
+
 	@GetMapping("/check_phone_num")
 	@ResponseBody
-	public boolean check_phone_num(String phone_num) {
+	public boolean check_phone_num(String phone_num) throws Exception {
 		System.out.println(phone_num);
 		boolean findResult = ms.findMemberPhoneNum(phone_num);
 		return findResult;
@@ -46,14 +46,14 @@ public class MemberController {
 
 	@GetMapping("/check_email")
 	@ResponseBody
-	public boolean check_email(String email) {
+	public boolean check_email(String email) throws Exception {
 		System.out.println(email);
 		boolean findResult = ms.findMemberEmail(email);
 		return findResult;
 	}
 
 	@GetMapping("/check_lol_account")
-	public @ResponseBody List<MemberDto> check_lol_account(String lol_account) {
+	public @ResponseBody List<MemberDto> check_lol_account(String lol_account) throws Exception {
 		System.out.println(lol_account);
 		List<MemberDto> findResult = ms.findLolAccount(lol_account);
 		System.out.println(findResult);
@@ -63,11 +63,11 @@ public class MemberController {
 		} else {
 			return findResult;
 		}
-		
+
 	}
 
 	@PostMapping("/join")
-	public ModelAndView join(MemberDto md) {
+	public ModelAndView join(MemberDto md) throws Exception {
 
 		boolean result = ms.join(md);
 
@@ -79,25 +79,25 @@ public class MemberController {
 	}
 
 	@PostMapping("/login")
-	public ModelAndView login(MemberDto md, HttpSession session, RedirectAttributes ra) {
-	    MemberDto member = ms.login(md);
+	public ModelAndView login(MemberDto md, HttpSession session, RedirectAttributes ra) throws Exception {
+		MemberDto member = ms.login(md);
+		log.info("{}",member);
+		System.out.println("로그인 반환 결과:"+member);
+		if (member != null) {
+			session.setAttribute("email", member.getEmail());
+			session.setAttribute("lol_account", member.getLol_account());
+			session.setAttribute("user_type", member.getUser_type());
 
-	    if (member != null) {
-	        session.setAttribute("email", md.getEmail());
-	        session.setAttribute("lol_account", md.getLol_account());
-	        session.setAttribute("user_type", md.getUser_type());
-
-	        ra.addFlashAttribute("msg", "로그인 성공");
-	        return new ModelAndView("redirect:/testMain");
-	    }
-	    ra.addFlashAttribute("msg", "로그인 실패");
-	    ra.addFlashAttribute("check", 2);
-	    return new ModelAndView("redirect:/home");
+			ra.addFlashAttribute("msg", "로그인 성공");
+			return new ModelAndView("redirect:/testMain");
+		}
+		ra.addFlashAttribute("msg", "로그인 실패");
+		ra.addFlashAttribute("check", 2);
+		return new ModelAndView("redirect:/home");
 	}
 
-
 	@PostMapping("/logout")
-	public String logout(HttpSession session) {
+	public String logout(HttpSession session) throws Exception {
 		if (session.getAttribute("email") != null) {
 			session.invalidate(); // 세션 무효화
 			return "redirect:/";
@@ -106,31 +106,32 @@ public class MemberController {
 			return "forward:/";
 		}
 	}
-	
+
 	@GetMapping("/findEmail")
 	public String findEmail(Model model) {
 		return "findEmail";
 	}
-	
+
 	@GetMapping("/find_email")
 	@ResponseBody
-	public String find_email(String phone_num) {
+	public String find_email(String phone_num) throws Exception {
 		String email = ms.find_email(phone_num);
-		if(email != null) {
+		if (email != null) {
 			return email;
 		}
 		return null;
 	}
-	
+
 	@GetMapping("/findPassword")
 	public String findPassword(Model model) {
 		return "findPassword";
 	}
-	
+
 	@PostMapping("/find_password")
-	public @ResponseBody String find_password(@RequestParam("email") String email, @RequestParam("phone_num") String phone_num) {
-		String password = ms.find_password(email,phone_num);
-		System.out.println("컨트롤러 반환결과"+password);
+	public @ResponseBody String find_password(@RequestParam("email") String email,
+			@RequestParam("phone_num") String phone_num) throws Exception {
+		String password = ms.find_password(email, phone_num);
+		System.out.println("컨트롤러 반환결과" + password);
 		return password;
 	}
 }
