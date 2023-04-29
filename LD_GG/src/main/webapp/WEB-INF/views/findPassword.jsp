@@ -22,11 +22,11 @@
 	<h1>비밀번호 찾기~~~~~~</h1>
 	<table border="1">
 		<tr>
-			<td><input type="email" id="email" name="email"></td>
+			<td><input type="email" id="email" name="email" placeholder="등록된 이메일 적으라우"></td>
 			<td rowspan="2"><button id="find_password">비밀번호 찾기</button>
 		</tr>
 		<tr>
-			<td><input type="text" id="phone" name="phone"></td>
+			<td><input type="text" id="phone" name="phone" placeholder="전화번호도 적으라우"></td>
 		</tr>
 		<tr>
 			<td><span id="result">비밀번호찾기</span></td>

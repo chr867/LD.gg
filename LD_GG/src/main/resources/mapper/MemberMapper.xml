@@ -11,7 +11,8 @@
 	</select>
 
 	<select id="getMemberInfo" resultType="member">
-		SELECT * FROM MEMBER WHERE
+		SELECT
+		email,phone_num,lol_account,user_type,join_date FROM MEMBER WHERE
 		email=#{email}
 	</select>
 
@@ -37,17 +38,23 @@
 		SELECT phone_num FROM MEMBER WHERE phone_num=#{phone_num}
 	</select>
 
-	<select id="get_email" parameterType="member"
+	<select id="getUserEmail" parameterType="member"
 		resultType="String">
 		SELECT email FROM MEMBER WHERE phone_num=#{phone_num}
 	</select>
 
-	<select id="check_account" parameterType="member"
+	<select id="checkAccount" parameterType="member"
 		resultType="member">
-		SELECT email,phone_num FROM MEMBER WHERE email=#{email} and phone_num=#{phone_num}
-	</select>	
-	
-	<update id="update_password" parameterType="member">
-		UPDATE MEMBER SET password = #{password} WHERE email = #{email}
+		SELECT email,phone_num FROM MEMBER WHERE email=#{email} and
+		phone_num=#{phone_num}
+	</select>
+
+	<update id="updatePassword" parameterType="member">
+		UPDATE MEMBER SET
+		password = #{password} WHERE email = #{email}
 	</update>
+
+	<delete id="deleteAccount" parameterType="String">
+		DELETE FROM member WHERE email = #{email}
+	</delete>
 </mapper>

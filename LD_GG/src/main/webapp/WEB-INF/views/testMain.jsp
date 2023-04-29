@@ -9,13 +9,15 @@
 <body>
 	<h1>Test Main</h1>
 	<h1>${msg}</h1>
-	<h1>${email}</h1>
-	<h1>${member.lol_account}</h1>
-	<h1>${member.user_type}</h1>
+	<p>이메일 : ${sessionScope.email}</p>
+	<p>롤 계정 : ${sessionScope.lol_account}</p>
+	<p>유저 타입 : ${sessionScope.user_type}</p>
 
 	<form id="logoutFrm" action="/logout" method="post">
 		<a href="javascript:logout()">로그아웃</a>
 	</form>
+	<br>
+	<a href="/dropMember">회원탈퇴</a>
 
 </body>
 <script type="text/javascript">
