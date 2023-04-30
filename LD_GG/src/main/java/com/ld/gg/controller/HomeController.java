@@ -27,12 +27,6 @@ public class HomeController {
 		return "index";
 	}
 	
-	//로그인 페이지로 이동
-	@GetMapping("/login")
-	public String login() {
-		return "home";
-	}
-	
 	//마이페이지로 이동
 	@GetMapping("/mypage")
 	public String go_mypage(HttpServletRequest request, Model model) {

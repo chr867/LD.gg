@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.ld.gg.dao.mentoringdao.MyMentoringDAO">
+
+
+<select id="select_by_email_my_mentoring" resultType="myMentoring">
+  SELECT * FROM my_mentoring WHERE menti_email = #{menti_email};
+</select>
+
+<insert id="insert_my_mentoring" parameterType="myMentoring">
+  INSERT INTO my_mentoring (menti_email, class_id, mentor_email) VALUES (#{menti_email}, #{class_id}, #{mentor_email});
+</insert>
+
+<update id="update_my_mentoring" parameterType="myMentoring">
+  UPDATE my_mentoring SET menti_state = #{menti_state}, done_date = #{done_date}
+  WHERE menti_email = #{menti_email} AND class_id = #{class_id};
+</update>
+
+<delete id="delete_my_mentoring" parameterType="myMentoring">
+  DELETE FROM my_mentoring WHERE menti_email = #{menti_email} AND class_id = #{class_id};
+</delete>
+
+
+
+</mapper>

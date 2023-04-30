@@ -1,5 +1,7 @@
 package com.ld.gg.controller.mentoringController;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -13,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ld.gg.dto.MemberDto;
 import com.ld.gg.dto.mentoringdto.MentorProfileDTO;
+import com.ld.gg.dto.mentoringdto.TagListDTO;
 import com.ld.gg.service.MemberService;
 import com.ld.gg.service.mentoringService.MentorProfileService;
 
@@ -24,7 +27,7 @@ public class MentoringController {
 	private MentorProfileService mtpService;
 	
 	@Autowired
-	private MemberService ms;
+	private MemberService mbService;
 	
 	//멘토 찾기 페이지로 이동
 	@GetMapping("/list")
@@ -45,14 +48,16 @@ public class MentoringController {
 	
 	//멘토 프로필 작성 페이지로 이동
 	@GetMapping("/write-profile")
-    public String go_mentor_profile_edit(HttpServletRequest request, Model model) {
+    public ModelAndView go_mentor_profile_edit(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		String email = (String) session.getAttribute("email");
 		Integer user_type = (Integer)session.getAttribute("user_type");
-		model.addAttribute("mentor_email", email);
-		System.out.println("유저타입: "+user_type);
+		MentorProfileDTO mtp = mtpService.select_by_email_mentor_profile(email);
+		List<TagListDTO> tagList = mtpService.select_all_tag();
 		//if (user_type==2) {
-		return "mentoringView/mentorProfileForm";
+		return new ModelAndView("mentoringView/mentorProfileForm") 
+				.addObject("mentor_profile", mtp)
+				.addObject("tag_list", tagList);
 		//}
 		//return null;
     }

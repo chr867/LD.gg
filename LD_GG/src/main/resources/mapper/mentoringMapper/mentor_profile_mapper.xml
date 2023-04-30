@@ -5,11 +5,11 @@
 <!-- select_all_mentor_profiles() 메서드와 매핑될 SQL -->
 <mapper namespace="com.ld.gg.dao.mentoringdao.MentorProfileDAO">
 
-<select id="select_all_mentor_profiles" resultType="com.ld.gg.dto.mentoringdto.MentorProfileDTO">
+<select id="select_all_mentor_profiles" resultType="mentorProfile">
   SELECT * FROM mentor_profile;
 </select>
 
-<select id="select_by_email_mentor_profile" resultType="com.ld.gg.dto.mentoringdto.MentorProfileDTO">
+<select id="select_by_email_mentor_profile" resultType="mentorProfile">
   SELECT * FROM mentor_profile WHERE mentor_email = #{mentor_email};
 </select>
 
@@ -25,9 +25,10 @@
   );
 </insert>
 
-<update id="update_mentor_profile" parameterType="com.ld.gg.dto.mentoringdto.MentorProfileDTO">
-  UPDATE mentor_profile SET class_info = #{class_info}, specialized_position = #{specialized_position}, 
-  specialized_champion = #{specialized_champion}, contact_time = #{contact_time} WHERE mentor_email = #{mentor_email};
+<update id="update_mentor_profile" parameterType="mentorProfile">
+  UPDATE mentor_profile SET about_mentor = #{about_mentor}, specialized_position = #{specialized_position}, 
+  specialized_champion = #{specialized_champion}, contact_time = #{contact_time}, careers = #{careers}, 
+  recom_ment = #{recom_ment} WHERE mentor_email = #{mentor_email};
 </update>
 
 <delete id="delete_mentor_profile" parameterType="String">
