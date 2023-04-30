@@ -18,7 +18,6 @@ import com.ld.gg.dto.MemberDto;
 import com.ld.gg.service.MemberService;
 
 import lombok.extern.slf4j.Slf4j;
-import oracle.jdbc.proxy.annotation.Post;
 
 @Slf4j
 @Controller
@@ -29,6 +28,20 @@ public class MemberController {
 	@GetMapping("/join")
 	public String join_page(Model model) {
 		return "join";
+	}
+	
+	@PostMapping("/join")
+	public ModelAndView join(MemberDto md) throws Exception {
+		boolean result = ms.join(md);
+
+		if (result) {
+			return new ModelAndView("redirect:/home")
+					.addObject("msg", "회원가입 성공")
+					.addObject("check", 1);
+		} else {
+			return new ModelAndView("redirect:/join")
+					.addObject("msg", "회원가입 실패");
+		}
 	}
 
 	@GetMapping("/testMain")
@@ -64,18 +77,6 @@ public class MemberController {
 			return findResult;
 		}
 
-	}
-
-	@PostMapping("/join")
-	public ModelAndView join(MemberDto md) throws Exception {
-
-		boolean result = ms.join(md);
-
-		if (result) {
-			return new ModelAndView("redirect:/home").addObject("msg", "회원가입 성공").addObject("check", 1);
-		} else {
-			return new ModelAndView("redirect:/join").addObject("msg", "회원가입 실패");
-		}
 	}
 
 	@PostMapping("/login")
@@ -163,5 +164,14 @@ public class MemberController {
 		}
 		log.info("탈퇴 실패");
 		return false;
+	}
+	
+	@PostMapping("/change_usertype")
+	@ResponseBody
+	public boolean changeUserType(String email, String password, Integer user_type) {
+		log.info("유저타입 변경 시작");
+		boolean result = ms.changeUserType(email,password,user_type);
+		log.info("회원전환 결과:"+result);
+		return result;
 	}
 }

@@ -19,7 +19,7 @@ public class MemberService {
 
 	public boolean join(MemberDto md) {
 		try {
-			int joinResult = mDao.join(md);
+			Integer joinResult = mDao.join(md);
 			if (joinResult != 0) {
 				return true;
 			} else {
@@ -114,7 +114,7 @@ public class MemberService {
 	private boolean updatePassword(String email, String password) {
 		try {
 			// 비밀번호 업데이트 로직
-			int success = mDao.updatePassword(email, password);
+			Integer success = mDao.updatePassword(email, password);
 			System.out.println("success : " + success);
 			if (success != 0) {
 				return true;
@@ -194,10 +194,40 @@ public class MemberService {
 	}
 	
 	private boolean deleteAccount(String email) {
-		int deleteResult = mDao.deleteAccount(email);
+		Integer deleteResult = mDao.deleteAccount(email);
 		if(deleteResult != 0) {
 			return true;
 		}else {
+			return false;
+		}
+	}
+
+	public boolean changeUserType(String email, String password, Integer user_type) {
+		boolean pwMatchResult = checkPassword(email,password);
+		
+		if(pwMatchResult){
+			boolean updateResult = updateUserType(email, user_type);
+			return updateResult;
+		}else {
+			return false;
+		}
+	}
+	
+	private boolean updateUserType(String email, Integer user_type) {
+		Integer updateResult = mDao.updateUserType(email,user_type);
+		if(updateResult != 0) {
+			return true;
+		}
+		return false; 
+	}
+	
+	private boolean checkPassword(String email, String password){
+		String savedPassword = mDao.getLoginInfo(email);
+		if (savedPassword.equals(password)) {
+			log.info("패스워드 매치!");
+			return true;
+		} else {
+			log.info("패스워드 불일치");
 			return false;
 		}
 	}
