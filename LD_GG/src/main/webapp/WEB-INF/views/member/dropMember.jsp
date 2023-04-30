@@ -33,7 +33,7 @@
 		if(password !== ""){
 			$.ajax({
 		        method: 'post',
-		        url: '/drop_member',
+		        url: '/member/drop_member',
 		        data: {email:'${sessionScope.email}', password:password},
 		      }).done(res=>{
 		        console.log(res);

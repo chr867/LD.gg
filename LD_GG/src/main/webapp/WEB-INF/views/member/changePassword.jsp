@@ -42,7 +42,7 @@ document.getElementById("changePassword").addEventListener("click", function() {
 	    if (passwordTochange1 === passwordTochange2) {
  	      $.ajax({
 	        method: 'post',
-	        url: '/change_password',
+	        url: '/member/change_password',
 	        data: {email:'${sessionScope.email}', password:password, changePw:passwordTochange2},
 	      }).done(res=>{
 	        console.log(res);

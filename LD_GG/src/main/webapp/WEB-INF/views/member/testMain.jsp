@@ -25,16 +25,10 @@
 	<p>롤 계정 : ${sessionScope.lol_account}</p>
 	<p>유저 타입 : ${sessionScope.user_type}</p>
 
-	<form id="logoutFrm" action="/logout" method="post">
+	<form id="logoutFrm" action="/member/logout" method="post">
 		<a href="javascript:logout()">로그아웃</a>
 	</form>
-	<br>
-	<a href="/dropMember">회원탈퇴</a>
 	
-	<h3 id="userTypeText"></h3><button id="userTypeChange">전환하기</button>
-	<input class="input" type="password" id="password" name="password" placeholder="비밀번호 적으라우">
-	<span id="result"></span>
-
 </body>
 <script type="text/javascript">
 	function logout() {
@@ -65,13 +59,13 @@
 		if(changeType != 0){
 			$.ajax({
 		        method: 'post',
-		        url: '/change_usertype',
+		        url: '/member/change_usertype',
 		        data: {email:'${sessionScope.email}',password:password, user_type:changeType},
 		      }).done(res=>{
 		        console.log(res);
 		        if (res) {
 		        	  console.log()
-		        	  location.href = '/testMain';
+		        	  location.href = '/member/testMain';
 		        	} else {
 		        	  console.log(res)
 		        	  document.getElementById("result").innerHTML = "유저타입 변경 실패";

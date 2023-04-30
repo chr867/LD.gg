@@ -40,7 +40,7 @@ $('#find_password').on('click',function(){
 		let phone = $('#phone').val()
 		$.ajax({
 			method: 'post',
-			url: '/find_password',
+			url: '/member/find_password',
 			data: {email:$('#email').val(), phone_num:$('#phone').val()},
 		}).done(res=>{
 			console.log(res);

@@ -1,4 +1,4 @@
-package com.ld.gg.controller;
+package com.ld.gg.controller.member;
 
 import java.util.List;
 
@@ -9,8 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -20,37 +22,27 @@ import com.ld.gg.service.MemberService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Controller
-public class MemberController {
+@RestController
+@RequestMapping("/member")
+public class MemberRestController {
 	@Autowired
 	private MemberService ms;
-
-	@GetMapping("/join")
-	public String join_page(Model model) {
-		return "join";
-	}
 	
 	@PostMapping("/join")
 	public ModelAndView join(MemberDto md) throws Exception {
 		boolean result = ms.join(md);
 
 		if (result) {
-			return new ModelAndView("redirect:/home")
+			return new ModelAndView("redirect:/")
 					.addObject("msg", "회원가입 성공")
 					.addObject("check", 1);
 		} else {
-			return new ModelAndView("redirect:/join")
+			return new ModelAndView("redirect:/member/join")
 					.addObject("msg", "회원가입 실패");
 		}
 	}
-
-	@GetMapping("/testMain")
-	public String test_main(Model model) {
-		return "testMain";
-	}
-
+	
 	@GetMapping("/check_phone_num")
-	@ResponseBody
 	public boolean check_phone_num(String phone_num) throws Exception {
 		System.out.println(phone_num);
 		boolean findResult = ms.findMemberPhoneNum(phone_num);
@@ -58,7 +50,6 @@ public class MemberController {
 	}
 
 	@GetMapping("/check_email")
-	@ResponseBody
 	public boolean check_email(String email) throws Exception {
 		System.out.println(email);
 		boolean findResult = ms.findMemberEmail(email);
@@ -66,7 +57,7 @@ public class MemberController {
 	}
 
 	@GetMapping("/check_lol_account")
-	public @ResponseBody List<MemberDto> check_lol_account(String lol_account) throws Exception {
+	public List<MemberDto> check_lol_account(String lol_account) throws Exception {
 		System.out.println(lol_account);
 		List<MemberDto> findResult = ms.findLolAccount(lol_account);
 		System.out.println(findResult);
@@ -76,7 +67,6 @@ public class MemberController {
 		} else {
 			return findResult;
 		}
-
 	}
 
 	@PostMapping("/login")
@@ -90,7 +80,7 @@ public class MemberController {
 			session.setAttribute("user_type", member.getUser_type());
 
 			ra.addFlashAttribute("msg", "로그인 성공");
-			return new ModelAndView("redirect:/testMain");
+			return new ModelAndView("redirect:/member/testMain");
 		}
 		ra.addFlashAttribute("msg", "로그인 실패");
 		ra.addFlashAttribute("check", 2);
@@ -108,11 +98,6 @@ public class MemberController {
 		}
 	}
 
-	@GetMapping("/findEmail")
-	public String findEmail(Model model) {
-		return "findEmail";
-	}
-
 	@GetMapping("/find_email")
 	@ResponseBody
 	public String find_email(String phone_num) throws Exception {
@@ -123,39 +108,22 @@ public class MemberController {
 		return null;
 	}
 
-	@GetMapping("/findPassword")
-	public String moveFindPassword(Model model) {
-		return "findPassword";
-	}
-
 	@PostMapping("/find_password")
-	public @ResponseBody String findPassword(@RequestParam("email") String email,
-			@RequestParam("phone_num") String phone_num) throws Exception {
+	public String findPassword(String email, String phone_num) throws Exception {
 		String password = ms.findPassword(email, phone_num);
 		System.out.println("컨트롤러 반환결과" + password);
 		return password;
 	}
 	
-	@GetMapping("/changePassword")
-	public String moveChangePassword(String email, String password) {
-		return "changePassword";
-	}
-	
 	@PostMapping("/change_password")
-	@ResponseBody
-	public boolean changePassword(String email, String password, String changePw) {
+	public boolean changePassword(String email, String password, String changePw) throws Exception{
 		boolean result = ms.changePassword(email,password,changePw);
 		log.info("비밀번호 변경 컨트롤러 반환부 : "+result);
 		return result;
 	}
-	@GetMapping("/dropMember")
-	public String moveDropMember(Model model) {
-		return "dropMember";
-	}
-	
+
 	@PostMapping("/drop_member")
-	@ResponseBody
-	public boolean dropMember(String email, String password, HttpSession session) {
+	public boolean dropMember(String email, String password, HttpSession session) throws Exception{
 		boolean result = ms.dropMember(email,password);
 		if(result) {
 			log.info("탈퇴 완료");
@@ -167,8 +135,7 @@ public class MemberController {
 	}
 	
 	@PostMapping("/change_usertype")
-	@ResponseBody
-	public boolean changeUserType(String email, String password, Integer user_type, HttpSession session) {
+	public boolean changeUserType(String email, String password, Integer user_type, HttpSession session) throws Exception{
 		log.info("유저타입 변경 시작");
 		boolean result = ms.changeUserType(email,password,user_type);
 		log.info("회원전환 결과:"+result);

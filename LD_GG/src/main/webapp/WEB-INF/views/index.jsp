@@ -24,7 +24,7 @@
 </head>
 <body>
 	<h1>index.jsp</h1>
-	<form action="/login" name="logFrm" method="post">
+	<form action="/member/login" name="logFrm" method="post">
 		<table border="1">
 			<tr>
 				<td colspan="2" align="center">로그인</td>
@@ -40,12 +40,12 @@
 				<td colspan="2" align="center" bgcolor="skyblue">마 쪼리나?</td>
 			</tr>
 			<tr>
-				<td colspan="2" align="center"><a href="/join">회원가입</a></td>
+				<td colspan="2" align="center"><a href="/member/join">회원가입</a></td>
 			</tr>
 		</table>
 	</form>
-	<a href="/findEmail">이메일 찾기</a> 
-	<a href="/findPassword">비밀번호 찾기</a>
+	<a href="/member/findEmail">이메일 찾기</a> 
+	<a href="/member/findPassword">비밀번호 찾기</a>
 	<br>
 	<br>
 	<br>
