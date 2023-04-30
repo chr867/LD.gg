@@ -54,6 +54,9 @@
 			for(record of res){
 				rList += '<tr id = "'record.summoner_name'">'
 				rList += '<td><span class = "win_lose"></span><span class = "game_mode"></span></td>'
+				rList += '<td><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+record.champ_id+'.png" alt="#"></td>'
+			rList += '</tbody>'
+			$('#record').html(rList)
 			}
 		}).fail(err=>{
 			console.log(err)
