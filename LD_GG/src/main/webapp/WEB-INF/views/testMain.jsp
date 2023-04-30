@@ -72,6 +72,7 @@
 		        if (res) {
 		        	  document.getElementById("result").innerHTML = "유저타입 변경완료";
 		        	  document.getElementById("result").style.color = "blue";
+		        	  location.href = '/testMain';
 		        	} else {
 		        	  document.getElementById("result").innerHTML = "유저타입 변경 실패";
 		        	  document.getElementById("result").style.color = "red";

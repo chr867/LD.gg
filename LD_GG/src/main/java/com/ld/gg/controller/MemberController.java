@@ -168,10 +168,13 @@ public class MemberController {
 	
 	@PostMapping("/change_usertype")
 	@ResponseBody
-	public boolean changeUserType(String email, String password, Integer user_type) {
+	public boolean changeUserType(String email, String password, Integer user_type, HttpSession session) {
 		log.info("유저타입 변경 시작");
 		boolean result = ms.changeUserType(email,password,user_type);
 		log.info("회원전환 결과:"+result);
+		if(result) {
+			session.setAttribute("user_type", user_type);
+		}
 		return result;
 	}
 }
