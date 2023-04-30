@@ -29,37 +29,37 @@ public class MemberController {
 
 	@GetMapping("/join")
 	public String goJoin(Model model) {
-		return "join";
+		return "/member/join";
 	}
 
 	@GetMapping("/testMain")
 	public String goTestMain(Model model) {
-		return "testMain";
+		return "/member/testMain";
 	}
 
 	@GetMapping("/findEmail")
 	public String goFindEmail(Model model) {
-		return "findEmail";
+		return "/member/findEmail";
 	}
 
 	@GetMapping("/findPassword")
 	public String goFindPassword(Model model) {
-		return "findPassword";
+		return "/member/findPassword";
 	}
 	
 	@GetMapping("/changePassword")
 	public String goChangePassword(Model model) {
-		return "changePassword";
+		return "/member/changePassword";
 	}
 	
 	@GetMapping("/myPage")
 	public String goMypage() {
-		return "myPage";
+		return "/member/myPage";
 	}
 	
 	@GetMapping("/profile")
 	public String goProfile() {
-		return "profile";
+		return "/member/profile";
 	}
 	
 }
