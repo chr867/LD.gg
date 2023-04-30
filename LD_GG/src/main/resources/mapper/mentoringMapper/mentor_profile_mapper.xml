@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- select_all_mentor_profiles() 메서드와 매핑될 SQL -->
+<mapper namespace="com.ld.gg.dao.mentoringdao.MentorProfileDAO">
+
+<select id="select_all_mentor_profiles" resultType="mentorProfile">
+  SELECT * FROM mentor_profile;
+</select>
+
+<select id="select_by_email_mentor_profile" resultType="mentorProfile">
+  SELECT * FROM mentor_profile WHERE mentor_email = #{mentor_email};
+</select>
+
+<insert id="insert_mentor_profile" parameterType="String">
+  INSERT INTO mentor_profile (mentor_email) VALUES (#{mentor_email});
+</insert>
+
+<insert id="renewal_mentor_profile">
+  INSERT INTO mentor_profile (mentor_email)
+  SELECT email FROM member
+  WHERE member.user_type = 2 AND NOT EXISTS (
+      SELECT 1 FROM mentor_profile WHERE mentor_profile.mentor_email = member.email
+  );
+</insert>
+
+<update id="update_mentor_profile" parameterType="mentorProfile">
+  UPDATE mentor_profile SET about_mentor = #{about_mentor}, specialized_position = #{specialized_position}, 
+  specialized_champion = #{specialized_champion}, contact_time = #{contact_time}, careers = #{careers}, 
+  recom_ment = #{recom_ment} WHERE mentor_email = #{mentor_email};
+</update>
+
+<delete id="delete_mentor_profile" parameterType="String">
+  DELETE FROM mentor_profile WHERE mentor_email = #{mentor_email};
+</delete>
+
+
+
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- select_all_mentor_profiles() 메서드와 매핑될 SQL -->
+<mapper namespace="com.ld.gg.dao.mentoringdao.TagListDAO">
+
+<select id="select_all_tag" resultType="tagList">
+  SELECT * FROM mentoring_tag_list;
+</select>
+
+<select id="select_by_tag_type" resultType="tagList">
+  SELECT * FROM mentoring_tag_list WHERE tag_type = #{tag_type};
+</select>
+
+<select id="select_by_id_tag" resultType="tagList">
+  SELECT * FROM mentoring_tag_list WHERE tag_id = #{tag_id};
+</select>
+
+
+
+</mapper>

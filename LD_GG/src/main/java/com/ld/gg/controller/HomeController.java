@@ -1,5 +1,7 @@
 package com.ld.gg.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,4 +27,14 @@ public class HomeController {
 		return "index";
 	}
 	
+	//마이페이지로 이동
+	@GetMapping("/mypage")
+	public String go_mypage(HttpServletRequest request, Model model) {
+		HttpSession session = request.getSession();
+		String email = (String)session.getAttribute("email");
+		Integer user_type = (Integer)session.getAttribute("user_type");
+		model.addAttribute("email", email);
+		model.addAttribute("user_type", user_type);
+		return "myPage";
+	}
 }

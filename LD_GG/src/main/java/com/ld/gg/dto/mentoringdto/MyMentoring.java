@@ -1,5 +1,7 @@
 package com.ld.gg.dto.mentoringdto;
 
+import java.time.LocalDateTime;
+
 import org.apache.ibatis.type.Alias;
 
 import lombok.AllArgsConstructor;
@@ -7,17 +9,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain=true)
-@Alias("customMentor")
-public class CustomMentorDTO {
+@Alias("myMentoring")
+public class MyMentoring {
 	private String menti_email; //pk
-    private String summoner_name;
-    private String position_to_learn;
-    private String champion_to_learn;
-    private String target_tier;
-    private String own_goal;
+	private int class_id; //pk
+	private int menti_state; //0: 대기중, 1: 수강중, 2: 수강 완료
+	private String mentor_email;
+	private LocalDateTime apply_date;
+	private LocalDateTime done_date;
 }

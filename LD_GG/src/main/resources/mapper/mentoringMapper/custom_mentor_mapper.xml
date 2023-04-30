@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.ld.gg.dao.mentoringdao.CustomMentorDAO">
+
+<select id="select_all_custom_mentor" resultType="customMentor">
+  SELECT * FROM custom_mentor;
+</select>
+
+<select id="select_by_email_custom_mentor" resultType="customMentor">
+  SELECT * FROM custom_mentor WHERE menti_email = #{menti_email};
+</select>
+
+<insert id="insert_custom_mentor" parameterType="String">
+  INSERT INTO custom_mentor (menti_email) VALUES (#{menti_email});
+</insert>
+
+<update id="update_custom_mentor" parameterType="customMentor">
+  UPDATE custom_mentor SET menti_email = #{menti_email}, summoner_name = #{summoner_name}, 
+  position_to_learn = #{position_to_learn}, champion_to_learn = #{champion_to_learn}, target_tier = #{target_tier},
+  own_goal = #{own_goal} WHERE menti_email = #{menti_email};
+</update>
+
+<delete id="delete_custom_mentor" parameterType="String">
+  DELETE FROM custom_mentor WHERE menti_email = #{menti_email};
+</delete>
+
+
+
+</mapper>

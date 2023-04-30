@@ -7,17 +7,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain=true)
-@Alias("customMentor")
-public class CustomMentorDTO {
-	private String menti_email; //pk
-    private String summoner_name;
-    private String position_to_learn;
-    private String champion_to_learn;
-    private String target_tier;
-    private String own_goal;
+@Alias("mentorClass")
+public class MentorClassDTO {
+	private int class_id; //pk
+	private String mentor_email;
+	private String class_name;
+	private String class_info;
+	private int price;
 }

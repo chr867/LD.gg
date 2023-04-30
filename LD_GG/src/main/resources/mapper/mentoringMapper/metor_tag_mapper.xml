@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.ld.gg.dao.mentoringdao.MentorTagDAO">
+
+<select id="select_all_mentor_tag" resultType="mentorTag">
+  SELECT * FROM mentor_tag;
+</select>
+
+<select id="select_by_email_mentor_tag" resultType="mentorTag">
+  SELECT * FROM mentor_tag WHERE mentor_email = #{mentor_email};
+</select>
+
+<insert id="insert_mentor_tag" parameterType="mentorTag">
+  INSERT INTO mentor_tag (mentor_email, tag_id) VALUES (#{mentor_email}, #{tag_id});
+</insert>
+
+<delete id="delete_mentor_tag" parameterType="String">
+  DELETE FROM mentor_tag WHERE mentor_email = #{mentor_email};
+</delete>
+
+
+
+</mapper>

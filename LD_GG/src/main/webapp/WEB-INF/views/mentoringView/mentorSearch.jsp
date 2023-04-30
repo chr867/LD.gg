@@ -16,7 +16,6 @@
         fetch('/mentor/find-mentor/')
             .then(response => response.json())
             .then(data => {
-            	console.log(data);
                 const mentorList = document.getElementById("mentor-list");
                 for (let i = 0; i < data.length; i++) {
                     const mentor = data[i];
@@ -54,7 +53,7 @@
     	}
 
     window.onload = function() {
-        // 페이지 로드가 완료되면 멘토 리스트를 출력합니다.
+        // 페이지 로드가 완료되면 멘토 리스트를 출력
     	renewal_mentor_list()
         .then(() => get_mentor_list())
         .catch(error => console.error(error));
