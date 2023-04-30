@@ -70,10 +70,10 @@
 		      }).done(res=>{
 		        console.log(res);
 		        if (res) {
-		        	  document.getElementById("result").innerHTML = "유저타입 변경완료";
-		        	  document.getElementById("result").style.color = "blue";
+		        	  console.log()
 		        	  location.href = '/testMain';
 		        	} else {
+		        	  console.log(res)
 		        	  document.getElementById("result").innerHTML = "유저타입 변경 실패";
 		        	  document.getElementById("result").style.color = "red";
 		        	} 
