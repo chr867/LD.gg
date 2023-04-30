@@ -4,8 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.ld.gg.controller.summoner.RecordDto;
 import com.ld.gg.dao.Summoner_dao;
-import com.ld.gg.dto.SummonerDto;
+import com.ld.gg.dto.summoner.SummonerDto;
 
 @Service
 public class SummonerService {
@@ -34,6 +35,11 @@ public class SummonerService {
 	public SummonerDto get_summoner_info(String summoner_name) {
 		SummonerDto sd = SD.get_summoner_info(summoner_name);
 		return sd;
+	}
+
+	public List<RecordDto> get_summoner_record() {
+		List<RecordDto> sr = SD.get_summoner_record();
+		return sr;
 	}
 	
 
