@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.ld.gg.controller.summoner.RecordDto;
 import com.ld.gg.dao.Summoner_dao;
+import com.ld.gg.dto.summoner.RecordDto;
 import com.ld.gg.dto.summoner.SummonerDto;
 
 @Service

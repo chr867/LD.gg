@@ -1,4 +1,4 @@
-package com.ld.gg.controller.summoner;
+package com.ld.gg.dto.summoner;
 
 import org.apache.ibatis.type.Alias;
 

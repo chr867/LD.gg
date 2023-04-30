@@ -1,4 +1,4 @@
-package com.ld.gg.dto;
+package com.ld.gg.dto.summoner;
 
 import org.apache.ibatis.type.Alias;
 

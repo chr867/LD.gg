@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.ld.gg.controller.summoner.RecordDto;
+import com.ld.gg.dto.summoner.RecordDto;
 import com.ld.gg.dto.summoner.SummonerDto;
 
 public interface Summoner_dao {
