@@ -21,10 +21,13 @@
 <body>
 	<h1>비밀번호 변경 페이지</h1>
 	<h1>세션 확인 이메일: ${sessionScope.email}</h1>
-	<input class="input" type="password" id="password" name="password" placeholder="느그 비밀번호 적으라우">
-	<input class="input" type="password" id="passwordTochange1" name="passwordTochange1" placeholder="변경할 비밀번호 적으라우">
-	<input class="input" type="password" id="passwordTochange2" name="passwordTochange2" placeholder="한번 더 적으라우">
-	
+	<input class="input" type="password" id="password" name="password"
+		placeholder="느그 비밀번호 적으라우">
+	<input class="input" type="password" id="passwordTochange1"
+		name="passwordTochange1" placeholder="변경할 비밀번호 적으라우">
+	<input class="input" type="password" id="passwordTochange2"
+		name="passwordTochange2" placeholder="한번 더 적으라우">
+
 	<input type="button" id="changePassword" value="비밀번호 변경하기">
 	<span id="result"></span>
 </body>
@@ -39,15 +42,17 @@ document.getElementById("changePassword").addEventListener("click", function() {
 	    if (passwordTochange1 === passwordTochange2) {
  	      $.ajax({
 	        method: 'post',
-	        url: '/change_password',
+	        url: '/member/change_password',
 	        data: {email:'${sessionScope.email}', password:password, changePw:passwordTochange2},
 	      }).done(res=>{
 	        console.log(res);
-	        if(res) {
-	          $('#result').html("비밀번호 변경완료").css('color', 'blue');
-	        } else {
-	          $('#result').html("비밀번호 변경 실패").css('color', 'red');
-	        } 
+	        if (res) {
+	        	  document.getElementById("result").innerHTML = "비밀번호 변경완료";
+	        	  document.getElementById("result").style.color = "blue";
+	        	} else {
+	        	  document.getElementById("result").innerHTML = "비밀번호 변경 실패";
+	        	  document.getElementById("result").style.color = "red";
+	        	} 
 	      }).fail(err=>{
 	        console.log(err);
 	      }); 

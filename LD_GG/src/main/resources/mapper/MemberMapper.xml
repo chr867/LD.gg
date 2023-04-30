@@ -55,6 +55,12 @@
 	</update>
 
 	<delete id="deleteAccount" parameterType="String">
-		DELETE FROM member WHERE email = #{email}
+		DELETE FROM member
+		WHERE email = #{email}
 	</delete>
+
+	<update id="updateUserType" parameterType="member">
+		UPDATE MEMBER SET
+		user_type = #{user_type} WHERE email = #{email}
+	</update>
 </mapper>

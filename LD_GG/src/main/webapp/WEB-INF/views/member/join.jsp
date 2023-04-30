@@ -26,7 +26,7 @@
 	<h1>join.jsp</h1>
 	<h1>joinFrm.jsp--회원가입 양식</h1>
 	<h1>${msg}</h1>
-	<form id="joinFrm" name="joinFrm" action="/join" method="post"
+	<form id="joinFrm" name="joinFrm" action="/member/join" method="post"
 		onsubmit="return check()">
 
 		<table border="1" style="margin: auto;">
@@ -104,7 +104,7 @@
 		if($('#summoner').val() !=''){
 			$.ajax({
 				method: 'get',
-				url: '/check_lol_account',
+				url: '/member/check_lol_account',
 				data: {lol_account:$('#summoner').val()},
 			}).done(res=>{
 				if(res.length === 0){
@@ -128,7 +128,7 @@
 		if($('#email').val() !=''){
 			$.ajax({
 				method: 'get',
-				url: '/check_email',
+				url: '/member/check_email',
 				data: {email:$('#email').val()},
 				//dataType: 'html', //json,html(text)
 			}).done(res=>{
@@ -152,7 +152,7 @@
 		if($('#phone').val() !=''){
 			$.ajax({
 				method: 'get',
-				url: '/check_phone_num',
+				url: '/member/check_phone_num',
 				data: {phone_num:$('#phone').val()},
 				//dataType: 'html', //json,html(text)
 			}).done(res=>{

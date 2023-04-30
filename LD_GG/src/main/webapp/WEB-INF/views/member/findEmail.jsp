@@ -29,7 +29,7 @@ $('#find_email').on('click',function(){
 	if($('#phone').val() !=''){
 		$.ajax({
 			method: 'get',
-			url: '/find_email',
+			url: '/member/find_email',
 			data: {phone_num:$('#phone').val()},
 		}).done(res=>{
 			console.log(res);
