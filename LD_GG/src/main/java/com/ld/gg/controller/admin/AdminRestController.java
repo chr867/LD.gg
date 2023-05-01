@@ -30,16 +30,15 @@ public class AdminRestController {
 			return json;
 		}
 		
-		@RequestMapping("/contents")
-		public String get_notice_content() {
-
-			return null;
-		}
-		
 		@RequestMapping("/search")
-		public String search_notice_content() {
+		public String search_notice_content(String t_b_content) throws Exception{
+			List<NoticeDto> n_list = as.search_notice(t_b_content);
 
-			return null;
+			ObjectMapper mapper = new ObjectMapper();
+			String json = null;
+			json = mapper.writeValueAsString(n_list);
+			
+			return json;
 		}
 		
 		@RequestMapping("/modify")
