@@ -90,7 +90,13 @@
 		si.s_level DESC;
 	</select>
 	
-	<select id="get_summoner_info" resultType = "summoner">
+	<select id="get_summoner_info" resultType = "List">
+		SELECT * FROM
+		SUMMONER_INFO
+		WHERE summoner_name = ${summoner_name}
+	</select>
+	
+	<select id="get_renewal_info" resultType = "List">
 		SELECT * FROM
 		SUMMONER_INFO
 		WHERE summoner_name = ${summoner_name}
