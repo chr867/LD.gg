@@ -21,6 +21,12 @@
 	</div>
 	<div id="pager" style="height: 35px;"></div>
 	
+<a href="/userinterface/notice/write">작성</a>
+
+<form action="#" onsubmit="search()">
+	<input type="text" name="t_b_content">
+</form>
+
 <script type="text/javascript">
 
 $("#grid").jqGrid({
@@ -28,13 +34,53 @@ $("#grid").jqGrid({
 	datatype : "json",
 	colNames : ['번호', '내용', '조회수', '추천 수', '날짜'],
 	colModel:[
-		{name:'t_b_num', index:'t_b_num', width:90, align: "center"},
-		{name:'t_b_content', index:'t_b_content', width:90, align: "center"},
-		{name:'t_b_view', index:'t_b_view', width:90, align: "center"},
-		{name:'t_b_recom', index:'t_b_recom', width:90, align: "center"},
-		{name:'t_b_date', index:'t_b_date', width:90, align: "center"}
-	]
+		{name:'t_b_num', index:'t_b_num', width:90, align: "center", key:true},
+		{name:'t_b_content', index:'t_b_num', width:90, align: "center", sortable : false},
+		{name:'t_b_views', index:'t_b_num', width:90, align: "center"},
+		{name:'t_b_recom', index:'t_b_num', width:90, align: "center"},
+		{name:'t_b_date', index:'t_b_num', width:90, align: "center"}
+		],
+	sortable : true,
+	loadonce : true,
+/* 	autowidth: true,
+	multiselect: true,
+	pager:'#pager',
+	rowNum: 10,
+	rowList: [10, 20, 50],
+	sortname: 'date',
+	sortorder: 'desc',
+	height: 250, */
+	onSelectRow: function(rowid){
+		location.href = `/userinterface/notice/detail?t_b_num=\${rowid}`
+	}
 })
+
+function search(){
+	$("#grid").jqGrid({
+		url : "/userinterface/notice/search.json",
+		datatype : "json",
+		colNames : ['번호', '내용', '조회수', '추천 수', '날짜'],
+		colModel:[
+			{name:'t_b_num', index:'t_b_num', width:90, align: "center", key:true},
+			{name:'t_b_content', index:'t_b_num', width:90, align: "center"},
+			{name:'t_b_views', index:'t_b_num', width:90, align: "center"},
+			{name:'t_b_recom', index:'t_b_num', width:90, align: "center"},
+			{name:'t_b_date', index:'t_b_num', width:90, align: "center"}
+			],
+	/* 	autowidth: true,
+		multiselect: true,
+		pager:'#pager',
+		rowNum: 10,
+		rowList: [10, 20, 50],
+		sortname: 'date',
+		sortorder: 'desc',
+		height: 250, */
+		onSelectRow: function(rowid){
+			location.href = `/userinterface/notice/detail?t_b_num=\${rowid}`
+		}
+	})
+
+}
 </script>
 </div>
 </body>
