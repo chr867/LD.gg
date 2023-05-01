@@ -29,8 +29,18 @@ public class TipController {
 	}
 	
 	@GetMapping("/details")
-	public String tipDetails(Model model) {
-		return "/tip/details";
+	public ModelAndView tipDetails(@RequestParam("t_b_num") int t_b_num) {
+		TipDto tipDetails = ts.getTipDetails(t_b_num);
+		
+		//페이지 로드시 조회수 1씩 증가 
+		int t_b_views = tipDetails.getT_b_views() + 1; 
+		log.info("조회수 : "+t_b_views);
+		tipDetails.setT_b_views(t_b_views); 
+	    ts.updateView(tipDetails); 
+	    
+		ModelAndView mav = new ModelAndView("tip/details");
+		mav.addObject("tipDetails",tipDetails);
+		return mav;
 	}
 	
 	@GetMapping("/write")

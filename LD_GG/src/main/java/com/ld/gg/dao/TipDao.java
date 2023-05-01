@@ -11,5 +11,9 @@ public interface TipDao {
 	List<TipDto> getBoardList();
 
 	List<TipDto> getSearchList(String keyword);
+
+	TipDto getTipDetails(int t_b_num);
+
+	void updateView(TipDto tipDetails);
 	
 }
