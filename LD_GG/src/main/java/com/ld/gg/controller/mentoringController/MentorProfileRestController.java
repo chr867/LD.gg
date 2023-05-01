@@ -1,5 +1,7 @@
 package com.ld.gg.controller.mentoringController;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ld.gg.dao.MemberDao;
+import com.ld.gg.dto.MemberDto;
 import com.ld.gg.dto.mentoringdto.MentorProfileDTO;
+import com.ld.gg.dto.mentoringdto.MentorTagDTO;
+import com.ld.gg.service.MemberService;
 import com.ld.gg.service.mentoringService.MentorProfileService;
 
 @RestController
@@ -27,13 +33,23 @@ public class MentorProfileRestController {
 	
 	@Autowired
 	private MentorProfileService mtpService;
+	@Autowired
+	private MemberDao mbdao;
 	
 	//멘토 회원 목록 가져오기
 	@GetMapping("/find-mentor")
 	public String select_all_mentor_profile() throws JsonProcessingException{
 		List<MentorProfileDTO> mtpList = mtpService.select_all_mentor_profiles();
 		ObjectMapper objectMapper = new ObjectMapper();
-		String mtpListjson = objectMapper.writeValueAsString(mtpList);
+		Iterator<MentorProfileDTO> iterator = mtpList.iterator();
+		List<String> lol_name_list = new ArrayList<>();
+		while (iterator.hasNext()) {
+			MentorProfileDTO mtp = iterator.next();
+		    String mentor_email = mtp.getMentor_email(); // mentor_email 추출
+		    MemberDto mbdto = mbdao.getMemberInfo(mentor_email);
+		    lol_name_list.add(mbdto.getLol_account());
+		}
+		String mtpListjson = objectMapper.writeValueAsString(lol_name_list);
 		return mtpListjson;
 	}
 	
@@ -54,6 +70,11 @@ public class MentorProfileRestController {
 	@PutMapping("/edit-profile")
 	public ResponseEntity<?> updateMentorProfile(@RequestBody MentorProfileDTO mentorProfileDTO){
 		mtpService.update_mentor_profile(mentorProfileDTO);
+	    return ResponseEntity.ok("Success");
+	}
+	@PutMapping("/edit-mentor-tag")
+	public ResponseEntity<?> insert_mentor_tag(@RequestBody MentorTagDTO mentor_tag_dto){
+		System.out.println(mentor_tag_dto);
 	    return ResponseEntity.ok("Success");
 	}
 	

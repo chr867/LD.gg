@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 
-<mapper namespace="com.ld.gg.dao.mentoringdao.MentorClassDAO">
+<mapper namespace="com.ld.gg.dao.mentoringdao.MentorProfileDAO">
 
 
 <select id="select_by_email_mentor_class" resultType="mentorClass">

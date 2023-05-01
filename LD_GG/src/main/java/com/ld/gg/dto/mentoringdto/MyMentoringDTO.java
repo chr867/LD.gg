@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(chain=true)
 @Alias("myMentoring")
-public class MyMentoring {
+public class MyMentoringDTO {
 	private String menti_email; //pk
 	private int class_id; //pk
 	private int menti_state; //0: 대기중, 1: 수강중, 2: 수강 완료

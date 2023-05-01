@@ -78,7 +78,8 @@
 
     	  // 선택한 태그들의 정보를 객체에 담기
     	  let data = {
-    	    selected_tags: selectedTags
+    	    mentor_email: "${mentor_profile.mentor_email}",
+    	    tag_id: selectedTags
     	  };
 
     	  // 서버로 전달할 JSON 형태로 변환

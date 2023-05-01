@@ -7,7 +7,7 @@
 <title>멘토 프로필</title>
 </head>
 <body>
-	<h2>${mentor_profile.mentor_email}멘토님의 프로필</h2>
+	<h2>${member.lol_account} 멘토님의 프로필</h2>
 	<h4>멘토 소개: ${mentor_profile.about_mentor}</h4>
 	<h4>특화 챔피언: ${mentor_profile.specialized_champion}</h4>
 	<h4>특화 포지션: ${mentor_profile.specialized_position}</h4>

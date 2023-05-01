@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.ld.gg.dao.mentoringdao.MentorProfileDAO;
 import com.ld.gg.dao.mentoringdao.TagListDAO;
 import com.ld.gg.dto.mentoringdto.MentorProfileDTO;
+import com.ld.gg.dto.mentoringdto.MentorTagDTO;
 import com.ld.gg.dto.mentoringdto.TagListDTO;
 
 @Service
@@ -17,6 +18,17 @@ public class MentorProfileService {
 	private MentorProfileDAO mtpdao;
 	@Autowired
 	private TagListDAO tagdao;
+	
+	//이메일로 멘토 태그 가져오기
+	public List<MentorTagDTO> select_by_email_mentor_tag(String mentor_email){
+		List<MentorTagDTO> mentor_tag_dto = mtpdao.select_by_email_mentor_tag(mentor_email);
+		return mentor_tag_dto;
+	}
+	
+	//멘토 태그 등록
+	public void insert_mentor_tag(String mentor_email, int[] tag_id_list) {
+		
+	}
 	
 	//모든 태그 리스트 가져오기
 	public List<TagListDTO> select_all_tag(){
