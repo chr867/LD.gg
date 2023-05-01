@@ -43,5 +43,15 @@ public class TipService {
 		log.info("{}",sList);
 		return sList;
 	}
+
+	public TipDto getTipDetails(int t_b_num) {
+		return tDao.getTipDetails(t_b_num);
+		
+	}
+
+	public void updateView(TipDto tipDetails) {
+		tDao.updateView(tipDetails);
+		
+	}
 	
 }

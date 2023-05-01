@@ -13,14 +13,26 @@
 	</insert>
 
 	<select id="getBoardList" resultType="tip">
-		SELECT * FROM tip_board ORDER BY t_b_num DESC;
+		SELECT * FROM tip_board
+		ORDER BY t_b_num DESC;
 	</select>
 
 	<select id="getSearchList" resultType="tip">
 		SELECT * FROM tip_board
 		WHERE t_b_content LIKE CONCAT('%', #{keyword}, '%')
-		OR t_b_title LIKE CONCAT('%', #{keyword}, '%')
+		OR t_b_title LIKE
+		CONCAT('%', #{keyword}, '%')
 		ORDER BY t_b_content DESC
 	</select>
 
+	<select id="getTipDetails" resultType="tip">
+		SELECT * FROM tip_board
+		WHERE t_b_num = #{t_b_num};
+	</select>
+
+	<update id="updateView" parameterType="tip">
+		UPDATE tip_board
+		SET t_b_views = #{t_b_views}
+		WHERE t_b_num = #{t_b_num}
+	</update>
 </mapper>

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,7 +18,96 @@
 <script src="https://code.jquery.com/jquery-3.6.3.js"
 	integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
 	crossorigin="anonymous"></script>
+<style type="text/css">
+/*  게시글 확인용으로 GPT로 작성된 CSS입니다 프론트페이지 작업시 삭제해주세요*/
+body {
+	font-family: Arial, sans-serif;
+	background-color: #F5F5F5;
+}
+
+h1 {
+	font-size: 24px;
+	color: #333;
+	margin-top: 20px;
+	margin-bottom: 10px;
+}
+
+.container {
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 20px;
+	background-color: #FFF;
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 20px;
+}
+
+th, td {
+	padding: 10px;
+	text-align: left;
+	border-bottom: 1px solid #CCC;
+}
+
+th {
+	background-color: #EEE;
+}
+
+.label {
+	display: inline-block;
+	width: 120px;
+	font-weight: bold;
+	color: #666;
+	margin-right: 10px;
+	margin-bottom: 5px;
+}
+
+.value {
+	color: #333;
+}
+</style>
+</head>
 <body>
-	<h1>공략 게시판 상세페이지</h1>
+	<div class="container">
+		<h1>공략 게시판 상세페이지</h1>
+		<table>
+			<tr>
+				<th class="label">글 번호</th>
+				<td class="value">${tipDetails.t_b_num}</td>
+			</tr>
+			<tr>
+				<th class="label">제목</th>
+				<td class="value">${tipDetails.t_b_title}</td>
+			</tr>
+			<tr>
+				<th class="label">내용</th>
+				<td class="value">${tipDetails.t_b_content}</td>
+			</tr>
+			<tr>
+				<th class="label">조회수</th>
+				<td class="value">${tipDetails.t_b_views}</td>
+			</tr>
+			<tr>
+				<th class="label">추천수</th>
+				<td class="value">${tipDetails.t_b_recom}</td>
+			</tr>
+			<tr>
+				<th class="label">작성일</th>
+				<td class="value">${tipDetails.t_b_date}</td>
+			</tr>
+			<tr>
+				<th class="label">챔피언</th>
+				<td class="value">${tipDetails.champion_id}</td>
+			</tr>
+			<tr>
+				<th class="label">작성자</th>
+				<td class="value">${tipDetails.email}</td>
+			</tr>
+		</table>
+	</div>
+
 </body>
 </html>
