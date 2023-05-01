@@ -12,7 +12,7 @@ import com.ld.gg.dto.champ.Champ_match_up_rune;
 import com.ld.gg.dto.champ.Champ_match_up_skill;
 import com.ld.gg.dto.champ.Champ_match_up_spell;
 
-public interface Champ_dao {
+public interface ChampDao {
 
 	Champ_analytics champ_rank(@Param("lane")String lane, @Param("tier")String tier);
 

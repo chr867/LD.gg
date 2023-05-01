@@ -22,6 +22,27 @@ public class AdminService {
 		
 		return n_list;
 	}
+
+	public NoticeDto get_notice_detail(int t_b_num) {
+		NoticeDto notice = ad.get_notice_detail(t_b_num);
+		log.info("notice = {}", notice);
+
+		return notice;
+	}
+
+	public void increase_views(int t_b_num) {
+		Boolean result = ad.increase_views(t_b_num);
+		if(!result) {
+			log.info("조회수 에러");
+		}
+	}
+
+	public List<NoticeDto> search_notice(String keyword) {
+		List<NoticeDto> n_list = ad.search_notice(keyword);
+		log.info("search = {}", n_list);
+		
+		return n_list;
+	}
 	
 	
 

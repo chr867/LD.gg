@@ -1,8 +1,11 @@
 package com.ld.gg.controller.summoner;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,7 +27,13 @@ public class SummonerController {
 	
 	@GetMapping(value = "/info")
 	public ModelAndView summoner_info(String summoner_name) {
-		SummonerDto s = ss.get_summoner_info(summoner_name);
+		List<SummonerDto> s = ss.get_summoner_info(summoner_name);
 		return new ModelAndView("info").addObject("summoner", s);
+	}
+	
+	@PostMapping(value = "/renewal")
+	public List<SummonerDto> renewal_info(String summoner_name){
+		List<SummonerDto> s = ss.get_renewal_info(summoner_name);
+		return s;
 	}
 }

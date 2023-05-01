@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ld.gg.dao.TipDao">
+	<insert id="insertTip" parameterType="tip">
+		INSERT INTO tip_board
+		(t_b_content, t_b_views, t_b_recom, champion_id, email, t_b_title)
+		VALUES (#{t_b_content}, default, default, #{champion_id},
+		#{email},
+		#{t_b_title});
+	</insert>
+
+	<select id="getBoardList" resultType="tip">
+		SELECT * FROM tip_board ORDER BY t_b_num DESC;
+	</select>
+
+	<select id="getSearchList" resultType="tip">
+		SELECT * FROM tip_board
+		WHERE t_b_content LIKE CONCAT('%', #{keyword}, '%')
+		OR t_b_title LIKE CONCAT('%', #{keyword}, '%')
+		ORDER BY t_b_content DESC
+	</select>
+
+</mapper>

@@ -17,9 +17,13 @@ public interface Summoner_dao {
 
 	List<SummonerDto> get_summoner_level();
 
-	SummonerDto get_summoner_info(@Param("summoner_name") String summoner_name);
+	List<SummonerDto> get_summoner_info(@Param("summoner_name") String summoner_name);
 
-	List<RecordDto> get_summoner_record();
+	List<RecordDto> get_summoner_record(@Param("summoner_name") String summoner_name);
+
+	List<SummonerDto> get_renewal_info(@Param("summoner_name") String summoner_name);
+
+	List<RecordDto> get_champ_position_filter(@Param("summoner_name") String summoner_name);
 	
 
 }
