@@ -5,11 +5,24 @@
 <html>
   <head>
     <title>Mentor Profile Form</title>
+    <style>
+  .scrollable-table {
+    height: 200px;
+    overflow: auto;
+  }
+  .toggle-button {
+    display: block;
+    margin: 10px;
+  }
+  #container_by_class{
+  	border: 1px solid black;
+  }
+</style>
   </head>
   <body>
     <h1>멘토 프로필 작성</h1>
     <form id="mentorProfileForm" onsubmit="return submitForm()">
-      <h2>${mentor_profile.mentor_email} 멘토님</h2>
+      <h2>${member.lol_account} 멘토님</h2>
       <label for="about_mentor">멘토 소개:</label>
       <input type="text" id="about_mentor" name="about_mentor" value="${mentor_profile.about_mentor}" required><br><br>
       <label for="specializedPosition">특화 포지션:</label>
@@ -22,31 +35,108 @@
       <input type="text" id="careers" name="careers" value="${mentor_profile.careers}" required><br><br>
       <label for="recom_ment">이런 분들께 추천해요:</label>
       <input type="text" id="recom_ment" name="recom_ment" value="${mentor_profile.recom_ment}" required><br><br>
-      
-      <table>
-	  <thead>
-	    <tr>
-	      <th>선택</th>
-	      <th>필드1</th>
-	    </tr>
-	  </thead>
-	  <tbody>
-	    <c:forEach items="${tag_list}" var="tag_list">
-	      <tr>
-	        <td>
-	          <input type="checkbox" name="selected_tags" value="${tag_list.tag_id}">
-	        </td>
-	        <td>${tag_list.tag_info}</td>
-	      </tr>
-	    </c:forEach>
-	  </tbody>
-	  <button onclick="submitTagForm()">태그 저장</button>
-	</table>
-      
       <input type="submit" value="작성">
-      
-    </form>
+       </form>
+      <div class="scrollable-table">
+		  <table>
+		    <thead>
+		      <tr>
+		        <th>선택</th>
+		        <th>필드1</th>
+		      </tr>
+		    </thead>
+		    <tbody>
+		      <c:forEach items="${tag_list}" var="tag_list">
+		        <tr>
+		          <td>
+		            <input type="checkbox" name="selected_tags" value="${tag_list.tag_id}">
+		          </td>
+		          <td>${tag_list.tag_info}</td>
+		        </tr>
+		      </c:forEach>
+		    </tbody>
+		  </table>
+		</div>
+		<button class="save_tag" onclick="deleteMentorTag()">태그 저장</button>
+   		<button class="toggle-button" onclick="toggleTable()">토글 버튼</button>
+   		
+   		<form id="classForm" onsubmit="return classSubmitForm()">
+      <label for="class_name">수업명:</label>
+      <input type="text" id="class_name" name="class_name" value="" required><br><br>
+      <label for="class_info">수업 정보:</label>
+      <input type="text" id="class_info" name="class_info" value="" required><br><br>
+      <label for="price">가격</label>
+      <input type="number" id="price" name="price" value="" required><br><br>
+      <input type="submit" value="새로운 수업 작성">
+       </form>
+       <div>
+       <c:forEach items="${class_list}" var="class_list">
+       		<div id="container_by_class">
+		        <div>
+		        <h4>${class_list.class_name}</h4>
+		        <button onclick = "deleteClass('${class_list.class_id}')">삭제</button>
+		        </div>
+		        <div>
+		        <h4>${class_list.price}</h4>
+		        </div>
+		        <div>
+		        <h4>${class_list.class_info}</h4>
+		        </div>
+	       </div>
+		</c:forEach>
+       </div>
     <script>
+    	function select_by_email_class(){
+    		const email = "${member.email}";
+    		fetch("/mentor/select-mentor-class", {
+    		  method: "GET",
+    		  headers: {
+    		    "Content-Type": "application/json;charset=UTF-8"
+    		  },
+    		  body: JSON.stringify(email)
+    		})
+    		.then(response => response.json())
+    		.then(class_list => {
+    		  console.log(class_list);
+    		})
+    		.catch(error => console.error(error));
+    	}
+		function deleteClass(class_id){
+	        let xhr = new XMLHttpRequest();
+	        xhr.open("DELETE", "/mentor/delete-mentor-class/");
+	        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	        xhr.onload = function () {
+	    	    if (xhr.status === 200) {
+	    	    	select_by_email_class();
+	    	    }
+	        };
+	        xhr.send(class_id);
+    	}
+    	function classSubmitForm() {
+        let form = document.getElementById("classForm");
+        let formData = new FormData(form);
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", "/mentor/insert-mentor-class/");
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        let price = parseInt(formData.get("price"));
+        let mentorClassDTO = {
+        	mentor_email: "${mentor_profile.mentor_email}",
+        	class_name: formData.get("class_name"),
+        	class_info: formData.get("class_info"),
+        	price: price
+        };
+        console.log(mentorClassDTO);
+        xhr.send(JSON.stringify(mentorClassDTO));
+        return false;
+      }
+    	function toggleTable() {
+    	  let table = document.querySelector('.scrollable-table');
+    	  if (table.style.display === 'none') {
+    	    table.style.display = 'block';
+    	  } else {
+    	    table.style.display = 'none';
+    	  }
+    	}
       function submitForm() {
         let form = document.getElementById("mentorProfileForm");
         let formData = new FormData(form);
@@ -66,24 +156,11 @@
         return false;
       }
       
-      function submitTagForm() {
-    	  let checkboxes = document.getElementsByName("selected_tags");
-    	  let selectedTags = [];
-    	  for (let i = 0; i < checkboxes.length; i++) {
-    	    if (checkboxes[i].checked) {
-    	      selectedTags.push(checkboxes[i].value);
-    	    }
-    	  }
-    	  console.log(selectedTags); // 선택한 태그들의 정보를 출력
-
-    	  // 선택한 태그들의 정보를 객체에 담기
-    	  let data = {
-    	    mentor_email: "${mentor_profile.mentor_email}",
-    	    tag_id: selectedTags
-    	  };
+      function submitTagForm(tagList) {
+    	  //console.log(tagList); // 선택한 태그들의 정보를 출력
 
     	  // 서버로 전달할 JSON 형태로 변환
-    	  let jsonData = JSON.stringify(data);
+    	  let jsonData = JSON.stringify(tagList);
 
     	  // AJAX 요청 보내기
     	  let xhr = new XMLHttpRequest();
@@ -92,6 +169,34 @@
     	  xhr.send(jsonData);
 
     	  return false; // 폼 제출 방지
+    	}
+
+    	function deleteMentorTag() {
+    	  let mentorEmail = "${mentor_profile.mentor_email}";
+    	  let xhr = new XMLHttpRequest();
+    	  xhr.open("DELETE", "/mentor/delete-mentor-tag");
+    	  xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    	  xhr.onload = function () {
+    	    if (xhr.status === 200) {
+    	      let checkboxes = document.getElementsByName("selected_tags");
+    	      let tagList = [];
+    	      for (let i = 0; i < checkboxes.length; i++) {
+    	        if (checkboxes[i].checked) {
+    	          let tag = checkboxes[i].value;
+    	          let data = {
+    	            mentor_email: "${mentor_profile.mentor_email}",
+    	            tag_id: tag,
+    	          };
+    	          tagList.push(data);
+    	        }
+    	      }
+    	      submitTagForm(tagList); // submitTagForm 함수 호출
+    	      //console.log("멘토 태그가 삭제되었습니다.");
+    	    } else {
+    	    	//console.log("멘토 태그 삭제에 실패했습니다.");
+    	    }
+    	  };
+    	  xhr.send(mentorEmail);
     	}
     </script>
   </body>

@@ -19,7 +19,7 @@
   VALUES (#{mentor_email}, #{class_name}, #{class_info}, #{price});
 </insert>
 
-<update id="update_mentor_class" parameterType="int">
+<update id="update_mentor_class" parameterType="mentorClass">
   UPDATE mentor_class SET mentor_email = #{mentor_email}, class_name = #{class_name}, 
   class_info = #{class_info}, price = #{price}
   WHERE class_id = #{class_id};

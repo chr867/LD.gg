@@ -1,5 +1,6 @@
 package com.ld.gg.service.mentoringService;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.ld.gg.dao.mentoringdao.MentorProfileDAO;
 import com.ld.gg.dao.mentoringdao.TagListDAO;
+import com.ld.gg.dto.MemberDto;
+import com.ld.gg.dto.mentoringdto.MentorClassDTO;
 import com.ld.gg.dto.mentoringdto.MentorProfileDTO;
 import com.ld.gg.dto.mentoringdto.MentorTagDTO;
 import com.ld.gg.dto.mentoringdto.TagListDTO;
@@ -19,6 +22,24 @@ public class MentorProfileService {
 	@Autowired
 	private TagListDAO tagdao;
 	
+	//이메일로 멘토 수업 목록 가져오기
+	public List<MentorClassDTO> select_by_email_mentor_class(String mentor_email){
+		List<MentorClassDTO> mentor_class_dto = mtpdao.select_by_email_mentor_class(mentor_email);
+		return mentor_class_dto;
+	}
+	//멘토 클래스 인서트
+	public void insert_mentor_class(MentorClassDTO mentor_class_dto) {
+		mtpdao.insert_mentor_class(mentor_class_dto);
+	}
+	//멘토 클래스 업데이트
+	public void update_mentor_class(MentorClassDTO mentor_class_dto) {
+		mtpdao.update_mentor_class(mentor_class_dto);
+	}
+	//아이디로 멘토 클래스 삭제
+	public void delete_mentor_class(int class_id) {
+		mtpdao.delete_mentor_class(class_id);
+	}
+	
 	//이메일로 멘토 태그 가져오기
 	public List<MentorTagDTO> select_by_email_mentor_tag(String mentor_email){
 		List<MentorTagDTO> mentor_tag_dto = mtpdao.select_by_email_mentor_tag(mentor_email);
@@ -26,8 +47,16 @@ public class MentorProfileService {
 	}
 	
 	//멘토 태그 등록
-	public void insert_mentor_tag(String mentor_email, int[] tag_id_list) {
-		
+	public void insert_mentor_tag(List<MentorTagDTO> mentor_tag_list) {
+		Iterator<MentorTagDTO> iterator = mentor_tag_list.iterator();
+		while (iterator.hasNext()) {
+			MentorTagDTO mentor_tag_dto = iterator.next();
+			mtpdao.insert_mentor_tag(mentor_tag_dto);
+		}	
+	}
+	//멘토 태그 삭제
+	public void delete_mentor_tag(String mentor_email) {
+		mtpdao.delete_mentor_tag(mentor_email);
 	}
 	
 	//모든 태그 리스트 가져오기
