@@ -30,7 +30,7 @@ public class AdminRestController {
 			return json;
 		}
 		
-		@RequestMapping("/search")
+		@RequestMapping("/search.json")
 		public String search_notice_content(String t_b_content) throws Exception{
 			List<NoticeDto> n_list = as.search_notice(t_b_content);
 

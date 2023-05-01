@@ -31,4 +31,5 @@ public class AdminController {
 		return "notice_detail";
 	}
 	
+	
 }
