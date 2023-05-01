@@ -86,18 +86,7 @@ public class MemberRestController {
 		ra.addFlashAttribute("check", 2);
 		return new ModelAndView("redirect:/");
 	}
-
-	@PostMapping("/logout")
-	public String logout(HttpSession session) throws Exception {
-		if (session.getAttribute("email") != null) {
-			session.invalidate(); // 세션 무효화
-			return "redirect:/";
-		} else {
-			log.info("비로그인 중");
-			return "redirect:/";
-		}
-	}
-
+	
 	@GetMapping("/find_email")
 	@ResponseBody
 	public String find_email(String phone_num) throws Exception {

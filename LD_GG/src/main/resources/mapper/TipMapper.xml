@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ld.gg.dao.TipDao">
+	<select id="test" resultType="tip">
+		select * from TIP_BOARD where id =
+		1
+	</select>
+
+	<insert id="insertTip" parameterType="tip">
+		INSERT INTO tip_board
+		(t_b_content, t_b_views, t_b_recom, champion_id, email, t_b_title)
+		VALUES (#{t_b_content}, default, default, #{champion_id},
+		#{email}, #{t_b_title});
+	</insert>
+</mapper>

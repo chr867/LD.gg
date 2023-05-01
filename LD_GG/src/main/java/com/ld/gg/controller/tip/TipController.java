@@ -6,7 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.ld.gg.service.TipBoardService;
+import com.ld.gg.service.TipService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/tip")
 public class TipController {
 	@Autowired
-	private TipBoardService ts;
+	private TipService ts;
 	
 	@GetMapping("/")
 	public String goTipList(Model model) {
