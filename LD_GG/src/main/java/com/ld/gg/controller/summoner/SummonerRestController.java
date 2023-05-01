@@ -39,9 +39,15 @@ public class SummonerRestController {
 		return sd;
 	}
 	
-	@GetMapping("/record")
-	public List<RecordDto> summoner_record(){
-		List<RecordDto> sr = ss.get_summoner_record();
+	@GetMapping("/get_summoner_record")
+	public List<RecordDto> summoner_record(String summoner_name){
+		List<RecordDto> sr = ss.get_summoner_record(summoner_name);
+		return sr;
+	}
+	
+	@GetMapping("/get_champ_position_filter")
+	public List<RecordDto> get_position_filter(String summoner_name){
+		List<RecordDto> sr = ss.get_champ_position_filter(summoner_name);
 		return sr;
 	}
 	

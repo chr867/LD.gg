@@ -32,13 +32,23 @@ public class SummonerService {
 		return sd;
 	}
 
-	public SummonerDto get_summoner_info(String summoner_name) {
-		SummonerDto sd = SD.get_summoner_info(summoner_name);
+	public List<SummonerDto> get_summoner_info(String summoner_name) {
+		List<SummonerDto> sd = SD.get_summoner_info(summoner_name);
 		return sd;
 	}
 
-	public List<RecordDto> get_summoner_record() {
-		List<RecordDto> sr = SD.get_summoner_record();
+	public List<RecordDto> get_summoner_record(String summoner_name) {
+		List<RecordDto> sr = SD.get_summoner_record(summoner_name);
+		return sr;
+	}
+
+	public List<SummonerDto> get_renewal_info(String summoner_name) {
+		List<SummonerDto> sd = SD.get_renewal_info(summoner_name); 
+		return sd;
+	}
+
+	public List<RecordDto> get_champ_position_filter(String summoner_name) {
+		List<RecordDto> sr = SD.get_champ_position_filter(summoner_name);
 		return sr;
 	}
 	
