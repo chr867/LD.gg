@@ -18,5 +18,4 @@ public class HomeController {
 //		es.test();
 		return "index";
 	}
-	
 }

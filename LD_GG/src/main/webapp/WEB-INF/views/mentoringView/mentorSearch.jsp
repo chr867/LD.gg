@@ -19,10 +19,11 @@
                 const mentorList = document.getElementById("mentor-list");
                 for (let i = 0; i < data.length; i++) {
                     const mentor = data[i];
+                    console.log(mentor);
                     const listItem = document.createElement('li');
                     const link = document.createElement('a');
-                    link.href = '/mentor/profile/' + mentor.mentor_email;
-                    link.innerHTML = '<h2>' + mentor.mentor_email + '멘토님 </h2>';
+                    link.href = '/mentor/profile/' + mentor;
+                    link.innerHTML = '<h2>' + mentor + '멘토님 </h2>';
                     link.onclick = function(event) {  // 클릭 이벤트 핸들러 등록
                         event.preventDefault();  // 기본 동작 방지
                         window.location.href = link.href;  // URL 이동

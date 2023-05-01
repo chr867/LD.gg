@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 
-<mapper namespace="com.ld.gg.dao.mentoringdao.MentiTagDAO">
+<mapper namespace="com.ld.gg.dao.mentoringdao.MentiDAO">
 
 <select id="select_all_menti_tag" resultType="mentiTag">
   SELECT * FROM menti_tag;

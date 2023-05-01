@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 
-<mapper namespace="com.ld.gg.dao.mentoringdao.MentorTagDAO">
+<mapper namespace="com.ld.gg.dao.mentoringdao.MentorProfileDAO">
 
 <select id="select_all_mentor_tag" resultType="mentorTag">
   SELECT * FROM mentor_tag;
