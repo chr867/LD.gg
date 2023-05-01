@@ -12,6 +12,6 @@ public interface AdminDao {
 
 	Boolean increase_views(int t_b_num);
 
-	List<NoticeDto> search_notice(String t_b_content);
+	List<NoticeDto> search_notice(String keyword);
 
 }

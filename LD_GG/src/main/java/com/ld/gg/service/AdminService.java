@@ -37,8 +37,8 @@ public class AdminService {
 		}
 	}
 
-	public List<NoticeDto> search_notice(String t_b_content) {
-		List<NoticeDto> n_list = ad.search_notice(t_b_content);
+	public List<NoticeDto> search_notice(String keyword) {
+		List<NoticeDto> n_list = ad.search_notice(keyword);
 		log.info("search = {}", n_list);
 		
 		return n_list;

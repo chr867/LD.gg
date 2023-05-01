@@ -4,15 +4,23 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ld.gg.dao.TipDao">
-	<select id="test" resultType="tip">
-		select * from TIP_BOARD where id =
-		1
-	</select>
-
 	<insert id="insertTip" parameterType="tip">
 		INSERT INTO tip_board
 		(t_b_content, t_b_views, t_b_recom, champion_id, email, t_b_title)
 		VALUES (#{t_b_content}, default, default, #{champion_id},
-		#{email}, #{t_b_title});
+		#{email},
+		#{t_b_title});
 	</insert>
+
+	<select id="getBoardList" resultType="tip">
+		SELECT * FROM tip_board ORDER BY t_b_num DESC;
+	</select>
+
+	<select id="getSearchList" resultType="tip">
+		SELECT * FROM tip_board
+		WHERE t_b_content LIKE CONCAT('%', #{keyword}, '%')
+		OR t_b_title LIKE CONCAT('%', #{keyword}, '%')
+		ORDER BY t_b_content DESC
+	</select>
+
 </mapper>

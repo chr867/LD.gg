@@ -20,7 +20,7 @@
 	
 	<select id="search_notice" resultType="notice">
 		SELECT * FROM NOTICE_BOARD
-		WHERE T_B_CONTENT LIKE '%${t_b_content}%'
+		WHERE T_B_CONTENT LIKE '%${keyword}%'
 	</select>
 	
 </mapper>

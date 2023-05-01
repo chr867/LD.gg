@@ -1,5 +1,7 @@
 package com.ld.gg.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +17,31 @@ public class TipService {
 	private TipDao tDao;
 
 	public boolean tipWrite(TipDto tDto) {
-		Integer insertResult = tDao.insertTip(tDto);
-		
-		if(insertResult != 0) {
-			return true;
-		}else {
+		try {
+			Integer insertResult = tDao.insertTip(tDto);
+			
+			if(insertResult != 0) {
+				return true;
+			}else {
+				return false;
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+			e.printStackTrace();
 			return false;
 		}
+	}
+
+	public List<TipDto> getTipList() {
+		List<TipDto> tList = tDao.getBoardList();
+		log.info("{}",tList);
+		return tList;
+	}
+
+	public List<TipDto> getSearchList(String keyword) {
+		List<TipDto> sList = tDao.getSearchList(keyword);
+		log.info("{}",sList);
+		return sList;
 	}
 	
 }
