@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -36,10 +37,14 @@ public class MentorProfileRestController {
 	private MentorProfileService mtpService;
 	@Autowired
 	private MemberDao mbdao;
+	@Autowired
+	private MemberService mbService;
 	
 	//이메일로 멘토 클래스 가져오기
 	@GetMapping("select-mentor-class")
-	public String select_by_email_mentor_class(@RequestBody String email) throws JsonProcessingException{
+	public String select_by_email_mentor_class(@RequestParam String lol_account) throws JsonProcessingException{
+		List<MemberDto> mbdto = mbService.findLolAccount(lol_account);
+		String email = mbdto.get(0).getEmail();
 		List<MentorClassDTO> class_list = mtpService.select_by_email_mentor_class(email);
 		ObjectMapper objectMapper = new ObjectMapper();
 		String class_List_json = objectMapper.writeValueAsString(class_list);
