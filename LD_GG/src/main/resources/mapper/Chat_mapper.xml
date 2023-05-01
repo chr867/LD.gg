@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ld.gg.dao.ChatDao">
+	<insert id="save_minigame_chat" parameterType="chat_mini">
+		INSERT INTO MINI_GAME_CHAT 
+		VALUES(#{mini_game_send_user}, #{mini_game_chat_content}, #{mini_game_chat_time})
+	</insert>
+
+</mapper>
