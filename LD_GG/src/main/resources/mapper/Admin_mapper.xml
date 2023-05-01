@@ -6,4 +6,21 @@
 		SELECT * FROM NOTICE_BOARD
 		ORDER BY t_b_num asc;
 	</select>
+	
+	<select id="get_notice_detail" resultType="notice">
+		SELECT * FROM NOTICE_BOARD
+		WHERE T_B_NUM = #{t_b_num}
+	</select>
+	
+	<update id="increase_views" >
+		UPDATE NOTICE_BOARD 
+		SET T_B_VIEWS = T_B_VIEWS + 1
+		WHERE T_B_NUM = ${t_b_num}
+	</update>
+	
+	<select id="search_notice" resultType="notice">
+		SELECT * FROM NOTICE_BOARD
+		WHERE T_B_CONTENT LIKE '%${t_b_content}%'
+	</select>
+	
 </mapper>

@@ -7,7 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ld.gg.dao.champ.Champ_dao;
+import com.ld.gg.dao.champ.ChampDao;
 import com.ld.gg.dto.champ.Champ_analytics;
 import com.ld.gg.dto.champ.Champ_default;
 import com.ld.gg.dto.champ.Champ_match_up_default;
@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class Champion_service {
 	@Autowired
-	Champ_dao cd;
+	ChampDao cd;
 	
 	public Champ_analytics champ_rank(String lane, String tier){
 		Champ_analytics champ_list = cd.champ_rank(lane, tier);
