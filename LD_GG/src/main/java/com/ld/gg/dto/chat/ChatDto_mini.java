@@ -1,4 +1,4 @@
-package com.ld.gg.dto;
+package com.ld.gg.dto.chat;
 
 import java.sql.Timestamp;
 

@@ -7,7 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ld.gg.dao.champ.ChampDao;
+import com.ld.gg.dao.ChampDao;
 import com.ld.gg.dto.champ.Champ_analytics;
 import com.ld.gg.dto.champ.Champ_default;
 import com.ld.gg.dto.champ.Champ_match_up_default;

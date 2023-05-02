@@ -49,7 +49,7 @@ public class ChampionRestController {
 		return json;
 	}
 
-	@GetMapping("build-recom.json")
+	@GetMapping("/build-recom.json")
 	public String build_recom(String left_champion, String right_champion) throws Exception{
 		Map<String, Object>build_map = cs.build_recom(left_champion, right_champion);
 		
