@@ -66,6 +66,12 @@ public class MentorProfileService {
 		mymtdao.delete_my_mentoring(my_mt_dto);
 	}
 	
+	//멘토 이메일로 나와 잘 맞는 멘티 추천
+	public List<CustomMentorDTO> recom_menti(String mentor_email) {
+		List<CustomMentorDTO> recom_menti_list = mentidao.recom_menti(mentor_email);
+		return recom_menti_list;
+	}
+	
 	//멘티 이메일로 맞춤멘토 추천
 	public List<MentorProfileDTO> recom_mentor(String menti_email){
 		List<MentorProfileDTO> recom_mentor_list = mentidao.recom_mentor(menti_email);
@@ -199,4 +205,5 @@ public class MentorProfileService {
 	public void delete_mentor_profile(String mentor_email) {
 		mtpdao.delete_mentor_profile(mentor_email);
 	}
+	
 }

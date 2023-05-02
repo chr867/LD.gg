@@ -16,6 +16,16 @@
 	LIMIT 5;
 </select>
 
+<select id="recom_menti" resultType="customMentor" parameterType="String">
+	SELECT cm.menti_email , cm.summoner_name , cm.position_to_learn , cm.champion_to_learn , cm.target_tier , cm.own_goal
+	FROM custom_mentor AS cm
+	JOIN menti_tag AS mt ON cm.menti_email = mt.menti_email
+	WHERE mt.tag_id IN (SELECT tag_id FROM mentor_tag WHERE mentor_email = #{mentor_email})
+	GROUP BY cm.menti_email
+	HAVING COUNT(DISTINCT mt.tag_id) >= 2
+	ORDER BY COUNT(DISTINCT mt.tag_id) desc;
+</select>
+
 <select id="select_all_custom_mentor" resultType="customMentor">
   SELECT * FROM custom_mentor;
 </select>

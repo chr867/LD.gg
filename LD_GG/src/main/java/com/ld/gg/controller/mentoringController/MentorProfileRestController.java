@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ld.gg.dao.MemberDao;
@@ -29,6 +24,7 @@ import com.ld.gg.dto.mentoringdto.MentiTagDTO;
 import com.ld.gg.dto.mentoringdto.MentorClassDTO;
 import com.ld.gg.dto.mentoringdto.MentorProfileDTO;
 import com.ld.gg.dto.mentoringdto.MentorTagDTO;
+import com.ld.gg.dto.mentoringdto.estimateDTO;
 import com.ld.gg.service.MemberService;
 import com.ld.gg.service.mentoringService.MentorProfileService;
 
@@ -43,10 +39,26 @@ public class MentorProfileRestController {
 	@Autowired
 	private MemberService mbService;
 	
+	//견적 내용을 받아서 견적 내역 저장
+	@PostMapping("/save-estimate")
+	public void insert_estimate(@RequestBody estimateDTO estdto) {
+		List<MemberDto> mb = mbService.findLolAccount(estdto.getMenti_email());
+		estdto.setMenti_email(mb.get(0).getEmail());
+		mtpService.insert_estimate(estdto);
+	}
+	
+	//나와 잘 맞는 멘티 추천
+	@PostMapping("/recom-menti")
+	public String recom_menti(@RequestBody Map<String,String> email) throws JsonProcessingException{
+		List<CustomMentorDTO> cmList = mtpService.recom_menti(email.get("mentor_email"));
+		ObjectMapper objectMapper = new ObjectMapper();
+		String cmList_json = objectMapper.writeValueAsString(cmList);
+		return cmList_json;
+	}
+	
 	//맞춤멘토 추천
-	@PostMapping("recom-mentor")
+	@PostMapping("/recom-mentor")
 	public String recom_mentor(@RequestBody Map<String,String> email) throws JsonProcessingException{
-		//String menti_email = custom_mentor_dto.getMenti_email();
 		List<MentorProfileDTO> mtpList = mtpService.recom_mentor(email.get("menti_email"));
 		ObjectMapper objectMapper = new ObjectMapper();
 		String mtpList_json = objectMapper.writeValueAsString(mtpList);
@@ -54,7 +66,7 @@ public class MentorProfileRestController {
 	}
 	
 	//맞춤멘토 멘티 태그 저장
-	@PostMapping("save-menti-tag")
+	@PostMapping("/save-menti-tag")
 	@Transactional
 	public void save_menti_tag(@RequestBody List<MentiTagDTO> menti_tag_list) {
 		String menti_email = menti_tag_list.get(0).getMenti_email();
@@ -63,7 +75,7 @@ public class MentorProfileRestController {
 	}
 	
 	//맞춤멘토 객체 받아서 업데이트
-	@PostMapping("save-custom-mentor")
+	@PostMapping("/save-custom-mentor")
 	@Transactional
 	public void save_custom_mentor(@RequestBody CustomMentorDTO custom_mentor) {
 		String menti_email = custom_mentor.getMenti_email();
@@ -72,7 +84,7 @@ public class MentorProfileRestController {
 	}
 	
 	//이메일로 멘토 클래스 가져오기
-	@GetMapping("select-mentor-class")
+	@GetMapping("/select-mentor-class")
 	public String select_by_email_mentor_class(@RequestParam String lol_account) throws JsonProcessingException{
 		List<MemberDto> mbdto = mbService.findLolAccount(lol_account);
 		String email = mbdto.get(0).getEmail();
