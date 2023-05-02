@@ -30,5 +30,7 @@ public interface TipDao {
 
 	int replyInsert(TipDto tDto);
 
+	List<TipDto> getReplyList(int t_b_num);
+
 	
 }

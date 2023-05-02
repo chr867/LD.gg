@@ -92,4 +92,8 @@
 		VALUES (#{t_b_num}, #{t_r_content}, #{email});
 
 	</insert>
+	
+	<select id="getReplyList" resultType="tip">
+		SELECT * FROM tip_reply WHERE t_b_num = #{t_b_num}
+	</select>
 </mapper>

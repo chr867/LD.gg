@@ -110,6 +110,11 @@ public class TipService {
 		}
 	}
 
+	public List<TipDto> getReplyList(int t_b_num) {
+		List<TipDto> rList = tDao.getReplyList(t_b_num);
+		return rList;
+	}
+
 
 	
 }
