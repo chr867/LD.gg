@@ -1,6 +1,6 @@
 package com.ld.gg.dao;
 
-import com.ld.gg.dto.ChatDto_mini;
+import com.ld.gg.dto.chat.ChatDto_mini;
 
 public interface ChatDao {
 

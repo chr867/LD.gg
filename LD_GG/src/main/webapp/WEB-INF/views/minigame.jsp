@@ -5,6 +5,9 @@
 <head>
 <meta charset="UTF-8">
 <title>미니게임</title>
+<script src="https://code.jquery.com/jquery-3.6.3.js"
+	integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+	crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -13,10 +16,41 @@
 <hr>
 <input type="text" id="chat-input">
 <button onclick="send()">전송</button>
+<button onclick="timeline2()">추가정보</button>
 
 
 <script>
 
+	let time = 5
+	
+	function timeline2(){
+		$.ajax({
+			data : time,
+			method : 'get',
+			url : '/minigame/timeline.json',
+			dataType : 'json',
+		}).done(res=>{
+			console.log(res)
+		}).fail(err=>{
+			console.log(err)
+		})
+		
+		time += 5 
+	}
+
+
+$.ajax({
+	method : 'get',
+	url : '/minigame/data.json',
+	dataType : 'json',
+}).done(res=>{
+	console.log(res)
+}).fail(err=>{
+	console.log(err)
+})
+
+
+// 채팅
 	let socket;
 		
 	function connect() {
@@ -62,6 +96,7 @@
 		socket.send(text);
 		document.querySelector("#chat-input").value = ""
 	}
+// 채팅 끝
 </script>
 </body>
 </html>

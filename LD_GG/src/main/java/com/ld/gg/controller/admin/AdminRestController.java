@@ -41,7 +41,7 @@ public class AdminRestController {
 			return json;
 		}
 		
-		@RequestMapping("/modify")
+		@RequestMapping("/modify.json")
 		public String notice_modify() {
 
 			return null;

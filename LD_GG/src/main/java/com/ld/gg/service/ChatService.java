@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ld.gg.dao.ChatDao;
-import com.ld.gg.dto.ChatDto_mini;
+import com.ld.gg.dto.chat.ChatDto_mini;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,4 +1,4 @@
-package com.ld.gg.dao.champ;
+package com.ld.gg.dao;
 
 import java.util.List;
 
