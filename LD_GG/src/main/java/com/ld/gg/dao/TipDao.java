@@ -24,5 +24,11 @@ public interface TipDao {
 
 	int deleteRecom(TipDto tDto);
 
+	TipDto getTipinfo(int t_b_num);
+
+	int updateModifyTip(TipDto tDto);
+
+	int replyInsert(TipDto tDto);
+
 	
 }

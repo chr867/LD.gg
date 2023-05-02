@@ -44,7 +44,7 @@ public class TipController {
 	}
 	
 	@GetMapping("/write")
-	public String tipWrite(Model model) {
+	public String goTipWrite(Model model) {
 		return "/tip/write";
 	}
 	
@@ -80,4 +80,55 @@ public class TipController {
 			return mav;
 		}
 	}
-}
+	
+	@GetMapping("/modify")
+	public ModelAndView goTipModify(@RequestParam("t_b_num")int t_b_num, HttpSession session) {
+		log.info("글수정 기능 글번호 :"+t_b_num);
+		String email = (String)session.getAttribute("email");
+		TipDto tipInfo = ts.getTipinfo(t_b_num);
+		if(email.equals(tipInfo.getEmail())) {
+			ModelAndView mav = new ModelAndView("/tip/modify");
+			mav.addObject("num", tipInfo.getT_b_num());
+			mav.addObject("title", tipInfo.getT_b_title());
+			mav.addObject("content", tipInfo.getT_b_content());
+			mav.addObject("champion", tipInfo.getChampion_id());
+			return mav;
+		}else {
+			return new ModelAndView("/tip/").addObject("msg","글 수정페이지 이동 실패");
+		}
+	}
+	
+	@PostMapping("/modify_tip")
+	public ModelAndView modifyTip(@RequestParam int t_b_num,
+            @RequestParam String t_b_title,
+            @RequestParam String t_b_content,
+            @RequestParam int champion_id,
+            HttpSession session) {
+		
+		String email = (String)session.getAttribute("email");
+		
+		TipDto tDto = new TipDto();
+		tDto.setEmail(email);
+		tDto.setT_b_num(t_b_num);
+		tDto.setT_b_title(t_b_title);
+		tDto.setT_b_content(t_b_content);
+		tDto.setChampion_id(champion_id);
+		log.info("공략 글내용"+tDto);
+		boolean success = ts.ModifyTip(tDto);
+		log.info("공략 인서트 결과:"+success);
+		if (success) {
+			// 글쓰기 성공시 게시판 목록 페이지로 이동
+			return new ModelAndView("redirect:/tip/details?t_b_num=" + t_b_num);
+		} else {
+			// 글쓰기 실패시 글쓰기 페이지로 이동
+			ModelAndView mav = new ModelAndView("/tip/modify?t_b_num=" + t_b_num);
+			mav.addObject("errorMsg", "글쓰기에 실패했습니다.");
+			mav.addObject("num", t_b_num);
+			mav.addObject("title", t_b_title);
+			mav.addObject("content", t_b_content);
+			mav.addObject("champion", champion_id);
+			return mav;
+		}
+	}
+	
+	}

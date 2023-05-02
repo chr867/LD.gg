@@ -69,18 +69,57 @@ th {
 	color: #333;
 }
 
-.btn {
-	display: inline-block;
-	background-color: #4CAF50;
+#comment-form {
+	margin-top: 20px;
+	padding: 20px;
+	border-radius: 10px;
+	background-color: #f2f2f2;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+#comment-textarea {
+	width: 90%;
+	height: 100px;
+	margin-bottom: 10px;
+	padding: 10px;
+	border: none;
+	border-radius: 5px;
+	resize: none;
+	background-color: #fff;
+	font-size: 16px;
+	color: #444;
+	font-family: 'Noto Sans KR', sans-serif;
+}
+
+#comment-form input[type="submit"] {
+	display: block;
+	margin: 0 auto;
+	width: 100px;
+	height: 30px;
+	background-color: #0077b6;
 	color: #fff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 16px;
+	font-family: 'Noto Sans KR', sans-serif;
+}
+
+#comment-form input[type="submit"]:hover {
+	background-color: #023e8a;
+}
+#comment-submit-btn{
+	display: inline-block;
+	background-color: #EAEAEA;
 	padding: 8px 12px;
 	border: none;
 	border-radius: 3px;
 	cursor: pointer;
+	width: 8%;
+	height:100px;
 }
-
-.btn:hover {
-	background-color: #3e8e41;
+#comment-submit-btn:hover{
+background-color: #BDBDBD;
 }
 </style>
 </head>
@@ -122,8 +161,21 @@ th {
 			</tr>
 		</table>
 		<button onclick=tipRecom(${tipDetails.t_b_num})>게시물 추천하기</button>
-		<button onclick=modifyTip(${tipDetails.t_b_num}) id="modifyButton">게시물 수정하기</button>
-		<button onclick=deleteTip(${tipDetails.t_b_num}) id="deleteButton">게시물 삭제하기</button>
+		<button onclick=modifyTip(${tipDetails.t_b_num}) id="modifyButton">게시물
+			수정하기</button>
+		<button onclick=deleteTip(${tipDetails.t_b_num}) id="deleteButton">게시물
+			삭제하기</button>
+		<br>
+		<h2>댓글</h2>
+		<div id="comment-section">
+			<div id="comment-form">
+				<input type="text" placeholder="댓글을 입력해주세요" id="comment-textarea">
+				<button id="comment-submit-btn" onclick="submitComment()">등록</button>
+			</div>
+			<div id="comment-list">
+				<!-- 댓글 목록이 출력될 영역 -->
+			</div>
+		</div>
 	</div>
 </body>
 <script type="text/javascript">
@@ -132,11 +184,9 @@ let deleteButton = document.getElementById("deleteButton");
 let writerEmail = '${tipDetails.email}';
 let myEmail = '${sessionScope.email}';
 if(writerEmail === myEmail){
-	console.log("매치");
 	modifyButton.style.display = "block";
 	deleteButton.style.display = "block";
 }else{
-	console.log("노매치");
 	modifyButton.style.display = "none";
 	deleteButton.style.display = "none";
 }
@@ -165,20 +215,50 @@ function tipRecom(t_b_num) {
 }
 
 function modifyTip(t_b_num) {
-	$.ajax({
-		method: 'post',
-		url: '/tip/modify',
-		data: {t_b_num:t_b_num},
-	}).done(res=>{
-		if(res == 1){
-			alert("추천 성공")
-			location.href = "/tip/details?t_b_num="+${tipDetails.t_b_num};
-		}else{
-			alert("오류")
-		}
-	}).fail(err=>{
-		console.log(err);
-	})
+	location.href = "/tip/modify?t_b_num="+t_b_num;
 }
+
+function submitComment() {
+	let t_b_num = ${tipDetails.t_b_num};
+	let t_r_content = document.getElementById("comment-textarea").value;
+	
+	$.ajax({
+        method: 'post',
+        url: '/tip/reply_insert',
+        data: {t_b_num:t_b_num,t_r_content:t_r_content},
+      }).done(res=>{
+        console.log(res);
+        if (res) {
+        	  console.log()
+        	  location.href = '/tip/details?t_b_num='+t_b_num;
+        	} else {
+        	  console.log(res)
+        	  alert("댓글 등록 실패")
+        	} 
+      }).fail(err=>{
+        console.log(err);
+      }); 
+}
+
+function loadComments() {
+/* 	$.ajax({
+        method: 'post',
+        url: '/tip/reply_list',
+      }).done(res=>{
+        console.log(res);
+        if (res) {
+        	  console.log()
+        	  location.href = '/tip/details?t_b_num='+t_b_num;
+        	} else {
+        	  console.log(res)
+        	  alert("댓글 등록 실패")
+        	} 
+      }).fail(err=>{
+        console.log(err);
+      }); */
+}
+
+// 페이지 로딩 시 댓글 목록을 가져옵니다.
+loadComments();
 </script>
 </html>

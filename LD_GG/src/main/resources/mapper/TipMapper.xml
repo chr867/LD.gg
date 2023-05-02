@@ -57,8 +57,7 @@
 		WHERE t_b_num = #{t_b_num}
 	</update>
 
-	<select id="recomInfo" parameterType="tip"
-		resultType="Integer">
+	<select id="recomInfo" parameterType="tip" resultType="Integer">
 		SELECT *
 		FROM tip_recom
 		WHERE email = #{email} AND t_b_num =
@@ -67,10 +66,30 @@
 
 	<insert id="insertRecom" parameterType="tip">
 		INSERT INTO tip_recom
-		(t_b_num, email) VALUES (#{t_b_num}, #{email});
+		(t_b_num, email) VALUES (#{t_b_num}, #{email})
 	</insert>
 
 	<delete id="deleteRecom" parameterType="tip">
-		DELETE FROM tip_recom WHERE t_b_num = #{t_b_num} AND email = #{email};
+		DELETE FROM tip_recom
+		WHERE t_b_num = #{t_b_num} AND email = #{email}
 	</delete>
+
+	<select id="getTipinfo" resultType="tip">
+		SELECT * FROM tip_board WHERE
+		t_b_num = #{t_b_num}
+	</select>
+
+	<update id="updateModifyTip" parameterType="tip">
+		UPDATE tip_board SET
+		t_b_title = #{t_b_title}, t_b_content = #{t_b_content},
+		champion_id =
+		#{champion_id} WHERE t_b_num = #{t_b_num};
+	</update>
+
+	<insert id="replyInsert" parameterType="tip">
+		INSERT INTO `tip_reply`
+		(`t_b_num`, `t_r_content`, `email`)
+		VALUES (#{t_b_num}, #{t_r_content}, #{email});
+
+	</insert>
 </mapper>

@@ -79,6 +79,37 @@ public class TipService {
 		}
 	}
 
+	public TipDto getTipinfo(int t_b_num) {
+		return tDao.getTipinfo(t_b_num);
+	}
+
+	public boolean ModifyTip(TipDto tDto) {
+		try {
+			int updateResult = tDao.updateModifyTip(tDto);
+			log.info("공략글 수정 결과 :"+updateResult);
+			if(updateResult != 0) {
+				return true;
+			}else {
+				return false;
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	//성공 1, 실패2
+	public int replyInsert(TipDto tDto) {
+		int insertResult = tDao.replyInsert(tDto);
+		log.info("댓글 인서트 결과:"+insertResult);
+		if(insertResult != 0) {
+			return 1;
+		}else {
+			return 2;
+		}
+	}
+
 
 	
 }
