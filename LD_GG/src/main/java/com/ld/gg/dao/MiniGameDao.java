@@ -9,4 +9,8 @@ public interface MiniGameDao {
 
 	MiniGameTimeDto timeline_minigame(Integer time);
 
+	int submit_minigame();
+
+	boolean point_update(Integer point);
+
 }

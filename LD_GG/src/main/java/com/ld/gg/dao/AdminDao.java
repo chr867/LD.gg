@@ -14,4 +14,6 @@ public interface AdminDao {
 
 	List<NoticeDto> search_notice(String keyword);
 
+	boolean write_notice(NoticeDto nd);
+
 }

@@ -28,12 +28,14 @@
 
 <script type="text/javascript">
 
+// 공지 목록
 $("#grid").jqGrid({
 	url : "/userinterface/notice/histroy.json",
 	datatype : "json",
 	colNames : ['번호', '내용', '조회수', '추천 수', '날짜'],
 	colModel:[
 		{name:'t_b_num', index:'t_b_num', width:90, align: "center", key:true},
+		{name:'t_b_title', index:'t_b_num', width:90, align: "center", sortable : false},
 		{name:'t_b_content', index:'t_b_num', width:90, align: "center", sortable : false},
 		{name:'t_b_views', index:'t_b_num', width:90, align: "center"},
 		{name:'t_b_recom', index:'t_b_num', width:90, align: "center"},
@@ -53,7 +55,9 @@ $("#grid").jqGrid({
 		location.href = `/userinterface/notice/detail?t_b_num=\${rowid}`
 	}
 })
+// 목록 끝
 
+// 검색
 document.getElementById("search").addEventListener("click", function() {
 let keyword = document.getElementById('keyword').value;
 console.log(keyword);
@@ -64,7 +68,8 @@ console.log(keyword);
 		colNames : ['번호', '내용', '조회수', '추천 수', '날짜'],
 		colModel:[
 			{name:'t_b_num', index:'t_b_num', width:90, align: "center", key:true},
-			{name:'t_b_content', index:'t_b_num', width:90, align: "center"},
+			{name:'t_b_title', index:'t_b_num', width:90, align: "center", sortable : false},
+			{name:'t_b_content', index:'t_b_num', width:90, align: "center", sortable : false},
 			{name:'t_b_views', index:'t_b_num', width:90, align: "center"},
 			{name:'t_b_recom', index:'t_b_num', width:90, align: "center"},
 			{name:'t_b_date', index:'t_b_num', width:90, align: "center"}
@@ -81,8 +86,9 @@ console.log(keyword);
 			location.href = `/userinterface/notice/detail?t_b_num=\${rowid}`
 		}
 	}).trigger("reloadGrid");
-
 });
+//검색 끝
+
 </script>
 </div>
 </body>
