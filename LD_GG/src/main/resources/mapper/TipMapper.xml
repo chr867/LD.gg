@@ -6,15 +6,25 @@
 <mapper namespace="com.ld.gg.dao.TipDao">
 	<insert id="insertTip" parameterType="tip">
 		INSERT INTO tip_board
-		(t_b_content, t_b_views, t_b_recom, champion_id, email, t_b_title)
-		VALUES (#{t_b_content}, default, default, #{champion_id},
+		(t_b_content, t_b_views, champion_id, email, t_b_title)
+		VALUES
+		(#{t_b_content}, default, #{champion_id},
 		#{email},
 		#{t_b_title});
 	</insert>
 
 	<select id="getBoardList" resultType="tip">
-		SELECT * FROM tip_board
-		ORDER BY t_b_num DESC;
+		SELECT tb.*,
+		IFNULL(tr.t_b_recom, 0) AS t_b_recom
+		FROM tip_board tb
+		LEFT JOIN (
+		SELECT COUNT(*) AS t_b_recom, t_b_num
+		FROM tip_recom
+		GROUP BY t_b_num
+		)
+		tr ON tb.t_b_num = tr.t_b_num
+		ORDER BY tb.t_b_num desc;
+
 	</select>
 
 	<select id="getSearchList" resultType="tip">
@@ -26,13 +36,41 @@
 	</select>
 
 	<select id="getTipDetails" resultType="tip">
-		SELECT * FROM tip_board
-		WHERE t_b_num = #{t_b_num};
+		SELECT tb.*,
+		IFNULL(tr.t_b_recom, 0) AS t_b_recom
+		FROM tip_board tb
+		LEFT JOIN (
+		SELECT COUNT(*) AS t_b_recom, t_b_num
+		FROM tip_recom
+		WHERE t_b_num =
+		#{t_b_num}
+		GROUP BY t_b_num
+		) tr ON tb.t_b_num = tr.t_b_num
+		WHERE
+		tb.t_b_num = #{t_b_num}
 	</select>
 
 	<update id="updateView" parameterType="tip">
 		UPDATE tip_board
-		SET t_b_views = #{t_b_views}
+		SET
+		t_b_views = #{t_b_views}
 		WHERE t_b_num = #{t_b_num}
 	</update>
+
+	<select id="recomInfo" parameterType="tip"
+		resultType="Integer">
+		SELECT *
+		FROM tip_recom
+		WHERE email = #{email} AND t_b_num =
+		#{t_b_num}
+	</select>
+
+	<insert id="insertRecom" parameterType="tip">
+		INSERT INTO tip_recom
+		(t_b_num, email) VALUES (#{t_b_num}, #{email});
+	</insert>
+
+	<delete id="deleteRecom" parameterType="tip">
+		DELETE FROM tip_recom WHERE t_b_num = #{t_b_num} AND email = #{email};
+	</delete>
 </mapper>

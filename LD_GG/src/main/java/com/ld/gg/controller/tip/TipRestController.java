@@ -19,6 +19,7 @@ import com.ld.gg.dto.TipDto;
 import com.ld.gg.service.TipService;
 
 import lombok.extern.slf4j.Slf4j;
+import oracle.jdbc.proxy.annotation.Post;
 
 @Slf4j
 @RestController
@@ -50,5 +51,21 @@ public class TipRestController {
 		json = mapper.writeValueAsString(searchList);
 		
 		return json;
+	}
+	
+	//retrun 1 = 추천 성공 , 2 = 추천취소 성공 , 3 = 오류, 4 = 로그인필요
+	@PostMapping("/recom")
+	public int tipRecom(HttpSession session, @RequestParam("t_b_num") int t_b_num) {
+		String email = (String)session.getAttribute("email");
+		if(email == null) {
+			return 4;
+		}
+		TipDto tDto = new TipDto();
+		tDto.setEmail(email);
+		tDto.setT_b_num(t_b_num);
+		
+		int recomResult = ts.recomUpdate(tDto);
+		
+		return recomResult;
 	}
 }

@@ -2,6 +2,8 @@ package com.ld.gg.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.ld.gg.dto.TipDto;
 
 public interface TipDao {
@@ -15,5 +17,12 @@ public interface TipDao {
 	TipDto getTipDetails(int t_b_num);
 
 	void updateView(TipDto tipDetails);
+
+	Integer recomInfo(TipDto tDto);
+
+	int insertRecom(TipDto tDto);
+
+	int deleteRecom(TipDto tDto);
+
 	
 }
