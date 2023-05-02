@@ -122,26 +122,60 @@ th {
 			</tr>
 		</table>
 		<button onclick=tipRecom(${tipDetails.t_b_num})>게시물 추천하기</button>
+		<button onclick=modifyTip(${tipDetails.t_b_num}) id="modifyButton">게시물 수정하기</button>
+		<button onclick=deleteTip(${tipDetails.t_b_num}) id="deleteButton">게시물 삭제하기</button>
 	</div>
 </body>
 <script type="text/javascript">
-function tipRecom(t_b_num) {
+let modifyButton = document.getElementById("modifyButton");
+let deleteButton = document.getElementById("deleteButton");
+let writerEmail = '${tipDetails.email}';
+let myEmail = '${sessionScope.email}';
+if(writerEmail === myEmail){
+	console.log("매치");
+	modifyButton.style.display = "block";
+	deleteButton.style.display = "block";
+}else{
+	console.log("노매치");
+	modifyButton.style.display = "none";
+	deleteButton.style.display = "none";
+}
+
+function tipRecom(t_b_num) { 
 	$.ajax({
 		method: 'post',
 		url: '/tip/recom',
 		data: {t_b_num:t_b_num},
 	}).done(res=>{
-		console.log(res);
 		if(res == 1){
 			alert("추천 성공")
 			location.href = "/tip/details?t_b_num="+${tipDetails.t_b_num};
 		}else if(res == 2){
 			alert("추천 취소 성공")
 			location.href = "/tip/details?t_b_num="+${tipDetails.t_b_num};
+		}else if(res == 4){
+			alert("로그인 후 이용해주세요")
 		}else{
-			alert("추천오류 실패")
+			alert("오류")
 		}
 		
+	}).fail(err=>{
+		console.log(err);
+	})
+}
+
+function modifyTip(t_b_num) {
+	$.ajax({
+		method: 'post',
+		url: '/tip/modify',
+		data: {t_b_num:t_b_num},
+	}).done(res=>{
+		if(res == 1){
+			alert("추천 성공")
+			location.href = "/tip/details?t_b_num="+${tipDetails.t_b_num};
+		}else{
+			alert("오류")
+		}
 	}).fail(err=>{
 		console.log(err);
 	})
