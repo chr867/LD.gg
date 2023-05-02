@@ -4,9 +4,6 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.ld.gg.dto.mentoringdto.MentorClassDTO;
-import com.ld.gg.dto.mentoringdto.MentorProfileDTO;
-import com.ld.gg.dto.mentoringdto.MentorTagDTO;
 import com.ld.gg.dto.mentoringdto.MyMentoringDTO;
 import com.ld.gg.dto.mentoringdto.estimateDTO;
 

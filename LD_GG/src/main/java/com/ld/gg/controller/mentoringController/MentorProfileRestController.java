@@ -10,18 +10,22 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ld.gg.dao.MemberDao;
 import com.ld.gg.dto.MemberDto;
+import com.ld.gg.dto.mentoringdto.CustomMentorDTO;
+import com.ld.gg.dto.mentoringdto.MentiTagDTO;
 import com.ld.gg.dto.mentoringdto.MentorClassDTO;
 import com.ld.gg.dto.mentoringdto.MentorProfileDTO;
 import com.ld.gg.dto.mentoringdto.MentorTagDTO;
@@ -36,10 +40,33 @@ public class MentorProfileRestController {
 	private MentorProfileService mtpService;
 	@Autowired
 	private MemberDao mbdao;
+	@Autowired
+	private MemberService mbService;
+	
+	
+	//맞춤멘토 멘티 태그 저장
+	@PostMapping("save-menti-tag")
+	@Transactional
+	public void save_menti_tag(@RequestBody List<MentiTagDTO> menti_tag_list) {
+		String menti_email = menti_tag_list.get(0).getMenti_email();
+		mtpService.delete_menti_tag(menti_email);
+		mtpService.insert_menti_tag(menti_tag_list);
+	}
+	
+	//맞춤멘토 객체 받아서 업데이트
+	@PostMapping("save-custom-mentor")
+	@Transactional
+	public void save_custom_mentor(@RequestBody CustomMentorDTO custom_mentor) {
+		String menti_email = custom_mentor.getMenti_email();
+		mtpService.delete_custom_mentor(menti_email);
+		mtpService.insert_custom_mentor(custom_mentor);
+	}
 	
 	//이메일로 멘토 클래스 가져오기
 	@GetMapping("select-mentor-class")
-	public String select_by_email_mentor_class(@RequestBody String email) throws JsonProcessingException{
+	public String select_by_email_mentor_class(@RequestParam String lol_account) throws JsonProcessingException{
+		List<MemberDto> mbdto = mbService.findLolAccount(lol_account);
+		String email = mbdto.get(0).getEmail();
 		List<MentorClassDTO> class_list = mtpService.select_by_email_mentor_class(email);
 		ObjectMapper objectMapper = new ObjectMapper();
 		String class_List_json = objectMapper.writeValueAsString(class_list);

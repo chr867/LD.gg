@@ -1,14 +1,19 @@
 package com.ld.gg.service.mentoringService;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ld.gg.dao.mentoringdao.MentiDAO;
 import com.ld.gg.dao.mentoringdao.MentorProfileDAO;
 import com.ld.gg.dao.mentoringdao.TagListDAO;
 import com.ld.gg.dto.MemberDto;
+import com.ld.gg.dto.mentoringdto.CustomMentorDTO;
+import com.ld.gg.dto.mentoringdto.MentiTagDTO;
 import com.ld.gg.dto.mentoringdto.MentorClassDTO;
 import com.ld.gg.dto.mentoringdto.MentorProfileDTO;
 import com.ld.gg.dto.mentoringdto.MentorTagDTO;
@@ -21,6 +26,51 @@ public class MentorProfileService {
 	private MentorProfileDAO mtpdao;
 	@Autowired
 	private TagListDAO tagdao;
+	@Autowired
+	private MentiDAO mentidao;
+	
+	//이메일로 멘티 태그 가져오기
+	public List<MentiTagDTO> select_by_email_menti_tag(String menti_email){
+		List<MentiTagDTO> menti_tag_list = mentidao.select_by_email_menti_tag(menti_email);
+		return menti_tag_list;
+	}
+	//멘티 태그 객체로 인서트
+	public void insert_menti_tag(List<MentiTagDTO> menti_tag_list) {
+		Iterator<MentiTagDTO> iterator = menti_tag_list.iterator();
+		while (iterator.hasNext()) {
+			MentiTagDTO menti_tag_dto = iterator.next();
+			System.out.println(menti_tag_dto);
+			mentidao.insert_menti_tag(menti_tag_dto);
+		}
+	}
+	//멘트 이메일로 멘티 태그 삭제
+	public void delete_menti_tag(String menti_email) {
+		mentidao.delete_menti_tag(menti_email);
+		
+	}
+	
+	//모든 맞춤멘토 목록 가져오기
+	public List<CustomMentorDTO> select_all_custom_mentor(){
+		List<CustomMentorDTO> custom_mentor_dto_list= mentidao.select_all_custom_mentor();
+		return custom_mentor_dto_list;
+	}
+	//이메일로 맞춤멘토 데이터 가져오기
+	public CustomMentorDTO select_by_email_custom_mentor(String menti_email) {
+		CustomMentorDTO custom_mentor_dto = mentidao.select_by_email_custom_mentor(menti_email);
+		return custom_mentor_dto;
+	}
+	//이메일, 소환사명으로 맞춤멘토에 빈 데이터 넣기
+	public void insert_custom_mentor(CustomMentorDTO custom_mentor) {
+	    mentidao.insert_custom_mentor(custom_mentor);
+	}
+	//맞춤멘토 객체 받아서 업데이트
+	public void update_custom_mentor(CustomMentorDTO custom_mentor) {
+		mentidao.update_custom_mentor(custom_mentor);
+	}
+	//이메일로 맞춤멘토 삭제
+	public void delete_custom_mentor(String menti_email) {
+		mentidao.delete_custom_mentor(menti_email);
+	}
 	
 	//이메일로 멘토 수업 목록 가져오기
 	public List<MentorClassDTO> select_by_email_mentor_class(String mentor_email){

@@ -54,7 +54,7 @@
 
 	<!-- @Transactional 어노테이션 사용하기 위한 설정, 반드시 servlet-context.xml에 설정 -->
 	<tx:annotation-driven
-		transaction-manager="tx_manager" />
+		transaction-manager="txManager" />
 
 	<!-- 인터셉터를 이용해서 로그인 여부 판단 -->
 
