@@ -5,6 +5,17 @@
 
 <mapper namespace="com.ld.gg.dao.mentoringdao.MentiDAO">
 
+<select id="recom_mentor" resultType="mentorProfile" parameterType="String">
+	SELECT mp.mentor_email, mp.about_mentor, mp.specialized_position, mp.specialized_champion, mp.contact_time, mp.careers, mp.recom_ment
+	FROM mentor_profile AS mp
+	JOIN mentor_tag AS mt ON mp.mentor_email = mt.mentor_email
+	WHERE mt.tag_id IN (SELECT tag_id FROM menti_tag WHERE menti_email = #{menti_email})
+	GROUP BY mp.mentor_email
+	HAVING COUNT(DISTINCT mt.tag_id) >= 2
+	ORDER BY COUNT(DISTINCT mt.tag_id) desc
+	LIMIT 5;
+</select>
+
 <select id="select_all_custom_mentor" resultType="customMentor">
   SELECT * FROM custom_mentor;
 </select>

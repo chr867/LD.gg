@@ -43,6 +43,15 @@ public class MentorProfileRestController {
 	@Autowired
 	private MemberService mbService;
 	
+	//맞춤멘토 추천
+	@PostMapping("recom-mentor")
+	public String recom_mentor(@RequestBody Map<String,String> email) throws JsonProcessingException{
+		//String menti_email = custom_mentor_dto.getMenti_email();
+		List<MentorProfileDTO> mtpList = mtpService.recom_mentor(email.get("menti_email"));
+		ObjectMapper objectMapper = new ObjectMapper();
+		String mtpList_json = objectMapper.writeValueAsString(mtpList);
+		return mtpList_json;
+	}
 	
 	//맞춤멘토 멘티 태그 저장
 	@PostMapping("save-menti-tag")

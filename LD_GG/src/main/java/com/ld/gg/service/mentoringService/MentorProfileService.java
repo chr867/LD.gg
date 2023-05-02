@@ -1,17 +1,12 @@
 package com.ld.gg.service.mentoringService;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.ld.gg.dao.mentoringdao.MentiDAO;
 import com.ld.gg.dao.mentoringdao.MentorProfileDAO;
 import com.ld.gg.dao.mentoringdao.TagListDAO;
-import com.ld.gg.dto.MemberDto;
 import com.ld.gg.dto.mentoringdto.CustomMentorDTO;
 import com.ld.gg.dto.mentoringdto.MentiTagDTO;
 import com.ld.gg.dto.mentoringdto.MentorClassDTO;
@@ -28,6 +23,12 @@ public class MentorProfileService {
 	private TagListDAO tagdao;
 	@Autowired
 	private MentiDAO mentidao;
+	
+	//멘티 이메일로 맞춤멘토 추천
+	public List<MentorProfileDTO> recom_mentor(String menti_email){
+		List<MentorProfileDTO> recom_mentor_list = mentidao.recom_mentor(menti_email);
+		return recom_mentor_list;
+	}
 	
 	//이메일로 멘티 태그 가져오기
 	public List<MentiTagDTO> select_by_email_menti_tag(String menti_email){
