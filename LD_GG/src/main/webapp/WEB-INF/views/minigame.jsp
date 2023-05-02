@@ -25,7 +25,7 @@
 	function answer(){
 		$.ajax({
 			data : predict,
-			method : 'get',
+			method : 'post',
 			url : '/minigame/submit.json',
 			contentType: "application/json; charset=utf-8",
 		}).done(res=>{
@@ -40,7 +40,7 @@
 	function timeline2(){
 		$.ajax({
 			data : time,
-			method : 'get',
+			method : 'post',
 			url : '/minigame/timeline.json',
 			dataType : 'json',
 		}).done(res=>{

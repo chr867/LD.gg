@@ -45,7 +45,7 @@ public class MiniGameRestController {
 		String tmp = null;
 		Integer result = ms.submit_minigame();
 		System.out.println("result = "+result);
-		predict = 0;
+		predict = 1;
 		
 		if(result == predict) {
 			ms.point_update(5);
@@ -54,7 +54,7 @@ public class MiniGameRestController {
 			ms.point_update(-5);
 			tmp = "예측 실패";
 		}
-		
+
 		return tmp;
 	}
 	
