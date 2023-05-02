@@ -14,6 +14,7 @@ import lombok.experimental.Accessors;
 @Alias("notice")
 public class NoticeDto {
 	private int t_b_num;
+	private String t_b_title;
 	private String t_b_content;
 	private int t_b_views;
 	private int t_b_recom;

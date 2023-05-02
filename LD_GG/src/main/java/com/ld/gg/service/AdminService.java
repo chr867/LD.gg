@@ -18,14 +18,14 @@ public class AdminService {
 	
 	public List<NoticeDto> get_notice_history() {
 		List<NoticeDto> n_list = ad.get_notice_history();
-		log.info("n_list = {}", n_list);
+		log.info("공지 목록 = {}", n_list);
 		
 		return n_list;
 	}
 
 	public NoticeDto get_notice_detail(int t_b_num) {
 		NoticeDto notice = ad.get_notice_detail(t_b_num);
-		log.info("notice = {}", notice);
+		log.info("공지 상세 = {}", notice);
 
 		return notice;
 	}
@@ -39,9 +39,15 @@ public class AdminService {
 
 	public List<NoticeDto> search_notice(String keyword) {
 		List<NoticeDto> n_list = ad.search_notice(keyword);
-		log.info("search = {}", n_list);
+		log.info("공지 검색 결과 = {}", n_list);
 		
 		return n_list;
+	}
+
+	public boolean write_notice(NoticeDto nd) {
+		boolean result = ad.write_notice(nd);
+		log.info("글 작성 결과 = {}", result);
+		return result;
 	}
 	
 	

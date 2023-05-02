@@ -17,16 +17,30 @@
 <input type="text" id="chat-input">
 <button onclick="send()">전송</button>
 <button onclick="timeline2()">추가정보</button>
-
+<button onclick="answer()">정답 제출</button>
 
 <script>
 
-	let time = 5
+	let predict = 1
+	function answer(){
+		$.ajax({
+			data : predict,
+			method : 'post',
+			url : '/minigame/submit.json',
+			contentType: "application/json; charset=utf-8",
+		}).done(res=>{
+			console.log(res)
+		}).fail(err=>{
+			console.log(err)
+		})
+	}
+
 	
+	let time = 5
 	function timeline2(){
 		$.ajax({
 			data : time,
-			method : 'get',
+			method : 'post',
 			url : '/minigame/timeline.json',
 			dataType : 'json',
 		}).done(res=>{
@@ -52,7 +66,6 @@ $.ajax({
 
 // 채팅
 	let socket;
-		
 	function connect() {
 		let url = "ws://"
 		url += location.host;

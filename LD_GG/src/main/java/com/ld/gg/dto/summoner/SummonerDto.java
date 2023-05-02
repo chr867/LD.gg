@@ -18,10 +18,11 @@ public class SummonerDto {
 	private int lose;
 	private double winrate;
 	private int lp;
-	private String most_champ_id1;
-	private String most_champ_id2;
-	private String most_champ_id3;
+	private String most_champ_name1;
+	private String most_champ_name2;
+	private String most_champ_name3;
 	private String tier;
 	private String game_mode;
 	private String ranking;
+	private String main_lane;
 }
