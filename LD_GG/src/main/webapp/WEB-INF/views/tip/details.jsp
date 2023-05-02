@@ -71,7 +71,7 @@ th {
 
 #comment-form {
 	margin-top: 20px;
-	padding: 20px;
+	padding: 10px;
 	border-radius: 10px;
 	background-color: #f2f2f2;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
@@ -79,7 +79,7 @@ th {
 
 #comment-textarea {
 	width: 90%;
-	height: 100px;
+	height: 70px;
 	margin-bottom: 10px;
 	padding: 10px;
 	border: none;
@@ -108,7 +108,8 @@ th {
 #comment-form input[type="submit"]:hover {
 	background-color: #023e8a;
 }
-#comment-submit-btn{
+
+#comment-submit-btn {
 	display: inline-block;
 	background-color: #EAEAEA;
 	padding: 8px 12px;
@@ -116,11 +117,12 @@ th {
 	border-radius: 3px;
 	cursor: pointer;
 	width: 8%;
-	height:100px;
+	height: 70px;
 }
-#comment-submit-btn:hover{
-background-color: #BDBDBD;
-}
+
+#comment-submit-btn:hover {
+	background-color: #BDBDBD;
+} 
 </style>
 </head>
 <body>
@@ -172,9 +174,11 @@ background-color: #BDBDBD;
 				<input type="text" placeholder="댓글을 입력해주세요" id="comment-textarea">
 				<button id="comment-submit-btn" onclick="submitComment()">등록</button>
 			</div>
-			<div id="comment-list">
-				<!-- 댓글 목록이 출력될 영역 -->
-			</div>
+
+			<table id="comment-list">
+
+			</table>
+
 		</div>
 	</div>
 </body>
@@ -230,7 +234,7 @@ function submitComment() {
         console.log(res);
         if (res) {
         	  console.log()
-        	  location.href = '/tip/details?t_b_num='+t_b_num;
+        	  loadComments(); //댓글 등록시 비동기로 댓글로드
         	} else {
         	  console.log(res)
         	  alert("댓글 등록 실패")
@@ -241,24 +245,28 @@ function submitComment() {
 }
 
 function loadComments() {
-/* 	$.ajax({
-        method: 'post',
-        url: '/tip/reply_list',
-      }).done(res=>{
-        console.log(res);
-        if (res) {
-        	  console.log()
-        	  location.href = '/tip/details?t_b_num='+t_b_num;
-        	} else {
-        	  console.log(res)
-        	  alert("댓글 등록 실패")
-        	} 
-      }).fail(err=>{
+    $.ajax({
+        method: 'get',
+        url: '/tip/replyList',
+        data: {t_b_num: ${tipDetails.t_b_num}},
+    }).done(res => {
+    	console.log(res);
+    	let replyList = "";
+        res.forEach(reply => {
+        	replyList += '<tr height="35" align="center">'
+        	replyList += '<td width="100">'+reply.email+'</td>'
+        	replyList += '<td width="500">'+reply.t_r_content+'</td>'
+        	replyList += '<td width="100">'+reply.t_r_date+'</td>'
+        	replyList += '</tr>'
+        });
+        console.log(replyList);
+        $('#comment-list').html(replyList)
+    }).fail(err => {
         console.log(err);
-      }); */
+    }); 
 }
 
-// 페이지 로딩 시 댓글 목록을 가져옵니다.
+
 loadComments();
 </script>
 </html>

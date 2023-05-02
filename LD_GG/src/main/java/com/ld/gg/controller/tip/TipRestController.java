@@ -85,5 +85,13 @@ public class TipRestController {
 		return replyInsertResult;
 	}
 	
+	@GetMapping("/replyList")
+	public List<TipDto> replyList(int t_b_num) throws Exception{
+        
+        List<TipDto> replyList = ts.getReplyList(t_b_num);
+		
+		return replyList;
+	}
+	
 	
 }
