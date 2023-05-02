@@ -53,5 +53,32 @@ public class TipService {
 		tDao.updateView(tipDetails);
 		
 	}
+	//추천 = 1, 취소 = 2, 오류 = 3 
+	public int recomUpdate(TipDto tDto) {
+		Integer recomInfo = tDao.recomInfo(tDto);
+		log.info("추천정보 결과:"+recomInfo);
+		if(recomInfo == null) {
+			log.info("추천 인서트 시작");
+			log.info("{}",tDto);
+			int recomInsertResult = tDao.insertRecom(tDto);
+			log.info("추천 인서트 결과 : "+recomInsertResult);
+			if(recomInsertResult != 0) {
+				return 1;
+			}else {
+				return 3;
+			}
+		}else {
+			log.info("추천 딜리트 시작");
+			int recomDeleteResult = tDao.deleteRecom(tDto);
+			log.info("추천 딜리트 결과 : "+recomDeleteResult);
+			if(recomDeleteResult != 0) {
+				return 2;
+			}else {
+				return 3;
+			}
+		}
+	}
+
+
 	
 }

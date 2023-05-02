@@ -68,6 +68,20 @@ th {
 .value {
 	color: #333;
 }
+
+.btn {
+	display: inline-block;
+	background-color: #4CAF50;
+	color: #fff;
+	padding: 8px 12px;
+	border: none;
+	border-radius: 3px;
+	cursor: pointer;
+}
+
+.btn:hover {
+	background-color: #3e8e41;
+}
 </style>
 </head>
 <body>
@@ -107,7 +121,30 @@ th {
 				<td class="value">${tipDetails.email}</td>
 			</tr>
 		</table>
+		<button onclick=tipRecom(${tipDetails.t_b_num})>게시물 추천하기</button>
 	</div>
-
 </body>
+<script type="text/javascript">
+function tipRecom(t_b_num) {
+	$.ajax({
+		method: 'post',
+		url: '/tip/recom',
+		data: {t_b_num:t_b_num},
+	}).done(res=>{
+		console.log(res);
+		if(res == 1){
+			alert("추천 성공")
+			location.href = "/tip/details?t_b_num="+${tipDetails.t_b_num};
+		}else if(res == 2){
+			alert("추천 취소 성공")
+			location.href = "/tip/details?t_b_num="+${tipDetails.t_b_num};
+		}else{
+			alert("추천오류 실패")
+		}
+		
+	}).fail(err=>{
+		console.log(err);
+	})
+}
+</script>
 </html>
