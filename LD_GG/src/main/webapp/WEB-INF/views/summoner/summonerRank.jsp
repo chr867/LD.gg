@@ -6,10 +6,9 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 
-<script src="https://code.jquery.com/jquery-3.6.3.js"></script>
-<script src="/resources/js/jquery.serializeObject.js"></script>
-<script src='https://kit.fontawesome.com/a076d05399.js'
-	crossorigin='anonymous'></script>
+<script src="https://code.jquery.com/jquery-3.6.3.js"
+	integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+	crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -20,9 +19,9 @@
 
 		<div>
 			<!-- 정렬 필터 -->
-			<p id="solo_rank">솔로랭크</p>
-			<p id="flex_rank">자유랭크</p>
-			<p id="level">레벨</p>
+			<button type = "button" id="solo_rank">솔로랭크</button>
+			<button type = "button"  id="flex_rank">자유랭크</button>
+			<button type = "button" id="level">레벨</button>
 		</div>
 
 		<table id="summnoner_rank_table">
@@ -45,31 +44,32 @@
 	<script type="text/javascript">
 		$.ajax({
 			method : 'get',
-			url : '/ranking'
+			url : '/summoner/ranking'
 		}).done(res=>{
 			let i = 1;
 			let sList = '<tbody>'
 			for(summoner of res){
-				sList += '<tr id = "'summoer.summoner_name'" onclick = "info(this)">'
-				sList += '<td id = "idx">'i'</td>'
-				sList += '<td id = "icon"><img src = "https://ddragon.leagueoflegends.com/cdn/13.8.1/img/profileicon/'+summoner.profile_icon_id'.png"></td>'
-				sList += '<td id = "name">'summoner.summoner_name'</td>'
-				sList += '<td id = "tier">'summoer.tier'</td>'
-				sList += '<td id = "lp">'summoner.lp'</td>'
-				sList += '<td id = "s_level">'summoer.s_level'</td>'
-				sList += '<td id = lane><img src = "https://ditoday.com/wp-content/uploads/2022/02/ps_'summoner.main_lane'.png"></td>'
+				sList += '<tr id = "'+summoner.summoner_name+'" onclick = "info(this)">'
+				sList += '<td id = "idx">'+i+'</td>'
+				sList += '<td id = "icon"><img src = "https://ddragon.leagueoflegends.com/cdn/13.8.1/img/profileicon/'+summoner.profile_icon_id+'.png"></td>'
+				sList += '<td id = "name">'+summoner.summoner_name+'</td>'
+				sList += '<td id = "tier"><img alt="#" src="https://opgg-static.akamaized.net/images/medals/'+summoner.tier+"_"+summoner.ranking+'.png"></td>'
+				sList += '<td id = "lp">'+summoner.lp+'</td>'
+				sList += '<td id = "s_level">'+summoner.s_level+'</td>'
+				sList += '<td id = lane><img src = "https://ditoday.com/wp-content/uploads/2022/02/ps_'+summoner.main_lane+'.png"></td>'
 				sList += '<td><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+summoner.most_champ_id1+'.png" alt="#"></td>'
 				sList += '<td><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+summoner.most_champ_id2+'.png" alt="#"></td>'
 				sList += '<td><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+summoner.most_champ_id3+'.png" alt="#"></td>'
-				sList += '<td id = winrate>'summoner.winrate'</td>'
+				sList += '<td id = winrate>'+summoner.winrate+'</td>'
+				i += 1
+			}
 			sList += '</tbody>'
 			$('#summoner_rank_table').html(sList)	//소환사 랭킹 테이블 기본
-			}
 		}).fail(err=>{
 			console.log(err)
 		})
 		
-		$('#solo_rank').click(function() {
+		/* $('#solo_rank').click(function() {
 			$.ajax({
 				method : 'get',
 				url : '/solo',
@@ -105,11 +105,11 @@
 				let i = 1
 				let sList = '<tbody>'
 				for(summoner of res){
-					sList += '<tr id = "'summoer.summoner_name'" onclick = "info(this)">'
+					sList += '<tr id = "'summoner.summoner_name'" onclick = "info(this)">'
 					sList += '<td id = "idx">'i'</td>'
 					sList += '<td id = "icon"><img src = "https://ddragon.leagueoflegends.com/cdn/13.8.1/img/profileicon/'+summoner.profile_icon_id'.png"></td>'
 					sList += '<td id = "name">'summoner.summoner_name'</td>'
-					sList += '<td id = "tier">'summoer.tier'</td>'
+					sList += '<td id = "tier">'summoner.tier'</td>'
 					sList += '<td id = "lp">'summoner.lp'</td>'
 					sList += '<td id = "s_level">'summoer.s_level'</td>'
 					sList += '<td id = lane><img src = "https://ditoday.com/wp-content/uploads/2022/02/ps_'summoner.main_lane'.png"></td>'
@@ -156,7 +156,7 @@
 		function info(summoner){
 			let summoner_name = summoner.getAttribute("summoner_name")
 			location.href = "/info/?summoner_name="+summoner_name
-		}
+		} */
 		
 	</script>
 

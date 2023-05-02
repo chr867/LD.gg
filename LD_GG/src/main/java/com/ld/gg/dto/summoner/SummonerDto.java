@@ -8,6 +8,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @Alias("summoner")
+
 public class SummonerDto {
 	private String summoner_name;
 	private int s_level;
@@ -19,7 +20,8 @@ public class SummonerDto {
 	private int lp;
 	private String most_champ_id1;
 	private String most_champ_id2;
-	private String most_chamnp_id3;
+	private String most_champ_id3;
 	private String tier;
 	private String game_mode;
+	private String ranking;
 }

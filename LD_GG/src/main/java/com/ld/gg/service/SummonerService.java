@@ -2,6 +2,7 @@ package com.ld.gg.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ld.gg.dao.Summoner_dao;
@@ -10,6 +11,8 @@ import com.ld.gg.dto.summoner.SummonerDto;
 
 @Service
 public class SummonerService {
+	
+	@Autowired
 	private Summoner_dao SD;
 
 	public List<SummonerDto> get_summoner_rank() {
