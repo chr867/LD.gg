@@ -35,8 +35,8 @@
             .catch(error => {
                 console.error('Error:', error);
             });
-    }
-    function renewal_mentor_list() {
+	    }
+	    function renewal_mentor_list() {
     	  return fetch('/mentor/renewal-mentor-list', {
     	    method: 'POST',
     	    headers: {
@@ -55,9 +55,7 @@
 
     window.onload = function() {
         // 페이지 로드가 완료되면 멘토 리스트를 출력
-    	renewal_mentor_list()
-        .then(() => get_mentor_list())
-        .catch(error => console.error(error));
+        get_mentor_list()
     };
 </script>
 </body>
