@@ -11,12 +11,15 @@
 		si.tier,
 		si.lp,
 		si.s_level,
-		sr.most_champ_id1,
-		sr.most_champ_id2,
-		sr.most_champ_id3,
+		sr.most_champ_name1,
+		sr.most_champ_name2,
+		sr.most_champ_name3,
 		si.winrate,
 		si.ranking,
-		sr.main_lane
+		sr.main_lane,
+		si.wins,
+		si.lose,
+		si.games
 		FROM
 		summoner_info si
 		JOIN summoner_ranking sr ON
@@ -32,9 +35,9 @@
 		si.tier,
 		si.lp,
 		si.s_level,
-		sr.most_champ_id1,
-		sr.most_champ_id2,
-		sr.most_champ_id3,
+		sr.most_champ_name1,
+		sr.most_champ_name2,
+		sr.most_champ_name3,
 		si.winrate,
 		sr.main_lane
 		FROM
@@ -56,9 +59,9 @@
 		si.tier,
 		si.lp,
 		si.s_level,
-		sr.most_champ_id1,
-		sr.most_champ_id2,
-		sr.most_champ_id3,
+		sr.most_champ_name1,
+		sr.most_champ_name2,
+		sr.most_champ_name3,
 		si.winrate,
 		sr.main_lane
 		FROM
@@ -78,9 +81,9 @@
 		si.tier,
 		si.lp,
 		si.s_level,
-		sr.most_champ_id1,
-		sr.most_champ_id2,
-		sr.most_champ_id3,
+		sr.most_champ_name1,
+		sr.most_champ_name2,
+		sr.most_champ_name3,
 		si.winrate,
 		sr.main_lane
 		FROM
