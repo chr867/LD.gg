@@ -32,6 +32,11 @@ public class MentoringController {
 	@Autowired
 	private MemberDao mbdao;
 	
+	//마이멘토링 페이지로 이동
+	@GetMapping("/my-mentoring")
+	public String go_my_mentoring() {
+		return "mentoringView/myMentoring";
+	}
 	
 	//맞춤 멘토 페이지로 이동
 	@GetMapping("/custom-mentor")

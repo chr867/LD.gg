@@ -18,12 +18,12 @@
   SELECT * FROM estimate WHERE menti_email = #{menti_email};
 </select>
 
-<insert id="insert_mentor_class" parameterType="estimate">
+<insert id="insert_estimate" parameterType="estimate">
   INSERT INTO estimate (estimate_info, mentor_email, menti_email) 
   VALUES (#{estimate_info}, #{mentor_email}, #{menti_email});
 </insert>
 
-<delete id="delete_mentor_class" parameterType="int">
+<delete id="delete_estimate" parameterType="int">
   DELETE FROM estimate WHERE class_id = #{class_id};
 </delete>
 

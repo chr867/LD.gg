@@ -6,13 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ld.gg.dao.mentoringdao.MentiDAO;
 import com.ld.gg.dao.mentoringdao.MentorProfileDAO;
+import com.ld.gg.dao.mentoringdao.MyMentroingDAO;
 import com.ld.gg.dao.mentoringdao.TagListDAO;
 import com.ld.gg.dto.mentoringdto.CustomMentorDTO;
 import com.ld.gg.dto.mentoringdto.MentiTagDTO;
 import com.ld.gg.dto.mentoringdto.MentorClassDTO;
 import com.ld.gg.dto.mentoringdto.MentorProfileDTO;
 import com.ld.gg.dto.mentoringdto.MentorTagDTO;
+import com.ld.gg.dto.mentoringdto.MyMentoringDTO;
 import com.ld.gg.dto.mentoringdto.TagListDTO;
+import com.ld.gg.dto.mentoringdto.estimateDTO;
 
 @Service
 public class MentorProfileService {
@@ -23,6 +26,45 @@ public class MentorProfileService {
 	private TagListDAO tagdao;
 	@Autowired
 	private MentiDAO mentidao;
+	@Autowired
+	private MyMentroingDAO mymtdao;
+	
+	//멘토 이메일로 견적서 가져오기
+	public List<estimateDTO> select_by_mentor_email_estimate(String mentor_email){
+		List<estimateDTO> est_list = mymtdao.select_by_mentor_email_estimate(mentor_email);
+		return est_list;
+	}
+	//멘티 이메일로 견적서 가져오기
+	public List<estimateDTO> select_by_menti_email_estimate(String menti_email){
+		List<estimateDTO> est_list = mymtdao.select_by_menti_email_estimate(menti_email);
+		return est_list;
+	}
+	//견적서 추가
+	public void insert_estimate(estimateDTO estdto) {
+		mymtdao.insert_estimate(estdto);
+	}
+	//견적서 삭제
+	public void delete_estimate(int estimate_id) {
+		mymtdao.delete_estimate(estimate_id);
+	}
+	
+	//이메일로 멘토링 내역 가져오기
+	public List<MyMentoringDTO> select_by_email_my_mentoring(String email){
+		List<MyMentoringDTO> mymtdto = mymtdao.select_by_email_my_mentoring(email);
+		return mymtdto;
+	}
+	//멘토링 내역 추가
+	public void insert_my_mentoring(MyMentoringDTO my_mt_dto) {
+		mymtdao.insert_my_mentoring(my_mt_dto);
+	}
+	//멘토링 내역 수정
+	public void update_my_mentoring(MyMentoringDTO my_mt_dto) {
+		mymtdao.update_my_mentoring(my_mt_dto);
+	}
+	//멘토링 내역 삭제
+	public void delete_my_mentoring(MyMentoringDTO my_mt_dto) {
+		mymtdao.delete_my_mentoring(my_mt_dto);
+	}
 	
 	//멘티 이메일로 맞춤멘토 추천
 	public List<MentorProfileDTO> recom_mentor(String menti_email){
