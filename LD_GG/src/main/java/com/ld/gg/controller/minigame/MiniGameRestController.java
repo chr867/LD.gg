@@ -1,8 +1,6 @@
 package com.ld.gg.controller.minigame;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,8 +17,9 @@ public class MiniGameRestController {
 	MiniGameService ms;
 	
 	@RequestMapping("/data.json")
-	public String data_minigame(Model model) throws Exception{
+	public String data_minigame() throws Exception{
 		MiniGameDataDto md = ms.data_minigame();
+		md.setMinigame_result(-1);
 		
 		ObjectMapper mapper = new ObjectMapper();
 		String json = null;
@@ -30,7 +29,7 @@ public class MiniGameRestController {
 	}
 	
 	@RequestMapping("/timeline.json")
-	public String timeline_minigame(Model model, @RequestParam(defaultValue = "5")Integer time) throws Exception{
+	public String timeline_minigame(@RequestParam(defaultValue = "5")Integer time) throws Exception{
 		MiniGameTimeDto md = ms.timeline_minigame(time);
 		md.setMinigame_result(-1);
 		
@@ -39,7 +38,24 @@ public class MiniGameRestController {
 		json = mapper.writeValueAsString(md);
 
 		return json;
+	}
+	
+	@RequestMapping(value="/submit.json", produces="application/json;charset=UTF-8")
+	public String submit_minigame(Integer predict) {
+		String tmp = null;
+		Integer result = ms.submit_minigame();
+		System.out.println("result = "+result);
+		predict = 0;
 		
+		if(result == predict) {
+			ms.point_update(5);
+			tmp = "예측 성공";
+		}else {
+			ms.point_update(-5);
+			tmp = "예측 실패";
+		}
+		
+		return tmp;
 	}
 	
 }

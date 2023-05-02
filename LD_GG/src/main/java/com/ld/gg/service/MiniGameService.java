@@ -29,5 +29,16 @@ public class MiniGameService {
 		return timeline_dto;
 	}
 
-	
+	public int submit_minigame() {
+		int result = md.submit_minigame();
+		log.info("result = {}", result);
+		
+		return result;
+	}
+
+	public void point_update(Integer point) {
+		boolean result = md.point_update(point);
+		log.info("result = {}", result);
+	}
+
 }
