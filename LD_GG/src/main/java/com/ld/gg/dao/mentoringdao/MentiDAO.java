@@ -1,21 +1,19 @@
 package com.ld.gg.dao.mentoringdao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
 import com.ld.gg.dto.mentoringdto.CustomMentorDTO;
 import com.ld.gg.dto.mentoringdto.MentiTagDTO;
-import com.ld.gg.dto.mentoringdto.MentorClassDTO;
-import com.ld.gg.dto.mentoringdto.MentorProfileDTO;
-import com.ld.gg.dto.mentoringdto.MentorTagDTO;
 
 @Mapper
 public interface MentiDAO {
 	//맞춤 멘토
 	List<CustomMentorDTO> select_all_custom_mentor();
 	CustomMentorDTO select_by_email_custom_mentor(String menti_email);
-	void insert_custom_mentor(String menti_email);
+	void insert_custom_mentor(CustomMentorDTO custom_mentor);
 	void update_custom_mentor(CustomMentorDTO custom_mentor);
 	void delete_custom_mentor(String menti_email);
 	

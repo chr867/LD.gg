@@ -21,7 +21,7 @@
 	<h4>경력: ${mentor_profile.careers}</h4>
 	<h4>이런 분들께 추천해요: ${mentor_profile.recom_ment}</h4>
 	
-	<div>
+	<div id="mentor_class_info">
        <c:forEach items="${class_list}" var="class_list">
        		<div id="container_by_class">
 		        <div>

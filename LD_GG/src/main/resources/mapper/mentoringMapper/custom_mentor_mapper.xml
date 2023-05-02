@@ -13,13 +13,14 @@
   SELECT * FROM custom_mentor WHERE menti_email = #{menti_email};
 </select>
 
-<insert id="insert_custom_mentor" parameterType="String">
-  INSERT INTO custom_mentor (menti_email) VALUES (#{menti_email});
+<insert id="insert_custom_mentor" parameterType="customMentor">
+  INSERT INTO custom_mentor (menti_email, summoner_name, position_to_learn, champion_to_learn, target_tier, own_goal) 
+  VALUES (#{menti_email},#{summoner_name},#{position_to_learn},#{champion_to_learn},#{target_tier},#{own_goal});
 </insert>
 
 <update id="update_custom_mentor" parameterType="customMentor">
-  UPDATE custom_mentor SET menti_email = #{menti_email}, summoner_name = #{summoner_name}, 
-  position_to_learn = #{position_to_learn}, champion_to_learn = #{champion_to_learn}, target_tier = #{target_tier},
+  UPDATE custom_mentor SET position_to_learn = #{position_to_learn},
+  champion_to_learn = #{champion_to_learn}, target_tier = #{target_tier},
   own_goal = #{own_goal} WHERE menti_email = #{menti_email};
 </update>
 

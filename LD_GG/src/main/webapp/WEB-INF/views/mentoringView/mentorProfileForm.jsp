@@ -105,20 +105,19 @@
 		      const mentorClassInfo = document.getElementById("mentor_class_info");
 		      let html = "";
 		      class_list.forEach((mentorClass) => {
-		        html += `
-		          <div id="container_by_class">
-		            <div>
-		              <h4>${mentorClass.class_name}</h4>
-		              <button onclick="deleteClass('${mentorClass.class_id}')">삭제</button>
-		            </div>
-		            <div>
-		              <h4>${mentorClass.price}</h4>
-		            </div>
-		            <div>
-		              <h4>${mentorClass.class_info}</h4>
-		            </div>
-		          </div>
-		        `;
+		    	  console.log(mentorClass);
+		    	  html += "<div id=\"container_by_class\">\n" +
+		          "  <div>\n" +
+		          "    <h4>" + mentorClass.class_name + "</h4>\n" +
+		          "    <button onclick=\"deleteClass('" + mentorClass.class_id + "')\">삭제</button>\n" +
+		          "  </div>\n" +
+		          "  <div>\n" +
+		          "    <h4>" + mentorClass.price + "</h4>\n" +
+		          "  </div>\n" +
+		          "  <div>\n" +
+		          "    <h4>" + mentorClass.class_info + "</h4>\n" +
+		          "  </div>\n" +
+		          "</div>";
 		      });
 		      mentorClassInfo.innerHTML = html;
 		    })
@@ -150,6 +149,11 @@
         	price: price
         };
         console.log(mentorClassDTO);
+        xhr.onload = function () {
+    	    if (xhr.status === 200) {
+    	    	select_by_email_class();
+    	    }
+        };
         xhr.send(JSON.stringify(mentorClassDTO));
         return false;
       }
