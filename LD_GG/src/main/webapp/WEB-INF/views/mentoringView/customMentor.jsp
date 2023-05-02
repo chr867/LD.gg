@@ -6,6 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>맞춤 멘토</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
 .scrollable-table {
 	height: 200px;
@@ -54,7 +55,49 @@
     </div>
     <button class="save_tag" onclick="deleteMentiTag()">태그 저장</button>
 	<button class="toggle-button" onclick="toggleTable()">토글 버튼</button>  
+    <button id="recom-mentor-btn">추천 멘토 찾기</button>
+    <div id="recom_mentor_list">
+    </div>
     <script>
+    $(document).ready(function() {
+		$("#recom-mentor-btn").click(function() {
+			let menti_email = "${member.email}";
+			$.ajax({
+		        type: "POST",
+		        url: `/mentor/recom-mentor`,
+		        contentType: "application/json; charset=utf-8",
+		        dataType: "json",
+		        data: JSON.stringify({
+		        	menti_email: menti_email
+		        	}),
+	        	success: function(data) {
+	        		  let mentorList = $("#recom_mentor_list");
+	        		  let table = $("<table>").addClass("mentor-table");
+	        		  let header = $("<tr>").append(
+	        		    $("<th>").text("멘토명"),
+	        		    $("<th>").text("멘토 소개")
+	        		  );
+	        		  table.append(header);
+	        		  for (let i = 0; i < data.length; i++) {
+	        		    let mentor = data[i];
+	        		    let row = $("<tr>").append(
+	        		      $("<td>").text(mentor.mentor_email),
+	        		      $("<td>").text(mentor.about_mentor)
+	        		    );
+	        		    table.append(row);
+	        		  }
+	        		  mentorList.empty().append(table);
+        		},
+		        error: function(xhr, status, error) {
+		            console.error(xhr.responseText);
+		            console.error(status);
+		            console.error(error);
+		        }
+		    });
+		});
+	});
+
+    
     function submitForm() {
         let form = document.getElementById("customMentorForm");
         let formData = new FormData(form);
