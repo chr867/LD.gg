@@ -68,4 +68,22 @@ public class TipRestController {
 		
 		return recomResult;
 	}
+	
+	@PostMapping("/reply_insert")
+	public int replyInsert(HttpSession session, int t_b_num, String t_r_content) {
+		String email = (String)session.getAttribute("email");
+		if(email == null) {
+			return 4;
+		}
+		TipDto tDto = new TipDto();
+		tDto.setEmail(email);
+		tDto.setT_b_num(t_b_num);
+		tDto.setT_r_content(t_r_content);
+		
+		int replyInsertResult = ts.replyInsert(tDto);
+		
+		return replyInsertResult;
+	}
+	
+	
 }

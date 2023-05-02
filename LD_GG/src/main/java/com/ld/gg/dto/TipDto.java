@@ -19,4 +19,9 @@ public class TipDto {
 	private Date t_b_date;
 	private int champion_id;
 	private String email;
+	
+	private int t_r_num;
+	private String t_r_content;
+	private	Date t_r_date;
+	
 }
