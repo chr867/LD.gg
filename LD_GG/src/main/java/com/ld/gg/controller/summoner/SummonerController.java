@@ -16,13 +16,14 @@ import com.ld.gg.service.SummonerService;
 @Controller
 @RequestMapping("/summoner")
 public class SummonerController {
+	
+	@Autowired
 	private SummonerService ss;
 	
 	
 	@GetMapping(value = "/rank")
 	public String summoner_rank() {
-		
-		return "summonerRank";
+		return "summoner/summonerRank";
 	}
 	
 	@GetMapping(value = "/info")

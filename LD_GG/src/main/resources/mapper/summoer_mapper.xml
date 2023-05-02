@@ -4,8 +4,8 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ld.gg.dao.Summoner_dao">
-	<select id="get_summoer_rank" resultType="List">
-		SELECT DISTINCT
+	<select id="get_summoer_rank" resultType="summoner">
+		SELECT
 		si.profile_icon_id,
 		si.summoner_name,
 		si.tier,
@@ -15,10 +15,11 @@
 		sr.most_champ_id2,
 		sr.most_champ_id3,
 		si.winrate,
+		si.ranking,
 		sr.main_lane
 		FROM
-		SUMMONER_INFO si
-		JOIN SUMMONER_RANKING sr ON
+		summoner_info si
+		JOIN summoner_ranking sr ON
 		si.summoner_name = sr.summoner_name
 		ORDER BY
 		si.lp DESC;

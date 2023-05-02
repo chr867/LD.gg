@@ -2,6 +2,7 @@ package com.ld.gg.controller.summoner;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,8 +12,11 @@ import com.ld.gg.dto.summoner.SummonerDto;
 import com.ld.gg.service.SummonerService;
 
 @RestController
+
 @RequestMapping(value = "/summoner")
 public class SummonerRestController {
+	
+	@Autowired
 	private SummonerService ss;
 	
 	@GetMapping("/ranking")
