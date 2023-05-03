@@ -9,7 +9,7 @@ import com.ld.gg.dto.mentoringdto.MyMentoringDTO;
 import com.ld.gg.dto.mentoringdto.estimateDTO;
 
 @Mapper
-public interface MyMentroingDAO {
+public interface MyMentoringDAO {
 	estimateDTO select_by_id_estimate(int estimate_id);
 	List<estimateDTO> select_by_mentor_email_estimate(String mentor_email);
 	List<estimateDTO> select_by_menti_email_estimate(String menti_email);

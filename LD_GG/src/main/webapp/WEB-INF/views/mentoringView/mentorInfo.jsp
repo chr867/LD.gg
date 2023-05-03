@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <title>멘토 프로필</title>
 <style>
-  #container_by_class{
+  .container_by_class{
   	border: 1px solid black;
   }
 </style>
@@ -26,9 +26,9 @@
 	
 	<div id="mentor_class_info">
        <c:forEach items="${class_list}" var="class_list">
-       		<div id="container_by_class">
+       		<div class="container_by_class">
 		        <div>
-		        <h4>${class_list.class_name}</h4><button class="apply-btn">수업신청</button>
+		        <h4>${class_list.class_name}</h4><button class="apply-btn" id="${class_list.class_id}">수업신청</button>
 		        </div>
 		        <div>
 		        <h4>${class_list.price}</h4>
@@ -46,13 +46,33 @@
 <script>
 	$(document).ready(function() {
 	    $(".apply-btn").click(function() {
+	    	let class_id =$(this).attr("id");
 	        $.ajax({
 	            url: "/mentor/check-session",
 	            method: "GET",
 	            success: function(response) {
 	                if (response.isLoggedIn) {
 	                    let email = response.email;
-	                    console.log(email);
+	                    let data = {
+	                    		menti_email: email,
+	                            class_id: class_id,
+	                            menti_state: null,
+	                            mentor_email: "${mentor.email}",
+	                            apply_date: null,
+	                            done_date: null
+	                    };
+	                    $.ajax({
+	                        url: "/mentor/save-mentoring-history",
+	                        method: "POST",
+	                        data: JSON.stringify(data),
+	                        contentType: "application/json; charset=utf-8",
+	                        success: function() {
+	                            alert("멘토링 내역이 추가되었습니다.");
+	                        },
+	                        error: function() {
+	                            alert("멘토링 내역 추가에 실패했습니다.");
+	                        }
+	                    });
 	                } else {
 	                	console.log(response);
 	                    alert("로그인 후 이용 가능합니다.");

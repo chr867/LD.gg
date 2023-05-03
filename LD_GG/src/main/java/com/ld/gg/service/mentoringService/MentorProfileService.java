@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ld.gg.dao.mentoringdao.MentiDAO;
 import com.ld.gg.dao.mentoringdao.MentorProfileDAO;
-import com.ld.gg.dao.mentoringdao.MyMentroingDAO;
+import com.ld.gg.dao.mentoringdao.MyMentoringDAO;
 import com.ld.gg.dao.mentoringdao.TagListDAO;
 import com.ld.gg.dto.mentoringdto.CustomMentorDTO;
 import com.ld.gg.dto.mentoringdto.LikeMentorDTO;
@@ -28,7 +28,7 @@ public class MentorProfileService {
 	@Autowired
 	private MentiDAO mentidao;
 	@Autowired
-	private MyMentroingDAO mymtdao;
+	private MyMentoringDAO mymtdao;
 	
 	//이메일로 내가 찜한 멘토 목록 가져오기
 	public List<LikeMentorDTO> select_by_email_like_mentor(String email){

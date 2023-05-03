@@ -81,18 +81,19 @@ public class RestMentoringController {
 	}
 	//멘토링 내역 수정
 	@PutMapping("/update-mentoring-history")
-	public void update_my_mentoring(MyMentoringDTO my_mt_dto) {
+	public void update_my_mentoring(@RequestBody MyMentoringDTO my_mt_dto) {
 		mtpService.update_my_mentoring(my_mt_dto);
 	}
 	
 	//멘토링 내역 추가
 	@PostMapping("/save-mentoring-history")
-	public void insert_my_mentoring(MyMentoringDTO my_mt_dto) {
+	public void insert_my_mentoring(@RequestBody MyMentoringDTO my_mt_dto) {
+		System.out.println(my_mt_dto);
 		mtpService.insert_my_mentoring(my_mt_dto);
 	}
 	//멘토링 내역 삭제
 	@DeleteMapping("/delete-mentoring-history")
-	public void delete_my_mentoring(MyMentoringDTO my_mt_dto) {
+	public void delete_my_mentoring(@RequestBody MyMentoringDTO my_mt_dto) {
 		mtpService.delete_my_mentoring(my_mt_dto);
 	}
 	
