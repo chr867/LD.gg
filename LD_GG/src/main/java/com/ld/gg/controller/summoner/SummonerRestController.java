@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ld.gg.dto.summoner.RecordDto;
+import com.ld.gg.dto.summoner.RecordInfoDto;
 import com.ld.gg.dto.summoner.SummonerDto;
+import com.ld.gg.dto.summoner.SummonerRankDto;
 import com.ld.gg.service.SummonerService;
 
 @RestController
@@ -19,27 +21,21 @@ public class SummonerRestController {
 	@Autowired
 	private SummonerService ss;
 	
-	@GetMapping("/ranking")
-	public List<SummonerDto> summoner_ranking(){
-		List<SummonerDto> sd = ss.get_summoner_rank();
-		return sd;
-	}
-	
 	@GetMapping("/solo")
-	public List<SummonerDto> summoner_solo_rank(){
-		List<SummonerDto> sd = ss.get_summoner_solo();
+	public List<SummonerRankDto> summoner_solo_rank(){
+		List<SummonerRankDto> sd = ss.get_summoner_solo();
 		return sd;
 	}
 	
 	@GetMapping("/flex")
-	public List<SummonerDto> summoner_flex_rank(){
-		List<SummonerDto> sd = ss.get_summoner_flex();
+	public List<SummonerRankDto> summoner_flex_rank(){
+		List<SummonerRankDto> sd = ss.get_summoner_flex();
 		return sd;
 	}
 	
 	@GetMapping("/level")
-	public List<SummonerDto> summoner_level(){
-		List<SummonerDto> sd = ss.get_summoner_level();
+	public List<SummonerRankDto> summoner_level(){
+		List<SummonerRankDto> sd = ss.get_summoner_level();
 		return sd;
 	}
 	
@@ -54,5 +50,13 @@ public class SummonerRestController {
 		List<RecordDto> sr = ss.get_champ_position_filter(summoner_name);
 		return sr;
 	}
+	
+	@GetMapping("/get_record_info")
+	public List<RecordInfoDto> get_record_info(String summoner_name){
+		List<RecordInfoDto> rid = ss.get_record_info(summoner_name);
+		return rid;
+	}
+	
+	
 	
 }
