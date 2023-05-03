@@ -28,4 +28,11 @@
 		VALUES (2, #{t_b_content}, default, default, default, #{t_b_title})
 	</insert>
 	
+	<update id="modify_notice" parameterType="notice">
+		UPDATE NOTICE_BOARD 
+		SET t_b_title = #{t_b_title},
+		t_b_content = #{t_b_content},
+		t_b_date = default 
+		where t_b_num = #{t_b_num}
+	</update>
 </mapper>
