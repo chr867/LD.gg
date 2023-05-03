@@ -23,6 +23,6 @@
 	src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.0/jquery.validate.min.js"></script>
 </head>
 <body>
-
+	<h1>회원관리 페이지</h1>
 </body>
 </html>

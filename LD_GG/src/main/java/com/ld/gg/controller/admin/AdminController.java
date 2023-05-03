@@ -63,4 +63,14 @@ public class AdminController {
 	public String goAdPage() {
 		return "/admin/adminPage";
 	}
+	
+	@GetMapping("/ad/management")
+	public String goAbMangement() {
+		return "/admin/adManagement";
+	}
+	
+	@GetMapping("/member/management")
+	public String goMbMangement() {
+		return "/admin/mbMangement";
+	}
 }

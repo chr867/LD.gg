@@ -24,8 +24,8 @@
 	src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.0/jquery.validate.min.js"></script>
 <body>
 	<h1>관리자 페이지</h1>
-	<div><a href="/userinterface/management/advertisement">광고관리 페이지</a></div>
-	<div><a href="/userinterface/management/member">회원관리 페이지</a></div>
+	<div><a href="/userinterface/ad/management">광고관리 페이지</a></div>
+	<div><a href="/userinterface/member/management">회원관리 페이지</a></div>
 	
 </body>
 <script type="text/javascript">
