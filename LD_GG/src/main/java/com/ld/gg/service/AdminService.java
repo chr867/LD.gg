@@ -23,7 +23,7 @@ public class AdminService {
 		return n_list;
 	}
 
-	public NoticeDto get_notice_detail(int t_b_num) {
+	public NoticeDto get_notice_detail(Integer t_b_num) {
 		NoticeDto notice = ad.get_notice_detail(t_b_num);
 		log.info("공지 상세 = {}", notice);
 
@@ -48,6 +48,12 @@ public class AdminService {
 		boolean result = ad.write_notice(nd);
 		log.info("글 작성 결과 = {}", result);
 		return result;
+	}
+
+	public Boolean modify_notice(NoticeDto nd) {
+		boolean b_result = ad.modify_notice(nd);
+		log.info("공지 수정 결과 = {}", b_result);
+		return b_result;
 	}
 	
 	

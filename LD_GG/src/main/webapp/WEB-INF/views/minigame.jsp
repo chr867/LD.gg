@@ -17,23 +17,27 @@
 <input type="text" id="chat-input">
 <button onclick="send()">전송</button>
 <button onclick="timeline2()">추가정보</button>
-<button onclick="answer()">정답 제출</button>
+<button onclick="answer('${email}')">정답 제출</button>
 
 <script>
 
 	let predict = 1
-	function answer(){
+	function answer(email){
+		let data = JSON.stringify({ predict: predict, email: email });
+		console.log(data)
 		$.ajax({
-			data : predict,
+			data : data,
 			method : 'post',
 			url : '/minigame/submit.json',
 			contentType: "application/json; charset=utf-8",
 		}).done(res=>{
 			console.log(res)
+			alert(res.responseText)
 		}).fail(err=>{
 			console.log(err)
+			alert(err.responseText)
 		})
-	}
+}
 
 	
 	let time = 5

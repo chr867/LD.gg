@@ -3,6 +3,7 @@ package com.ld.gg.controller.admin;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,20 +31,16 @@ public class AdminRestController {
 			return json;
 		}
 		
-		@RequestMapping("/search.json")
-		public String search_notice_content(String t_b_content) throws Exception{
-			List<NoticeDto> n_list = as.search_notice(t_b_content);
-
+		@GetMapping("/search.json")
+		public String search_notice_content(String keyword) throws Exception{
+			log.info("search : {}", keyword);
+			List<NoticeDto> n_list = as.search_notice(keyword);
+			
 			ObjectMapper mapper = new ObjectMapper();
 			String json = null;
 			json = mapper.writeValueAsString(n_list);
 			
 			return json;
 		}
-		
-		@RequestMapping("/modify.json")
-		public String notice_modify() {
 
-			return null;
-		}
 }

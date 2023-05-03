@@ -36,8 +36,8 @@ public class MiniGameService {
 		return result;
 	}
 
-	public void point_update(Integer point) {
-		boolean result = md.point_update(point);
+	public void point_update(Integer point, String email) {
+		boolean result = md.point_update(point, email);
 		log.info("result = {}", result);
 	}
 
