@@ -127,5 +127,17 @@ public class TipRestController {
 		return email.equals(repylInfo.getEmail());
 	}
 	
+	@PostMapping("/reply/modify")
+	public boolean replyModify(int t_r_num, String t_r_content) {
+		log.info("댓글번호!"+t_r_num);
+		log.info("댓글내용!"+t_r_content);
+		TipDto tDto = new TipDto();
+		tDto.setT_r_num(t_r_num);
+		tDto.setT_r_content(t_r_content);
+		boolean updateResult = ts.updateReply(tDto);
+		
+		return updateResult;
+	}
+	
 	
 }

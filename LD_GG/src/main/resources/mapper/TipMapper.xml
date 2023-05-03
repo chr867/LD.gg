@@ -83,7 +83,7 @@
 		UPDATE tip_board SET
 		t_b_title = #{t_b_title}, t_b_content = #{t_b_content},
 		champion_id =
-		#{champion_id} WHERE t_b_num = #{t_b_num};
+		#{champion_id},t_b_date = default WHERE t_b_num = #{t_b_num};
 	</update>
 
 	<insert id="replyInsert" parameterType="tip">
@@ -116,4 +116,9 @@
 		DELETE FROM tip_reply
 		WHERE t_r_num = #{t_r_num};
 	</delete>
+
+	<update id="updateReply" parameterType="tip">
+		UPDATE tip_reply SET t_r_content = #{t_r_content}, t_r_date = default 
+		WHERE t_r_num = #{t_r_num};
+	</update>
 </mapper>

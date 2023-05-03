@@ -38,6 +38,8 @@ public interface TipDao {
 
 	int deleteReply(int t_r_num);
 
+	int updateReply(TipDto tDto);
+
 
 	
 }

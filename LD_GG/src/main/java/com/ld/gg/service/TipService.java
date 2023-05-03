@@ -173,6 +173,14 @@ public class TipService {
 		}
 	}
 
+	public boolean updateReply(TipDto tDto) {
+		int updateResult = tDao.updateReply(tDto);
+		if(updateResult != 0) {
+			return true;
+		}else
+			return false;
+	}
+
 
 	
 }
