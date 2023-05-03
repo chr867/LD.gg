@@ -1,9 +1,5 @@
 package com.ld.gg.controller.admin;
 
-import java.util.List;
-
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,8 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ld.gg.dto.NoticeDto;
 import com.ld.gg.service.AdminService;
 
@@ -24,7 +20,7 @@ public class AdminController {
 	
 	@GetMapping("/notice")
 	public String go_notice() {
-		return "notice";
+		return "/notice/notice";
 	}
 	
 	@GetMapping("/notice/detail")
@@ -33,12 +29,12 @@ public class AdminController {
 		NoticeDto notice = as.get_notice_detail(t_b_num);
 		model.addAttribute("notice", notice);
 		
-		return "notice_detail";
+		return "/notice/notice_detail";
 	}
 	
 	@GetMapping("/notice/write")
 	public String write_notice() throws Exception{
-		return "notice_write";
+		return "/notice/notice_write";
 	}
 	
 	@PostMapping("/notice/write.do")
@@ -51,12 +47,40 @@ public class AdminController {
 		String tmp = null;
 		
 		if(result) {
-			tmp = "notice";
+			tmp = "/notice/notice";
 		}else {
-			tmp = "notice_write";
+			tmp = "/notice/notice_write";
 		}
 		
 		return tmp;
+	}
+		
+	@RequestMapping("/notice/modify")
+	public String notice_modify(Model model, Integer t_b_num) {
+		NoticeDto nd = as.get_notice_detail(t_b_num);
+		model.addAttribute("nd", nd);
+		
+		
+		return "/notice/notice_modify";
+	}
+	
+	@RequestMapping("/notice/modify.do")
+	public String notice_modify_do(RedirectAttributes attribute, int t_b_num, String t_b_title, String t_b_content) {
+		NoticeDto nd = new NoticeDto();
+		nd.setT_b_num(t_b_num).setT_b_title(t_b_title).setT_b_content(t_b_content);
+		
+		Boolean b_result = as.modify_notice(nd);
+		String s_result = null;
+		
+		if(b_result) {
+			s_result = "redirect:/userinterface/notice";
+			attribute.addFlashAttribute("msg", "수정 완료");
+		}else {
+			s_result = "redirect:/userinterface/notice/modify";
+			attribute.addFlashAttribute("msg", "수정 실패");
+		}
+
+		return s_result;
 	}
 	
 }
