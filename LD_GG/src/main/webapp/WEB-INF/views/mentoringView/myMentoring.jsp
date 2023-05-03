@@ -26,6 +26,9 @@
 	<h4>도움이 필요한 멘티목록</h4>
 	<div id="menti_list"></div>
 	<br>
+	<h4>내가 찜한 멘토 목록</h4>
+	<div id="like_mentor_list"></div>
+	<br>
 	
 	<!-- 모달 -->
 	<div class="modal fade" id="estimateModal" tabindex="-1" aria-labelledby="estimateModalLabel" aria-hidden="true" style="display: none;">
@@ -104,9 +107,9 @@ $(window).on("load", function() {
     		  let rEstList = $("#received_estimate");
     		  let table = $("<table>").addClass("rEst-table");
     		  let header = $("<tr>").append(
-    		    $("<th>").text("견적서를 보낸 멘토"),
-    		    $("<th>").text("견적 내용"),
-    		    $("<th>").text("보낸 날짜")
+    		    $("<th>").text("/견적서를 보낸 멘토/"),
+    		    $("<th>").text("견적 내용/"),
+    		    $("<th>").text("보낸 날짜/")
     		  );
     		  table.append(header);
     		  for (let i = 0; i < data.length; i++) {
@@ -118,7 +121,38 @@ $(window).on("load", function() {
     		    );
     		    table.append(row);
     		  }
-    		  mentiList.empty().append(table);
+    		  rEstList.empty().append(table);
+		},
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+            console.error(status);
+            console.error(error);
+        }
+    });
+	$.ajax({
+        type: "GET",
+        url: "/mentor/get-sent-estimate",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+    	success: function(data) {
+    		  let sEstList = $("#sent_estimate");
+    		  let table = $("<table>").addClass("sEst-table");
+    		  let header = $("<tr>").append(
+    		    $("<th>").text("/내 견적서를 받은 멘티/"),
+    		    $("<th>").text("견적 내용/"),
+    		    $("<th>").text("보낸 날짜/")
+    		  );
+    		  table.append(header);
+    		  for (let i = 0; i < data.length; i++) {
+    		    let est = data[i];
+    		    let row = $("<tr>").append(
+    		      $("<td>").text(est.menti_email),
+    		      $("<td>").text(est.estimate_info),
+    		      $("<td>").text(est.estimate_date)
+    		    );
+    		    table.append(row);
+    		  }
+    		  sEstList.empty().append(table);
 		},
         error: function(xhr, status, error) {
             console.error(xhr.responseText);

@@ -1,6 +1,7 @@
 package com.ld.gg.controller.mentoringController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.ld.gg.dao.MemberDao;
 import com.ld.gg.dto.MemberDto;
 import com.ld.gg.dto.mentoringdto.CustomMentorDTO;
@@ -28,13 +31,14 @@ import com.ld.gg.dto.mentoringdto.MentiTagDTO;
 import com.ld.gg.dto.mentoringdto.MentorClassDTO;
 import com.ld.gg.dto.mentoringdto.MentorProfileDTO;
 import com.ld.gg.dto.mentoringdto.MentorTagDTO;
+import com.ld.gg.dto.mentoringdto.MyMentoringDTO;
 import com.ld.gg.dto.mentoringdto.estimateDTO;
 import com.ld.gg.service.MemberService;
 import com.ld.gg.service.mentoringService.MentorProfileService;
 
 @RestController
 @RequestMapping(value = "/mentor", produces = "text/html; charset=UTF-8")
-public class MentorProfileRestController {
+public class RestMentoringController {
 	
 	@Autowired
 	private MentorProfileService mtpService;
@@ -43,6 +47,55 @@ public class MentorProfileRestController {
 	@Autowired
 	private MemberService mbService;
 	
+	//세션 정보 체크
+	@GetMapping("/check-session")
+	public ResponseEntity<Map<String, Object>> checkSession(HttpServletRequest request) {
+	    HttpSession session = request.getSession(false); // 현재 세션이 없으면 null 반환
+	    if (session != null && session.getAttribute("email") != null) {
+	        String email = (String) session.getAttribute("email"); // 세션에서 email 정보 가져오기
+	        Map<String, Object> response = new HashMap<>();
+	        response.put("isLoggedIn", true);
+	        response.put("email", email);
+	        return ResponseEntity.ok()
+	                .contentType(MediaType.APPLICATION_JSON)
+	                .body(response);
+	    } else {
+	        Map<String, Object> response = new HashMap<>();
+	        response.put("isLoggedIn", false);
+	        return ResponseEntity.ok()
+	                .contentType(MediaType.APPLICATION_JSON)
+	                .body(response);
+	    }
+	}
+	
+	//이메일로 멘토링 내역 가져오기
+	@GetMapping("/get-mentoring-history")
+	public String select_by_email_my_mentoring(HttpServletRequest request) throws JsonProcessingException{
+		HttpSession session = request.getSession();
+		String email = (String)session.getAttribute("email");
+		List<MyMentoringDTO> my_mt_list= mtpService.select_by_email_my_mentoring(email);
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.registerModule(new JavaTimeModule()); //LocalDateTime 타입 변수 json으로 변환
+		String my_mt_list_json = objectMapper.writeValueAsString(my_mt_list);
+		return my_mt_list_json;
+	}
+	//멘토링 내역 수정
+	@PutMapping("/update-mentoring-history")
+	public void update_my_mentoring(MyMentoringDTO my_mt_dto) {
+		mtpService.update_my_mentoring(my_mt_dto);
+	}
+	
+	//멘토링 내역 추가
+	@PostMapping("/save-mentoring-history")
+	public void insert_my_mentoring(MyMentoringDTO my_mt_dto) {
+		mtpService.insert_my_mentoring(my_mt_dto);
+	}
+	//멘토링 내역 삭제
+	@DeleteMapping("/delete-mentoring-history")
+	public void delete_my_mentoring(MyMentoringDTO my_mt_dto) {
+		mtpService.delete_my_mentoring(my_mt_dto);
+	}
+	
 	//보낸 견적 내역 가져오기
 	@GetMapping("/get-sent-estimate")
 	public String select_by_mentor_email_estimate(HttpServletRequest request) throws JsonProcessingException{
@@ -50,6 +103,7 @@ public class MentorProfileRestController {
 		String mentor_email = (String)session.getAttribute("email");
 		List<estimateDTO> estList = mtpService.select_by_mentor_email_estimate(mentor_email);
 		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.registerModule(new JavaTimeModule()); //LocalDateTime 타입 변수 json으로 변환
 		String estList_json = objectMapper.writeValueAsString(estList);
 		return estList_json;
 	}
@@ -60,6 +114,7 @@ public class MentorProfileRestController {
 		String menti_email = (String)session.getAttribute("email");
 		List<estimateDTO> estList = mtpService.select_by_menti_email_estimate(menti_email);
 		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.registerModule(new JavaTimeModule()); //LocalDateTime 타입 변수 json으로 변환
 		String estList_json = objectMapper.writeValueAsString(estList);
 		return estList_json;
 	}

@@ -11,9 +11,12 @@
   	border: 1px solid black;
   }
 </style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 </head>
 <body>
-	<h2>${member.lol_account} 멘토님의 프로필</h2>
+	<h2>${mentor.lol_account} 멘토님의 프로필</h2>
 	<h4>멘토 소개: ${mentor_profile.about_mentor}</h4>
 	<h4>특화 챔피언: ${mentor_profile.specialized_champion}</h4>
 	<h4>특화 포지션: ${mentor_profile.specialized_position}</h4>
@@ -25,7 +28,7 @@
        <c:forEach items="${class_list}" var="class_list">
        		<div id="container_by_class">
 		        <div>
-		        <h4>${class_list.class_name}</h4><button onclick="apply()">수업신청</button>
+		        <h4>${class_list.class_name}</h4><button class="apply-btn">수업신청</button>
 		        </div>
 		        <div>
 		        <h4>${class_list.price}</h4>
@@ -40,10 +43,24 @@
 	
 	<a href="/mentor/list">목록</a>
 	
-	<script>
-		function apply() {
-			window.location.href = "/apply/" + "${mentor_email}";
-		}
-	</script>
+<script>
+	$(document).ready(function() {
+	    $(".apply-btn").click(function() {
+	        $.ajax({
+	            url: "/mentor/check-session",
+	            method: "GET",
+	            success: function(response) {
+	                if (response.isLoggedIn) {
+	                    let email = response.email;
+	                    console.log(email);
+	                } else {
+	                	console.log(response);
+	                    alert("로그인 후 이용 가능합니다.");
+	                }
+	            }
+	        });
+	    });
+	});
+</script>
 </body>
 </html>

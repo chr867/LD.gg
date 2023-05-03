@@ -29,6 +29,8 @@ public class MentoringController {
 	@Autowired
 	private MemberDao mbdao;
 	
+	
+	
 	//마이멘토링 페이지로 이동
 	@GetMapping("/my-mentoring")
 	public ModelAndView go_my_mentoring(HttpServletRequest request) {
@@ -59,7 +61,10 @@ public class MentoringController {
 	
 	//멘토 아이디를 입력해서 멘토 프로필 페이지로 이동
 	@GetMapping("/profile/{lol_account}")
-    public ModelAndView go_mentor_profile(@PathVariable String lol_account) {
+    public ModelAndView go_mentor_profile(@PathVariable String lol_account, HttpServletRequest request) {
+		HttpSession session = request.getSession(); // 현재 접속중인 회원의 아이디 확인
+		String email = (String) session.getAttribute("email");
+		MemberDto mbdto = mbdao.getMemberInfo(email);
 		List<MemberDto> mbList = mbService.findLolAccount(lol_account);
 		String mentor_email = mbList.get(0).getEmail();
 		List<MentorClassDTO> mentor_class_list = mtpService.select_by_email_mentor_class(mentor_email);
@@ -67,7 +72,8 @@ public class MentoringController {
 		return new ModelAndView("mentoringView/mentorInfo")
 				.addObject("mentor_profile", mtp)
 				.addObject("class_list", mentor_class_list)
-				.addObject("member", mbList.get(0));
+				.addObject("mentor", mbList.get(0))
+				.addObject("member", mbdto);
     }
 	
 	//멘토 프로필 작성 페이지로 이동
