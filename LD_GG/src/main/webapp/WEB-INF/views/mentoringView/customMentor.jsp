@@ -61,15 +61,11 @@
     <script>
     $(document).ready(function() {
 		$("#recom-mentor-btn").click(function() {
-			let menti_email = "${member.email}";
 			$.ajax({
-		        type: "POST",
-		        url: `/mentor/recom-mentor`,
+		        type: "GET",
+		        url: "/mentor/recom-mentor",
 		        contentType: "application/json; charset=utf-8",
 		        dataType: "json",
-		        data: JSON.stringify({
-		        	menti_email: menti_email
-		        	}),
 	        	success: function(data) {
 	        		  let mentorList = $("#recom_mentor_list");
 	        		  let table = $("<table>").addClass("mentor-table");

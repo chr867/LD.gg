@@ -138,6 +138,13 @@
 			<artifactId>jackson-databind</artifactId>
 			<version>2.14.1</version>
 		</dependency>
+		
+		<!-- jackson-datatype-jsr310 //LocalDateTime을 json으로 변환 -->
+		<dependency>
+		  <groupId>com.fasterxml.jackson.datatype</groupId>
+		  <artifactId>jackson-datatype-jsr310</artifactId>
+		  <version>2.14.0</version>
+		</dependency>
 
 		<!-- 파일 업로드, 다운로드 -->
 		<!-- commons-fileupload -->

@@ -12,16 +12,20 @@
 </head>
 <body>
 	
-	<h2>마이멘토링 페이지입니다~~</h2>
-	<h3>${member.lol_account} 회원님</h3>
+	<h2>${member.lol_account} 회원님의 마이멘토링 페이지입니다~~</h2>
+	<br>
 	<h4>받은 견적서</h4>
 	<div id="received_estimate"></div>
+	<br>
 	<h4>보낸 견적서</h4>
 	<div id="sent_estimate"></div>
+	<br>
 	<h4>나의 멘토링 내역</h4>
 	<div id="mentoring_history"></div>
+	<br>
 	<h4>도움이 필요한 멘티목록</h4>
 	<div id="menti_list"></div>
+	<br>
 	
 	<!-- 모달 -->
 	<div class="modal fade" id="estimateModal" tabindex="-1" aria-labelledby="estimateModalLabel" aria-hidden="true" style="display: none;">
@@ -48,15 +52,11 @@
 	
 <script>
 $(window).on("load", function() {
-	let mentor_email = "${member.email}";
 	$.ajax({
-        type: "POST",
-        url: `/mentor/recom-menti`,
+        type: "GET",
+        url: "/mentor/recom-menti",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        data: JSON.stringify({
-        	mentor_email: mentor_email
-        	}),
     	success: function(data) {
     		  let mentiList = $("#menti_list");
     		  let table = $("<table>").addClass("menti-table");
@@ -88,6 +88,37 @@ $(window).on("load", function() {
     			    $(".modal-title").attr("id",menti_summoner_name);
     			    $(".modal-title").text(menti_summoner_name+"님에게 견적서 보내기");
               });
+		},
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+            console.error(status);
+            console.error(error);
+        }
+    });
+	$.ajax({
+        type: "GET",
+        url: "/mentor/get-received-estimate",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+    	success: function(data) {
+    		  let rEstList = $("#received_estimate");
+    		  let table = $("<table>").addClass("rEst-table");
+    		  let header = $("<tr>").append(
+    		    $("<th>").text("견적서를 보낸 멘토"),
+    		    $("<th>").text("견적 내용"),
+    		    $("<th>").text("보낸 날짜")
+    		  );
+    		  table.append(header);
+    		  for (let i = 0; i < data.length; i++) {
+    		    let est = data[i];
+    		    let row = $("<tr>").append(
+    		      $("<td>").text(est.mentor_email),
+    		      $("<td>").text(est.estimate_info),
+    		      $("<td>").text(est.estimate_date)
+    		    );
+    		    table.append(row);
+    		  }
+    		  mentiList.empty().append(table);
 		},
         error: function(xhr, status, error) {
             console.error(xhr.responseText);

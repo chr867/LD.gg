@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +43,27 @@ public class MentorProfileRestController {
 	@Autowired
 	private MemberService mbService;
 	
+	//보낸 견적 내역 가져오기
+	@GetMapping("/get-sent-estimate")
+	public String select_by_mentor_email_estimate(HttpServletRequest request) throws JsonProcessingException{
+		HttpSession session = request.getSession();
+		String mentor_email = (String)session.getAttribute("email");
+		List<estimateDTO> estList = mtpService.select_by_mentor_email_estimate(mentor_email);
+		ObjectMapper objectMapper = new ObjectMapper();
+		String estList_json = objectMapper.writeValueAsString(estList);
+		return estList_json;
+	}
+	//받은 견적 내역 가져오기
+	@GetMapping("/get-received-estimate")
+	public String select_by_menti_email_estimate(HttpServletRequest request) throws JsonProcessingException{
+		HttpSession session = request.getSession();
+		String menti_email = (String)session.getAttribute("email");
+		List<estimateDTO> estList = mtpService.select_by_menti_email_estimate(menti_email);
+		ObjectMapper objectMapper = new ObjectMapper();
+		String estList_json = objectMapper.writeValueAsString(estList);
+		return estList_json;
+	}
+	
 	//견적 내용을 받아서 견적 내역 저장
 	@PostMapping("/save-estimate")
 	public void insert_estimate(@RequestBody estimateDTO estdto) {
@@ -48,18 +73,22 @@ public class MentorProfileRestController {
 	}
 	
 	//나와 잘 맞는 멘티 추천
-	@PostMapping("/recom-menti")
-	public String recom_menti(@RequestBody Map<String,String> email) throws JsonProcessingException{
-		List<CustomMentorDTO> cmList = mtpService.recom_menti(email.get("mentor_email"));
+	@GetMapping("/recom-menti")
+	public String recom_menti(HttpServletRequest request) throws JsonProcessingException{
+		HttpSession session = request.getSession();
+		String mentor_email = (String)session.getAttribute("email");
+		List<CustomMentorDTO> cmList = mtpService.recom_menti(mentor_email);
 		ObjectMapper objectMapper = new ObjectMapper();
 		String cmList_json = objectMapper.writeValueAsString(cmList);
 		return cmList_json;
 	}
 	
 	//맞춤멘토 추천
-	@PostMapping("/recom-mentor")
-	public String recom_mentor(@RequestBody Map<String,String> email) throws JsonProcessingException{
-		List<MentorProfileDTO> mtpList = mtpService.recom_mentor(email.get("menti_email"));
+	@GetMapping("/recom-mentor")
+	public String recom_mentor(HttpServletRequest request) throws JsonProcessingException{
+		HttpSession session = request.getSession();
+		String menti_email = (String)session.getAttribute("email");
+		List<MentorProfileDTO> mtpList = mtpService.recom_mentor(menti_email);
 		ObjectMapper objectMapper = new ObjectMapper();
 		String mtpList_json = objectMapper.writeValueAsString(mtpList);
 		return mtpList_json;
