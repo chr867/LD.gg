@@ -27,6 +27,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.ld.gg.dao.MemberDao;
 import com.ld.gg.dto.MemberDto;
 import com.ld.gg.dto.mentoringdto.CustomMentorDTO;
+import com.ld.gg.dto.mentoringdto.LikeMentorDTO;
 import com.ld.gg.dto.mentoringdto.MentiTagDTO;
 import com.ld.gg.dto.mentoringdto.MentorClassDTO;
 import com.ld.gg.dto.mentoringdto.MentorProfileDTO;
@@ -46,6 +47,18 @@ public class RestMentoringController {
 	private MemberDao mbdao;
 	@Autowired
 	private MemberService mbService;
+	
+	//찜한 멘토 추가
+	@PostMapping("/insert_like_mentor")
+	public void insert_like_mentor(LikeMentorDTO like_mentor_dto) {
+		
+	}
+	
+	//찜한 멘토 삭제
+	@DeleteMapping("/delete_like_mentor")
+	public void delete_like_mentor(LikeMentorDTO like_mentor_dto) {
+		
+	}
 	
 	//세션 정보 체크
 	@GetMapping("/check-session")

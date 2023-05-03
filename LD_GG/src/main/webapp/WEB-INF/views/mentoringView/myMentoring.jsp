@@ -182,7 +182,7 @@ $(window).on("load", function() {
     		  for (let i = 0; i < data.length; i++) {
     		    let myMt = data[i];
     		    let row = $("<tr>").append(
-    		      $("<td>").text(myMt.class_id),
+    		      $("<td>").text(myMt.class_name),
     		      $("<td>").text(myMt.mentor_email),
     		      $("<td>").text(myMt.menti_state === 0 ? "대기중" : myMt.menti_state === 1 ? "진행중" : "수업 완료"),
     		      $("<td>").text(myMt.apply_date),
@@ -211,6 +211,7 @@ $(document).ready(function() {
 		    data: JSON.stringify({
 		    	menti_email: mentiEmail,
 		        class_id: $(this).attr("id"),
+		        class_name: null,
 		        menti_state: 1, // 상태를 업데이트 합니다.
 				mentor_email:null,
 				apply_date: null,
@@ -239,6 +240,7 @@ $(document).ready(function() {
 		    data: JSON.stringify({
 		    	menti_email: mentiEmail,
 		        class_id: $(this).attr("id"),
+		        class_name: null,
 		        menti_state: 2, // 상태를 업데이트 합니다.
 				mentor_email:null,
 				apply_date: null,
@@ -304,7 +306,7 @@ $(document).ready(function() {
 		    			  let myMt = data[i];
 		    			  let row = $("<tr>").append(
 		    			    $("<td>").text(myMt.menti_email),
-		    			    $("<td>").text(myMt.class_id),
+		    			    $("<td>").text(myMt.class_name),
 		    			    $("<td>").text(myMt.menti_state === 0 ? "대기중" : myMt.menti_state === 1 ? "진행중" : "수업 완료"),
 		    			    $("<td>").text(myMt.apply_date),
 		    			    $("<td>").text(myMt.done_date),

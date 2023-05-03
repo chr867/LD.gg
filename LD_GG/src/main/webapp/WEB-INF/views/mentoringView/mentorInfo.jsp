@@ -16,8 +16,11 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 </head>
 <body>
-	<h2>${mentor.lol_account} 멘토님의 프로필</h2>
-	<h4>멘토 소개: ${mentor_profile.about_mentor}</h4>
+	<h2>${mentor.lol_account} 멘토님의 프로필</h2> <button class="like-btn" id="${mentor.lol_account}">찜하기</button>
+	<h4>찜한 횟수: ${mentor_profile.num_of_likes}</h4>
+	<h4>수업 횟수: ${mentor_profile.num_of_lessons}</h4>
+	<h4>리뷰 횟수: ${mentor_profile.num_of_reviews}</h4>
+	<h4>평점: ${mentor_profile.total_grade}</h4>
 	<h4>특화 챔피언: ${mentor_profile.specialized_champion}</h4>
 	<h4>특화 포지션: ${mentor_profile.specialized_position}</h4>
 	<h4>수업 가능 시간: ${mentor_profile.contact_time}</h4>
@@ -45,6 +48,19 @@
 	
 <script>
 	$(document).ready(function() {
+		var isLiked = false;
+
+		  $('.like-btn').click(function() {
+		    if (isLiked) {
+		    	isLiked = false;
+		    	$('.like-btn').text('찜 하기');
+		      console.log('찜 해제');
+		    } else {
+		    	isLiked = true;
+		    	$('.like-btn').text('찜 해제');
+		      console.log('찜 하기');
+		    }
+		  });
 	    $(".apply-btn").click(function() {
 	    	let class_id =$(this).attr("id");
 	        $.ajax({
@@ -70,7 +86,7 @@
 	                            alert("멘토링 내역이 추가되었습니다.");
 	                        },
 	                        error: function() {
-	                            alert("멘토링 내역 추가에 실패했습니다.");
+	                            alert("이미 신청한 클래스입니다.");
 	                        }
 	                    });
 	                } else {
