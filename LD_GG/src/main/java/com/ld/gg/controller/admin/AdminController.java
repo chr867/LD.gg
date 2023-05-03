@@ -74,10 +74,10 @@ public class AdminController {
 		
 		if(b_result) {
 			s_result = "redirect:/userinterface/notice";
-			attribute.addFlashAttribute("msg", "done");
+			attribute.addFlashAttribute("msg", "수정 완료");
 		}else {
 			s_result = "redirect:/userinterface/notice/modify";
-			attribute.addFlashAttribute("msg", "fail");
+			attribute.addFlashAttribute("msg", "수정 실패");
 		}
 
 		return s_result;

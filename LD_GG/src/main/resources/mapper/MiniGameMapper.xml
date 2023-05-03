@@ -18,8 +18,8 @@
 		SELECT MINIGAME_RESULT FROM MINIGAME_DATA
 	</select>
 	
-	<update id="point_update" parameterType="Integer">
+	<update id="point_update">
 		UPDATE POINT SET point_balance = point_balance + #{point}
-		WHERE holder_email = "test@naver.com"
+		WHERE holder_email = #{email}
 	</update>
 </mapper>

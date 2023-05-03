@@ -32,12 +32,9 @@
 <script type="text/javascript">
 
 const msg = document.getElementById("msg").innerHTML
-if(msg == 'done'){
-	alert('수정 성공')
-}else if(msg == 'fail'){
-	alert('수정 실패')
+if(msg){
+	alert(msg)
 }
-
 
 // 공지 목록
 $("#grid").jqGrid({

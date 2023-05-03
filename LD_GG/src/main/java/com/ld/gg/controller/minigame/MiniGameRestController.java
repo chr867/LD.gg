@@ -1,6 +1,9 @@
 package com.ld.gg.controller.minigame;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,6 +13,9 @@ import com.ld.gg.dto.minigame.MiniGameDataDto;
 import com.ld.gg.dto.minigame.MiniGameTimeDto;
 import com.ld.gg.service.MiniGameService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/minigame")
 public class MiniGameRestController {
@@ -41,17 +47,21 @@ public class MiniGameRestController {
 	}
 	
 	@RequestMapping(value="/submit.json", produces="application/json;charset=UTF-8")
-	public String submit_minigame(Integer predict) {
+	public String submit_minigame(@RequestBody Map<String, Object> paramMap) {
+	    Integer predict = (Integer)paramMap.get("predict");
+	    String email = (String)paramMap.get("email");
+		log.info("predict = {}", predict);
+		log.info("email = {}", email);
+
 		String tmp = null;
 		Integer result = ms.submit_minigame();
-		System.out.println("result = "+result);
-		predict = 1;
+		log.info("result = {}", result);
 		
 		if(result == predict) {
-			ms.point_update(5);
+			ms.point_update(5, email);
 			tmp = "예측 성공";
 		}else {
-			ms.point_update(-5);
+			ms.point_update(-5, email);
 			tmp = "예측 실패";
 		}
 

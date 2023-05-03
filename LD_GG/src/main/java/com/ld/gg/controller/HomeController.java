@@ -15,7 +15,6 @@ public class HomeController {
 	
 	@GetMapping("/")
 	public String home(Model model) {
-//		es.test();
 		return "index";
 	}
 }
