@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ld.gg.dto.NoticeDto;
+import com.ld.gg.dto.admin.NoticeDto;
 import com.ld.gg.service.AdminService;
 
 import lombok.extern.slf4j.Slf4j;

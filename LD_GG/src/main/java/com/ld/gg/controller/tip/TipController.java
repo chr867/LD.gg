@@ -24,12 +24,12 @@ public class TipController {
 	private TipService ts;
 	
 	@GetMapping("/")
-	public String goTipList(Model model) {
+	public String goTipList(Model model) throws Exception{
 		return "/tip/list";
 	}
 	
 	@GetMapping("/details")
-	public ModelAndView tipDetails(@RequestParam("t_b_num") int t_b_num) {
+	public ModelAndView tipDetails(@RequestParam("t_b_num") int t_b_num) throws Exception{
 		TipDto tipDetails = ts.getTipDetails(t_b_num);
 		
 		//페이지 로드시 조회수 1씩 증가 
@@ -44,13 +44,13 @@ public class TipController {
 	}
 	
 	@GetMapping("/write")
-	public String goTipWrite(Model model) {
+	public String goTipWrite(Model model) throws Exception{
 		return "/tip/write";
 	}
 	
 	@PostMapping("/write_tip")
 	public ModelAndView writeTip(@RequestParam String t_b_title, @RequestParam String t_b_content,
-			@RequestParam int champion_id, HttpSession session) {
+			@RequestParam int champion_id, HttpSession session) throws Exception{
 		String email = (String)session.getAttribute("email");
 		log.info("이메일 정보: "+email);
 		if (email == null) {
@@ -82,7 +82,7 @@ public class TipController {
 	}
 	
 	@GetMapping("/modify")
-	public ModelAndView goTipModify(@RequestParam("t_b_num")int t_b_num, HttpSession session) {
+	public ModelAndView goTipModify(@RequestParam("t_b_num")int t_b_num, HttpSession session) throws Exception{
 		log.info("글수정 기능 글번호 :"+t_b_num);
 		String email = (String)session.getAttribute("email");
 		TipDto tipInfo = ts.getTipinfo(t_b_num);
@@ -103,7 +103,7 @@ public class TipController {
             @RequestParam String t_b_title,
             @RequestParam String t_b_content,
             @RequestParam int champion_id,
-            HttpSession session) {
+            HttpSession session) throws Exception{
 		
 		String email = (String)session.getAttribute("email");
 		

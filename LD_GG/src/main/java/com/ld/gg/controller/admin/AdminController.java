@@ -9,7 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.ld.gg.dto.NoticeDto;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ld.gg.dto.admin.NoticeDto;
+
 import com.ld.gg.service.AdminService;
 
 @Controller
@@ -83,4 +86,18 @@ public class AdminController {
 		return s_result;
 	}
 	
+	@GetMapping("/admin")
+	public String goAdPage() {
+		return "/admin/adminPage";
+	}
+	
+	@GetMapping("/ad/management")
+	public String goAbMangement() {
+		return "/admin/adManagement";
+	}
+	
+	@GetMapping("/member/management")
+	public String goMbMangement() {
+		return "/admin/mbMangement";
+	}
 }

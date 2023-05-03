@@ -1,4 +1,4 @@
-package com.ld.gg.dto;
+package com.ld.gg.dto.admin;
 
 import java.time.LocalDateTime;
 import java.util.Date;

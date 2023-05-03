@@ -2,7 +2,7 @@ package com.ld.gg.dao;
 
 import java.util.List;
 
-import com.ld.gg.dto.NoticeDto;
+import com.ld.gg.dto.admin.NoticeDto;
 
 public interface AdminDao {
 

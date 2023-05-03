@@ -83,17 +83,42 @@
 		UPDATE tip_board SET
 		t_b_title = #{t_b_title}, t_b_content = #{t_b_content},
 		champion_id =
-		#{champion_id} WHERE t_b_num = #{t_b_num};
+		#{champion_id},t_b_date = default WHERE t_b_num = #{t_b_num};
 	</update>
 
 	<insert id="replyInsert" parameterType="tip">
 		INSERT INTO `tip_reply`
 		(`t_b_num`, `t_r_content`, `email`)
-		VALUES (#{t_b_num}, #{t_r_content}, #{email});
+		VALUES (#{t_b_num}, #{t_r_content},
+		#{email});
 
 	</insert>
-	
+
 	<select id="getReplyList" resultType="tip">
-		SELECT * FROM tip_reply WHERE t_b_num = #{t_b_num}
+		SELECT * FROM tip_reply
+		WHERE t_b_num = #{t_b_num}
+		ORDER BY t_r_num DESC
 	</select>
+
+	<delete id="deleteTip" parameterType="tip">
+		DELETE FROM tip_board
+		WHERE
+		t_b_num = #{t_b_num};
+	</delete>
+
+	<select id="getReplyinfo" resultType="tip">
+		SELECT * FROM tip_reply
+		WHERE
+		t_r_num = #{t_r_num}
+	</select>
+
+	<delete id="deleteReply" parameterType="tip">
+		DELETE FROM tip_reply
+		WHERE t_r_num = #{t_r_num};
+	</delete>
+
+	<update id="updateReply" parameterType="tip">
+		UPDATE tip_reply SET t_r_content = #{t_r_content}, t_r_date = default 
+		WHERE t_r_num = #{t_r_num};
+	</update>
 </mapper>

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ld.gg.dao.AdminDao;
-import com.ld.gg.dto.NoticeDto;
+import com.ld.gg.dto.admin.NoticeDto;
 
 import lombok.extern.slf4j.Slf4j;
 
