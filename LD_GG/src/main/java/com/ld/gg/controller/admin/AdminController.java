@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ld.gg.dto.NoticeDto;
+import com.ld.gg.dto.admin.NoticeDto;
 import com.ld.gg.service.AdminService;
 
 @Controller
@@ -59,4 +59,8 @@ public class AdminController {
 		return tmp;
 	}
 	
+	@GetMapping("/admin")
+	public String goAdPage() {
+		return "/admin/adminPage";
+	}
 }
