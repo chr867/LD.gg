@@ -52,6 +52,19 @@ public class TipRestController {
 		
 		return json;
 	}
+	// 1 = 삭제성공 , 2 = 삭제실패, 3 = 이메일매칭 x, 4 = 오류
+	@PostMapping("/delete")
+	public int tipDelete(HttpSession session, int t_b_num) {
+		log.info(t_b_num+"번 공략글 삭제 시작");
+		String email = (String)session.getAttribute("email");
+		TipDto tipInfo = ts.getTipinfo(t_b_num);
+		if(email.equals(tipInfo.getEmail())) {
+			int deleteResult = ts.tipDelete(t_b_num);
+			return deleteResult;
+		}else{
+			return 3;
+		}
+	}
 	
 	//retrun 1 = 추천 성공 , 2 = 추천취소 성공 , 3 = 오류, 4 = 로그인필요
 	@PostMapping("/recom")

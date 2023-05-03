@@ -115,6 +115,16 @@ public class TipService {
 		return rList;
 	}
 
+	public int tipDelete(int t_b_num) {
+		int deleteResult = tDao.deleteTip(t_b_num);
+		
+		if(deleteResult != 0) {
+			return 1;
+		}else {
+			return 2;
+		}
+	}
+
 
 	
 }

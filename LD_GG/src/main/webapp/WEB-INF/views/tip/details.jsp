@@ -222,6 +222,33 @@ function modifyTip(t_b_num) {
 	location.href = "/tip/modify?t_b_num="+t_b_num;
 }
 
+function deleteTip(t_b_num) {
+	$.ajax({
+        method: 'post',
+        url: '/tip/delete',
+        data: {t_b_num:t_b_num},
+      }).done(res=>{
+        console.log(res);
+        if (res==1) {
+        	  console.log()
+        	  alert("공략글 삭제 성공")
+        	  location.href = "/tip/"
+        	}else if(res==2){
+        	  console.log(res)
+        	  alert("공략글 삭제 실패")
+        	}else if(res==3){
+          	  console.log(res)
+        	  alert("본인 게시물 외엔 삭제할 수 없습니다.")
+        	}else{
+              console.log(res)
+              alert("오류발생")
+        	}
+      }).fail(err=>{
+        console.log(err);
+        alert("오류발생")
+      }); 
+}
+
 function submitComment() {
 	let t_b_num = ${tipDetails.t_b_num};
 	let t_r_content = document.getElementById("comment-textarea").value;

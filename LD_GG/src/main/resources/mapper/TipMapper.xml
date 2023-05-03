@@ -89,11 +89,18 @@
 	<insert id="replyInsert" parameterType="tip">
 		INSERT INTO `tip_reply`
 		(`t_b_num`, `t_r_content`, `email`)
-		VALUES (#{t_b_num}, #{t_r_content}, #{email});
+		VALUES (#{t_b_num}, #{t_r_content},
+		#{email});
 
 	</insert>
-	
+
 	<select id="getReplyList" resultType="tip">
-		SELECT * FROM tip_reply WHERE t_b_num = #{t_b_num}
+		SELECT * FROM tip_reply
+		WHERE t_b_num = #{t_b_num}
 	</select>
+
+	<delete id="deleteTip" parameterType="tip">
+		DELETE FROM tip_board
+		WHERE t_b_num = #{t_b_num};
+	</delete>
 </mapper>
