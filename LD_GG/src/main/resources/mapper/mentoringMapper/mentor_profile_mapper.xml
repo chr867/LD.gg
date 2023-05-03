@@ -28,7 +28,8 @@
 <update id="update_mentor_profile" parameterType="mentorProfile">
   UPDATE mentor_profile SET about_mentor = #{about_mentor}, specialized_position = #{specialized_position}, 
   specialized_champion = #{specialized_champion}, contact_time = #{contact_time}, careers = #{careers}, 
-  recom_ment = #{recom_ment} WHERE mentor_email = #{mentor_email};
+  recom_ment = #{recom_ment}, num_of_lessons = #{num_of_lessons}, num_of_reviews = #{num_of_reviews}
+  , num_of_likes = #{num_of_likes}, total_grade = #{total_grade} WHERE mentor_email = #{mentor_email};
 </update>
 
 <delete id="delete_mentor_profile" parameterType="String">

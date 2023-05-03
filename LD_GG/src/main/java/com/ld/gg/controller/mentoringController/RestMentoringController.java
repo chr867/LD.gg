@@ -49,14 +49,29 @@ public class RestMentoringController {
 	private MemberService mbService;
 	
 	//찜한 멘토 추가
-	@PostMapping("/insert_like_mentor")
-	public void insert_like_mentor(LikeMentorDTO like_mentor_dto) {
-		
+	@Transactional
+	@PostMapping("/insert-like-mentor")
+	public void insert_like_mentor(@RequestBody LikeMentorDTO like_mentor_dto) {
+		mtpService.insert_like_mentor(like_mentor_dto);
+		String mentor_email = like_mentor_dto.getLike_mentor();
+		MentorProfileDTO mtpdto= mtpService.select_by_email_mentor_profile(mentor_email);
+		int likes = mtpdto.getNum_of_likes();
+		MentorProfileDTO like_mtp_dto = mtpdto.setNum_of_likes(likes+1);
+		System.out.println(like_mtp_dto);
+		mtpService.update_mentor_profile(like_mtp_dto);
 	}
 	
 	//찜한 멘토 삭제
-	@DeleteMapping("/delete_like_mentor")
-	public void delete_like_mentor(LikeMentorDTO like_mentor_dto) {
+	@Transactional
+	@DeleteMapping("/delete-like-mentor")
+	public void delete_like_mentor(@RequestBody LikeMentorDTO like_mentor_dto) {
+		mtpService.delete_like_mentor(like_mentor_dto);
+		String mentor_email = like_mentor_dto.getLike_mentor();
+		MentorProfileDTO mtpdto= mtpService.select_by_email_mentor_profile(mentor_email);
+		int likes = mtpdto.getNum_of_likes();
+		MentorProfileDTO like_mtp_dto = mtpdto.setNum_of_likes(likes-1);
+		System.out.println(like_mtp_dto);
+		mtpService.update_mentor_profile(like_mtp_dto);
 		
 	}
 	
@@ -106,15 +121,20 @@ public class RestMentoringController {
 	//멘토링 내역 수정
 	@PutMapping("/update-mentoring-history")
 	public void update_my_mentoring(@RequestBody MyMentoringDTO my_mt_dto) {
-		System.out.println(my_mt_dto);
 		mtpService.update_my_mentoring(my_mt_dto);
 	}
 	
+	
 	//멘토링 내역 추가
+	@Transactional
 	@PostMapping("/save-mentoring-history")
 	public void insert_my_mentoring(@RequestBody MyMentoringDTO my_mt_dto) {
-		System.out.println(my_mt_dto);
 		mtpService.insert_my_mentoring(my_mt_dto);
+		String mentor_email = my_mt_dto.getMentor_email();
+		MentorProfileDTO mtpdto = mtpService.select_by_email_mentor_profile(mentor_email);
+		int lessons = mtpdto.getNum_of_lessons();
+		MentorProfileDTO lessons_mtp_dto = mtpdto.setNum_of_lessons(lessons+1);
+		mtpService.update_mentor_profile(lessons_mtp_dto);
 	}
 	//멘토링 내역 삭제
 	@DeleteMapping("/delete-mentoring-history")

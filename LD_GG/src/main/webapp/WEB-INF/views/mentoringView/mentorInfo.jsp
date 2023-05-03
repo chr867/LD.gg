@@ -49,17 +49,65 @@
 <script>
 	$(document).ready(function() {
 		var isLiked = false;
-
 		  $('.like-btn').click(function() {
-		    if (isLiked) {
-		    	isLiked = false;
-		    	$('.like-btn').text('찜 하기');
-		      console.log('찜 해제');
-		    } else {
-		    	isLiked = true;
-		    	$('.like-btn').text('찜 해제');
-		      console.log('찜 하기');
-		    }
+			  $.ajax({
+		            url: "/mentor/check-session",
+		            method: "GET",
+		            success: function(response) {
+		            if (response.isLoggedIn) {
+		            	let email = response.email;
+		            	if(email === "${mentor.email}"){
+		            		$('.like-btn').remove();
+		            	}
+					    if (isLiked) {
+					    	isLiked = false;
+					    	$('.like-btn').text('찜 하기');
+					    	let data = {
+			                		email: email,
+			                        like_mentor: "${mentor.email}"
+			                };
+					    	$.ajax({
+			                    url: "/mentor/delete-like-mentor",
+			                    method: "DELETE",
+			                    data: JSON.stringify(data),
+			                    contentType: "application/json; charset=utf-8",
+			                    success: function() {
+			                        alert("찜 목록에서 삭제되었습니다.");
+			                    },
+			                    error: function() {
+			                        alert("삭제 실패.");
+			                    }
+			                });
+					      console.log('찜 해제');
+					      console.log(data);
+					    } else {
+					    	isLiked = true;
+					    	$('.like-btn').text('찜 해제');
+					    	let data = {
+			                		email: email,
+			                        like_mentor: "${mentor.email}"
+			                };
+					    	$.ajax({
+			                    url: "/mentor/insert-like-mentor",
+			                    method: "POST",
+			                    data: JSON.stringify(data),
+			                    contentType: "application/json; charset=utf-8",
+			                    success: function() {
+			                        alert("찜 목록에 추가되었습니다.");
+			                    },
+			                    error: function() {
+			                        alert("찜 목록 추가에 실패했습니다.");
+			                    }
+			                });
+					      console.log('찜 하기');
+					      console.log(data);
+					    }
+		            }else {
+	                	console.log(response);
+	                    alert("로그인 후 이용 가능합니다.");
+		            }
+	             }
+			  });
 		  });
 	    $(".apply-btn").click(function() {
 	    	let class_id =$(this).attr("id");
@@ -97,6 +145,7 @@
 	        });
 	    });
 	});
+		
 </script>
 </body>
 </html>

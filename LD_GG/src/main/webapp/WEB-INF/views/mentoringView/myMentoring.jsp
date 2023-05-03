@@ -186,7 +186,9 @@ $(window).on("load", function() {
     		      $("<td>").text(myMt.mentor_email),
     		      $("<td>").text(myMt.menti_state === 0 ? "대기중" : myMt.menti_state === 1 ? "진행중" : "수업 완료"),
     		      $("<td>").text(myMt.apply_date),
-    		      $("<td>").text(myMt.done_date)
+    		      $("<td>").text(myMt.done_date),
+    		      myMt.menti_state === 0 ? $("<button>").addClass("cancel-btn").attr("id", myMt.class_id).data("menti-email", myMt.menti_email).text("신청 취소") : null,
+    		      myMt.menti_state === 1 ? $("<button>").addClass("refund-btn").attr("id", myMt.class_id).data("menti-email", myMt.menti_email).text("환불") : null
     		    );
     		    table.append(row);
     		  }
