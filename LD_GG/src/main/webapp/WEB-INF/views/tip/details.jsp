@@ -255,12 +255,13 @@ function submitComment() {
 	
 	$.ajax({
         method: 'post',
-        url: '/tip/reply_insert',
+        url: '/tip/reply/insert',
         data: {t_b_num:t_b_num,t_r_content:t_r_content},
       }).done(res=>{
         console.log(res);
         if (res) {
-        	  console.log()
+        	  console.log(res);
+        	  document.getElementById("comment-textarea").value = null;
         	  loadComments(); //댓글 등록시 비동기로 댓글로드
         	} else {
         	  console.log(res)
@@ -274,16 +275,24 @@ function submitComment() {
 function loadComments() {
     $.ajax({
         method: 'get',
-        url: '/tip/replyList',
+        url: '/tip/reply/list',
         data: {t_b_num: ${tipDetails.t_b_num}},
     }).done(res => {
     	console.log(res);
     	let replyList = "";
         res.forEach(reply => {
+        	let deleteButton = '';
+        	let modifyButton = '';
+        	if(myEmail===reply.email){
+        		deleteButton = '<td><button id="comment-delete-btn" onclick="deleteComment('+reply.t_r_num+')">삭제</button></td>'
+        		modifyButton = '<td><button id="comment-modify-btn" onclick="modifyReplyBtn('+reply.t_r_num+')">수정</button></td>'
+        	}
         	replyList += '<tr height="35" align="center">'
         	replyList += '<td width="100">'+reply.email+'</td>'
-        	replyList += '<td width="500">'+reply.t_r_content+'</td>'
+        	replyList += '<td width="500" id=content_num_'+reply.t_r_num+'>'+reply.t_r_content+'</td>'
         	replyList += '<td width="100">'+reply.t_r_date+'</td>'
+        	replyList += deleteButton
+        	replyList += modifyButton
         	replyList += '</tr>'
         });
         console.log(replyList);
@@ -292,7 +301,55 @@ function loadComments() {
         console.log(err);
     }); 
 }
+function deleteComment(t_r_num) {
+ 	$.ajax({
+        method: 'post',
+        url: '/tip/reply/delete',
+        data: {t_r_num:t_r_num},
+      }).done(res=>{
+        console.log(res);
+        if (res==1) {
+        	  console.log()
+        	  alert("댓글 삭제 성공")
+        	  loadComments();
+        	}else if(res==2){
+        	  console.log(res)
+        	  alert("댓글 삭제 실패")
+        	}else if(res==3){
+          	  console.log(res)
+        	  alert("본인 게시물 외엔 삭제할 수 없습니다.")
+        	}else{
+              console.log(res)
+              alert("오류발생")
+        	}
+        loadComments(); //댓글 삭제시 비동기로 댓글로드
+      }).fail(err=>{
+        console.log(err);
+        alert("오류발생")
+      });  
+}
+function modifyReplyBtn(t_r_num) {
+	$.ajax({
+        method: 'get',
+        url: '/tip/reply/match',
+        data: {t_r_num:t_r_num},
+      }).done(res=>{
+        if (res) {
+        	  console.log(res);
+        	  const contentId = 'content_num_' + t_r_num;
+        	  const inputId = 'content_input_num_' + t_r_num;
+        	  const contentElement = document.getElementById(contentId);
+        	  const content = contentElement.innerHTML;
+        	  contentElement.innerHTML = '<input class="modifyBox" type="text" id="' + inputId + '" value="' + content + '">';
 
+        	} else {
+        	  console.log(res)
+
+        	} 
+      }).fail(err=>{
+        console.log(err);
+      });
+}
 
 loadComments();
 </script>

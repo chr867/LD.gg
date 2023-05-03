@@ -34,6 +34,10 @@ public interface TipDao {
 
 	int deleteTip(int t_b_num);
 
+	TipDto getReplyinfo(int t_r_num);
+
+	int deleteReply(int t_r_num);
+
 
 	
 }

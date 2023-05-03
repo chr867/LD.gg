@@ -54,7 +54,7 @@ public class TipRestController {
 	}
 	// 1 = 삭제성공 , 2 = 삭제실패, 3 = 이메일매칭 x, 4 = 오류
 	@PostMapping("/delete")
-	public int tipDelete(HttpSession session, int t_b_num) {
+	public int tipDelete(HttpSession session, int t_b_num) throws Exception{
 		log.info(t_b_num+"번 공략글 삭제 시작");
 		String email = (String)session.getAttribute("email");
 		TipDto tipInfo = ts.getTipinfo(t_b_num);
@@ -66,12 +66,12 @@ public class TipRestController {
 		}
 	}
 	
-	//retrun 1 = 추천 성공 , 2 = 추천취소 성공 , 3 = 오류, 4 = 로그인필요
+	//retrun 1 = 추천 성공 , 2 = 추천취소 성공 , 3 = 로그인필요, 4 = 오류
 	@PostMapping("/recom")
-	public int tipRecom(HttpSession session, @RequestParam("t_b_num") int t_b_num) {
+	public int tipRecom(HttpSession session, @RequestParam("t_b_num") int t_b_num) throws Exception{
 		String email = (String)session.getAttribute("email");
 		if(email == null) {
-			return 4;
+			return 3;
 		}
 		TipDto tDto = new TipDto();
 		tDto.setEmail(email);
@@ -81,12 +81,12 @@ public class TipRestController {
 		
 		return recomResult;
 	}
-	
-	@PostMapping("/reply_insert")
-	public int replyInsert(HttpSession session, int t_b_num, String t_r_content) {
+	// 1 = 성공 , 2 = 실패, 3 = 이메일매칭 x, 4 = 오류
+	@PostMapping("/reply/insert")
+	public int replyInsert(HttpSession session, int t_b_num, String t_r_content) throws Exception{
 		String email = (String)session.getAttribute("email");
 		if(email == null) {
-			return 4;
+			return 3;
 		}
 		TipDto tDto = new TipDto();
 		tDto.setEmail(email);
@@ -98,12 +98,33 @@ public class TipRestController {
 		return replyInsertResult;
 	}
 	
-	@GetMapping("/replyList")
+	@GetMapping("/reply/list")
 	public List<TipDto> replyList(int t_b_num) throws Exception{
         
         List<TipDto> replyList = ts.getReplyList(t_b_num);
 		
 		return replyList;
+	}
+	
+	@PostMapping("/reply/delete")
+	public int replyDelete(HttpSession session, int t_r_num) throws Exception{
+		log.info(t_r_num+"번 댓글 삭제 시작");
+		String email = (String)session.getAttribute("email");
+		TipDto repylInfo = ts.getReplyinfo(t_r_num);
+		if(email.equals(repylInfo.getEmail())) {
+			int deleteResult = ts.replyDelete(t_r_num);
+			return deleteResult;
+		}else{
+			return 3;
+		}
+	}
+	
+	@GetMapping("/reply/match")
+	public boolean replyMatch(HttpSession session, int t_r_num) throws Exception{
+		log.info(t_r_num+"번 댓글 데이터 가져오기 시작");
+		String email = (String)session.getAttribute("email");
+		TipDto repylInfo = ts.getReplyinfo(t_r_num);
+		return email.equals(repylInfo.getEmail());
 	}
 	
 	

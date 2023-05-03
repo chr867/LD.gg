@@ -97,10 +97,23 @@
 	<select id="getReplyList" resultType="tip">
 		SELECT * FROM tip_reply
 		WHERE t_b_num = #{t_b_num}
+		ORDER BY t_r_num DESC
 	</select>
 
 	<delete id="deleteTip" parameterType="tip">
 		DELETE FROM tip_board
-		WHERE t_b_num = #{t_b_num};
+		WHERE
+		t_b_num = #{t_b_num};
+	</delete>
+
+	<select id="getReplyinfo" resultType="tip">
+		SELECT * FROM tip_reply
+		WHERE
+		t_r_num = #{t_r_num}
+	</select>
+
+	<delete id="deleteReply" parameterType="tip">
+		DELETE FROM tip_reply
+		WHERE t_r_num = #{t_r_num};
 	</delete>
 </mapper>
