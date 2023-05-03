@@ -102,7 +102,7 @@ public class MentoringController {
 					.addObject("member", mbdto);
 			}
 		}else {
-			return new ModelAndView("redirect:/member/myPage");
+			return new ModelAndView("redirect:/member/profile");
 		}
     }
 }

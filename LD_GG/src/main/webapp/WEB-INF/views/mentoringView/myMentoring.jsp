@@ -20,8 +20,11 @@
 	<h4>보낸 견적서</h4>
 	<div id="sent_estimate"></div>
 	<br>
-	<h4>나의 멘토링 내역</h4>
-	<div id="mentoring_history"></div>
+	<h4>수업 신청 내역</h4>
+	<div id="apply_class_history"></div>
+	<br>
+	<h4>수업 요청 내역</h4>
+	<div id="request_class_history"></div>
 	<br>
 	<h4>도움이 필요한 멘티목록</h4>
 	<div id="menti_list"></div>
@@ -160,8 +163,98 @@ $(window).on("load", function() {
             console.error(error);
         }
     });
+	$.ajax({
+        type: "GET",
+        url: "/mentor/get-mentoring-history",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+    	success: function(data) {
+    		  let myMtList = $("#apply_class_history");
+    		  let table = $("<table>").addClass("myMt-table");
+    		  let header = $("<tr>").append(
+    		    $("<th>").text("수업 이름"),
+    		    $("<th>").text("멘토 이름"),
+    		    $("<th>").text("상태"),
+    		    $("<th>").text("신청 날짜"),
+    		    $("<th>").text("완료 날짜")
+    		  );
+    		  table.append(header);
+    		  for (let i = 0; i < data.length; i++) {
+    		    let myMt = data[i];
+    		    let row = $("<tr>").append(
+    		      $("<td>").text(myMt.class_id),
+    		      $("<td>").text(myMt.mentor_email),
+    		      $("<td>").text(myMt.menti_state === 0 ? "대기중" : myMt.menti_state === 1 ? "진행중" : "수업 완료"),
+    		      $("<td>").text(myMt.apply_date),
+    		      $("<td>").text(myMt.done_date)
+    		    );
+    		    table.append(row);
+    		  }
+    		  myMtList.empty().append(table);
+		},
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+            console.error(status);
+            console.error(error);
+        }
+    });
+	
 });
 $(document).ready(function() {
+	getRequestHistory();
+	$(document).on('click', '.accept-btn', function(event) { //동적으로 만들어지는 버튼에 대해서
+		let mentiEmail = $(this).data("menti-email");
+		$.ajax({
+		    type: "PUT",
+		    url: "/mentor/update-mentoring-history",
+		    contentType: "application/json; charset=utf-8",
+		    data: JSON.stringify({
+		    	menti_email: mentiEmail,
+		        class_id: $(this).attr("id"),
+		        menti_state: 1, // 상태를 업데이트 합니다.
+				mentor_email:null,
+				apply_date: null,
+				done_date: null
+		    }),
+		    success: function() {
+		      // 성공적으로 업데이트 되었을 경우 처리할 내용을 작성합니다.
+		    	getRequestHistory();
+		    },
+		    error: function(xhr, status, error) {
+		      console.error(xhr.responseText);
+		      console.error(status);
+		      console.error(error);
+		    }
+		  });
+	});
+	$(document).on('click', '.done-btn', function(event) { //동적으로 만들어지는 버튼에 대해서
+		let mentiEmail = $(this).data("menti-email");
+		const date = new Date();
+		const kstDate = new Date(date.getTime() + (9 * 60 * 60 * 1000)); 
+		const localeTime = kstDate.toISOString();
+		$.ajax({
+		    type: "PUT",
+		    url: "/mentor/update-mentoring-history",
+		    contentType: "application/json; charset=utf-8",
+		    data: JSON.stringify({
+		    	menti_email: mentiEmail,
+		        class_id: $(this).attr("id"),
+		        menti_state: 2, // 상태를 업데이트 합니다.
+				mentor_email:null,
+				apply_date: null,
+				done_date: localeTime
+		    }),
+		    success: function() {
+		      // 성공적으로 업데이트 되었을 경우 처리할 내용을 작성합니다.
+		    	getRequestHistory();
+		    },
+		    error: function(xhr, status, error) {
+		      console.error(xhr.responseText);
+		      console.error(status);
+		      console.error(error);
+		    }
+		  });
+	});
 	$(".btn-close").click(()=>{
 		$("#estimateModal").modal("hide");
 	});
@@ -190,6 +283,45 @@ $(document).ready(function() {
 	      }
 	    });
 	  });
+	  function getRequestHistory() {
+			$.ajax({
+		        type: "GET",
+		        url: "/mentor/get-request-history",
+		        contentType: "application/json; charset=utf-8",
+		        dataType: "json",
+		    	success: function(data) {
+		    		  let myMtList = $("#request_class_history");
+		    		  let table = $("<table>").addClass("myMt-table");
+		    		  let header = $("<tr>").append(
+		  				$("<th>").text("신청한 멘티"),
+		  				$("<th>").text("수업 이름"),
+		    		    $("<th>").text("상태"),
+		    		    $("<th>").text("신청 날짜"),
+		    		    $("<th>").text("완료 날짜")
+		    		  );
+		    		  table.append(header);
+		    		  for (let i = 0; i < data.length; i++) {
+		    			  let myMt = data[i];
+		    			  let row = $("<tr>").append(
+		    			    $("<td>").text(myMt.menti_email),
+		    			    $("<td>").text(myMt.class_id),
+		    			    $("<td>").text(myMt.menti_state === 0 ? "대기중" : myMt.menti_state === 1 ? "진행중" : "수업 완료"),
+		    			    $("<td>").text(myMt.apply_date),
+		    			    $("<td>").text(myMt.done_date),
+		    			    myMt.menti_state === 0 ? $("<button>").addClass("accept-btn").attr("id", myMt.class_id).data("menti-email", myMt.menti_email).text("수락") : null,
+		    			    myMt.menti_state === 1 ? $("<button>").addClass("done-btn").attr("id", myMt.class_id).data("menti-email", myMt.menti_email).text("수업 완료") : null
+		    			  );
+		    		    table.append(row);
+		    		  }
+		    		  myMtList.empty().append(table);
+				},
+		        error: function(xhr, status, error) {
+		            console.error(xhr.responseText);
+		            console.error(status);
+		            console.error(error);
+		        }
+		    });
+			}
 	});
 </script>
 

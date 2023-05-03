@@ -73,6 +73,11 @@ public class MentorProfileService {
 		List<MyMentoringDTO> mymtdto = mymtdao.select_by_email_my_mentoring(email);
 		return mymtdto;
 	}
+	//멘토 이메일로 멘토링 내역 가져오기
+	public List<MyMentoringDTO> select_by_mentor_email_my_mentoring(String mentor_email){
+		List<MyMentoringDTO> mymtdto = mymtdao.select_by_mentor_email_my_mentoring(mentor_email);
+		return mymtdto;
+	}
 	//멘토링 내역 추가
 	public void insert_my_mentoring(MyMentoringDTO my_mt_dto) {
 		mymtdao.insert_my_mentoring(my_mt_dto);

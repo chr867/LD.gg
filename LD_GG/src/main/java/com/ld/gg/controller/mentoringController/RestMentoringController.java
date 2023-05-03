@@ -79,9 +79,21 @@ public class RestMentoringController {
 		String my_mt_list_json = objectMapper.writeValueAsString(my_mt_list);
 		return my_mt_list_json;
 	}
+	//멘토 이메일로 멘토링 내역 가져오기
+	@GetMapping("/get-request-history")
+	public String select_by_mentor_email_my_mentoring(HttpServletRequest request) throws JsonProcessingException{
+		HttpSession session = request.getSession();
+		String mentor_email = (String)session.getAttribute("email");
+		List<MyMentoringDTO> my_mt_list= mtpService.select_by_mentor_email_my_mentoring(mentor_email);
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.registerModule(new JavaTimeModule()); //LocalDateTime 타입 변수 json으로 변환
+		String my_mt_list_json = objectMapper.writeValueAsString(my_mt_list);
+		return my_mt_list_json;
+	}
 	//멘토링 내역 수정
 	@PutMapping("/update-mentoring-history")
 	public void update_my_mentoring(@RequestBody MyMentoringDTO my_mt_dto) {
+		System.out.println(my_mt_dto);
 		mtpService.update_my_mentoring(my_mt_dto);
 	}
 	

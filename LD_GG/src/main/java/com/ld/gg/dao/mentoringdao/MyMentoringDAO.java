@@ -18,6 +18,7 @@ public interface MyMentoringDAO {
 	
 	
 	List<MyMentoringDTO> select_by_email_my_mentoring(String email);
+	List<MyMentoringDTO> select_by_mentor_email_my_mentoring(String mentor_email);
 	void insert_my_mentoring(MyMentoringDTO my_mt_dto);
 	void update_my_mentoring(MyMentoringDTO my_mt_dto);
 	void delete_my_mentoring(MyMentoringDTO my_mt_dto);

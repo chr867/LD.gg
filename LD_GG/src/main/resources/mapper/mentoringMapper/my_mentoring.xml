@@ -10,6 +10,10 @@
   SELECT * FROM my_mentoring WHERE menti_email = #{menti_email};
 </select>
 
+<select id="select_by_mentor_email_my_mentoring" resultType="myMentoring">
+  SELECT * FROM my_mentoring WHERE mentor_email = #{mentor_email};
+</select>
+
 <insert id="insert_my_mentoring" parameterType="myMentoring">
   INSERT INTO my_mentoring (menti_email, class_id, mentor_email) VALUES (#{menti_email}, #{class_id}, #{mentor_email});
 </insert>
