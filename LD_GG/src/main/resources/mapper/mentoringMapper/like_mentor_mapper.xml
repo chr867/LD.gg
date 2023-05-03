@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ld.gg.dao.mentoringdao.MyMentroingDAO">
+
+<select id="select_by_email_like_mentor" resultType="likeMentor">
+  SELECT * FROM mentor_like_list WHERE email = #{email};
+</select>
+
+<select id="count_by_mentor_email_like_mentor" resultType="Integer">
+  SELECT count(*) FROM mentor_like_list WHERE like_mentor = #{like_mentor};
+</select>
+
+<insert id="insert_like_mentor" parameterType="likeMentor">
+  INSERT INTO mentor_like_list (email, like_mentor) 
+  VALUES (#{email}, #{like_mentor});
+</insert>
+
+<delete id="delete_like_mentor" parameterType="likeMentor">
+  DELETE FROM mentor_like_list WHERE email = #{email} 
+  AND like_mentor = #{like_mentor};
+</delete>
+
+</mapper>

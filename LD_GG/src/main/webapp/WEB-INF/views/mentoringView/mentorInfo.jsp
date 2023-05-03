@@ -7,14 +7,20 @@
 <meta charset="UTF-8">
 <title>멘토 프로필</title>
 <style>
-  #container_by_class{
+  .container_by_class{
   	border: 1px solid black;
   }
 </style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 </head>
 <body>
-	<h2>${member.lol_account} 멘토님의 프로필</h2>
-	<h4>멘토 소개: ${mentor_profile.about_mentor}</h4>
+	<h2>${mentor.lol_account} 멘토님의 프로필</h2> <button class="like-btn" id="${mentor.lol_account}">찜하기</button>
+	<h4>찜한 횟수: ${mentor_profile.num_of_likes}</h4>
+	<h4>수업 횟수: ${mentor_profile.num_of_lessons}</h4>
+	<h4>리뷰 횟수: ${mentor_profile.num_of_reviews}</h4>
+	<h4>평점: ${mentor_profile.total_grade}</h4>
 	<h4>특화 챔피언: ${mentor_profile.specialized_champion}</h4>
 	<h4>특화 포지션: ${mentor_profile.specialized_position}</h4>
 	<h4>수업 가능 시간: ${mentor_profile.contact_time}</h4>
@@ -23,9 +29,9 @@
 	
 	<div id="mentor_class_info">
        <c:forEach items="${class_list}" var="class_list">
-       		<div id="container_by_class">
+       		<div class="container_by_class">
 		        <div>
-		        <h4>${class_list.class_name}</h4><button onclick="apply()">수업신청</button>
+		        <h4>${class_list.class_name}</h4><button class="apply-btn" id="${class_list.class_id}">수업신청</button>
 		        </div>
 		        <div>
 		        <h4>${class_list.price}</h4>
@@ -40,10 +46,57 @@
 	
 	<a href="/mentor/list">목록</a>
 	
-	<script>
-		function apply() {
-			window.location.href = "/apply/" + "${mentor_email}";
-		}
-	</script>
+<script>
+	$(document).ready(function() {
+		var isLiked = false;
+
+		  $('.like-btn').click(function() {
+		    if (isLiked) {
+		    	isLiked = false;
+		    	$('.like-btn').text('찜 하기');
+		      console.log('찜 해제');
+		    } else {
+		    	isLiked = true;
+		    	$('.like-btn').text('찜 해제');
+		      console.log('찜 하기');
+		    }
+		  });
+	    $(".apply-btn").click(function() {
+	    	let class_id =$(this).attr("id");
+	        $.ajax({
+	            url: "/mentor/check-session",
+	            method: "GET",
+	            success: function(response) {
+	                if (response.isLoggedIn) {
+	                    let email = response.email;
+	                    let data = {
+	                    		menti_email: email,
+	                            class_id: class_id,
+	                            menti_state: null,
+	                            mentor_email: "${mentor.email}",
+	                            apply_date: null,
+	                            done_date: null
+	                    };
+	                    $.ajax({
+	                        url: "/mentor/save-mentoring-history",
+	                        method: "POST",
+	                        data: JSON.stringify(data),
+	                        contentType: "application/json; charset=utf-8",
+	                        success: function() {
+	                            alert("멘토링 내역이 추가되었습니다.");
+	                        },
+	                        error: function() {
+	                            alert("이미 신청한 클래스입니다.");
+	                        }
+	                    });
+	                } else {
+	                	console.log(response);
+	                    alert("로그인 후 이용 가능합니다.");
+	                }
+	            }
+	        });
+	    });
+	});
+</script>
 </body>
 </html>

@@ -6,9 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ld.gg.dao.mentoringdao.MentiDAO;
 import com.ld.gg.dao.mentoringdao.MentorProfileDAO;
-import com.ld.gg.dao.mentoringdao.MyMentroingDAO;
+import com.ld.gg.dao.mentoringdao.MyMentoringDAO;
 import com.ld.gg.dao.mentoringdao.TagListDAO;
 import com.ld.gg.dto.mentoringdto.CustomMentorDTO;
+import com.ld.gg.dto.mentoringdto.LikeMentorDTO;
 import com.ld.gg.dto.mentoringdto.MentiTagDTO;
 import com.ld.gg.dto.mentoringdto.MentorClassDTO;
 import com.ld.gg.dto.mentoringdto.MentorProfileDTO;
@@ -27,7 +28,26 @@ public class MentorProfileService {
 	@Autowired
 	private MentiDAO mentidao;
 	@Autowired
-	private MyMentroingDAO mymtdao;
+	private MyMentoringDAO mymtdao;
+	
+	//이메일로 내가 찜한 멘토 목록 가져오기
+	public List<LikeMentorDTO> select_by_email_like_mentor(String email){
+		List<LikeMentorDTO> like_mentor_list = mymtdao.select_by_email_like_mentor(email);
+		return like_mentor_list;
+	}
+	//멘토 이메일로 찜당한 횟수 가져오기
+	public Integer count_by_mentor_email_like_mentor(String like_mentor) {
+		Integer count_likes = mymtdao.count_by_mentor_email_like_mentor(like_mentor);
+		return count_likes;
+	}
+	//찜한 멘토 추가
+	public void insert_like_mentor(LikeMentorDTO like_mentor_dto) {
+		mymtdao.insert_like_mentor(like_mentor_dto);
+	}
+	//찜한 멘토 삭제
+	public void delete_like_mentor(LikeMentorDTO like_mentor_dto) {
+		mymtdao.delete_like_mentor(like_mentor_dto);
+	}
 	
 	//멘토 이메일로 견적서 가져오기
 	public List<estimateDTO> select_by_mentor_email_estimate(String mentor_email){
@@ -51,6 +71,11 @@ public class MentorProfileService {
 	//이메일로 멘토링 내역 가져오기
 	public List<MyMentoringDTO> select_by_email_my_mentoring(String email){
 		List<MyMentoringDTO> mymtdto = mymtdao.select_by_email_my_mentoring(email);
+		return mymtdto;
+	}
+	//멘토 이메일로 멘토링 내역 가져오기
+	public List<MyMentoringDTO> select_by_mentor_email_my_mentoring(String mentor_email){
+		List<MyMentoringDTO> mymtdto = mymtdao.select_by_mentor_email_my_mentoring(mentor_email);
 		return mymtdto;
 	}
 	//멘토링 내역 추가

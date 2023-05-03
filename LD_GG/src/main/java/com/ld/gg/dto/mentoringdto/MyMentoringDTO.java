@@ -17,6 +17,7 @@ import lombok.experimental.Accessors;
 public class MyMentoringDTO {
 	private String menti_email; //pk
 	private int class_id; //pk
+	private String class_name;
 	private int menti_state; //0: 대기중, 1: 수강중, 2: 수강 완료
 	private String mentor_email;
 	private LocalDateTime apply_date;

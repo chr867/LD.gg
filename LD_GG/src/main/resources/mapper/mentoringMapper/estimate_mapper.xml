@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 
-<mapper namespace="com.ld.gg.dao.mentoringdao.MyMentroingDAO">
+<mapper namespace="com.ld.gg.dao.mentoringdao.MyMentoringDAO">
 
 
 <select id="select_by_id_estimate" resultType="estimate">
