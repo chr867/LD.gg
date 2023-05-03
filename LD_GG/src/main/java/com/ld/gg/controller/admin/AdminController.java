@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ld.gg.dto.NoticeDto;
 import com.ld.gg.service.AdminService;
@@ -64,7 +65,7 @@ public class AdminController {
 	}
 	
 	@RequestMapping("/notice/modify.do")
-	public String notice_modify_do(Model model, int t_b_num, String t_b_title, String t_b_content) {
+	public String notice_modify_do(RedirectAttributes attribute, int t_b_num, String t_b_title, String t_b_content) {
 		NoticeDto nd = new NoticeDto();
 		nd.setT_b_num(t_b_num).setT_b_title(t_b_title).setT_b_content(t_b_content);
 		
@@ -72,13 +73,13 @@ public class AdminController {
 		String s_result = null;
 		
 		if(b_result) {
-			s_result = "/notice/notice";
-			model.addAttribute("msg", "done");
+			s_result = "redirect:/userinterface/notice";
+			attribute.addFlashAttribute("msg", "done");
 		}else {
-			s_result = "/notice/modify";
-			model.addAttribute("msg", "fail");
+			s_result = "redirect:/userinterface/notice/modify";
+			attribute.addFlashAttribute("msg", "fail");
 		}
-						
+
 		return s_result;
 	}
 	

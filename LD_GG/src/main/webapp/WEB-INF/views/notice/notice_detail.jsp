@@ -15,6 +15,7 @@ ${notice.t_b_recom}
 ${notice.t_b_date}
 
 <button onclick="modify(${notice.t_b_num})">수정</button>
+<button onclick="go_list()">목록</button>
 
 <script type="text/javascript">
 
@@ -22,6 +23,9 @@ ${notice.t_b_date}
 		location.href = `/userinterface/notice/modify?t_b_num=\${t_b_num}`
 	}
 
+	function go_list(){
+		location.href = '/userinterface/notice'
+	}
 
 </script>
 </body>
