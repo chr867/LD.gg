@@ -111,7 +111,7 @@
 	$('#renewal').click(function(){
 		$.ajax({
 			method : 'post',
-			url : '/renewal',
+			url : '/summoner/renewal',
 			data : {summoner_name : '${summoner.summoner_name}'}
 		}).done(res=>{
 			console.log(res)
@@ -122,7 +122,7 @@
 	
 	$.ajax({
 		method : 'get',
-		url : '/get_champ_position_filter',
+		url : '/summoner/get_champ_position_filter',
 		data : {summoner_name : '${summoner.summoner_name}'}
 	}).done(res=>{
 		let pList = '<button id = "all_position"><img src = "" alt ="#"></button>'
@@ -138,7 +138,7 @@
 	
 	$.ajax({
 		method : 'get',
-		url : '/get_champ_record',
+		url : '/summoner/get_champ_record',
 		data : {summoner_name : '${summoner.summoner_name}'}
 	}).done(res=>{
 		let cList = '<tbody>'
@@ -162,7 +162,7 @@
 	
 	$.ajax({
 		method : 'get',
-		url : '/get_recent_games',
+		url : '/summoner/get_recent_games',
 		data : {summoner_name : '${summoner.summoner_name}'}
 	}).done(res=>{
 		let gList = '<tbody>'
@@ -175,22 +175,60 @@
 		gList += '<td><div><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+res.most_champ_id3+'.png" alt="#"><p><span>'res.most_champ3_winrate'</span><span>'res.most_champ3_win'승'res.most_champ3_lose'패</span></p></div></td>'
 	})
 	
-	$.ajax({
+	$.ajax({//전적 정보 가져오기(최근 20게임)
 		method : 'get',
-		url : '/get_summoner_record',
+		url : '/summoner/get_summoner_record',
 		data : {summoner_name : '${summoner.summoner_name}'}
 	}).done(res=>{
 		let rList = '<tbody>';
 		for(record of res){
 			rList += '<tr id = "'record.summoner_name'">'
 			rList += '<td><span class = "win_lose"></span><span class = "game_mode"></span></td>'
-			rList += '<td><div><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+record.champ_id+'.png" alt="#"></div></td>'
+			rList += '<td><div><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+record.champ_name+'.png" alt="#"></div></td>'
 			rList += '<td><div></div></td>'
 		rList += '</tbody>'
 		$('#record').html(rList)
 		}
 	}).fail(err=>{
 		console.log(err)
+	})
+	
+	$.ajax({//화살표 버튼 클릭 시(전적 정보 상세)
+		method : 'get',
+		url : '/summoner/get_record_info',
+		data : {summoner_name : '${summoner.summoner_name}'}
+	}).done(res=>{
+		console.log(res)
+	}).fail(err=>{
+		console.log(err)
+	})
+	
+	$(function(){//빌드 버튼 클릭 시
+		$('#build').click(function(){
+			$.ajax({
+				method : 'get',
+				url : '/summoner/get_record_build',
+				data : {summoner_name : '${summoner.summoner_name}'}
+			}).done(res=>{
+				console.log(res)
+			}).fail(err=>{
+				console.log(err)
+			})
+		})
+	})
+	
+	$(function(){//랭킹 버튼 클릭 시
+		$('#ranking').click(function(){
+			$.ajax({
+				method : 'get',
+				url : '/summoner/get_record_build',
+				data : {summoner_name : '${summoner.summoner_name}'}
+			}).done(res=>{
+				console.log(res)
+			}).fail(err=>{
+				console.log(err)
+			})
+		})
 	})
 	
 	$('.rank_filter').click(function(){

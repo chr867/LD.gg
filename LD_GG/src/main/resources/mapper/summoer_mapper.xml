@@ -4,31 +4,25 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ld.gg.dao.Summoner_dao">
-	<select id="get_summoer_rank" resultType="summoner">
+	<select id="get_summoer_solo" resultType="summoner_rank">
 		SELECT
-		si.profile_icon_id,
-		si.summoner_name,
-		si.tier,
-		si.lp,
-		si.s_level,
-		sr.most_champ_name1,
-		sr.most_champ_name2,
-		sr.most_champ_name3,
-		si.winrate,
-		si.ranking,
-		sr.main_lane,
-		si.wins,
-		si.lose,
-		si.games
+		LOWER(tier) as tier,
+		division,
+		summoner_name,
+		queue,
+		wins,
+		losses,
+		lp,
+		round((wins/(wins+losses))*100,2) as winrate
 		FROM
-		summoner_info si
-		JOIN summoner_ranking sr ON
-		si.summoner_name = sr.summoner_name
+		summoner_rank
+		WHERE
+		queue = 'RANKED_SOLO_5x5'
 		ORDER BY
-		si.lp DESC;
+		lp DESC;
 	</select>
 
-	<select id="get_summoer_solo" resultType="List">
+	<select id="get_summoner_flex" resultType="summoner_rank">
 		SELECT DISTINCT
 		si.profile_icon_id,
 		si.summoner_name,
@@ -47,34 +41,12 @@
 		JOIN RECORD r ON si.summoner_name =
 		r.summoner_name
 		WHERE
-		r.game_mode = 'solo_rank'
+		queue = 'RANKED_FLEX_5x5'
 		ORDER BY
 		si.lp DESC;
 	</select>
 
-	<select id="get_summoner_flex" resultType="List">
-		SELECT DISTINCT
-		si.profile_icon_id,
-		si.summoner_name,
-		si.tier,
-		si.lp,
-		si.s_level,
-		sr.most_champ_name1,
-		sr.most_champ_name2,
-		sr.most_champ_name3,
-		si.winrate,
-		sr.main_lane
-		FROM
-		SUMMONER_INFO si
-		JOIN SUMMONER_RANKING sr ON si.summoner_name = sr.summoner_name
-		JOIN RECORD r ON si.summoner_name = r.summoner_name
-		WHERE
-		r.game_mode = 'flex_rank'
-		ORDER BY
-		si.lp DESC;
-	</select>
-
-	<select id="get_summoner_level" resultType="List">
+	<select id="get_summoner_level" resultType="summoner">
 		SELECT DISTINCT
 		si.profile_icon_id,
 		si.summoner_name,
@@ -93,17 +65,21 @@
 		ORDER BY
 		si.s_level DESC;
 	</select>
-	
-	<select id="get_summoner_info" resultType = "List">
+
+	<select id="get_summoner_info" resultType="List">
+		SELECT * FROM
+		SUMMONER_INFO
+		WHERE summoner_name = ${summoner_name}
+	</select>
+
+	<select id="get_renewal_info" resultType="List">
 		SELECT * FROM
 		SUMMONER_INFO
 		WHERE summoner_name = ${summoner_name}
 	</select>
 	
-	<select id="get_renewal_info" resultType = "List">
-		SELECT * FROM
-		SUMMONER_INFO
-		WHERE summoner_name = ${summoner_name}
+	<select id="get_record_info" resultType = "record_info">
+	
 	</select>
 
 </mapper>

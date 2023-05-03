@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.ld.gg.dao.Summoner_dao;
 import com.ld.gg.dto.summoner.RecordDto;
+import com.ld.gg.dto.summoner.RecordInfoDto;
 import com.ld.gg.dto.summoner.SummonerDto;
+import com.ld.gg.dto.summoner.SummonerRankDto;
 
 @Service
 public class SummonerService {
@@ -15,23 +17,18 @@ public class SummonerService {
 	@Autowired
 	private Summoner_dao SD;
 
-	public List<SummonerDto> get_summoner_rank() {
-		List<SummonerDto> sd = SD.get_summoer_rank();
+	public List<SummonerRankDto> get_summoner_solo() {
+		List<SummonerRankDto> sd = SD.get_summoer_solo();
 		return sd;
 	}
 
-	public List<SummonerDto> get_summoner_solo() {
-		List<SummonerDto> sd = SD.get_summoer_solo();
+	public List<SummonerRankDto> get_summoner_flex() {
+		List<SummonerRankDto> sd = SD.get_summoner_flex();
 		return sd;
 	}
 
-	public List<SummonerDto> get_summoner_flex() {
-		List<SummonerDto> sd = SD.get_summoner_flex();
-		return sd;
-	}
-
-	public List<SummonerDto> get_summoner_level() {
-		List<SummonerDto> sd = SD.get_summoner_level();
+	public List<SummonerRankDto> get_summoner_level() {
+		List<SummonerRankDto> sd = SD.get_summoner_level();
 		return sd;
 	}
 
@@ -53,6 +50,11 @@ public class SummonerService {
 	public List<RecordDto> get_champ_position_filter(String summoner_name) {
 		List<RecordDto> sr = SD.get_champ_position_filter(summoner_name);
 		return sr;
+	}
+
+	public List<RecordInfoDto> get_record_info(String summoner_name) {
+		List<RecordInfoDto> rid = SD.get_record_info(summoner_name);
+		return rid;
 	}
 	
 
