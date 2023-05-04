@@ -31,6 +31,7 @@
 	<a href="/member/profile">개인정보 수정</a>
 	<a href="/member/myPage">마이페이지</a>
 	<a href="/tip/">공략페이지</a>
+	<a href="/userinterface/admin">어드민페이지</a>
 </body>
 <script type="text/javascript">
 	function logout(){

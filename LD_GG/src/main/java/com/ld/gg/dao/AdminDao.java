@@ -2,7 +2,9 @@ package com.ld.gg.dao;
 
 import java.util.List;
 
+import com.ld.gg.dto.admin.AdDto;
 import com.ld.gg.dto.admin.NoticeDto;
+
 
 public interface AdminDao {
 
@@ -17,5 +19,11 @@ public interface AdminDao {
 	boolean write_notice(NoticeDto nd);
 
 	boolean modify_notice(NoticeDto nd);
+
+	int insertAd(AdDto aDto);
+
+	List<AdDto> getAdList();
+
+	List<AdDto> getSearchAdList(String keyword);
 
 }

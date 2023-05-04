@@ -98,6 +98,6 @@ public class AdminController {
 	
 	@GetMapping("/member/management")
 	public String goMbMangement() {
-		return "/admin/mbMangement";
+		return "/admin/mbManagement";
 	}
 }

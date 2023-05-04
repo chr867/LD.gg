@@ -3,36 +3,59 @@
 
 <mapper namespace="com.ld.gg.dao.AdminDao">
 	<select id="get_notice_history" resultType="notice">
-		SELECT * FROM NOTICE_BOARD
+		SELECT * FROM
+		NOTICE_BOARD
 		ORDER BY t_b_num asc;
 	</select>
-	
+
 	<select id="get_notice_detail" resultType="notice">
-		SELECT * FROM NOTICE_BOARD
+		SELECT * FROM
+		NOTICE_BOARD
 		WHERE T_B_NUM = #{t_b_num}
 	</select>
-	
-	<update id="increase_views" >
-		UPDATE NOTICE_BOARD 
+
+	<update id="increase_views">
+		UPDATE NOTICE_BOARD
 		SET T_B_VIEWS = T_B_VIEWS + 1
 		WHERE T_B_NUM = ${t_b_num}
 	</update>
-	
+
 	<select id="search_notice" resultType="notice">
 		SELECT * FROM NOTICE_BOARD
 		WHERE T_B_CONTENT LIKE '%${keyword}%'
 	</select>
-	
+
 	<insert id="write_notice" parameterType="notice">
 		INSERT INTO NOTICE_BOARD
 		VALUES (2, #{t_b_content}, default, default, default, #{t_b_title})
 	</insert>
-	
+
 	<update id="modify_notice" parameterType="notice">
-		UPDATE NOTICE_BOARD 
-		SET t_b_title = #{t_b_title},
+		UPDATE NOTICE_BOARD
+		SET
+		t_b_title = #{t_b_title},
 		t_b_content = #{t_b_content},
-		t_b_date = default 
+		t_b_date =
+		default
 		where t_b_num = #{t_b_num}
 	</update>
+
+	<insert id="insertAd" parameterType="ad">
+		INSERT INTO ad (ad_pay,
+		ad_advertiser, ad_name, ad_start, ad_end)
+		VALUES (#{ad_pay},
+		#{ad_advertiser}, #{ad_name}, #{ad_start},
+		#{ad_end})
+	</insert>
+
+	<select id="getAdList" resultType="ad">
+		SELECT * FROM ad ORDER BY
+		ad_num DESC;
+	</select>
+
+	<select id="getSearchAdList" resultType="ad">
+		SELECT *
+		FROM ad
+		WHERE ad_advertiser LIKE '%${keyword}%' OR ad_name LIKE '%${keyword}%';
+	</select>
 </mapper>
