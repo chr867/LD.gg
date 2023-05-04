@@ -48,6 +48,16 @@ public class RestMentoringController {
 	@Autowired
 	private MemberService mbService;
 	
+	//이메일로 찜한 멘토 목록 가져오기
+	@PostMapping("/get-like-mentor")
+	public String select_by_email_like_mentor(@RequestBody Map<String, String> emailmap) throws JsonProcessingException{
+		String email = emailmap.get("email");
+		List<LikeMentorDTO> like_mentor_list = mtpService.select_by_email_like_mentor(email);
+		ObjectMapper objectMapper = new ObjectMapper();
+		String like_mentor_list_json = objectMapper.writeValueAsString(like_mentor_list);
+		return like_mentor_list_json;
+	}
+	
 	//찜한 멘토 추가
 	@Transactional
 	@PostMapping("/insert-like-mentor")

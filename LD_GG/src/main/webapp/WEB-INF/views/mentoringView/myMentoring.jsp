@@ -57,8 +57,8 @@
 </div>
 	
 <script>
-$(window).on("load", function() {
-	$.ajax({
+$(document).ready(function() {
+	$.ajax({ //도움이 필요한 멘티 목록 가져오기
         type: "GET",
         url: "/mentor/recom-menti",
         contentType: "application/json; charset=utf-8",
@@ -101,7 +101,7 @@ $(window).on("load", function() {
             console.error(error);
         }
     });
-	$.ajax({
+	$.ajax({ //받은 견적서 목록 가져오기
         type: "GET",
         url: "/mentor/get-received-estimate",
         contentType: "application/json; charset=utf-8",
@@ -132,7 +132,7 @@ $(window).on("load", function() {
             console.error(error);
         }
     });
-	$.ajax({
+	$.ajax({ //보낸 견적서 목록 가져오기
         type: "GET",
         url: "/mentor/get-sent-estimate",
         contentType: "application/json; charset=utf-8",
@@ -154,7 +154,7 @@ $(window).on("load", function() {
     		      $("<td>").text(est.estimate_date)
     		    );
     		    table.append(row);
-    		  }
+    		  } 
     		  sEstList.empty().append(table);
 		},
         error: function(xhr, status, error) {
@@ -163,7 +163,7 @@ $(window).on("load", function() {
             console.error(error);
         }
     });
-	$.ajax({
+	$.ajax({ //수업 요청 내역 가져오기
         type: "GET",
         url: "/mentor/get-mentoring-history",
         contentType: "application/json; charset=utf-8",
@@ -200,15 +200,54 @@ $(window).on("load", function() {
             console.error(error);
         }
     });
+	$.ajax({ //수업 요청 내역 가져오기
+		url: "/mentor/get-like-mentor",
+		type: "POST",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        data: JSON.stringify({
+			email: "${member.email}"
+		}),
+        success: function(data) {
+    		  let myMtList = $("#like_mentor_list");
+    		  let table = $("<table>").addClass("myMt-table");
+    		  let header = $("<tr>").append(
+    		    $("<th>").text("수업 이름"),
+    		    $("<th>").text("멘토 이름"),
+    		    $("<th>").text("상태"),
+    		    $("<th>").text("신청 날짜"),
+    		    $("<th>").text("완료 날짜")
+    		  );
+    		  table.append(header);
+    		  for (let i = 0; i < data.length; i++) {
+    		    let myMt = data[i];
+    		    let row = $("<tr>").append(
+    		      $("<td>").text(myMt.class_name),
+    		      $("<td>").text(myMt.mentor_email),
+    		      $("<td>").text(myMt.menti_state === 0 ? "대기중" : myMt.menti_state === 1 ? "진행중" : "수업 완료"),
+    		      $("<td>").text(myMt.apply_date),
+    		      $("<td>").text(myMt.done_date),
+    		      myMt.menti_state === 0 ? $("<button>").addClass("cancel-btn").attr("id", myMt.class_id).data("menti-email", myMt.menti_email).text("신청 취소") : null,
+    		      myMt.menti_state === 1 ? $("<button>").addClass("refund-btn").attr("id", myMt.class_id).data("menti-email", myMt.menti_email).text("환불") : null
+    		    );
+    		    table.append(row);
+    		  }
+    		  myMtList.empty().append(table);
+		},
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+            console.error(status);
+            console.error(error);
+        }
+    });
 	
-});
-$(document).ready(function() {
+
 	getRequestHistory();
 	$(document).on('click', '.accept-btn', function(event) { //동적으로 만들어지는 버튼에 대해서
 		let mentiEmail = $(this).data("menti-email");
 		$.ajax({
 		    type: "PUT",
-		    url: "/mentor/update-mentoring-history",
+		    url: "/mentor/update-mentoring-history", //수락 버튼 누를떄 멘토링 내역 수정
 		    contentType: "application/json; charset=utf-8",
 		    data: JSON.stringify({
 		    	menti_email: mentiEmail,
@@ -237,7 +276,7 @@ $(document).ready(function() {
 		const localeTime = kstDate.toISOString();
 		$.ajax({
 		    type: "PUT",
-		    url: "/mentor/update-mentoring-history",
+		    url: "/mentor/update-mentoring-history", //수업완료 버튼 누를떄 멘토링 내역 수정
 		    contentType: "application/json; charset=utf-8",
 		    data: JSON.stringify({
 		    	menti_email: mentiEmail,
@@ -259,7 +298,7 @@ $(document).ready(function() {
 		    }
 		  });
 	});
-	$(".btn-close").click(()=>{
+	$(".btn-close").click(()=>{ 
 		$("#estimateModal").modal("hide");
 	});
 	  $("#estimateForm").submit(function(event) {
@@ -271,7 +310,7 @@ $(document).ready(function() {
 	      	menti_email: $(".modal-title").attr("id"),
 	      	estimate_date: null
 	    };
-	    $.ajax({
+	    $.ajax({ //견적서 보내기 기능
 	      type: "POST",
 	      url: "/mentor/save-estimate",
 	      data: JSON.stringify(form_data),
@@ -288,7 +327,7 @@ $(document).ready(function() {
 	    });
 	  });
 	  function getRequestHistory() {
-			$.ajax({
+			$.ajax({ //수업 요청 내역 가져오기
 		        type: "GET",
 		        url: "/mentor/get-request-history",
 		        contentType: "application/json; charset=utf-8",

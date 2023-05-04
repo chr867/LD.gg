@@ -48,7 +48,31 @@
 	
 <script>
 	$(document).ready(function() {
+    	if("${member.email}" === "${mentor.email}"){
+    		$('.like-btn').remove();
+    	}
 		var isLiked = false;
+		let data = {
+			email: "${member.email}"
+		}
+		$.ajax({
+		    url: "/mentor/get-like-mentor",
+		    method: "POST",
+		    dataType: "json",
+		    data: JSON.stringify(data),
+		    contentType: "application/json; charset=utf-8",
+		    success: function(response) {
+		    	for (var i = 0; i < response.length; i++) {
+		    	    if (response[i].like_mentor === "${mentor.email}") {
+		    	        isLiked = true;
+		    	        $('.like-btn').text('찜 해제');
+		    	        break;
+		    	    }
+		    	}
+		    }
+		});
+		
+    	
 		  $('.like-btn').click(function() {
 			  $.ajax({
 		            url: "/mentor/check-session",
@@ -56,9 +80,6 @@
 		            success: function(response) {
 		            if (response.isLoggedIn) {
 		            	let email = response.email;
-		            	if(email === "${mentor.email}"){
-		            		$('.like-btn').remove();
-		            	}
 					    if (isLiked) {
 					    	isLiked = false;
 					    	$('.like-btn').text('찜 하기');

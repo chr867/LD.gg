@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import com.ld.gg.dao.MemberDao;
 import com.ld.gg.dto.MemberDto;
+import com.ld.gg.dto.mentoringdto.LikeMentorDTO;
 import com.ld.gg.dto.mentoringdto.MentorClassDTO;
 import com.ld.gg.dto.mentoringdto.MentorProfileDTO;
 import com.ld.gg.dto.mentoringdto.TagListDTO;
@@ -69,11 +70,13 @@ public class MentoringController {
 		String mentor_email = mbList.get(0).getEmail();
 		List<MentorClassDTO> mentor_class_list = mtpService.select_by_email_mentor_class(mentor_email);
 		MentorProfileDTO mtp = mtpService.select_by_email_mentor_profile(mentor_email);
+		List<LikeMentorDTO> like_mentor_list = mtpService.select_by_email_like_mentor(email);
 		return new ModelAndView("mentoringView/mentorInfo")
-				.addObject("mentor_profile", mtp)
-				.addObject("class_list", mentor_class_list)
-				.addObject("mentor", mbList.get(0))
-				.addObject("member", mbdto);
+				.addObject("mentor_profile", mtp) //해당 페이지 멘토 프로필
+				.addObject("class_list", mentor_class_list) //해당 페이지 멘토 클래스
+				.addObject("mentor", mbList.get(0)) //해당 페이지 멘토 회원정보
+				.addObject("member", mbdto) //해당 페이지 멘토 회원정보
+				.addObject("like_mentor", like_mentor_list); //접속한 사람 회원정보
     }
 	
 	//멘토 프로필 작성 페이지로 이동
