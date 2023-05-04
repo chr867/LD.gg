@@ -67,7 +67,7 @@
 		</interceptor> </interceptors> -->
 
 	<beans:beans>
-		<beans:bean id="basicServer" class="com.ld.gg.controller.server.WebSocketHandler"></beans:bean>
+		<beans:bean id="basicServer" class="com.ld.gg.controller.server.WebSocketMiniGameHandler"></beans:bean>
 		<websocket:handlers>
 			<websocket:mapping handler="basicServer" path="/minigame"/>
 			<websocket:handshake-interceptors>
