@@ -81,5 +81,18 @@
 	<select id="get_record_info" resultType = "record_info">
 	
 	</select>
+	
+	<select id="get_champ_record" resultType = "champ_record">
+	
+	</select>
+	
+	<select id="get_20games_summary" resultType = "record_info">
+	
+	</select>
+	
+	
+	<select id="get_champ_position_filter" resultType = "summoner">
+	
+	</select>
 
 </mapper>

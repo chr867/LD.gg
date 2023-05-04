@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ld.gg.dto.summoner.ChampRecordDto;
 import com.ld.gg.dto.summoner.RecordDto;
 import com.ld.gg.dto.summoner.RecordInfoDto;
 import com.ld.gg.dto.summoner.SummonerDto;
@@ -41,22 +42,27 @@ public class SummonerRestController {
 	
 	@GetMapping("/get_summoner_record")
 	public List<RecordDto> summoner_record(String summoner_name){
-		List<RecordDto> sr = ss.get_summoner_record(summoner_name);
-		return sr;
+		List<RecordDto> rd = ss.get_summoner_record(summoner_name);
+		return rd;
 	}
 	
 	@GetMapping("/get_champ_position_filter")
-	public List<RecordDto> get_position_filter(String summoner_name){
-		List<RecordDto> sr = ss.get_champ_position_filter(summoner_name);
-		return sr;
+	public List<SummonerDto> get_position_filter(String summoner_name){
+		List<SummonerDto> sd = ss.get_champ_position_filter(summoner_name);
+		return sd;
 	}
 	
-	@GetMapping("/get_record_info")
-	public List<RecordInfoDto> get_record_info(String summoner_name){
-		List<RecordInfoDto> rid = ss.get_record_info(summoner_name);
-		return rid;
+	@GetMapping("/get_champ_record")
+	public List<ChampRecordDto> get_champ_record(String summoner_name){
+		List<ChampRecordDto> crd = ss.get_champ_record(summoner_name);
+		return crd;
 	}
 	
+	@GetMapping("/get_20games_summary")
+	public List<ChampRecordDto> get_20games_summary(String summoner_name){
+		List<ChampRecordDto> crd = ss.get_20games_summary(summoner_name);
+		return crd;
+	}
 	
 	
 }
