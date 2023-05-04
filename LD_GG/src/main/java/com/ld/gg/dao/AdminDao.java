@@ -5,6 +5,7 @@ import java.util.List;
 import com.ld.gg.dto.admin.AdDto;
 import com.ld.gg.dto.admin.NoticeDto;
 
+
 public interface AdminDao {
 
 	List<NoticeDto> get_notice_history();

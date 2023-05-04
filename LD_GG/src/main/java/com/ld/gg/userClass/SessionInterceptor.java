@@ -24,25 +24,7 @@ public class SessionInterceptor implements HandlerInterceptor {
             response.sendRedirect("/"); // 홈페이지로 이동
             return false;
         }else {
-        	String email = (String) request.getSession().getAttribute("email");
-            String ipAddress = request.getRemoteAddr();
-            String requestURI = request.getRequestURI();
-            String httpMethod = request.getMethod();
-            String userAgent = request.getHeader("User-Agent");
-            log.info("email" + email);
-            log.info("ipAddress"+ipAddress);
-            log.info("requestURI"+requestURI);
-            log.info("httpMethod"+httpMethod);
-            log.info("userAgent"+userAgent);
-            
-            SessionDto sDto = new SessionDto();
-            sDto.setEmail(email);
-            sDto.setIpAddress(ipAddress);
-            sDto.setRequestURI(requestURI);
-            sDto.setHttpMethod(httpMethod);
-            sDto.setUserAgent(userAgent);
-            boolean insertResult = sDao.insertSession(sDto);
-        	return insertResult; 
+        	return true;
         }
     }
 

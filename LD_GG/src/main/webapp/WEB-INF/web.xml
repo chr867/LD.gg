@@ -61,4 +61,12 @@
 	<session-config>
 		<session-timeout>30</session-timeout> <!-- 세션 만료 시간: 30분 -->
 	</session-config>
+	<web-app>
+    <!-- HttpSessionListener를 등록합니다. -->
+	<listener>
+	  <listener-class>com.ld.gg.userClass.SessionListener</listener-class>
+	</listener>
+
+</web-app>
+	
 </web-app>

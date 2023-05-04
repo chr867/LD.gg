@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ld.gg.dto.MemberDto;
+import com.ld.gg.dto.SessionDto;
 import com.ld.gg.service.MemberService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -67,24 +68,6 @@ public class MemberRestController {
 		} else {
 			return findResult;
 		}
-	}
-
-	@PostMapping("/login")
-	public ModelAndView login(MemberDto md, HttpSession session, RedirectAttributes ra) throws Exception {
-		MemberDto member = ms.login(md);
-		log.info("{}",member);
-		System.out.println("로그인 반환 결과:"+member);
-		if (member != null) {
-			session.setAttribute("email", member.getEmail());
-			session.setAttribute("lol_account", member.getLol_account());
-			session.setAttribute("user_type", member.getUser_type());
-
-			ra.addFlashAttribute("msg", "로그인 성공");
-			return new ModelAndView("redirect:/member/testMain");
-		}
-		ra.addFlashAttribute("msg", "로그인 실패");
-		ra.addFlashAttribute("check", 2);
-		return new ModelAndView("redirect:/");
 	}
 	
 	@GetMapping("/find_email")

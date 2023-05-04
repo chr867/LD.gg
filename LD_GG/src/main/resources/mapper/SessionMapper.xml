@@ -3,8 +3,8 @@
 
 <mapper namespace="com.ld.gg.dao.SessionDao">
 	<insert id="insertSession" parameterType="com.ld.gg.dto.SessionDto">
-		INSERT INTO session_record (email, ipAddress, requestURI, httpMethod,userAgent)
-		VALUES (#{email}, #{ipAddress}, #{requestURI}, #{httpMethod}, #{userAgent});
+		INSERT INTO session_record (logType, email, ipAddress, requestURI, httpMethod,userAgent)
+		VALUES (#{logType}, #{email}, #{ipAddress}, #{requestURI}, #{httpMethod}, #{userAgent});
 	</insert>
 
 </mapper>
