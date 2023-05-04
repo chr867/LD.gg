@@ -196,10 +196,11 @@
 	}).done(res=>{
 		let rList = '<tbody>';
 		for(record of res){
-			rList += '<tr id = "'+record.summoner_name+'">'
+			rList += '<tr class = "'+record.summoner_name+'">'
 			rList += '<td><span class = "win_lose"></span><span class = "game_mode"></span></td>'
 			rList += '<td><div><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+record.champ_name+'.png" alt="#"></div></td>'
-			rList += '<td><div></div></td>'
+			rList += '<td><button onclick = "info(this)"></button></td>'
+			rList += '<td><div class = "'+record.match_id+'"></div></td>'
 		rList += '</tbody>'
 		}
 		$('#record').html(rList)
@@ -207,25 +208,79 @@
 		console.log(err)
 	})
 	
+	function info(record){
+		$.ajax({
+			method : 'get',
+			url : '/summoner/get_summoner_record',
+			data : {match_id : '${record.match_id}'}
+		}).done(res=>{
+			let rList = '<div>';
+			for(record of res){
+				rList += '<div><ul><li><button type = "button" class = "info" onclick = "info()"></button></li><li><button type = "button" class = "build_info" onclick = "build_info()"></button></li><li><button type = "button" class = "ranking_info" onclick = "ranking_info()"></button></li></ul></div>'
+				rList += '<div class = "record_info">'
+				rList += '<div class = "win_team">'
+				rList += '<header class = "win_team_header">'
+				rList += '<strong class = "strong_text">승리</strong>'
+				rList += '<div>'//포탑,용,바론, 킬 같은 기타 정보 요약
+				rList += '<div>'//포탑,용,바론 div
+				rList += '<div><img src = "" alt = "#"><span>'+record.win_team_tower+'</span></div>'//포탑 킬 div
+				rList += '<div><img src = "" alt = "#"><span>'+record.win_team_dragon+'</span></div>'//용 킬 div
+				rList += '<div><img src = "" alt = "#"><span>'+record.win_team_baron+'</span></div>'//바론 킬 div
+				rList += '</div>'//포탑,용,바론 div end
+				rList += '<div>|</div>'
+				rList += '<div>'//팀의 킬,데스,어시스트
+				rList += '<span><span>'+record.win_team_kills+'</span><span>/</span><span>'+record.win_team_deaths+'</span>/'+record.win_team_assists+'</span>'
+				rList += '</div>'//팀의 킬,데스,어시스트 end
+				rList += '</div>'//포탑,용,바론, 킬 같은 기타 정보 요약 end
+				rList += '</header>'//win_team_header end
+				rList += '<div>'//win_team 소환사1
+				rList += '<div>'//챔피언,스펠,룬
+				rList += '<div role = "img" aria-label = "'+record.champ_name_kr1+'" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+record.champ_name+'.png");"></div>'
+				rList += '<span>'+record.champ_level1+'</span>'
+				rList += '<div><img src = "" alt = "#"><img src = "" alt = "#"></div>'//스펠
+				rList += '<div><img src = "" alt = "#"><img src = "" alt = "#"></div>'//룬
+				rList += '</div>'//챔피언,스펠,룬 end
+				rList += '<div><span>'+record.winner_name1+'</span></div>'//소환사 이름
+				rList += '<div>'//킬,데스,어시스트 정보
+				rList += '<strong><span>'+record.winner_kills1+'</span><span>/'+record.winner_deaths1+'</span><span>/'+record.winner_assists1+'</span></strong>'
+				rList += '<span>'+record.winner_kda1+'</span>'
+				rList += '</div>'//킬,데스,어시스트 정보 end
+				rList += '<div>'//cs,피해량,와드
+				rList += '<div><span><span>'+record.winner_cs1+'</span><span>/'+record.winner_ward1+'</span><span>/'+record.winner_dealt1+'</span></span></div>'
+				rList += '</div>'//cs,피해량,와드 end
+				rList += '<div>'//item 목록
+				rList += '<img src = "" alt = "#">'
+				rList += '</div>'//item 목록 end
+				rList += '</div>'//win_team 소환사1 end
+				rList += '</div>'//win_team end
+				rList += '<div class = "lose_team">'
+				rList += '</div>'//lose_team end
+				rList += '</div>'//record_info end
+			rList += '</div>'
+			}
+			$('.record.match_id').html(rList)
+		}).fail(err=>{
+			console.log(err)
+		})
+	}
+	
 	//빌드 버튼 클릭 시
-	$('#build').click(function(){
+	function build_info(){
 		$.ajax({
 			method : 'get',
 			url : '/summoner/get_record_build',
 			data : {summoner_name : '${summoner.summoner_name}'}
 		}).done(res=>{
 			console.log(res)
-			dList = '<div>'
 			for(build of res){
-				dList += '<div><div><header><div></div></header><header><div></div></header></div></div>'//아이템 빌드, 스킬 마스터리
+				dList = '<div><div><header><div></div></header><header><div></div></header></div></div>'//아이템 빌드, 스킬 마스터리
 				dList += '<div><header><div></div><div></div></header></div>'//룬 빌드 정보
-			dList += '</div>'
 			}
 			$('.build_info').html(dList)
 		}).fail(err=>{
 			console.log(err)
 		})
-	})
+	}
 	
 	//랭킹 버튼 클릭 시
 	$('#ranking').click(function(){
