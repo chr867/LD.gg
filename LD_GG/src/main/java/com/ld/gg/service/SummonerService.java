@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ld.gg.dao.Summoner_dao;
+import com.ld.gg.dto.summoner.ChampRecordDto;
 import com.ld.gg.dto.summoner.RecordDto;
 import com.ld.gg.dto.summoner.RecordInfoDto;
 import com.ld.gg.dto.summoner.SummonerDto;
@@ -47,14 +48,19 @@ public class SummonerService {
 		return sd;
 	}
 
-	public List<RecordDto> get_champ_position_filter(String summoner_name) {
-		List<RecordDto> sr = SD.get_champ_position_filter(summoner_name);
-		return sr;
+	public List<SummonerDto> get_champ_position_filter(String summoner_name) {
+		List<SummonerDto> sd = SD.get_champ_position_filter(summoner_name);
+		return sd;
 	}
 
-	public List<RecordInfoDto> get_record_info(String summoner_name) {
-		List<RecordInfoDto> rid = SD.get_record_info(summoner_name);
-		return rid;
+	public List<ChampRecordDto> get_champ_record(String summoner_name) {
+		List<ChampRecordDto> crd = SD.get_champ_record(summoner_name);
+		return crd;
+	}
+
+	public List<ChampRecordDto> get_20games_summary(String summoner_name) {
+		List<ChampRecordDto> crd = SD.get_20games_summary(summoner_name);
+		return crd;
 	}
 	
 

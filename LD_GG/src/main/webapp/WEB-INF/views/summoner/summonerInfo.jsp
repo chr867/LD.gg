@@ -55,20 +55,27 @@
 			
 			</div>
 			
-			<table id = "champ">
-				<tr>
-					<th>챔피언</th>
-					<th>승률</th>
-					<th>게임수</th>
-					<th>승리</th>
-					<th>패배</th>
-					<th>KDA</th>
-					<th>킬</th>
-					<th>데스</th>
-					<th>어시스트</th>
-					<th>CS</th>
-					<th>분당 CS</th>
-				</tr>
+			<table>
+				<thead>
+					<tr>
+						<th>챔피언</th>
+						<th>승률</th>
+						<th>게임수</th>
+						<th>승리</th>
+						<th>패배</th>
+						<th>KDA</th>
+						<th>킬</th>
+						<th>데스</th>
+						<th>어시스트</th>
+						<th>CS</th>
+						<th>분당 CS</th>
+					</tr>
+				</thead>
+				
+				<tbody id = "champ">
+				
+				</tbody>
+				
 			</table>
 			
 		</div><!-- 해당 소환사의 Top3 챔피언 통계 -->
@@ -85,8 +92,11 @@
 				<button type = "button" id = "classic_filter">일반</button>
 			</div>
 			
-			<div id = "recent_20games">
+			<div>
 				<span id = "20games">최근 20게임 전적 요약</span>
+				<table id = "recent_20games">
+				
+				</table>
 			</div>
 			
 			<table id = "recent_table">
@@ -109,7 +119,7 @@
 
 	<script type="text/javascript">
 	$('#renewal').click(function(){
-		$.ajax({
+		$.ajax({//전적 정보 전체 갱신
 			method : 'post',
 			url : '/summoner/renewal',
 			data : {summoner_name : '${summoner.summoner_name}'}
@@ -120,116 +130,116 @@
 		})
 	})
 	
-	$.ajax({
+	$.ajax({//소환사의 챔피언 통계 필터 버튼 생성(포지션별 픽률 높은 순으로 생성)
 		method : 'get',
 		url : '/summoner/get_champ_position_filter',
 		data : {summoner_name : '${summoner.summoner_name}'}
 	}).done(res=>{
-		let pList = '<button id = "all_position"><img src = "" alt ="#"></button>'
+		let pList = '<button id = "position"><img src = "" alt ="#"></button>'
 		for(position of res){
-			pList = '<button type = "button" id = "top_position"><img src = "" alt = "#"></button>'
-			pList = '<button type = "button" id = "jun_position"><img src = "" alt = "#"></button>'
-			pList = '<button type = "button" id = "mid_position"><img src = "" alt = "#"></button>'
-			pList = '<button type = "button" id = "adc_position"><img src = "" alt = "#"></button>'
-			pList = '<button type = "button" id = "sup_position"><img src = "" alt = "#"></button>'
+			pList = '<button type = "button" class = "position"><img src = "" alt = "#"></button>'
+			pList = '<button type = "button" class = "position"><img src = "" alt = "#"></button>'
+			pList = '<button type = "button" class = "position"><img src = "" alt = "#"></button>'
+			pList = '<button type = "button" class = "position"><img src = "" alt = "#"></button>'
+			pList = '<button type = "button" class = "position"><img src = "" alt = "#"></button>'
 		$('#champ_position_filter').html(pList)
 		}
 	})
 	
-	$.ajax({
+	$.ajax({//소환사의 챔피언 통계
 		method : 'get',
 		url : '/summoner/get_champ_record',
 		data : {summoner_name : '${summoner.summoner_name}'}
 	}).done(res=>{
 		let cList = '<tbody>'
 		for(champ of res){
-			cList += '<tr id = "'champ.champ_id'">'
-			cList += '<td><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+champ.champ_id+'.png" alt="#"></td>'
-			cList += '<td>'champ.winrate'%</td>'
-			cList += '<td>'champ.games'</td>'
-			cList += '<td>'champ.wins'</td>'
-			cList += '<td>'champ.lose'</td>'
-			cList += '<td>'champ.KDA'</td>'
-			cList += '<td>'champ.kills'</td>'
-			cList += '<td>'champ.deaths'</td>'
-			cList += '<td>'champ.assists'</td>'
-			cList += '<td>'champ.cs'</td>'
-			cList += '<td>'champ.cs_per_minute'</td>'
+			cList += '<tr class = "'+champ.champ_id+'">'
+			cList += '<td><div><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+champ.champ_name+'.png" alt="#"><p>'+champ.champ_name+'</p></div></td>'
+			cList += '<td>'+champ.winrate+'%</td>'
+			cList += '<td>'+champ.games+'</td>'
+			cList += '<td>'+champ.wins+'</td>'
+			cList += '<td>'+champ.lose+'</td>'
+			cList += '<td>'+champ.KDA+'</td>'
+			cList += '<td>'+champ.kills+'</td>'
+			cList += '<td>'+champ.deaths+'</td>'
+			cList += '<td>'+champ.assists+'</td>'
+			cList += '<td>'+champ.cs+'</td>'
+			cList += '<td>'+champ.cs_per_minute+'</td>'
 		cList += '</tbody>'
 		$('#champ').html(cList)
 		}
 	})
 	
-	$.ajax({
+	$.ajax({//최근 20전적 요약본
 		method : 'get',
-		url : '/summoner/get_recent_games',
+		url : '/summoner/get_20games_summary',
 		data : {summoner_name : '${summoner.summoner_name}'}
 	}).done(res=>{
 		let gList = '<tbody>'
-		gList += '<td><span>'res.winrate'</span><span>'res.wins'승 '+res.lose'패</span></td>'
-		gList += '<td>'res.ava_point'</td>'
-		gList += '<td>'res.maximan_ava'</td>'
-		gList += '<td>'res.position_pick'</td>'
-		gList += '<td><div><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+res.most_champ_id2+'.png" alt="#"><p><span>'res.most_champ2_winrate'</span><span>'res.most_champ1_win'승'res.most_champ1_lose'패</span></p></div></td>'
-		gList += '<td><div><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+res.most_champ_id2+'.png" alt="#"><p><span>'res.most_champ2_winrate'</span><span>'res.most_champ2_win'승'res.most_champ2_lose'패</span></p></div></td>'
-		gList += '<td><div><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+res.most_champ_id3+'.png" alt="#"><p><span>'res.most_champ3_winrate'</span><span>'res.most_champ3_win'승'res.most_champ3_lose'패</span></p></div></td>'
+		gList += '<td><span>'+res.winrate+'</span><span>'+res.wins+'승 '+res.lose+'패</span></td>'
+		gList += '<td>'+res.ava_point+'</td>'
+		gList += '<td>'+res.maximan_ava+'</td>'
+		gList += '<td>'+res.position_pick+'</td>'
+		gList += '<td><div><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+res.most_champ_id2+'.png" alt="#"><p><span>'+res.most_champ2_winrate+'</span><span>'+res.most_champ1_win+'승'+res.most_champ1_lose+'패</span></p></div></td>'
+		gList += '<td><div><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+res.most_champ_id2+'.png" alt="#"><p><span>'+res.most_champ2_winrate+'</span><span>'+res.most_champ2_win+'승'+res.most_champ2_lose+'패</span></p></div></td>'
+		gList += '<td><div><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+res.most_champ_id3+'.png" alt="#"><p><span>'+res.most_champ3_winrate+'</span><span>'+res.most_champ3_win+'승'+res.most_champ3_lose+'패</span></p></div></td>'
+		let gList += '</tbody>'
+		$('#recent_20games').html(gList)
+	}).fail(err=>{
+		console.log(err)
 	})
 	
-	$.ajax({//전적 정보 가져오기(최근 20게임)
+	$.ajax({//전적 정보 가져오기
 		method : 'get',
 		url : '/summoner/get_summoner_record',
 		data : {summoner_name : '${summoner.summoner_name}'}
 	}).done(res=>{
 		let rList = '<tbody>';
 		for(record of res){
-			rList += '<tr id = "'record.summoner_name'">'
+			rList += '<tr id = "'+record.summoner_name+'">'
 			rList += '<td><span class = "win_lose"></span><span class = "game_mode"></span></td>'
 			rList += '<td><div><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+record.champ_name+'.png" alt="#"></div></td>'
 			rList += '<td><div></div></td>'
 		rList += '</tbody>'
-		$('#record').html(rList)
 		}
+		$('#record').html(rList)
 	}).fail(err=>{
 		console.log(err)
 	})
 	
-	$.ajax({//화살표 버튼 클릭 시(전적 정보 상세)
-		method : 'get',
-		url : '/summoner/get_record_info',
-		data : {summoner_name : '${summoner.summoner_name}'}
-	}).done(res=>{
-		console.log(res)
-	}).fail(err=>{
-		console.log(err)
-	})
-	
-	$(function(){//빌드 버튼 클릭 시
-		$('#build').click(function(){
-			$.ajax({
-				method : 'get',
-				url : '/summoner/get_record_build',
-				data : {summoner_name : '${summoner.summoner_name}'}
-			}).done(res=>{
-				console.log(res)
-			}).fail(err=>{
-				console.log(err)
-			})
+	//빌드 버튼 클릭 시
+	$('#build').click(function(){
+		$.ajax({
+			method : 'get',
+			url : '/summoner/get_record_build',
+			data : {summoner_name : '${summoner.summoner_name}'}
+		}).done(res=>{
+			console.log(res)
+			dList = '<div>'
+			for(build of res){
+				dList += '<div><div><header><div></div></header><header><div></div></header></div></div>'//아이템 빌드, 스킬 마스터리
+				dList += '<div><header><div></div><div></div></header></div>'//룬 빌드 정보
+			dList += '</div>'
+			}
+			$('.build_info').html(dList)
+		}).fail(err=>{
+			console.log(err)
 		})
 	})
 	
-	$(function(){//랭킹 버튼 클릭 시
-		$('#ranking').click(function(){
-			$.ajax({
-				method : 'get',
-				url : '/summoner/get_record_build',
-				data : {summoner_name : '${summoner.summoner_name}'}
-			}).done(res=>{
-				console.log(res)
-			}).fail(err=>{
-				console.log(err)
-			})
+	//랭킹 버튼 클릭 시
+	$('#ranking').click(function(){
+		$.ajax({
+			method : 'get',
+			url : '/summoner/get_record_build',
+			data : {summoner_name : '${summoner.summoner_name}'}
+		}).done(res=>{
+			console.log(res)
+		}).fail(err=>{
+			console.log(err)
 		})
 	})
+	
 	
 	$('.rank_filter').click(function(){
 		$('.rank_filter').not(this).prop('checked', false)
