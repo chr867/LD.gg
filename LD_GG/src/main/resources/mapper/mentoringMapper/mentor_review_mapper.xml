@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.ld.gg.dao.mentoringdao.MentiDAO">
+
+
+<select id="select_by_reviewer_email_mentor_review" resultType="mentor_review">
+	SELECT * FROM mentor_review WHERE reviewer_email = #{reviewer_email};
+</select>
+
+<select id="select_by_mentor_email_mentor_review" resultType="mentor_review">
+	SELECT * FROM mentor_review WHERE mentor_email = #{mentor_email};
+</select>
+
+<insert id="insert_mentor_review" parameterType="mentor_review">
+  INSERT INTO mentor_review (reviewer_email,class_id
+  ,review_content,mentor_email,grade) 
+  VALUES (#{reviewer_email},#{class_id},#{review_content}
+  ,#{mentor_email},#{grade});
+</insert>
+
+<delete id="delete_mentor_review" parameterType="int">
+  DELETE FROM mentor_review WHERE review_num = #{review_num};
+</delete>
+
+
+
+</mapper>

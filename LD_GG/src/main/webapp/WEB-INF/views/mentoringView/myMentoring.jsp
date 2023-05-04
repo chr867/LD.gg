@@ -33,7 +33,7 @@
 	<div id="like_mentor_list"></div>
 	<br>
 	
-	<!-- 모달 -->
+	<!-- 견적서 쓰기 모달 -->
 	<div class="modal fade" id="estimateModal" tabindex="-1" aria-labelledby="estimateModalLabel" aria-hidden="true" style="display: none;">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -45,6 +45,46 @@
           <div class="mb-3">
             <label for="estimateContent" class="form-label">견적 내용</label>
             <textarea class="form-control" id="estimateContent" rows="5"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+            <button type="submit" class="btn btn-primary">전송</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 리뷰 쓰기 모달 -->
+	<div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="reviewModalLabel"></h5>
+      </div>
+      <div class="modal-body">
+        <form id="reviewForm">
+        <div class="mb-3">
+		  <label for="grade" class="form-label">평점</label>
+		  <div>
+		    <span class="star-grade">
+		      <input type="radio" name="grade" id="grade-5" value="5" />
+		      <label for="grade-5"><i class="fa fa-star"></i></label>
+		      <input type="radio" name="grade" id="grade-4" value="4" />
+		      <label for="grade-4"><i class="fa fa-star"></i></label>
+		      <input type="radio" name="grade" id="grade-3" value="3" />
+		      <label for="grade-3"><i class="fa fa-star"></i></label>
+		      <input type="radio" name="grade" id="grade-2" value="2" />
+		      <label for="grade-2"><i class="fa fa-star"></i></label>
+		      <input type="radio" name="grade" id="grade-1" value="1" />
+		      <label for="grade-1"><i class="fa fa-star"></i></label>
+		    </span>
+		  </div>
+		</div>
+          <div class="mb-3">
+            <label for="reviewContent" class="form-label">리뷰 내용</label>
+            <textarea class="form-control" id="reviewContent" rows="5"></textarea>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">닫기</button>
@@ -164,11 +204,21 @@ $(document).ready(function() {
     		    		  .text("신청 취소") : null,
     		      myMt.menti_state === 1 ? $("<button>").addClass("refund-btn")
     		    		  .attr("id", myMt.class_id)
-    		    		  .text("환불") : null
+    		    		  .text("환불") : null,
+    		   		myMt.menti_state === 2 ? $("<button>").addClass("review-btn")
+    	    		    		  .attr("id", myMt.mentor_lol_account)
+    	    		    		  .attr("name", myMt.class_id)
+    	    		    		  .text("리뷰 쓰기") : null
     		    );
     		    table.append(row);
     		  }
     		  myMtList.empty().append(table);
+    		  $(".review-btn").click(function() {
+    			  let mentor_name = this.id;
+    			    $("#reviewModal").modal("show"); //리뷰 모달 켜기
+    			    $(".modal-title").attr("id",mentor_name);
+    			    $(".modal-title").text(mentor_name+"님에게 리뷰 쓰기");
+              });
 		},
         error: function(xhr, status, error) {
             console.error(xhr.responseText);
@@ -176,6 +226,44 @@ $(document).ready(function() {
             console.error(error);
         }
     });
+	
+	$(".btn-close").click(()=>{ //견적서 모달 끄기
+		$("#reviewModal").modal("hide");
+	});
+	$(function() { //평점 바뀔때 마다 
+		  $('.star-grade input').change(function() {
+		    var grade = $(this).val();
+		    $('#reviewForm').append('<input type="hidden" name="grade" value="' + grade + '">');
+		  });
+		});
+	  $("#reviewForm").submit(function(event) {
+	    event.preventDefault();
+	    let form_data = {
+	    		review_email: "${member.email}",
+	    		class_id: $(".review-btn").attr('name'),
+	    	review_content: $("#reviewContent").val(),
+	    	mentor_email: $(".modal-title").attr("id"),
+	      	grade: $('.star-grade input').attr('name')
+	    };
+	    console.log(form_data);
+	    $.ajax({ //견적서 보내기 기능
+	      type: "POST",
+	      url: "/mentor/save-review",
+	      data: JSON.stringify(form_data),
+	      contentType: "application/json; charset=utf-8",
+	      success: function(data) {
+	        alert("리뷰 작성 완료.");
+	        $("#reviewModal").modal("hide");
+	        ////////////리뷰 목록 불러오기/////////////////////
+	      },
+	      error: function(xhr, status, error) {
+	        console.error(xhr.responseText);
+	        console.error(status);
+	        console.error(error);
+	      }
+	    });
+	  });
+	
 	$.ajax({ //내가 찜한 멘토 가져오기
 		url: "/mentor/get-like-mentor",
 		type: "POST",
@@ -320,19 +408,15 @@ $(document).ready(function() {
 		    }
 		  });
 	});
-	$(".btn-close").click(()=>{ 
+	$(".btn-close").click(()=>{ //견적서 모달 끄기
 		$("#estimateModal").modal("hide");
 	});
 	  $("#estimateForm").submit(function(event) {
 	    event.preventDefault();
 	    let form_data = {
-	    	estimate_id: null,
 	    	estimate_info: $("#estimateContent").val(),
 	      	mentor_email: "${member.email}",
-	      	menti_email: $(".modal-title").attr("id"),
-	      	menti_lol_account: null,
-	      	mentor_lol_account: null,
-	      	estimate_date: null
+	      	menti_email: $(".modal-title").attr("id")
 	    };
 	    $.ajax({ //견적서 보내기 기능
 	      type: "POST",

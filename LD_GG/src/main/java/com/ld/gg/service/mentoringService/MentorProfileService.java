@@ -4,6 +4,9 @@ import java.util.Iterator;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ld.gg.dao.mentoringdao.MentiDAO;
 import com.ld.gg.dao.mentoringdao.MentorProfileDAO;
 import com.ld.gg.dao.mentoringdao.MyMentoringDAO;
@@ -13,10 +16,11 @@ import com.ld.gg.dto.mentoringdto.LikeMentorDTO;
 import com.ld.gg.dto.mentoringdto.MentiTagDTO;
 import com.ld.gg.dto.mentoringdto.MentorClassDTO;
 import com.ld.gg.dto.mentoringdto.MentorProfileDTO;
+import com.ld.gg.dto.mentoringdto.MentorReviewDTO;
 import com.ld.gg.dto.mentoringdto.MentorTagDTO;
 import com.ld.gg.dto.mentoringdto.MyMentoringDTO;
 import com.ld.gg.dto.mentoringdto.TagListDTO;
-import com.ld.gg.dto.mentoringdto.estimateDTO;
+import com.ld.gg.dto.mentoringdto.EstimateDTO;
 
 @Service
 public class MentorProfileService {
@@ -29,6 +33,29 @@ public class MentorProfileService {
 	private MentiDAO mentidao;
 	@Autowired
 	private MyMentoringDAO mymtdao;
+	
+	//리뷰어 이메일로 내가 쓴 리뷰 가져오기
+	public String select_by_reviewer_email_mentor_review(String reviewer_email) throws JsonProcessingException {
+		List<MentorReviewDTO> mentor_review_list = mentidao.select_by_reviewer_email_mentor_review(reviewer_email);
+		ObjectMapper objectMapper = new ObjectMapper();
+		String mentor_review_list_json = objectMapper.writeValueAsString(mentor_review_list);
+		return mentor_review_list_json;
+	}
+	//멘토 이메일로 나에게 달린 리뷰 가져오기
+	public String select_by_mentor_email_mentor_review(String mentor_email) throws JsonProcessingException {
+		List<MentorReviewDTO> mentor_review_list = mentidao.select_by_mentor_email_mentor_review(mentor_email);
+		ObjectMapper objectMapper = new ObjectMapper();
+		String mentor_review_list_json = objectMapper.writeValueAsString(mentor_review_list);
+		return mentor_review_list_json;
+	}
+	//리뷰 생성
+	public void insert_mentor_review(MentorReviewDTO mentor_review_dto) {
+		mentidao.insert_mentor_review(mentor_review_dto);
+	}
+	//리뷰 삭제
+	public void delete_mentor_review(int review_num) {
+		mentidao.delete_mentor_review(review_num);
+	}
 	
 	//이메일로 내가 찜한 멘토 목록 가져오기
 	public List<LikeMentorDTO> select_by_email_like_mentor(String email){
@@ -50,17 +77,17 @@ public class MentorProfileService {
 	}
 	
 	//멘토 이메일로 견적서 가져오기
-	public List<estimateDTO> select_by_mentor_email_estimate(String mentor_email){
-		List<estimateDTO> est_list = mymtdao.select_by_mentor_email_estimate(mentor_email);
+	public List<EstimateDTO> select_by_mentor_email_estimate(String mentor_email){
+		List<EstimateDTO> est_list = mymtdao.select_by_mentor_email_estimate(mentor_email);
 		return est_list;
 	}
 	//멘티 이메일로 견적서 가져오기
-	public List<estimateDTO> select_by_menti_email_estimate(String menti_email){
-		List<estimateDTO> est_list = mymtdao.select_by_menti_email_estimate(menti_email);
+	public List<EstimateDTO> select_by_menti_email_estimate(String menti_email){
+		List<EstimateDTO> est_list = mymtdao.select_by_menti_email_estimate(menti_email);
 		return est_list;
 	}
 	//견적서 추가
-	public void insert_estimate(estimateDTO estdto) {
+	public void insert_estimate(EstimateDTO estdto) {
 		mymtdao.insert_estimate(estdto);
 	}
 	//견적서 삭제

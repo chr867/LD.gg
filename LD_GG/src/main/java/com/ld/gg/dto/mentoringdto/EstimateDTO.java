@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(chain=true)
 @Alias("estimate")
-public class estimateDTO {
+public class EstimateDTO {
 	private int estimate_id; //pk
 	private String estimate_info;
 	private String mentor_email;

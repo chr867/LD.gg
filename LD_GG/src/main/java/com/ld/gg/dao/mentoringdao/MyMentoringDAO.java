@@ -6,14 +6,14 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.ld.gg.dto.mentoringdto.LikeMentorDTO;
 import com.ld.gg.dto.mentoringdto.MyMentoringDTO;
-import com.ld.gg.dto.mentoringdto.estimateDTO;
+import com.ld.gg.dto.mentoringdto.EstimateDTO;
 
 @Mapper
 public interface MyMentoringDAO {
-	estimateDTO select_by_id_estimate(int estimate_id);
-	List<estimateDTO> select_by_mentor_email_estimate(String mentor_email);
-	List<estimateDTO> select_by_menti_email_estimate(String menti_email);
-	void insert_estimate(estimateDTO estdto);
+	EstimateDTO select_by_id_estimate(int estimate_id);
+	List<EstimateDTO> select_by_mentor_email_estimate(String mentor_email);
+	List<EstimateDTO> select_by_menti_email_estimate(String menti_email);
+	void insert_estimate(EstimateDTO estdto);
 	void delete_estimate(int estimate_id);
 	
 	
