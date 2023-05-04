@@ -16,11 +16,13 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(chain=true)
 @Alias("estimate")
-public class estimateDTO {
+public class EstimateDTO {
 	private int estimate_id; //pk
 	private String estimate_info;
 	private String mentor_email;
 	private String menti_email;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy년 MM월 dd일 HH:mm:ss")
 	private LocalDateTime estimate_date;
+	private String menti_lol_account;
+	private String mentor_lol_account;
 }

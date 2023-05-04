@@ -5,11 +5,21 @@
 <mapper namespace="com.ld.gg.dao.mentoringdao.MyMentoringDAO">
 
 <select id="select_by_email_like_mentor" resultType="likeMentor">
-  SELECT * FROM mentor_like_list WHERE email = #{email};
+	select mll.email, m.lol_account as menti_lol_account , 
+	mll.like_mentor, m2.lol_account as mentor_lol_account
+	from mentor_like_list mll 
+	join member m on m.email = mll.email
+	join member m2 on m2.email = mll.like_mentor  
+	WHERE mll.email = #{email};
 </select>
 
 <select id="count_by_mentor_email_like_mentor" resultType="Integer">
-  SELECT count(*) FROM mentor_like_list WHERE like_mentor = #{like_mentor};
+	select mll.email, m.lol_account as menti_lol_account , 
+	mll.like_mentor, m2.lol_account as mentor_lol_account
+	from mentor_like_list mll 
+	join member m on m.email = mll.email
+	join member m2 on m2.email = mll.like_mentor
+	WHERE mll.like_mentor = #{like_mentor};
 </select>
 
 <insert id="insert_like_mentor" parameterType="likeMentor">

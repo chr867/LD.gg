@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.ld.gg.dto.mentoringdto.CustomMentorDTO;
 import com.ld.gg.dto.mentoringdto.MentiTagDTO;
 import com.ld.gg.dto.mentoringdto.MentorProfileDTO;
+import com.ld.gg.dto.mentoringdto.MentorReviewDTO;
 
 @Mapper
 public interface MentiDAO {
@@ -24,4 +25,9 @@ public interface MentiDAO {
 	void insert_menti_tag(MentiTagDTO menti_tag_dto);
 	void delete_menti_tag(String menti_email);
 	
+	//리뷰 기능
+	List<MentorReviewDTO> select_by_reviewer_email_mentor_review(String reviewer_email);
+	List<MentorReviewDTO> select_by_mentor_email_mentor_review(String mentor_email);
+	void insert_mentor_review(MentorReviewDTO mentor_review_dto);
+	void delete_mentor_review(int review_num);
 }

@@ -15,4 +15,6 @@ import lombok.experimental.Accessors;
 public class LikeMentorDTO {
 	private String email;
 	private String like_mentor;
+	private String menti_lol_account;
+	private String mentor_lol_account;
 }

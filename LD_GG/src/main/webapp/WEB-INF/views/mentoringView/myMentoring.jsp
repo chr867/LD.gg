@@ -12,7 +12,7 @@
 </head>
 <body>
 	
-	<h2>${member.lol_account} 회원님의 마이멘토링 페이지입니다~~</h2>
+	<h2>${member.lol_account} 회원님의 마이멘토링(멘토 전용) 페이지입니다~~</h2>
 	<br>
 	<h4>받은 견적서</h4>
 	<div id="received_estimate"></div>
@@ -33,7 +33,7 @@
 	<div id="like_mentor_list"></div>
 	<br>
 	
-	<!-- 모달 -->
+	<!-- 견적서 쓰기 모달 -->
 	<div class="modal fade" id="estimateModal" tabindex="-1" aria-labelledby="estimateModalLabel" aria-hidden="true" style="display: none;">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -55,10 +55,52 @@
     </div>
   </div>
 </div>
+
+<!-- 리뷰 쓰기 모달 -->
+	<div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="reviewModalLabel"></h5>
+      </div>
+      <div class="modal-body">
+        <form id="reviewForm">
+        <div class="mb-3">
+		  <label for="grade" class="form-label">평점</label>
+		  <div>
+		    <span class="star-grade">
+		      <input type="radio" name="grade" id="grade-5" value="5" />
+		      <label for="grade-5"><i class="fa fa-star"></i></label>
+		      <input type="radio" name="grade" id="grade-4" value="4" />
+		      <label for="grade-4"><i class="fa fa-star"></i></label>
+		      <input type="radio" name="grade" id="grade-3" value="3" />
+		      <label for="grade-3"><i class="fa fa-star"></i></label>
+		      <input type="radio" name="grade" id="grade-2" value="2" />
+		      <label for="grade-2"><i class="fa fa-star"></i></label>
+		      <input type="radio" name="grade" id="grade-1" value="1" />
+		      <label for="grade-1"><i class="fa fa-star"></i></label>
+		    </span>
+		  </div>
+		</div>
+          <div class="mb-3">
+            <label for="reviewContent" class="form-label">리뷰 내용</label>
+            <textarea class="form-control" id="reviewContent" rows="5"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+            <button type="submit" class="btn btn-primary">전송</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 	
 <script>
-$(window).on("load", function() {
-	$.ajax({
+$(document).ready(function() {
+	getRequestHistory();
+	getSentEstimate();
+	$.ajax({ //도움이 필요한 멘티 목록 가져오기
         type: "GET",
         url: "/mentor/recom-menti",
         contentType: "application/json; charset=utf-8",
@@ -101,7 +143,7 @@ $(window).on("load", function() {
             console.error(error);
         }
     });
-	$.ajax({
+	$.ajax({ //받은 견적서 목록 가져오기
         type: "GET",
         url: "/mentor/get-received-estimate",
         contentType: "application/json; charset=utf-8",
@@ -118,7 +160,7 @@ $(window).on("load", function() {
     		  for (let i = 0; i < data.length; i++) {
     		    let est = data[i];
     		    let row = $("<tr>").append(
-    		      $("<td>").text(est.mentor_email),
+    		      $("<td>").text(est.mentor_lol_account),
     		      $("<td>").text(est.estimate_info),
     		      $("<td>").text(est.estimate_date)
     		    );
@@ -132,38 +174,8 @@ $(window).on("load", function() {
             console.error(error);
         }
     });
-	$.ajax({
-        type: "GET",
-        url: "/mentor/get-sent-estimate",
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-    	success: function(data) {
-    		  let sEstList = $("#sent_estimate");
-    		  let table = $("<table>").addClass("sEst-table");
-    		  let header = $("<tr>").append(
-    		    $("<th>").text("/내 견적서를 받은 멘티/"),
-    		    $("<th>").text("견적 내용/"),
-    		    $("<th>").text("보낸 날짜/")
-    		  );
-    		  table.append(header);
-    		  for (let i = 0; i < data.length; i++) {
-    		    let est = data[i];
-    		    let row = $("<tr>").append(
-    		      $("<td>").text(est.menti_email),
-    		      $("<td>").text(est.estimate_info),
-    		      $("<td>").text(est.estimate_date)
-    		    );
-    		    table.append(row);
-    		  }
-    		  sEstList.empty().append(table);
-		},
-        error: function(xhr, status, error) {
-            console.error(xhr.responseText);
-            console.error(status);
-            console.error(error);
-        }
-    });
-	$.ajax({
+	
+	$.ajax({ //수업 신청 내역 가져오기
         type: "GET",
         url: "/mentor/get-mentoring-history",
         contentType: "application/json; charset=utf-8",
@@ -183,16 +195,30 @@ $(window).on("load", function() {
     		    let myMt = data[i];
     		    let row = $("<tr>").append(
     		      $("<td>").text(myMt.class_name),
-    		      $("<td>").text(myMt.mentor_email),
+    		      $("<td>").text(myMt.mentor_lol_account),
     		      $("<td>").text(myMt.menti_state === 0 ? "대기중" : myMt.menti_state === 1 ? "진행중" : "수업 완료"),
     		      $("<td>").text(myMt.apply_date),
     		      $("<td>").text(myMt.done_date),
-    		      myMt.menti_state === 0 ? $("<button>").addClass("cancel-btn").attr("id", myMt.class_id).data("menti-email", myMt.menti_email).text("신청 취소") : null,
-    		      myMt.menti_state === 1 ? $("<button>").addClass("refund-btn").attr("id", myMt.class_id).data("menti-email", myMt.menti_email).text("환불") : null
+    		      myMt.menti_state === 0 ? $("<button>").addClass("cancel-btn")
+    		    		  .attr("id", myMt.class_id)
+    		    		  .text("신청 취소") : null,
+    		      myMt.menti_state === 1 ? $("<button>").addClass("refund-btn")
+    		    		  .attr("id", myMt.class_id)
+    		    		  .text("환불") : null,
+    		   		myMt.menti_state === 2 ? $("<button>").addClass("review-btn")
+    	    		    		  .attr("id", myMt.mentor_lol_account)
+    	    		    		  .attr("name", myMt.class_id)
+    	    		    		  .text("리뷰 쓰기") : null
     		    );
     		    table.append(row);
     		  }
     		  myMtList.empty().append(table);
+    		  $(".review-btn").click(function() {
+    			  let mentor_name = this.id;
+    			    $("#reviewModal").modal("show"); //리뷰 모달 켜기
+    			    $(".modal-title").attr("id",mentor_name);
+    			    $(".modal-title").text(mentor_name+"님에게 리뷰 쓰기");
+              });
 		},
         error: function(xhr, status, error) {
             console.error(xhr.responseText);
@@ -201,23 +227,149 @@ $(window).on("load", function() {
         }
     });
 	
-});
-$(document).ready(function() {
-	getRequestHistory();
+	$(".btn-close").click(()=>{ //견적서 모달 끄기
+		$("#reviewModal").modal("hide");
+	});
+	$(function() { //평점 바뀔때 마다 
+		  $('.star-grade input').change(function() {
+		    var grade = $(this).val();
+		    $('#reviewForm').append('<input type="hidden" name="grade" value="' + grade + '">');
+		  });
+		});
+	  $("#reviewForm").submit(function(event) {
+	    event.preventDefault();
+	    let form_data = {
+	    		review_email: "${member.email}",
+	    		class_id: $(".review-btn").attr('name'),
+	    	review_content: $("#reviewContent").val(),
+	    	mentor_email: $(".modal-title").attr("id"),
+	      	grade: $('.star-grade input').attr('name')
+	    };
+	    console.log(form_data);
+	    $.ajax({ //견적서 보내기 기능
+	      type: "POST",
+	      url: "/mentor/save-review",
+	      data: JSON.stringify(form_data),
+	      contentType: "application/json; charset=utf-8",
+	      success: function(data) {
+	        alert("리뷰 작성 완료.");
+	        $("#reviewModal").modal("hide");
+	        ////////////리뷰 목록 불러오기/////////////////////
+	      },
+	      error: function(xhr, status, error) {
+	        console.error(xhr.responseText);
+	        console.error(status);
+	        console.error(error);
+	      }
+	    });
+	  });
+	
+	$.ajax({ //내가 찜한 멘토 가져오기
+		url: "/mentor/get-like-mentor",
+		type: "POST",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        data: JSON.stringify({
+			email: "${member.email}"
+		}),
+        success: function(data) {
+    		  let likeMentorList = $("#like_mentor_list");
+    		  let table = $("<table>").addClass("likeMentor-table");
+    		  let header = $("<tr>").append(
+    		    $("<th>").text("찜한 멘토")
+    		  );
+    		  table.append(header);
+    		  for (let i = 0; i < data.length; i++) {
+    		    let like_mentor = data[i];
+    		    let row = $("<tr>").append(
+    		      $("<td>").text(like_mentor.mentor_lol_account),
+    		      $("<button>").addClass("like-cancel-btn").text("찜 해제").on("click", function() {
+    		          $(this).closest('tr').remove(); // 클릭한 버튼이 속한 행 삭제
+    		          let data ={
+    		        	email: "${member.email}",
+		                like_mentor: ""+like_mentor.like_mentor
+    		          }
+    		          $.ajax({
+		                    url: "/mentor/delete-like-mentor",
+		                    type: "DELETE",
+		                    data: JSON.stringify(data),
+		                    contentType: "application/json; charset=utf-8",
+		                    success: function() {
+		                        alert("찜 목록에서 삭제 되었습니다.");
+		                    },
+		                    error: function() {
+		                        alert("삭제 실패.");
+		                    }
+		                });
+    		      })
+    		    );
+    		    table.append(row);
+    		  }
+    		  likeMentorList.empty().append(table);
+		},
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+            console.error(status);
+            console.error(error);
+        }
+    });
+	
+
+	
+	$(document).on('click', '.cancel-btn', function(event) { //수업 신청 취소
+		let classId = $(this).attr("id");
+	    let mentiEmail = "${member.email}";
+	    let data ={
+	    	menti_email: mentiEmail,
+	    	class_id: classId
+	    }
+		$(this).closest('tr').remove();
+		$.ajax({
+            url: "/mentor/delete-mentoring-history",
+            type: "DELETE",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            success: function() {
+                alert("수업 신청이 취소되었습니다");
+            },
+            error: function() {
+                alert("수업 신청 취소 실패");
+            }
+        });
+		
+	})
+	$(document).on('click', '.refund-btn', function(event) { //수업 환불
+		let classId = $(this).attr("id");
+	    let mentiEmail = "${member.email}";
+	    let data ={
+		    	menti_email: mentiEmail,
+		    	class_id: classId
+		    }
+		$(this).closest('tr').remove();
+	    $.ajax({
+            url: "/mentor/refund-mentoring-history",
+            type: "DELETE",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            success: function() {
+                alert("수업 환불 완료");
+            },
+            error: function() {
+                alert("환불 실패");
+            }
+        });
+		
+	})
 	$(document).on('click', '.accept-btn', function(event) { //동적으로 만들어지는 버튼에 대해서
-		let mentiEmail = $(this).data("menti-email");
+		let mentiEmail = $(this).closest('tr').find('td:eq(0)').text();
 		$.ajax({
 		    type: "PUT",
-		    url: "/mentor/update-mentoring-history",
+		    url: "/mentor/update-mentoring-history", //수락 버튼 누를떄 멘토링 내역 수정
 		    contentType: "application/json; charset=utf-8",
 		    data: JSON.stringify({
 		    	menti_email: mentiEmail,
 		        class_id: $(this).attr("id"),
-		        class_name: null,
 		        menti_state: 1, // 상태를 업데이트 합니다.
-				mentor_email:null,
-				apply_date: null,
-				done_date: null
 		    }),
 		    success: function() {
 		      // 성공적으로 업데이트 되었을 경우 처리할 내용을 작성합니다.
@@ -231,25 +383,22 @@ $(document).ready(function() {
 		  });
 	});
 	$(document).on('click', '.done-btn', function(event) { //동적으로 만들어지는 버튼에 대해서
-		let mentiEmail = $(this).data("menti-email");
+		let mentiEmail = ""+$(this).closest('tr').find('td:eq(0)').text();
 		const date = new Date();
 		const kstDate = new Date(date.getTime() + (9 * 60 * 60 * 1000)); 
 		const localeTime = kstDate.toISOString();
 		$.ajax({
 		    type: "PUT",
-		    url: "/mentor/update-mentoring-history",
+		    url: "/mentor/update-mentoring-history", //수업완료 버튼 누를떄 멘토링 내역 수정
 		    contentType: "application/json; charset=utf-8",
 		    data: JSON.stringify({
 		    	menti_email: mentiEmail,
 		        class_id: $(this).attr("id"),
-		        class_name: null,
 		        menti_state: 2, // 상태를 업데이트 합니다.
-				mentor_email:null,
-				apply_date: null,
 				done_date: localeTime
 		    }),
 		    success: function() {
-		      // 성공적으로 업데이트 되었을 경우 처리할 내용을 작성합니다.
+		      // 성공적으로 업데이트 되었을 경우 처리할 내용
 		    	getRequestHistory();
 		    },
 		    error: function(xhr, status, error) {
@@ -259,19 +408,17 @@ $(document).ready(function() {
 		    }
 		  });
 	});
-	$(".btn-close").click(()=>{
+	$(".btn-close").click(()=>{ //견적서 모달 끄기
 		$("#estimateModal").modal("hide");
 	});
 	  $("#estimateForm").submit(function(event) {
 	    event.preventDefault();
 	    let form_data = {
-	    	estimate_id: null,
 	    	estimate_info: $("#estimateContent").val(),
 	      	mentor_email: "${member.email}",
-	      	menti_email: $(".modal-title").attr("id"),
-	      	estimate_date: null
+	      	menti_email: $(".modal-title").attr("id")
 	    };
-	    $.ajax({
+	    $.ajax({ //견적서 보내기 기능
 	      type: "POST",
 	      url: "/mentor/save-estimate",
 	      data: JSON.stringify(form_data),
@@ -279,6 +426,7 @@ $(document).ready(function() {
 	      success: function(data) {
 	        alert("견적서가 전송되었습니다.");
 	        $("#estimateModal").modal("hide");
+	        getSentEstimate();
 	      },
 	      error: function(xhr, status, error) {
 	        console.error(xhr.responseText);
@@ -288,7 +436,7 @@ $(document).ready(function() {
 	    });
 	  });
 	  function getRequestHistory() {
-			$.ajax({
+			$.ajax({ //수업 요청 내역 가져오기
 		        type: "GET",
 		        url: "/mentor/get-request-history",
 		        contentType: "application/json; charset=utf-8",
@@ -307,13 +455,17 @@ $(document).ready(function() {
 		    		  for (let i = 0; i < data.length; i++) {
 		    			  let myMt = data[i];
 		    			  let row = $("<tr>").append(
-		    			    $("<td>").text(myMt.menti_email),
+		    			    $("<td>").text(myMt.menti_lol_account),
 		    			    $("<td>").text(myMt.class_name),
 		    			    $("<td>").text(myMt.menti_state === 0 ? "대기중" : myMt.menti_state === 1 ? "진행중" : "수업 완료"),
 		    			    $("<td>").text(myMt.apply_date),
 		    			    $("<td>").text(myMt.done_date),
-		    			    myMt.menti_state === 0 ? $("<button>").addClass("accept-btn").attr("id", myMt.class_id).data("menti-email", myMt.menti_email).text("수락") : null,
-		    			    myMt.menti_state === 1 ? $("<button>").addClass("done-btn").attr("id", myMt.class_id).data("menti-email", myMt.menti_email).text("수업 완료") : null
+		    			    myMt.menti_state === 0 ? $("<button>").addClass("accept-btn")
+		    			    		.attr("id", myMt.class_id)
+		    			    		.text("수락") : null,
+		    			    myMt.menti_state === 1 ? $("<button>").addClass("done-btn")
+		    			    		.attr("id", myMt.class_id)
+		    			    		.text("수업 완료") : null
 		    			  );
 		    		    table.append(row);
 		    		  }
@@ -326,6 +478,39 @@ $(document).ready(function() {
 		        }
 		    });
 			}
+	  function getSentEstimate() {
+	  $.ajax({ //보낸 견적서 목록 가져오기
+	        type: "GET",
+	        url: "/mentor/get-sent-estimate",
+	        contentType: "application/json; charset=utf-8",
+	        dataType: "json",
+	    	success: function(data) {
+	    		  let sEstList = $("#sent_estimate");
+	    		  let table = $("<table>").addClass("sEst-table");
+	    		  let header = $("<tr>").append(
+	    		    $("<th>").text("/내 견적서를 받은 멘티/"),
+	    		    $("<th>").text("견적 내용/"),
+	    		    $("<th>").text("보낸 날짜/")
+	    		  );
+	    		  table.append(header);
+	    		  for (let i = 0; i < data.length; i++) {
+	    		    let est = data[i];
+	    		    let row = $("<tr>").append(
+	    		      $("<td>").text(est.menti_lol_account),
+	    		      $("<td>").text(est.estimate_info),
+	    		      $("<td>").text(est.estimate_date)
+	    		    );
+	    		    table.append(row);
+	    		  } 
+	    		  sEstList.empty().append(table);
+			},
+	        error: function(xhr, status, error) {
+	            console.error(xhr.responseText);
+	            console.error(status);
+	            console.error(error);
+	        }
+	    });
+	  }
 	});
 </script>
 

@@ -1,5 +1,7 @@
 package com.ld.gg.controller.mentoringController;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -31,9 +33,10 @@ import com.ld.gg.dto.mentoringdto.LikeMentorDTO;
 import com.ld.gg.dto.mentoringdto.MentiTagDTO;
 import com.ld.gg.dto.mentoringdto.MentorClassDTO;
 import com.ld.gg.dto.mentoringdto.MentorProfileDTO;
+import com.ld.gg.dto.mentoringdto.MentorReviewDTO;
 import com.ld.gg.dto.mentoringdto.MentorTagDTO;
 import com.ld.gg.dto.mentoringdto.MyMentoringDTO;
-import com.ld.gg.dto.mentoringdto.estimateDTO;
+import com.ld.gg.dto.mentoringdto.EstimateDTO;
 import com.ld.gg.service.MemberService;
 import com.ld.gg.service.mentoringService.MentorProfileService;
 
@@ -47,6 +50,42 @@ public class RestMentoringController {
 	private MemberDao mbdao;
 	@Autowired
 	private MemberService mbService;
+	
+	//리뷰어 이메일로 내가 쓴 리뷰 가져오기
+	@PostMapping("/get-review-by-reviewer")
+	public String select_by_reviewer_email_mentor_review(@RequestBody String reviewer_email) throws JsonProcessingException {
+		String mentor_review_list = mtpService.select_by_reviewer_email_mentor_review(reviewer_email);
+		return mentor_review_list;
+	}
+	
+	//멘토 이메일로 나에게 달린 리뷰 가져오기
+	@PostMapping("/get-review-by-mentor")
+	public String select_by_mentor_email_mentor_review(@RequestBody String mentor_email) throws JsonProcessingException {
+		String mentor_review_list = mtpService.select_by_mentor_email_mentor_review(mentor_email);
+		return mentor_review_list;
+	}
+	
+	//리뷰 생성
+	@PutMapping("/save-review")
+	public void insert_mentor_review(MentorReviewDTO mentor_review_dto) {
+		mtpService.insert_mentor_review(mentor_review_dto);
+	}
+	
+	//리뷰 삭제
+	@DeleteMapping("/delete-review")
+	public void insert_mentor_review(int review_num) {
+		mtpService.delete_mentor_review(review_num);
+	}
+	
+	//이메일로 찜한 멘토 목록 가져오기
+	@PostMapping("/get-like-mentor")
+	public String select_by_email_like_mentor(@RequestBody Map<String, String> emailmap) throws JsonProcessingException{
+		String email = emailmap.get("email");
+		List<LikeMentorDTO> like_mentor_list = mtpService.select_by_email_like_mentor(email);
+		ObjectMapper objectMapper = new ObjectMapper();
+		String like_mentor_list_json = objectMapper.writeValueAsString(like_mentor_list);
+		return like_mentor_list_json;
+	}
 	
 	//찜한 멘토 추가
 	@Transactional
@@ -72,7 +111,6 @@ public class RestMentoringController {
 		MentorProfileDTO like_mtp_dto = mtpdto.setNum_of_likes(likes-1);
 		System.out.println(like_mtp_dto);
 		mtpService.update_mentor_profile(like_mtp_dto);
-		
 	}
 	
 	//세션 정보 체크
@@ -121,9 +159,10 @@ public class RestMentoringController {
 	//멘토링 내역 수정
 	@PutMapping("/update-mentoring-history")
 	public void update_my_mentoring(@RequestBody MyMentoringDTO my_mt_dto) {
-		mtpService.update_my_mentoring(my_mt_dto);
+		List<MemberDto> mb = mbService.findLolAccount(my_mt_dto.getMenti_email());
+		MyMentoringDTO newest = my_mt_dto.setMenti_email(mb.get(0).getEmail());
+		mtpService.update_my_mentoring(newest);
 	}
-	
 	
 	//멘토링 내역 추가
 	@Transactional
@@ -142,12 +181,22 @@ public class RestMentoringController {
 		mtpService.delete_my_mentoring(my_mt_dto);
 	}
 	
+	//멘토링 내역 환불
+	@Transactional
+	@DeleteMapping("/refund-mentoring-history")
+	public void refund_my_mentoring(@RequestBody MyMentoringDTO my_mt_dto) {
+		mtpService.delete_my_mentoring(my_mt_dto);
+		//환불 하는 메서드 추가해야함~~~~~~~~~
+		//환불 하는 메서드 추가해야함~~~~~~~~~
+		//환불 하는 메서드 추가해야함~~~~~~~~~
+	}
+	
 	//보낸 견적 내역 가져오기
 	@GetMapping("/get-sent-estimate")
 	public String select_by_mentor_email_estimate(HttpServletRequest request) throws JsonProcessingException{
 		HttpSession session = request.getSession();
 		String mentor_email = (String)session.getAttribute("email");
-		List<estimateDTO> estList = mtpService.select_by_mentor_email_estimate(mentor_email);
+		List<EstimateDTO> estList = mtpService.select_by_mentor_email_estimate(mentor_email);
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new JavaTimeModule()); //LocalDateTime 타입 변수 json으로 변환
 		String estList_json = objectMapper.writeValueAsString(estList);
@@ -158,7 +207,7 @@ public class RestMentoringController {
 	public String select_by_menti_email_estimate(HttpServletRequest request) throws JsonProcessingException{
 		HttpSession session = request.getSession();
 		String menti_email = (String)session.getAttribute("email");
-		List<estimateDTO> estList = mtpService.select_by_menti_email_estimate(menti_email);
+		List<EstimateDTO> estList = mtpService.select_by_menti_email_estimate(menti_email);
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new JavaTimeModule()); //LocalDateTime 타입 변수 json으로 변환
 		String estList_json = objectMapper.writeValueAsString(estList);
@@ -167,10 +216,10 @@ public class RestMentoringController {
 	
 	//견적 내용을 받아서 견적 내역 저장
 	@PostMapping("/save-estimate")
-	public void insert_estimate(@RequestBody estimateDTO estdto) {
+	public void insert_estimate(@RequestBody EstimateDTO estdto) {
 		List<MemberDto> mb = mbService.findLolAccount(estdto.getMenti_email());
-		estdto.setMenti_email(mb.get(0).getEmail());
-		mtpService.insert_estimate(estdto);
+		EstimateDTO newest = estdto.setMenti_email(mb.get(0).getEmail());
+		mtpService.insert_estimate(newest);
 	}
 	
 	//나와 잘 맞는 멘티 추천
