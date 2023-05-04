@@ -38,8 +38,14 @@ public class MentoringController {
 		HttpSession session = request.getSession();
 		String email = (String) session.getAttribute("email");
 		MemberDto mbdto = mbdao.getMemberInfo(email);
-		return new ModelAndView("mentoringView/myMentoring")
-				.addObject("member", mbdto);
+		if (mbdto.getUser_type() == 2) {
+			return new ModelAndView("mentoringView/myMentoring")
+					.addObject("member", mbdto);
+		} else {
+			return new ModelAndView("mentoringView/myMentoringMemberOnly")
+					.addObject("member", mbdto);
+		}
+		
 	}
 	
 	//맞춤 멘토 페이지로 이동

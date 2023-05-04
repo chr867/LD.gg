@@ -1,5 +1,7 @@
 package com.ld.gg.controller.mentoringController;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -82,7 +84,6 @@ public class RestMentoringController {
 		MentorProfileDTO like_mtp_dto = mtpdto.setNum_of_likes(likes-1);
 		System.out.println(like_mtp_dto);
 		mtpService.update_mentor_profile(like_mtp_dto);
-		
 	}
 	
 	//세션 정보 체크
@@ -134,7 +135,6 @@ public class RestMentoringController {
 		mtpService.update_my_mentoring(my_mt_dto);
 	}
 	
-	
 	//멘토링 내역 추가
 	@Transactional
 	@PostMapping("/save-mentoring-history")
@@ -150,6 +150,16 @@ public class RestMentoringController {
 	@DeleteMapping("/delete-mentoring-history")
 	public void delete_my_mentoring(@RequestBody MyMentoringDTO my_mt_dto) {
 		mtpService.delete_my_mentoring(my_mt_dto);
+	}
+	
+	//멘토링 내역 환불
+	@Transactional
+	@DeleteMapping("/refund-mentoring-history")
+	public void refund_my_mentoring(@RequestBody MyMentoringDTO my_mt_dto) {
+		mtpService.delete_my_mentoring(my_mt_dto);
+		//환불 하는 메서드 추가해야함~~~~~~~~~
+		//환불 하는 메서드 추가해야함~~~~~~~~~
+		//환불 하는 메서드 추가해야함~~~~~~~~~
 	}
 	
 	//보낸 견적 내역 가져오기
