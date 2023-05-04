@@ -9,10 +9,13 @@ import lombok.experimental.Accessors;
 @Accessors(chain=true)
 @Alias("ad")
 public class AdDto {
+	private int ad_num;
 	private int ad_pay;
 	private String ad_advertiser;
 	private String ad_name;
-	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private String ad_term;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	private String ad_start;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	private String ad_end;
 
 }
