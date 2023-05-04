@@ -26,4 +26,6 @@ public class MyMentoringDTO {
 	private LocalDateTime apply_date;
 	//@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy년 MM월 dd일 HH:mm:ss")
 	private LocalDateTime done_date;
+	private String menti_lol_account;
+	private String mentor_lol_account;
 }

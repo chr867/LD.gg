@@ -12,7 +12,7 @@
 </head>
 <body>
 	
-	<h2>${member.lol_account} 회원님의 마이멘토링(멘토아님) 페이지입니다~~</h2>
+	<h2>${member.lol_account} 회원님의 마이멘토링(일반회원) 페이지입니다~~</h2>
 	<br>
 	<h4>받은 견적서</h4>
 	<div id="received_estimate"></div>
@@ -66,7 +66,7 @@ $(document).ready(function() {
     		  for (let i = 0; i < data.length; i++) {
     		    let est = data[i];
     		    let row = $("<tr>").append(
-    		      $("<td>").text(est.mentor_email),
+    		      $("<td>").text(est.mentor_lol_account),
     		      $("<td>").text(est.estimate_info),
     		      $("<td>").text(est.estimate_date)
     		    );
@@ -101,7 +101,7 @@ $(document).ready(function() {
     		    let myMt = data[i];
     		    let row = $("<tr>").append(
     		      $("<td>").text(myMt.class_name),
-    		      $("<td>").text(myMt.mentor_email),
+    		      $("<td>").text(myMt.mentor_lol_account),
     		      $("<td>").text(myMt.menti_state === 0 ? "대기중" : myMt.menti_state === 1 ? "진행중" : "수업 완료"),
     		      $("<td>").text(myMt.apply_date),
     		      $("<td>").text(myMt.done_date),
@@ -122,6 +122,7 @@ $(document).ready(function() {
             console.error(error);
         }
     });
+	
 	$.ajax({ //내가 찜한 멘토 가져오기
 		url: "/mentor/get-like-mentor",
 		type: "POST",
@@ -140,7 +141,7 @@ $(document).ready(function() {
     		  for (let i = 0; i < data.length; i++) {
     		    let like_mentor = data[i];
     		    let row = $("<tr>").append(
-    		      $("<td>").text(like_mentor.like_mentor),
+    		      $("<td>").text(like_mentor.mentor_lol_account),
     		      $("<button>").addClass("like-cancel-btn").text("찜 해제").on("click", function() {
     		          $(this).closest('tr').remove(); // 클릭한 버튼이 속한 행 삭제
     		          let data ={

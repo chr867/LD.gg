@@ -132,7 +132,9 @@ public class RestMentoringController {
 	//멘토링 내역 수정
 	@PutMapping("/update-mentoring-history")
 	public void update_my_mentoring(@RequestBody MyMentoringDTO my_mt_dto) {
-		mtpService.update_my_mentoring(my_mt_dto);
+		List<MemberDto> mb = mbService.findLolAccount(my_mt_dto.getMenti_email());
+		MyMentoringDTO newest = my_mt_dto.setMenti_email(mb.get(0).getEmail());
+		mtpService.update_my_mentoring(newest);
 	}
 	
 	//멘토링 내역 추가
@@ -189,8 +191,8 @@ public class RestMentoringController {
 	@PostMapping("/save-estimate")
 	public void insert_estimate(@RequestBody estimateDTO estdto) {
 		List<MemberDto> mb = mbService.findLolAccount(estdto.getMenti_email());
-		estdto.setMenti_email(mb.get(0).getEmail());
-		mtpService.insert_estimate(estdto);
+		estimateDTO newest = estdto.setMenti_email(mb.get(0).getEmail());
+		mtpService.insert_estimate(newest);
 	}
 	
 	//나와 잘 맞는 멘티 추천

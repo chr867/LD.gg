@@ -7,21 +7,27 @@
 
 
 <select id="select_by_email_my_mentoring" resultType="myMentoring">
- 	SELECT mm.menti_email, mm.class_id, mc.class_name, mm.menti_state, 
-	mm.mentor_email, mm.apply_date, mm.done_date 
+ 	SELECT mm.menti_email, m.lol_account as menti_lol_account, 
+ 	mm.class_id, mc.class_name, mm.menti_state, 
+	mm.mentor_email, m2.lol_account as mentor_lol_account, mm.apply_date, mm.done_date 
 	FROM my_mentoring mm 
 	JOIN mentor_class mc 
 	ON mm.class_id = mc.class_id 
+	join member m ON m.email = mm.menti_email
+	join member m2 on m2.email = mm.mentor_email
 	where menti_email = #{menti_email}
 	ORDER BY mm.apply_date DESC;
 </select>
 
 <select id="select_by_mentor_email_my_mentoring" resultType="myMentoring">
-  SELECT mm.menti_email, mm.class_id, mc.class_name, mm.menti_state, 
-	mm.mentor_email, mm.apply_date, mm.done_date 
+  SELECT mm.menti_email, m.lol_account as menti_lol_account, 
+ 	mm.class_id, mc.class_name, mm.menti_state, 
+	mm.mentor_email, m2.lol_account as mentor_lol_account, mm.apply_date, mm.done_date 
 	FROM my_mentoring mm 
 	JOIN mentor_class mc 
 	ON mm.class_id = mc.class_id 
+	join member m ON m.email = mm.menti_email
+	join member m2 on m2.email = mm.mentor_email
 	where mm.mentor_email = #{mentor_email}
 	ORDER BY mm.apply_date DESC;
 </select>

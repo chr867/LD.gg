@@ -144,7 +144,9 @@
 	                            menti_state: null,
 	                            mentor_email: "${mentor.email}",
 	                            apply_date: null,
-	                            done_date: null
+	                            done_date: null,
+	                            menti_lol_account: null,
+	            				mentor_lol_account: null
 	                    };
 	                    $.ajax({
 	                        url: "/mentor/save-mentoring-history",

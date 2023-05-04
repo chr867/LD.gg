@@ -23,4 +23,6 @@ public class estimateDTO {
 	private String menti_email;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy년 MM월 dd일 HH:mm:ss")
 	private LocalDateTime estimate_date;
+	private String menti_lol_account;
+	private String mentor_lol_account;
 }

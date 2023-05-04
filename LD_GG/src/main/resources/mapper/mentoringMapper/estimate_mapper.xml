@@ -7,15 +7,33 @@
 
 
 <select id="select_by_id_estimate" resultType="estimate">
-  SELECT * FROM estimate WHERE estimate_id = #{estimate_id};
+	select e.estimate_id, e.estimate_info , e.mentor_email , 
+	m.lol_account as mentor_lol_account, e.menti_email, 
+	m2.lol_account as menti_lol_account, e.estimate_date
+	from estimate e 
+	join member m on e.mentor_email = m.email 
+	join member m2 on m2.email = e.menti_email
+	WHERE e.estimate_id = #{estimate_id};
 </select>
 
 <select id="select_by_mentor_email_estimate" resultType="estimate">
-  SELECT * FROM estimate WHERE mentor_email = #{mentor_email};
+	select e.estimate_id, e.estimate_info , e.mentor_email , 
+	m.lol_account as mentor_lol_account, e.menti_email, 
+	m2.lol_account as menti_lol_account, e.estimate_date
+	from estimate e 
+	join member m on e.mentor_email = m.email 
+	join member m2 on m2.email = e.menti_email  
+	WHERE e.mentor_email = #{mentor_email};
 </select>
 
 <select id="select_by_menti_email_estimate" resultType="estimate">
-  SELECT * FROM estimate WHERE menti_email = #{menti_email};
+	SELECT e.estimate_id, e.estimate_info, e.mentor_email, 
+  m.lol_account AS mentor_lol_account, e.menti_email, 
+  m2.lol_account AS menti_lol_account, e.estimate_date
+  FROM estimate e 
+  JOIN member m ON e.mentor_email = m.email 
+  JOIN member m2 ON m2.email = e.menti_email  
+  WHERE e.menti_email = #{menti_email};
 </select>
 
 <insert id="insert_estimate" parameterType="estimate">
@@ -24,7 +42,7 @@
 </insert>
 
 <delete id="delete_estimate" parameterType="int">
-  DELETE FROM estimate WHERE class_id = #{class_id};
+  DELETE FROM estimate WHERE estimate_id = #{estimate_id};
 </delete>
 
 

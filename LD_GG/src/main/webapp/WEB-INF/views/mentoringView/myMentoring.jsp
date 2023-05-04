@@ -12,7 +12,7 @@
 </head>
 <body>
 	
-	<h2>${member.lol_account} 회원님의 마이멘토링 페이지입니다~~</h2>
+	<h2>${member.lol_account} 회원님의 마이멘토링(멘토 전용) 페이지입니다~~</h2>
 	<br>
 	<h4>받은 견적서</h4>
 	<div id="received_estimate"></div>
@@ -120,7 +120,7 @@ $(document).ready(function() {
     		  for (let i = 0; i < data.length; i++) {
     		    let est = data[i];
     		    let row = $("<tr>").append(
-    		      $("<td>").text(est.mentor_email),
+    		      $("<td>").text(est.mentor_lol_account),
     		      $("<td>").text(est.estimate_info),
     		      $("<td>").text(est.estimate_date)
     		    );
@@ -155,7 +155,7 @@ $(document).ready(function() {
     		    let myMt = data[i];
     		    let row = $("<tr>").append(
     		      $("<td>").text(myMt.class_name),
-    		      $("<td>").text(myMt.mentor_email),
+    		      $("<td>").text(myMt.mentor_lol_account),
     		      $("<td>").text(myMt.menti_state === 0 ? "대기중" : myMt.menti_state === 1 ? "진행중" : "수업 완료"),
     		      $("<td>").text(myMt.apply_date),
     		      $("<td>").text(myMt.done_date),
@@ -194,7 +194,7 @@ $(document).ready(function() {
     		  for (let i = 0; i < data.length; i++) {
     		    let like_mentor = data[i];
     		    let row = $("<tr>").append(
-    		      $("<td>").text(like_mentor.like_mentor),
+    		      $("<td>").text(like_mentor.mentor_lol_account),
     		      $("<button>").addClass("like-cancel-btn").text("찜 해제").on("click", function() {
     		          $(this).closest('tr').remove(); // 클릭한 버튼이 속한 행 삭제
     		          let data ={
@@ -233,11 +233,7 @@ $(document).ready(function() {
 	    let mentiEmail = "${member.email}";
 	    let data ={
 	    	menti_email: mentiEmail,
-	    	class_id: classId,
-	    	menti_state: null,
-	    	mentor_email: null,
-	    	apply_date: null,
-	    	done_date: null,
+	    	class_id: classId
 	    }
 		$(this).closest('tr').remove();
 		$.ajax({
@@ -259,11 +255,7 @@ $(document).ready(function() {
 	    let mentiEmail = "${member.email}";
 	    let data ={
 		    	menti_email: mentiEmail,
-		    	class_id: classId,
-		    	menti_state: null,
-		    	mentor_email: null,
-		    	apply_date: null,
-		    	done_date: null,
+		    	class_id: classId
 		    }
 		$(this).closest('tr').remove();
 	    $.ajax({
@@ -289,11 +281,7 @@ $(document).ready(function() {
 		    data: JSON.stringify({
 		    	menti_email: mentiEmail,
 		        class_id: $(this).attr("id"),
-		        class_name: null,
 		        menti_state: 1, // 상태를 업데이트 합니다.
-				mentor_email:null,
-				apply_date: null,
-				done_date: null
 		    }),
 		    success: function() {
 		      // 성공적으로 업데이트 되었을 경우 처리할 내용을 작성합니다.
@@ -318,10 +306,7 @@ $(document).ready(function() {
 		    data: JSON.stringify({
 		    	menti_email: mentiEmail,
 		        class_id: $(this).attr("id"),
-		        class_name: null,
 		        menti_state: 2, // 상태를 업데이트 합니다.
-				mentor_email:null,
-				apply_date: null,
 				done_date: localeTime
 		    }),
 		    success: function() {
@@ -345,6 +330,8 @@ $(document).ready(function() {
 	    	estimate_info: $("#estimateContent").val(),
 	      	mentor_email: "${member.email}",
 	      	menti_email: $(".modal-title").attr("id"),
+	      	menti_lol_account: null,
+	      	mentor_lol_account: null,
 	      	estimate_date: null
 	    };
 	    $.ajax({ //견적서 보내기 기능
@@ -384,7 +371,7 @@ $(document).ready(function() {
 		    		  for (let i = 0; i < data.length; i++) {
 		    			  let myMt = data[i];
 		    			  let row = $("<tr>").append(
-		    			    $("<td>").text(myMt.menti_email),
+		    			    $("<td>").text(myMt.menti_lol_account),
 		    			    $("<td>").text(myMt.class_name),
 		    			    $("<td>").text(myMt.menti_state === 0 ? "대기중" : myMt.menti_state === 1 ? "진행중" : "수업 완료"),
 		    			    $("<td>").text(myMt.apply_date),
@@ -425,7 +412,7 @@ $(document).ready(function() {
 	    		  for (let i = 0; i < data.length; i++) {
 	    		    let est = data[i];
 	    		    let row = $("<tr>").append(
-	    		      $("<td>").text(est.menti_email),
+	    		      $("<td>").text(est.menti_lol_account),
 	    		      $("<td>").text(est.estimate_info),
 	    		      $("<td>").text(est.estimate_date)
 	    		    );
