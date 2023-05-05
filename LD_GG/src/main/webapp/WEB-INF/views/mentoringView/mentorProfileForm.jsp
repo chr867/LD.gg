@@ -6,6 +6,146 @@
 <head>
 <title>Mentor Profile Form</title>
 <style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 16px;
+  color: #333;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 1rem 0;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+h4 {
+  font-size: 1.2rem;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+form label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+form input[type="text"], form input[type="number"] {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+form input[type="submit"] {
+  background-color: #4CAF50;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+form input[type="submit"]:hover {
+  background-color: #3e8e41;
+}
+
+.scrollable-table {
+  height: 200px;
+  overflow: auto;
+  margin-top: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+.toggle-button, .save_tag {
+  display: block;
+  margin-top: 1rem;
+  background-color: #4CAF50;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.toggle-button:hover {
+  background-color: #3e8e41;
+}
+.save_tag:hover {
+  background-color: #3e8e41;
+}
+
+#container_by_class {
+  border: 1px solid black;
+  margin: 1rem 0;
+  padding: 1rem;
+}
+
+.delete-button {
+  background-color: #f44336;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  background-color: #d32f2f;
+}
+
+@media screen and (min-width: 768px) {
+  .flex-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .form-container {
+    width: 45%;
+  }
+  
+  #mentor_class_info {
+    width: 45%;
+  }
+}
 .scrollable-table {
 	height: 200px;
 	overflow: auto;
@@ -19,6 +159,7 @@
 #container_by_class {
 	border: 1px solid black;
 }
+
 </style>
 </head>
 <body>
@@ -50,7 +191,7 @@
 			<thead>
 				<tr>
 					<th>선택</th>
-					<th>필드1</th>
+					<th>태그</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -65,14 +206,14 @@
 		</table>
 	</div>
 	<button class="save_tag" onclick="deleteMentorTag()">태그 저장</button>
-	<button class="toggle-button" onclick="toggleTable()">토글 버튼</button>
+	<button class="toggle-button" onclick="toggleTable()">숨기기</button>
 
 	<form id="classForm" onsubmit="return classSubmitForm()">
 		<label for="class_name">수업명:</label> <input type="text"
 			id="class_name" name="class_name" value="" required><br>
 		<br> <label for="class_info">수업 정보:</label> <input type="text"
 			id="class_info" name="class_info" value="" required><br>
-		<br> <label for="price">가격</label> <input type="number"
+		<br> <label for="price">가격: </label> <input type="number"
 			id="price" name="price" value="" required><br>
 		<br> <input type="submit" value="새로운 수업 작성">
 	</form>

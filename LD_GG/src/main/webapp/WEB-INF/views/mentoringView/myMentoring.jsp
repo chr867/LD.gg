@@ -504,7 +504,7 @@ $(document).ready(function() {
 		    url: "/mentor/update-mentoring-history", 
 		    contentType: "application/json; charset=utf-8",
 		    data: JSON.stringify({
-		    	menti_email: mentiEmail,
+		    	menti_email: mentiEmail, //소환사명
 		        class_id: $(this).attr("id"),
 		        menti_state: 1, // 상태를 업데이트 합니다.
 		    }),
@@ -529,8 +529,9 @@ $(document).ready(function() {
 		    url: "/mentor/update-mentoring-history", 
 		    contentType: "application/json; charset=utf-8",
 		    data: JSON.stringify({
-		    	menti_email: mentiEmail,
+		    	menti_email: mentiEmail, //소환사명
 		        class_id: $(this).attr("id"),
+		        mentor_email: "${member.email}",
 		        menti_state: 2, // 상태를 업데이트 합니다.
 				done_date: localeTime
 		    }),
@@ -576,7 +577,7 @@ $(document).ready(function() {
 	  function getRequestHistory() {
 			$.ajax({ //수업 요청 내역 가져오기
 				type: "POST",
-			    url: "/mentor/get-mentoring-history",
+			    url: "/mentor/get-request-history",
 			    contentType: "application/json; charset=utf-8",
 			    dataType: "json",
 			    data: JSON.stringify({

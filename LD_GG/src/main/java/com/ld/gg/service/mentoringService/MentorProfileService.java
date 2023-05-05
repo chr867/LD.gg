@@ -186,11 +186,12 @@ public class MentorProfileService {
 	@Transactional
 	public void update_my_mentoring(MyMentoringDTO my_mt_dto) {
 		List<MemberDto> mb = mbService.findLolAccount(my_mt_dto.getMenti_email()); //소환사명으로 회원정보 조회
-		String mentor_email = mb.get(0).getEmail(); //회원 정보에서 이메일 추출
-		MyMentoringDTO newest = my_mt_dto.setMenti_email(mentor_email); //추출한 이메일로 dto 다시 세팅
+		String email = mb.get(0).getEmail(); //회원 정보에서 이메일 추출
+		MyMentoringDTO newest = my_mt_dto.setMenti_email(email); //추출한 이메일로 dto 다시 세팅
 		mymtdao.update_my_mentoring(newest); //멘토링 내역 수정
 		int state = my_mt_dto.getMenti_state(); //멘토링 내역에서 멘티 상태 추출
 		if(state == 2) { //수업 완료를 누르면
+			String mentor_email = my_mt_dto.getMentor_email();
 			MentorProfileDTO mtpdto = select_by_email_mentor_profile(mentor_email);
 			int lessons = mtpdto.getNum_of_lessons();
 			MentorProfileDTO lessons_mtp_dto = mtpdto.setNum_of_lessons(lessons+1); //레슨 수 증가

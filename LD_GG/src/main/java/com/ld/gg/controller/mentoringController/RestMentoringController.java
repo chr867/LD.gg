@@ -125,7 +125,7 @@ public class RestMentoringController {
 		return my_mt_list_json;
 	}
 	//멘토 이메일로 나에게 수강신청한 멘티 내역 가져오기
-	@GetMapping("/get-request-history")
+	@PostMapping("/get-request-history")
 	public String select_by_mentor_email_my_mentoring(@RequestBody Map<String,String> emailMap) throws JsonProcessingException{
 		String my_mt_list_json = mtpService.select_by_mentor_email_my_mentoring(emailMap);
 		return my_mt_list_json;

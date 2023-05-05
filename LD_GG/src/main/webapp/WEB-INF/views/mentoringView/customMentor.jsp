@@ -17,18 +17,69 @@
 	display: block;
 	margin: 10px;
 }
+.position-buttons {
+  display: flex;
+}
+
+.position-buttons button {
+  background-color: #f2f2f2;
+  border: none;
+  color: black;
+  padding: 10px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.position-buttons button:hover {
+  background-color: #ddd;
+}
+
 </style>
 </head>
 <body>
 	<h2>맞춤 멘토 페이지 입니다~</h2>
 	<form id="customMentorForm" onsubmit="return submitForm()">
       <h2>${member.lol_account} 회원님</h2>
+      <h4>나에게 딱 맞는 멘토님을 찾기위해</h4>
+      <h4><img src=""><em>목표를 설정해 볼까요?</em></h4>
       <label for="position_to_learn">배우고 싶은 포지션:</label>
       <input type="text" id="position_to_learn" name="position_to_learn" value="${mentor_profile.about_mentor}" required><br><br>
+      <div class="position-buttons">
+		  <button id="top-button">탑</button>
+		  <button id="jungle-button">정글</button>
+		  <button id="mid-button">미드</button>
+		  <button id="bot-button">바텀</button>
+		  <button id="support-button">서포터</button>
+		</div><br><br>
       <label for="champion_to_learn">배우고 싶은 챔피언:</label>
       <input type="text" id="champion_to_learn" name="champion_to_learn" value="${mentor_profile.specialized_position}" required><br><br>
+      
+      <div class="champ-selector-inner"><div class="champ-info"><span><img retry-img="" src="" cdn-img="" class="champ-img"><p class="champ-name">배우고 싶은 챔피언을 선택 해주세요</p></span></div><img src="" class="arrow-icon"></div>
+      
+      <div class="filter-champ-wrap" style="">
+      <div win-rate-filter-champ="">
+      <span text-input="" class="input-champ-keyword white">
+      <input placeholder="챔피언을 검색하세요" tabindex="0" type="text" class="">
+      <!----></span>
+      <div class="champ-list">
+      <div class="champ-item">
+      <div id="champion">
+      <img retry-img="" src="https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/Garen.png?&amp;retry=0" cdn-img="" d="64x64" class="champ-icon">
+      <span>가렌</span></div>
+      <div class="rate-wrap">
+      <div class="rate-bar-wrap">
+      <div class="rate-bar-bg">
+      </div><!---->
+      </div>
+      <p class="pick-rate">픽률 0%</p>
+      </div>
+      </div>
+      </div>
+      </div>
+      
       <label for="target_tier">목표 티어:</label>
       <input type="text" id="target_tier" name="target_tier" value="${mentor_profile.specialized_champion}" required><br><br>
+      
       <label for="own_goal">나만의 목표:</label>
       <input type="text" id="own_goal" name="own_goal" value="${mentor_profile.contact_time}" required><br><br>
       <input type="submit" value="작성">
@@ -36,6 +87,7 @@
       <div class="scrollable-table">
       <table>
 	  <thead>
+	  
 	    <tr>
 	      <th>선택</th>
 	      <th>필드1</th>
@@ -60,6 +112,59 @@
     </div>
     <script>
     $(document).ready(function() {
+    	
+    	// 선택한 포지션 값을 저장할 배열
+    	let positions = [];
+
+    	// 버튼 클릭 이벤트 추가
+    	$("#top-button").on("click", function() {
+    	  if (positions.includes("top")) {
+    	    // 선택한 포지션 배열에서 삭제
+    	    positions.splice(positions.indexOf("top"), 1);
+    	  } else {
+    	    // 선택한 포지션 배열에 추가
+    	    positions.push("top");
+    	  }
+    	  $("#position_to_learn").val("top");
+    	});
+
+    	// 나머지 버튼들도 동일하게 추가
+    	$("#jungle-button").on("click", function() {
+    	  if (positions.includes("jungle")) {
+    	    positions.splice(positions.indexOf("jungle"), 1);
+    	  } else {
+    	    positions.push("jungle");
+    	  }
+    	  $("#position_to_learn").val("jungle");
+    	});
+
+    	$("#mid-button").on("click", function() {
+    	  if (positions.includes("mid")) {
+    	    positions.splice(positions.indexOf("mid"), 1);
+    	  } else {
+    	    positions.push("mid");
+    	  }
+    	  $("#position_to_learn").val("mid");
+    	});
+
+    	$("#bot-button").on("click", function() {
+    	  if (positions.includes("bot")) {
+    	    positions.splice(positions.indexOf("bot"), 1);
+    	  } else {
+    	    positions.push("bot");
+    	  }
+    	  $("#position_to_learn").val("bot");
+    	});
+
+    	$("#support-button").on("click", function() {
+    	  if (positions.includes("support")) {
+    	    positions.splice(positions.indexOf("support"), 1);
+    	  } else {
+    	    positions.push("support");
+    	  }
+    	  $("#position_to_learn").val("support");
+    	});
+    	
 		$("#recom-mentor-btn").click(function() {
 			$.ajax({
 		        type: "GET",
