@@ -3,6 +3,7 @@ package com.ld.gg.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.ld.gg.dao.AdminDao;
@@ -80,13 +81,13 @@ public class AdminService {
 		return adList;
 	}
 
-	public boolean insertSession(SessionDto sDto) {
+	public Integer insertSession(SessionDto sDto) {
 		log.info("로그인 로그아웃 저장 서비스 클래스 진입");
 		Integer result = sDao.insertSession(sDto);
 		if(result!= null) {
-			return true;
+			return 1;
 		}else 
-			return false;
+			return 0;
 	}
 	
 	

@@ -6,20 +6,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.ld.gg.dao.SessionDao;
 import com.ld.gg.dto.MemberDto;
-import com.ld.gg.dto.SessionDto;
 import com.ld.gg.service.MemberService;
 import com.ld.gg.userClass.SessionListener;
 
@@ -31,8 +26,14 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberController {
 	@Autowired
 	private MemberService ms;
+	
+	private final SessionListener sl;
+
 	@Autowired
-	private SessionListener sl;
+	public MemberController(SessionListener sl) {
+	    this.sl = sl;
+	}
+
 	
 	@GetMapping("/join")
 	public String goJoin(Model model) {
