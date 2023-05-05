@@ -13,16 +13,21 @@ import com.ld.gg.dto.SessionDto;
 import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SessionInterceptor implements HandlerInterceptor {
-	
-	@Autowired
-	SessionDao sDao;
+
 	
 	@Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if (request.getSession().getAttribute("email") == null) { // 로그인하지 않은 경우
-        	System.out.println("로그인을 해야합니다");
+
+		Integer userType = (Integer) request.getSession().getAttribute("user_type");
+        if (userType == null) { // 로그인하지 않은 경우
+        	log.info("로그인을 해야합니다");
             response.sendRedirect("/"); // 홈페이지로 이동
             return false;
+        }else if(userType == 4){
+        	String email = (String) request.getSession().getAttribute("email");
+        	log.info("정지된 회원입니다. : "+email);
+        	response.sendRedirect("/"); // 홈페이지로 이동
+        	return false;
         }else {
         	return true;
         }

@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ld.gg.dto.MemberDto;
 import com.ld.gg.dto.admin.AdDto;
 import com.ld.gg.dto.admin.NoticeDto;
 import com.ld.gg.service.AdminService;
@@ -81,6 +83,47 @@ public class AdminRestController {
 			
 			return json;
 		}
+		
+		@GetMapping("/admin/member/lists.json")
+		public String mbLists() throws JsonProcessingException {
+			List<MemberDto> memberLists = as.getMemberLists();
+			ObjectMapper mapper = new ObjectMapper();
+			String json = null;
+			json = mapper.writeValueAsString(memberLists);
+			return json;
+		}
+		
+		@GetMapping("/admin/member/search.json")
+		public String mbLists(String keyword) throws Exception{
+			List<MemberDto> memberLists = as.getSearchMemberLists(keyword);
+			
+			ObjectMapper mapper = new ObjectMapper();
+			String json = null;
+			json = mapper.writeValueAsString(memberLists);
+			
+			return json;
+		}
+		
+		@GetMapping("/admin/member/history/lists.json")
+		public String mbHistoryLists() throws JsonProcessingException {
+			List<MemberDto> memberHistoryLists = as.getMemberHistoryLists();
+			ObjectMapper mapper = new ObjectMapper();
+			String json = null;
+			json = mapper.writeValueAsString(memberHistoryLists);
+			return json;
+		}
+		
+		@GetMapping("/admin/member/history/search.json")
+		public String mbHistoryLists(String keyword) throws Exception{
+			List<MemberDto> memberHistoryLists = as.getSearchMemberHistoryLists(keyword);
+			
+			ObjectMapper mapper = new ObjectMapper();
+			String json = null;
+			json = mapper.writeValueAsString(memberHistoryLists);
+			
+			return json;
+		}	
+		
 		
 
 }
