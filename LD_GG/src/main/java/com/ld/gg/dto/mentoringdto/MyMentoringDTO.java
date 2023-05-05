@@ -1,11 +1,8 @@
 package com.ld.gg.dto.mentoringdto;
 
 import java.time.LocalDateTime;
-
 import org.apache.ibatis.type.Alias;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

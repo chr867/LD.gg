@@ -50,6 +50,7 @@
 	$(document).ready(function() {
     	if("${member.email}" === "${mentor.email}"){
     		$('.like-btn').remove();
+    		$(".apply-btn").remove();
     	}
 		var isLiked = false;
 		let data = {
@@ -100,7 +101,6 @@
 			                    }
 			                });
 					      console.log('찜 해제');
-					      console.log(data);
 					    } else {
 					    	isLiked = true;
 					    	$('.like-btn').text('찜 해제');
@@ -121,10 +121,8 @@
 			                    }
 			                });
 					      console.log('찜 하기');
-					      console.log(data);
 					    }
 		            }else {
-	                	console.log(response);
 	                    alert("로그인 후 이용 가능합니다.");
 		            }
 	             }
@@ -141,12 +139,7 @@
 	                    let data = {
 	                    		menti_email: email,
 	                            class_id: class_id,
-	                            menti_state: null,
-	                            mentor_email: "${mentor.email}",
-	                            apply_date: null,
-	                            done_date: null,
-	                            menti_lol_account: null,
-	            				mentor_lol_account: null
+	                            mentor_email: "${mentor.email}"
 	                    };
 	                    $.ajax({
 	                        url: "/mentor/save-mentoring-history",
@@ -154,14 +147,13 @@
 	                        data: JSON.stringify(data),
 	                        contentType: "application/json; charset=utf-8",
 	                        success: function() {
-	                            alert("멘토링 내역이 추가되었습니다.");
+	                            alert("수강 신청이 완료되었습니다.");
 	                        },
 	                        error: function() {
-	                            alert("이미 신청한 클래스입니다.");
+	                            alert("이미 신청한 수업입니다.");
 	                        }
 	                    });
 	                } else {
-	                	console.log(response);
 	                    alert("로그인 후 이용 가능합니다.");
 	                }
 	            }

@@ -26,6 +26,7 @@ public interface MentiDAO {
 	void delete_menti_tag(String menti_email);
 	
 	//리뷰 기능
+	MentorReviewDTO select_by_review_num(int review_num);
 	List<MentorReviewDTO> select_by_reviewer_email_mentor_review(String reviewer_email);
 	List<MentorReviewDTO> select_by_mentor_email_mentor_review(String mentor_email);
 	void insert_mentor_review(MentorReviewDTO mentor_review_dto);
