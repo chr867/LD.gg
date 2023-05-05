@@ -44,8 +44,16 @@
 			</tr>
 		</table>
 	</form>
-	<a href="/member/findEmail">이메일 찾기</a> 
+	<a href="/member/findEmail">이메일 찾기</a>
 	<a href="/member/findPassword">비밀번호 찾기</a>
+	<p>이메일 : ${sessionScope.email}</p>
+	<p>롤 계정 : ${sessionScope.lol_account}</p>
+	<p>유저 타입 : ${sessionScope.user_type}</p>
+	<form id="logoutFrm" action="/member/logout" method="post">
+		<a href="javascript:logout()">로그아웃</a>
+	</form>
+	<a href="/member/testMain">테스트메인</a>
+	<button onclick="loginCheck()">로그인확인버튼</button>
 	<br>
 	<br>
 	<br>
@@ -62,6 +70,34 @@
 	</form>
 </body>
 <script type="text/javascript">
+	document.addEventListener("DOMContentLoaded", function() {
+		let email = "${sessionScope.email}";
+		if (email !== "") {
+			var loginForm = document.querySelector('form[name="logFrm"]');
+			loginForm.style.display = 'none';
+		}
+	});
+	
+	function loginCheck() { 
+		$.ajax({
+	        method: 'get',
+	        url: '/member/check_login',
+	      }).done(res=>{
+	        if(res){
+	        	alert("이미 로그인중입니다.")
+	        	location.href = '/';
+	        }else{
+	        	alert("비로그인중")
+	        }
+	      }).fail(err=>{
+	        console.log(err);
+	      }); 
+	}
+
+	function logout() {
+		document.querySelector('#logoutFrm').submit();
+	}
+
 	let check = $
 	{
 		check

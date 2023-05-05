@@ -50,7 +50,7 @@ public class MemberController {
 			session.setAttribute("lol_account", member.getLol_account());
 			session.setAttribute("user_type", member.getUser_type());
 			
-			//SessionListener sessionListener = new SessionListener();
+
 		    sl.login(member.getEmail(),request);
             
 			ra.addFlashAttribute("msg", "로그인 성공");
@@ -59,17 +59,6 @@ public class MemberController {
 		ra.addFlashAttribute("msg", "로그인 실패");
 		ra.addFlashAttribute("check", 2);
 		return new ModelAndView("redirect:/");
-	}
-	
-	@PostMapping("/logout")
-	public String logout(HttpSession session) throws Exception {
-		if (session.getAttribute("email") != null) {
-			session.invalidate(); // 세션 무효화
-			return "redirect:/";
-		} else {
-			log.info("비로그인 중");
-			return "redirect:/";
-		}
 	}
 	
 	@GetMapping("/testMain")
