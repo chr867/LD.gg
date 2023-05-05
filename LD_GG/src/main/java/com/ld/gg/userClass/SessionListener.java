@@ -1,5 +1,7 @@
 package com.ld.gg.userClass;
+
 import java.time.LocalDateTime;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpServletRequest;
@@ -9,12 +11,9 @@ import javax.servlet.http.HttpSessionListener;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
-import com.ld.gg.dao.AdminDao;
 import com.ld.gg.dao.SessionDao;
 import com.ld.gg.dto.SessionDto;
-import com.ld.gg.service.AdminService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,85 +21,95 @@ import lombok.extern.slf4j.Slf4j;
 @WebListener
 @Component
 public class SessionListener implements HttpSessionListener {
-	
-	@Autowired
-	private AdminService as;
-	
-	@Autowired
-	private AdminDao aDao;
 
-    @Override
-    public void sessionCreated(HttpSessionEvent event) {
-        // 세션이 생성될 때 호출됩니다.
-    }
+	private static final ConcurrentHashMap<String, HttpSession> sessions = new ConcurrentHashMap<>();
+	private static final ConcurrentHashMap<String, HttpSession> emailSessions = new ConcurrentHashMap<>();
 
-    @Override
-    public void sessionDestroyed(HttpSessionEvent event) {
-    	
-        try {
+	@Autowired
+	private SessionDao sDao;
+
+	@Override
+	public void sessionCreated(HttpSessionEvent event) {
+		HttpSession session = event.getSession();
+		log.info("세션정보 : {}",session);
+	}
+
+	@Override
+	public void sessionDestroyed(HttpSessionEvent event) {
+		try {
 			HttpSession session = event.getSession();
-			// 세션이 삭제될 때 호출됩니다.
 			String email = (String) session.getAttribute("email");
+
+			LocalDateTime logoutTime = LocalDateTime.now();
 			if (email != null) {
-
-			    LocalDateTime logoutTime = LocalDateTime.now();
-
-			    HttpServletRequest request = (HttpServletRequest) session.getAttribute("request");
-			    String ipAddress = request != null ? request.getRemoteAddr() : "";
-			    String requestURI = request != null ? request.getRequestURI() : "";
-			    String httpMethod = request != null ? request.getMethod() : "";
-			    String userAgent = request != null ? request.getHeader("User-Agent") : "";
-
-			    System.out.println("로그아웃 - 이메일: " + email + ", IP 주소: " + ipAddress + ", 로그아웃 시간: " + logoutTime
-			            + ", Request URI: " + requestURI + ", HTTP Method: " + httpMethod + ", User-Agent: " + userAgent);
-			    
-			    SessionDto sDto = new SessionDto();
-			    sDto.setLogType("OUT");
-			    sDto.setEmail(email);
-			    
-			    log.info("세션DTO 결과:"+ sDto);
-			    log.info("{}"+as);
-			    log.info("{}"+aDao);
-//			    boolean insertResult = as.insertSession(sDto);
-//			    log.info("로그아웃 기록 결과:" + insertResult);
+				HttpServletRequest request = (HttpServletRequest) session.getAttribute("request");
+				String ipAddress = request != null ? request.getRemoteAddr() : "";
+				String requestURI = request != null ? request.getRequestURI() : "";
+				String httpMethod = request != null ? request.getMethod() : "";
+				String userAgent = request != null ? request.getHeader("User-Agent") : "";
+				log.info("로그아웃 - 이메일: " + email + ", IP 주소: " + ipAddress + ", 로그아웃 시간: " + logoutTime
+						+ ", Request URI: " + requestURI + ", HTTP Method: " + httpMethod + ", User-Agent: " + userAgent);
+				log.info("세션디스트로이드 세션 삭제 시작");
+				
+				session.invalidate(); 
+				emailSessions.remove(email);
+				sessions.remove(email);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("세션 삭제 중 에러 발생", e);
 		}
-    }
+	}
 
-    // 로그인 이력을 저장하는 메소드
-    public void login(String email, HttpServletRequest request) {
-        try {
-			// 현재 시간을 구합니다.
-			LocalDateTime loginTime = LocalDateTime.now();
+	// 로그인 이력을 저장하는 메소드
+	public void login(String email, HttpServletRequest request) {
+	    try {
+	        HttpSession session = request.getSession();
+	        HttpSession prevSession = emailSessions.putIfAbsent(email, session);
+	        if (prevSession != null) {
+	            log.warn("중복 로그인 - 이메일: {}, 세션을 제거합니다.", email);
+	            prevSession.invalidate();
+	        } else {
+	            sessions.put(email, session);
+	        }
 
-			String ipAddress = request != null ? request.getRemoteAddr() : "";
-			String requestURI = request != null ? request.getRequestURI() : "";
-			String httpMethod = request != null ? request.getMethod() : "";
-			String userAgent = request != null ? request.getHeader("User-Agent") : "";
+	        LocalDateTime loginTime = LocalDateTime.now();
+	        String ipAddress = request != null ? request.getRemoteAddr() : "";
+	        String requestURI = request != null ? request.getRequestURI() : "";
+	        String httpMethod = request != null ? request.getMethod() : "";
+	        String userAgent = request != null ? request.getHeader("User-Agent") : "";
 
-			System.out.println("로그인 - 이메일: " + email + ", IP 주소: " + ipAddress + ", 로그인 시간: " + loginTime
-			        + ", Request URI: " + requestURI + ", HTTP Method: " + httpMethod + ", User-Agent: " + userAgent);
-			
-			SessionDto sDto = new SessionDto();
-			sDto.setLogType("IN");
-			sDto.setEmail(email);
-			sDto.setIpAddress(ipAddress);
-			sDto.setRequestURI(requestURI);
-			sDto.setHttpMethod(httpMethod);
-			sDto.setUserAgent(userAgent);
-			log.info("세션DTO 결과:"+ sDto);
-			log.info("{}"+as);
-			boolean insertResult = as.insertSession(sDto);
-			log.info("로그인 기록 결과:" + insertResult);
+	        log.info("로그인 - 이메일: " + email + ", IP 주소: " + ipAddress + ", 로그인 시간: " + loginTime
+	                + ", Request URI: " + requestURI + ", HTTP Method: " + httpMethod + ", User-Agent: " + userAgent);
+
+	        SessionDto sDto = new SessionDto();
+	        sDto.setLogType("IN");
+	        sDto.setEmail(email);
+	        sDto.setIpAddress(ipAddress);
+	        sDto.setRequestURI(requestURI);
+	        sDto.setHttpMethod(httpMethod);
+	        sDto.setUserAgent(userAgent);
+	        Integer insertResult = sDao.insertSession(sDto);
+	        log.info("로그인 기록 결과:" + insertResult);
+	    } catch (Exception e) {
+	        System.out.println(e);
+	        e.printStackTrace();
+	    }
+	}
+	
+	// 로그아웃 메소드
+	public void logout(String email){
+		try {
+			HttpSession session = sessions.get(email);
+			if (session != null) {
+				log.info("로그아웃 메소드 세션 삭제 시작");
+				
+			    emailSessions.remove(email);
+				sessions.remove(email); 
+			}
 		} catch (Exception e) {
 			System.out.println(e);
 			e.printStackTrace();
-			
 		}
-    }
+	}
+
 }
-
-
-

@@ -16,5 +16,6 @@ public class SessionDto {
 	private String userAgent;
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private String sessionDate;
+	private String action;
 
 }

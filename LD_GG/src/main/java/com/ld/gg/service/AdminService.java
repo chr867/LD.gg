@@ -3,10 +3,12 @@ package com.ld.gg.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.ld.gg.dao.AdminDao;
 import com.ld.gg.dao.SessionDao;
+import com.ld.gg.dto.MemberDto;
 import com.ld.gg.dto.SessionDto;
 import com.ld.gg.dto.admin.AdDto;
 import com.ld.gg.dto.admin.NoticeDto;
@@ -80,15 +82,26 @@ public class AdminService {
 		return adList;
 	}
 
-	public boolean insertSession(SessionDto sDto) {
-		log.info("로그인 로그아웃 저장 서비스 클래스 진입");
-		Integer result = sDao.insertSession(sDto);
-		if(result!= null) {
-			return true;
-		}else 
-			return false;
+	public List<MemberDto> getMemberLists() {
+		List<MemberDto> meberLists = ad.getMemberLists();
+		return meberLists;
 	}
-	
+
+	public List<MemberDto> getSearchMemberLists(String keyword) {
+		List<MemberDto> meberLists = ad.getSearchMemberLists(keyword);
+		return meberLists;
+	}
+
+	public List<MemberDto> getMemberHistoryLists() {
+		List<MemberDto> meberHistoryLists = ad.getMemberHistoryLists();
+		return meberHistoryLists;
+	}
+
+	public List<MemberDto> getSearchMemberHistoryLists(String keyword) {
+		List<MemberDto> meberHistoryLists = ad.getSearchMemberHistoryLists(keyword);
+		return meberHistoryLists;
+	}
+
 	
 
 }

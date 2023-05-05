@@ -2,6 +2,7 @@ package com.ld.gg.dao;
 
 import java.util.List;
 
+import com.ld.gg.dto.MemberDto;
 import com.ld.gg.dto.admin.AdDto;
 import com.ld.gg.dto.admin.NoticeDto;
 
@@ -25,5 +26,13 @@ public interface AdminDao {
 	List<AdDto> getAdList();
 
 	List<AdDto> getSearchAdList(String keyword);
+
+	List<MemberDto> getMemberLists();
+
+	List<MemberDto> getSearchMemberLists(String keyword);
+
+	List<MemberDto> getMemberHistoryLists();
+
+	List<MemberDto> getSearchMemberHistoryLists(String keyword);
 
 }

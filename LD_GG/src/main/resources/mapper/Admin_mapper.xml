@@ -56,6 +56,32 @@
 	<select id="getSearchAdList" resultType="ad">
 		SELECT *
 		FROM ad
-		WHERE ad_advertiser LIKE '%${keyword}%' OR ad_name LIKE '%${keyword}%';
+		WHERE
+		ad_advertiser LIKE '%${keyword}%' OR ad_name LIKE '%${keyword}%'
+	</select>
+
+	<select id="getMemberLists" resultType="member">
+		SELECT
+		email,phone_num,lol_account,user_type,join_date FROM MEMBER ORDER BY
+		join_date DESC;
+	</select>
+
+	<select id="getSearchMemberLists" resultType="member">
+		SELECT email,phone_num,lol_account,user_type,join_date
+		FROM MEMBER
+		WHERE
+		email LIKE '%${keyword}%' OR lol_account LIKE '%${keyword}%'
+	</select>
+	
+	<select id="getMemberHistoryLists" resultType="com.ld.gg.dto.SessionDto">
+		SELECT * FROM session_record ORDER BY
+		sessionDate DESC;
+	</select>
+
+	<select id="getSearchMemberHistoryLists" resultType="com.ld.gg.dto.SessionDto">
+		SELECT *
+		FROM session_record
+		WHERE
+		email LIKE '%${keyword}%'
 	</select>
 </mapper>
