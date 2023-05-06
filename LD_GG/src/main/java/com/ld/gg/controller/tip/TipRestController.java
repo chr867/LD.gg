@@ -139,5 +139,30 @@ public class TipRestController {
 		return updateResult;
 	}
 	
+	@GetMapping("/reply/subReplyList")
+	public List<TipDto> subReplyList(int t_r_num){
+        
+        List<TipDto> subReplyList = ts.getsubReplyList(t_r_num);
+		
+		return subReplyList;
+	}
+	
+	// 1 = 성공 , 2 = 실패, 3 = 이메일매칭 x, 4 = 오류
+	@PostMapping("/reply/subReplyinsert")
+	public int subReplyInsert(HttpSession session, int t_b_num, String t_r_content, int t_r_num) throws Exception{
+		String email = (String)session.getAttribute("email");
+		if(email == null) {
+			return 3;
+		}
+		TipDto tDto = new TipDto();
+		tDto.setEmail(email);
+		tDto.setT_b_num(t_b_num);
+		tDto.setT_r_content(t_r_content);
+		tDto.setT_r_parents_num(t_r_num);
+		
+		int subReplyInsertResult = ts.subReplyInsert(tDto);
+		
+		return subReplyInsertResult;
+	}
 	
 }

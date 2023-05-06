@@ -96,8 +96,16 @@
 
 	<select id="getReplyList" resultType="tip">
 		SELECT * FROM tip_reply
-		WHERE t_b_num = #{t_b_num}
-		ORDER BY t_r_num DESC
+		WHERE t_b_num = #{t_b_num} AND t_r_parents_num IS NULL
+		ORDER BY t_r_num
+		DESC
+	</select>
+
+	<select id="getsubReplyList" resultType="tip">
+		SELECT * FROM tip_reply
+		WHERE t_r_parents_num = #{t_r_num}
+		ORDER BY t_r_num
+		DESC
 	</select>
 
 	<delete id="deleteTip" parameterType="tip">
@@ -118,7 +126,16 @@
 	</delete>
 
 	<update id="updateReply" parameterType="tip">
-		UPDATE tip_reply SET t_r_content = #{t_r_content}, t_r_date = default 
-		WHERE t_r_num = #{t_r_num};
+		UPDATE tip_reply SET
+		t_r_content = #{t_r_content}, t_r_date = default
+		WHERE t_r_num =
+		#{t_r_num};
 	</update>
+
+	<insert id="subReplyInsert" parameterType="tip">
+		INSERT INTO `tip_reply`
+		(`t_b_num`, `t_r_content`, `email`, `t_r_parents_num`)
+		VALUES (#{t_b_num}, #{t_r_content}, #{email}, #{t_r_num});
+
+	</insert>
 </mapper>

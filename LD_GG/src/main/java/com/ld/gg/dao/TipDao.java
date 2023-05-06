@@ -40,6 +40,10 @@ public interface TipDao {
 
 	int updateReply(TipDto tDto);
 
+	List<TipDto> getsubReplyList(int t_r_num);
+
+	int subReplyInsert(TipDto tDto);
+
 
 	
 }
