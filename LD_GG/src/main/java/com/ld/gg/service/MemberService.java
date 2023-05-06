@@ -228,7 +228,7 @@ public class MemberService {
 
 	private boolean updateUserType(String email, Integer user_type) {
 		try {
-			Integer updateResult = mDao.updateUserType(email, user_type);
+			int updateResult = mDao.updateUserType(email, user_type);
 			if (updateResult != 0) {
 				return true;
 			}

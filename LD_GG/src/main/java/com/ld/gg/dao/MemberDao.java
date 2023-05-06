@@ -28,6 +28,6 @@ public interface MemberDao {
 
 	Integer deleteAccount(String email);
 
-	Integer updateUserType(@Param("email") String email, @Param("user_type") Integer user_type);
+	int updateUserType(@Param("email") String email, @Param("user_type") Integer user_type);
 	
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.ld.gg.dao.AdminDao;
+import com.ld.gg.dao.MemberDao;
 import com.ld.gg.dao.SessionDao;
 import com.ld.gg.dto.MemberDto;
 import com.ld.gg.dto.SessionDto;
@@ -20,6 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 public class AdminService {
 	@Autowired
 	private AdminDao ad;
+	
+	@Autowired
+	private MemberDao mDao;
 	
 	@Autowired
 	private SessionDao sDao;
@@ -100,6 +104,15 @@ public class AdminService {
 	public List<MemberDto> getSearchMemberHistoryLists(String keyword) {
 		List<MemberDto> meberHistoryLists = ad.getSearchMemberHistoryLists(keyword);
 		return meberHistoryLists;
+	}
+
+	public int updateMemberStop(String email, int user_type) {
+		int updateResult = mDao.updateUserType(email, user_type);
+		if(updateResult != 0) {
+			return 1;
+		}else {
+			return 2;
+		}
 	}
 
 	
