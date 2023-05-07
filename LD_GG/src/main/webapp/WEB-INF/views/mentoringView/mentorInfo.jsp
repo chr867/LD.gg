@@ -20,12 +20,16 @@
 	<h4>찜한 횟수: ${mentor_profile.num_of_likes}</h4>
 	<h4>수업 횟수: ${mentor_profile.num_of_lessons}</h4>
 	<h4>리뷰 횟수: ${mentor_profile.num_of_reviews}</h4>
-	<h4>평점: ${mentor_profile.total_grade}</h4>
+	<h4 id="avg_grade">평점: ${mentor_profile.total_grade/mentor_profile.num_of_reviews}</h4>
 	<h4>특화 챔피언: ${mentor_profile.specialized_champion}</h4>
 	<h4>특화 포지션: ${mentor_profile.specialized_position}</h4>
 	<h4>수업 가능 시간: ${mentor_profile.contact_time}</h4>
 	<h4>경력: ${mentor_profile.careers}</h4>
 	<h4>이런 분들께 추천해요: ${mentor_profile.recom_ment}</h4>
+	
+	<h4>멘토 리뷰</h4>
+	<div id="review_for_me"></div>
+	<br>
 	
 	<div id="mentor_class_info">
        <c:forEach items="${class_list}" var="class_list">
@@ -48,8 +52,12 @@
 	
 <script>
 	$(document).ready(function() {
+		let avg_grade = ${mentor_profile.total_grade/mentor_profile.num_of_reviews}
+		let roundedGrade = avg_grade.toFixed(1);
+		$('#avg_grade').html('평점: '+roundedGrade);
     	if("${member.email}" === "${mentor.email}"){
     		$('.like-btn').remove();
+    		$(".apply-btn").remove();
     	}
 		var isLiked = false;
 		let data = {
@@ -100,7 +108,6 @@
 			                    }
 			                });
 					      console.log('찜 해제');
-					      console.log(data);
 					    } else {
 					    	isLiked = true;
 					    	$('.like-btn').text('찜 해제');
@@ -121,10 +128,8 @@
 			                    }
 			                });
 					      console.log('찜 하기');
-					      console.log(data);
 					    }
 		            }else {
-	                	console.log(response);
 	                    alert("로그인 후 이용 가능합니다.");
 		            }
 	             }
@@ -141,12 +146,7 @@
 	                    let data = {
 	                    		menti_email: email,
 	                            class_id: class_id,
-	                            menti_state: null,
-	                            mentor_email: "${mentor.email}",
-	                            apply_date: null,
-	                            done_date: null,
-	                            menti_lol_account: null,
-	            				mentor_lol_account: null
+	                            mentor_email: "${mentor.email}"
 	                    };
 	                    $.ajax({
 	                        url: "/mentor/save-mentoring-history",
@@ -154,20 +154,61 @@
 	                        data: JSON.stringify(data),
 	                        contentType: "application/json; charset=utf-8",
 	                        success: function() {
-	                            alert("멘토링 내역이 추가되었습니다.");
+	                            alert("수강 신청이 완료되었습니다.");
 	                        },
 	                        error: function() {
-	                            alert("이미 신청한 클래스입니다.");
+	                            alert("이미 신청한 수업입니다.");
 	                        }
 	                    });
 	                } else {
-	                	console.log(response);
 	                    alert("로그인 후 이용 가능합니다.");
 	                }
 	            }
 	        });
 	    });
-	});
+	    
+	    $.ajax({ //내게 달린 리뷰
+			url: "/mentor/get-review-for-me",
+			type: "POST",
+	        contentType: "application/json; charset=utf-8",
+	        dataType: "json",
+	        data: JSON.stringify({
+				mentor_email: "${mentor_profile.mentor_email}"
+			}),
+	        success: function(data) {
+	    		  let reviewForMeList = $("#review_for_me");
+	    		  let table = $("<table>").addClass("review-for-me-table");
+	    		  let header = $("<tr>").append(
+	    		    $("<th>").text("작성자"),
+	    		    $("<th>").text("멘토"),
+	    		    $("<th>").text("수업 이름"),
+	    		    $("<th>").text("리뷰 내용"),
+	    		    $("<th>").text("작성일"),
+	    		    $("<th>").text("평점")
+	    		  );
+	    		  table.append(header);
+	    		  for (let i = 0; i < data.length; i++) {
+	    		    let review_for_me = data[i];
+	    		    let row = $("<tr>").append(
+	    		      $("<td>").text(review_for_me.reviewer_lol_account),
+	    		      $("<td>").text(review_for_me.mentor_lol_account),
+	    		      $("<td>").text(review_for_me.class_name),
+	    		      $("<td>").text(review_for_me.review_content),
+	    		      $("<td>").text(review_for_me.review_date),
+	    		      $("<td>").text(review_for_me.grade+'점')
+	    		    );
+	    		    table.append(row);
+	    		  }
+	    		  reviewForMeList.empty().append(table);
+			},
+	        error: function(xhr, status, error) {
+	            console.error(xhr.responseText);
+	            console.error(status);
+	            console.error(error);
+	        }
+	    });
+	    
+	});//ready
 		
 </script>
 </body>

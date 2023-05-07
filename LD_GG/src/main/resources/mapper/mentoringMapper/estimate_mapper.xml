@@ -13,7 +13,8 @@
 	from estimate e 
 	join member m on e.mentor_email = m.email 
 	join member m2 on m2.email = e.menti_email
-	WHERE e.estimate_id = #{estimate_id};
+	WHERE e.estimate_id = #{estimate_id}
+	ORDER BY e.estimate_date DESC;
 </select>
 
 <select id="select_by_mentor_email_estimate" resultType="estimate">
@@ -23,7 +24,8 @@
 	from estimate e 
 	join member m on e.mentor_email = m.email 
 	join member m2 on m2.email = e.menti_email  
-	WHERE e.mentor_email = #{mentor_email};
+	WHERE e.mentor_email = #{mentor_email}
+	ORDER BY e.estimate_date DESC;
 </select>
 
 <select id="select_by_menti_email_estimate" resultType="estimate">
@@ -33,7 +35,8 @@
   FROM estimate e 
   JOIN member m ON e.mentor_email = m.email 
   JOIN member m2 ON m2.email = e.menti_email  
-  WHERE e.menti_email = #{menti_email};
+  WHERE e.menti_email = #{menti_email}
+  ORDER BY e.estimate_date DESC;
 </select>
 
 <insert id="insert_estimate" parameterType="estimate">

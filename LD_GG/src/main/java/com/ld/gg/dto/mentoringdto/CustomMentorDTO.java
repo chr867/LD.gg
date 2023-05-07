@@ -19,5 +19,4 @@ public class CustomMentorDTO {
     private String position_to_learn;
     private String champion_to_learn;
     private String target_tier;
-    private String own_goal;
 }

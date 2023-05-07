@@ -7,11 +7,36 @@
 
 
 <select id="select_by_reviewer_email_mentor_review" resultType="mentor_review">
-	SELECT * FROM mentor_review WHERE reviewer_email = #{reviewer_email};
+	select mr.review_num ,mr.reviewer_email ,
+	m.lol_account as reviewer_lol_account, 
+	mr.class_id, mc.class_name
+	,mr.review_content ,mr.review_date , 
+	mr.mentor_email ,m2.lol_account as mentor_lol_account, mr.grade 
+	from mentor_review mr
+	join member m on m.email = mr.reviewer_email
+	join member m2 on m2.email = mr.mentor_email
+	join mentor_class mc on mc.class_id = mr.class_id
+	WHERE mr.reviewer_email = #{reviewer_email}
+	ORDER BY mr.review_date DESC;
 </select>
 
 <select id="select_by_mentor_email_mentor_review" resultType="mentor_review">
-	SELECT * FROM mentor_review WHERE mentor_email = #{mentor_email};
+	select mr.review_num ,mr.reviewer_email ,
+	m.lol_account as reviewer_lol_account, 
+	mr.class_id, mc.class_name ,mr.review_content ,mr.review_date , 
+	mr.mentor_email ,m2.lol_account as mentor_lol_account, mr.grade 
+	from mentor_review mr
+	join member m on m.email = mr.reviewer_email
+	join member m2 on m2.email = mr.mentor_email
+	join mentor_class mc on mc.class_id = mr.class_id
+	WHERE mr.mentor_email = #{mentor_email}
+	ORDER BY mr.review_date DESC;
+</select>
+
+<select id="select_by_review_num" resultType="mentor_review">
+	select *
+	from mentor_review mr
+	WHERE mr.review_num = #{review_num};
 </select>
 
 <insert id="insert_mentor_review" parameterType="mentor_review">

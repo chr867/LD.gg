@@ -22,5 +22,8 @@ public class MentorReviewDTO {
 	private LocalDateTime review_date;
 	private String mentor_email;
 	private float grade;
+	private String reviewer_lol_account;
+	private String mentor_lol_account;
+	private String class_name;
 	
 }

@@ -14,7 +14,7 @@
 </select>
 
 <insert id="insert_menti_tag" parameterType="mentiTag">
-  INSERT INTO menti_tag (menti_email, tag_id) VALUES (#{menti_email}, #{tag_id});
+  INSERT INTO menti_tag (menti_email, tag_id, tag_note) VALUES (#{menti_email}, #{tag_id}, #{tag_note});
 </insert>
 
 <delete id="delete_menti_tag" parameterType="String">
