@@ -123,6 +123,12 @@ public class AdminRestController {
 			
 			return json;
 		}	
+		// 1 = 성공 2 = 실패
+		@PostMapping("/admin/member/stop")
+		public int mbStop(String email) {
+			int result = as.updateMemberStop(email,4);
+			return result;
+		}
 		
 		
 

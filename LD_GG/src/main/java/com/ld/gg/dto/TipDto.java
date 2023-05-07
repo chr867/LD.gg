@@ -24,7 +24,7 @@ public class TipDto {
 	
 	private int t_r_num;
 	private String t_r_content;
-	
+	private int t_r_parents_num;
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private	String t_r_date;
 	

@@ -291,7 +291,7 @@ function loadComments() {
         		deleteButton = '<td><button id="comment-delete-btn-'+reply.t_r_num+'" onclick="deleteComment('+reply.t_r_num+')">삭제</button></td>'
         		modifyButton = '<td><button id="comment-modify-btn-'+reply.t_r_num+'" onclick="modifyReplyBtn('+reply.t_r_num+')">수정</button></td>'
         	}
-        	replyList += '<tr height="35" align="center">'
+        	replyList += '<tr height="35" align="center" id="reply_box_'+reply.t_r_num+'">'
         	replyList += '<td width="100">'+reply.email+'</td>'
         	replyList += '<td width="500" id="content_num_'+reply.t_r_num+'">'+reply.t_r_content+'</td>'
         	replyList += '<td width="100">'+reply.t_r_date+'</td>'
