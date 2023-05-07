@@ -2,6 +2,8 @@ package com.ld.gg.dao.mentoringdao;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
+
+import com.ld.gg.dto.champ.Champ_default;
 import com.ld.gg.dto.mentoringdto.CustomMentorDTO;
 import com.ld.gg.dto.mentoringdto.MentiTagDTO;
 import com.ld.gg.dto.mentoringdto.MentorProfileDTO;
@@ -31,4 +33,8 @@ public interface MentiDAO {
 	List<MentorReviewDTO> select_by_mentor_email_mentor_review(String mentor_email);
 	void insert_mentor_review(MentorReviewDTO mentor_review_dto);
 	void delete_mentor_review(int review_num);
+	
+	//챔피언
+	List<Champ_default> select_all_champ();
+	Champ_default select_by_id_champ(int id);
 }

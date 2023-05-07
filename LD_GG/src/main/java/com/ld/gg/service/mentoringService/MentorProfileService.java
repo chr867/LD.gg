@@ -20,6 +20,7 @@ import com.ld.gg.dao.mentoringdao.MentorProfileDAO;
 import com.ld.gg.dao.mentoringdao.MyMentoringDAO;
 import com.ld.gg.dao.mentoringdao.TagListDAO;
 import com.ld.gg.dto.MemberDto;
+import com.ld.gg.dto.champ.Champ_default;
 import com.ld.gg.dto.mentoringdto.CustomMentorDTO;
 import com.ld.gg.dto.mentoringdto.LikeMentorDTO;
 import com.ld.gg.dto.mentoringdto.MentiTagDTO;
@@ -53,6 +54,18 @@ public class MentorProfileService {
 	private MemberService mbService;
 	@Autowired
 	private ObjectMapper objectMapper;
+	
+	//모든 챔피언 이름 가져오기
+	public String select_all_champ() throws JsonProcessingException {
+		List<Champ_default> champ_name_list = mentidao.select_all_champ();
+		String champ_name_list_json = objectMapper.writeValueAsString(champ_name_list);
+		return champ_name_list_json;
+	}
+	//챔피언 아이디로 챔피언 이름 가져오기
+	public Champ_default select_by_id_champ(int id) {
+		Champ_default champ_name = mentidao.select_by_id_champ(id);
+		return champ_name;
+	}
 	
 	//리뷰어 이메일로 내가 쓴 리뷰 가져오기
 	public String select_by_reviewer_email_mentor_review(Map<String,String> reviewer_email) throws JsonProcessingException {
@@ -300,11 +313,38 @@ public class MentorProfileService {
 		List<TagListDTO> tagdto = tagdao.select_all_tag();
 		return tagdto;
 	}
-	//태그 타입으로 태그 리스트 가져오기
-	public List<TagListDTO> select_by_tag_type(String tag_type){
-		List<TagListDTO> tagdto = tagdao.select_by_tag_type(tag_type);
-		return tagdto;
+	
+	//목표 태그 가져오기
+	public String select_taget_tag() throws JsonProcessingException{
+		List<TagListDTO> taget_tag = tagdao.select_by_tag_type("target");
+		String taget_tag_list = objectMapper.writeValueAsString(taget_tag);
+		return taget_tag_list;
 	}
+	//수업방식 태그 가져오기
+	public String select_class_method_tag() throws JsonProcessingException{
+		List<TagListDTO> class_method_tag = tagdao.select_by_tag_type("class_method");
+		String class_method_tag_list = objectMapper.writeValueAsString(class_method_tag);
+		return class_method_tag_list;
+	}
+	//스타일 태그 가져오기
+	public String select_style_tag() throws JsonProcessingException{
+		List<TagListDTO> style_tag = tagdao.select_by_tag_type("style");
+		String style_tag_list = objectMapper.writeValueAsString(style_tag);
+		return style_tag_list;
+	}
+	//스타일2 태그 가져오기
+	public String select_style2_tag() throws JsonProcessingException{
+		List<TagListDTO> style2_tag = tagdao.select_by_tag_type("style2");
+		String style2_tag_list = objectMapper.writeValueAsString(style2_tag);
+		return style2_tag_list;
+	}
+	//경력 태그 가져오기
+	public String select_careers_tag() throws JsonProcessingException{
+		List<TagListDTO> careers_tag = tagdao.select_by_tag_type("careers");
+		String careers_tag_list = objectMapper.writeValueAsString(careers_tag);
+		return careers_tag_list;
+	}
+	
 	//태그 아이디로 태그 가져오기
 	public TagListDTO select_by_id_tag(int tag_id){
 		TagListDTO tagdto = tagdao.select_by_id_tag(tag_id);

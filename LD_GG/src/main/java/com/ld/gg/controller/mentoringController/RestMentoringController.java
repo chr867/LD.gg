@@ -28,6 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.ld.gg.dao.MemberDao;
 import com.ld.gg.dto.MemberDto;
+import com.ld.gg.dto.champ.Champ_default;
 import com.ld.gg.dto.mentoringdto.CustomMentorDTO;
 import com.ld.gg.dto.mentoringdto.LikeMentorDTO;
 import com.ld.gg.dto.mentoringdto.MentiTagDTO;
@@ -36,6 +37,7 @@ import com.ld.gg.dto.mentoringdto.MentorProfileDTO;
 import com.ld.gg.dto.mentoringdto.MentorReviewDTO;
 import com.ld.gg.dto.mentoringdto.MentorTagDTO;
 import com.ld.gg.dto.mentoringdto.MyMentoringDTO;
+import com.ld.gg.dto.mentoringdto.TagListDTO;
 import com.ld.gg.dto.mentoringdto.EstimateDTO;
 import com.ld.gg.service.MemberService;
 import com.ld.gg.service.mentoringService.MentorProfileService;
@@ -50,6 +52,20 @@ public class RestMentoringController {
 	private MemberDao mbdao;
 	@Autowired
 	private MemberService mbService;
+	
+	//모든 챔피언 이름 가져오기
+	@GetMapping("/get-all-champ")
+	public String select_all_champ() throws JsonProcessingException {
+		String champ_name_list_json = mtpService.select_all_champ();
+		return champ_name_list_json;
+	}
+	
+	//챔피언 아이디로 챔피언 이름 가져오기
+	@GetMapping("/get-champ-name-by-id")
+	public Champ_default select_by_id_champ(@RequestParam int id) {
+		Champ_default champ_name = mtpService.select_by_id_champ(id);
+		return champ_name;
+	}
 	
 	//리뷰어 이메일로 내가 쓴 리뷰 가져오기
 	@PostMapping("/get-review-by-reviewer")
@@ -221,6 +237,37 @@ public class RestMentoringController {
 		String menti_email = menti_tag_list.get(0).getMenti_email();
 		mtpService.delete_menti_tag(menti_email);
 		mtpService.insert_menti_tag(menti_tag_list);
+	}
+	
+	//목표 태그 가져오기
+	@GetMapping("/get-target-tag")
+	public String select_taget_tag() throws JsonProcessingException {
+		String taget_tag_list = mtpService.select_taget_tag();
+		return taget_tag_list;
+	}
+	//수업방식 태그 가져오기
+	@GetMapping("/get-class-method-tag")
+	public String select_class_method_tag() throws JsonProcessingException {
+		String class_method_tag_list = mtpService.select_class_method_tag();
+		return class_method_tag_list;
+	}
+	//스타일 태그 가져오기
+	@GetMapping("/get-style-tag")
+	public String select_style_tag() throws JsonProcessingException {
+		String style_tag_list = mtpService.select_style_tag();
+		return style_tag_list;
+	}
+	//스타일2 태그 가져오기
+	@GetMapping("/get-style2-tag")
+	public String select_style2_tag() throws JsonProcessingException {
+		String style2_tag_list = mtpService.select_style2_tag();
+		return style2_tag_list;
+	}
+	//경력 태그 가져오기
+	@GetMapping("/get-careers-tag")
+	public String select_careers_tag() throws JsonProcessingException {
+		String careers_tag_list = mtpService.select_careers_tag();
+		return careers_tag_list;
 	}
 	
 	//맞춤멘토 객체 받아서 업데이트
