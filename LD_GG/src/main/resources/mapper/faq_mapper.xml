@@ -12,6 +12,12 @@
 	SELECT * FROM faq WHERE faq_id = #{faq_id};
 </select>
 
+<select id="select_all_inquiries" resultType="ci">
+	SELECT * FROM customer_inquiries;
+</select>
 
+<select id="select_by_id_customer_service" resultType="cs">
+	SELECT * FROM customer_service WHERE cs_id = #{cs_id};
+</select>
 
 </mapper>
