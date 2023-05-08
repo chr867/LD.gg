@@ -1,4 +1,5 @@
 import datetime
+import random
 import time
 import pandas as pd
 import requests
@@ -16,6 +17,8 @@ api_keys = private.api_keys
 
 api_it = iter(api_keys)
 summoner_leagues = []
+test = []
+result = []
 for tier in tqdm(tiers):
     for division in tqdm(divisions):
         print(tier, division)
@@ -32,6 +35,8 @@ for tier in tqdm(tiers):
                 url = f'https://kr.api.riotgames.com/lol/league/v4/entries/RANKED_SOLO_5x5/{tier}/{division}?page={page_p}&api_key={api_key}'
                 res_p = requests.get(url).json()
                 tmp_lst.append(res_p[0]['summonerId'])
+                test = [{'summonerId': i['summonerId'], 'api_key': api_key} for i in res_p]
+                result.extend(test)
             except IndexError:
                 break
             except Exception as e:
@@ -43,8 +48,6 @@ for tier in tqdm(tiers):
             if len(res_p) < 50:
                 break
             page_p += 1
-
-# summoner_rank_columns = ['tier', 'league_id', 'queue', 'summoner_name', 'lp', 'wins', 'loses', 'division', 'match_count']
 
 rank_df = pd.DataFrame(summoner_leagues)
 rank_result_df = rank_df[['tier', 'leagueId', 'queueType', 'summonerName', 'leaguePoints', 'wins', 'losses', 'rank']]
@@ -69,42 +72,35 @@ rank_result_df.progress_apply(lambda x: insert(x, sql_conn), axis=1)
 sql_conn.commit()
 sql_conn.close()
 
-
-summoner_names = [i['summonerName'] for i in summoner_leagues]
+random.shuffle(test)
 summoner_info = []
-for summoner_name in tqdm(summoner_names):
-    tmp = []
-    try:
-        url = f'https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/{summoner_name}?api_key={api_key}'
-        res = requests.get(url).json()
-        tmp.append(res['accountId'])
-    except Exception as e:
-        print(f'suummoner names {e} 예외 발생 {res}, {summoner_name}, {api_key}')
-        continue
-    summoner_info.append(res)
-
-summoner_names = [i['summonerName'] for i in summoner_leagues]
-summoner_info = []
-for summoner_name in tqdm(summoner_names):
-    tmp = []
-    try:
-        url = f'https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/{summoner_name}?api_key={api_key}'
-        res = requests.get(url).json()
-        tmp.append(res['accountId'])
-    except Exception as e:
-        print(f'suummoner names {e} 예외 발생 {res}, {summoner_name}, {api_key}')
-        continue
-    summoner_info.append(res)
+for k in tqdm(test):
+    while True:
+        tmp = []
+        try:
+            url = f'https://kr.api.riotgames.com/lol/summoner/v4/summoners/{k["summonerId"]}?api_key={k["api_key"]}'
+            res = requests.get(url).json()
+            tmp.append(res['accountId'])
+        except Exception as e:
+            print(f'suummoner names {e} 예외 발생 {res}, {k["summonerId"]}, {k["api_key"]}')
+            time.sleep(10)
+            continue
+        summoner_info.append(res)
+        break
 
 info_df = pd.DataFrame(summoner_info)
 info_result_df = info_df[['name', 'summonerLevel', 'profileIconId', 'revisionDate']]
 info_result_df.columns = ['summoner_name', 's_level', 'profile_icon_id', 'revision_date']
 
-for_merge_df = rank_result_df[['summoner_name', 'match_count', 'tier', 'wins', 'losses', 'lp', 'division']][:20]
+for_merge_df = rank_result_df[['summoner_name', 'match_count', 'tier', 'wins', 'losses', 'lp', 'division']]
 for_merge_df.columns = ['summoner_name', 'games', 'tier', 'wins', 'losses', 'lp', 'ranking']
+
+info_result_df['summoner_name'].unique()
+for_merge_df['summoner_name'].unique()
 
 info_merged_df = pd.merge(info_result_df, for_merge_df)
 info_merged_df.keys()
+
 def info_insert(s, conn):
     insert_query = (
         f'INSERT INTO SUMMONER_INFO (SUMMONER_NAME, S_LEVEL, PROFILE_ICON_ID, GAMES, TIER, WINS, LOSSES, LP, RANKING) '
