@@ -17,14 +17,31 @@
 </head>
 <body>
 	<h2>${mentor.lol_account} 멘토님의 프로필</h2> <button class="like-btn" id="${mentor.lol_account}">찜하기</button>
+	
 	<h4>찜한 횟수: ${mentor_profile.num_of_likes}</h4>
+	
 	<h4>수업 횟수: ${mentor_profile.num_of_lessons}</h4>
+	
 	<h4>리뷰 횟수: ${mentor_profile.num_of_reviews}</h4>
+	
 	<h4 id="avg_grade">평점: ${mentor_profile.total_grade/mentor_profile.num_of_reviews}</h4>
-	<h4>특화 챔피언: ${mentor_profile.specialized_champion}</h4>
-	<h4>특화 포지션: ${mentor_profile.specialized_position}</h4>
+	
+	<h4>특화 포지션:</h4>
+	<div id="specializedPosition">${mentor_profile.specialized_position}</div>
+	
+	<h4>특화 챔피언</h4>
+	<div id="specializedChampion">
+	<div class="top-champ"><p>탑</p></div>
+	<div class="jungle-champ"><p>정글</p></div>
+	<div class="mid-champ"><p>미드</p></div>
+	<div class="bottom-champ"><p>바텀</p></div>
+	<div class="supporter-champ"><p>서포터</p></div>
+	</div>
+	
 	<h4>수업 가능 시간: ${mentor_profile.contact_time}</h4>
+	
 	<h4>경력: ${mentor_profile.careers}</h4>
+	
 	<h4>이런 분들께 추천해요: ${mentor_profile.recom_ment}</h4>
 	
 	<h4>멘토 리뷰</h4>
@@ -52,6 +69,8 @@
 	
 <script>
 	$(document).ready(function() {
+		displaySpecializedPosition();//멘토 프로필 가져와서 특화 포지션 게시
+		
 		let avg_grade = ${mentor_profile.total_grade/mentor_profile.num_of_reviews}
 		let roundedGrade = avg_grade.toFixed(1);
 		$('#avg_grade').html('평점: '+roundedGrade);
@@ -78,6 +97,30 @@
 		    	    }
 		    	}
 		    }
+		});
+		
+		//탑 특화 챔피언
+		let top_specialized_champion = [${mentor_profile.top_specialized_champion}];
+		
+		top_specialized_champion.forEach(function (id) {
+		    $.ajax({ //챔피언 id로 이름 가져오기
+		        type: "GET",
+		        url: "/mentor/get-champ-name-by-id?id=" + id,
+		        contentType: "application/json; charset=utf-8",
+		        dataType: "json",
+		        success: function (champion) {
+		            console.log(top_specialized_champion);
+		            let imageUrl = "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +champion.champion_en_name + ".png?&amp;retry=0";
+		            let champImg = $("<img>").addClass("champ-icon").attr("src", imageUrl);
+		            let champName = $("<p>").addClass("champ-name").text(champion.champion_kr_name);
+		            $(".top-champ").append(champImg);
+		            $(".top-champ").append(champName);
+		        },
+		        error: function (request, status, error) {
+		            console.error(error);
+		            // 오류 처리
+		        }
+		    });
 		});
 		
     	
@@ -207,6 +250,27 @@
 	            console.error(error);
 	        }
 	    });
+	    
+	    function displaySpecializedPosition(){
+			$.ajax({
+			  url: '/mentor/get-mentor-profile',
+			  type: 'POST',
+			  contentType: 'application/json;charset=UTF-8',
+			  data: JSON.stringify({ mentor_email: '${mentor_profile.mentor_email}' }),
+			  success: function(data) {
+				  let sp = JSON.parse(data);
+				  let mpsp = JSON.parse(sp.specialized_position);
+				  if (mpsp.length == 2) {
+					    $('#specializedPosition').text(mpsp[0] + '/' + mpsp[1]);
+					  } else {
+					    $('#specializedPosition').text(mpsp[0]);
+					  }
+			  },
+			  error: function(xhr, status, error) {
+			    console.log(error);
+			  }
+			});
+			}
 	    
 	});//ready
 		
