@@ -205,6 +205,7 @@
 		console.log(res)
 		let champ_div = $('<div></div>');
 		let winrate_div = $('<div></div>');
+		let games_div = $('<div><div>');
 		let wins_div = $('<div></div>');
 		let losses_div = $('<div></div>');
 		let kda_div = $('<div></div>');
@@ -213,11 +214,62 @@
 		let assists_div = $('<div><div>');
 		let cs_div = $('<div></div>');
 		let cs_pm_div = $('<div></div>');
-		$.each(res, function (i, champ){
-			let champ_img = $('<div role = "img" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+champ.champ_name+'.png")"></div>');
-			let champ_name = $('<span>'++'</span>')
-			champ_div.append(champ_img)
+		$.each(res.champ_name, function (i, champ_name){
+			let champ_img = $('<div role = "img" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+champ_name+'.png")"></div>');
+			let champ_name = $('<span>'+champ_name+'</span>');
+			champ_div.append(champ_img,champ_name);
 		})
+		$.each(res.winrate, function(i, winrate){
+			let winrate = $('<strong>'+winrate+'%</strong>');
+			winrate_div.append(winrate);
+		})
+		$.each(res.games, function(i, games){
+			let games = $('<p>'+games+'</p>');
+			games_div.append(games);
+		})
+		$.each(res.wins, function(i, wins){
+			let win = $('<span>'+wins+'</span>');
+			wins_div.append(win);
+		})
+		$.each(res.losses, function(i, losses){
+			let losses = $('<span>'+losses+'</span>');
+			losses_div.append(losses);
+		})
+		$.each(res.kda, function(i, kda){
+			let kda = $('<strong>'+kda+'</strong>');
+			kda_div.append(kda);
+		})
+		$.each(res.kills, function(i, kills){
+			let kills = $('<span>'+kills+'</span>');
+			kills_div.append(kills);
+		})
+		$.each(res.deaths, function(i, deaths){
+			let deaths = $('<span>'+deaths+'</span>');
+			deaths_div.append(deaths);
+		})
+		$.each(res.assists, function(i, assists){
+			let assists = $('<span>'+assists+'</span>');
+			assists_div.append(assists);
+		})
+		$.each(res.cs, function(i, cs){
+			let cs = $('<strong>'+cs+'</strong>');
+			cs_div.append(cs);
+		})
+		$.each(res.cs_pm, function(i, cs_pm){
+			let cs_pm = $('<span>'+cs_pm+'<span>');
+			cs_pm_div.append(cs_pm);
+		})
+		$('.champ_data').html(champ_div);
+		$('.winrate_data').html(winrate_div);
+		$('.games_data').html(games_div);
+		$('.wins_data').html(wins_div);
+		$('.losses_data').html(losses_div);
+		$('.kda_data').html(kda_div);
+		$('.kills_data').html(kills_div);
+		$('.deaths_data').html(deaths_div);
+		$('.assists_data').html(assists_div);
+		$('.cs_data').html(cs_div);
+		$('.cs_pm_data').html(cs_pm_div);
 	}).fail(err=>{
 		console.log(err)
 	})
