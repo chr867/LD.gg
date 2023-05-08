@@ -146,6 +146,16 @@
 		  <version>2.14.0</version>
 		</dependency>
 
+		<!-- chatting library -->
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-messaging -->
+		<!-- 채희정 추가 -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-messaging</artifactId>
+			<version>5.3.2</version>
+		</dependency>
+
+
 		<!-- 파일 업로드, 다운로드 -->
 		<!-- commons-fileupload -->
 		<dependency>
