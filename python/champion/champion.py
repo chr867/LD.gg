@@ -15,12 +15,16 @@ tqdm.pandas()
 
 # RIOT-API-KEY
 riot_api_key = 'RGAPI-14667a4e-7c3c-45fa-ac8f-e53c7c3f5fe1'
-# --------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+# RawData
 conn = mu.connect_mysql()
-df = pd.DataFrame(mu.mysql_execute_dict("select * from match_raw", conn))
+df = pd.DataFrame(mu.mysql_execute_dict("SELECT match_id,matches FROM match_raw LIMIT 5000", conn))
 conn.close()
 df['matches'] = df['matches'].apply(json.loads)
 
+
+# ----------------------------------------------------------------------------------------------------------------------
+# 룬 데이터 정제
 def rune_data(df):
     result = []
     print("룬데이터 추출 시작")
@@ -71,3 +75,46 @@ def rune_data(df):
     top_runes = top_runes.reindex(columns=new_column_order)
     print("룬데이터 정제완료")
     return top_runes
+
+
+rune_data = rune_data(df)
+# ----------------------------------------------------------------------------------------------------------------------
+# 아이템 데이터 정제
+df.iloc[0]['matches']['info']['participants'][0]['item0']
+df.iloc[0]['matches']['info']['participants'][4]['challenges']['mythicItemUsed']
+result = []
+for i in tqdm(range(len(df))):
+    raw_data = df.iloc[i]['matches']['info']['participants']
+    for summoner in range(len(raw_data)):
+        lst = []
+        lst.append(raw_data[summoner]['championId'])
+        try:
+            lst.append(raw_data[summoner]['challenges']['mythicItemUsed'])
+        except:
+            lst.append(0)
+        lst.append(raw_data[summoner]['item0'])
+        lst.append(raw_data[summoner]['item1'])
+        lst.append(raw_data[summoner]['item2'])
+        lst.append(raw_data[summoner]['item3'])
+        lst.append(raw_data[summoner]['item4'])
+        lst.append(raw_data[summoner]['item5'])
+        lst.append(raw_data[summoner]['item6'])
+        result.append(lst)
+columns = ['championId','mythicItemUsed','item0','item1','item2','item3','item4','item5','item6']
+item_df = pd.DataFrame(result,columns=columns)
+
+item_df.iloc[0]
+
+item_columns = ['item0', 'item1', 'item2', 'item3', 'item4', 'item5']
+melted_df = item_df.melt(id_vars=['championId'], value_vars=item_columns, var_name='item_col', value_name='itemId')
+
+non_zero_items = melted_df[melted_df['itemId'] != 0]
+item_frequency = non_zero_items.groupby(['championId', 'itemId']).size().reset_index(name='frequency')
+
+
+def top_n_items(df, n=4):
+    return df.nlargest(n, 'frequency')
+
+top_items_df = item_frequency.groupby('championId', group_keys=False).apply(top_n_items)
+
+
