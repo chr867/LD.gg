@@ -62,6 +62,12 @@ public class SummonerService {
 		List<ChampRecordDto> crd = SD.get_20games_summary(summoner_name);
 		return crd;
 	}
+
+	public List<RecordDto> get_record_detail(String match_id) {
+		List<RecordDto> rd = SD.get_record_detail(match_id);
+		return rd;
+	}
+	
 	
 
 }

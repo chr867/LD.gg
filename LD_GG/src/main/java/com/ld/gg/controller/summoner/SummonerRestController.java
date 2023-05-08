@@ -64,5 +64,11 @@ public class SummonerRestController {
 		return crd;
 	}
 	
+	@GetMapping("/get_record_detail")
+	public List<RecordDto> get_record_detail(String match_id){
+		List<RecordDto> rd = ss.get_record_detail(match_id);
+		return rd;
+	}
+	
 	
 }
