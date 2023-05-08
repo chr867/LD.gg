@@ -56,28 +56,55 @@
 
 			<div id="champ_position_filter"></div>
 
-			<table>
-				<thead>
-					<tr>
-						<th>챔피언</th>
-						<th>승률</th>
-						<th>게임수</th>
-						<th>승리</th>
-						<th>패배</th>
-						<th>KDA</th>
-						<th>킬</th>
-						<th>데스</th>
-						<th>어시스트</th>
-						<th>CS</th>
-						<th>분당 CS</th>
-					</tr>
-				</thead>
-
-				<tbody id="champ">
-
-				</tbody>
-
-			</table>
+			<div>
+				<header>챔피언 통계</header>
+				<div>
+					<div>
+						<div class = "champion_category"></div>
+						<div class = "champ_data"></div>
+					</div>
+					<div>
+						<div class = "winrate_category"></div>
+						<div class = "winrate_data"></div>
+					</div>
+					<div>
+						<div class = "games_category"></div>
+						<div class = "games_data"></div>
+					</div>
+					<div>
+						<div class = "wins_category"></div>
+						<div class = "wins_data"></div>
+					</div>
+					<div>
+						<div class = "losses_category"></div>
+						<div class = "losses_data"></div>
+					</div>
+					<div>
+						<div class = "kda_category"></div>
+						<div class = "kda_data"></div>
+					</div>
+					<div>
+						<div class = "kills_category"></div>
+						<div class = "kills_data"></div>
+					</div>
+					<div>
+						<div class = "deaths_category"></div>
+						<div class = "deaths_data"></div>
+					</div>
+					<div>
+						<div class = "assists_category"></div>
+						<div class = "assists_data"></div>
+					</div>
+					<div>
+						<div class = "cs_category"></div>
+						<div class = "cs_data"></div>
+					</div>
+					<div>
+						<div class = "cs_pm_category"></div>
+						<div class = "cs_pm_data"></div>
+					</div>
+				</div>
+			</div>
 
 		</div>
 		<!-- 해당 소환사의 Top3 챔피언 통계 -->
@@ -96,21 +123,39 @@
 			</div>
 
 			<div>
-				<span id="20games">최근 20게임 전적 요약</span>
-				<table id="recent_20games">
-
-				</table>
+				<header>
+					<span>최근 20게임 전적 요약</span>
+				</header>
+				
+				<div>
+					<div>
+						<div class = "header_category">승률</div>
+						<div class = "winrate_div"></div>
+					</div>
+					<div>
+						<div class = "header_category">평점</div>
+						<div class = "grade_div"></div>
+					</div>
+					<div>
+						<div class = "header_category">최고평점</div>
+						<div class = "best_grade_div"></div>
+					</div>
+					<div>
+						<div class = "header_category">포지션별 픽률</div>
+						<div class = "position_pickrate_div"></div>
+					</div>
+					<div>
+						<div class = "header_category">자주 플레이한 챔피언</div>
+						<div class = "most_play_champ_div"></div>
+					</div>
+					
+					<div id = "recent_20games">
+					
+					</div>
+					
+				</div>
+				
 			</div>
-
-			<table id="recent_table">
-				<tr>
-					<th>승률</th>
-					<th>평점</th>
-					<th>최고평점</th>
-					<th>포지션 픽률</th>
-					<th>자주 플레이한 챔피언</th>
-				</tr>
-			</table>
 
 			<div id="record">
 
@@ -157,23 +202,24 @@
 		url : '/summoner/get_champ_record',
 		data : {summoner_name : '${summoner.summoner_name}'}
 	}).done(res=>{
-		let cList = '<tbody>'
-		for(champ of res){
-			cList += '<tr class = "'+champ.champ_id+'">'
-			cList += '<td><div><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+champ.champ_name+'.png" alt="#"><p>'+champ.champ_name+'</p></div></td>'
-			cList += '<td>'+champ.winrate+'%</td>'
-			cList += '<td>'+champ.games+'</td>'
-			cList += '<td>'+champ.wins+'</td>'
-			cList += '<td>'+champ.lose+'</td>'
-			cList += '<td>'+champ.KDA+'</td>'
-			cList += '<td>'+champ.kills+'</td>'
-			cList += '<td>'+champ.deaths+'</td>'
-			cList += '<td>'+champ.assists+'</td>'
-			cList += '<td>'+champ.cs+'</td>'
-			cList += '<td>'+champ.cs_per_minute+'</td>'
-		cList += '</tbody>'
-		$('#champ').html(cList)
-		}
+		console.log(res)
+		let champ_div = $('<div></div>');
+		let winrate_div = $('<div></div>');
+		let wins_div = $('<div></div>');
+		let losses_div = $('<div></div>');
+		let kda_div = $('<div></div>');
+		let kills_div = $('<div></div>');
+		let deaths_div = $('<div></div>');
+		let assists_div = $('<div><div>');
+		let cs_div = $('<div></div>');
+		let cs_pm_div = $('<div></div>');
+		$.each(res, function (i, champ){
+			let champ_img = $('<div role = "img" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+champ.champ_name+'.png")"></div>');
+			let champ_name = $('<span>'++'</span>')
+			champ_div.append(champ_img)
+		})
+	}).fail(err=>{
+		console.log(err)
 	})
 	
 	$.ajax({//최근 20전적 요약본
@@ -181,16 +227,52 @@
 		url : '/summoner/get_20games_summary',
 		data : {summoner_name : '${summoner.summoner_name}'}
 	}).done(res=>{
-		let gList = '<tbody>'
-		gList += '<td><span>'+res.winrate+'</span><span>'+res.wins+'승 '+res.lose+'패</span></td>'
-		gList += '<td>'+res.ava_point+'</td>'
-		gList += '<td>'+res.maximan_ava+'</td>'
-		gList += '<td>'+res.position_pick+'</td>'
-		gList += '<td><div><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+res.most_champ_id2+'.png" alt="#"><p><span>'+res.most_champ2_winrate+'</span><span>'+res.most_champ1_win+'승'+res.most_champ1_lose+'패</span></p></div></td>'
-		gList += '<td><div><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+res.most_champ_id2+'.png" alt="#"><p><span>'+res.most_champ2_winrate+'</span><span>'+res.most_champ2_win+'승'+res.most_champ2_lose+'패</span></p></div></td>'
-		gList += '<td><div><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+res.most_champ_id3+'.png" alt="#"><p><span>'+res.most_champ3_winrate+'</span><span>'+res.most_champ3_win+'승'+res.most_champ3_lose+'패</span></p></div></td>'
-		let gList += '</tbody>'
-		$('#recent_20games').html(gList)
+		console.log(res)
+		$.each(res, function (i,record){
+			let winrate_strong = $('<strong>'+record.winrate+'%</strong>');//승률
+			let win_data_span = $('<span>'+record.wins+'승 '+record.losses+'패</span>');//승리,패뱃 수 데이터
+			$('.winrate_div').html(winrate_strong,win_data_span);
+			
+			let grade_strong = $('<strong>'+record.kda_grade+'</strong>');//평점(kda의 평균) 데이터
+			let grade_p = $('<p>'+record.wrost_kda+'<span>'+record.medium_kda+'</span>'+record.best_kda+'</p>');//평점(kda > 아마 제일 못한 판 / 중간 치 / 제일 잘한 판의 kda인듯)
+			$('.grade_div').html(grade_strong,grade_p);
+			
+			let best_grade_strong = $('<strong>'+record.best_kda+'</strong>');//최고 평점(kda) 데이터
+			let best_grade_p = $('<p>'+record.best_kills+'/<span>'+record.best_deaths+'/</span>'+record.best_assits+'</p>');//최고 평점(kda)
+			$('.best_grade_div').html(best_grade_strong, best_grade_p);
+			
+			let position_pickrate_div = $('<div></div>');
+			$.each(record.position, function(j,position){
+				let position_pickrate_img = $('<img src = "https://ditoday.com/wp-content/uploads/2022/02/'+position+'.png" alt = "#">');
+				
+				$.each(record.position_pickrate, function(k,pickrate){
+					let position_pickrate = $('<p>'+pickrate+'%</p>');
+					position_pickrate_div.append(position_pickrate_img, position_pickrate);
+				})
+				
+			})
+			$('.position_pickrate_div').html(position_pickrate_div);
+			
+			let div = $('<div></div>');
+			$.each(record.champ, function (k, champ){
+				let champ_div = $('<div></div>');
+				let champ_img = $('<div role = "img" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+champ.champ_name+'.png")"></div>');
+				$.each(record.champ_winrate, function(p, winrate){
+					let champ_winrate = $('<p>'+winrate+'%</p>');
+					$.each(record.champ_win, function(w, win){
+						let champ_win = $('<span>'+win+'승</span>');
+						$.each(record.champ_lose, function(l, lose){
+							let champ_lose = $('<span>'+lose+'패</span>');
+							champ_winrate.append(champ_win,champ_lose);
+							champ_div.append(champ_img,champ_winrate);
+						})
+					})
+				})
+				div.append(champ_div);
+			})
+			$('.most_champ_play_div').html(div);
+			
+		})
 	}).fail(err=>{
 		console.log(err)
 	})
