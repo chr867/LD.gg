@@ -62,9 +62,10 @@ public class MentorProfileService {
 		return champ_name_list_json;
 	}
 	//챔피언 아이디로 챔피언 이름 가져오기
-	public Champ_default select_by_id_champ(int id) {
+	public String select_by_id_champ(int id) throws JsonProcessingException {
 		Champ_default champ_name = mentidao.select_by_id_champ(id);
-		return champ_name;
+		String champ_name_json = objectMapper.writeValueAsString(champ_name);
+		return champ_name_json;
 	}
 	
 	//리뷰어 이메일로 내가 쓴 리뷰 가져오기
@@ -213,6 +214,14 @@ public class MentorProfileService {
 	}
 	//멘토링 내역 삭제
 	public void delete_my_mentoring(MyMentoringDTO my_mt_dto) {
+		mymtdao.delete_my_mentoring(my_mt_dto);
+	}
+	//멘티 소환사명 받아서 멘토링 내역 삭제
+	public void reject_my_mentoring(MyMentoringDTO my_mt_dto) {
+		String summoner_name = my_mt_dto.getMenti_email();
+		List<MemberDto> mbdto = mbdao.getMemberLolAccount(summoner_name);
+		String menti_email = mbdto.get(0).getEmail();
+		my_mt_dto.setMenti_email(menti_email);
 		mymtdao.delete_my_mentoring(my_mt_dto);
 	}
 	

@@ -62,8 +62,8 @@ public class RestMentoringController {
 	
 	//챔피언 아이디로 챔피언 이름 가져오기
 	@GetMapping("/get-champ-name-by-id")
-	public Champ_default select_by_id_champ(@RequestParam int id) {
-		Champ_default champ_name = mtpService.select_by_id_champ(id);
+	public String select_by_id_champ(@RequestParam int id) throws JsonProcessingException {
+		String champ_name = mtpService.select_by_id_champ(id);
 		return champ_name;
 	}
 	
@@ -161,6 +161,11 @@ public class RestMentoringController {
 	@DeleteMapping("/delete-mentoring-history")
 	public void delete_my_mentoring(@RequestBody MyMentoringDTO my_mt_dto) {
 		mtpService.delete_my_mentoring(my_mt_dto);
+	}
+	//멘티 소환사명 받아서 멘토링 내역 삭제
+	@DeleteMapping("/reject-mentoring-history")
+	public void reject_my_mentoring(@RequestBody MyMentoringDTO my_mt_dto) {
+		mtpService.reject_my_mentoring(my_mt_dto);
 	}
 	
 	//멘토링 내역 환불
