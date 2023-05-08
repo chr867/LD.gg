@@ -112,9 +112,9 @@
 				</tr>
 			</table>
 
-			<table id="record">
+			<div id="record">
 
-			</table>
+			</div>
 			<!-- 전적 정보 테이블 -->
 
 		</div>
@@ -200,16 +200,136 @@
 		url : '/summoner/get_summoner_record',
 		data : {summoner_name : '${summoner.summoner_name}'}
 	}).done(res=>{
-		let rList = '<tbody>';
-		for(record of res){
-			rList += '<tr class = "'+record.summoner_name+'">'
-			rList += '<td><span class = "win_lose"></span><span class = "game_mode"></span></td>'
-			rList += '<td><div><img src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+record.champ_name+'.png" alt="#"></div></td>'
-			rList += '<td><button onc1lick = "info(this)"></button></td>'
-			rList += '<td><table class = "'+record.match_id+'"></table></td>'
-		rList += '</tbody>'
-		}
-		$('#record').html(rList)
+		console.log(res)
+		$.each(res, function (i, record){
+			let record_div = $('<div class = "record_div"></div>');	//전적 정보가 담길 div
+			
+			let record_win_lose_div = $('<div class = "record_win_lose_div"></div>');	//해당 전적의 승패 정보
+			let record_champ_div = $('<div class = "record_champ_div"></div>');	//해당 전적에서 사용한 챔피언/룬/스펠 정보
+			let record_kda_div = $('<div class = "record_kda_div"></div>');	//KDA 정보
+			let record_cs_sight_div = $('<div class = "record_cs_sight_div"></div>');	//CS,시야점수,핑크 와드 설치 수,킬관여율
+			let record_item_div = $('<div class = "record_item_div"></div>');	//아이템 정보
+			let record_player_div = $('<div class + "record_plyaer_div"></div>');	//해당 전적에서 매칭된 플레이어 목록(챔피언 아이콘 + 소환사 이름)
+			
+			if(record.win){//승패 여부에 따라 승리 div 패배 div 생성
+				let record_win_div = $('<div class = "record_win_div"></div>');
+				let record_win_strong = $('<strong class = "record_win_strong"></strong>');
+				let record_win_span = $('<span class = "record_win_span">승리</span>');
+				record_win_strong.append(record_win_span);
+				let record_game_mode = $('<span class = "record_game_mode">'+record.game_mode+'</span>');
+				let record_game_duration = $('<span class = "record_game_duration">'+record.game_duration+'</span>');
+				record_win_div.append(record_win_strong,record_game_mode,record_game_duration);
+			}else{
+				let record_lose_div = $('<div class = "record_lose_div"></div>');
+				let record_lose_strong = $('<strong class = "record_lose_strong"></strong>');
+				let record_lose_span = $('<span class = "record_lose_span">패배</span>');
+				record_lose_strong.append(record_lose_span);
+				let record_game_mode = $('<span class = "record_game_mode">'+record.game_mode+'</span>');
+				let record_game_duration = $('<span class = "record_game_duration">'+record.game_duration+'</span>');
+				record_lose_div.append(record_lose_strong,record_game_mode,record_game_duration);
+			}
+			
+			let record_champ_sub_div = $('<div class = "record_chamnp_sub_div"></div>');//챔피언 정보 담을 서브 div
+			let record_champ_img = $('<div class = "record_champ_img" role = "img" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+record.champ_name+'.png")"></div>');//챔피언 이미지를 div로 만들기
+			let record_champ_level = $('<span class = "record_champ_level">'+record.champ_level+'</span>');//챔피언 레벨을 이미지 위에 띄우기
+			record_champ_img.append(record_champ_level);//레벨을 이미지 위에 띄우기 위해 append
+			
+			let record_spell_div = $('<div class = "record_spell_div"></div>');//스펠 정보 담을 서브 div
+			let record_spell_img1 = $('<div class = "record_spell_img1" role = "img" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/spell/'+record.spell1+'.png")"></div>');//스펠 이미지 div로 생성
+			let record_spell_img2 = $('<div class = "record_spell_img2" role = "img" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/spell/'+record.spell2+'.png")"></div>');
+			record_spell_div.append(record_spell_img1,record_spell_img2);//만들어진 스펠 이미지들을 서브 div에 append
+			
+			let record_rune_div = $('<div class = "record_rune_div"></div>');//룬 정보 담을 서브 div
+			let record_rune_img1 = $('<div class = "record_rune_img1" role = "img" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/img/'+record.rune_img1+'")"></div>');//룬 이미지를 div로 생성
+			let record_rune_img2 = $('<div class = "record_rune_img2" role = "img" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/img/'+record.rune_img2+'")"></div>');
+			record_rune_div.append(record_rune_img1,record_rune_img2);//서브 div에 룬 이미지들 append
+			record_champ_sub_div.append(record_champ_div_mini,record_spell_div,record_rune_div)//이미지 정보들을 담은 서브 div를 챔피언 정보를 담는 div에 append
+			
+			let record_kda_sub_div = $('<div class = "record_kda_sub_div"></div>');//kda 정보를 담을 서브 div
+			let record_kda_strong = $('<strong class = "record_kda_strong"></strong>');//kda 정보(span태그)를 감싸서 강조 표현
+			let record_kda = $('<span>'+record.kills+'/</span><span>'+record.deaths+'/</span><span>'+record.assists+'</span>');//k/d/a 값
+			record_kda_strong.append(record_kda);//k/d/a의 span 태그 strong 태그 안으로 append
+			record_kda_sub_div.append(record_kda_strong);//만들어진 kda 정보를 서브 div에 append
+			
+			let record_cs_sight_sub_div = $('<div class = "record_cs_sight_sub_div"></div>');//cs,시야점수,핑와 설치 점수를 담을 서브 div
+			let record_cs = $('<span class = "record_text">킬 관여 '+record.cs+'</span>');//cs점수
+			let record_sight_point = $('<span class = "record_text">시야 점수 '+record.sight_point+'</span>');//시야점수
+			let record_red_wards_img = $('<div class = "record_res_wards_img" role = "img" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/13.9.1/img/item/2055.png")"></div>');//제어와드 이미지
+			let record_red_wards = $('<span class = "record_red_wards">'+record.red_wards+'</span>');//제어와드 설치 수
+			record_cs_sight_sub_div.append(record_cs,record_sight_point,record_red_wards_img,record_red_wards);//만들어진 정보 서브 div에 append
+			record_cs_sight_div.append(record_cs_sight_sub_div);//서브 div를 정보를 담을 div에 append
+			
+			let record_item_sub_div = $('<div class = "record_item_sub_div"></div>');//아이템 이미지 정보를 담을 서브 div
+			let record_item_img1 = $('<div class = "record_item_img1" role = "img" style = "background-image : url("http://ddragon.leagueoflegends.com/cdn/13.9.1/img/item/'+record.item1.png+'")"></div>');//아이템1 이미지
+			let record_item_img2 = $('<div class = "record_item_img2" role = "img" style = "background-image : url("http://ddragon.leagueoflegends.com/cdn/13.9.1/img/item/'+record.item2.png+'")"></div>');//아이템2 이미지
+			let record_item_img3 = $('<div class = "record_item_img3" role = "img" style = "background-image : url("http://ddragon.leagueoflegends.com/cdn/13.9.1/img/item/'+record.item3.png+'")"></div>');//아이템3 이미지
+			let record_item_img4 = $('<div class = "record_item_img4" role = "img" style = "background-image : url("http://ddragon.leagueoflegends.com/cdn/13.9.1/img/item/'+record.item4.png+'")"></div>');//아이템4 이미지
+			let record_item_img5 = $('<div class = "record_item_img5" role = "img" style = "background-image : url("http://ddragon.leagueoflegends.com/cdn/13.9.1/img/item/'+record.item5.png+'")"></div>');//아이템5 이미지
+			let record_item_img6 = $('<div class = "record_item_img6" role = "img" style = "background-image : url("http://ddragon.leagueoflegends.com/cdn/13.9.1/img/item/'+record.item6.png+'")"></div>');//아이템6 이미지
+			let record_item_img7 = $('<div class = "record_item_img7" role = "img" style = "background-image : url("http://ddragon.leagueoflegends.com/cdn/13.9.1/img/item/'+record.item7.png+'")"></div>');//아이템7 이미지
+			record_item_sub_div.append(record_item_img1,record_item_img2,record_item_img3,record_item_img4,record_item_img5,record_item_img6,record_item_img7);//만들어진 이미지 정보들을 서브 div에 apend
+			record_item_div.append(record_item_sub_div);//서브 div를 아이템 정보를 담을 div에 append
+			
+			let record_team1_div = $('<div class = "record_team1_div"></div>');//팀 아이디 값이 100인 팀
+			let record_team2_div = $('<div class = "record_team2_div"></div>');//팀 아이디 값이 200인 팀
+			
+			let record_player1_div = $('<div class = "record_player_div"></div>');//플레이어1의 정보를 담을 서브 div
+			let record_player1_img = $('<div class = "record_player_img" role = "img" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+record.champ_name1+'.png")"></div>');//플레이어1이 플레이한 챔피언의 이미지
+			let record_player1_name = $('<span class = "record_player_name">'+record.player_name1+'</span>');//플레이어1의 이름
+			record_player1_div.append(record_player1_img,record_player1_name);//만들어진 플레이어1의 정보를 플레이어1의 서브 div에 append
+			
+			let record_player2_div = $('<div class = "record_player_div"></div>');//플레이어2의 정보를 담을 서브 div
+			let record_player2_img = $('<div class = "record_player_img" role = "img" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+record.champ_name2+'.png")"></div>');//플레이어2이 플레이한 챔피언의 이미지
+			let record_player2_name = $('<span class = "record_player_name">'+record.player_name2+'</span>');//플레이어1의 이름
+			record_player2_div.append(record_player2_img,record_player2_name);//만들어진 플레이어2의 정보를 플레이어2의 서브 div에 append
+			
+			let record_player3_div = $('<div class = "record_player_div"></div>');//플레이어3의 정보를 담을 서브 div
+			let record_player3_img = $('<div class = "record_player_img" role = "img" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+record.champ_name3+'.png")"></div>');//플레이어3이 플레이한 챔피언의 이미지
+			let record_player3_name = $('<span class = "record_player_name">'+record.player_name3+'</span>');//플레이어3의 이름
+			record_player3_div.append(record_player3_img,record_player3_name);//만들어진 플레이어3의 정보를 플레이어3의 서브 div에 append
+			
+			let record_player4_div = $('<div class = "record_player_div"></div>');//플레이어4의 정보를 담을 서브 div
+			let record_player4_img = $('<div class = "record_player_img" role = "img" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+record.champ_name4+'.png")"></div>');//플레이어4이 플레이한 챔피언의 이미지
+			let record_player4_name = $('<span class = "record_player_name">'+record.player_name4+'</span>');//플레이어5의 이름
+			record_player4_div.append(record_player4_img,record_player4_name);//만들어진 플레이어4의 정보를 플레이어4의 서브 div에 append
+			
+			let record_player5_div = $('<div class = "record_player_div"></div>');//플레이어5의 정보를 담을 서브 div
+			let record_player5_img = $('<div class = "record_player_img" role = "img" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+record.champ_name5+'.png")"></div>');//플레이어5이 플레이한 챔피언의 이미지
+			let record_player5_name = $('<span class = "record_player_name">'+record.player_name5+'</span>');//플레이어5의 이름
+			record_player5_div.append(record_player5_img,record_player5_name);//만들어진 플레이어5의 정보를 플레이어5의 서브 div에 append
+			
+			let record_player6_div = $('<div class = "record_player_div"></div>');//플레이어6의 정보를 담을 서브 div
+			let record_player6_img = $('<div class = "record_player_img" role = "img" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+record.champ_name6+'.png")"></div>');//플레이어6이 플레이한 챔피언의 이미지
+			let record_player6_name = $('<span class = "record_player_name">'+record.player_name6+'</span>');//플레이어6의 이름
+			record_player6_div.append(record_player6_img,record_player6_name);//만들어진 플레이어6의 정보를 플레이어6의 서브 div에 append
+			
+			let record_player7_div = $('<div class = "record_player_div"></div>');//플레이어7의 정보를 담을 서브 div
+			let record_player7_img = $('<div class = "record_player_img" role = "img" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+record.champ_name7+'.png")"></div>');//플레이어7이 플레이한 챔피언의 이미지
+			let record_player7_name = $('<span class = "record_player_name">'+record.player_name7+'</span>');//플레이어7의 이름
+			record_player7_div.append(record_player7_img,record_player7_name);//만들어진 플레이어7의 정보를 플레이어7의 서브 div에 append
+			
+			let record_player8_div = $('<div class = "record_player_div"></div>');//플레이어8의 정보를 담을 서브 div
+			let record_player8_img = $('<div class = "record_player_img" role = "img" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+record.champ_name8+'.png")"></div>');//플레이어8이 플레이한 챔피언의 이미지
+			let record_player8_name = $('<span class = "record_player_name">'+record.player_name8+'</span>');//플레이어8의 이름
+			record_player8_div.append(record_player8_img,record_player8_name);//만들어진 플레이어8의 정보를 플레이어8의 서브 div에 append
+			
+			let record_player9_div = $('<div class = "record_player_div"></div>');//플레이어9의 정보를 담을 서브 div
+			let record_player9_img = $('<div class = "record_player_img" role = "img" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+record.champ_name9+'.png")"></div>');//플레이어9이 플레이한 챔피언의 이미지
+			let record_player9_name = $('<span class = "record_player_name">'+record.player_name9+'</span>');//플레이어9의 이름
+			record_player9_div.append(record_player9_img,record_player9_name);//만들어진 플레이어9의 정보를 플레이어9의 서브 div에 append
+			
+			let record_player10_div = $('<div class = "record_player_div"></div>');//플레이어10의 정보를 담을 서브 div
+			let record_player10_img = $('<div class = "record_player_img" role = "img" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+record.champ_name10+'.png")"></div>');//플레이어10이 플레이한 챔피언의 이미지
+			let record_player10_name = $('<span class = "record_player_name">'+record.player_name10+'</span>');//플레이어10의 이름
+			record_player10_div.append(record_player10_img,record_player10_name);//만들어진 플레이어10의 정보를 플레이어10의 서브 div에 append
+			
+			record_team1_div.append(record_player1_div,record_player2_div,record_player3_div,record_player4_div,record_player5_div);
+			record_team2_div.append(record_player6_div,record_player7_div,record_player8_div,record_player9_div,record_player10_div);
+			
+			record_player_div.append(record_team1_div,record_team2_div);
+			
+			record_div.append(record_win_lose_div,record_champ_div,record_champ_div,record_kda_div,record_cs_sight_div,record_item_div,record_player_div);
+		})
 	}).fail(err=>{
 		console.log(err)
 	})

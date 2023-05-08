@@ -23,7 +23,7 @@ public class SummonerController {
 	
 	@GetMapping(value = "/rank")
 	public String summoner_rank() {
-		return "summoner/summonerRank";
+		return "/summoner/summonerRank";
 	}
 	
 	@GetMapping(value = "/info")

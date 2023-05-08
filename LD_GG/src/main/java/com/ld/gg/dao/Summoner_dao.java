@@ -29,6 +29,8 @@ public interface Summoner_dao {
 	List<ChampRecordDto> get_champ_record(@Param("summoner_name") String summoner_name);
 
 	List<ChampRecordDto> get_20games_summary(@Param("summoner_name") String summoner_name);
+
+	List<RecordDto> get_record_detail(@Param("match_id") String match_id);
 	
 
 }

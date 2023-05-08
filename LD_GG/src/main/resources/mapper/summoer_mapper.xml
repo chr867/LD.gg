@@ -66,16 +66,20 @@
 		si.s_level DESC;
 	</select>
 
-	<select id="get_summoner_info" resultType="List">
+	<select id="get_summoner_info" resultType="record">
 		SELECT * FROM
 		SUMMONER_INFO
 		WHERE summoner_name = ${summoner_name}
 	</select>
 
-	<select id="get_renewal_info" resultType="List">
+	<select id="get_renewal_info" resultType="summoner">
 		SELECT * FROM
 		SUMMONER_INFO
 		WHERE summoner_name = ${summoner_name}
+	</select>
+	
+	<select id="get_summoner_record" resultType = "record">
+		
 	</select>
 	
 	<select id="get_record_info" resultType = "record_info">
@@ -92,6 +96,10 @@
 	
 	
 	<select id="get_champ_position_filter" resultType = "summoner">
+	
+	</select>
+	
+	<select id="get_record_detail" resultType = "record">
 	
 	</select>
 
