@@ -1,7 +1,5 @@
 package com.ld.gg.controller.mentoringController;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -41,6 +39,8 @@ import com.ld.gg.dto.mentoringdto.TagListDTO;
 import com.ld.gg.dto.mentoringdto.EstimateDTO;
 import com.ld.gg.service.MemberService;
 import com.ld.gg.service.mentoringService.MentorProfileService;
+
+import oracle.jdbc.proxy.annotation.Post;
 
 @RestController
 @RequestMapping(value = "/mentor", produces = "text/html; charset=UTF-8")
@@ -338,6 +338,7 @@ public class RestMentoringController {
 	//mentorProfileForm.jsp에서 작성한 프로필 정보 등록
 	@PutMapping("/edit-profile")
 	public ResponseEntity<?> updateMentorProfile(@RequestBody MentorProfileDTO mentorProfileDTO){
+		System.out.println(mentorProfileDTO);
 		mtpService.update_mentor_profile(mentorProfileDTO);
 	    return ResponseEntity.ok("Success");
 	}
@@ -362,5 +363,13 @@ public class RestMentoringController {
 		String mentor_email = email.get("mentor_email");
 		mtpService.delete_mentor_profile(mentor_email);
 	}
+	
+	//멘토 이메일로 멘토 프로필 가져오기
+	@PostMapping("/get-mentor-profile")
+	public String select_by_email_mentor_profile(@RequestBody Map<String, String> mentor_email) throws JsonProcessingException {
+		String mentor_profile = mtpService.select_by_email_mentor_profile(mentor_email);
+		return mentor_profile;
+	}
+	
 }
 	
