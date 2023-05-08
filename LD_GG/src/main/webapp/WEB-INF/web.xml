@@ -62,7 +62,7 @@
 	</filter-mapping>
 
 	<session-config>
-		<session-timeout>30</session-timeout> <!-- 세션 만료 시간: 30분 -->
+		<session-timeout>300</session-timeout> <!-- 세션 만료 시간: 30분 -->
 	</session-config>
 
 	<!-- HttpSessionListener를 등록합니다. -->

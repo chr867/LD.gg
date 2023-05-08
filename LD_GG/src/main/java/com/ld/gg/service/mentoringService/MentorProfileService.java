@@ -135,7 +135,7 @@ public class MentorProfileService {
 	public void insert_like_mentor(LikeMentorDTO like_mentor_dto) {
 		mymtdao.insert_like_mentor(like_mentor_dto);
 		String mentor_email = like_mentor_dto.getLike_mentor();
-		MentorProfileDTO mtpdto= select_by_email_mentor_profile(mentor_email);
+		MentorProfileDTO mtpdto= mtpdao.select_by_email_mentor_profile(mentor_email);
 		int likes = mtpdto.getNum_of_likes();
 		MentorProfileDTO like_mtp_dto = mtpdto.setNum_of_likes(likes+1); //찜한 횟수 추가
 		update_mentor_profile(like_mtp_dto);
@@ -146,7 +146,7 @@ public class MentorProfileService {
 	public void delete_like_mentor(LikeMentorDTO like_mentor_dto) {
 		mymtdao.delete_like_mentor(like_mentor_dto);
 		String mentor_email = like_mentor_dto.getLike_mentor();
-		MentorProfileDTO mtpdto= select_by_email_mentor_profile(mentor_email);
+		MentorProfileDTO mtpdto= mtpdao.select_by_email_mentor_profile(mentor_email);
 		int likes = mtpdto.getNum_of_likes();
 		MentorProfileDTO like_mtp_dto = mtpdto.setNum_of_likes(likes-1); //찜한 횟수 감소
 		update_mentor_profile(like_mtp_dto);
@@ -205,7 +205,7 @@ public class MentorProfileService {
 		int state = my_mt_dto.getMenti_state(); //멘토링 내역에서 멘티 상태 추출
 		if(state == 2) { //수업 완료를 누르면
 			String mentor_email = my_mt_dto.getMentor_email();
-			MentorProfileDTO mtpdto = select_by_email_mentor_profile(mentor_email);
+			MentorProfileDTO mtpdto = mtpdao.select_by_email_mentor_profile(mentor_email);
 			int lessons = mtpdto.getNum_of_lessons();
 			MentorProfileDTO lessons_mtp_dto = mtpdto.setNum_of_lessons(lessons+1); //레슨 수 증가
 			update_mentor_profile(lessons_mtp_dto); //멘토 프로필 수정
@@ -303,6 +303,7 @@ public class MentorProfileService {
 			mtpdao.insert_mentor_tag(mentor_tag_dto);
 		}	
 	}
+	
 	//멘토 태그 삭제
 	public void delete_mentor_tag(String mentor_email) {
 		mtpdao.delete_mentor_tag(mentor_email);
@@ -358,9 +359,11 @@ public class MentorProfileService {
 	}
 	
 	//이메일로 멘토 프로필 가져오기
-	public MentorProfileDTO select_by_email_mentor_profile(String mentor_email) {
-		MentorProfileDTO mtp = mtpdao.select_by_email_mentor_profile(mentor_email);
-		return mtp;
+	public String select_by_email_mentor_profile(Map<String, String> mentor_email) throws JsonProcessingException {
+		String email =mentor_email.get("mentor_email");
+		MentorProfileDTO mtp = mtpdao.select_by_email_mentor_profile(email);
+		String mentor_profile = objectMapper.writeValueAsString(mtp);
+		return mentor_profile;
 	}
 	
 	//멤버 테이블에서 유저타입이 2인 모든 회원 멘토프로필 테이블에 인서트

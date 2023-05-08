@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ld.gg.dao.FaqDAO">
+
+<select id="select_all_faq" resultType="faq">
+	SELECT * FROM faq;
+</select>
+
+<select id="select_by_id_all_faq" resultType="faq">
+	SELECT * FROM faq WHERE faq_id = #{faq_id};
+</select>
+
+
+
+</mapper>
