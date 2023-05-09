@@ -11,6 +11,7 @@ import com.ld.gg.dto.summoner.RecordDto;
 import com.ld.gg.dto.summoner.RecordInfoDto;
 import com.ld.gg.dto.summoner.SummonerDto;
 import com.ld.gg.dto.summoner.SummonerRankDto;
+import com.ld.gg.paging.Paging;
 
 @Service
 public class SummonerService {
@@ -67,7 +68,10 @@ public class SummonerService {
 		List<RecordDto> rd = SD.get_record_detail(match_id);
 		return rd;
 	}
-	
-	
+
+	public List<SummonerRankDto> getRankAllData() {
+		List<SummonerRankDto> srd = SD.getRankAllData();
+		return srd;
+	}
 
 }

@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ld.gg.dto.admin.AdDto;
 import com.ld.gg.dto.summoner.ChampRecordDto;
 import com.ld.gg.dto.summoner.RecordDto;
 import com.ld.gg.dto.summoner.RecordInfoDto;
@@ -21,6 +23,17 @@ public class SummonerRestController {
 	
 	@Autowired
 	private SummonerService ss;
+	
+	@GetMapping("/rank/all/data.json")
+	public String rank_data() throws Exception{
+		List<SummonerRankDto> srd = ss.getRankAllData();
+		
+		ObjectMapper mapper = new ObjectMapper();
+		String json = null;
+		json = mapper.writeValueAsString(srd);
+		
+		return json;
+	}
 	
 	@GetMapping("/solo")
 	public List<SummonerRankDto> summoner_solo_rank(){

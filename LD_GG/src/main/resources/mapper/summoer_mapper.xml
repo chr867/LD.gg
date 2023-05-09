@@ -4,20 +4,20 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ld.gg.dao.Summoner_dao">
+
+	<select id="getRankAllData" resultType="summoner_rank">
+		SELECT sr.summoner_name, si.profile_icon_id, si.s_level, LOWER(sr.tier) as tier, sr.division, sr.wins, sr.losses, sr.lp, round((sr.wins/(sr.wins+sr.losses))*100,2) as winrate
+		FROM summoner_rank sr
+		INNER JOIN summoner_info si on sr.summoner_name = si.summoner_name
+		ORDER BY
+		lp DESC;
+	</select>
+
 	<select id="get_summoer_solo" resultType="summoner_rank">
-		SELECT
-		LOWER(tier) as tier,
-		division,
-		summoner_name,
-		queue,
-		wins,
-		losses,
-		lp,
-		round((wins/(wins+losses))*100,2) as winrate
-		FROM
-		summoner_rank
-		WHERE
-		queue = 'RANKED_SOLO_5x5'
+		SELECT sr.LOWER(tier) as tier, sr.division, sr.summoner_name, sr.queue, sr.wins, sr.losses, sr.lp, sr.round((wins/(wins+losses))*100,2) as winrate, si.profile_icon_id, si.s_level
+		FROM summoner_rank sr
+		INNER JOIN summoner_info si on sr.summoner_name = si.summoner_name
+		WHERE queue = 'RANKED_SOLO_5x5'
 		ORDER BY
 		lp DESC;
 	</select>
