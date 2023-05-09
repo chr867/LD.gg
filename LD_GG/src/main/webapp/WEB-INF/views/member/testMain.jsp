@@ -33,6 +33,7 @@
 	<a href="/tip/">공략페이지</a>
 	<a href="/userinterface/admin">어드민페이지</a>
 	<a href="/">메인페이지</a>
+	<a href="/chat/chat-list">채팅방</a>
 </body>
 <script type="text/javascript">
 	function logout(){
