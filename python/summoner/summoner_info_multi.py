@@ -43,7 +43,7 @@ def get_summoner_info(k_):
                 url = f'https://kr.api.riotgames.com/lol/summoner/v4/summoners/{k["summonerId"]}?api_key={k["api_key"]}'
                 res = requests.get(url).json()
                 tmp.append(res['accountId'])
-                result.extend(res)
+                result.append(res)
             except Exception as e:
                 print(f'suummoner names {e} 예외 발생 {res}, {k["summonerId"]}, {k["api_key"]}')
                 time.sleep(20)
@@ -53,11 +53,11 @@ def get_summoner_info(k_):
 
 def info_insert(s, conn):
     insert_query = (
-        f'INSERT INTO SUMMONER_INFO (SUMMONER_NAME, S_LEVEL, PROFILE_ICON_ID, GAMES, TIER, WINS, LOSSES, LP, RANKING) '
-        f'VALUES ({repr(s.summoner_name)}, {s.s_level}, {s.profile_icon_id}, {s.games}, {repr(s.tier)}, {s.wins}, {s.losses}, {s.lp}, {repr(s.ranking)}) '
+        f'INSERT INTO SUMMONER_INFO (SUMMONER_NAME, S_LEVEL, PROFILE_ICON_ID, GAMES, TIER, WINS, LOSSES, LP, RANKING, TIER_INT) '
+        f'VALUES ({repr(s.summoner_name)}, {s.s_level}, {s.profile_icon_id}, {s.games}, {repr(s.tier)}, {s.wins}, {s.losses}, {s.lp}, {repr(s.ranking)}, {s.tier_int}) '
         f'ON DUPLICATE KEY UPDATE '
         f'SUMMONER_NAME = {repr(s.summoner_name)}, S_LEVEL = {s.s_level}, PROFILE_ICON_ID = {s.profile_icon_id}, GAMES = {s.games}, '
-        f'TIER = {repr(s.tier)}, WINS = {s.wins}, LOSSES = {s.losses}, LP = {s.lp}, RANKING = {repr(s.ranking)}'
+        f'TIER = {repr(s.tier)}, WINS = {s.wins}, LOSSES = {s.losses}, LP = {s.lp}, RANKING = {repr(s.ranking)}, TIER_INT = {s.tier_int}'
     )
     mu.mysql_execute_dict(insert_query, conn)
 
@@ -86,7 +86,7 @@ def main():
                     res_p = requests.get(url).json()
                     tmp_lst.append(res_p[0]['summonerId'])
                     test = [{'summonerId': i['summonerId'], 'api_key': api_key} for i in res_p]
-                    result.extend(test)
+                    result.append(test)
                 except IndexError:
                     break
                 except Exception as e:
@@ -97,7 +97,6 @@ def main():
                 summoner_leagues.extend(res_p)
                 if len(res_p) < 50:
                     break
-                break
                 page_p += 1
     rank_df = pd.DataFrame(summoner_leagues)
     rank_result_df = rank_df[
@@ -115,22 +114,22 @@ def main():
     start = 0
     for _ in range(4):
         end = start + chunk_size
-        result_splits.append(result[start:end])
+        result_splits.extend(result[start:end])
         start = end
 
     summoner_info = []
     with mp.Pool(processes=4) as pool:
         results = list(tqdm(pool.imap(get_summoner_info, result_splits), total=len(result_splits)))
-
-    for n in results:
-        summoner_info.append(n)
+        for result in results:
+            for dict in result:
+                summoner_info.append(dict)
 
     info_df = pd.DataFrame(summoner_info)
     info_result_df = info_df[['name', 'summonerLevel', 'profileIconId', 'revisionDate']]
     info_result_df.columns = ['summoner_name', 's_level', 'profile_icon_id', 'revision_date']
 
-    for_merge_df = rank_result_df[['summoner_name', 'match_count', 'tier', 'wins', 'losses', 'lp', 'division']]
-    for_merge_df.columns = ['summoner_name', 'games', 'tier', 'wins', 'losses', 'lp', 'ranking']
+    for_merge_df = rank_result_df[['summoner_name', 'match_count', 'tier', 'wins', 'losses', 'lp', 'division', 'tier_int']]
+    for_merge_df.columns = ['summoner_name', 'games', 'tier', 'wins', 'losses', 'lp', 'ranking', 'tier_int']
 
     info_result_df['summoner_name'].unique()
     for_merge_df['summoner_name'].unique()
