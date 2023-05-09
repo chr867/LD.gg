@@ -80,8 +80,6 @@ def rune_data(df):
 rune_data = rune_data(df)
 # ----------------------------------------------------------------------------------------------------------------------
 # 아이템 데이터 정제
-df.iloc[0]['matches']['info']['participants'][0]['item0']
-df.iloc[0]['matches']['info']['participants'][4]['challenges']['mythicItemUsed']
 result = []
 for i in tqdm(range(len(df))):
     raw_data = df.iloc[i]['matches']['info']['participants']
@@ -99,12 +97,12 @@ for i in tqdm(range(len(df))):
         lst.append(raw_data[summoner]['item4'])
         lst.append(raw_data[summoner]['item5'])
         lst.append(raw_data[summoner]['item6'])
+        lst.append(raw_data[summoner]['win'])
         result.append(lst)
-columns = ['championId','mythicItemUsed','item0','item1','item2','item3','item4','item5','item6']
-item_df = pd.DataFrame(result,columns=columns)
-
-item_df.iloc[0]
-
+columns = ['championId', 'mythicItemUsed', 'item0', 'item1', 'item2', 'item3', 'item4', 'item5', 'item6', 'win']
+item_df = pd.DataFrame(result, columns=columns)
+item_df['win'] = item_df['win'].astype(int)
+# ----------------------------------------------------------------------------------------------------------------------
 item_columns = ['item0', 'item1', 'item2', 'item3', 'item4', 'item5']
 melted_df = item_df.melt(id_vars=['championId'], value_vars=item_columns, var_name='item_col', value_name='itemId')
 
@@ -112,9 +110,58 @@ non_zero_items = melted_df[melted_df['itemId'] != 0]
 item_frequency = non_zero_items.groupby(['championId', 'itemId']).size().reset_index(name='frequency')
 
 
-def top_n_items(df, n=4):
+def top_n_items(df, n=10):
     return df.nlargest(n, 'frequency')
+
 
 top_items_df = item_frequency.groupby('championId', group_keys=False).apply(top_n_items)
 
 
+# ----------------------------------------------------------------------------------------------------------------------
+# 챔피언 신발 데이터
+def shoe_data(item_df):
+    shoe_items = [3111, 3117, 3009, 3047, 3006, 3158, 3020]
+    champion_shoe_counts = {}
+    champion_win_counts = {}
+
+    for row in tqdm(item_df.itertuples()):
+        champion_id = row.championId
+        if champion_id not in champion_shoe_counts:
+            champion_shoe_counts[champion_id] = {item: 0 for item in shoe_items}
+            champion_win_counts[champion_id] = {item: 0 for item in shoe_items}
+
+        for item in shoe_items:
+            if item in row[3:10]:
+                champion_shoe_counts[champion_id][item] += 1
+                if row.win:
+                    champion_win_counts[champion_id][item] += 1
+
+    result = []
+    for champion_id, shoe_counts in tqdm(champion_shoe_counts.items()):
+        for item_id, count in shoe_counts.items():
+            win_count = champion_win_counts[champion_id][item_id]
+            result.append([champion_id, item_id, count, win_count])
+
+    columns = ['championId', 'itemId', 'usage_count', 'win_count']
+    shoe_items_df = pd.DataFrame(result, columns=columns)
+
+    shoe_items_df['winrate'] = round((shoe_items_df['win_count'] / shoe_items_df['usage_count']) * 100, 2)
+
+    def rank_items(group):
+        group['rank'] = group['usage_count'].rank(ascending=False, method='first')
+        group.loc[group['rank'] == 2, 'rank'] = group[group['rank'] == 2]['winrate'].rank(ascending=False,
+                                                                                          method='first') + 1
+        return group
+
+    shoe_items_df = shoe_items_df.groupby('championId', group_keys=True).apply(rank_items)
+
+    top_2_shoes_per_champion = shoe_items_df[shoe_items_df['rank'].isin([1, 2])]
+
+    merged_df = top_2_shoes_per_champion.copy()
+    merged_df['rank'] = merged_df['rank'].astype(int)
+    merged_df = merged_df[['championId', 'itemId', 'usage_count', 'win_count', 'winrate', 'rank']]
+    return merged_df
+
+
+shoe_data = shoe_data(item_df)
+# ----------------------------------------------------------------------------------------------------------------------
