@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -49,6 +51,7 @@ public class FaqService {
 		String ci_dto_list_json = objectMapper.writeValueAsString(ci_dto_list);
 		return ci_dto_list_json;
 	}
+	//질문 아이디로 고객 질문 가져오기
 	public String select_by_id_inquiries(int id) throws JsonProcessingException {
 		CustomerInquiriesDTO ci_dto = faqdao.select_by_id_inquiries(id);
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -87,8 +90,13 @@ public class FaqService {
 		return cs_dto_json;
 	}
 	//고객 응대 등록
+	@Transactional
 	public void insert_customer_service(CustomerServiceDTO cs) {
-		faqdao.insert_customer_service(cs);
+		faqdao.insert_customer_service(cs); //고객 응대 등록
+		int inquiries_id = cs.getCs_id();
+		CustomerInquiriesDTO csdto = faqdao.select_by_id_inquiries(inquiries_id);
+		csdto.setState("답변 완료");
+		faqdao.update_inquiries(csdto); //고객 질문 상태 변경
 	}
 	//고객 응대 수정
 	public void update_customer_service(CustomerServiceDTO cs) {

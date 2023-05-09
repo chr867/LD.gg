@@ -18,6 +18,7 @@ import lombok.experimental.Accessors;
 @Alias("ci")
 public class CustomerInquiriesDTO {
 	private int inquiries_id;
+	private String state;
 	private String inquiries_title;
 	private String inquiries_info;
 	private String costomer_email;
