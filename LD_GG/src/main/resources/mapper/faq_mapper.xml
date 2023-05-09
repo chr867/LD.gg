@@ -37,7 +37,7 @@
   VALUES (#{inquiries_title}, #{inquiries_info}, #{costomer_email});
 </insert>
 <update id="update_inquiries" parameterType="ci">
-  UPDATE customer_inquiries SET inquiries_title = #{inquiries_title},
+  UPDATE customer_inquiries SET state = #{state}, inquiries_title = #{inquiries_title},
   inquiries_info = #{inquiries_info}, views =#{views}
   WHERE inquiries_id = #{inquiries_id};
 </update>
@@ -49,8 +49,8 @@
 	SELECT * FROM customer_service WHERE cs_id = #{inquiries_id};
 </select>
 <insert id="insert_customer_service" parameterType="cs">
-  INSERT INTO customer_service (cs_id, cs_title, cs_info, cs_answerer_id) 
-  VALUES (#{cs_id}, #{cs_title}, #{cs_info}, #{cs_answerer_id});
+  INSERT INTO customer_service (cs_id, cs_title, cs_info, cs_answerer_email) 
+  VALUES (#{cs_id}, #{cs_title}, #{cs_info}, #{cs_answerer_email});
 </insert>
 <update id="update_customer_service" parameterType="cs">
   UPDATE customer_service SET cs_title = #{cs_title}

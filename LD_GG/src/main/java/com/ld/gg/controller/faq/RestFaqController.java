@@ -79,14 +79,15 @@ public class RestFaqController {
 	}
 	
 	//질문 아이디로 고객 응대 가져오기
-	@GetMapping("/get-cs")
-	public String select_by_id_customer_service(int inquiries_id) throws JsonProcessingException {
+	@GetMapping("/get-cs/{id}")
+	public String select_by_id_customer_service(@PathVariable("id") int inquiries_id) throws JsonProcessingException {
 		String cs_dto_json = faqService.select_by_id_customer_service(inquiries_id);
 		return cs_dto_json;
 	}
 	//고객 응대 등록
 	@PostMapping("/save-cs")
 	public void insert_customer_service(@RequestBody CustomerServiceDTO cs) {
+		System.out.println(cs);
 		faqService.insert_customer_service(cs);
 	}
 	//고객 응대 수정
