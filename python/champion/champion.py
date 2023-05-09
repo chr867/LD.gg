@@ -10,6 +10,7 @@ from tqdm import tqdm
 import my_utils as mu
 import json
 import time
+import numpy as np
 
 tqdm.pandas()
 
@@ -18,9 +19,10 @@ riot_api_key = 'RGAPI-14667a4e-7c3c-45fa-ac8f-e53c7c3f5fe1'
 # ----------------------------------------------------------------------------------------------------------------------
 # RawData
 conn = mu.connect_mysql()
-df = pd.DataFrame(mu.mysql_execute_dict("SELECT match_id,matches FROM match_raw LIMIT 5000", conn))
+df = pd.DataFrame(mu.mysql_execute_dict("SELECT * FROM match_raw LIMIT 5000", conn))
 conn.close()
 df['matches'] = df['matches'].apply(json.loads)
+df['timeline'] = df['timeline'].apply(json.loads)
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -224,12 +226,11 @@ def top_item_data(item_df):
         df_filtered = df[~df['itemId'].isin(excluded_items)]
         return df_filtered.nlargest(n, 'frequency')
 
-    # 제외할 아이템 목록 정의
+    # 제외할 아이템 목록
     mysitic_item_lst = mysitic_item_data['mythicItemUsed'].unique()
     shoes_lst = [3111, 3117, 3009, 3047, 3006, 3158, 3020]
     excluded_items = list(mysitic_item_lst) + shoes_lst
 
-    # 제외할 아이템 목록을 전달하여 상위 10개의 아이템을 추출
     top_items_df = item_frequency.groupby('championId', group_keys=False).apply(
         lambda x: top_n_items(x, excluded_items))
     top_items_df['wins'] = top_items_df['wins'].astype(int)
@@ -238,4 +239,51 @@ def top_item_data(item_df):
 
 
 top_item_data = top_item_data(item_df)
+
+
 # ----------------------------------------------------------------------------------------------------------------------
+def start_item_df(df):
+    result = []
+    for x in tqdm(range(len(df))):
+        timeline_df = df.iloc[x]['timeline']['info']['frames']
+        item_dict_by_participant = {i: [] for i in range(1, len(df.iloc[x]['matches']['info']['participants']) + 1)}
+        for event in timeline_df[1]['events']:
+            if event['type'] == 'ITEM_PURCHASED':
+                item_dict_by_participant[event['participantId']].append(event['itemId'])
+
+        row_result = []
+        for i in range(len(df.iloc[x]['matches']['info']['participants'])):
+            championId = df.iloc[x]['matches']['info']['participants'][i]['championId']
+            win = df.iloc[x]['matches']['info']['participants'][i]['win']
+            items = ",".join(map(str, item_dict_by_participant[i + 1]))
+            row_result.append([championId, items, win])
+
+        result.extend(row_result)
+
+    columns = ['championId', 'itemId', 'win']
+    start_item = pd.DataFrame(result, columns=columns)
+    start_item['win'] = start_item['win'].astype(int)
+
+    return start_item
+
+
+start_item_df = start_item_df(df)
+
+def start_item(start_item_df):
+    start_item_counts = start_item_df.groupby(['championId', 'itemId']).agg({'win': ['count', 'sum']})
+    start_item_counts.columns = ['play_count', 'win_count']
+    start_item_counts.reset_index(inplace=True)
+
+    start_item_counts['win_rate'] = round((start_item_counts['win_count'] / start_item_counts['play_count']) * 100, 2)
+
+    item_count = start_item_df.groupby(['championId', 'itemId'])['win'].count().reset_index()
+    item_count.columns = ['championId', 'itemId', 'item_count']
+    start_item_counts = start_item_counts.merge(item_count, on=['championId', 'itemId'])
+
+    start_item_counts = start_item_counts[(start_item_counts['win_count'] >= 5) & (start_item_counts['item_count'] >= 5)]
+
+    top3_start_item = start_item_counts.groupby('championId').apply(lambda x: x.nlargest(3, ['item_count', 'win_rate']))
+    return top3_start_item
+
+
+start_item = start_item(start_item_df)
