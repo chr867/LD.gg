@@ -51,7 +51,7 @@
       <div class="modal-header">
         <h5 class="modal-title" id="inquiriesModalLabel"></h5>
       </div>
-      <div class="modal-body">
+      <div class="modal-body"> 
         <form id="inquiriesForm">
           <div class="mb-3">
             <label for="inquiriesContent" class="form-label">문의 내용</label>
