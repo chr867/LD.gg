@@ -24,9 +24,14 @@
 
                 let rlist = '';
 
-                $.each(resp, function(i, resp) {
-                  rlist += '<input type="button" value="' + resp + '" onClick="go_chat_room">';
-                });
+                if(resp !== null){
+                  $.each(resp, function(i, resp) {
+                    rlist += '<input type="button" value="' + resp + '" onClick="go_chat_room(this.value)">';
+                  });
+                }
+                else {
+                  rlist = '조회되는 데이터가 없거나 잠시 후 다시 시도하여 주시기 바랍니다.';
+                }
 
                 $("#mentor-list").html(rlist);
               })
@@ -48,7 +53,7 @@
                 let rlist = '';
 
                 $.each(resp, function(i, resp) {
-                  rlist += '<input type="button" value="' + resp + '" onClick="go_chat_room">';
+                  rlist += '<input type="button" value="' + resp + '" onclick="go_chat_room(this.value)">';
                 });
 
                 $("#mentor-list").html(rlist);
@@ -58,85 +63,50 @@
               })
     }
 
-    function go_chat_room(){
+    /* chat_room에 insert 하고 팝업창 띄우기 */
+    function go_chat_room(chat_receive_user){
+      console.log(chat_receive_user);
+
       $.ajax({
-        method : "POST",
-        url : "chat/chatroom/${sendEmail}",
-        data : {data : JSON.stringify(data)},
-        // 스프링 추가 설정.
-        dataType : "json",
-        timeout : "1000" // 요청 타임 아웃
+        url: "/chat/go_chatroom/",
+        method: "POST",
+        data: {
+          'chat_category' : 0,
+          'chat_receive_user' : chat_receive_user,
+          'chat_send_user' : '${email}'
+        },
+        dataType : "json"
       })
               .done(function(resp){
-                // res = 0 성공 => 팝업창으로 채팅방 열기
-                // res = 1 실패 => 재시도 요청하기
-                console.log(resp);
-              })
-              .fail(function(err){
-                console.log(err);
-              })
-    }
-
-    function goAjax(){
-      $.ajax({
-        method : "POST",
-        url : "member/info",
-        data : {data : JSON.stringify(data)},
-        // 스프링 추가 설정.
-        dataType : "json",
-        timeout : "1000" // 요청 타임 아웃
+                if(resp === 0){
+                  alert("잠시 후 다시 시도해주세요.");
+                  //"window.open('http://localhost:8080/chat/chatroom', 'window_name', 'width=430, height=500, location=no, status=no, scrollbars=yes');">열기</button>
+                  // 팝업 창의 URL
+                  var url = "http://localhost:8080/chat/enter_chatroom/" + resp;
+                  // 팝업 창의 크기
+                  var width = 500;
+                  var height = 500;
+                  // 팝업 창을 화면 중앙에 위치시키기 위한 좌표 계산
+                  var left = (window.innerWidth / 2) - (width / 2);
+                  var top = (window.innerHeight / 2) - (height / 2);
+                  // 팝업 창을 열기 위한 window.open 함수 호출
+                  //var popup = window.open(url, "popup", "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top);
+                  var popup = window.open(url, 'window_name', 'width=430, height=500, location=no, status=no, scrollbars=yes');
+                  // 팝업 창의 포커스를 설정
+                  popup.focus();
+                }
+                else {
+                  alert("잠시 후 다시 시도해주세요.")
+                }
+        // res = 0 성공 => 팝업창으로 채팅방 열기
+        // res = 1 실패 => 재시도 요청하기
+        console.log(resp);
       })
-              .done(function(resp){
-                console.log(resp);
-
-                $("#memberInfo").html(resp.id + "<br>" + resp.pw);
-              })
               .fail(function(err){
                 console.log(err);
-              })
+              });
     }
-    let mentor_list = document.getElementById("mentoring-list");
-    const axios = require('axios');
 
-    // Make a request for a user with a given ID
-    axios.get('/user?ID=12345')
-            .then(function (response) {
-              // handle success
-              console.log(response);
-            })
-            .catch(function (error) {
-              // handle error
-              console.log(error);
-            })
-            .finally(function () {
-              // always executed
-            });
-
-    // Optionally the request above could also be done as
-    axios.get('/user', {
-      params: {
-        ID: 12345
-      }
-    })
-            .then(function (response) {
-              console.log(response);
-            })
-            .catch(function (error) {
-              console.log(error);
-            })
-            .finally(function () {
-              // always executed
-            });
-
-    // Want to use async/await? Add the `async` keyword to your outer function/method.
-    async function getUser() {
-      try {
-        const response = await axios.get('/user?ID=12345');
-        console.log(response);
-      } catch (error) {
-        console.error(error);
-      }
-    }
   </script>
 </head>
 <body>
@@ -158,12 +128,6 @@
 
   기존 채팅방을 이용하고 싶으시다면 아래에서 이메일을 입력하세요.
   <table border="1">
-    <tr>
-      멘토링 채팅
-    </tr>
-    <tr>
-      메이트 채팅
-    </tr>
   </table>
   <button onclick="window.open('http://localhost:8080/chat/chatroom', 'window_name', 'width=430, height=500, location=no, status=no, scrollbars=yes');">열기</button>
 </body>

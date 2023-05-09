@@ -14,17 +14,16 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 
 @Controller
 @Slf4j
 @RequestMapping("/chat")
 public class ChatController {
-
     @Autowired
     public ChatService chatService;
 
+    /* chatList.jsp로 이동 */
     @GetMapping("/chat-list")
     public ModelAndView go_chatlist(HttpServletRequest request) {
         HttpSession session = request.getSession();
@@ -35,14 +34,6 @@ public class ChatController {
         return new ModelAndView("/chat/chatList").addObject("email", email);
     }
 
-    @GetMapping("/go-chatroom")
-    public ModelAndView go_chatroom(HttpServletRequest request){
-        HttpSession session = request.getSession();
-
-
-
-        return new ModelAndView("/chat/chatList");
-    }
 
     @MessageMapping("/lol_chat.register")
     @SendTo("/topic/public")
@@ -57,10 +48,20 @@ public class ChatController {
         return ms;
     }
 
-    @GetMapping("/chatroom")
+    @GetMapping("/chatroom/{email}")
     public String home(Model model) {
-        return "/chat/chatroom";
+        return "chatRoom";
     }
 
-    /* sendEmail로 요청 받은 사람 이메일 열기 */
+    /* 채팅방 입장 시 */
+    @GetMapping("/enter_chatroom/{chat_room_seq}")
+    public ModelAndView chatRoom(HttpServletRequest request, @RequestParam("chat_room_seq") int chatroomseq){
+        HttpSession session = request.getSession();
+        String email = (String) session.getAttribute("email");
+
+        System.out.println(email);
+        System.out.println(chatroomseq);
+
+        return new ModelAndView("/chat/chattingRoom").addObject("email", email).addObject("chat_room_seq", chatroomseq);
+    }
 }

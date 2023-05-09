@@ -1,6 +1,8 @@
 package com.ld.gg.service;
 
 import com.ld.gg.dao.mentoringdao.MentiDAO;
+import com.ld.gg.dto.chat.ChatListDto;
+import com.ld.gg.dto.chat.ChatroomDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,5 +36,29 @@ public class ChatService {
 		log.info("mentor_list : {}", mentor_list);
 
 		return mentor_list;
+	}
+
+	/*chat_room 테이블에 insert 하고 chat_room_seq 가져옴.*/
+	public int getChatRoomSeq(ChatroomDto croomdto) {
+		System.out.println("insert_chat_list : " + croomdto.getChat_send_user());
+
+		boolean res = cd.insert_chat_room(croomdto);
+
+		int chatroom_seq = 0;
+
+		if(res == true){
+			System.out.println("chatroom insert success...");
+			chatroom_seq = croomdto.getChat_room_seq();
+		} else {
+			System.out.println("chatroom insert failed...");
+		}
+
+		return chatroom_seq;
+	}
+
+	public List<ChatListDto> getChatContent(int chatRoomSeq) {
+		List<ChatListDto> chat_content_list = cd.select_chat_content(chatRoomSeq);
+
+		return chat_content_list;
 	}
 }

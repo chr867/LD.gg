@@ -61,5 +61,8 @@
 <script
         src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script src="/resources/js/chat.js"></script>
+<script>
+
+</script>
 </body>
 </html>
