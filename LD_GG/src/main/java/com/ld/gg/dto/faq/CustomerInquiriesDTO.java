@@ -1,6 +1,10 @@
 package com.ld.gg.dto.faq;
 
+import java.time.LocalDateTime;
+
 import org.apache.ibatis.type.Alias;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,4 +21,7 @@ public class CustomerInquiriesDTO {
 	private String inquiries_title;
 	private String inquiries_info;
 	private String costomer_email;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy년 MM월 dd일 HH:mm:ss")
+	private LocalDateTime date;
+	private int views;
 }
