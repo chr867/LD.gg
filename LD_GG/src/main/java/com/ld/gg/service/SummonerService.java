@@ -11,7 +11,6 @@ import com.ld.gg.dto.summoner.RecordDto;
 import com.ld.gg.dto.summoner.RecordInfoDto;
 import com.ld.gg.dto.summoner.SummonerDto;
 import com.ld.gg.dto.summoner.SummonerRankDto;
-import com.ld.gg.paging.Paging;
 
 @Service
 public class SummonerService {
@@ -19,18 +18,18 @@ public class SummonerService {
 	@Autowired
 	private Summoner_dao SD;
 
-	public List<SummonerRankDto> get_summoner_solo() {
-		List<SummonerRankDto> sd = SD.get_summoer_solo();
+	public List<SummonerRankDto> getRankSoloData() {
+		List<SummonerRankDto> sd = SD.getRankSoloData();
 		return sd;
 	}
 
-	public List<SummonerRankDto> get_summoner_flex() {
-		List<SummonerRankDto> sd = SD.get_summoner_flex();
+	public List<SummonerRankDto> getRankFlexData() {
+		List<SummonerRankDto> sd = SD.getRankFlexData();
 		return sd;
 	}
 
-	public List<SummonerRankDto> get_summoner_level() {
-		List<SummonerRankDto> sd = SD.get_summoner_level();
+	public List<SummonerRankDto> getRankLevelData() {
+		List<SummonerRankDto> sd = SD.getRankLevelData();
 		return sd;
 	}
 
@@ -69,9 +68,24 @@ public class SummonerService {
 		return rd;
 	}
 
-	public List<SummonerRankDto> getRankAllData() {
-		List<SummonerRankDto> srd = SD.getRankAllData();
+	public List<SummonerRankDto> getRankLoadingData() {
+		List<SummonerRankDto> srd = SD.getRankLoadingData();
 		return srd;
+	}
+
+	public List<ChampRecordDto> getChampSolo(String summoner_name) {
+		List<ChampRecordDto> crd = SD.getChampSolo(summoner_name);
+		return crd;
+	}
+
+	public List<ChampRecordDto> getChampFlex(String summoner_name) {
+		List<ChampRecordDto> crd = SD.getChampFlex(summoner_name);
+		return crd;
+	}
+
+	public List<ChampRecordDto> getChampClassic(String summoner_name) {
+		List<ChampRecordDto> crd = SD.getChampClassic(summoner_name);
+		return crd;
 	}
 
 }

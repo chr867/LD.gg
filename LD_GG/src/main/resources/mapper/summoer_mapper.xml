@@ -5,63 +5,62 @@
 
 <mapper namespace="com.ld.gg.dao.Summoner_dao">
 
-	<select id="getRankAllData" resultType="summoner_rank">
-		SELECT sr.summoner_name, si.profile_icon_id, si.s_level, LOWER(sr.tier) as tier, sr.division, sr.wins, sr.losses, sr.lp, round((sr.wins/(sr.wins+sr.losses))*100,2) as winrate
+	<select id="getRankLoadingData" resultType="summoner_rank">
+		SELECT
+		sr.summoner_name,
+		si.profile_icon_id, si.s_level, LOWER(sr.tier) as
+		tier, sr.division,
+		sr.wins, sr.losses, sr.lp,
+		round((sr.wins/(si.games))*100,2) as
+		winrate
 		FROM summoner_rank sr
-		INNER JOIN summoner_info si on sr.summoner_name = si.summoner_name
-		ORDER BY
-		lp DESC;
-	</select>
-
-	<select id="get_summoer_solo" resultType="summoner_rank">
-		SELECT sr.LOWER(tier) as tier, sr.division, sr.summoner_name, sr.queue, sr.wins, sr.losses, sr.lp, sr.round((wins/(wins+losses))*100,2) as winrate, si.profile_icon_id, si.s_level
-		FROM summoner_rank sr
-		INNER JOIN summoner_info si on sr.summoner_name = si.summoner_name
-		WHERE queue = 'RANKED_SOLO_5x5'
-		ORDER BY
-		lp DESC;
-	</select>
-
-	<select id="get_summoner_flex" resultType="summoner_rank">
-		SELECT DISTINCT
-		si.profile_icon_id,
-		si.summoner_name,
-		si.tier,
-		si.lp,
-		si.s_level,
-		sr.most_champ_name1,
-		sr.most_champ_name2,
-		sr.most_champ_name3,
-		si.winrate,
-		sr.main_lane
-		FROM
-		SUMMONER_INFO si
-		JOIN SUMMONER_RANKING sr ON
-		si.summoner_name = sr.summoner_name
-		JOIN RECORD r ON si.summoner_name =
-		r.summoner_name
+		INNER
+		JOIN summoner_info si ON sr.summoner_name = si.summoner_name
 		WHERE
-		queue = 'RANKED_FLEX_5x5'
-		ORDER BY
-		si.lp DESC;
+		sr.queue = 'RANKED_SOLO_5x5' AND LOWER(sr.tier) IN ('challenger',
+		'grandmaster', 'master')
+		ORDER BY sr.lp DESC;
 	</select>
 
-	<select id="get_summoner_level" resultType="summoner">
-		SELECT DISTINCT
-		si.profile_icon_id,
-		si.summoner_name,
-		si.tier,
-		si.lp,
-		si.s_level,
-		sr.most_champ_name1,
-		sr.most_champ_name2,
-		sr.most_champ_name3,
-		si.winrate,
-		sr.main_lane
-		FROM
-		SUMMONER_INFO si
-		JOIN SUMMONER_RANKING sr ON
-		si.summoner_name = sr.summoner_name
+	<select id="getRankSoloData" resultType="summoner_rank">
+		SELECT sr.summoner_name,
+		si.profile_icon_id, si.s_level, LOWER(sr.tier) as tier, sr.division,
+		sr.wins, sr.losses, sr.lp, round((sr.wins/(si.games))*100,2) as
+		winrate
+		FROM summoner_rank sr
+		INNER JOIN summoner_info si ON
+		sr.summoner_name = si.summoner_name
+		WHERE sr.queue = 'RANKED_SOLO_5x5'
+		AND LOWER(sr.tier) IN ('challenger',
+		'grandmaster', 'master')
+		ORDER BY
+		sr.lp DESC;
+	</select>
+
+	<select id="getRankFlexData" resultType="summoner_rank">
+		SELECT sr.summoner_name,
+		si.profile_icon_id, si.s_level, LOWER(sr.tier) as tier, sr.division,
+		sr.wins, sr.losses, sr.lp, round((sr.wins/(si.games))*100,2) as
+		winrate
+		FROM summoner_rank sr
+		INNER JOIN summoner_info si ON
+		sr.summoner_name = si.summoner_name
+		WHERE sr.queue = 'RANKED_FLEX_5x5'
+		AND LOWER(sr.tier) IN ('challenger',
+		'grandmaster', 'master')
+		ORDER BY
+		sr.lp DESC;
+	</select>
+
+	<select id="getRankLevelData" resultType="summoner">
+		SELECT sr.summoner_name,
+		si.profile_icon_id, si.s_level, LOWER(sr.tier) as tier, sr.division,
+		sr.wins, sr.losses, sr.lp, round((sr.wins/(si.games))*100,2) as
+		winrate
+		FROM summoner_rank sr
+		INNER JOIN summoner_info si ON
+		sr.summoner_name = si.summoner_name
+		WHERE sr.queue = 'RANKED_SOLO_5x5'
 		ORDER BY
 		si.s_level DESC;
 	</select>
@@ -77,30 +76,42 @@
 		SUMMONER_INFO
 		WHERE summoner_name = ${summoner_name}
 	</select>
-	
-	<select id="get_summoner_record" resultType = "record">
-		
+
+	<select id="get_summoner_record" resultType="record">
+
+	</select>
+
+	<select id="get_record_info" resultType="record_info">
+
+	</select>
+
+	<select id="get_champ_record" resultType="champ_record">
+
 	</select>
 	
-	<select id="get_record_info" resultType = "record_info">
-	
-	</select>
-	
-	<select id="get_champ_record" resultType = "champ_record">
-	
-	</select>
-	
-	<select id="get_20games_summary" resultType = "record_info">
-	
-	</select>
-	
-	
-	<select id="get_champ_position_filter" resultType = "summoner">
+	<select id="getChampSolo">
 	
 	</select>
 	
-	<select id="get_record_detail" resultType = "record">
+	<select id="getChampFlex">
 	
+	</select>
+	
+	<select id="getChampClassic">
+	
+	</select>
+
+	<select id="get_20games_summary" resultType="record_info">
+
+	</select>
+
+
+	<select id="get_champ_position_filter" resultType="summoner">
+
+	</select>
+
+	<select id="get_record_detail" resultType="record">
+
 	</select>
 
 </mapper>

@@ -13,13 +13,13 @@ import com.ld.gg.dto.summoner.SummonerRankDto;
 
 public interface Summoner_dao {
 	
-	List<SummonerRankDto> getRankAllData();
+	List<SummonerRankDto> getRankLoadingData();
 
-	List<SummonerRankDto> get_summoer_solo();
+	List<SummonerRankDto> getRankSoloData();
 
-	List<SummonerRankDto> get_summoner_flex();
+	List<SummonerRankDto> getRankFlexData();
 
-	List<SummonerRankDto> get_summoner_level();
+	List<SummonerRankDto> getRankLevelData();
 
 	List<SummonerDto> get_summoner_info(@Param("summoner_name") String summoner_name);
 
@@ -34,5 +34,11 @@ public interface Summoner_dao {
 	List<ChampRecordDto> get_20games_summary(@Param("summoner_name") String summoner_name);
 
 	List<RecordDto> get_record_detail(@Param("match_id") String match_id);
+
+	List<ChampRecordDto> getChampSolo(String summoner_name);
+
+	List<ChampRecordDto> getChampFlex(String summoner_name);
+
+	List<ChampRecordDto> getChampClassic(String summoner_name);
 
 }
