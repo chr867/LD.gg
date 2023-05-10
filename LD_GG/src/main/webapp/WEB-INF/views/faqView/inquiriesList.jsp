@@ -5,25 +5,33 @@
 <head>
 <meta charset="UTF-8">
 <title>고객 문의사항</title>
-</head>
-<link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
-    crossorigin="anonymous">
-<link rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
-<script
-    src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.3.js"
-    integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
-    crossorigin="anonymous"></script>
-<!-- jqGrid CSS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/css/ui.jqgrid.min.css">
-<!-- jqGrid JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/jquery.jqgrid.min.js"></script>
-<style type="text/css"></style>
+<!-- Bootstrap CSS (버전 5.3.0-alpha1) -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 
+<!-- SweetAlert2 CSS (버전 11.4.10) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+
+<!-- jQuery (버전 3.6.3) -->
+<script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+
+<!-- jqGrid CSS (버전 4.15.5) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/css/ui.jqgrid.min.css">
+
+<!-- jqGrid JS (버전 4.15.5) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/jquery.jqgrid.min.js"></script>
+
+<!-- Bootstrap JS (버전 3.3.2) -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+<!-- Bootstrap CSS (버전 3.3.2) -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+</head>
+<style>
+.modal-backdrop {
+    z-index: 0; 
+}
+</style>
 <body>
 
 <h3>고객 문의사항</h3>
@@ -34,18 +42,9 @@
             <input type="text" class="form-control mb-2 mr-sm-2" id="keyword" placeholder="검색어 입력">
             <button type="button" class="btn btn-primary mb-2" id="search">검색</button>
         </div>
-    </div>
-    <div class="col-md-6 text-right">
-				<button type="button" id="open-inquiries" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#inquiriesModal">글작성</button>
-			</div>
-    
-   <div id="grid-wrapper">
-    <table id="grid"></table>
-    <div id="pager"></div>
-    </div>
-    
-    <!-- 문의사항 작성 모달 -->
-	<div class="modal fade" id="inquiriesModal" tabindex="-1" aria-labelledby="inquiriesModalLabel" aria-hidden="true" style="display: none;">
+        
+        <!-- 문의사항 작성 모달 -->
+<div class="modal fade" id="inquiriesModal" tabindex="-1" aria-labelledby="inquiriesModalLabel" aria-hidden="true" style="display: none;">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -54,11 +53,15 @@
       <div class="modal-body"> 
         <form id="inquiriesForm">
           <div class="mb-3">
-            <label for="inquiriesContent" class="form-label">문의 내용</label>
-            <textarea class="form-control" id="inquiriesContent" rows="5"></textarea>
+            <label for="inquiriesTitle" class="form-label">제목</label>
+            <input type="text" class="form-control" id="inquiriesTitle" name="inquiriesTitle">
+          </div>
+          <div class="mb-3">
+            <label for="inquiriesContent" class="form-label">내용</label>
+            <textarea class="form-control" id="inquiriesContent" name="inquiriesContent" rows="5"></textarea>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             <button type="submit" class="btn btn-primary">전송</button>
           </div>
         </form>
@@ -66,14 +69,58 @@
     </div>
   </div>
 </div>
-
+<!-- 모달 -->
+    </div>
+    
+    
+   <div id="grid-wrapper">
+    <table id="grid" style="width: 100%;"></table>
+	    <div class="col-md-6 text-right">
+			<button type="button" id="open-inquiries" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#inquiriesModal">글작성</button>
+		</div>
+    <div id="pager"></div>
+    
+    </div>
 </div>
 
+<!-- jQuery library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- jqGrid library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/jquery.jqgrid.min.js"></script>
+<!-- Bootstrap jQuery UI library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-bootstrap/0.5pre/assets/js/bootstrap.min.js"></script>
+
 <script type="text/javascript">
     $(document).ready(function () {
+    	loadGrid();
+    	
+    	 $("#inquiriesForm").submit(function(event) {
+    		    event.preventDefault();
+    		    let form_data = {
+    		    	inquiries_title: $("#inquiriesTitle").val(),
+    		    	inquiries_info: $("#inquiriesContent").val(),
+    		      	customer_email: "${member.email}"
+    		    };
+    		    console.log(form_data)
+    		    $.ajax({ //견적서 보내기 기능
+    		      type: "POST",
+    		      url: "/faq/save-ci",
+    		      data: JSON.stringify(form_data),
+    		      contentType: "application/json; charset=utf-8",
+    		      success: function(data) {
+    		        alert("질문이 등록되었습니다.");
+    		        $("#inquiriesModal").modal("hide");
+    		        loadGrid();
+    		      },
+    		      error: function(xhr, status, error) {
+    		        console.error(xhr.responseText);
+    		        console.error(status);
+    		        console.error(error);
+    		      }
+    		    });
+    		  })
+    	 
+    	
     	$("#open-inquiries").click(function() {
             let costomer_email = "${member.email}";
             $("#inquiriesModal").modal("show"); //문의사항 모달 켜기
@@ -84,17 +131,18 @@
     		$("#inquiriesModal").modal("hide");
     	});
     	
+    	function loadGrid(){
     	$("#grid").jqGrid({
     		  url: "/faq/get-all-ci", //고객 문의사항 가져오기
     		  datatype: "json",
     		  colNames: ['번호','상태', '제목', '작성일', '작성자', '조회수'],
     		  colModel: [
-    		    { name: 'inquiries_id', index: 'inquiries_id', width: 20 },
-    		    { name: 'state', index: 'state', width: 50 },
-    		    { name: 'inquiries_title', index: 'inquiries_title', width: 300 },
-    		    { name: 'date', index: 'date', width: 90 },
-    		    { name: 'costomer_email', index: 'costomer_email', width: 80 },
-    		    { name: 'views', index: 'views', width: 50 }
+    		    { name: 'inquiries_id', index: 'inquiries_id' , width:'5%'},
+    		    { name: 'state', index: 'state', width:'10%'},
+    		    { name: 'inquiries_title', index: 'inquiries_title', width:'60%'},
+    		    { name: 'date', index: 'date', width:'20%'},
+    		    { name: 'customer_email', index: 'customer_email', width:'20%'},
+    		    { name: 'views', index: 'views', width:'5%'}
     		  ],
     		  loadtext: '로딩중..',
     		  sortable: true,
@@ -104,8 +152,9 @@
     		  rowNum: 10,
     		  sortname: 'createdDate',
     		  sortorder: 'desc',
-    		  width: 1000,
-    		  height: 500,
+    		  autowidth: true,
+  			shrinkToFit: true,
+    		  height: "auto",
     		  pgbuttons: true,
     		  pgtext: null,
     		  viewrecords: false,
@@ -185,7 +234,7 @@
 						   		    	contentType: "application/json;charset=UTF-8",
 						   		    	  data: JSON.stringify(data),
 						   		    	  success: function(data) {
-						   		    		console.log("답변이 등록되었습니다");
+						   		    		alert("답변이 등록되었습니다");
 						   		    	  },
 						   		    	  error: function(xhr, status, error) {
 						   		    		console.log(error);
@@ -206,6 +255,7 @@
 				  });
     		  }//onSelectRow
     		});
+    	}
 
 
         $("#search").on("click", function () { //검색

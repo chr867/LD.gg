@@ -29,12 +29,12 @@
 </select>
 <select id="select_by_email_inquiries" resultType="ci">
 	SELECT * FROM customer_inquiries 
-	WHERE costomer_email=#{costomer_email}
+	WHERE customer_email=#{customer_email}
 	ORDER BY date DESC;;
 </select>
 <insert id="insert_inquiries" parameterType="ci">
-  INSERT INTO customer_inquiries (inquiries_title, inquiries_info, costomer_email) 
-  VALUES (#{inquiries_title}, #{inquiries_info}, #{costomer_email});
+  INSERT INTO customer_inquiries (inquiries_title, inquiries_info, customer_email) 
+  VALUES (#{inquiries_title}, #{inquiries_info}, #{customer_email});
 </insert>
 <update id="update_inquiries" parameterType="ci">
   UPDATE customer_inquiries SET state = #{state}, inquiries_title = #{inquiries_title},

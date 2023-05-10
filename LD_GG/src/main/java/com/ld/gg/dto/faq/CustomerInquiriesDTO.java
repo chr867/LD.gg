@@ -21,7 +21,7 @@ public class CustomerInquiriesDTO {
 	private String state;
 	private String inquiries_title;
 	private String inquiries_info;
-	private String costomer_email;
+	private String customer_email;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy년 MM월 dd일 HH:mm:ss")
 	private LocalDateTime date;
 	private int views;
