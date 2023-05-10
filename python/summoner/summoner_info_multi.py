@@ -33,7 +33,7 @@ def tier_int(t):
         return 9
 
 def get_summoner_info(k_):
-    print('get_summoner_info', len(k_))
+    print('get_summoner_info', len(k_[:1000]))
     result = []
     for k in tqdm(k_):
         while True:
@@ -73,7 +73,7 @@ def main():
         for division in tqdm(divisions):
             print(tier, division)
             tmp_lst = []
-            page_p = 1
+            page_p = random.randrange(1, 50)
             while True:
                 try:
                     api_key = next(api_it)
@@ -97,7 +97,10 @@ def main():
                 summoner_leagues.extend(res_p)
                 if len(res_p) < 50:
                     break
-                page_p += 1
+
+                if len(summoner_leagues) >= 500:
+                    break
+
     rank_df = pd.DataFrame(summoner_leagues)
     rank_result_df = rank_df[
         ['tier', 'leagueId', 'queueType', 'summonerName', 'leaguePoints', 'wins', 'losses', 'rank']]
@@ -105,9 +108,6 @@ def main():
     rank_result_df['tier_int'] = rank_result_df.apply(lambda x: tier_int(x), axis=1)
     rank_result_df.columns = [
         ['tier', 'league_id', 'queue', 'summoner_name', 'lp', 'wins', 'losses', 'division', 'match_count', 'tier_int']]
-
-    # result_splits = np.array_split(result, 4)
-    # result_splits = [list(split) for split in result_splits]  # numpy array를 일반 리스트로 변환
 
     result_splits = []
     chunk_size = len(result) // 4
@@ -138,6 +138,7 @@ def main():
     print(len(info_merged_df))
 
     sql_conn = mu.connect_mysql()
+    print('insert')
     info_merged_df.progress_apply(lambda x: info_insert(x, sql_conn), axis=1)
 
     # 작업이 완료될 때까지 대기
@@ -146,9 +147,13 @@ def main():
 
     sql_conn.commit()
     sql_conn.close()
+    print('done')
 
 if __name__ == '__main__':
-    main()
+    for _ in range(24):
+        main()
+        print('sleep')
+        time.sleep(20)
 
 
 
