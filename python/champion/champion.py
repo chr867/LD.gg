@@ -19,11 +19,13 @@ riot_api_key = 'RGAPI-14667a4e-7c3c-45fa-ac8f-e53c7c3f5fe1'
 # ----------------------------------------------------------------------------------------------------------------------
 # RawData
 conn = mu.connect_mysql()
-df = pd.DataFrame(mu.mysql_execute_dict("SELECT * FROM match_raw LIMIT 5000", conn))
+start_time = time.time()
+df = pd.DataFrame(mu.mysql_execute_dict("SELECT * FROM match_raw", conn))
 conn.close()
 df['matches'] = df['matches'].apply(json.loads)
 df['timeline'] = df['timeline'].apply(json.loads)
-
+end_time = time.time()
+print("Data load time: {:.2f} seconds".format(end_time - start_time))
 
 # ----------------------------------------------------------------------------------------------------------------------
 # 룬 데이터 정제
@@ -112,7 +114,7 @@ def item_df(raw_data):
             lst.append(df[summoner]['item6'])
             lst.append(df[summoner]['win'])
             result.append(lst)
-    columns = ['champion_id', 'mythicItemUsed', 'item0', 'item1', 'item2', 'item3', 'item4', 'item5', 'item6', 'win']
+    columns = ['champion_id', 'mythic_item', 'item0', 'item1', 'item2', 'item3', 'item4', 'item5', 'item6', 'win']
     item_df = pd.DataFrame(result, columns=columns)
     item_df['win'] = item_df['win'].astype(int)
     print("아이템 데이터 정제 완료 ")
@@ -186,36 +188,43 @@ def mythic_item_data(raw_data):
     result = []
     print("신화 아이템 데이터 정제 시작")
     for i in tqdm(range(len(raw_data))):
-        raw_data = raw_data.iloc[i]['matches']['info']['participants']
-        for summoner in range(len(raw_data)):
-            champion_id = raw_data[summoner]['championId']
-            mythic_item_used = raw_data[summoner]['challenges']['mythicItemUsed'] if 'mythicItemUsed' in \
-                                                                                     raw_data[summoner][
+        df = raw_data.iloc[i]['matches']['info']['participants']
+        for summoner in range(len(df)):
+            champion_id = df[summoner]['championId']
+            mythic_item_used = df[summoner]['challenges']['mythicItemUsed'] if 'mythicItemUsed' in \
+                                                                                     df[summoner][
                                                                                          'challenges'] else 0
-            win = raw_data[summoner]['win']
+            win = df[summoner]['win']
             result.append([champion_id, mythic_item_used, win])
 
-    mythic_item_df = pd.DataFrame(result, columns=['championId', 'mythicItemUsed', 'win'])
-    mythic_item_df['mythicItemUsed'] = mythic_item_df['mythicItemUsed'].astype(int)
+    mythic_item_df = pd.DataFrame(result, columns=['champion_id', 'mythic_item', 'win'])
+    mythic_item_df['mythic_item'] = mythic_item_df['mythic_item'].astype(int)
     mythic_item_df['win'] = mythic_item_df['win'].astype(int)
 
-    mythic_item_df = mythic_item_df[mythic_item_df['mythicItemUsed'] != 0]
+    mythic_item_df = mythic_item_df[mythic_item_df['mythic_item'] != 0]
 
     top_items = []
-    for champion_id, group in mythic_item_df.groupby('championId'):
-        top_items_df = group.groupby('mythicItemUsed').agg({'mythicItemUsed': 'count', 'win': 'sum'})
-        top_items_df.columns = ['usage_count', 'win_count']
-        top_items_df['winrate'] = round((top_items_df['win_count'] / top_items_df['usage_count']) * 100, 2)
-        top_items_df = top_items_df.sort_values(['usage_count', 'winrate'], ascending=[False, False])
+    for champion_id, group in mythic_item_df.groupby('champion_id'):
+        top_items_df = group.groupby('mythic_item').agg({'mythic_item': 'count', 'win': 'sum'})
+        top_items_df.columns = ['pick_count', 'win_count']
+        top_items_df['win_rate'] = round((top_items_df['win_count'] / top_items_df['pick_count']) * 100, 2)
+        top_items_df = top_items_df.sort_values(['pick_count', 'win_rate'], ascending=[False, False])
         top_items_df = top_items_df.iloc[:3].reset_index()
-        top_items_df['championId'] = champion_id
+        top_items_df['champion_id'] = champion_id
         top_items.append(top_items_df)
 
     top_items_df = pd.concat(top_items)
-    top_items_df['rank'] = top_items_df.groupby('championId')['usage_count'].rank(ascending=False, method='first')
+    top_items_df['rank'] = top_items_df.groupby('champion_id')['pick_count'].rank(ascending=False, method='first')
     top_items_df['rank'] = top_items_df['rank'].astype(int)
+
+    total_game_df = mythic_item_df.groupby(['champion_id']).agg({'win': ['count']})
+    total_game_df.columns = ['total_game']
+    total_game_df.reset_index(inplace=True)
+    merged_df = pd.merge(top_items_df, total_game_df, on='champion_id')
+    merged_df['pick_rate'] = round((merged_df['pick_count'] / merged_df['total_game']) * 100, 2)
+    final_df = merged_df.drop(columns=['total_game'])
     print("신화 아이템 데이터 정제 완료 ")
-    return top_items_df[['championId', 'mythicItemUsed', 'usage_count', 'win_count', 'winrate', 'rank']]
+    return final_df[['champion_id', 'mythic_item', 'pick_count', 'win_count', 'win_rate','pick_rate']]
 
 
 mysitic_item_data = mythic_item_data(df)
@@ -226,35 +235,41 @@ mysitic_item_data = mythic_item_data(df)
 def common_item_data(item_df_data):
     print("일반 아이템 데이터 정제 시작 ")
     item_columns = ['item0', 'item1', 'item2', 'item3', 'item4', 'item5']
-    melted_df = item_df_data.melt(id_vars=['championId', 'win'], value_vars=item_columns, var_name='item_col',
-                                  value_name='itemId')
+    melted_df = item_df_data.melt(id_vars=['champion_id', 'win'], value_vars=item_columns, var_name='item_col',
+                                  value_name='item_id')
 
-    non_zero_items = melted_df[melted_df['itemId'] != 0]
-    item_frequency = non_zero_items.groupby(['championId', 'itemId']).size().reset_index(name='frequency')
+    non_zero_items = melted_df[melted_df['item_id'] != 0]
+    item_frequency = non_zero_items.groupby(['champion_id', 'item_id']).size().reset_index(name='pick_count')
 
     non_zero_items_wins = non_zero_items[non_zero_items['win'] == 1]
-    item_wins = non_zero_items_wins.groupby(['championId', 'itemId']).size().reset_index(name='wins')
+    item_wins = non_zero_items_wins.groupby(['champion_id', 'item_id']).size().reset_index(name='win')
 
-    item_frequency = item_frequency.merge(item_wins, on=['championId', 'itemId'], how='left')
-    item_frequency['wins'].fillna(0, inplace=True)
+    item_frequency = item_frequency.merge(item_wins, on=['champion_id', 'item_id'], how='left')
+    item_frequency['win'].fillna(0, inplace=True)
 
     def top_n_items(df, excluded_items, n=3):
-        df_filtered = df[~df['itemId'].isin(excluded_items)]
-        return df_filtered.nlargest(n, 'frequency')
+        df_filtered = df[~df['item_id'].isin(excluded_items)]
+        return df_filtered.nlargest(n, 'pick_count')
 
-    mysitic_item_lst = mysitic_item_data['mythicItemUsed'].unique()
+    mysitic_item_lst = mysitic_item_data['mythic_item'].unique()
     shoes_lst = [3111, 3117, 3009, 3047, 3006, 3158, 3020]
     excluded_items = list(mysitic_item_lst) + shoes_lst
 
-    top_items_df = item_frequency.groupby('championId', group_keys=False).apply(
+    top_items_df = item_frequency.groupby('champion_id', group_keys=False).apply(
         lambda x: top_n_items(x, excluded_items))
-    top_items_df['wins'] = top_items_df['wins'].astype(int)
-    top_items_df['winrate'] = round((top_items_df['wins'] / top_items_df['frequency']) * 100, 2)
+    top_items_df['win'] = top_items_df['win'].astype(int)
+    top_items_df['win_rate'] = round((top_items_df['win'] / top_items_df['pick_count']) * 100, 2)
+
+    total_game_df = item_df_data.groupby(['champion_id']).agg({'win': ['count']})
+    total_game_df.columns = ['total_game']
+    total_game_df.reset_index(inplace=True)
+    merged_df = pd.merge(top_items_df, total_game_df, on='champion_id')
+    merged_df['pick_rate'] = round((merged_df['pick_count'] / merged_df['total_game']) * 100, 2)
+    final_df = merged_df.drop(columns=['total_game'])
     print("일반 아이템 데이터 정제 완료 ")
-    return top_items_df
+    return final_df
 
-
-top_item_data = common_item_data(item_df)
+common_item_data = common_item_data(item_df)
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -265,6 +280,8 @@ def start_item_data(raw_data):
     print("시작 아이템 데이터 정제 시작 ")
     for x in tqdm(range(len(raw_data))):
         timeline_df = raw_data.iloc[x]['timeline']['info']['frames']
+        if len(timeline_df) < 2:
+            continue
         item_dict_by_participant = {i: [] for i in range(1, len(raw_data.iloc[x]['matches']['info']['participants']) + 1)}
         for event in timeline_df[1]['events']:
             if event['type'] == 'ITEM_PURCHASED':
@@ -272,30 +289,38 @@ def start_item_data(raw_data):
 
         row_result = []
         for i in range(len(raw_data.iloc[x]['matches']['info']['participants'])):
-            championId = raw_data.iloc[x]['matches']['info']['participants'][i]['championId']
+            champion_id = raw_data.iloc[x]['matches']['info']['participants'][i]['championId']
             win = raw_data.iloc[x]['matches']['info']['participants'][i]['win']
             items = [item for item in item_dict_by_participant[i + 1] if item not in accessories_lst]
             items_str = ",".join(map(str, items))
-            row_result.append([championId, items_str, win])
+            row_result.append([champion_id, items_str, win])
 
         result.extend(row_result)
 
-    columns = ['championId', 'itemId', 'win']
+    columns = ['champion_id', 'item_id', 'win']
     start_item_df = pd.DataFrame(result, columns=columns)
     start_item_df['win'] = start_item_df['win'].astype(int)
 
-    start_item_counts = start_item_df.groupby(['championId', 'itemId']).agg({'win': ['count', 'sum']})
-    start_item_counts.columns = ['play_count', 'win_count']
-    start_item_counts.reset_index(inplace=True)
+    start_item_counts = start_item_df.groupby(['champion_id', 'item_id']).agg({'win': ['count', 'sum']})
+    start_item_counts.columns = ['pick_count', 'win_count']
+    start_item_counts = start_item_counts.reset_index()
 
-    start_item_counts['win_rate'] = round((start_item_counts['win_count'] / start_item_counts['play_count']) * 100, 2)
+    start_item_counts['win_rate'] = round((start_item_counts['win_count'] / start_item_counts['pick_count']) * 100, 2)
 
     start_item_counts = start_item_counts[
-        (start_item_counts['win_count'] >= 5) & (start_item_counts['play_count'] >= 5)]
+        (start_item_counts['win_count'] >= 5) & (start_item_counts['pick_count'] >= 5)]
 
-    top3_start_item = start_item_counts.groupby('championId').apply(lambda x: x.nlargest(3, ['play_count', 'win_rate']))
+    top3_start_item = start_item_counts.groupby('champion_id').apply(lambda x: x.nlargest(3, ['pick_count', 'win_rate']))
+    top3_start_item = top3_start_item.reset_index(drop=True)
+
+    total_game_df = start_item_df.groupby(['champion_id']).agg({'win': ['count']})
+    total_game_df.columns = ['total_game']
+    total_game_df = total_game_df.reset_index()
+    merged_df = pd.merge(top3_start_item, total_game_df, on='champion_id')
+    merged_df['pick_rate'] = round((merged_df['pick_count'] / merged_df['total_game']) * 100, 2)
+    final_df = merged_df.drop(columns=['total_game'])
     print("시작 아이템 데이터 정제 완료 ")
-    return top3_start_item
+    return final_df
 
 
 start_item = start_item_data(df)
@@ -303,18 +328,129 @@ start_item = start_item_data(df)
 
 # ----------------------------------------------------------------------------------------------------------------------
 # 장신구 아이템 정제
-def accessories_data(item_df_data):
-    print("장신구 데이터 정제 시작 ")
-    acc_df = item_df_data[['championId', 'item6', 'win']]
-    acc_df = acc_df.groupby(['championId', 'item6']).agg({'win': ['sum', 'size']})
-    acc_df.columns = ['win', 'count']
-    acc_df.reset_index(inplace=True)
-    acc_df['winrate'] = round((acc_df['win'] / acc_df['count']) * 100, 2)
-    print("장신구 데이터 정제 완료 ")
+def accessories_data(raw_data):
+    result = []
+    accessories_lst = [3364, 3340, 3363, 3330, 3513]
+    print("장신구 아이템 데이터 정제 시작 ")
+    for x in tqdm(range(len(raw_data))):
+        timeline_df = raw_data.iloc[x]['timeline']['info']['frames']
+        if len(timeline_df) < 2:
+            continue
+        item_dict_by_participant = {i: [] for i in range(1, len(raw_data.iloc[x]['matches']['info']['participants']) + 1)}
+        for event in timeline_df[1]['events']:
+            if event['type'] == 'ITEM_PURCHASED' and event['itemId'] in accessories_lst:
+                item_dict_by_participant[event['participantId']].append(event)
 
-    return acc_df
+        row_result = []
+        for i in range(len(raw_data.iloc[x]['matches']['info']['participants'])):
+            champion_id = raw_data.iloc[x]['matches']['info']['participants'][i]['championId']
+            acc_last = raw_data.iloc[x]['matches']['info']['participants'][i]['item6']
 
+            win = raw_data.iloc[x]['matches']['info']['participants'][i]['win']
+            items = [item['itemId'] for item in item_dict_by_participant[i + 1]]
+            items.append(acc_last)
+            items_str = ",".join(map(str, items))
+            row_result.append([champion_id, items_str, win])
 
-accessories_df = accessories_data(item_df)
+        result.extend(row_result)
+
+    columns = ['champion_id', 'item_id', 'win']
+    start_item_df = pd.DataFrame(result, columns=columns)
+    start_item_df['win'] = start_item_df['win'].astype(int)
+
+    start_item_counts = start_item_df.groupby(['champion_id', 'item_id']).agg({'win': ['count', 'sum']})
+    start_item_counts.columns = ['pick_count', 'win_count']
+    start_item_counts = start_item_counts.reset_index()
+
+    start_item_counts['win_rate'] = round((start_item_counts['win_count'] / start_item_counts['pick_count']) * 100, 2)
+
+    start_item_counts = start_item_counts[
+        (start_item_counts['win_count'] >= 5) & (start_item_counts['pick_count'] >= 5)]
+
+    top3_start_item = start_item_counts.groupby('champion_id').apply(lambda x: x.nlargest(3, ['pick_count', 'win_rate']))
+    top3_start_item = top3_start_item.reset_index(drop=True)
+
+    total_game_df = start_item_df.groupby(['champion_id']).agg({'win': ['count']})
+    total_game_df.columns = ['total_game']
+    total_game_df = total_game_df.reset_index()
+    merged_df = pd.merge(top3_start_item, total_game_df, on='champion_id')
+    merged_df['pick_rate'] = round((merged_df['pick_count'] / merged_df['total_game']) * 100, 2)
+    final_df = merged_df.drop(columns=['total_game'])
+    print("장신구 아이템 데이터 정제 완료 ")
+    return final_df
+
+accessories_data = accessories_data(df)
 # ----------------------------------------------------------------------------------------------------------------------
 # 스펠 데이터
+def spell_data(raw_data):
+    result = []
+    print("스펠 데이터 정제 시작 ")
+    for i in tqdm(range(len(raw_data))):
+        df = raw_data.iloc[i]['matches']['info']['participants']
+        for summoner in range(len(df)):
+            lst = []
+            lst.append(df[summoner]['championId'])
+            lst.append(df[summoner]['summoner1Id'])
+            lst.append(df[summoner]['summoner2Id'])
+            lst.append(df[summoner]['win'])
+            result.append(lst)
+    columns = ['champion_id', 'spell_1', 'spell_2', 'win']
+
+    spell_df = pd.DataFrame(result, columns=columns)
+    spell_df['win'] = spell_df['win'].astype(int)
+    def combine_spells(df):
+        df['spell_1'], df['spell_2'] = np.sort(df[['spell_1', 'spell_2']], axis=1).T
+        df['spells'] = df['spell_1'].astype(str) + ',' + df['spell_2'].astype(str)
+        return df.groupby(['champion_id', 'spells'])['win'].agg(['count', 'sum']).reset_index()
+
+    top3_spells = (
+        combine_spells(spell_df)
+        .sort_values(['champion_id', 'sum', 'count'], ascending=[True, False, False])
+        .groupby('champion_id')
+        .head(2)
+        .rename(columns={'count': 'pick_count', 'sum': 'win_count'})
+    )
+
+    top3_spells['win_rate'] = round((top3_spells['win_count'] / top3_spells['pick_count']) * 100, 2)
+    total_game_df = spell_df.groupby(['champion_id']).agg({'win': ['count']})
+    total_game_df.columns = ['total_game']
+    total_game_df.reset_index(inplace=True)
+    merged_df = pd.merge(top3_spells, total_game_df, on='champion_id')
+    merged_df['pick_rate'] = round((merged_df['pick_count'] / merged_df['total_game']) * 100, 2)
+    final_df = merged_df.drop(columns=['total_game'])
+    print("스펠 데이터 정제 완료 ")
+    return final_df
+
+
+spell_data = spell_data(df)
+# ----------------------------------------------------------------------------------------------------------------------
+
+
+df.iloc[0]['timeline']['info']['frames'][3]['events'][1]['level']
+df.iloc[0]['matches']['info']['participants'][0]['championId']
+df.iloc[0]['matches']['info']['participants'][0]['participantId']
+
+def skill_build_data(raw_data):
+    for x in tqdm(range(len(raw_data))):
+        for minute in range(len(raw_data.iloc[x]['timeline']['info']['frames'])):
+            events = raw_data.iloc[x]['timeline']['info']['frames'][minute]['events']
+            participants = raw_data.iloc[x]['matches']['info']['participants']
+
+            # Create a dictionary to map participantId to championId
+            participant_to_champion = {participant['participantId']: participant['championId'] for participant in
+                                       participants}
+
+            for event in events:
+                if event['type'] == 'SKILL_LEVEL_UP':
+                    participant_id = event['participantId']
+                    skill_slot = event['skillSlot']
+                    champion_id = participant_to_champion[participant_id]
+                if event['type'] == 'LEVEL_UP':
+                    level = event['level']
+                    print(level)
+                    #
+                    # print(
+                    #     f"Champion ID: {champion_id} Level: {level} Skill Slot: {skill_slot}")
+
+
+skill_build_data(df[:1])
