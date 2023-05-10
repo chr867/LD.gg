@@ -9,4 +9,27 @@
 	<select id="select_by_email_mentor_list" parameterType="String" resultType="String">
 		select distinct mentor_email from my_mentoring where menti_email = 'asd@naver.com'
 	</select>
+	<insert id="insert_chat_list" parameterType="chatroom">
+		insert into chat_room(chat_room_seq, chat_category, chat_send_user, chat_receive_user)
+		values (null, #{chat_category}, #{chat_send_user}, #{chat_receive_user});
+	</insert>
+	<insert id="insert_chat_room" parameterType="chatroom" useGeneratedKeys="true" keyProperty="chat_room_seq">
+		insert into chat_room(chat_room_seq, chat_category, chat_send_user, chat_receive_user)
+		values (null, #{chat_category}, #{chat_send_user}, #{chat_receive_user})
+		<selectKey resultType="int" keyProperty="chat_room_seq" order="AFTER">
+			select last_insert_id()
+		</selectKey>
+	</insert>
+
+	<select id="select_chat_list" parameterType="String" resultType="chatroom">
+		select * from chat_room where chat_send_user = #{email} or chat_receive_user = #{email}
+	</select>
+
+	<select id="select_chat_room_seq" parameterType="chatroom" resultType="int">
+		select chat_room_seq from chat_room where chat_category = #{chat_category} and chat_send_user = #{chat_send_user} and chat_receive_user = #{chat_receive_user} limit 1
+	</select>
+
+	<!--<select id="select_by_email_mentor_list" parameterType="int" resultType="chatlist">
+		select chat_content, chat_time from chat_list where chat_room_seq = #{chatRoomSeq}
+	</select>-->
 </mapper>

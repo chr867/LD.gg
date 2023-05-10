@@ -11,12 +11,17 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/lol_chat").withSockJS();
+        // StompEndpointRegistry : WebSocket endpoint 등록하는 클래스.
+        registry.addEndpoint("/chatroom").withSockJS(); // /chatroom으로 들어오는 클라이언트 endpoint로 등록.
+        //withSockJS() : SockJS 활성화.
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/topic");
-        registry.setApplicationDestinationPrefixes("/app");
+        // MessageBrokerRegistry : 메시지 브로커 등록하고 구성.
+        registry.enableSimpleBroker("/chatseq"); // 메시지 브로커 활성화하는 메소드.
+        registry.setApplicationDestinationPrefixes("/app"); // STOMP 클라이언트에서 보내는 메시지의 대상 주소를 정의하는데 사용되는 경로 prefix 설정.
     }
+
+
 }

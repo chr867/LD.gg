@@ -15,4 +15,5 @@ public class ChatListDto {
     private int chat_category;
     private String chat_content;
     private Timestamp chat_time;
+    private String chat_user;
 }
