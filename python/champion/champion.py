@@ -1,17 +1,11 @@
 # --------------------------------------------------------
 # Package
-import bs4
 import pandas as pd
-import requests
-import cx_Oracle
-import pymysql
-from requests import request
 from tqdm import tqdm
 import my_utils as mu
 import json
 import time
 import numpy as np
-
 tqdm.pandas()
 
 # RIOT-API-KEY
@@ -20,13 +14,41 @@ riot_api_key = 'RGAPI-14667a4e-7c3c-45fa-ac8f-e53c7c3f5fe1'
 # RawData
 conn = mu.connect_mysql()
 start_time = time.time()
-df = pd.DataFrame(mu.mysql_execute_dict("SELECT * FROM match_raw", conn))
+df = pd.DataFrame(mu.mysql_execute_dict("SELECT * FROM match_raw LIMIT 1", conn))
 conn.close()
 df['matches'] = df['matches'].apply(json.loads)
 df['timeline'] = df['timeline'].apply(json.loads)
 end_time = time.time()
 print("Data load time: {:.2f} seconds".format(end_time - start_time))
 
+def data_select():
+    start_time = time.time()
+    conn = mu.connect_mysql()
+    cursor = conn.cursor()
+    cursor.execute('SELECT COUNT(*) FROM match_raw')
+    total_records = cursor.fetchone()[0]
+    cursor.close()
+    total_records = 5000 # 원하는 만큼 설정
+    print(f"총 {total_records}개 데이터 SELECT 시작합니다.")
+    batch_size = 100
+    dfs = []
+    count = 0
+    for offset in tqdm(range(0, total_records, batch_size)):
+        query = f'SELECT * FROM match_raw LIMIT {batch_size} OFFSET {offset}'
+        df = pd.read_sql(query, conn)
+        dfs.append(df)
+        count += 100
+        print(f"데이터 : {count}개")
+        time.sleep(0.1)
+    conn.close()
+
+    df = pd.concat(dfs, ignore_index=True)
+    end_time = time.time()
+    print("데이터 SELECT 종료")
+    print("데이터 로딩 시간 : {:.2f}초".format(end_time - start_time))
+    return df
+
+df = data_select()
 # ----------------------------------------------------------------------------------------------------------------------
 # 룬 데이터 정제
 def rune_data(raw_data):
