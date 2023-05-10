@@ -61,8 +61,8 @@
     </div>
   </div>
 </div>
-
 <!-- 리뷰 쓰기 모달 -->
+
 	<div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true" style="display: none;">
   <div class="modal-dialog">
     <div class="modal-content">
