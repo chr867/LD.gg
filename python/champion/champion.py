@@ -28,7 +28,7 @@ def data_select():
     cursor.execute('SELECT COUNT(*) FROM match_raw')
     total_records = cursor.fetchone()[0]
     cursor.close()
-    # total_records = 1000 # 원하는 만큼 설정
+    total_records = 5000 # 원하는 만큼 설정
     print(f"총 {total_records}개 데이터 SELECT 시작합니다.")
     batch_size = 100
     dfs = []
