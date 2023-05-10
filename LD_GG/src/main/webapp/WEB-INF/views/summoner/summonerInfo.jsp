@@ -335,6 +335,7 @@
 		data : {summoner_name : '${summoner.summoner_name}'}
 	}).done(res=>{
 		console.log(res)
+		let div = $('<div></div>');
 		$.each(res, function (i, record){
 			let record_div = $('<div class = "record_div"></div>');	//전적 정보가 담길 div
 			
@@ -462,17 +463,22 @@
 			
 			record_player_div.append(record_team1_div,record_team2_div);
 			
+			let button_div = $('<div class = "button_div"></div>');
+			let button = $('<button type = "button" onclick = "function info(record.match_id)"></button>');
+			
 			record_div.append(record_win_lose_div,record_champ_div,record_champ_div,record_kda_div,record_cs_sight_div,record_item_div,record_player_div);
+			div.append(record_div);
 		})
+		$('#record').html(div))
 	}).fail(err=>{
 		console.log(err)
 	})
 	
-	function info(record){
+	function info(match_id){
 		$.ajax({
 			  method: 'get',
 			  url: 'summoner/get_record_detail',
-			  data: { match_id: '${record.match_id}' }
+			  data: { match_id: '${match_id}' }
 			}).done(res => {
 			  console.log(res);
 			  // 1. div 태그 생성. class 속성에 "whole" 부여
@@ -1062,8 +1068,267 @@
 			url : '/summoner/info/getSyntheesis',
 			data : {match_id : '${match_id}'}
 		}).done(res=>{
-			console.log(res)
-			
+			console.log(res);
+			  // 1. div 태그 생성. class 속성에 "whole" 부여
+		      let whole = $('<div class="whole"></div>');
+
+		      // 2. header와 div 태그 생성
+		      let header = $('<header class="data_header"></header>');
+		      let data = $('<div class="data"></div>');
+			  whole.append(header, data); // 2. 생성된 태그들을 whole 태그 내부에 추가
+			  
+			  // 3. 'data_header' 내부에 div 태그 3개 생성
+			  let synthesis = $('<div class="synthesis" onclick="synthesis(res.match_id)"><p>종합</p></div>');
+			  let build = $('<div class="build" onclick="build(res.match_id)"><p>빌드</p></div>');
+			  let ranking = $('<div class="ranking" onclick="ranking(res.match_id)"><p>랭킹</p></div>');
+			  header.append(synthesis, build, ranking);
+			  
+			  // 4. 'data' 내부에 새로운 div 태그 두 개를 생성
+			  let win = $('<div class="win"><header class="win_header"></header></div>');
+			  let lose = $('<div class="lose"><header class="lose_header"></header></div>');
+			  data.append(win, lose);
+			  
+			  $.each(res, function (i, record) {
+			    if (record.win) {
+			      // 5. 'win' 내부에 res의 win 값이 true 인 데이터 수 만큼 div 태그 생성
+			      let winTeam = $('<div class="win_team"></div>');
+			      // 7. 각 'win_team' 내부에 작업할 내용
+			      // 7-1. div 태그 4개 생성. 각 div 태그의 class 속성에 'champ_info','kda_info','cs_ward_info','item_info' 부여.
+			      let champInfo = $('<div class="champ_info"></div>');
+			      let kdaInfo = $('<div class="kda_info"></div>');
+			      let csWardInfo = $('<div class="cs_ward_info"></div>');
+			      let itemInfo = $('<div class="item_info"></div>');
+			      winTeam.append(champInfo,kdaInfo,csWardInfo,itemInfo);
+			      
+			      let champion = $('<div class="champion"><div role = "img" class = "champ_img" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+record.champ_name+'.png")"></div></div>');
+			      let champLevel = $('<span class="champ_level">${record.champ_level}</span>');
+			      champion.append(champLevel);
+			      let spell = $('<div class = "spell"><div class="spell1" role="img" style="background-image: url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/spell/'+record.spell1+'.png")"></div> <div class="spell2" role="img" style="background-image: url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/spell/'+record.spell2+'.png")"></div></div>');
+			      let rune = $('<div class = "rune"><div class="rune_primary" role="img" style="background-image: url("https://ddragon.leagueoflegends.com/cdn/img/'+record.rune_img1+'")></div> <div class="rune_sub" role="img" style="background-image: url("https://ddragon.leagueoflegends.com/cdn/img/'+record.rune_img2+'")></div></div>');
+			      let summonerName = $('<div class="summoner_name"></div>');
+			      let tierBox = $('<span class = "tier_box"></span>');
+			      switch (record.tier) {
+			      case 'challenger':
+			        $tierBox.text('C');
+			        break;
+			      case 'grandmaster':
+			    	  $tierBox.text('GM');
+			        break;
+			      case 'master':
+			    	  $tierBox.text('M');
+			        break;
+			      case 'diamond':
+			    	  $tierBox.text('D');
+			        break;
+			      case 'platinum':
+			    	  $tierBox.text('P');
+			        break;
+			      case 'gold':
+			    	  $tierBox.text('G');
+			        break;
+			      case 'silver':
+			    	  $tierBox.text('S');
+			        break;
+			      case 'bronze':
+			    	  $tierBox.text('B');
+			        break;
+			      case 'iron':
+			    	  $tierBox.text('I');
+			        break;
+			    }
+			      let name = $('<span class = "name">${record.summoner_name}</span>');
+			      summonerName.append(tierBox, name);
+			      champInfo.append(champion,spell,rune,summonerName);
+			      
+			      let kdaInfoText = $('<strong class = "kda_info_text"></strong>');
+			      let kdaText = $('<strong class = "kda_text"></strong>');
+			      let kills = $('<span>${record.kills}/ </span>');
+			      let deaths = $('<span>${record.deaths}/ </span>');
+			      let assists = $('<span>${record.assists}</span>');
+			      kdaInfoText.append(kills,deaths,assists);
+			      let kda = $('<span>${record.kda}</span>');
+			      kdaText.append(kda);
+			      kdaInfo.append(kdaInfoText,kdaText);
+			      
+			      let csWard = $('<span class = "cs_ward"></span>');
+			      let cs = $('<span>${record.cs}/ </span>');
+			      let redWards = $('<span>${record.red_wards_placed}</span>');
+			      csWard.append(cs,redWards);
+			      csWardInfo.append(csWard);
+			      
+			      let itemImg1 = $('<div class = "item_img"></div>');
+			      if(record.item !== null){
+			    	  img1 = $('<img src = "http://ddragon.leagueoflegends.com/cdn/13.9.1/img/item/'+record.item1.png+'" alt = "#">');
+				      itemImg.append(img1);
+			      }
+			      itemInfo.append(itemImg1);
+			      
+			      let itemImg2 = $('<div class = "item_img"></div>');
+			      if(record.item !== null){
+			    	  img2 = $('<img src = "http://ddragon.leagueoflegends.com/cdn/13.9.1/img/item/'+record.item2.png+'" alt = "#">');
+				      itemImg.append(img2);
+			      }
+			      itemInfo.append(itemImg2);
+			      
+			      let itemImg3 = $('<div class = "item_img"></div>');
+			      if(record.item !== null){
+			    	  img3 = $('<img src = "http://ddragon.leagueoflegends.com/cdn/13.9.1/img/item/'+record.item3.png+'" alt = "#">');
+				      itemImg.append(img3);
+			      }
+			      itemInfo.append(itemImg3);
+			      
+			      let itemImg4 = $('<div class = "item_img"></div>');
+			      if(record.item !== null){
+			    	  img4 = $('<img src = "http://ddragon.leagueoflegends.com/cdn/13.9.1/img/item/'+record.item4.png+'" alt = "#">');
+				      itemImg.append(img4);
+			      }
+			      itemInfo.append(itemImg4);
+			      
+			      let itemImg5 = $('<div class = "item_img"></div>');
+			      if(record.item !== null){
+			    	  img5 = $('<img src = "http://ddragon.leagueoflegends.com/cdn/13.9.1/img/item/'+record.item5.png+'" alt = "#">');
+				      itemImg.append(img5);
+			      }
+			      itemInfo.append(itemImg5);
+			      
+			      let itemImg6 = $('<div class = "item_img"></div>');
+			      if(record.item !== null){
+			    	  img6 = $('<img src = "http://ddragon.leagueoflegends.com/cdn/13.9.1/img/item/'+record.item6.png+'" alt = "#">');
+				      itemImg.append(img6);
+			      }
+			      itemInfo.append(itemImg6);
+			      
+			      let itemImg7 = $('<div class = "item_img"></div>');
+			      if(record.item !== null){
+			    	  img7 = $('<img src = "http://ddragon.leagueoflegends.com/cdn/13.9.1/img/item/'+record.item7.png+'" alt = "#">');
+				      itemImg.append(img7);
+			      }
+			      itemInfo.append(itemImg7);
+			      
+			      winTeam.append(champInfo,kdaInfo,csWardInfo,itemInfo);
+			      
+			      win.append(winTeam);
+			    } else {
+			      // 6. 'lose' 내부에 res의 win 값이 false 인 데이터 수 만큼 div 태그 생성
+			      let loseTeam = $('<div class = "lose_team"></div>');
+			      
+			      let champInfo = $('<div class="champ_info"></div>');
+			      let kdaInfo = $('<div class="kda_info"></div>');
+			      let csWardInfo = $('<div class="cs_ward_info"></div>');
+			      let itemInfo = $('<div class="item_info"></div>');
+			      winTeam.append(champInfo,kdaInfo,csWardInfo,itemInfo);
+			      
+			      let champion = $('<div class="champion"><div role = "img" class = "champ_img" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+record.champ_name+'.png")"></div></div>');
+			      let champLevel = $('<span class="champ_level">${record.champ_level}</span>');
+			      champion.append(champLevel);
+			      let spell = $('<div class = "spell"><div class="spell1" role="img" style="background-image: url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/spell/'+record.spell1+'.png")"></div> <div class="spell2" role="img" style="background-image: url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/spell/'+record.spell2+'.png")"></div></div>');
+			      let rune = $('<div class = "rune"><div class="rune_primary" role="img" style="background-image: url("https://ddragon.leagueoflegends.com/cdn/img/'+record.rune_img1+'")></div> <div class="rune_sub" role="img" style="background-image: url("https://ddragon.leagueoflegends.com/cdn/img/'+record.rune_img2+'")></div></div>');
+			      let summonerName = $('<div class="summoner_name"></div>');
+			      let tierBox = $('<span class = "tier_box"></span>');
+			      switch (record.tier) {
+			      case 'challenger':
+			        $tierBox.text('C');
+			        break;
+			      case 'grandmaster':
+			    	  $tierBox.text('GM');
+			        break;
+			      case 'master':
+			    	  $tierBox.text('M');
+			        break;
+			      case 'diamond':
+			    	  $tierBox.text('D');
+			        break;
+			      case 'platinum':
+			    	  $tierBox.text('P');
+			        break;
+			      case 'gold':
+			    	  $tierBox.text('G');
+			        break;
+			      case 'silver':
+			    	  $tierBox.text('S');
+			        break;
+			      case 'bronze':
+			    	  $tierBox.text('B');
+			        break;
+			      case 'iron':
+			    	  $tierBox.text('I');
+			        break;
+			    }
+			      let name = $('<span class = "name">${record.summoner_name}</span>');
+			      summonerName.append(tierBox, name);
+			      champInfo.append(champion,spell,rune,summonerName);
+			      
+			      let kdaInfoText = $('<strong class = "kda_info_text"></strong>');
+			      let kdaText = $('<strong class = "kda_text"></strong>');
+			      let kills = $('<span>${record.kills}/ </span>');
+			      let deaths = $('<span>${record.deaths}/ </span>');
+			      let assists = $('<span>${record.assists}</span>');
+			      kdaInfoText.append(kills,deaths,assists);
+			      let kda = $('<span>${record.kda}</span>');
+			      kdaText.append(kda);
+			      kdaInfo.append(kdaInfoText,kdaText);
+			      
+			      let csWard = $('<span class = "cs_ward"></span>');
+			      let cs = $('<span>${record.cs}/ </span>');
+			      let redWards = $('<span>${record.red_wards_placed}</span>');
+			      csWard.append(cs,redWards);
+			      csWardInfo.append(csWard);
+			      
+			      let itemImg1 = $('<div class = "item_img"></div>');
+			      if(record.item !== null){
+			    	  img1 = $('<img src = "http://ddragon.leagueoflegends.com/cdn/13.9.1/img/item/'+record.item1.png+'" alt = "#">');
+				      itemImg.append(img1);
+			      }
+			      itemInfo.append(itemImg1);
+			      
+			      let itemImg2 = $('<div class = "item_img"></div>');
+			      if(record.item !== null){
+			    	  img2 = $('<img src = "http://ddragon.leagueoflegends.com/cdn/13.9.1/img/item/'+record.item2.png+'" alt = "#">');
+				      itemImg.append(img2);
+			      }
+			      itemInfo.append(itemImg2);
+			      
+			      let itemImg3 = $('<div class = "item_img"></div>');
+			      if(record.item !== null){
+			    	  img3 = $('<img src = "http://ddragon.leagueoflegends.com/cdn/13.9.1/img/item/'+record.item3.png+'" alt = "#">');
+				      itemImg.append(img3);
+			      }
+			      itemInfo.append(itemImg3);
+			      
+			      let itemImg4 = $('<div class = "item_img"></div>');
+			      if(record.item !== null){
+			    	  img4 = $('<img src = "http://ddragon.leagueoflegends.com/cdn/13.9.1/img/item/'+record.item4.png+'" alt = "#">');
+				      itemImg.append(img4);
+			      }
+			      itemInfo.append(itemImg4);
+			      
+			      let itemImg5 = $('<div class = "item_img"></div>');
+			      if(record.item !== null){
+			    	  img5 = $('<img src = "http://ddragon.leagueoflegends.com/cdn/13.9.1/img/item/'+record.item5.png+'" alt = "#">');
+				      itemImg.append(img5);
+			      }
+			      itemInfo.append(itemImg5);
+			      
+			      let itemImg6 = $('<div class = "item_img"></div>');
+			      if(record.item !== null){
+			    	  img6 = $('<img src = "http://ddragon.leagueoflegends.com/cdn/13.9.1/img/item/'+record.item6.png+'" alt = "#">');
+				      itemImg.append(img6);
+			      }
+			      itemInfo.append(itemImg6);
+			      
+			      let itemImg7 = $('<div class = "item_img"></div>');
+			      if(record.item !== null){
+			    	  img7 = $('<img src = "http://ddragon.leagueoflegends.com/cdn/13.9.1/img/item/'+record.item7.png+'" alt = "#">');
+				      itemImg.append(img7);
+			      }
+			      itemInfo.append(itemImg7);
+			      
+			      loseTeam.append(champInfo,kdaInfo,csWardInfo,itemInfo);
+			      
+			      lose.append(loseTeam);
+			    }
+			  });
+			  .html(whole)
 		}).fail(err=>{
 			console.log(err)
 		})
@@ -1077,10 +1342,54 @@
 			data : {match_id : '${match_id}'}
 		}).done(res=>{
 			console.log(res)
-			$.each(res, function(i, ){
-				
+			let data_div = $('<div></div>');
+			let item_build_div = $('<div class = "item_build_div"></div>');
+			let skill_build_div = $('<div class = "skill_build_div"></div>');
+			let rune_build_div = $('<div class = "rune_build_div"></div>');
+			
+			let item_div = $('<div></div>');
+			$.each(res.timeline, function(i,timeline){
+				let item = $('<img src = "http://ddragon.leagueoflegends.com/cdn/13.9.1/img/item/'+res.item.png+'">');
+				item_div.append(item);
 			})
-			$('.build_info').html(dList)
+			item_build_div.append(item_div);
+			
+			let skill_div = $('<div></div>');
+			$.each(res.timeline, function(i, timeline){
+				let skill1 = $('<img src = "http://ddragon.leagueoflegends.com/cdn/13.9.1/img/spell/'+res.skill1+'.png">');
+				let skill2 = $('<img src = "http://ddragon.leagueoflegends.com/cdn/13.9.1/img/spell/'+res.skill2+'.png">');
+				let skill3 = $('<img src = "http://ddragon.leagueoflegends.com/cdn/13.9.1/img/spell/'+res.skill3+'.png">');
+				skill_div.append(skill1,skill2,skill3);
+			})
+			skill_build_div.append(skill_div);
+			
+			let rune_div1 = $('<div></div>');
+			let rune_div2 = $('<div></div>');
+			let rune_stat = $('<div></div>');
+			
+			let main_rune = $('<img src = "https://ddragon.leagueoflegends.com/cdn/img/'+res.main_rune+'.png">');
+			let main1 = $('<img src = "https://ddragon.leagueoflegends.com/cdn/img/'+res.main_rune1+'.png">');
+			let main2 = $('<img src = "https://ddragon.leagueoflegends.com/cdn/img/'+res.main_rune2+'.png">');
+			let main3 = $('<img src = "https://ddragon.leagueoflegends.com/cdn/img/'+res.main_rune3+'.png">');
+			let main4 = $('<img src = "https://ddragon.leagueoflegends.com/cdn/img/'+res.main_rune4+'.png">');
+			rune_div1.append(main_rune,main1,main2,main3,main4);
+			
+			let sub_rune = $('<img src = "https://ddragon.leagueoflegends.com/cdn/img/'+res.main_rune+'.png">');
+			let sub1 = $('<img src = "https://ddragon.leagueoflegends.com/cdn/img/'+res.sub_rune1+'.png">');
+			let sub2 = $('<img src = "https://ddragon.leagueoflegends.com/cdn/img/'+res.sub_rune2+'.png">');
+			let sub3 = $('<img src = "https://ddragon.leagueoflegends.com/cdn/img/'+res.sub_rune3+'.png">');
+			rune_div2.append(sub_rune,sub1,sub2,sub3);
+			
+			let stat1 = $('<img src = "">');
+			let stat2 = $('<img src = "">');
+			let stat3 = $('<img src = "">');
+			
+			rune_stat.append(stat1,stat2,stat3);
+			
+			rune_build_div.append(rune_div1,rune_div2,rune_stat);	
+			
+			data_div.append(item_build_div,skill_build_div,rune_build_div);
+			$('.build_info').html(data_div);
 		}).fail(err=>{
 			console.log(err)
 		})
