@@ -48,10 +48,9 @@
 
 			<div id="champ_rank_filter">
 				<input type="radio" value="랭크 전체" class="rank_filter" id="champ_all">
-				<input type="radio" value="솔로 랭크" class="rank_filter"
-					id="champ_solo"> <input type="radio" value="자유 랭크"
-					class="rank_filter" id="champ_flex"> <input type="radio"
-					value="일반" class="rank_filter" id="champ_classic">
+				<input type="radio" value="솔로 랭크" class="rank_filter" id="champ_solo">
+				<input type="radio" value="자유 랭크" class="rank_filter" id="champ_flex">
+				<input type="radio"	value="일반" class="rank_filter" id="champ_classic">
 			</div>
 
 			<div id="champ_position_filter"></div>
@@ -186,15 +185,16 @@
 		url : '/summoner/get_champ_position_filter',
 		data : {summoner_name : '${summoner.summoner_name}'}
 	}).done(res=>{
-		let pList = '<button id = "position"><img src = "" alt ="#"></button>'
-		for(position of res){
-			pList = '<button type = "button" class = "position"><img src = "" alt = "#"></button>'
-			pList = '<button type = "button" class = "position"><img src = "" alt = "#"></button>'
-			pList = '<button type = "button" class = "position"><img src = "" alt = "#"></button>'
-			pList = '<button type = "button" class = "position"><img src = "" alt = "#"></button>'
-			pList = '<button type = "button" class = "position"><img src = "" alt = "#"></button>'
-		$('#champ_position_filter').html(pList)
-		}
+		console.log(res)
+		let filter_div = $('<div class = "filter_div"></div>');
+		let all = $('<div><strong class = "all">전체</strong></div>');
+		filter_div.append(all);
+		$.each(res, function(i, position){
+			let position = $('<div class = "position_div"><img class = "position_img" src = "https://ditoday.com/wp-content/uploads/2022/02/'+position+'.png"></div>');
+			filter_div.append(position);
+		})
+	}).fail(err=>{
+		console.log(err)
 	})
 	
 	$.ajax({//소환사의 챔피언 통계
@@ -484,9 +484,9 @@
 			  whole.append(header, data); // 2. 생성된 태그들을 whole 태그 내부에 추가
 			  
 			  // 3. 'data_header' 내부에 div 태그 3개 생성
-			  let synthesis = $('<div class="synthesis" onclick="function1()"><p>종합</p></div>');
-			  let build = $('<div class="build" onclick="function2()"><p>빌드</p></div>');
-			  let ranking = $('<div class="ranking" onclick="function3()"><p>랭킹</p></div>');
+			  let synthesis = $('<div class="synthesis" onclick="synthesis(res.match_id)"><p>종합</p></div>');
+			  let build = $('<div class="build" onclick="build(res.match_id)"><p>빌드</p></div>');
+			  let ranking = $('<div class="ranking" onclick="ranking(res.match_id)"><p>랭킹</p></div>');
 			  header.append(synthesis, build, ranking);
 			  
 			  // 4. 'data' 내부에 새로운 div 태그 두 개를 생성
@@ -737,21 +737,349 @@
 			}).fail(err => {
 			  console.log(err);
 			});
-
 	}
 	
-	//빌드 버튼 클릭 시
-	/* function build_info(){
-		$.ajax({
+	$('#champ_all').click(function(){
+		$.ajax({//소환사의 챔피언 통계
 			method : 'get',
-			url : '/summoner/get_record_build',
+			url : '/summoner/get_champ_record',
 			data : {summoner_name : '${summoner.summoner_name}'}
 		}).done(res=>{
 			console.log(res)
-			for(build of res){
-				dList = '<div><div><header><div></div></header><header><div></div></header></div></div>'//아이템 빌드, 스킬 마스터리
-				dList += '<div><header><div></div><div></div></header></div>'//룬 빌드 정보
-			}
+			let champ_div = $('<div></div>');
+			let winrate_div = $('<div></div>');
+			let games_div = $('<div><div>');
+			let wins_div = $('<div></div>');
+			let losses_div = $('<div></div>');
+			let kda_div = $('<div></div>');
+			let kills_div = $('<div></div>');
+			let deaths_div = $('<div></div>');
+			let assists_div = $('<div><div>');
+			let cs_div = $('<div></div>');
+			let cs_pm_div = $('<div></div>');
+			$.each(res.champ_name, function (i, champ_name){
+				let champ_img = $('<div role = "img" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+champ_name+'.png")"></div>');
+				let champ_name = $('<span>'+champ_name+'</span>');
+				champ_div.append(champ_img,champ_name);
+			})
+			$.each(res.winrate, function(i, winrate){
+				let winrate = $('<strong>'+winrate+'%</strong>');
+				winrate_div.append(winrate);
+			})
+			$.each(res.games, function(i, games){
+				let games = $('<p>'+games+'</p>');
+				games_div.append(games);
+			})
+			$.each(res.wins, function(i, wins){
+				let win = $('<span>'+wins+'</span>');
+				wins_div.append(win);
+			})
+			$.each(res.losses, function(i, losses){
+				let losses = $('<span>'+losses+'</span>');
+				losses_div.append(losses);
+			})
+			$.each(res.kda, function(i, kda){
+				let kda = $('<strong>'+kda+'</strong>');
+				kda_div.append(kda);
+			})
+			$.each(res.kills, function(i, kills){
+				let kills = $('<span>'+kills+'</span>');
+				kills_div.append(kills);
+			})
+			$.each(res.deaths, function(i, deaths){
+				let deaths = $('<span>'+deaths+'</span>');
+				deaths_div.append(deaths);
+			})
+			$.each(res.assists, function(i, assists){
+				let assists = $('<span>'+assists+'</span>');
+				assists_div.append(assists);
+			})
+			$.each(res.cs, function(i, cs){
+				let cs = $('<strong>'+cs+'</strong>');
+				cs_div.append(cs);
+			})
+			$.each(res.cs_pm, function(i, cs_pm){
+				let cs_pm = $('<span>'+cs_pm+'<span>');
+				cs_pm_div.append(cs_pm);
+			})
+			$('.champ_data').html(champ_div);
+			$('.winrate_data').html(winrate_div);
+			$('.games_data').html(games_div);
+			$('.wins_data').html(wins_div);
+			$('.losses_data').html(losses_div);
+			$('.kda_data').html(kda_div);
+			$('.kills_data').html(kills_div);
+			$('.deaths_data').html(deaths_div);
+			$('.assists_data').html(assists_div);
+			$('.cs_data').html(cs_div);
+			$('.cs_pm_data').html(cs_pm_div);
+		}).fail(err=>{
+			console.log(err)
+		})
+	})
+	
+	$('#champ_solo').click(function(){
+		$.ajax({//소환사의 챔피언 통계
+			method : 'get',
+			url : '/summoner/get_champ_solo',
+			data : {summoner_name : '${summoner.summoner_name}'}
+		}).done(res=>{
+			console.log(res)
+			let champ_div = $('<div></div>');
+			let winrate_div = $('<div></div>');
+			let games_div = $('<div><div>');
+			let wins_div = $('<div></div>');
+			let losses_div = $('<div></div>');
+			let kda_div = $('<div></div>');
+			let kills_div = $('<div></div>');
+			let deaths_div = $('<div></div>');
+			let assists_div = $('<div><div>');
+			let cs_div = $('<div></div>');
+			let cs_pm_div = $('<div></div>');
+			$.each(res.champ_name, function (i, champ_name){
+				let champ_img = $('<div role = "img" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+champ_name+'.png")"></div>');
+				let champ_name = $('<span>'+champ_name+'</span>');
+				champ_div.append(champ_img,champ_name);
+			})
+			$.each(res.winrate, function(i, winrate){
+				let winrate = $('<strong>'+winrate+'%</strong>');
+				winrate_div.append(winrate);
+			})
+			$.each(res.games, function(i, games){
+				let games = $('<p>'+games+'</p>');
+				games_div.append(games);
+			})
+			$.each(res.wins, function(i, wins){
+				let win = $('<span>'+wins+'</span>');
+				wins_div.append(win);
+			})
+			$.each(res.losses, function(i, losses){
+				let losses = $('<span>'+losses+'</span>');
+				losses_div.append(losses);
+			})
+			$.each(res.kda, function(i, kda){
+				let kda = $('<strong>'+kda+'</strong>');
+				kda_div.append(kda);
+			})
+			$.each(res.kills, function(i, kills){
+				let kills = $('<span>'+kills+'</span>');
+				kills_div.append(kills);
+			})
+			$.each(res.deaths, function(i, deaths){
+				let deaths = $('<span>'+deaths+'</span>');
+				deaths_div.append(deaths);
+			})
+			$.each(res.assists, function(i, assists){
+				let assists = $('<span>'+assists+'</span>');
+				assists_div.append(assists);
+			})
+			$.each(res.cs, function(i, cs){
+				let cs = $('<strong>'+cs+'</strong>');
+				cs_div.append(cs);
+			})
+			$.each(res.cs_pm, function(i, cs_pm){
+				let cs_pm = $('<span>'+cs_pm+'<span>');
+				cs_pm_div.append(cs_pm);
+			})
+			$('.champ_data').html(champ_div);
+			$('.winrate_data').html(winrate_div);
+			$('.games_data').html(games_div);
+			$('.wins_data').html(wins_div);
+			$('.losses_data').html(losses_div);
+			$('.kda_data').html(kda_div);
+			$('.kills_data').html(kills_div);
+			$('.deaths_data').html(deaths_div);
+			$('.assists_data').html(assists_div);
+			$('.cs_data').html(cs_div);
+			$('.cs_pm_data').html(cs_pm_div);
+		}).fail(err=>{
+			console.log(err)
+		})
+	})
+	
+	$('#champ_flex').click(function(){
+		$.ajax({//소환사의 챔피언 통계
+			method : 'get',
+			url : '/summoner/get_champ_flex',
+			data : {summoner_name : '${summoner.summoner_name}'}
+		}).done(res=>{
+			console.log(res)
+			let champ_div = $('<div></div>');
+			let winrate_div = $('<div></div>');
+			let games_div = $('<div><div>');
+			let wins_div = $('<div></div>');
+			let losses_div = $('<div></div>');
+			let kda_div = $('<div></div>');
+			let kills_div = $('<div></div>');
+			let deaths_div = $('<div></div>');
+			let assists_div = $('<div><div>');
+			let cs_div = $('<div></div>');
+			let cs_pm_div = $('<div></div>');
+			$.each(res.champ_name, function (i, champ_name){
+				let champ_img = $('<div role = "img" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+champ_name+'.png")"></div>');
+				let champ_name = $('<span>'+champ_name+'</span>');
+				champ_div.append(champ_img,champ_name);
+			})
+			$.each(res.winrate, function(i, winrate){
+				let winrate = $('<strong>'+winrate+'%</strong>');
+				winrate_div.append(winrate);
+			})
+			$.each(res.games, function(i, games){
+				let games = $('<p>'+games+'</p>');
+				games_div.append(games);
+			})
+			$.each(res.wins, function(i, wins){
+				let win = $('<span>'+wins+'</span>');
+				wins_div.append(win);
+			})
+			$.each(res.losses, function(i, losses){
+				let losses = $('<span>'+losses+'</span>');
+				losses_div.append(losses);
+			})
+			$.each(res.kda, function(i, kda){
+				let kda = $('<strong>'+kda+'</strong>');
+				kda_div.append(kda);
+			})
+			$.each(res.kills, function(i, kills){
+				let kills = $('<span>'+kills+'</span>');
+				kills_div.append(kills);
+			})
+			$.each(res.deaths, function(i, deaths){
+				let deaths = $('<span>'+deaths+'</span>');
+				deaths_div.append(deaths);
+			})
+			$.each(res.assists, function(i, assists){
+				let assists = $('<span>'+assists+'</span>');
+				assists_div.append(assists);
+			})
+			$.each(res.cs, function(i, cs){
+				let cs = $('<strong>'+cs+'</strong>');
+				cs_div.append(cs);
+			})
+			$.each(res.cs_pm, function(i, cs_pm){
+				let cs_pm = $('<span>'+cs_pm+'<span>');
+				cs_pm_div.append(cs_pm);
+			})
+			$('.champ_data').html(champ_div);
+			$('.winrate_data').html(winrate_div);
+			$('.games_data').html(games_div);
+			$('.wins_data').html(wins_div);
+			$('.losses_data').html(losses_div);
+			$('.kda_data').html(kda_div);
+			$('.kills_data').html(kills_div);
+			$('.deaths_data').html(deaths_div);
+			$('.assists_data').html(assists_div);
+			$('.cs_data').html(cs_div);
+			$('.cs_pm_data').html(cs_pm_div);
+		}).fail(err=>{
+			console.log(err)
+		})
+	})
+	
+	$('#champ_classic').click(function(){
+		$.ajax({//소환사의 챔피언 통계
+			method : 'get',
+			url : '/summoner/get_champ_classic',
+			data : {summoner_name : '${summoner.summoner_name}'}
+		}).done(res=>{
+			console.log(res)
+			let champ_div = $('<div></div>');
+			let winrate_div = $('<div></div>');
+			let games_div = $('<div><div>');
+			let wins_div = $('<div></div>');
+			let losses_div = $('<div></div>');
+			let kda_div = $('<div></div>');
+			let kills_div = $('<div></div>');
+			let deaths_div = $('<div></div>');
+			let assists_div = $('<div><div>');
+			let cs_div = $('<div></div>');
+			let cs_pm_div = $('<div></div>');
+			$.each(res.champ_name, function (i, champ_name){
+				let champ_img = $('<div role = "img" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+champ_name+'.png")"></div>');
+				let champ_name = $('<span>'+champ_name+'</span>');
+				champ_div.append(champ_img,champ_name);
+			})
+			$.each(res.winrate, function(i, winrate){
+				let winrate = $('<strong>'+winrate+'%</strong>');
+				winrate_div.append(winrate);
+			})
+			$.each(res.games, function(i, games){
+				let games = $('<p>'+games+'</p>');
+				games_div.append(games);
+			})
+			$.each(res.wins, function(i, wins){
+				let win = $('<span>'+wins+'</span>');
+				wins_div.append(win);
+			})
+			$.each(res.losses, function(i, losses){
+				let losses = $('<span>'+losses+'</span>');
+				losses_div.append(losses);
+			})
+			$.each(res.kda, function(i, kda){
+				let kda = $('<strong>'+kda+'</strong>');
+				kda_div.append(kda);
+			})
+			$.each(res.kills, function(i, kills){
+				let kills = $('<span>'+kills+'</span>');
+				kills_div.append(kills);
+			})
+			$.each(res.deaths, function(i, deaths){
+				let deaths = $('<span>'+deaths+'</span>');
+				deaths_div.append(deaths);
+			})
+			$.each(res.assists, function(i, assists){
+				let assists = $('<span>'+assists+'</span>');
+				assists_div.append(assists);
+			})
+			$.each(res.cs, function(i, cs){
+				let cs = $('<strong>'+cs+'</strong>');
+				cs_div.append(cs);
+			})
+			$.each(res.cs_pm, function(i, cs_pm){
+				let cs_pm = $('<span>'+cs_pm+'<span>');
+				cs_pm_div.append(cs_pm);
+			})
+			$('.champ_data').html(champ_div);
+			$('.winrate_data').html(winrate_div);
+			$('.games_data').html(games_div);
+			$('.wins_data').html(wins_div);
+			$('.losses_data').html(losses_div);
+			$('.kda_data').html(kda_div);
+			$('.kills_data').html(kills_div);
+			$('.deaths_data').html(deaths_div);
+			$('.assists_data').html(assists_div);
+			$('.cs_data').html(cs_div);
+			$('.cs_pm_data').html(cs_pm_div);
+		}).fail(err=>{
+			console.log(err)
+		})
+	})
+	
+	//종합 버튼 클릭 시
+	function synthesis(match_id){
+		$.ajax({
+			method : 'get',
+			url : '/summoner/info/getSyntheesis',
+			data : {match_id : '${match_id}'}
+		}).done(res=>{
+			console.log(res)
+			
+		}).fail(err=>{
+			console.log(err)
+		})
+	}
+	
+	//빌드 버튼 클릭 시
+	function build(match_id){
+		$.ajax({
+			method : 'get',
+			url : '/summoner/info/getBuild',
+			data : {match_id : '${match_id}'}
+		}).done(res=>{
+			console.log(res)
+			$.each(res, function(i, ){
+				
+			})
 			$('.build_info').html(dList)
 		}).fail(err=>{
 			console.log(err)
@@ -762,8 +1090,8 @@
 	$('#ranking').click(function(){
 		$.ajax({
 			method : 'get',
-			url : '/summoner/get_record_build',
-			data : {summoner_name : '${summoner.summoner_name}'}
+			url : '/summoner/getRanking',
+			data : {match_id : '${match_id}'}
 		}).done(res=>{
 			console.log(res)
 		}).fail(err=>{
@@ -774,7 +1102,7 @@
 	
 	$('.rank_filter').click(function(){
 		$('.rank_filter').not(this).prop('checked', false)
-	}) */
+	})
 	
 	</script>
 

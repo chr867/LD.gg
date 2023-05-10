@@ -28,9 +28,9 @@ public class SummonerController {
 	}
 
 	@GetMapping(value = "/info")
-	public ModelAndView summoner_info(String summoner_name) {
-		List<SummonerDto> s = ss.get_summoner_info(summoner_name);
-		return new ModelAndView("info").addObject("summoner", s);
+	public ModelAndView summoner_info(@RequestParam String summoner_name) {
+	    List<SummonerDto> s = ss.get_summoner_info(summoner_name);
+	    return new ModelAndView("summonerInfo").addObject("summoner", s);
 	}
 
 	@PostMapping(value = "/renewal")
