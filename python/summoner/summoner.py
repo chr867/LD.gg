@@ -44,7 +44,6 @@ for tier in tqdm(tiers):
             summoner_leagues.extend(res_p)
             if len(res_p) < 50:
                 break
-            # break
             page_p += 1
 
 def tier_int(t):
@@ -66,6 +65,7 @@ def tier_int(t):
         return 8
     elif t.tier == 'CHALLENGER':
         return 9
+
 
 rank_df = pd.DataFrame(summoner_leagues)
 rank_result_df = rank_df[['tier', 'leagueId', 'queueType', 'summonerName', 'leaguePoints', 'wins', 'losses', 'rank']]
