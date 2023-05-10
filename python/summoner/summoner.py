@@ -79,11 +79,11 @@ def insert(t, conn_):
         f'INSERT INTO SUMMONER_RANK (TIER, LEAGUE_ID, QUEUE, SUMMONER_NAME, LP, WINS, LOSSES, DIVISION,'
         f' MATCH_COUNT, TIER_INT)'
         f'VALUES ({repr(t.tier)}, {repr(t.league_id)}, {repr(t.queue)}, {repr(t.summoner_name)}, '
-        f'{t.lp}, {t.wins}, {t.losses}, {repr(t.division)}, {t.match_count})'
+        f'{t.lp}, {t.wins}, {t.losses}, {repr(t.division)}, {t.match_count}, {t.tier_int})'
         f'ON DUPLICATE KEY UPDATE '
         f'tier = {repr(t.tier)}, league_id = {repr(t.league_id)}, queue = {repr(t.queue)},'
         f'summoner_name = {repr(t.summoner_name)}, lp = {t.lp}, wins = {t.wins}, losses = {t.losses}, '
-        f'division = {repr(t.division)}, match_count = {t.match_count}'
+        f'division = {repr(t.division)}, match_count = {t.match_count}, tier_int = {t.tier_int}'
     )
     mu.mysql_execute_dict(insert_query, conn_)
 
