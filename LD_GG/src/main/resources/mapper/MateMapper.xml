@@ -5,11 +5,20 @@
 
 <mapper namespace="com.ld.gg.dao.MateDao">
 	<select id="getBoardList" resultType="mate">
-		SELECT mp.mate_id ,mp.email ,mp.mate_content ,mp.mate_date,mp.mate_title,m.LOL_ACCOUNT  
+		SELECT mp.mate_id ,mp.email ,mp.mate_content ,mp.mate_date,mp.mate_title,m.lol_account  
 		FROM MATE_POST as MP JOIN (
 			SELECT *
 			FROM MEMBER) as M
 		ON MP.EMAIL = M.EMAIL
-		ORDER BY mp.mate_id  desc;
+		ORDER BY mp.mate_id desc;
 	</select>
+	<insert id="insertMate" parameterType="mate">
+	INSERT INTO mate_post
+		(email, mate_title, mate_content,mate_date)
+		VALUES(
+		#{email},
+		#{mate_title},
+		#{mate_content},
+		default);
+	</insert>
 </mapper>
