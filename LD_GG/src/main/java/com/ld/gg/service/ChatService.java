@@ -61,4 +61,23 @@ public class ChatService {
 
 		return chat_content_list;
 	}
+
+	public boolean insert_chat_list(ChatListDto chatListDto) {
+		return false;
+	}
+
+	public List<ChatroomDto> getChatRoomList(String email) {
+		List<ChatroomDto> chatroomDtoList = cd.select_chat_list(email);
+
+		return chatroomDtoList;
+	}
+
+	public int select_chat_room_seq(ChatroomDto croomdto) {
+		System.out.println("select_chat_room_seq 실행...");
+		log.info("chatroom : {}", croomdto);
+
+		int chat_room_seq = cd.select_chat_room_seq(croomdto);
+
+		return chat_room_seq;
+	}
 }
