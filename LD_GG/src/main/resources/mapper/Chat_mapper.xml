@@ -29,7 +29,11 @@
 		select chat_room_seq from chat_room where chat_category = #{chat_category} and chat_send_user = #{chat_send_user} and chat_receive_user = #{chat_receive_user} limit 1
 	</select>
 
-	<!--<select id="select_by_email_mentor_list" parameterType="int" resultType="chatlist">
+	<select id="select_chat_content" parameterType="int" resultType="chatlist">
 		select chat_content, chat_time from chat_list where chat_room_seq = #{chatRoomSeq}
-	</select>-->
+	</select>
+
+	<insert id="insert_chat_content" parameterType="chatlist">
+		insert into chat_list(chat_seq, chat_room_seq, chat_category, chat_content, chat_time, chat_user) values (null, #{chat_room_seq}, #{chat_category}, #{chat_content}, default, #{chat_user})
+	</insert>
 </mapper>

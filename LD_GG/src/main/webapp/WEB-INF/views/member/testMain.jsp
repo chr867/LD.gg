@@ -35,6 +35,7 @@
 	<a href="/userinterface/admin">어드민페이지</a>
 	<a href="/">메인페이지</a>
 	<a href="/chat/chat-list">채팅방</a>
+	<a href="/question/question">질문</a>
 	<a href ="/wallet/payment">지갑</a>
 </body>
 <script type="text/javascript">

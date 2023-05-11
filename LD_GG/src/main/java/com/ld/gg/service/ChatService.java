@@ -57,12 +57,27 @@ public class ChatService {
 	}
 
 	public List<ChatListDto> getChatContent(int chatRoomSeq) {
+		System.out.println("getChatContent 실행..");
+
 		List<ChatListDto> chat_content_list = cd.select_chat_content(chatRoomSeq);
+
+		if(chat_content_list == null) {
+			System.out.println("채팅 내용 얻어오기 망함.");
+		} else{
+			log.info("{}", chat_content_list);
+		}
 
 		return chat_content_list;
 	}
 
 	public boolean insert_chat_list(ChatListDto chatListDto) {
+		// chat_list 테이블에 insert
+		boolean res = cd.insert_chat_content(chatListDto);
+
+		if(res == false){
+			System.out.println("chat_list 저장 성공");
+		}
+
 		return false;
 	}
 

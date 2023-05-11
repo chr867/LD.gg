@@ -100,6 +100,8 @@ public class ChatRestController {
             System.out.println("채팅 내용 얻어오기 망함.");
         }
 
+        System.out.println(chat_content_list);
+
         return chat_content_list;
     }
 }
