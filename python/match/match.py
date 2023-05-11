@@ -10,7 +10,7 @@ import logging
 tqdm.pandas()
 
 sql_conn = mu.connect_mysql()
-df = pd.DataFrame(mu.mysql_execute_dict('select * from match_raw limit 500', sql_conn))
+df = pd.DataFrame(mu.mysql_execute_dict('select * from match_raw limit 200', sql_conn))
 sql_conn.close()
 
 df['matches'] = df.apply(lambda x: json.loads(x['matches']), axis=1)
