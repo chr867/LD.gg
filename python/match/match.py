@@ -8,11 +8,10 @@ import json
 import multiprocessing as mp
 import logging
 from collections import OrderedDict
-
 tqdm.pandas()
 
 sql_conn = mu.connect_mysql()
-df = pd.DataFrame(mu.mysql_execute_dict('select * from match_raw limit 200', sql_conn))
+df = pd.DataFrame(mu.mysql_execute_dict('select * from match_raw', sql_conn))
 sql_conn.close()
 
 df['matches'] = df.apply(lambda x: json.loads(x['matches']), axis=1)
@@ -33,7 +32,7 @@ for m_idx, m in tqdm(enumerate(df['matches'])):
     tower_destroy = 0
     bans = 0
 
-    for p in m['participants']:
+    for p_idx, p in enumerate(m['participants']):
         game_end = list(df.iloc[m_idx]['timeline'].keys())[-1]
         minions_killed = df.iloc[m_idx]['timeline'][game_end]['participantFrames'][p_idx]['minionsKilled']
         jungle_minions_killed = df.iloc[m_idx]['timeline'][game_end]['participantFrames'][p_idx]['jungleMinionsKilled']
@@ -66,7 +65,7 @@ for m_idx, m in tqdm(enumerate(df['matches'])):
             p['participantId'],
             p['championName'],
             p['championId'],
-            m['teams'][team]['bans'][bans]['championId'],
+            m['bans'][p_idx],
             p['champExperience'],
             p['teamPosition'],
             p['teamId'],
@@ -82,15 +81,16 @@ for m_idx, m in tqdm(enumerate(df['matches'])):
         ])
         p_idx += 1
         bans += 1
-
+        p_id = 0
         for t in range(5, 26):
             try:
-                p_id = str(p['participantId'])
-                g_each = df.iloc[m_idx]['timeline']['info']['frames'][t]['participantFrames'][p_id]['totalGold']
+                g_each = df.iloc[m_idx]['timeline'][str(t)]['participantFrames'][p_id]['totalGold']
                 df_creater[-1].append(g_each)
+                p_id += 1
             except:
                 df_creater[-1].append(0)
 sum_df = pd.DataFrame(df_creater, columns=columns)
+
 
 def summoner_tier(x):
     url = f'https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/{x.summonerId}?api_key={x.api_key}'
@@ -98,8 +98,13 @@ def summoner_tier(x):
     try:
         res = res[0]['tier']
     except Exception as e:
-        print(f'Error: {e}, {x.summonerName}')
+        if 'status' in res:
+            print(res)
+            time.sleep(20)
+            res = summoner_tier(x)
+        print(f'Error: {e}, {res} {x.summonerName}')
         res = 0
+
     return res
 
 sum_df['summonerTier'] = sum_df.progress_apply(lambda x: summoner_tier(x), axis=1)

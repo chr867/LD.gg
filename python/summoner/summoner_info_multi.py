@@ -64,7 +64,7 @@ def info_insert(s, conn):
 def main():
     tiers = ['IRON', 'BRONZE', 'SILVER', 'GOLD', 'PLATINUM', 'DIAMOND']
     divisions = ['IV', 'III', 'II', 'I']
-    api_keys = private.api_keys
+    api_keys = private.riot_api_key_array_summoner
 
     api_it = iter(api_keys)
     summoner_leagues = []

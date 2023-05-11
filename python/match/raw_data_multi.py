@@ -101,7 +101,7 @@ def get_match_info_worker(args):
     tmp = set()
     random.shuffle(_match_ids)
 
-    for match_id in tqdm(_match_ids[:20]):  # 수정점
+    for match_id in tqdm(_match_ids[:500]):  # 수정점
         while True:
             try:
                 get_match_url = f'https://asia.api.riotgames.com/lol/match/v5/matches/{match_id}?api_key={api_key}'
@@ -176,7 +176,9 @@ def df_refine(df):
                 'summoner2Id': participant_list[userNum]['summoner2Id'],
                 'participantId': participant_list[userNum]['participantId'],
                 'totalMinionsKilled': participant_list[userNum]['totalMinionsKilled'],
+                'championName': participant_list[userNum]['championName'],
                 'championId': participant_list[userNum]['championId'],
+                'champExperience': participant_list[userNum]['champExperience'],
                 'win': participant_list[userNum]['win'],
                 'totalDamageDealtToChampions': participant_list[userNum]['totalDamageDealtToChampions'],
                 'damageDealtToObjectives': participant_list[userNum]['damageDealtToObjectives'],
@@ -187,6 +189,7 @@ def df_refine(df):
                 'profileIcon': participant_list[userNum]['profileIcon'],
                 'puuid': participant_list[userNum]['puuid'],
                 'summonerName': participant_list[userNum]['summonerName'],
+                'summonerId': participant_list[userNum]['summonerId'],
                 'summonerLevel': participant_list[userNum]['summonerLevel'],
                 'soloKills': participant_list[userNum]['challenges']['soloKills'],
                 'doubleKills': participant_list[userNum]['doubleKills'],
