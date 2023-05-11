@@ -9,5 +9,5 @@ public interface MateDao {
 	List<MateDto> getBoardList();
 	MateDto getMateDetails(int mate_id);
 	Integer insertMate(MateDto mDto);
-	
+	Integer mateReplyInsert(MateDto mDto);
 }

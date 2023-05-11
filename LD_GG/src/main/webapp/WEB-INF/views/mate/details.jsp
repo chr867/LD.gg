@@ -137,38 +137,34 @@ th {
 		<table>
 			<tr>
 				<th class="label">글 번호</th>
-				<td class="value">${mateDetails.mate_id}</td>
+				<td class="value">${MateDetails.mate_id}</td>
 			</tr>
 			<tr>
 				<th class="label">제목</th>
-				<td class="value">${tipDetails.t_b_title}</td>
+				<td class="value">${MateDetails.mate_title}</td>
 			</tr>
 			<tr>
 				<th class="label">내용</th>
-				<td class="value">${tipDetails.t_b_content}</td>
+				<td class="value">${MateDetails.mate_content}</td>
+			</tr>
+
+			<tr>
+				<th class="label">소환사명</th>
+				<td class="value">${MateDetails.lol_account}</td>
 			</tr>
 			<tr>
-				<th class="label">조회수</th>
-				<td class="value">${tipDetails.t_b_views}</td>
-			</tr>
-			<tr>
-				<th class="label">추천수</th>
-				<td class="value">${tipDetails.t_b_recom}</td>
-			</tr>
-			<tr>
-				<th class="label">작성일</th>
-				<td class="value">${tipDetails.t_b_date}</td>
-			</tr>
-			<tr>
-				<th class="label">챔피언</th>
-				<td class="value">${tipDetails.champion_id}</td>
+				<th class="label">최근전적</th>
+				<td class="value">${MateDetails.last_win_rate}</td>
 			</tr>
 			<tr>
 				<th class="label">작성자</th>
-				<td class="value">${tipDetails.email}</td>
+				<td class="value">${MateDetails.email}</td>
+			</tr>
+			<tr>
+				<th class="label">작성일</th>
+				<td class="value">${MateDetails.mate_date}</td>
 			</tr>
 		</table>
-		<button onclick=tipRecom(${tipDetails.t_b_num})>게시물 추천하기</button>
 		<button onclick=modifyTip(${tipDetails.t_b_num}) id="modifyButton">게시물
 			수정하기</button>
 		<button onclick=deleteTip(${tipDetails.t_b_num}) id="deleteButton">게시물
@@ -189,4 +185,44 @@ th {
 	</div>
 
 </body>
+<script type="text/javascript">
+function submitComment(){
+	let mate_id = ${MateDetails.mate_id}
+	let mate_r_content = document.getElementById("comment-textarea").value;
+	
+	$.ajax({
+		method: 'post',
+		url:'/mate/reply/insert',
+		data: {mate_id:mate_id,mate_r_content:mate_r_content}
+		}).done(res =>{
+			if (res){
+				console.log(res);
+				document.getElementById("comment-textarea").value=null
+				loadComments();
+			}else{
+				 console.log(res);
+				alert("댓글 등록 실패");
+				
+			}
+		}).fail(err=>{console.log(err);});	
+}
+function loadComments(){
+	$.ajax({
+		method:'get',
+		url:'/mate/reply/list',
+		data:{mate:${MateDetails.mate_id}}
+	}).done(res=>{
+		console.log(res);
+		let replyList='';
+		res.foreach(reply=>{
+			let deleteButton = '';
+        	let modifyButton = '';
+        	if(myEmail===reply.email){
+        		deleteButton=
+        			'<td><button id ="comment-delete-btn-'+reply.mate_id+'"onclick="deleteComment('+reply.mate_id+')">삭제</button></td>'
+        	}
+		})
+	})
+}
+</script>
 </html>

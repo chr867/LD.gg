@@ -37,7 +37,7 @@ public class MateController {
 		return "/mate/write";
 	}
 	@GetMapping("/details")
-	public ModelAndView MateDetails(@RequestParam int mate_id) throws Exception {
+	public ModelAndView mateDetails(@RequestParam int mate_id) throws Exception {
 	log.info("메이트 상세 보기 이동");
 	MateDto MateDetails = ms.getMateDetails(mate_id);
 	ModelAndView mav =new ModelAndView("mate/details");

@@ -44,4 +44,24 @@ public class MateService {
 		MateDto MateDetails = mDao.getMateDetails(mate_id);
 		return MateDetails;
 	}
+
+	public int mateReplyInsert(MateDto mDto) {
+		try {
+			Integer insertResult = mDao.mateReplyInsert(mDto);
+			if (insertResult != 0) {
+				log.info(insertResult+"insertResult");
+				int replyInsertResult =1;
+				return replyInsertResult;
+			} else {
+				int replyInsertResult =2;
+				return replyInsertResult;
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+			e.printStackTrace();
+			int replyInsertResult =4;
+			return replyInsertResult;
+		}
+
+	}
 }
