@@ -1,7 +1,5 @@
 package com.ld.gg.controller.mentoringController;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -42,6 +40,8 @@ import com.ld.gg.dto.mentoringdto.EstimateDTO;
 import com.ld.gg.service.MemberService;
 import com.ld.gg.service.mentoringService.MentorProfileService;
 
+import oracle.jdbc.proxy.annotation.Post;
+
 @RestController
 @RequestMapping(value = "/mentor", produces = "text/html; charset=UTF-8")
 public class RestMentoringController {
@@ -62,8 +62,8 @@ public class RestMentoringController {
 	
 	//챔피언 아이디로 챔피언 이름 가져오기
 	@GetMapping("/get-champ-name-by-id")
-	public Champ_default select_by_id_champ(@RequestParam int id) {
-		Champ_default champ_name = mtpService.select_by_id_champ(id);
+	public String select_by_id_champ(@RequestParam int id) throws JsonProcessingException {
+		String champ_name = mtpService.select_by_id_champ(id);
 		return champ_name;
 	}
 	
@@ -161,6 +161,11 @@ public class RestMentoringController {
 	@DeleteMapping("/delete-mentoring-history")
 	public void delete_my_mentoring(@RequestBody MyMentoringDTO my_mt_dto) {
 		mtpService.delete_my_mentoring(my_mt_dto);
+	}
+	//멘티 소환사명 받아서 멘토링 내역 삭제
+	@DeleteMapping("/reject-mentoring-history")
+	public void reject_my_mentoring(@RequestBody MyMentoringDTO my_mt_dto) {
+		mtpService.reject_my_mentoring(my_mt_dto);
 	}
 	
 	//멘토링 내역 환불
@@ -338,6 +343,7 @@ public class RestMentoringController {
 	//mentorProfileForm.jsp에서 작성한 프로필 정보 등록
 	@PutMapping("/edit-profile")
 	public ResponseEntity<?> updateMentorProfile(@RequestBody MentorProfileDTO mentorProfileDTO){
+		System.out.println(mentorProfileDTO);
 		mtpService.update_mentor_profile(mentorProfileDTO);
 	    return ResponseEntity.ok("Success");
 	}
@@ -362,5 +368,13 @@ public class RestMentoringController {
 		String mentor_email = email.get("mentor_email");
 		mtpService.delete_mentor_profile(mentor_email);
 	}
+	
+	//멘토 이메일로 멘토 프로필 가져오기
+	@PostMapping("/get-mentor-profile")
+	public String select_by_email_mentor_profile(@RequestBody Map<String, String> mentor_email) throws JsonProcessingException {
+		String mentor_profile = mtpService.select_by_email_mentor_profile(mentor_email);
+		return mentor_profile;
+	}
+	
 }
 	

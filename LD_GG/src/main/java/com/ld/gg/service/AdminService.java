@@ -115,6 +115,19 @@ public class AdminService {
 		}
 	}
 
+	public int forcedDrop(String email) {
+		try {
+			int deleteResult = ad.deleteForcedDrop(email);
+			if(deleteResult != 0) {
+				return 1;
+			}else
+				return 2;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 3;
+		}
+	}
+
 	
 
 }

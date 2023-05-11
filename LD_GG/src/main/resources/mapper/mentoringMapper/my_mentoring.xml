@@ -8,7 +8,7 @@
 
 <select id="select_by_email_my_mentoring" resultType="myMentoring">
  	SELECT mm.menti_email, m.lol_account as menti_lol_account, 
- 	mm.class_id, mc.class_name, mm.menti_state, 
+ 	mm.class_id, mc.class_name, mm.menti_state, mm.mentoring_id,
 	mm.mentor_email, m2.lol_account as mentor_lol_account, mm.apply_date, mm.done_date 
 	FROM my_mentoring mm 
 	JOIN mentor_class mc 
@@ -21,7 +21,7 @@
 
 <select id="select_by_mentor_email_my_mentoring" resultType="myMentoring">
   SELECT mm.menti_email, m.lol_account as menti_lol_account, 
- 	mm.class_id, mc.class_name, mm.menti_state, 
+ 	mm.class_id, mc.class_name, mm.menti_state, mm.mentoring_id,
 	mm.mentor_email, m2.lol_account as mentor_lol_account, mm.apply_date, mm.done_date 
 	FROM my_mentoring mm 
 	JOIN mentor_class mc 

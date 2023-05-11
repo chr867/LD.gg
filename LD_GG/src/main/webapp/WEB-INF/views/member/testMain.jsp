@@ -30,11 +30,13 @@
 	</form>
 	<a href="/member/profile">개인정보 수정</a>
 	<a href="/member/myPage">마이페이지</a>
+	<a href="/mate/">메이트페이지</a>
 	<a href="/tip/">공략페이지</a>
 	<a href="/userinterface/admin">어드민페이지</a>
 	<a href="/">메인페이지</a>
 	<a href="/chat/chat-list">채팅방</a>
 	<a href="/question/question">질문</a>
+	<a href ="/wallet/payment">지갑</a>
 </body>
 <script type="text/javascript">
 	function logout(){

@@ -35,4 +35,6 @@ public interface AdminDao {
 
 	List<MemberDto> getSearchMemberHistoryLists(String keyword);
 
+	int deleteForcedDrop(String email);
+
 }

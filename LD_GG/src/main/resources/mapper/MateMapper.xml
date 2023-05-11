@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ld.gg.dao.MateDao">
+	<select id="getBoardList" resultType="mate">
+		SELECT mp.mate_id ,mp.email ,mp.mate_content ,mp.mate_date,mp.mate_title,m.lol_account  
+		FROM MATE_POST as MP JOIN (
+			SELECT *
+			FROM MEMBER) as M
+		ON MP.EMAIL = M.EMAIL
+		ORDER BY mp.mate_id desc;
+	</select>
+	<insert id="insertMate" parameterType="mate">
+	INSERT INTO mate_post
+		(email, mate_title, mate_content,mate_date)
+		VALUES(
+		#{email},
+		#{mate_title},
+		#{mate_content},
+		default);
+	</insert>
+	<!-- 글 번호, 제목, 내용, 작성일,작성자, 소환사명, 최근전적(현제 더미값) -->
+		<select id="getMateDetails" resultType="mate">
+		SELECT mp.mate_id ,mp.email ,mp.mate_content ,mp.mate_date,mp.mate_title,m.lol_account,mp.last_win_rate 
+		FROM MATE_POST as MP JOIN (
+			SELECT *
+			FROM member
+			) as M
+		ON MP.EMAIL = M.EMAIL
+		where mate_id =#{mate_id};
+	</select>
+	<insert id="mateReplyInsert" parameterType="mate">
+	INSERT INTO mate_request
+		(mate_apply, mate_id, email,mate_r_content,mate_r_date)
+		VALUES(
+		#{mate_apply},
+		#{mate_id},
+		#{email},
+		#{mate_title},
+		default);
+	</insert>
+</mapper>

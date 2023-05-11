@@ -17,7 +17,11 @@ public class MentorProfileDTO {
     private String mentor_email; //pk
     private String about_mentor;
     private String specialized_position;
-    private String specialized_champion;
+    private String top_specialized_champion;
+    private String jg_specialized_champion;
+    private String mid_specialized_champion;
+    private String ad_specialized_champion;
+    private String sup_specialized_champion;
     private String contact_time;
     private String careers;
     private String recom_ment;

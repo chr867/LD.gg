@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import com.ld.gg.dao.MemberDao;
 import com.ld.gg.dao.mentoringdao.MentiDAO;
+import com.ld.gg.dao.mentoringdao.MentorProfileDAO;
 import com.ld.gg.dao.mentoringdao.MyMentoringDAO;
 import com.ld.gg.dto.MemberDto;
 import com.ld.gg.dto.mentoringdto.LikeMentorDTO;
@@ -33,6 +34,8 @@ public class MentoringController {
 	private MemberDao mbdao;
 	@Autowired
 	private MyMentoringDAO myMtDao;
+	@Autowired
+	private MentorProfileDAO mtpdao;
 	
 	
 	
@@ -79,7 +82,7 @@ public class MentoringController {
 		List<MemberDto> mbList = mbService.findLolAccount(lol_account);
 		String mentor_email = mbList.get(0).getEmail();
 		List<MentorClassDTO> mentor_class_list = mtpService.select_by_email_mentor_class(mentor_email);
-		MentorProfileDTO mtp = mtpService.select_by_email_mentor_profile(mentor_email);
+		MentorProfileDTO mtp = mtpdao.select_by_email_mentor_profile(mentor_email);
 		List<LikeMentorDTO> like_mentor_list = myMtDao.select_by_email_like_mentor(email);
 		return new ModelAndView("mentoringView/mentorInfo")
 				.addObject("mentor_profile", mtp) //해당 페이지 멘토 프로필
@@ -95,7 +98,7 @@ public class MentoringController {
 		HttpSession session = request.getSession();
 		String email = (String) session.getAttribute("email");
 		Integer user_type = (Integer)session.getAttribute("user_type");
-		MentorProfileDTO mtp = mtpService.select_by_email_mentor_profile(email);
+		MentorProfileDTO mtp = mtpdao.select_by_email_mentor_profile(email);
 		MemberDto mbdto = mbdao.getMemberInfo(email);
 		List<MentorClassDTO> mentor_class_list = mtpService.select_by_email_mentor_class(email);
 		List<TagListDTO> tagList = mtpService.select_all_tag();

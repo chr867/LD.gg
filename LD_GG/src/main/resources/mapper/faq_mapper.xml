@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ld.gg.dao.FaqDAO">
+
+<select id="select_all_faq" resultType="faq">
+	SELECT * FROM faq;
+</select>
+<select id="select_by_id_faq" resultType="faq">
+	SELECT * FROM faq WHERE faq_id = #{faq_id};
+</select>
+
+<select id="select_by_keyword_inquiries" resultType="ci">
+	SELECT * FROM customer_inquiries 
+	WHERE inquiries_title LIKE CONCAT('%', #{keyword}, '%')
+	OR inquiries_info LIKE
+	CONCAT('%', #{keyword}, '%')
+	ORDER BY date DESC;
+</select>
+<select id="select_all_inquiries" resultType="ci">
+	SELECT * FROM customer_inquiries
+	ORDER BY date DESC;;
+</select>
+<select id="select_by_id_inquiries" resultType="ci">
+	SELECT * FROM customer_inquiries
+	WHERE inquiries_id = #{inquiries_id}
+	ORDER BY date DESC;;
+</select>
+<select id="select_by_email_inquiries" resultType="ci">
+	SELECT * FROM customer_inquiries 
+	WHERE customer_email=#{customer_email}
+	ORDER BY date DESC;;
+</select>
+<insert id="insert_inquiries" parameterType="ci">
+  INSERT INTO customer_inquiries (inquiries_title, inquiries_info, customer_email) 
+  VALUES (#{inquiries_title}, #{inquiries_info}, #{customer_email});
+</insert>
+<update id="update_inquiries" parameterType="ci">
+  UPDATE customer_inquiries SET state = #{state}, inquiries_title = #{inquiries_title},
+  inquiries_info = #{inquiries_info}, views =#{views}
+  WHERE inquiries_id = #{inquiries_id};
+</update>
+<delete id="delete_inquiries" parameterType="Integer">
+  DELETE FROM customer_inquiries WHERE inquiries_id = #{inquiries_id};
+</delete>
+
+<select id="select_by_id_customer_service" resultType="cs">
+	SELECT * FROM customer_service WHERE cs_id = #{inquiries_id};
+</select>
+<insert id="insert_customer_service" parameterType="cs">
+  INSERT INTO customer_service (cs_id, cs_title, cs_info, cs_answerer_email) 
+  VALUES (#{cs_id}, #{cs_title}, #{cs_info}, #{cs_answerer_email});
+</insert>
+<update id="update_customer_service" parameterType="cs">
+  UPDATE customer_service SET cs_title = #{cs_title}
+  , cs_info = #{cs_info}
+  WHERE cs_id = #{cs_id};
+</update>
+<delete id="delete_customer_service" parameterType="Integer">
+  DELETE FROM customer_service WHERE cs_id = #{cs_id};
+</delete>
+
+</mapper>

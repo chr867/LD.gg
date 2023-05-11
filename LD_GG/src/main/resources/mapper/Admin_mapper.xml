@@ -67,21 +67,30 @@
 	</select>
 
 	<select id="getSearchMemberLists" resultType="member">
-		SELECT email,phone_num,lol_account,user_type,join_date
+		SELECT
+		email,phone_num,lol_account,user_type,join_date
 		FROM MEMBER
 		WHERE
-		email LIKE '%${keyword}%' OR lol_account LIKE '%${keyword}%'
+		email
+		LIKE '%${keyword}%' OR lol_account LIKE '%${keyword}%'
 	</select>
-	
-	<select id="getMemberHistoryLists" resultType="com.ld.gg.dto.SessionDto">
+
+	<select id="getMemberHistoryLists"
+		resultType="com.ld.gg.dto.SessionDto">
 		SELECT * FROM session_record ORDER BY
 		sessionDate DESC;
 	</select>
 
-	<select id="getSearchMemberHistoryLists" resultType="com.ld.gg.dto.SessionDto">
+	<select id="getSearchMemberHistoryLists"
+		resultType="com.ld.gg.dto.SessionDto">
 		SELECT *
 		FROM session_record
 		WHERE
 		email LIKE '%${keyword}%'
 	</select>
+
+	<delete id="deleteForcedDrop" parameterType="member">
+		DELETE FROM member
+		WHERE email = #{email}
+	</delete>
 </mapper>
