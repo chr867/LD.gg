@@ -140,7 +140,14 @@ def get_match_info_worker(args):
     return result_df
 # 끝
 
+# def for_df(df):
+
+
+
+# insert
+
 # insert  ######### insert 수정 #########
+
 def insert(t, conn_):
     try:
         matches_json, timeline_json = conn_.escape_string(json.dumps(t.matches)), conn_.escape_string(json.dumps(t.timeline))
@@ -152,6 +159,7 @@ def insert(t, conn_):
     except Exception as e:
         logging.exception(f"Error occurred during insert: {e}, {t.match_id}")
 # insert 끝
+
 
 def main():
     run_time = int(time.time() * 1000)  # 코드 돌린 Timestamp
