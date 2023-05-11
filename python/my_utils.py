@@ -3,7 +3,7 @@ import pymysql
 import requests
 
 seoul_api_key = '77676c6c566368723431555642674c'
-riot_api_key = 'RGAPI-95fae2eb-b7c8-4aad-a2d4-7d6dea9cd91b'
+riot_api_key = 'RGAPI-3c09d778-af7b-4f6b-94b4-e7784679bc11'
 
 # mysql
 
