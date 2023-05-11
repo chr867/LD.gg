@@ -58,7 +58,7 @@ def load_summoner_names_worker(worker_id):
         random.shuffle(name_lst)
 
         match_set = set()
-        for summoner_name in tqdm(name_lst[:20]):
+        for summoner_name in tqdm(name_lst[:50]):
             while True:
                 index = 0
                 start = 1673485200  # 시즌 시작 Timestamp
@@ -101,9 +101,8 @@ def get_match_info_worker(args):
     tmp = set()
     random.shuffle(_match_ids)
 
-    for match_id in tqdm(_match_ids[:10]):  # 수정점
+    for match_id in tqdm(_match_ids[:20]):  # 수정점
         while True:
-            time.sleep(1.25)
             try:
                 get_match_url = f'https://asia.api.riotgames.com/lol/match/v5/matches/{match_id}?api_key={api_key}'
                 get_match_res = requests.get(get_match_url).json()
@@ -117,7 +116,6 @@ def get_match_info_worker(args):
                 time.sleep(20)
                 continue
 
-            time.sleep(1.25)
             try:
                 get_timeline_url = f'https://asia.api.riotgames.com/lol/match/v5/matches/{match_id}/timeline?api_key={api_key}'
                 get_timeline_res = requests.get(get_timeline_url).json()
@@ -140,17 +138,107 @@ def get_match_info_worker(args):
     return result_df
 # 끝
 
-# def for_df(df):
+def df_refine(df):
+    def matches_data(df):
 
+        match_info = df['matches']['info']
+        participant_list = match_info['participants']
+        team_list = match_info['teams']
 
+        matches = {
+            'gameDuration': match_info['gameDuration'],
+            'gameVersion': match_info['gameVersion'],
+            'participants': []
+        }
 
-# insert
+        for userNum in range(len(participant_list)):
+            participant_dict = {
+                'kills': participant_list[userNum]['kills'],
+                'deaths': participant_list[userNum]['deaths'],
+                'assists': participant_list[userNum]['assists'],
+                'kda': participant_list[userNum]['challenges']['kda'],
+                'item0': participant_list[userNum]['item0'],
+                'item1': participant_list[userNum]['item1'],
+                'item2': participant_list[userNum]['item2'],
+                'item3': participant_list[userNum]['item3'],
+                'item4': participant_list[userNum]['item4'],
+                'item5': participant_list[userNum]['item5'],
+                'item6': participant_list[userNum]['item6'],
+                'mythicItemUsed': participant_list[userNum]['challenges'].get('mythicItemUsed', 0),
+                'defense': participant_list[userNum]['perks']['statPerks']['defense'],
+                'flex': participant_list[userNum]['perks']['statPerks']['flex'],
+                'offense': participant_list[userNum]['perks']['statPerks']['offense'],
+                'style0': participant_list[userNum]['perks']['styles'][0]['style'],
+                'perks0': [perks['perk'] for perks in participant_list[userNum]['perks']['styles'][0]['selections']],
+                'style1': participant_list[userNum]['perks']['styles'][1]['style'],
+                'perks1': [perks['perk'] for perks in participant_list[userNum]['perks']['styles'][1]['selections']],
+                'summoner1Id': participant_list[userNum]['summoner1Id'],
+                'summoner2Id': participant_list[userNum]['summoner2Id'],
+                'participantId': participant_list[userNum]['participantId'],
+                'totalMinionsKilled': participant_list[userNum]['totalMinionsKilled'],
+                'championId': participant_list[userNum]['championId'],
+                'win': participant_list[userNum]['win'],
+                'totalDamageDealtToChampions': participant_list[userNum]['totalDamageDealtToChampions'],
+                'damageDealtToObjectives': participant_list[userNum]['damageDealtToObjectives'],
+                'totalDamageTaken': participant_list[userNum]['totalDamageTaken'],
+                'inhibitorKills': participant_list[userNum]['inhibitorKills'],
+                'teamPosition': participant_list[userNum]['teamPosition'],
+                'teamId': participant_list[userNum]['teamId'],
+                'profileIcon': participant_list[userNum]['profileIcon'],
+                'puuid': participant_list[userNum]['puuid'],
+                'summonerName': participant_list[userNum]['summonerName'],
+                'summonerLevel': participant_list[userNum]['summonerLevel'],
+                'soloKills': participant_list[userNum]['challenges']['soloKills'],
+                'doubleKills': participant_list[userNum]['doubleKills'],
+                'tripleKills': participant_list[userNum]['tripleKills'],
+                'quadraKills': participant_list[userNum]['quadraKills'],
+                'pentaKills': participant_list[userNum]['pentaKills'],
+            }
+            matches['participants'].append(participant_dict)
+
+        ban_list = []
+        for team in team_list:
+            for ban in team['bans']:
+                ban_list.append(ban['championId'])
+
+        matches['bans'] = ban_list
+        return matches
+
+    def time_line_data(df):
+        time_line = {}
+        for i, frame in enumerate(df['timeline']['info']['frames']):
+            result = {'events': [], 'participantFrames': []}
+            events = []
+            for event in frame['events']:
+                if event['type'] == 'SKILL_LEVEL_UP' or event['type'] == 'ITEM_PURCHASED' or event[
+                    'type'] == 'BUILDING_KILL':
+                    events.append(event)
+            result['events'].extend(events)
+            for participant in range(len(frame['participantFrames'])):
+                participant_dict = {
+                    'participantId': frame['participantFrames'][f'{participant + 1}']['participantId'],
+                    'level': frame['participantFrames'][f'{participant + 1}']['level'],
+                    'totalGold': frame['participantFrames'][f'{participant + 1}']['totalGold'],
+                    'minionsKilled': frame['participantFrames'][f'{participant + 1}']['minionsKilled'],
+                    'jungleMinionsKilled': frame['participantFrames'][f'{participant + 1}']['jungleMinionsKilled'],
+                }
+                result['participantFrames'].append(participant_dict)
+            time_line[i] = result
+        return time_line
+
+    api_key = df['api_key']
+    match_id = df['matches']['metadata']['matchId']
+    matches = matches_data(df)
+    time_line = time_line_data(df)
+
+    columns = ['api_key', 'match_id', 'matches', 'time_line']
+    refine_df = pd.DataFrame([[api_key, match_id, matches, time_line]], columns=columns)
+    return refine_df
 
 # insert  ######### insert 수정 #########
-
 def insert(t, conn_):
     try:
-        matches_json, timeline_json = conn_.escape_string(json.dumps(t.matches)), conn_.escape_string(json.dumps(t.timeline))
+        matches_json, timeline_json = conn_.escape_string(json.dumps(t.matches)), conn_.escape_string(json.dumps(t.time_line))
         sql_insert = (
             f"insert ignore into match_raw (api_key, match_id, matches, timeline) values ({repr(t.api_key)},"
             f" {repr(t.match_id)}, '{matches_json}', '{timeline_json}')"
@@ -188,16 +276,20 @@ def main():
     merged_df = pd.concat(match_info_output)
     print("merged_df =", len(merged_df))
 
+    refine_df = pd.concat([df_refine(row) for _, row in merged_df.iterrows()], ignore_index=True)
     sql_conn = mu.connect_mysql()
-    merged_df.progress_apply(lambda x: insert(x, sql_conn), axis=1)
+    refine_df.progress_apply(lambda x: insert(x, sql_conn), axis=1)
     sql_conn.commit()
     sql_conn.close()
-
     print('done')
 
 if __name__ == '__main__':
     for _ in tqdm(range(24)):
-        main()
+        try:
+            main()
+        except Exception as e:
+            logging.exception(f'error {e}')
+            continue
         print('sleep 20')
         time.sleep(20)
 
