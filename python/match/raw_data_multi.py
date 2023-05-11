@@ -140,13 +140,9 @@ def get_match_info_worker(args):
     return result_df
 # 끝
 
-def insert_worker(args):
-    match_info, i = args
-    time.sleep(i*0.1)
-    conn = mu.connect_mysql('my_db')
-    match_info.progress_apply(lambda x: insert(x, conn), axis=1)
-    conn.commit()
-    conn.close()
+# def for_df(df):
+
+
 
 # insert
 def insert(t, conn_):
@@ -160,6 +156,7 @@ def insert(t, conn_):
     except Exception as e:
         logging.exception(f"Error occurred during insert: {e}, {t.match_id}")
 # insert 끝
+
 
 def main():
     run_time = int(time.time() * 1000)  # 코드 돌린 Timestamp
@@ -187,18 +184,11 @@ def main():
 
     merged_df = pd.concat(match_info_output)
     print("merged_df =", len(merged_df))
-
+######
     sql_conn = mu.connect_mysql('my_db')
     merged_df.progress_apply(lambda x: insert(x, sql_conn), axis=1)
     sql_conn.commit()
     sql_conn.close()
-
-    # with mp.Pool(processes=12) as pool:
-    #     print('**insert**')
-    #     chunk_size = len(merged_df) // 12
-    #     chunks2 = [merged_df[i:i + chunk_size] for i in range(0, len(merged_df), chunk_size)]
-    #     for _ in tqdm(pool.imap(insert_worker, zip(chunks2, range(12))), total=len(chunks2)):
-    #         pass
 
     print('done')
 
