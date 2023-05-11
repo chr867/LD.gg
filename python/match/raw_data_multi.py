@@ -58,7 +58,7 @@ def load_summoner_names_worker(worker_id):
         random.shuffle(name_lst)
 
         match_set = set()
-        for summoner_name in tqdm(name_lst[:40]):
+        for summoner_name in tqdm(name_lst[:20]):
             while True:
                 index = 0
                 start = 1673485200  # 시즌 시작 Timestamp
@@ -101,7 +101,7 @@ def get_match_info_worker(args):
     tmp = set()
     random.shuffle(_match_ids)
 
-    for match_id in tqdm(_match_ids[:500]):  # 수정점
+    for match_id in tqdm(_match_ids[:10]):  # 수정점
         while True:
             time.sleep(1.25)
             try:
@@ -131,30 +131,22 @@ def get_match_info_worker(args):
                 time.sleep(20)
                 continue
 
-            _result.append([match_id, get_match_res, get_timeline_res])
+            _result.append([api_key, match_id, get_match_res, get_timeline_res])
             tmp.clear()
             break
 
-    result_df = pd.DataFrame(_result, columns=['match_id', 'matches', 'timeline'])
+    result_df = pd.DataFrame(_result, columns=['api_key', 'match_id', 'matches', 'timeline'])
     print('get_match_info END len = ', len(result_df))
     return result_df
 # 끝
 
-def insert_worker(args):
-    match_info, i = args
-    time.sleep(i*0.1)
-    conn = mu.connect_mysql('my_db')
-    match_info.progress_apply(lambda x: insert(x, conn), axis=1)
-    conn.commit()
-    conn.close()
-
-# insert
+# insert  ######### insert 수정 #########
 def insert(t, conn_):
     try:
         matches_json, timeline_json = conn_.escape_string(json.dumps(t.matches)), conn_.escape_string(json.dumps(t.timeline))
         sql_insert = (
-            f"insert ignore into match_raw (match_id, matches, timeline) values ({repr(t.match_id)}, '{matches_json}', "
-            f"'{timeline_json}')"
+            f"insert ignore into match_raw (api_key, match_id, matches, timeline) values ({repr(t.api_key)},"
+            f" {repr(t.match_id)}, '{matches_json}', '{timeline_json}')"
         )
         mu.mysql_execute(sql_insert, conn_)
     except Exception as e:
@@ -165,10 +157,10 @@ def main():
     run_time = int(time.time() * 1000)  # 코드 돌린 Timestamp
     now = datetime.datetime.now()
     formatted_time = now.strftime("%Y-%m-%d %H:%M")
-    file_path = "C:/icia/python/runtime.txt"  # 메모장에 저장할 파일 경로와 이름 설정 헤응
-    with open(file_path, "w") as f:  # 파일 열기
-        f.write(formatted_time + " " + str(run_time))  # 런타임 값을 파일에 쓰기
-    f.close()  # 파일 닫기
+    # file_path = "C:/icia/python/runtime.txt"  # 메모장에 저장할 파일 경로와 이름 설정 헤응
+    # with open(file_path, "w") as f:  # 파일 열기
+    #     f.write(formatted_time + " " + str(run_time))  # 런타임 값을 파일에 쓰기
+    # f.close()  # 파일 닫기
 
     match_ids = set()
     with mp.Pool(processes=8) as pool:
@@ -188,17 +180,10 @@ def main():
     merged_df = pd.concat(match_info_output)
     print("merged_df =", len(merged_df))
 
-    sql_conn = mu.connect_mysql('my_db')
+    sql_conn = mu.connect_mysql()
     merged_df.progress_apply(lambda x: insert(x, sql_conn), axis=1)
     sql_conn.commit()
     sql_conn.close()
-
-    # with mp.Pool(processes=12) as pool:
-    #     print('**insert**')
-    #     chunk_size = len(merged_df) // 12
-    #     chunks2 = [merged_df[i:i + chunk_size] for i in range(0, len(merged_df), chunk_size)]
-    #     for _ in tqdm(pool.imap(insert_worker, zip(chunks2, range(12))), total=len(chunks2)):
-    #         pass
 
     print('done')
 
