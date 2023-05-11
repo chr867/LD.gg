@@ -14,7 +14,7 @@ riot_api_key = 'RGAPI-14667a4e-7c3c-45fa-ac8f-e53c7c3f5fe1'
 # RawData
 conn = mu.connect_mysql()
 start_time = time.time()
-df = pd.DataFrame(mu.mysql_execute_dict("SELECT * FROM match_raw LIMIT 1", conn))
+df = pd.DataFrame(mu.mysql_execute_dict("SELECT * FROM match_raw LIMIT 100", conn))
 conn.close()
 df['matches'] = df['matches'].apply(json.loads)
 df['timeline'] = df['timeline'].apply(json.loads)
@@ -28,7 +28,7 @@ def data_select():
     cursor.execute('SELECT COUNT(*) FROM match_raw')
     total_records = cursor.fetchone()[0]
     cursor.close()
-    total_records = 5000 # 원하는 만큼 설정
+    # total_records = 5000 # 원하는 만큼 설정
     print(f"총 {total_records}개 데이터 SELECT 시작합니다.")
     batch_size = 100
     dfs = []
@@ -49,25 +49,30 @@ def data_select():
     return df
 
 df = data_select()
+df['matches'] = df['matches'].apply(json.loads)
+df['timeline'] = df['timeline'].apply(json.loads)
+# ----------------------------------------------------------------------------------------------------------------------
+df.iloc[0]['matches']['participants'][0]['perks0']
+
 # ----------------------------------------------------------------------------------------------------------------------
 # 룬 데이터 정제
 def rune_data(raw_data):
     result = []
     print("룬데이터 추출 시작")
     for i in tqdm(range(len(raw_data))):
-        df = raw_data.iloc[i]['matches']['info']['participants']
+        df = raw_data.iloc[i]['matches']['participants']
         for summoner in range(len(df)):
             lst = []
             lst.append(df[summoner]['championId'])
-            lst.append(df[summoner]['perks']['statPerks']['defense'])
-            lst.append(df[summoner]['perks']['statPerks']['flex'])
-            lst.append(df[summoner]['perks']['statPerks']['offense'])
-            lst.append(df[summoner]['perks']['styles'][0]['style'])
-            for primaryRune in range(len(df[summoner]['perks']['styles'][0]['selections'])):
-                lst.append(df[summoner]['perks']['styles'][0]['selections'][primaryRune]['perk'])
-            lst.append(df[summoner]['perks']['styles'][1]['style'])
-            for subStyleRune in range(len(df[summoner]['perks']['styles'][1]['selections'])):
-                lst.append(df[summoner]['perks']['styles'][0]['selections'][subStyleRune]['perk'])
+            lst.append(df[summoner]['defense'])
+            lst.append(df[summoner]['flex'])
+            lst.append(df[summoner]['offense'])
+            lst.append(df[summoner]['style0'])
+            for primaryRune in df[summoner]['perks0']:
+                lst.append(primaryRune)
+            lst.append(df[summoner]['style1'])
+            for subStyleRune in df[summoner]['perks1']:
+                lst.append(subStyleRune)
             lst.append(df[summoner]['win'])
             result.append(lst)
     print("룬데이터 추출완료")
@@ -119,12 +124,12 @@ def item_df(raw_data):
     result = []
     print("아이템 데이터 정제 시작 ")
     for i in tqdm(range(len(raw_data))):
-        df = raw_data.iloc[i]['matches']['info']['participants']
+        df = raw_data.iloc[i]['matches']['participants']
         for summoner in range(len(df)):
             lst = []
             lst.append(df[summoner]['championId'])
             try:
-                lst.append(df[summoner]['challenges']['mythicItemUsed'])
+                lst.append(df[summoner]['mythicItemUsed'])
             except:
                 lst.append(0)
             lst.append(df[summoner]['item0'])
@@ -210,12 +215,10 @@ def mythic_item_data(raw_data):
     result = []
     print("신화 아이템 데이터 정제 시작")
     for i in tqdm(range(len(raw_data))):
-        df = raw_data.iloc[i]['matches']['info']['participants']
+        df = raw_data.iloc[i]['matches']['participants']
         for summoner in range(len(df)):
             champion_id = df[summoner]['championId']
-            mythic_item_used = df[summoner]['challenges']['mythicItemUsed'] if 'mythicItemUsed' in \
-                                                                                     df[summoner][
-                                                                                         'challenges'] else 0
+            mythic_item_used = df[summoner].get('mythicItemUsed', 0)
             win = df[summoner]['win']
             result.append([champion_id, mythic_item_used, win])
 
@@ -249,7 +252,7 @@ def mythic_item_data(raw_data):
     return final_df[['champion_id', 'mythic_item', 'pick_count', 'win_count', 'win_rate','pick_rate']]
 
 
-mysitic_item_data = mythic_item_data(df)
+mythic_item_data = mythic_item_data(df)
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -273,9 +276,9 @@ def common_item_data(item_df_data):
         df_filtered = df[~df['item_id'].isin(excluded_items)]
         return df_filtered.nlargest(n, 'pick_count')
 
-    mysitic_item_lst = mysitic_item_data['mythic_item'].unique()
+    mythic_item_lst = mythic_item_data['mythic_item'].unique()
     shoes_lst = [3111, 3117, 3009, 3047, 3006, 3158, 3020]
-    excluded_items = list(mysitic_item_lst) + shoes_lst
+    excluded_items = list(mythic_item_lst) + shoes_lst
 
     top_items_df = item_frequency.groupby('champion_id', group_keys=False).apply(
         lambda x: top_n_items(x, excluded_items))
@@ -476,3 +479,4 @@ def skill_build_data(raw_data):
 
 
 skill_build_data(df[:1])
+

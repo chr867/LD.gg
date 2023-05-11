@@ -836,4 +836,6 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,java,eclipse,intellij,python,pycharm,vs
-python/my_utils.py
+private.py
+my_utils.py
+
