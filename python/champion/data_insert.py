@@ -34,7 +34,7 @@ matches, timeline = get_match_timeline('KR_6488614800')
 lst.append(['KR_6487107017', matches, timeline])
 df = pd.DataFrame(lst, columns=['match_id', 'matches', 'timeline'])
 
-df.iloc[0]['matches']['info']['participants'][1]['damageDealtToObjectives']
+df.iloc[0]['matches']['info']['participants'][1]['challenges']['mythicItemUsed']
 
 df.iloc[0]['matches']['matchId']
 df.iloc[0]['matches']['metadata']['matchId']
@@ -281,3 +281,4 @@ def df_refine(df):
 
 
 refine_df = pd.concat([df_refine(row) for _, row in df.iterrows()], ignore_index=True)
+refine_df.iloc[0]['time_line']
