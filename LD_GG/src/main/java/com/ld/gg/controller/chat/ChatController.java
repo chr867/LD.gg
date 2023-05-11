@@ -61,8 +61,9 @@ public class ChatController {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
-    @MessageMapping("/chatroom/{chat_room_seq}/sendMessage")
+    @MessageMapping("/chatroom/{chat_room_seq}")
     public void sendMessage(HttpServletRequest request, @DestinationVariable int chat_room_seq, @Payload Message message) {
+        System.out.println("sendMessage 실행...");
         HttpSession session = request.getSession();
         String email = (String) session.getAttribute("email");
 

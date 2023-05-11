@@ -1,12 +1,14 @@
 package com.ld.gg.dto.chat;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.apache.ibatis.type.Alias;
 
 import java.sql.Timestamp;
 
 @Data
+@NoArgsConstructor
 @Accessors(chain=true)
 @Alias("chatlist")
 public class ChatListDto {

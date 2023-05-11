@@ -21,4 +21,6 @@ public interface ChatDao {
 	List<ChatroomDto> select_chat_list(String email);
 
 	int select_chat_room_seq(ChatroomDto croomdto);
+
+	boolean insert_chat_content(ChatListDto chatListDto);
 }
