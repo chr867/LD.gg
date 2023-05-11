@@ -58,7 +58,7 @@ def load_summoner_names_worker(worker_id):
         random.shuffle(name_lst)
 
         match_set = set()
-        for summoner_name in tqdm(name_lst[:20]):
+        for summoner_name in tqdm(name_lst[:50]):
             while True:
                 index = 0
                 start = 1673485200  # 시즌 시작 Timestamp
@@ -101,9 +101,8 @@ def get_match_info_worker(args):
     tmp = set()
     random.shuffle(_match_ids)
 
-    for match_id in tqdm(_match_ids[:10]):  # 수정점
+    for match_id in tqdm(_match_ids[:20]):  # 수정점
         while True:
-            time.sleep(1.25)
             try:
                 get_match_url = f'https://asia.api.riotgames.com/lol/match/v5/matches/{match_id}?api_key={api_key}'
                 get_match_res = requests.get(get_match_url).json()
@@ -117,7 +116,6 @@ def get_match_info_worker(args):
                 time.sleep(20)
                 continue
 
-            time.sleep(1.25)
             try:
                 get_timeline_url = f'https://asia.api.riotgames.com/lol/match/v5/matches/{match_id}/timeline?api_key={api_key}'
                 get_timeline_res = requests.get(get_timeline_url).json()
@@ -166,7 +164,7 @@ def df_refine(df):
                 'item4': participant_list[userNum]['item4'],
                 'item5': participant_list[userNum]['item5'],
                 'item6': participant_list[userNum]['item6'],
-                'mythicItemUsed': participant_list[userNum].get('mythicItemUsed', 0),
+                'mythicItemUsed': participant_list[userNum]['challenges'].get('mythicItemUsed', 0),
                 'defense': participant_list[userNum]['perks']['statPerks']['defense'],
                 'flex': participant_list[userNum]['perks']['statPerks']['flex'],
                 'offense': participant_list[userNum]['perks']['statPerks']['offense'],
@@ -220,32 +218,27 @@ def df_refine(df):
                 participant_dict = {
                     'participantId': frame['participantFrames'][f'{participant + 1}']['participantId'],
                     'level': frame['participantFrames'][f'{participant + 1}']['level'],
-                    'totalGold': frame['participantFrames'][f'{participant + 1}']['totalGold']
+                    'totalGold': frame['participantFrames'][f'{participant + 1}']['totalGold'],
+                    'minionsKilled': frame['participantFrames'][f'{participant + 1}']['minionsKilled'],
+                    'jungleMinionsKilled': frame['participantFrames'][f'{participant + 1}']['jungleMinionsKilled'],
                 }
                 result['participantFrames'].append(participant_dict)
             time_line[i] = result
         return time_line
 
+    api_key = df['api_key']
     match_id = df['matches']['metadata']['matchId']
     matches = matches_data(df)
     time_line = time_line_data(df)
 
-    columns = ['match_id', 'matches', 'time_line']
-    refine_df = pd.DataFrame([[match_id, matches, time_line]], columns=columns)
+    columns = ['api_key', 'match_id', 'matches', 'time_line']
+    refine_df = pd.DataFrame([[api_key, match_id, matches, time_line]], columns=columns)
     return refine_df
 
-
-# refine_df = pd.concat([df_refine(row) for _, row in df.iterrows()], ignore_index=True)
-
-
-
-# insert
-
 # insert  ######### insert 수정 #########
-
 def insert(t, conn_):
     try:
-        matches_json, timeline_json = conn_.escape_string(json.dumps(t.matches)), conn_.escape_string(json.dumps(t.timeline))
+        matches_json, timeline_json = conn_.escape_string(json.dumps(t.matches)), conn_.escape_string(json.dumps(t.time_line))
         sql_insert = (
             f"insert ignore into match_raw (api_key, match_id, matches, timeline) values ({repr(t.api_key)},"
             f" {repr(t.match_id)}, '{matches_json}', '{timeline_json}')"
@@ -283,16 +276,20 @@ def main():
     merged_df = pd.concat(match_info_output)
     print("merged_df =", len(merged_df))
 
+    refine_df = pd.concat([df_refine(row) for _, row in merged_df.iterrows()], ignore_index=True)
     sql_conn = mu.connect_mysql()
-    merged_df.progress_apply(lambda x: insert(x, sql_conn), axis=1)
+    refine_df.progress_apply(lambda x: insert(x, sql_conn), axis=1)
     sql_conn.commit()
     sql_conn.close()
-
     print('done')
 
 if __name__ == '__main__':
     for _ in tqdm(range(24)):
-        main()
+        try:
+            main()
+        except Exception as e:
+            logging.exception(f'error {e}')
+            continue
         print('sleep 20')
         time.sleep(20)
 
