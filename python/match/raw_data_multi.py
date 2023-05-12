@@ -102,12 +102,19 @@ def get_match_info_worker(args):
     tmp = set()
     random.shuffle(_match_ids)
 
-    for match_id in tqdm(_match_ids[:500]):  # 수정점
+    for match_id in tqdm(_match_ids[:20]):  # 수정점
         while True:
             try:
                 get_match_url = f'https://asia.api.riotgames.com/lol/match/v5/matches/{match_id}?api_key={api_key}'
                 get_match_res = requests.get(get_match_url).json()
-                tmp.update(get_match_res['metadata'])
+
+                gameversion_split = get_match_res['info']['gameVersion'].split('.')
+                gameversion = float(gameversion_split[0] + '.' + gameversion_split[1])
+                gameduration = get_match_res['info']['gameDuration']
+                if gameversion < 13.7:
+                    break
+                if gameduration < 900:
+                    break
             except Exception as e:
                 print(f'{e} match, {get_match_res["status"]["message"]},{api_key}')
                 if 'found' in get_match_res['status']['message']:
@@ -139,12 +146,6 @@ def get_match_info_worker(args):
 # 끝
 
 def df_refine(df):
-    if df['matches']['info']['gameVersion'] < 13.7:
-        return
-
-    if df['matches']['info']['gameDuration'] < 900:
-        return
-
     def matches_data(df):
         match_info = df['matches']['info']
         participant_list = match_info['participants']
@@ -302,26 +303,3 @@ if __name__ == '__main__':
             continue
         print('sleep 20')
         time.sleep(20)
-
-
-sql_conn = mu.connect_mysql()
-df = pd.DataFrame(mu.mysql_execute_dict('select match_id, matches from match_raw', sql_conn))
-sql_conn.close()
-df['matches'] = df.apply(lambda x: json.loads(x['matches']), axis=1)
-
-df = df[df['matches'].apply(lambda x: 'gameVersion' in x)]
-df['matches']['gameVersion'] = df['matches']['gameVersion'].apply(lambda x: float(x.split(' ')[0] + '.' + x.split(' ')[1]))
-df['matches'] = df['matches'].apply(lambda x: {**x, 'gameVersion': float(x['gameVersion'].split('.')[0] + '.' + x['gameVersion'].split('.')[1])} if 'gameVersion' in x else x)
-
-df = df[df['matches'].apply(lambda x: 'gameVersion' in x and float(x['gameVersion']) < 13.7)]
-
-def delete_match(match_id, sql_conn):
-    sql = (
-        f'delete from match_raw where match_id = {repr(match_id)}'
-    )
-    mu.mysql_execute(sql, sql_conn)
-
-sql_conn = mu.connect_mysql()
-df.progress_apply(lambda x: delete_match(x['match_id'], sql_conn), axis=1)
-sql_conn.commit()
-sql_conn.close()
