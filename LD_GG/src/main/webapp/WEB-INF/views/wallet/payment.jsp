@@ -84,6 +84,13 @@
 		
 		<div class = "flex-paymnent-cash">
 			<div class = "flex-label">
+				<strong>1 캐시</strong>
+			</div>
+			<input type = "button" class = "flex-payment-button" value = "1 원" style = "cursor : pointer">
+		</div>
+		
+		<div class = "flex-paymnent-cash">
+			<div class = "flex-label">
 				<strong>10,000 캐시</strong>
 			</div>
 			<input type = "button" class = "flex-payment-button" value = "10,000 원" style = "cursor : pointer">
@@ -178,11 +185,33 @@
 	})
 	
 	function requestPay() {
+		$(".flex-modal").fadeOut();
+		
+		let orderId = "";
+		
+		if(price === "1 원"){
+			let regex = /\d+/;
+			price = parseInt(price.match(regex)[0]);
+			console.log(price);
+		}else{
+			price = parseInt(price.replace(/,/g, ""));
+			console.log(price);
+		}
+		
+		$.ajax({
+			method : 'post',
+			url : '/wallet/payment/getOrderId',
+		}).done(res=>{
+			orderId = res;
+			console.log(orderId);
+		}).fail(err=>{
+			console.log(err);
+		})
 		if(pm == "kakaopay"){
 			IMP.request_pay({
 				pg : "kakaopay.TC0ONETIME",
 				pay_method : "card",
-				merchant_uid : "Iamport_test_payment1", // 주문번호
+				merchant_uid : orderId, // 주문번호
 				name : "테스트용 상품",
 				amount : price, // 숫자 타입
 				buyer_email : email,
@@ -190,20 +219,47 @@
 				buyer_tel : phone_num,
 			}, function(rsp) {
 				if (rsp.success) {
+					alert("결제가 완료되었습니다");
 					// 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
 					// jQuery로 HTTP 요청
+					console.log(rsp)
 					$.ajax({
-						url : "/payment/result",
+						url : "/wallet/payment/kakaopay/success",
 						method : "POST",
 						data : {
 							imp_uid : rsp.imp_uid, // 결제 고유번호
-							merchant_uid : rsp.merchant_uid
-						// 주문번호
+							merchant_uid : rsp.merchant_uid, // 주문번호
+							price : rsp.paid_amount,
+							email : "aaa@naver.com",
+							lol_account : "어쩔티비",
+							phone_num : "01011112539",
+							payment_status : "success",
+							payment_method : rsp.pg_type
 						}
-					}).done(function(data) {
+					}).done(res=>{
 						// 가맹점 서버 결제 API 성공시 로직
+						console.log(res)
+					}).fail(err=>{
+						console.log(err);
 					})
 				} else {
+					$.ajax({
+						url : "/wallet/payment/kakaopay/fail",
+						method : "POST",
+						data : {
+							imp_uid : rsp.imp_uid, // 결제 고유번호
+							merchant_uid : rsp.merchant_uid, // 주문번호
+							price : rsp.paid_amount,
+							email : "aaa@naver.com",
+							lol_account : "어쩔티비",
+							phone_num : "01011112539",
+							payment_status : "success",
+							payment_method : rsp.pg_type
+						}
+					}).done(res=>{
+						// 가맹점 서버 결제 API 성공시 로직
+						console.log(res)
+					})
 					alert("결제에 실패하였습니다. 에러 내용: " + rsp.error_msg);
 				}
 			});
@@ -212,7 +268,7 @@
 			IMP.request_pay({
 				pg : "kcp.A52CY",
 				pay_method : "card",
-				merchant_uid : "Iamport_test_payment2", // 주문번호
+				merchant_uid : orderId, // 주문번호
 				name : "테스트용 상품",
 				amount : price, // 숫자 타입
 				buyer_email : email,
@@ -220,20 +276,44 @@
 				buyer_tel : phone_num,
 			}, function(rsp) {
 				if (rsp.success) {
+					alert("결제가 완료되었습니다");
 					// 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
 					// jQuery로 HTTP 요청
 					$.ajax({
-						url : "/payment/result",
+						url : "/wallet/payment/kcp/success",
 						method : "POST",
 						data : {
 							imp_uid : rsp.imp_uid, // 결제 고유번호
-							merchant_uid : rsp.merchant_uid
-						// 주문번호
+							merchant_uid : rsp.merchant_uid, // 주문번호
+							price : rsp.paid_amount,
+							email : "aaa@naver.com",
+							lol_account : "어쩔티비",
+							phone_num : "01011112539",
+							payment_status : "success",
+							payment_method : rsp.pg_type
 						}
-					}).done(function(data) {
+					}).done(res=>{
 						// 가맹점 서버 결제 API 성공시 로직
+						console.log(res)
 					})
 				} else {
+					$.ajax({
+						url : "/wallet/payment/kcp/fail",
+						method : "POST",
+						data : {
+							imp_uid : rsp.imp_uid, // 결제 고유번호
+							merchant_uid : rsp.merchant_uid, // 주문번호
+							price : rsp.paid_amount,
+							email : "aaa@naver.com",
+							lol_account : "어쩔티비",
+							phone_num : "01011112539",
+							payment_status : "success",
+							payment_method : rsp.pg_type
+						}
+					}).done(res=>{
+						// 가맹점 서버 결제 API 성공시 로직
+						console.log(res)
+					})
 					alert("결제에 실패하였습니다. 에러 내용: " + rsp.error_msg);
 				}
 			});

@@ -40,5 +40,11 @@ public class PaymentController {
 	    return md;
 	}
 
+	@PostMapping("/payment/getOrderId")
+	@ResponseBody
+	public String getOrderId() {
+		String orderId = ps.getOrderId();
+		return orderId;
+	}
 	
 }

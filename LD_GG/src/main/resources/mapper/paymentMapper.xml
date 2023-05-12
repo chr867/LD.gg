@@ -8,5 +8,26 @@
 	<select id="getUserInfo" parameterType = "java.lang.String" resultType = "member">
 		SELECT email, phone_num, lol_account FROM member WHERE email = #{email}
 	</select>
+	
+	<select id="checkOrderId" parameterType = "java.lang.String" resultType = "java.lang.String">
+		SELECT merchant_id FROM paymentinfo WHERE merchant_id = #{orderId}
+	</select>
+	
+	<insert id="insertPaymentInfo" parameterType = "Map">
+		INSERT INTO paymentinfo (imp_uid, merchant_id, price, email, lol_account, phone_num, payment_status, payment_method)
+  		VALUES (#{imp_uid}, #{merchant_uid}, #{price}, #{email}, #{lol_account}, #{phone_num}, #{payment_status}, #{payment_method})
+	</insert>
+	
+	<select id="getPaymentInfo" parameterType = "java.lang.String" resultType = "point">
+		SELECT DISTINCT p.point_balance, pi.lol_account FROM paymentinfo pi JOIN point p ON pi.email = p.holder_email WHERE p.holder_email = #{email}
+	</select>
+	
+	<select id="checkBalance" parameterType = "java.lang.String" resultType = "int">
+		SELECT point_balance FROM point WHERE holder_email = #{email} 
+	</select>
+	
+	<update id="updateBalance" parameterType = "Integer">
+		UPDATE point SET point_balance = point_balance + #{point}
+	</update>
 
 </mapper>
