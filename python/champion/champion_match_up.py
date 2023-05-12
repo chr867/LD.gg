@@ -15,16 +15,165 @@ tqdm.pandas()
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+def matches_timeline_data_select(count):
+    start_time = time.time()
+    conn = mu.connect_mysql()
+    cursor = conn.cursor()
+    cursor.close()
+    print(f"총 {count}개 데이터 SELECT 시작합니다.")
+    batch_size = 1000
+    dfs = []
+    count = 0
+    for offset in tqdm(range(0, count, batch_size)):
+        query = f'SELECT matches,timeline FROM match_raw LIMIT {batch_size} OFFSET {offset}'
+        df = pd.read_sql(query, conn)
+        dfs.append(df)
+        count += 1000
+        print(f"데이터 : {count}개")
+        time.sleep(0.1)
+    conn.close()
+
+    df = pd.concat(dfs, ignore_index=True)
+    end_time = time.time()
+    print("데이터 SELECT 종료")
+    print("데이터 로딩 시간 : {:.2f}초".format(end_time - start_time))
+    return df
+# ----------------------------------------------------------------------------------------------------------------------
+def matches_data_select(count):
+    start_time = time.time()
+    conn = mu.connect_mysql()
+    cursor = conn.cursor()
+    cursor.close()
+    print(f"총 {count}개 데이터 SELECT 시작합니다.")
+    batch_size = 1000
+    dfs = []
+    count = 0
+    for offset in tqdm(range(0, count, batch_size)):
+        query = f'SELECT matches FROM match_raw LIMIT {batch_size} OFFSET {offset}'
+        df = pd.read_sql(query, conn)
+        dfs.append(df)
+        count += 1000
+        print(f"데이터 : {count}개")
+        time.sleep(0.1)
+    conn.close()
+
+    df = pd.concat(dfs, ignore_index=True)
+    end_time = time.time()
+    print("데이터 SELECT 종료")
+    print("데이터 로딩 시간 : {:.2f}초".format(end_time - start_time))
+    return df
+# ----------------------------------------------------------------------------------------------------------------------
+def matches_data(count):
+    print("데이터 SELECT 시작")
+    conn = mu.connect_mysql()
+    start_time = time.time()
+    df = pd.DataFrame(mu.mysql_execute_dict(f"SELECT matches FROM match_raw LIMIT {count}", conn))
+    conn.close()
+    end_time = time.time()
+    print("데이터로딩 시간: {:.2f}초".format(end_time - start_time))
+    print("데이터 SELECT 종료")
+    return df
+# ----------------------------------------------------------------------------------------------------------------------
+def matches_timeline_data(count):
+    conn = mu.connect_mysql()
+    print("데이터 SELECT 시작")
+    start_time = time.time()
+    df = pd.DataFrame(mu.mysql_execute_dict(f"SELECT matches,timeline FROM match_raw LIMIT {count}", conn))
+    conn.close()
+    end_time = time.time()
+    print("데이터로딩 시간: {:.2f}초".format(end_time - start_time))
+    print("데이터 SELECT 종료")
+    return df
+# ----------------------------------------------------------------------------------------------------------------------
 # RawData
 conn = mu.connect_mysql()
-df = pd.DataFrame(mu.mysql_execute_dict('select * from match_solr_rank',conn))
+df = pd.DataFrame(mu.mysql_execute_dict('select * from match_raw limit 10000',conn))
 conn.close()
+# ----------------------------------------------------------------------------------------------------------------------
+df = matches_timeline_data_select(10000)
+# ----------------------------------------------------------------------------------------------------------------------
 
-df = df[(df.gameDuration > 900) & (df.gameDuration <10000)]
+df['matches'] = df.apply(lambda x: json.loads(x['matches']), axis=1)
+df['timeline'] = df.apply(lambda x: json.loads(x['timeline']), axis=1)
 
-df
+df_creater = []
+columns = [
+    'api_key', 'match_id', 'gameDuration', 'gameVersion', 'summonerName', 'summonerId', 'summonerLevel',
+    'participantId', 'championName', 'championId', 'ban_champion_id', 'champExperience', 'teamPosition',
+    'teamId', 'win', 'kills', 'deaths', 'assists', 'towerDestroy', 'inhibitorDestroy', 'dealToObject',
+    'dealToChamp', 'cs', 'g_5', 'g_6', 'g_7', 'g_8', 'g_9', 'g_10', 'g_11', 'g_12', 'g_13', 'g_14', 'g_15',
+    'g_16', 'g_17', 'g_18', 'g_19', 'g_20', 'g_21', 'g_22', 'g_23', 'g_24', 'g_25'
+]
 
-sample = df[['match_id','championName','championId','win','teamPosition','g_15','teamId','kills','deaths','assists','dealToChamp','towerDestroy','cs','ban_champion_id']]
+for m_idx, m in tqdm(enumerate(df['matches'])):
+    if m['gameDuration'] < 900:
+        continue
+
+    tower_destroy = 0
+    bans = 0
+
+    for p_idx, p in enumerate(m['participants']):
+        game_end = list(df.iloc[m_idx]['timeline'].keys())[-1]
+        participant_frames = df.iloc[m_idx]['timeline'][game_end]['participantFrames']
+
+        minions_killed = participant_frames[p_idx]['minionsKilled']
+        jungle_minions_killed = participant_frames[p_idx]['jungleMinionsKilled']
+        cs = minions_killed + jungle_minions_killed
+
+        event_lst = [event for events in df.iloc[m_idx]['timeline'].values() for event in events['events']]
+        tower_destroy = sum(1 for event in event_lst if event['type'] == 'BUILDING_KILL' and event['killerId'] == p_idx)
+
+        team = 0 if p['teamId'] == 100 else 1
+
+        if bans == 5:
+            bans = 0
+
+        df_creater.append([
+            df['api_key'][m_idx],
+            df.iloc[m_idx]['match_id'],
+            m['gameDuration'],
+            m['gameVersion'],
+            p['summonerName'],
+            p['summonerId'],
+            p['summonerLevel'],
+            p['participantId'],
+            p['championName'],
+            p['championId'],
+            m['bans'][p_idx],
+            p['champExperience'],
+            p['teamPosition'],
+            p['teamId'],
+            p['win'],
+            p['kills'],
+            p['deaths'],
+            p['assists'],
+            tower_destroy,
+            p['inhibitorKills'],
+            p['damageDealtToObjectives'],
+            p['totalDamageDealtToChampions'],
+            cs
+        ])
+
+        for t in range(5, 26):
+            try:
+                g_each = df.iloc[m_idx]['timeline'][str(t)]['participantFrames'][p_idx]['totalGold']
+                df_creater[-1].append(g_each)
+            except Exception as e:
+                df_creater[-1].append(0)
+
+        bans += 1
+
+sum_df = pd.DataFrame(df_creater, columns=columns)
+
+
+
+# ----------------------------------------------------------------
+#match_up
+
+sample = sum_df[['match_id','championName','championId','win','teamPosition','g_15','teamId','kills','deaths','assists','dealToChamp','towerDestroy','cs','ban_champion_id']]
+
+# win 컬럼 boolean에서 int로 변경
+sample['win'] =sample.apply(lambda x:  1 if x.win ==True else 0 , axis = 1)
 
 sample.rename(columns={'championName': 'champion_name','championId': 'champion_id','teamPosition': 'team_position','teamId': 'team_id','dealToChamp': 'deal_to_champ','towerDestroy': 'tower_destroy'}, inplace=True)
 
@@ -92,6 +241,8 @@ r_df_o = r_df[['lane_kill_rate','kda','kill_participation','deal_to_champ','avg_
 #인덱스 리셋
 match_up =r_df_o.reset_index()
 
+print(len(r_df))
+
 match_up.rename(columns={'win_rate': 'match_up_win_rate','win_cnt': 'match_up_win_cnt'}, inplace=True)
 # nan , inf 값 제거
 match_up = match_up.dropna()
@@ -99,32 +250,28 @@ match_up = match_up.dropna()
 # multi-level index로 설정된 경우
 match_up.loc[r_df_o.index.get_level_values('champion_name') == 'Yorick']
 
+#  ---------------------------------------------------------------------------------------------------------------------
 # db에 데이터 삽입
-conn = mu.connect_mysql()
-# Cursor 객체 생성
-cursor = conn.cursor()
-# tqdm을 사용하여 데이터프레임의 각 행을 순회하며 데이터 삽입
-with tqdm(total=len(match_up)) as pbar:
-    for row in match_up.itertuples(index=False):
-        insert_query = "INSERT INTO champion_match_up (champion_name, champion_id, lane, enemy_champ, enemy_champ_id, lane_kill_rate, kda, kill_participation, deal_to_champ, avg_g_15, avg_tower_kill, avg_cs, match_up_win_rate, match_up_win_cnt, match_up_cnt) " \
-                       "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-        cursor.execute(insert_query, row)
-        pbar.update(1)
-# 변경사항을 커밋하여 데이터베이스에 반영
-conn.commit()
-# Cursor와 Connection 종료
-cursor.close()
-conn.close()
-
 def insert_my(x,conn):
     query = (
         f'insert into champion_match_up (champion_name, champion_id, lane, enemy_champ, enemy_champ_id, lane_kill_rate, kda, kill_participation, deal_to_champ, avg_g_15, avg_tower_kill, avg_cs, match_up_win_rate, match_up_win_cnt, match_up_cnt)'
         f'values({repr(x.champion_name)},{x.champion_id},{repr(x.lane)},{repr(x.enemy_champ)},{x.enemy_champ_id},{x.lane_kill_rate},{x.kda},{x.kill_participation},{x.deal_to_champ},{x.avg_g_15},{x.avg_tower_kill},{x.avg_cs},{x.match_up_win_rate},{x.match_up_win_cnt},{x.match_up_cnt})'
     )
+    query2 = (
+        f'INSERT INTO champion_match_up '
+        f'(champion_name, champion_id, lane, enemy_champ, enemy_champ_id, lane_kill_rate, kda, kill_participation, deal_to_champ, avg_g_15, avg_tower_kill, avg_cs, match_up_win_rate, match_up_win_cnt, match_up_cnt) '
+        f'VALUES ({repr(x.champion_name)}, {x.champion_id}, {repr(x.lane)}, {repr(x.enemy_champ)}, {x.enemy_champ_id}, {x.lane_kill_rate}, {x.kda}, {x.kill_participation}, {x.deal_to_champ}, {x.avg_g_15}, {x.avg_tower_kill}, {x.avg_cs}, {x.match_up_win_rate}, {x.match_up_win_cnt}, {x.match_up_cnt}) '
+        f'ON DUPLICATE KEY UPDATE '
+        f'champion_id = VALUES(champion_id), lane = VALUES(lane), enemy_champ = VALUES(enemy_champ), enemy_champ_id = VALUES(enemy_champ_id), '
+        f'lane_kill_rate = VALUES(lane_kill_rate), kda = VALUES(kda), kill_participation = VALUES(kill_participation), deal_to_champ = VALUES(deal_to_champ), '
+        f'avg_g_15 = VALUES(avg_g_15), avg_tower_kill = VALUES(avg_tower_kill), avg_cs = VALUES(avg_cs), '
+        f'match_up_win_rate = VALUES(match_up_win_rate), match_up_win_cnt = VALUES(match_up_win_cnt), match_up_cnt = VALUES(match_up_cnt)'
+    )
     try:
-        mu.mysql_execute(query,conn)
+        mu.mysql_execute(query2,conn)
     except Exception as e:
-        print(e)
+        # 중복된 레코드인 경우, 해당 레코드 출력
+        print(f"Duplicated record: {x}")
     return
 
 conn = mu.connect_mysql()

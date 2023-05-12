@@ -139,6 +139,9 @@ def get_match_info_worker(args):
 # 끝
 
 def df_refine(df):
+    if df['matches']['info']['gameDuration'] < 900:
+        return
+
     def matches_data(df):
 
         match_info = df['matches']['info']
