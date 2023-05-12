@@ -23,7 +23,7 @@
 	</insert>
 	<!-- 글 번호, 제목, 내용, 작성일,작성자, 소환사명, 최근전적(현제 더미값) -->
 		<select id="getMateDetails" resultType="mate">
-		SELECT mp.mate_id ,mp.email ,mp.mate_content ,mp.mate_date,mp.mate_title,m.lol_account,mp.last_win_rate 
+		SELECT mp.mate_id ,mp.email ,mp.mate_content ,mp.mate_date,mp.mate_title,m.lol_account
 		FROM MATE_POST as MP JOIN (
 			SELECT *
 			FROM member
@@ -33,12 +33,29 @@
 	</select>
 	<insert id="mateReplyInsert" parameterType="mate">
 	INSERT INTO mate_request
-		(mate_apply, mate_id, email,mate_r_content,mate_r_date)
+		(mate_apply, mate_id,email,mate_r_content,mate_r_date)
 		VALUES(
 		#{mate_apply},
 		#{mate_id},
 		#{email},
-		#{mate_title},
+		#{mate_r_content},
 		default);
 	</insert>
+	<select id="getReplyList" resultType="mate">
+		SELECT lol_account,mate_r_content,mate_r_date,mate_apply,mate_id,mate_r_id,mr.email
+		FROM mate_request mr JOIN (
+			SELECT *
+			FROM member
+			) as M
+		ON mr.EMAIL = M.EMAIL
+		where mate_id =#{mate_id}
+		ORDER BY mr.mate_r_id desc;
+	</select>
+	<update id="mateModify" parameterType="mate">
+		UPDATE MATE_POST SET
+		mate_title=#{mate_title},
+		mate_content=#{mate_content},
+		mate_date=default
+		WHERE mate_id =#{mate_id};
+	</update>
 </mapper>

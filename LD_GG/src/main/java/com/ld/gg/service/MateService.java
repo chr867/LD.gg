@@ -18,9 +18,13 @@ public class MateService {
 
 	public List<MateDto> getMateList() throws Exception {
 		List<MateDto> mList = mDao.getBoardList();
-		log.info("겟메이트서비스탔어용");
 		log.info("{}", mList);
 		return mList;
+	}
+	public List<MateDto> getReplyList(int mate_id) throws Exception {
+		List<MateDto> mReplyList = mDao.getReplyList(mate_id);
+		log.info("리플리스트"+ mReplyList);
+		return mReplyList;
 	}
 
 	public boolean mateWrite(MateDto mDto) {
@@ -28,6 +32,23 @@ public class MateService {
 			Integer insertResult = mDao.insertMate(mDto);
 			if (insertResult != 0) {
 				log.info(insertResult+"insertResult");
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+			e.printStackTrace();
+			return false;
+		}
+
+	}
+	public boolean mateModify(MateDto mDto) {
+		log.info(mDto+"mateModify-Dto");
+		try {
+			Integer mateModifyResult = mDao.mateModify(mDto);
+			if (mateModifyResult != 0) {
+				log.info(mateModifyResult+"mateModifyResult");
 				return true;
 			} else {
 				return false;
@@ -63,5 +84,10 @@ public class MateService {
 			return replyInsertResult;
 		}
 
+	}
+	public MateDto getSelectReplyList(int mate_r_id) {
+		MateDto SelectReplyList = mDao.getMateDetails(mate_r_id);
+		return SelectReplyList;
+		
 	}
 }
