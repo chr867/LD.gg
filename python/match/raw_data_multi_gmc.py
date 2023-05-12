@@ -14,32 +14,24 @@ tqdm.pandas()
 riot_api_keys = private.riot_api_key_array
 
 # 티어별 유저 이름, 이름으로 puuid, puuid로 match id
-def load_summoner_names_worker(worker_id):
-    api_key = riot_api_keys[worker_id]
-    tier_division = [
-        [['GOLD', 'IV'], ['IRON', 'IV'], ['IRON', 'III']],
-        [['SILVER', 'IV'], ['IRON', 'II'], ['PLATINUM', 'II']],
-        [['SILVER', 'II'], ['IRON', 'I'], ['PLATINUM', 'III']],
-        [['SILVER', 'III'], ['GOLD', 'I'], ['DIAMOND', 'IV']],
-        [['SILVER', 'I'], ['GOLD', 'II'], ['DIAMOND', 'I']],
-        [['BRONZE', 'II'], ['BRONZE', 'III'], ['DIAMOND', 'III']],
-        [['GOLD', 'III'], ['BRONZE', 'I'], ['DIAMOND', 'II']],
-        [['BRONZE', 'IV'], ['PLATINUM', 'IV'], ['PLATINUM', 'I']]
-    ]
-    for i in tqdm(tier_division[worker_id]):
-        tier = i[0]
-        division = i[1]
-        page_p = random.randrange(1, 50)
-        name_set = set()
+def load_summoner_names_worker():
+    api_it = iter(riot_api_keys)
+    api_key = next(api_it)
+    tier_division = ['C', 'GM', 'M']
+    name_set = set()
 
+    for i in tqdm(tier_division):
+        if i == 'C':
+            url = f'https://kr.api.riotgames.com/lol/league/v4/challengerleagues/by-queue/RANKED_SOLO_5x5?api_key={api_key}'
+        elif i == 'GM':
+            url = f'https://kr.api.riotgames.com/lol/league/v4/grandmasterleagues/by-queue/RANKED_SOLO_5x5?api_key={api_key}'
+        else:  # M
+            url = f'https://kr.api.riotgames.com/lol/league/v4/masterleagues/by-queue/RANKED_SOLO_5x5?api_key={api_key}'
         while True:
             try:
-                url = f'https://kr.api.riotgames.com/lol/league/v4/entries/RANKED_SOLO_5x5/{tier}/{division}?page={page_p}&api_key={api_key}'
                 res_p = requests.get(url).json()
-
-                for summoner in res_p:
+                for summoner in res_p['entries']:
                     name_set.add(summoner['summonerId'])
-
             except Exception:
                 if 'Forbidden' in res_p['status']['message']:
                     break
@@ -47,13 +39,11 @@ def load_summoner_names_worker(worker_id):
                 print(f'suummoner names 예외 발생 {res_p["status"]["message"]}, {api_key}')
                 time.sleep(20)
                 continue
-            print(len(name_set))
-            if len(res_p) < 200:
-                break
 
+            print(len(name_set))
             break
 
-        print('load_summoner_names END', worker_id, len(name_set))
+        print('load_summoner_names END')
         name_lst = list(name_set)
         random.shuffle(name_lst)
 
@@ -61,8 +51,7 @@ def load_summoner_names_worker(worker_id):
         for summoner_name in tqdm(name_lst[:50]):
             while True:
                 index = 0
-                start = 1680620400  # 최근 3패치 사용 오래 된 패치 날짜
-                # 13.7 패치 4월 5일 13.8패치 4월 19일 13.9 5월 3일
+                start = 1673485200  # 시즌 시작 Timestamp
                 # tmp = 1683438967290
                 try:
 
@@ -90,31 +79,25 @@ def load_summoner_names_worker(worker_id):
                 break
 
     match_list = list(match_set)
-    print('load_match_ids END', worker_id, len(match_list))
+    print('load_match_ids END', len(match_list))
     return match_list
 # 끝
 
 # match_id, matches, timeline 폼으로 만들기
-def get_match_info_worker(args):
-    _match_ids, i = args
+def get_match_info_worker(match_ids):
+    _match_ids = match_ids
     _result = []
-    api_key = riot_api_keys[i]
+    api_it = iter(riot_api_keys)
+    api_key = next(api_it)
     tmp = set()
     random.shuffle(_match_ids)
 
-    for match_id in tqdm(_match_ids[:20]):  # 수정점
+    for match_id in tqdm(_match_ids[:500]):  # 수정점
         while True:
             try:
                 get_match_url = f'https://asia.api.riotgames.com/lol/match/v5/matches/{match_id}?api_key={api_key}'
                 get_match_res = requests.get(get_match_url).json()
-
-                gameversion_split = get_match_res['info']['gameVersion'].split('.')
-                gameversion = float(gameversion_split[0] + '.' + gameversion_split[1])
-                gameduration = get_match_res['info']['gameDuration']
-                if gameversion < 13.7:
-                    break
-                if gameduration < 900:
-                    break
+                tmp.update(get_match_res['metadata'])
             except Exception as e:
                 print(f'{e} match, {get_match_res["status"]["message"]},{api_key}')
                 if 'found' in get_match_res['status']['message']:
@@ -123,6 +106,7 @@ def get_match_info_worker(args):
                     break
                 time.sleep(20)
                 continue
+
             try:
                 get_timeline_url = f'https://asia.api.riotgames.com/lol/match/v5/matches/{match_id}/timeline?api_key={api_key}'
                 get_timeline_res = requests.get(get_timeline_url).json()
@@ -147,9 +131,11 @@ def get_match_info_worker(args):
 
 def df_refine(df):
     def matches_data(df):
+
         match_info = df['matches']['info']
         participant_list = match_info['participants']
         team_list = match_info['teams']
+
         matches = {
             'gameDuration': match_info['gameDuration'],
             'gameVersion': match_info['gameVersion'],
@@ -260,46 +246,4 @@ def insert(t, conn_):
 # insert 끝
 
 
-def main():
-    run_time = int(time.time() * 1000)  # 코드 돌린 Timestamp
-    now = datetime.datetime.now()
-    formatted_time = now.strftime("%Y-%m-%d %H:%M")
-    # file_path = "C:/icia/python/runtime.txt"  # 메모장에 저장할 파일 경로와 이름 설정 헤응
-    # with open(file_path, "w") as f:  # 파일 열기
-    #     f.write(formatted_time + " " + str(run_time))  # 런타임 값을 파일에 쓰기
-    # f.close()  # 파일 닫기
-
-    match_ids = set()
-    with mp.Pool(processes=8) as pool:
-        print('**load_summoner_names**  matches_timeline')
-        for i, result in enumerate(tqdm(pool.imap(load_summoner_names_worker, range(8)))):
-            match_ids.update(result)
-
-    match_ids = list(match_ids)
-    print('load_summoner_names  **get_match_info**', len(match_ids))
-    match_info_output = []
-    with mp.Pool(processes=8) as pool:
-        chunk_size = len(match_ids)
-        chunks = [match_ids[i:i + chunk_size // 8] for i in range(0, len(match_ids), chunk_size // 8)]
-        for i, res in enumerate(tqdm(pool.imap(get_match_info_worker, zip(chunks, range(8))), total=len(chunks))):
-            match_info_output.append(res)
-
-    merged_df = pd.concat(match_info_output)
-    print("merged_df =", len(merged_df))
-
-    refine_df = pd.concat([df_refine(row) for _, row in merged_df.iterrows()], ignore_index=True)
-    sql_conn = mu.connect_mysql()
-    refine_df.progress_apply(lambda x: insert(x, sql_conn), axis=1)
-    sql_conn.commit()
-    sql_conn.close()
-    print('done')
-
-if __name__ == '__main__':
-    for _ in tqdm(range(24)):
-        try:
-            main()
-        except Exception as e:
-            logging.exception(f'error {e}')
-            continue
-        print('sleep 20')
-        time.sleep(20)
+match_list = load_summoner_names_worker()
