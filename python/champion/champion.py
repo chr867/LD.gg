@@ -7,53 +7,14 @@ import json
 import time
 import numpy as np
 tqdm.pandas()
+import data_load as dl
 
 # RIOT-API-KEY
 riot_api_key = 'RGAPI-14667a4e-7c3c-45fa-ac8f-e53c7c3f5fe1'
 # ----------------------------------------------------------------------------------------------------------------------
-# RawData
-conn = mu.connect_mysql()
-start_time = time.time()
-df = pd.DataFrame(mu.mysql_execute_dict("SELECT * FROM match_raw LIMIT 100", conn))
-conn.close()
+df = dl.matches_timeline_data(10000)
 df['matches'] = df['matches'].apply(json.loads)
 df['timeline'] = df['timeline'].apply(json.loads)
-end_time = time.time()
-print("Data load time: {:.2f} seconds".format(end_time - start_time))
-
-def data_select():
-    start_time = time.time()
-    conn = mu.connect_mysql()
-    cursor = conn.cursor()
-    cursor.execute('SELECT COUNT(*) FROM match_raw')
-    total_records = cursor.fetchone()[0]
-    cursor.close()
-    # total_records = 5000 # 원하는 만큼 설정
-    print(f"총 {total_records}개 데이터 SELECT 시작합니다.")
-    batch_size = 100
-    dfs = []
-    count = 0
-    for offset in tqdm(range(0, total_records, batch_size)):
-        query = f'SELECT * FROM match_raw LIMIT {batch_size} OFFSET {offset}'
-        df = pd.read_sql(query, conn)
-        dfs.append(df)
-        count += 100
-        print(f"데이터 : {count}개")
-        time.sleep(0.1)
-    conn.close()
-
-    df = pd.concat(dfs, ignore_index=True)
-    end_time = time.time()
-    print("데이터 SELECT 종료")
-    print("데이터 로딩 시간 : {:.2f}초".format(end_time - start_time))
-    return df
-
-df = data_select()
-df['matches'] = df['matches'].apply(json.loads)
-df['timeline'] = df['timeline'].apply(json.loads)
-# ----------------------------------------------------------------------------------------------------------------------
-df.iloc[0]['matches']['participants'][0]['perks0']
-
 # ----------------------------------------------------------------------------------------------------------------------
 # 룬 데이터 정제
 def rune_data(raw_data):
@@ -116,6 +77,7 @@ def rune_data(raw_data):
 
 
 rune_data = rune_data(df)
+
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -255,6 +217,7 @@ def mythic_item_data(raw_data):
 mythic_item_data = mythic_item_data(df)
 
 
+
 # ----------------------------------------------------------------------------------------------------------------------
 # 아이템 정제 (신화, 신발 제외)
 def common_item_data(item_df_data):
@@ -296,9 +259,9 @@ def common_item_data(item_df_data):
 
 common_item_data = common_item_data(item_df)
 
-
 # ----------------------------------------------------------------------------------------------------------------------
 # 시작 아이템 데이터 정제
+df.iloc[0]['timeline']
 def start_item_data(raw_data):
     result = []
     accessories_lst = [3364, 3340, 3363, 3330, 3513]
@@ -307,7 +270,8 @@ def start_item_data(raw_data):
         timeline_df = raw_data.iloc[x]['timeline']['info']['frames']
         if len(timeline_df) < 2:
             continue
-        item_dict_by_participant = {i: [] for i in range(1, len(raw_data.iloc[x]['matches']['info']['participants']) + 1)}
+        item_dict_by_participant = {i: [] for i in
+                                    range(1, len(raw_data.iloc[x]['matches']['info']['participants']) + 1)}
         for event in timeline_df[1]['events']:
             if event['type'] == 'ITEM_PURCHASED':
                 item_dict_by_participant[event['participantId']].append(event['itemId'])
@@ -335,7 +299,8 @@ def start_item_data(raw_data):
     start_item_counts = start_item_counts[
         (start_item_counts['win_count'] >= 5) & (start_item_counts['pick_count'] >= 5)]
 
-    top3_start_item = start_item_counts.groupby('champion_id').apply(lambda x: x.nlargest(3, ['pick_count', 'win_rate']))
+    top3_start_item = start_item_counts.groupby('champion_id').apply(
+        lambda x: x.nlargest(3, ['pick_count', 'win_rate']))
     top3_start_item = top3_start_item.reset_index(drop=True)
 
     total_game_df = start_item_df.groupby(['champion_id']).agg({'win': ['count']})
@@ -361,7 +326,8 @@ def accessories_data(raw_data):
         timeline_df = raw_data.iloc[x]['timeline']['info']['frames']
         if len(timeline_df) < 2:
             continue
-        item_dict_by_participant = {i: [] for i in range(1, len(raw_data.iloc[x]['matches']['info']['participants']) + 1)}
+        item_dict_by_participant = {i: [] for i in
+                                    range(1, len(raw_data.iloc[x]['matches']['info']['participants']) + 1)}
         for event in timeline_df[1]['events']:
             if event['type'] == 'ITEM_PURCHASED' and event['itemId'] in accessories_lst:
                 item_dict_by_participant[event['participantId']].append(event)
@@ -392,7 +358,8 @@ def accessories_data(raw_data):
     start_item_counts = start_item_counts[
         (start_item_counts['win_count'] >= 5) & (start_item_counts['pick_count'] >= 5)]
 
-    top3_start_item = start_item_counts.groupby('champion_id').apply(lambda x: x.nlargest(3, ['pick_count', 'win_rate']))
+    top3_start_item = start_item_counts.groupby('champion_id').apply(
+        lambda x: x.nlargest(3, ['pick_count', 'win_rate']))
     top3_start_item = top3_start_item.reset_index(drop=True)
 
     total_game_df = start_item_df.groupby(['champion_id']).agg({'win': ['count']})
@@ -404,7 +371,10 @@ def accessories_data(raw_data):
     print("장신구 아이템 데이터 정제 완료 ")
     return final_df
 
+
 accessories_data = accessories_data(df)
+
+
 # ----------------------------------------------------------------------------------------------------------------------
 # 스펠 데이터
 def spell_data(raw_data):
@@ -423,6 +393,7 @@ def spell_data(raw_data):
 
     spell_df = pd.DataFrame(result, columns=columns)
     spell_df['win'] = spell_df['win'].astype(int)
+
     def combine_spells(df):
         df['spell_1'], df['spell_2'] = np.sort(df[['spell_1', 'spell_2']], axis=1).T
         df['spells'] = df['spell_1'].astype(str) + ',' + df['spell_2'].astype(str)
@@ -455,6 +426,7 @@ df.iloc[0]['timeline']['info']['frames'][3]['events'][1]['level']
 df.iloc[0]['matches']['info']['participants'][0]['championId']
 df.iloc[0]['matches']['info']['participants'][0]['participantId']
 
+
 def skill_build_data(raw_data):
     for x in tqdm(range(len(raw_data))):
         for minute in range(len(raw_data.iloc[x]['timeline']['info']['frames'])):
@@ -479,4 +451,3 @@ def skill_build_data(raw_data):
 
 
 skill_build_data(df[:1])
-
