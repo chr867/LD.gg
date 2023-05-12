@@ -115,7 +115,6 @@ def get_match_info_worker(args):
                     break
                 time.sleep(20)
                 continue
-
             try:
                 get_timeline_url = f'https://asia.api.riotgames.com/lol/match/v5/matches/{match_id}/timeline?api_key={api_key}'
                 get_timeline_res = requests.get(get_timeline_url).json()
@@ -140,11 +139,9 @@ def get_match_info_worker(args):
 
 def df_refine(df):
     def matches_data(df):
-
         match_info = df['matches']['info']
         participant_list = match_info['participants']
         team_list = match_info['teams']
-
         matches = {
             'gameDuration': match_info['gameDuration'],
             'gameVersion': match_info['gameVersion'],
@@ -213,20 +210,23 @@ def df_refine(df):
             result = {'events': [], 'participantFrames': []}
             events = []
             for event in frame['events']:
-                if event['type'] == 'SKILL_LEVEL_UP' or event['type'] == 'ITEM_PURCHASED' or event[
-                    'type'] == 'BUILDING_KILL':
+                if event['type'] == 'SKILL_LEVEL_UP' or event['type'] == 'ITEM_PURCHASED' \
+                        or event['type'] == 'BUILDING_KILL':
                     events.append(event)
             result['events'].extend(events)
-            for participant in range(len(frame['participantFrames'])):
-                participant_dict = {
-                    'participantId': frame['participantFrames'][f'{participant + 1}']['participantId'],
-                    'level': frame['participantFrames'][f'{participant + 1}']['level'],
-                    'totalGold': frame['participantFrames'][f'{participant + 1}']['totalGold'],
-                    'minionsKilled': frame['participantFrames'][f'{participant + 1}']['minionsKilled'],
-                    'jungleMinionsKilled': frame['participantFrames'][f'{participant + 1}']['jungleMinionsKilled'],
-                }
-                result['participantFrames'].append(participant_dict)
-            time_line[i] = result
+            try:
+                for participant in range(len(frame['participantFrames'])):
+                    participant_dict = {
+                        'participantId': frame['participantFrames'][f'{participant + 1}']['participantId'],
+                        'level': frame['participantFrames'][f'{participant + 1}']['level'],
+                        'totalGold': frame['participantFrames'][f'{participant + 1}']['totalGold'],
+                        'minionsKilled': frame['participantFrames'][f'{participant + 1}']['minionsKilled'],
+                        'jungleMinionsKilled': frame['participantFrames'][f'{participant + 1}']['jungleMinionsKilled'],
+                    }
+                    result['participantFrames'].append(participant_dict)
+                time_line[i] = result
+            except TypeError:
+                print(f'{frame}')
         return time_line
 
     api_key = df['api_key']

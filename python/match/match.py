@@ -112,7 +112,7 @@ sum_df['summonerTier'] = sum_df.progress_apply(lambda x: summoner_tier(x), axis=
 def insert(t, conn):
     sql = (
         f"insert ignore into match_solr_rank (api_key, match_id, gameDuration, gameVersion, summonerName, summonerId," 
-        f"summonerTier, 'summonerLevel', participantId, championName, championId, ban_champion_id, champExperience, teamPosition,"
+        f"summonerTier, summonerLevel, participantId, championName, championId, ban_champion_id, champExperience, teamPosition,"
         f"teamId, win, kills, deaths, assists, towerDestroy, inhibitorDestroy, dealToObject, dealToChamp, cs,"
         f"g_5, g_6, g_7, g_8, g_9, g_10, g_11, g_12, g_13, g_14, g_15, g_16, g_17, g_18, g_19, g_20, g_21, g_22,"
         f"g_23, g_24, g_25) "
