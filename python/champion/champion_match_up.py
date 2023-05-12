@@ -15,86 +15,25 @@ tqdm.pandas()
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-def matches_timeline_data_select(count):
-    start_time = time.time()
-    conn = mu.connect_mysql()
-    cursor = conn.cursor()
-    cursor.close()
-    print(f"총 {count}개 데이터 SELECT 시작합니다.")
-    batch_size = 1000
-    dfs = []
-    count = 0
-    for offset in tqdm(range(0, count, batch_size)):
-        query = f'SELECT matches,timeline FROM match_raw LIMIT {batch_size} OFFSET {offset}'
-        df = pd.read_sql(query, conn)
-        dfs.append(df)
-        count += 1000
-        print(f"데이터 : {count}개")
-        time.sleep(0.1)
-    conn.close()
-
-    df = pd.concat(dfs, ignore_index=True)
-    end_time = time.time()
-    print("데이터 SELECT 종료")
-    print("데이터 로딩 시간 : {:.2f}초".format(end_time - start_time))
-    return df
-# ----------------------------------------------------------------------------------------------------------------------
-def matches_data_select(count):
-    start_time = time.time()
-    conn = mu.connect_mysql()
-    cursor = conn.cursor()
-    cursor.close()
-    print(f"총 {count}개 데이터 SELECT 시작합니다.")
-    batch_size = 1000
-    dfs = []
-    count = 0
-    for offset in tqdm(range(0, count, batch_size)):
-        query = f'SELECT matches FROM match_raw LIMIT {batch_size} OFFSET {offset}'
-        df = pd.read_sql(query, conn)
-        dfs.append(df)
-        count += 1000
-        print(f"데이터 : {count}개")
-        time.sleep(0.1)
-    conn.close()
-
-    df = pd.concat(dfs, ignore_index=True)
-    end_time = time.time()
-    print("데이터 SELECT 종료")
-    print("데이터 로딩 시간 : {:.2f}초".format(end_time - start_time))
-    return df
-# ----------------------------------------------------------------------------------------------------------------------
-def matches_data(count):
-    print("데이터 SELECT 시작")
-    conn = mu.connect_mysql()
-    start_time = time.time()
-    df = pd.DataFrame(mu.mysql_execute_dict(f"SELECT matches FROM match_raw LIMIT {count}", conn))
-    conn.close()
-    end_time = time.time()
-    print("데이터로딩 시간: {:.2f}초".format(end_time - start_time))
-    print("데이터 SELECT 종료")
-    return df
-# ----------------------------------------------------------------------------------------------------------------------
-def matches_timeline_data(count):
-    conn = mu.connect_mysql()
-    print("데이터 SELECT 시작")
-    start_time = time.time()
-    df = pd.DataFrame(mu.mysql_execute_dict(f"SELECT matches,timeline FROM match_raw LIMIT {count}", conn))
-    conn.close()
-    end_time = time.time()
-    print("데이터로딩 시간: {:.2f}초".format(end_time - start_time))
-    print("데이터 SELECT 종료")
-    return df
-# ----------------------------------------------------------------------------------------------------------------------
 # RawData
-conn = mu.connect_mysql()
-df = pd.DataFrame(mu.mysql_execute_dict('select * from match_raw limit 10000',conn))
-conn.close()
-# ----------------------------------------------------------------------------------------------------------------------
-df = matches_timeline_data_select(10000)
-# ----------------------------------------------------------------------------------------------------------------------
+def fetch_data_from_match_raw(limit):
+    conn = mu.connect_mysql()
+    query = f"select * from match_raw limit {limit}"
 
-df['matches'] = df.apply(lambda x: json.loads(x['matches']), axis=1)
-df['timeline'] = df.apply(lambda x: json.loads(x['timeline']), axis=1)
+    start_time = time.time()
+    data = mu.mysql_execute_dict(query, conn)
+    end_time = time.time()
+    execution_time = end_time - start_time
+    print(f"Execution time: {execution_time} seconds")
+
+    df = pd.DataFrame(data)
+    conn.close()
+
+    return df
+# ----------------------------------------------------------------------------------------------------------------------
+df = fetch_data_from_match_raw(1000)
+df['matches'] = df['matches'].progress_apply(lambda x: json.loads(x))
+df['timeline'] = df['timeline'].progress_apply(lambda x: json.loads(x))
 
 df_creater = []
 columns = [
@@ -180,7 +119,6 @@ sample.rename(columns={'championName': 'champion_name','championId': 'champion_i
 # 각 팀 킬 수 합쳐서 team_kills 컬럼에 추가
 sample['team_kills'] = sample.groupby(['match_id', 'team_id'])['kills'].transform('sum')
 
-sample
 #팀별로 테이블 분리
 blue = sample[sample['team_id'] == 100]
 red =sample[sample['team_id']==200]
@@ -278,3 +216,57 @@ conn = mu.connect_mysql()
 match_up.progress_apply(lambda x: insert_my(x,conn),axis =1)
 conn.commit()
 conn.close()
+
+# ---------------------------------------------------------------------------------------------------------------------
+df = fetch_data_from_match_raw(1000)
+df['matches'] = df['matches'].progress_apply(lambda x: json.loads(x))
+df['timeline'] = df['timeline'].progress_apply(lambda x: json.loads(x))
+# ---------------------------------------------------------------------------------------------------------------------
+# match_up_spell
+# 스펠 데이터
+
+df.iloc[0]['match_id']['participants']
+
+result = []
+print("스펠 데이터 정제 시작 ")
+for i in tqdm(range(len(df))):
+    participants = df.iloc[i]['matches']['participants']
+    for summoner in range(len(participants)):
+        lst = [
+            df.iloc[i]['match_id'],
+            participants[summoner]['championId'],
+            participants[summoner]['teamPosition'],
+            participants[summoner]['summoner1Id'],
+            participants[summoner]['summoner2Id'],
+            participants[summoner]['win']
+        ]
+        result.append(lst)
+columns = ['champion_id','teamPosition', 'spell_1', 'spell_2', 'win']
+
+spell_df = pd.DataFrame(result, columns=columns)
+
+spell_df['win'] = spell_df['win'].astype(int)
+
+def combine_spells(df):
+    df['spell_1'], df['spell_2'] = np.sort(df[['spell_1', 'spell_2']], axis=1).T # 중복제거
+    return df.groupby(['champion_id','teamPosition', 'spell_1', 'spell_2'])['win'].agg(['sum','count']).reset_index() #승리수 와 게임수 계산
+
+top3_spells = (
+    combine_spells(spell_df)
+    .sort_values(['champion_id', 'sum', 'count'], ascending=[True, False, False])
+    .groupby('champion_id')
+    .head(2)
+    .rename(columns={'count': 'pick_cnt', 'teamPosition': 'lane', 'sum': 'win_cnt', 'spell_1': 'd_spell', 'spell_2': 'f_spell'})
+)
+
+top3_spells['win_rate'] = round((top3_spells['win_cnt'] / top3_spells['pick_cnt']) * 100, 2) #승률 계산
+
+total_game_df = spell_df.groupby(['champion_id']).agg({'win': ['count']}) # 해당 챔피언이 등장한 게임수
+total_game_df.columns = ['total_game']
+total_game_df.reset_index(inplace=True)
+merged_df = pd.merge(top3_spells, total_game_df, on='champion_id')
+merged_df['pick_rate'] = round((merged_df['pick_cnt'] / merged_df['total_game']) * 100, 2)
+final_df = merged_df.drop(columns=['total_game'])
+print("스펠 데이터 정제 완료 ")
+
+spell_data = spell_data(df)
