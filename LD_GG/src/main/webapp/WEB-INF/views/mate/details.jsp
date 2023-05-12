@@ -154,7 +154,7 @@ th {
 			</tr>
 			<tr>
 				<th class="label">최근전적</th>
-				<td class="value">${MateDetails.last_win_rate}</td>
+				<td class="value">"최근승률 자리"</td>
 			</tr>
 			<tr>
 				<th class="label">작성자</th>
@@ -165,9 +165,9 @@ th {
 				<td class="value">${MateDetails.mate_date}</td>
 			</tr>
 		</table>
-		<button onclick=modifyTip(${tipDetails.t_b_num}) id="modifyButton">게시물
+		<button onclick=mateModify(${MateDetails.mate_id}) id="modifyButton">게시물
 			수정하기</button>
-		<button onclick=deleteTip(${tipDetails.t_b_num}) id="deleteButton">게시물
+		<button onclick=deleteTip(${MateDetails.mate_id}) id="deleteButton">게시물
 			삭제하기</button>
 		<br>
 		<h2>댓글</h2>
@@ -177,6 +177,9 @@ th {
 				<button id="comment-submit-btn" onclick="submitComment()">등록</button>
 			</div>
 
+			<table id="select-list">
+
+			</table>
 			<table id="comment-list">
 
 			</table>
@@ -186,6 +189,21 @@ th {
 
 </body>
 <script type="text/javascript">
+let modifyButton = document.getElementById("modifyButton")
+let deleteButton = document.getElementById("deleteButton")
+writeEmail="${MateDetails.email}";
+myEmail='${sessionScope.email}';
+if(writeEmail === myEmail){
+	modifyButton.style.display = "block";
+	deleteButton.style.display = "block";
+}else{
+	modifyButton.style.display = "none";
+	deleteButton.style.display = "none";
+}
+function mateModify(mate_id) {
+	location.href = "/mate/modify?mate_id="+mate_id;
+}
+
 function submitComment(){
 	let mate_id = ${MateDetails.mate_id}
 	let mate_r_content = document.getElementById("comment-textarea").value;
@@ -206,23 +224,44 @@ function submitComment(){
 			}
 		}).fail(err=>{console.log(err);});	
 }
-function loadComments(){
-	$.ajax({
-		method:'get',
-		url:'/mate/reply/list',
-		data:{mate:${MateDetails.mate_id}}
-	}).done(res=>{
-		console.log(res);
-		let replyList='';
-		res.foreach(reply=>{
-			let deleteButton = '';
+function loadComments() {
+    $.ajax({
+        method: 'get',
+        url: '/mate/reply/list',
+        data: {mate_id: ${MateDetails.mate_id}},
+    }).done(res => {
+    	console.log(res);
+    	let replyList = "";
+        res.forEach(reply => {
+        	let selectButton = '';
+        	let deleteButton = '';
         	let modifyButton = '';
         	if(myEmail===reply.email){
-        		deleteButton=
-        			'<td><button id ="comment-delete-btn-'+reply.mate_id+'"onclick="deleteComment('+reply.mate_id+')">삭제</button></td>'
+        		selectButton = '<td><button id="comment-select-btn onclick="selectComment())">선택</button></td>'
+        		deleteButton = '<td><button id="comment-delete-btn-'+reply.mate_r_id+'" onclick="deleteComment('+reply.t_r_num+')">삭제</button></td>'
+        		modifyButton = '<td><button id="comment-modify-btn-'+reply.mate_r_id+'" onclick="modifyReplyBtn('+reply.t_r_num+')">수정</button></td>'
         	}
-		})
-	})
+        	replyList += '<tr height="35" align="center" id="reply_box_'+reply.mate_r_id+'">'
+        	replyList += '<td width="100">'+reply.lol_account+'</td>'
+        	replyList += '<td width="300" id="content_num_'+reply.mate_r_id+'">'+reply.mate_r_content+'</td>'
+        	replyList += '<td width="100">최근승률 자리</td>'
+        	replyList += '<td width="100">'+reply.mate_r_date+'</td>'
+        	replyList += selectButton
+        	replyList += deleteButton
+        	replyList += modifyButton
+        	replyList += '</tr>'
+        });
+        console.log(replyList);
+        $('#comment-list').html(replyList)
+    }).fail(err => {
+        console.log(err);
+    }); 
 }
+function selectComment(){
+	
+//모디파이 스타일로 바꿔서 만들기 선택하면 값변경 디비로 올리는 식
+	
+}
+loadComments();
 </script>
 </html>

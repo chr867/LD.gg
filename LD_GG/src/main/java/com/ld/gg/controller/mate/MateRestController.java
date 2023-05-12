@@ -26,7 +26,7 @@ public class MateRestController {
 	
 	@GetMapping("/list.json")
 	public String MateList() throws Exception{
-		log.info("메이트레스트 컨트롤러 탔어용");
+		log.info("메이트레스트 컨트롤러 탔어용-상세글 리스트가져오기");
 		List<MateDto> mList= ms.getMateList();
 		
 	    ObjectMapper mapper = new ObjectMapper();
@@ -36,16 +36,26 @@ public class MateRestController {
 		
 		return json;
 	}
+	@GetMapping("/reply/list")
+	public List<MateDto> getReplyList(int mate_id) throws Exception{
+		log.info("메이트레스트 컨트롤러 탔어용-리플가져오기");
+		List<MateDto> mReplyList= ms.getReplyList(mate_id);
+		return mReplyList;
+	}
+	
+	
 	// 1 = 성공 , 2 = 실패, 3 = 이메일매칭 x, 4 = 오류
 	@PostMapping("/reply/insert")
-	public int mateReplyInsert(HttpSession session,int mate_id,String mate_r_content,String mate_apply) {
-		log.info("리플 인썰트 탔어용");
-		String email = (String) session.getAttribute("email");
-		if (email==null) {
+	public int mateReplyInsert(HttpSession session,int mate_id,String mate_r_content,String email) {
+		log.info("메이트 레스트 컨트롤러 댓글 등록");
+		String mate_apply = (String) session.getAttribute("email");
+		log.info("mate_apply:"+mate_apply);
+		if (mate_apply==null) {
 			return 3;
 		}
 		MateDto mDto = new MateDto();
-		mDto.setEmail(email);
+		mDto.setEmail(ms.getMateDetails(mate_id).getEmail());
+		mDto.setMate_apply(mate_apply);
 		mDto.setMate_id(mate_id);
 		mDto.setMate_r_content(mate_r_content);
 		int replyInsertResult=ms.mateReplyInsert(mDto);
