@@ -12,8 +12,10 @@ import data_load as dl
 # RIOT-API-KEY
 riot_api_key = 'RGAPI-14667a4e-7c3c-45fa-ac8f-e53c7c3f5fe1'
 # ----------------------------------------------------------------------------------------------------------------------
+test_df = dl.matches_timeline_data_select(5000)
+
 start_time = time.time()
-df = dl.matches_timeline_data(20000)
+df = dl.matches_timeline_data(5000)
 print("JSON 변환 시작")
 df['matches'] = df['matches'].apply(json.loads)
 df['timeline'] = df['timeline'].apply(json.loads)
@@ -426,170 +428,14 @@ def spell_data(raw_data):
 spell_data = spell_data(df)
 
 # ----------------------------------------------------------------------------------------------------------------------
-df.iloc[0]['timeline']['1']['events'][0]
 def skill_build_data(raw_data):
-    for x in tqdm(range(len(raw_data))):
-        for minute in range(len(raw_data.iloc[x]['timeline'])):
-            events = raw_data.iloc[x]['timeline']['info']['frames'][minute]['events']
-            participants = raw_data.iloc[x]['matches']['info']['participants']
-
-            participant_to_champion = {participant['participantId']: participant['championId'] for participant in
-                                       participants}
-
-            for event in events:
-                if event['type'] == 'SKILL_LEVEL_UP':
-                    participant_id = event['participantId']
-                    skill_slot = event['skillSlot']
-                    championId = participant_to_champion[participant_id]
-                if event['type'] == 'LEVEL_UP':
-                    level = event['level']
-                    print(level)
-                    #
-                    # print(
-                    #     f"Champion ID: {championId} Level: {level} Skill Slot: {skill_slot}")
-
-
-skill_build_data(df[:1])
-
-participant_ids = [participant['participantId'] for participant in df.iloc[0]['matches']['participants']]
-champion_ids = [participant['championId'] for participant in df.iloc[0]['matches']['participants']]
-timeline = df.iloc[0]['timeline']
-result = [[] for _ in range(10)]
-
-for minute in timeline:
-    events = timeline[str(minute)]['events']
-    for event in events:
-        if event['type'] == 'SKILL_LEVEL_UP':
-            participant_id = event['participantId']
-            skill_slot = event['skillSlot']
-            participant_index = participant_ids.index(participant_id)
-            if not result[participant_index]:
-                champion_id = champion_ids[participant_index]
-                result[participant_index].append(champion_id)
-            result[participant_index].append(skill_slot)
-
-
-participant_ids = [participant['participantId'] for participant in df.iloc[0]['matches']['participants']]
-champion_ids = [participant['championId'] for participant in df.iloc[0]['matches']['participants']]
-timeline = df.iloc[0]['timeline']
-result = [[] for _ in range(len(participant_ids))]
-
-for minute in timeline:
-    events = timeline[minute]['events']
-    for event in events:
-        if event['type'] == 'SKILL_LEVEL_UP':
-            participant_id = event['participantId']
-            skill_slot = event['skillSlot']
-            if participant_id in participant_ids:
-                participant_index = participant_ids.index(participant_id)
-                if not result[participant_index]:
-                    champion_id = champion_ids[participant_index]
-                    result[participant_index].append(champion_id)
-                result[participant_index].append(skill_slot)
-
-
-df.iloc[0]['timeline']['1']
-
-# ----------------------------------------------------------------------------------------------------------------------
-def skill_build_data(raw_data):
-    for x in range(len(raw_data)):
-        participant_ids = [participant['participantId'] for participant in df.iloc[x]['matches']['participants']]
-        champion_ids = [participant['championId'] for participant in df.iloc[x]['matches']['participants']]
-        timeline = df.iloc[x]['timeline']
-        result = [[] for _ in range(len(participant_ids))]
-
-        current_levels = [1 for _ in range(len(participant_ids))]
-
-        skill_order = [[] for _ in range(len(participant_ids))]
-
-        for minute in timeline:
-            participant_frames = timeline[minute]['participantFrames']
-            events = timeline[minute]['events']
-
-            for frame in participant_frames:
-                participant_id = frame['participantId']
-                if participant_id in participant_ids:
-                    participant_index = participant_ids.index(participant_id)
-                    level = frame['level']
-                    if level > current_levels[participant_index]:
-                        current_levels[participant_index] = level
-                        if skill_order[participant_index]:
-                            result[participant_index].append(skill_order[participant_index][-1])
-
-            for event in events:
-                if event['type'] == 'SKILL_LEVEL_UP':
-                    participant_id = event['participantId']
-                    skill_slot = event['skillSlot']
-                    if participant_id in participant_ids:
-                        participant_index = participant_ids.index(participant_id)
-                        if not result[participant_index]:
-                            champion_id = champion_ids[participant_index]
-                            result[participant_index].append(champion_id)
-                        skill_order[participant_index].append(skill_slot)
-
-
-import pandas as pd
-
-import pandas as pd
-
-
-def skill_build_data(raw_data):
-    all_results = []
-    for x in tqdm(range(len(raw_data))):
-        participant_ids = [participant['participantId'] for participant in raw_data.iloc[x]['matches']['participants']]
-        champion_ids = [participant['championId'] for participant in raw_data.iloc[x]['matches']['participants']]
-        timeline = raw_data.iloc[x]['timeline']
-        result = [[] for _ in range(len(participant_ids))]
-
-        current_levels = [1 for _ in range(len(participant_ids))]
-
-        skill_order = [[] for _ in range(len(participant_ids))]
-
-        for minute in timeline:
-            participant_frames = timeline[minute]['participantFrames']
-            events = timeline[minute]['events']
-
-            for frame in participant_frames:
-                participant_id = frame['participantId']
-                if participant_id in participant_ids:
-                    participant_index = participant_ids.index(participant_id)
-                    level = frame['level']
-                    if level > current_levels[participant_index]:
-                        current_levels[participant_index] = level
-                        if skill_order[participant_index]:
-                            result[participant_index].append(skill_order[participant_index][-1])
-
-            for event in events:
-                if event['type'] == 'SKILL_LEVEL_UP':
-                    participant_id = event['participantId']
-                    skill_slot = event['skillSlot']
-                    if participant_id in participant_ids:
-                        participant_index = participant_ids.index(participant_id)
-                        if not result[participant_index]:
-                            champion_id = champion_ids[participant_index]
-                            result[participant_index].append(champion_id)
-                        skill_order[participant_index].append(skill_slot)
-        all_results.extend(result)
-
-    df = pd.DataFrame(all_results,
-                      columns=['ChampionId', 'Level1', 'Level2', 'Level3', 'Level4', 'Level5', 'Level6', 'Level7',
-                               'Level8', 'Level9', 'Level10', 'Level11', 'Level12', 'Level13', 'Level14', 'Level15',
-                               'Level16', 'Level17'])
-    df = df.fillna(0)
-    df = df.astype(int)
-    return df
-
-
-skill_build_data = skill_build_data(df)
-# ----------------------------------------------------------------------------------------------------------------------
-def champion_skill_build_data(raw_data):
     result = []
     for x in tqdm(range(len(raw_data))):
         match = raw_data.iloc[x]['matches']
         participants = match['participants']
         timeline = raw_data.iloc[x]['timeline']
 
-        skill_build_lst = [[player['championId']] for player in participants]
+        skill_build_lst = [[player['championId'], player['win']] for player in participants]
 
         for minute in timeline:
             events = timeline[minute]['events']
@@ -599,16 +445,25 @@ def champion_skill_build_data(raw_data):
                     skill_slot = event['skillSlot']
                     skill_build_lst[participant_id - 1].append(skill_slot)
 
-        result.extend([[lst[0], ', '.join(map(str, lst[1:16]))] for lst in skill_build_lst if len(lst) > 11])
+        result.extend([[lst[0], lst[1], ', '.join(map(str, lst[2:17]))] for lst in skill_build_lst if len(lst) > 17])
 
-    df = pd.DataFrame(result, columns=['championId', 'skillBuild'])
-    return df
+    df = pd.DataFrame(result, columns=['championId', 'win', 'skillBuild'])
+    df['win'] = df['win'].astype(int)
 
+    top_skill_builds = df.groupby(['championId', 'skillBuild']).size().reset_index(name='pickCount')
+    top_skill_builds = top_skill_builds.sort_values(['championId', 'pickCount'], ascending=[True, False])
+    top_2_skill_builds = top_skill_builds.groupby('championId').head(2) # 추천 수 설정
+    wins_with_skill_build = df[df['win'] == 1].groupby(['championId', 'skillBuild']).size().reset_index(name='winCount')
+    top_2_skill_builds = pd.merge(top_2_skill_builds, wins_with_skill_build, on=['championId', 'skillBuild'], how='left')
+    top_2_skill_builds['winCount'] = top_2_skill_builds['winCount'].fillna(0)
 
-champion_skill_build_data = champion_skill_build_data(df)
+    total_games_per_champion = df.groupby('championId').size().reset_index(name='total_games')
+    top_2_skill_builds = pd.merge(top_2_skill_builds, total_games_per_champion, on='championId')
 
-result[30]
+    top_2_skill_builds['pick_rate'] = round((top_2_skill_builds['pickCount'] / top_2_skill_builds['total_games'])*100,2)
+    top_2_skill_builds['win_rate'] = round((top_2_skill_builds['winCount'] / top_2_skill_builds['pickCount'])*100,2)
+    top_2_skill_builds['winCount'] = top_2_skill_builds['winCount'].astype(int)
+    return top_2_skill_builds
 
-result[0] = [result[0][0], ', '.join(map(str, result[0][1:15]))]
+skill_build_data = skill_build_data(df)
 
-len(df.iloc[0]['timeline'])
