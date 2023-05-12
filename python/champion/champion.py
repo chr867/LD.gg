@@ -12,10 +12,8 @@ import data_load as dl
 # RIOT-API-KEY
 riot_api_key = 'RGAPI-14667a4e-7c3c-45fa-ac8f-e53c7c3f5fe1'
 # ----------------------------------------------------------------------------------------------------------------------
-df = dl.matches_timeline_data(50000)
-df = dl.matches_timeline_data_select(50000)
-
 start_time = time.time()
+df = dl.matches_timeline_data(20000)
 print("JSON 변환 시작")
 df['matches'] = df['matches'].apply(json.loads)
 df['timeline'] = df['timeline'].apply(json.loads)
@@ -583,4 +581,34 @@ def skill_build_data(raw_data):
 
 
 skill_build_data = skill_build_data(df)
+# ----------------------------------------------------------------------------------------------------------------------
+def champion_skill_build_data(raw_data):
+    result = []
+    for x in tqdm(range(len(raw_data))):
+        match = raw_data.iloc[x]['matches']
+        participants = match['participants']
+        timeline = raw_data.iloc[x]['timeline']
 
+        skill_build_lst = [[player['championId']] for player in participants]
+
+        for minute in timeline:
+            events = timeline[minute]['events']
+            for event in events:
+                if event['type'] == 'SKILL_LEVEL_UP':
+                    participant_id = event['participantId']
+                    skill_slot = event['skillSlot']
+                    skill_build_lst[participant_id - 1].append(skill_slot)
+
+        result.extend([[lst[0], ', '.join(map(str, lst[1:16]))] for lst in skill_build_lst if len(lst) > 11])
+
+    df = pd.DataFrame(result, columns=['championId', 'skillBuild'])
+    return df
+
+
+champion_skill_build_data = champion_skill_build_data(df)
+
+result[30]
+
+result[0] = [result[0][0], ', '.join(map(str, result[0][1:15]))]
+
+len(df.iloc[0]['timeline'])
