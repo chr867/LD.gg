@@ -61,7 +61,8 @@ def load_summoner_names_worker(worker_id):
         for summoner_name in tqdm(name_lst[:50]):
             while True:
                 index = 0
-                start = 1673485200  # 시즌 시작 Timestamp
+                start = 1680620400  # 최근 3패치 사용 오래 된 패치 날짜
+                # 13.7 패치 4월 5일 13.8패치 4월 19일 13.9 5월 3일
                 # tmp = 1683438967290
                 try:
 
@@ -138,6 +139,12 @@ def get_match_info_worker(args):
 # 끝
 
 def df_refine(df):
+    if df['matches']['info']['gameVersion'] < 13.7:
+        return
+
+    if df['matches']['info']['gameDuration'] < 900:
+        return
+
     def matches_data(df):
         match_info = df['matches']['info']
         participant_list = match_info['participants']
@@ -297,3 +304,24 @@ if __name__ == '__main__':
         time.sleep(20)
 
 
+sql_conn = mu.connect_mysql()
+df = pd.DataFrame(mu.mysql_execute_dict('select match_id, matches from match_raw', sql_conn))
+sql_conn.close()
+df['matches'] = df.apply(lambda x: json.loads(x['matches']), axis=1)
+
+df = df[df['matches'].apply(lambda x: 'gameVersion' in x)]
+df['matches']['gameVersion'] = df['matches']['gameVersion'].apply(lambda x: float(x.split(' ')[0] + '.' + x.split(' ')[1]))
+df['matches'] = df['matches'].apply(lambda x: {**x, 'gameVersion': float(x['gameVersion'].split('.')[0] + '.' + x['gameVersion'].split('.')[1])} if 'gameVersion' in x else x)
+
+df = df[df['matches'].apply(lambda x: 'gameVersion' in x and float(x['gameVersion']) < 13.7)]
+
+def delete_match(match_id, sql_conn):
+    sql = (
+        f'delete from match_raw where match_id = {repr(match_id)}'
+    )
+    mu.mysql_execute(sql, sql_conn)
+
+sql_conn = mu.connect_mysql()
+df.progress_apply(lambda x: delete_match(x['match_id'], sql_conn), axis=1)
+sql_conn.commit()
+sql_conn.close()
