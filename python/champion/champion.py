@@ -14,9 +14,10 @@ import data_load as dl
 riot_api_key = 'RGAPI-14667a4e-7c3c-45fa-ac8f-e53c7c3f5fe1'
 # ----------------------------------------------------------------------------------------------------------------------
 test_df = dl.matches_timeline_data_select(5000)
+asd = dl.matches_timeline_data(10)
 
 start_time = time.time()
-df = dl.matches_timeline_data(5000)
+df = dl.matches_timeline_data(10000)
 print("JSON 변환 시작")
 df['matches'] = df['matches'].apply(json.loads)
 df['timeline'] = df['timeline'].apply(json.loads)
@@ -173,6 +174,7 @@ def shoes_data(item_df_data):
 
     merged_df['pickRate'] = round((merged_df['pickCount'] / merged_df['win']) * 100, 2)
     final_df = merged_df[['championId', 'itemId', 'pickCount', 'winCount', 'winRate', 'pickRate']]
+    final_df.fillna(0)  # 카시오페아 문제 해결해야함
     print("신발 데이터 정제 완료 ")
     return final_df
 
@@ -436,7 +438,7 @@ spell_data = spell_data(df)
 def skill_build_data(raw_data):
     result = []
     for x in tqdm(range(len(raw_data))):
-        if len(raw_data.iloc[x]['timeline']) < 15: # 15분이하 게임 컷뚜
+        if len(raw_data.iloc[x]['timeline']) < 15:  # 15분이하 게임 컷뚜
             continue
         match = raw_data.iloc[x]['matches']
         participants = match['participants']
@@ -469,7 +471,7 @@ def skill_build_data(raw_data):
     top_2_skill_builds = pd.merge(top_2_skill_builds, total_games_per_champion, on='championId')
 
     top_2_skill_builds['pickRate'] = round((top_2_skill_builds['pickCount'] / top_2_skill_builds['totalGames']) * 100,
-                                            2)
+                                           2)
     top_2_skill_builds['winRate'] = round((top_2_skill_builds['winCount'] / top_2_skill_builds['pickCount']) * 100, 2)
     top_2_skill_builds['winCount'] = top_2_skill_builds['winCount'].astype(int)
 
@@ -492,100 +494,97 @@ def skill_build_data(raw_data):
 
 
 skill_build_data = skill_build_data(df)
+
+
 # ----------------------------------------------------------------------------------------------------------------------
 # 아이템 빌드 추천
 def item_build_data(raw_data):
-    for x in range(len(raw_data)):
-        if len(raw_data.iloc[x]['timeline']) < 15: # 15분이하 게임 컷뚜
+    shoe_items = [3111, 3117, 3009, 3047, 3006, 3158, 3020]
+    accessories_lst = [3364, 3340, 3363, 3330, 3513]
+    result = []
+    ex_data_count = 0
+    for x in tqdm(range(len(raw_data))):
+        if len(raw_data.iloc[x]['timeline']) < 30:
             continue
-        participants = df.iloc[x]['matches']['participants']
-        skill_build_lst = [[] for _ in range(len(participants))]
+        participants = raw_data.iloc[x]['matches']['participants']
+        item_end_lst = [[] for _ in range(len(participants))]
 
         for player in range(len(participants)):
             championId = participants[player]['championId']
+            win = participants[player]['win']
+            item0 = participants[player]['item0']
             item1 = participants[player]['item1']
             item2 = participants[player]['item2']
             item3 = participants[player]['item3']
             item4 = participants[player]['item4']
             item5 = participants[player]['item5']
-            skill_build_lst[player - 1].append(championId)
-            skill_build_lst[player - 1].append(item1)
-            skill_build_lst[player - 1].append(item2)
-            skill_build_lst[player - 1].append(item3)
-            skill_build_lst[player - 1].append(item4)
-            skill_build_lst[player - 1].append(item5)
-    return
+            item_end_lst[player].extend([championId, win, item0, item1, item2, item3, item4, item5])
+
+        item_build_lst = [[] for _ in range(len(participants))]
+
+        timeline = raw_data.iloc[x]['timeline']
+        for minute in timeline:
+            events = timeline[minute]['events']
+            for event in events:
+                if event['type'] == 'ITEM_PURCHASED':
+                    participant_id = event['participantId']
+                    itemId = event['itemId']
+                    item_build_lst[participant_id - 1].append(itemId)
+
+        final_lst = []
+
+        for end_champ, build_champ in zip(item_end_lst, item_build_lst):
+            final_champ = [end_champ[0], end_champ[1]]  # 챔피언 아이디를 포함한 리스트 생성
+            for item in end_champ[2:]:
+                if item > 2055 and item not in shoe_items and item not in accessories_lst: #item in build_champ and
+                    final_champ.append(item)
+            final_lst.append(final_champ)
+
+        modified_lst = []
+
+        for sublist in final_lst:
+            if len(sublist[2:]) > 2:
+                modified_sublist = [sublist[0], sublist[1], ', '.join(map(str, sublist[2:5]))]
+                modified_lst.append(modified_sublist)
+
+        for lst in modified_lst:
+            result.append(lst)
+            ex_data_count += 1
+
+    print(f'표본수 : {ex_data_count}개')
+    columns = ['championId', 'win', 'itemBuild']
+
+    item_build_df = pd.DataFrame(result, columns=columns)
+    item_build_df['win'] = item_build_df['win'].astype(int)
+
+    top_item_builds = item_build_df.groupby(['championId', 'itemBuild']).size().reset_index(name='pickCount')
+    top_item_builds = top_item_builds.sort_values(['championId', 'pickCount'], ascending=[True, False])
+    top_2_item_builds = top_item_builds.groupby('championId').head(5)  # 추천 수 설정
+    wins_with_skill_build = item_build_df[item_build_df['win'] == 1].groupby(['championId', 'itemBuild']).size().reset_index(name='winCount')
+    top_2_item_builds = pd.merge(top_2_item_builds, wins_with_skill_build, on=['championId', 'itemBuild'],
+                                  how='left')
+    top_2_item_builds['winCount'] = top_2_item_builds['winCount'].fillna(0)
+
+    total_games_per_champion = item_build_df.groupby('championId').size().reset_index(name='totalGames')
+    top_2_item_builds = pd.merge(top_2_item_builds, total_games_per_champion, on='championId')
+
+    top_2_item_builds['pickRate'] = round((top_2_item_builds['pickCount'] / top_2_item_builds['totalGames']) * 100,
+                                           2)
+    top_2_item_builds['winRate'] = round((top_2_item_builds['winCount'] / top_2_item_builds['pickCount']) * 100, 2)
+    top_2_item_builds['winCount'] = top_2_item_builds['winCount'].astype(int)
+    return top_2_item_builds
 
 
-participants = df.iloc[3]['matches']['participants']
-item_end_lst = [[] for _ in range(len(participants))]
+item_build_data = item_build_data(df)
 
-for player in range(len(participants)):
-    championId = participants[player]['championId']
-    item1 = participants[player]['item1']
-    item2 = participants[player]['item2']
-    item3 = participants[player]['item3']
-    item4 = participants[player]['item4']
-    item5 = participants[player]['item5']
-    item_end_lst[player - 1].append(championId)
-    item_end_lst[player - 1].append(item1)
-    item_end_lst[player - 1].append(item2)
-    item_end_lst[player - 1].append(item3)
-    item_end_lst[player - 1].append(item4)
-    item_end_lst[player - 1].append(item5)
+test1 = item_build_data[item_build_data['championId'] == 516]
+test2 = test1.groupby(['championId']).agg({'win': ['size']})
+test2.columns = ['totalGames']
 
-item_build_lst = [[] for _ in range(len(participants))]
+test1 = test1.groupby(['championId', 'itemBuild']).agg({'win': ['sum', 'size']}).reset_index()
+test1.columns = ['championId', 'itemBuild', 'winCount', 'pickCount']
+test1 = test1.sort_values(['pickCount'], ascending=False)
 
-timeline = df.iloc[3]['timeline']
-for minute in timeline:
-    events = timeline[minute]['events']
-    for event in events:
-        if event['type'] == 'ITEM_PURCHASED':
-            participant_id = event['participantId']
-            itemId = event['itemId']
-            item_build_lst[participant_id - 1].append(itemId)
+result_df = pd.merge(test1, test2, on='championId')
+result_df['pickRate'] = round((result_df['pickCount'] / result_df['totalGames'])*100,2)
 
-filtered_item_build_lst = []
-
-for i in range(len(item_build_lst)):
-    end_items = set(item_end_lst[i])
-    build_items = item_build_lst[i]
-    filtered_build_items = [item for item in build_items if item in end_items]
-    filtered_item_build_lst.append(filtered_build_items)
-
-
-item_end_lst[0]
-item_build_lst[0]
-
-#------
-participants = df.iloc[3]['matches']['participants']
-item_end_lst = [[] for _ in range(len(participants))]
-
-for player in range(len(participants)):
-    championId = participants[player]['championId']
-    item1 = participants[player]['item1']
-    item2 = participants[player]['item2']
-    item3 = participants[player]['item3']
-    item4 = participants[player]['item4']
-    item5 = participants[player]['item5']
-    item_end_lst[player].extend([championId, item1, item2, item3, item4, item5])
-
-item_build_lst = [[] for _ in range(len(participants))]
-
-timeline = df.iloc[3]['timeline']
-for minute in timeline:
-    events = timeline[minute]['events']
-    for event in events:
-        if event['type'] == 'ITEM_PURCHASED':
-            participant_id = event['participantId']
-            itemId = event['itemId']
-            item_build_lst[participant_id - 1].append(itemId)
-
-# Filter item_build_lst based on item_end_lst
-filtered_item_build_lst = []
-
-for i in range(len(item_build_lst)):
-    end_items = set(item_end_lst[i])
-    build_items = item_build_lst[i]
-    filtered_build_items = [item for item in build_items if item in end_items]
-    filtered_item_build_lst.append(filtered_build_items)
