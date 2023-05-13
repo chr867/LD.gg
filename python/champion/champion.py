@@ -17,7 +17,7 @@ test_df = dl.matches_timeline_data_select(5000)
 asd = dl.matches_timeline_data(10)
 
 start_time = time.time()
-df = dl.matches_timeline_data(10000)
+df = dl.matches_timeline_data(25000)
 print("JSON 변환 시작")
 df['matches'] = df['matches'].apply(json.loads)
 df['timeline'] = df['timeline'].apply(json.loads)
@@ -576,15 +576,6 @@ def item_build_data(raw_data):
 
 
 item_build_data = item_build_data(df)
+item_build_sort = item_build_data.sort_values(['pickRate'],ascending=False)
 
-test1 = item_build_data[item_build_data['championId'] == 516]
-test2 = test1.groupby(['championId']).agg({'win': ['size']})
-test2.columns = ['totalGames']
-
-test1 = test1.groupby(['championId', 'itemBuild']).agg({'win': ['sum', 'size']}).reset_index()
-test1.columns = ['championId', 'itemBuild', 'winCount', 'pickCount']
-test1 = test1.sort_values(['pickCount'], ascending=False)
-
-result_df = pd.merge(test1, test2, on='championId')
-result_df['pickRate'] = round((result_df['pickCount'] / result_df['totalGames'])*100,2)
-
+# ----------------------------------------------------------------------------------------------------------------------
