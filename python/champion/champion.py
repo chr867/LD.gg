@@ -579,3 +579,24 @@ item_build_data = item_build_data(df)
 item_build_sort = item_build_data.sort_values(['pickRate'],ascending=False)
 
 # ----------------------------------------------------------------------------------------------------------------------
+# 밴률 데이터
+def ban_rate_data(raw_data):
+    result = []
+    for x in tqdm(range(len(raw_data))):
+        ban_lst = raw_data.iloc[x]['matches']['bans']
+        for ban in ban_lst:
+            if ban != 0 and ban != -1:
+                result.append(ban)
+
+    columns = ['championId']
+    df = pd.DataFrame(result, columns=columns)
+    ban_rate_df = df.groupby(['championId']).size().reset_index(name='banCount')
+
+    ban_rate_df['banTotal'] = ban_rate_df['banCount'].sum()
+    ban_rate_df['banRate'] = round((ban_rate_df['banCount'] / ban_rate_df['banTotal'])*100, 2)
+
+    return ban_rate_df
+
+
+ban_rate_df = ban_rate_data(df)
+sort_ban_rate = ban_rate_df.sort_values(['banRate'], ascending = False)
