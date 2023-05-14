@@ -39,8 +39,6 @@ def load_summoner_names_worker():
                 print(f'suummoner names 예외 발생 {res_p["status"]["message"]}, {api_key}')
                 time.sleep(20)
                 continue
-
-            print(len(name_set))
             break
 
         print('load_summoner_names END')
@@ -60,10 +58,16 @@ def load_summoner_names_worker():
                     puuid = res['puuid']
 
                     while True:
-                        url = f'https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?startTime={start}&type=ranked&start={index}&count=100&api_key={api_key}'
-                        res = requests.get(url).json()
-                        index += 100
-                        match_set.update(res)
+                        try:
+                            url = f'https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?startTime={start}&type=ranked&start={index}&count=100&api_key={api_key}'
+                            res = requests.get(url).json()
+                            index += 100
+                            match_set.update(res)
+                        except:
+                            print(f'{res["status"]["message"]}, {api_key}')
+                            time.sleep(20)
+                            continue
+
                         if len(res) < 10:
                             break
 
@@ -84,15 +88,14 @@ def load_summoner_names_worker():
 # 끝
 
 # match_id, matches, timeline 폼으로 만들기
-def get_match_info_worker(match_ids):
-    _match_ids = match_ids
+def get_match_info_worker(args):
+    _match_ids, i = args
     _result = []
-    api_it = iter(riot_api_keys)
-    api_key = next(api_it)
+    api_key = riot_api_keys[i]
     tmp = set()
     random.shuffle(_match_ids)
 
-    for match_id in tqdm(_match_ids[:500]):  # 수정점
+    for match_id in tqdm(_match_ids):  # 수정점
         while True:
             try:
                 get_match_url = f'https://asia.api.riotgames.com/lol/match/v5/matches/{match_id}?api_key={api_key}'
@@ -244,6 +247,32 @@ def insert(t, conn_):
     except Exception as e:
         logging.exception(f"Error occurred during insert: {e}, {t.match_id}")
 # insert 끝
+def main():
+    match_ids = load_summoner_names_worker()
+    print('load_summoner_names  **get_match_info**', len(match_ids))
+    match_info_output = []
+    with mp.Pool(processes=8) as pool:
+        chunk_size = len(match_ids)
+        chunks = [match_ids[i:i + chunk_size // 8] for i in range(0, len(match_ids), chunk_size // 8)]
+        for i, res in enumerate(tqdm(pool.imap(get_match_info_worker, zip(chunks, range(8))), total=len(chunks))):
+            match_info_output.append(res)
 
+    merged_df = pd.concat(match_info_output)
+    print("merged_df =", len(merged_df))
 
-match_list = load_summoner_names_worker()
+    refine_df = pd.concat([df_refine(row) for _, row in merged_df.iterrows()], ignore_index=True)
+    sql_conn = mu.connect_mysql()
+    refine_df.progress_apply(lambda x: insert(x, sql_conn), axis=1)
+    sql_conn.commit()
+    sql_conn.close()
+    print('done')
+
+if __name__ == '__main__':
+    for _ in tqdm(range(24)):
+        try:
+            main()
+        except Exception as e:
+            logging.exception(f'error {e}')
+            continue
+        print('sleep 20')
+        time.sleep(20)
