@@ -6,13 +6,32 @@
 		INSERT INTO MINI_GAME_CHAT 
 		VALUES(#{mini_game_send_user}, #{mini_game_chat_content}, #{mini_game_chat_time})
 	</insert>
-	<select id="select_by_email_mentor_list" parameterType="String" resultType="String">
-		select distinct mentor_email from my_mentoring where menti_email = 'asd@naver.com'
+	<select id="select_mentor" parameterType="String" resultType="String">
+		select distinct mentor_email from my_mentoring where menti_email = #{email}
 	</select>
+	<select id="select_menti" parameterType="String" resultType="String">
+		select distinct menti_email from my_mentoring where mentor_email = #{email};
+	</select>
+
+	<select id="select_chatroomSEQ" parameterType="chatroom" resultType="Integer">
+		select chat_room_seq from chat_room where chat_category = #{chat_category} and chat_send_user = #{chat_send_user} and chat_receive_user = #{chat_receive_user} limit 1
+	</select>
+	<select id="select_chatroomSEQ_reverse" parameterType="chatroom" resultType="int">
+		select chat_room_seq from chat_room where chat_category = #{chat_category} and chat_send_user = #{chat_receive_user} and chat_receive_user = #{chat_send_user} limit 1
+	</select>
+
+	<insert id="insert_chatroomSEQ" parameterType="chatroom" useGeneratedKeys="true" keyProperty="chat_room_seq">
+		insert into chat_room(chat_room_seq, chat_category, chat_send_user, chat_receive_user)
+		values (null, #{chat_category}, #{chat_send_user}, #{chat_receive_user})
+		<selectKey resultType="int" keyProperty="chat_room_seq" order="AFTER">
+			select last_insert_id()
+		</selectKey>
+	</insert>
 	<insert id="insert_chat_list" parameterType="chatroom">
 		insert into chat_room(chat_room_seq, chat_category, chat_send_user, chat_receive_user)
-		values (null, #{chat_category}, #{chat_send_user}, #{chat_receive_user});
+		values (null, #{chat_category}, #{chat_send_user}, #{chat_receive_user})
 	</insert>
+
 	<insert id="insert_chat_room" parameterType="chatroom" useGeneratedKeys="true" keyProperty="chat_room_seq">
 		insert into chat_room(chat_room_seq, chat_category, chat_send_user, chat_receive_user)
 		values (null, #{chat_category}, #{chat_send_user}, #{chat_receive_user})
@@ -34,6 +53,10 @@
 	</select>
 
 	<insert id="insert_chat_content" parameterType="chatlist">
-		insert into chat_list(chat_seq, chat_room_seq, chat_category, chat_content, chat_time, chat_user) values (null, #{chat_room_seq}, #{chat_category}, #{chat_content}, default, #{chat_user})
+		insert into chat_list(chat_seq, chat_room_seq, chat_category, chat_content, chat_time, chat_user) values (null, #{chat_room_seq}, #{chat_category}, #{chat_content}, #{chat_time}, #{chat_user})
 	</insert>
+
+	<select id="select_user" parameterType="int" resultType="chatroom">
+		select chat_send_user, chat_receive_user from chat_room where chat_room_seq = #{chat_room_seq}
+	</select>
 </mapper>

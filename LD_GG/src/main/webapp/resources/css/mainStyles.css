@@ -1,0 +1,10 @@
+.widget-container {
+    position: fixed; /* 화면에 고정 */
+    bottom: 150px; /* 위쪽 여백 */
+    right: 150px; /* 왼쪽 여백 */
+    width: 100px; /* 가로 크기 */
+    height: 200px; /* 세로 크기 */
+    background-color: #f2f2f2; /* 배경색 */
+    border: 1px solid #ccc; /* 테두리 스타일 */
+    z-index: 9999; /* 다른 요소 위에 표시 */
+}

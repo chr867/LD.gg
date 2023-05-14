@@ -21,24 +21,24 @@ public class ChatRestController {
     @Autowired
     ChatService chatService;
 
-   /* 나의 멘토 가져오기 */
-    @PostMapping("/get_mentor_list")
-    public List<String> getMentorList(String email) {
+    /* 채팅방 열기 */
+    @PostMapping("/go_chat")
+    public int go_chat(ChatroomDto chatroomDto){
+        System.out.println("go_chat...");
+        /* chat_room_seq select*/
+        int chatroomSEQList = chatService.find_chatroomSEQ(chatroomDto);
+
+        return chatroomSEQList;
+    }
+
+   /* 나의 멘토, 멘티 가져오기 */
+    @PostMapping("/get_mentoring_list")
+    public List<String> getMentoringList(String email) {
         System.out.println("get_mentor_list" + email);
 
-        List<String> mentor_list = chatService.select_mentor(email);
+        List<String> mentoring_list = chatService.select_mentoring(email);
 
-        //List mentor_list = chatService.select_mentor(email);
-
-        if(mentor_list == null){
-            System.out.println("조회 결과 없음.");
-        }
-        else{
-            System.out.println("조회 성공!");
-            log.info("{}", mentor_list);
-        }
-
-        return mentor_list;
+        return mentoring_list;
     }
 
     /* 기존 채팅방 리스트를 가져오기 */
@@ -71,8 +71,8 @@ public class ChatRestController {
     }
 
     /* 기존 채팅방이 있는 경우 chat_room_seq를 select */
-    @PostMapping("/go_exist_chatting")
-    public int get_exist_chatting(ChatroomDto croomdto){
+    @PostMapping("/go_exist_chat")
+    public int get_exist_chat(ChatroomDto croomdto){
         System.out.println("go_exist_chatting 실행");
 
         System.out.println("chat_send_user : " + croomdto.getChat_send_user());

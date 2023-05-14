@@ -27,15 +27,21 @@ public class ChatService {
 	}
 
 	/* mentor email 가져오기 */
-	public List<String> select_mentor(String email) {
-		System.out.println("chatService의 select_mentor 호출" + email);
+	public List<String> select_mentoring(String email) {
+		System.out.println("chatService의 select_mentoring 호출" + email);
 
-		List<String> mentor_list = cd.select_by_email_mentor_list(email);
+		List<String> mentoring_list = cd.select_mentor(email);
 
-		System.out.println("실행");
-		log.info("mentor_list : {}", mentor_list);
+		if(mentoring_list.size() == 0){
+			System.out.println("조회 결과 없음. select_menti...");
+			mentoring_list = cd.select_menti(email);
+		} else{
+			System.out.println("조회 성공!");
+		}
 
-		return mentor_list;
+		log.info("mentor_list : {}", mentoring_list);
+
+		return mentoring_list;
 	}
 
 	/*chat_room 테이블에 insert 하고 chat_room_seq 가져옴.*/
@@ -78,7 +84,7 @@ public class ChatService {
 			System.out.println("chat_list 저장 성공");
 		}
 
-		return false;
+		return res;
 	}
 
 	public List<ChatroomDto> getChatRoomList(String email) {
@@ -94,5 +100,45 @@ public class ChatService {
 		int chat_room_seq = cd.select_chat_room_seq(croomdto);
 
 		return chat_room_seq;
+	}
+
+    public List<String> select_menti(String email) {
+		System.out.println("select_menti 실행...");
+
+		List<String> mentoring_list = cd.select_menti(email);
+
+		System.out.println("실행");
+		log.info("mentor_list : {}", mentoring_list);
+
+		return mentoring_list;
+	}
+
+	public int find_chatroomSEQ(ChatroomDto chatroomDto) {
+		log.info("find_chatroomSEQ : {}", chatroomDto);
+
+		// select chat_room_seq
+		Integer chatroomSEQ = null;
+
+		System.out.println("cd.select_chatroomSEQ(chatroomDto);");
+		chatroomSEQ = cd.select_chatroomSEQ(chatroomDto);
+		System.out.println("cd.select_chatroomSEQ(chatroomDto) : " + chatroomSEQ);
+
+		if(chatroomSEQ == null){
+			System.out.println("find_chatroomSEQ : " + chatroomSEQ);
+			chatroomSEQ = cd.select_chatroomSEQ_reverse(chatroomDto);
+			if(chatroomSEQ == null){
+				System.out.println("find_chatroomSEQ : " + chatroomSEQ);
+				chatroomSEQ = cd.insert_chatroomSEQ(chatroomDto);
+			}
+		}
+
+		System.out.println("find_chatroomSEQ : " + chatroomSEQ);
+		return chatroomSEQ;
+	}
+
+	public ChatroomDto select_user(int chatRoomSeq) {
+		ChatroomDto chatroomDto = cd.select_user(chatRoomSeq);
+
+		return chatroomDto;
 	}
 }

@@ -10,7 +10,7 @@ public interface ChatDao {
 
 	Boolean save_minigame_chat(ChatDto_mini cm);
 
-	List<String> select_by_email_mentor_list(String email);
+	List<String> select_mentor(String email);
 
 	boolean insert_chat_list(ChatroomDto croomdto);
 
@@ -23,4 +23,15 @@ public interface ChatDao {
 	int select_chat_room_seq(ChatroomDto croomdto);
 
 	boolean insert_chat_content(ChatListDto chatListDto);
+
+	List<String> select_menti(String email);
+
+
+	int insert_chatroomSEQ(ChatroomDto chatroomDto);
+
+	int select_chatroomSEQ_reverse(ChatroomDto chatroomDto);
+
+	Integer select_chatroomSEQ(ChatroomDto chatroomDto);
+
+	ChatroomDto select_user(int chatRoomSeq);
 }
