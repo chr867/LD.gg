@@ -11,154 +11,230 @@ import my_utils as mu
 import json
 import time
 import numpy as np
+from riotwatcher import LolWatcher, ApiError
+import imp
 tqdm.pandas()
+imp.reload(mu)
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 # RawData
 def fetch_data_from_match_raw(limit):
     conn = mu.connect_mysql()
-    query = f"select * from match_raw limit {limit}"
+    query = f"SELECT * FROM match_raw LIMIT {limit}"
 
     start_time = time.time()
-    data = mu.mysql_execute_dict(query, conn)
+
+    # 데이터를 가져올 때 tqdm 적용
+    with tqdm(total=limit) as pbar:
+        data = []
+        for row in tqdm(mu.mysql_execute_dict(query, conn)):
+            data.append(row)
+            pbar.update(1)
+
     end_time = time.time()
     execution_time = end_time - start_time
     print(f"Execution time: {execution_time} seconds")
 
     df = pd.DataFrame(data)
     conn.close()
+    df['matches'] = df['matches'].progress_apply(lambda x: json.loads(x))
+    df['timeline'] = df['timeline'].progress_apply(lambda x: json.loads(x))
+    return df
+# ----------------------------------------------------------------------------------------------------------------------
+def fetch_all_data_from_match_raw():
+    conn = mu.connect_mysql()
+    query = "SELECT * FROM match_raw"
 
+    start_time = time.time()
+
+    # 데이터를 가져올 때 tqdm 적용
+    data = []
+    with tqdm() as pbar:
+        for row in mu.mysql_execute_dict(query, conn):
+            data.append(row)
+            pbar.update(1)
+
+    end_time = time.time()
+    execution_time = end_time - start_time
+    print(f"Execution time: {execution_time} seconds")
+
+    df = pd.DataFrame(data)
+    conn.close()
+    df['matches'] = df['matches'].progress_apply(lambda x: json.loads(x))
+    df['timeline'] = df['timeline'].progress_apply(lambda x: json.loads(x))
     return df
 # ----------------------------------------------------------------------------------------------------------------------
 df = fetch_data_from_match_raw(1000)
-df['matches'] = df['matches'].progress_apply(lambda x: json.loads(x))
-df['timeline'] = df['timeline'].progress_apply(lambda x: json.loads(x))
-
+# ----------------------------------------------------------------------------------------------------------------------
+# 매치업 데이터 정제
 df_creater = []
 columns = [
-    'api_key', 'match_id', 'gameDuration', 'gameVersion', 'summonerName', 'summonerId', 'summonerLevel',
-    'participantId', 'championName', 'championId', 'ban_champion_id', 'champExperience', 'teamPosition',
-    'teamId', 'win', 'kills', 'deaths', 'assists', 'towerDestroy', 'inhibitorDestroy', 'dealToObject',
-    'dealToChamp', 'cs', 'g_5', 'g_6', 'g_7', 'g_8', 'g_9', 'g_10', 'g_11', 'g_12', 'g_13', 'g_14', 'g_15',
-    'g_16', 'g_17', 'g_18', 'g_19', 'g_20', 'g_21', 'g_22', 'g_23', 'g_24', 'g_25'
+    'match_id', 'game_duration', 'game_version',
+    'participant_id', 'champion_name', 'champion_id', 'ban_champion_id', 'team_position',
+    'team_id', 'win', 'kills', 'deaths', 'assists', 'tower_destroy',
+    'deal_to_champ', 'cs', 'spell_1', 'spell_2', 'g_15', 'skill_tree', 'skill_build','FRAGMENT1_ID', 'FRAGMENT2_ID',
+    'FRAGMENT3_ID', 'MAIN_KEYSTONE_ID', 'MAIN_SUB1_ID', 'MAIN_SUB2_ID',
+    'MAIN_SUB3_ID', 'MAIN_SUB4_ID', 'SUB_KEYSTONE_ID', 'SUB_SUB1_ID', 'SUB_SUB2_ID'
 ]
+def lane_processing(tower_lane, tower_team, teamPosition, teamId):
+    if (tower_lane[0] == teamPosition[0]) and (tower_team != teamId):
+        return True
+    else:
+        return False
 
 for m_idx, m in tqdm(enumerate(df['matches'])):
-    if m['gameDuration'] < 900:
+    if m['gameDuration'] < 900:  # 15분 미만 게임 제거
         continue
+    if any(p['teamPosition'] == '' for p in m['participants']):  # 팀포지션이 없는 소환사가 있는 게임 제거
+        print('팀포지션이 공백인 데이터가 있는 게임', df.iloc[m_idx]['match_id'])
+        continue
+    else:
+        for p_idx, p in enumerate(m['participants']):
+            game_end = list(df.iloc[m_idx]['timeline'].keys())[-1]
+            participant_frames = df.iloc[m_idx]['timeline'][game_end]['participantFrames']
 
-    tower_destroy = 0
-    bans = 0
+            minions_killed = participant_frames[p_idx]['minionsKilled'] #미니언 킬
+            jungle_minions_killed = participant_frames[p_idx]['jungleMinionsKilled'] #정글 미니언 킬
+            cs = minions_killed + jungle_minions_killed # cs
 
-    for p_idx, p in enumerate(m['participants']):
-        game_end = list(df.iloc[m_idx]['timeline'].keys())[-1]
-        participant_frames = df.iloc[m_idx]['timeline'][game_end]['participantFrames']
+            timeline_data = df.iloc[m_idx]['timeline'].values() # 타임라인
+            all_events = [event for events in timeline_data for event in events['events']] # 시간대 별 이벤트
+            building_kill_events = [event for event in all_events if event['type'] == 'BUILDING_KILL' and event.get('towerType') == 'OUTER_TURRET'] # 외곽 포탑 킬 이벤트 리스트
+            skill_level_up_events = [event for event in all_events if event['type'] == 'SKILL_LEVEL_UP'] # 스킬 레벨업 이벤트 리스트
+            item_purchased_events = [event for event in all_events if event['type'] == 'ITEM_PURCHASED'] # 아이템 구매 이벤트 리스트
 
-        minions_killed = participant_frames[p_idx]['minionsKilled']
-        jungle_minions_killed = participant_frames[p_idx]['jungleMinionsKilled']
-        cs = minions_killed + jungle_minions_killed
+            item_hiostory=[] # 모든 아이템 구매내역
+            for items in item_purchased_events:
+                if items['participantId'] == p['participantId']:
+                    item_hiostory.append(items['itemId'])
+            item_hiostory_str = ','.join(map(str, item_hiostory))
 
-        event_lst = [event for events in df.iloc[m_idx]['timeline'].values() for event in events['events']]
-        tower_destroy = sum(1 for event in event_lst if event['type'] == 'BUILDING_KILL' and event['killerId'] == p_idx)
-
-        team = 0 if p['teamId'] == 100 else 1
-
-        if bans == 5:
-            bans = 0
-
-        df_creater.append([
-            df['api_key'][m_idx],
-            df.iloc[m_idx]['match_id'],
-            m['gameDuration'],
-            m['gameVersion'],
-            p['summonerName'],
-            p['summonerId'],
-            p['summonerLevel'],
-            p['participantId'],
-            p['championName'],
-            p['championId'],
-            m['bans'][p_idx],
-            p['champExperience'],
-            p['teamPosition'],
-            p['teamId'],
-            p['win'],
-            p['kills'],
-            p['deaths'],
-            p['assists'],
-            tower_destroy,
-            p['inhibitorKills'],
-            p['damageDealtToObjectives'],
-            p['totalDamageDealtToChampions'],
-            cs
-        ])
-
-        for t in range(5, 26):
+            tower_destroy = 0 # 포탑 파괴시간
             try:
-                g_each = df.iloc[m_idx]['timeline'][str(t)]['participantFrames'][p_idx]['totalGold']
-                df_creater[-1].append(g_each)
+                for t_log in building_kill_events:
+                    lane = t_log['laneType']
+                    team_num = t_log['teamId']
+                    if lane_processing(lane, team_num, p['teamPosition'], p['teamId']):
+                        tower_destroy = round(t_log['timestamp'] / 1000)
             except Exception as e:
-                df_creater[-1].append(0)
+                print(e, lane, type(p['teamPosition']), p['teamPosition'])
 
-        bans += 1
+            skill_log = [] # 스킬 트리
+            for skills in skill_level_up_events:
+                if skills['participantId'] == p['participantId']:
+                    skill_log.append(skills['skillSlot'])
+            skill_log_str = ','.join(map(str, skill_log[:12]))
+
+            skill_priority = []  # 스킬 우선순위
+            skill_counts = {} # 각 스킬 빈도 수 저장
+            last_occurrence = {} # 각 스킬 마지막으로 선택된 위치 저장
+            for skill_idx, skill in enumerate(skill_log):
+                if skill == 4:  # 4번 스킬(R) 배제
+                    continue
+                if skill not in skill_counts:
+                    skill_counts[skill] = 0
+                skill_counts[skill] += 1
+                last_occurrence[skill] = skill_idx
+            # 등장 빈도가 높은 순서로, 그리고 빈도가 같으면 각 스킬이 마지막으로 찍힌 위치가 빠른 순서로 스킬 정렬
+            sorted_skills = sorted(skill_counts.items(), key=lambda x: (-x[1], last_occurrence[x[0]]))
+            # 스킬 우선순위 출력
+            skill_priority = [skill for skill, count in sorted_skills]
+            skill_priority_str = ','.join(map(str, skill_priority))
+
+            df_creater.append([
+                df.iloc[m_idx]['match_id'],
+                m['gameDuration'],
+                m['gameVersion'],
+                p['participantId'],
+                p['championName'],
+                p['championId'],
+                m['bans'][p_idx],
+                p['teamPosition'],
+                p['teamId'],
+                p['win'],
+                p['kills'],
+                p['deaths'],
+                p['assists'],
+                tower_destroy,
+                p['totalDamageDealtToChampions'],
+                cs,
+                p['summoner1Id'],  # 스펠1
+                p['summoner2Id'],  # 스펠2
+                df.iloc[m_idx]['timeline']['15']['participantFrames'][p_idx]['totalGold'], # 15분대 골드량
+                skill_log_str, # 스킬 트리
+                skill_priority_str # 스킬 우선순위
+            ])
+            # 룬 데이터
+            df_creater[-1].append(p['defense']) # 룬파편1
+            df_creater[-1].append(p['flex']) # 룬파편2
+            df_creater[-1].append(p['offense']) # 룬파편3
+            df_creater[-1].append(p['style0']) # 핵심 룬 빌드
+            for primaryRune in p['perks0']: # 핵심 룬 1, 일반 룬 3
+                df_creater[-1].append(primaryRune)
+            df_creater[-1].append(p['style1']) # 보조 룬 빌드
+            for subStyleRune in p['perks1']: # 일반 룬 2
+                df_creater[-1].append(subStyleRune)
 
 sum_df = pd.DataFrame(df_creater, columns=columns)
+sum_df['win'] = sum_df['win'].astype(int)
+#  ---------------------------------------------------------------------------------------------------------------------
+#포지션 별 승률 픽률,밴률 데이터 프레임 정제용
+sample2 = sum_df[['match_id','champion_id','win','team_position','ban_champion_id']]
+# 포지션 별 승률 픽률 계산
+sample3 = sample2.groupby(['champion_id','team_position'])['win'].agg(['sum','count']).reset_index().rename(columns={'sum':'win_cnt','count':'pick_cnt'})
+sample3['win_rate'] = round((sample3['win_cnt']/sample3['pick_cnt'])*100,2)
+sample3['lane_cnt'] = sample3.groupby(['team_position'])[['pick_cnt']].transform('sum')
+sample3['pick_rate'] = round((sample3['pick_cnt']/sample3['lane_cnt'])*100,2)
+win_pick_sample = sample3.sort_values(by=['pick_cnt', 'win_rate'], ascending=False).reset_index(drop=True).drop('lane_cnt', axis=1)
+# 챔피언 별 밴률 계산
+ban_sample = sample2[['ban_champion_id','team_position','win']].rename(columns={'ban_champion_id':'champion_id'})
+ban_sample = ban_sample.groupby(['champion_id','team_position'])['win'].agg(['count']).reset_index().rename(columns={'count':'ban_pick_cnt'})
+ban_sample = ban_sample[ban_sample['champion_id'] != -1]
+ban_sample = ban_sample.sort_values(by='ban_pick_cnt', ascending=False).reset_index(drop=True)
+ban_sample['lane_cnt'] = ban_sample.groupby(['team_position'])[['ban_pick_cnt']].transform('sum')
+ban_sample['ban_rate'] = (ban_sample['ban_pick_cnt']/ban_sample['lane_cnt'])*100
+ban_sample = ban_sample.groupby(['champion_id'])[['ban_pick_cnt','ban_rate']].sum().sort_values(by='ban_rate', ascending=False).reset_index()
+ban_sample['ban_rate'] = round(ban_sample['ban_rate'],2)
+# 머지
+wpb_sample = pd.merge(win_pick_sample,ban_sample, on=['champion_id'])
+wpb_sample = wpb_sample.sort_values(by=['pick_rate','win_rate','ban_rate'], ascending=False).reset_index(drop=True)
+#  ---------------------------------------------------------------------------------------------------------------------
+#match_up 2차 정제
 
-
-
-# ----------------------------------------------------------------
-#match_up
-
-sample = sum_df[['match_id','championName','championId','win','teamPosition','g_15','teamId','kills','deaths','assists','dealToChamp','towerDestroy','cs','ban_champion_id']]
-
-# win 컬럼 boolean에서 int로 변경
-sample['win'] =sample.apply(lambda x:  1 if x.win ==True else 0 , axis = 1)
-
-sample.rename(columns={'championName': 'champion_name','championId': 'champion_id','teamPosition': 'team_position','teamId': 'team_id','dealToChamp': 'deal_to_champ','towerDestroy': 'tower_destroy'}, inplace=True)
-
+sample = sum_df[['match_id','champion_name','champion_id','win','team_position','g_15'
+                 ,'team_id','kills','deaths','assists','deal_to_champ','tower_destroy'
+                 ,'cs','ban_champion_id','spell_1','spell_2', 'skill_tree', 'skill_build', 'FRAGMENT1_ID', 'FRAGMENT2_ID',
+    'FRAGMENT3_ID', 'MAIN_KEYSTONE_ID', 'MAIN_SUB1_ID','MAIN_SUB2_ID',
+    'MAIN_SUB3_ID', 'MAIN_SUB4_ID', 'SUB_KEYSTONE_ID', 'SUB_SUB1_ID', 'SUB_SUB2_ID']]
 # 각 팀 킬 수 합쳐서 team_kills 컬럼에 추가
 sample['team_kills'] = sample.groupby(['match_id', 'team_id'])['kills'].transform('sum')
-
 #팀별로 테이블 분리
 blue = sample[sample['team_id'] == 100]
-red =sample[sample['team_id']==200]
-
+red = sample[sample['team_id'] == 200]
 #팀별 컬럼 리네임
 blue_tmp = blue[['match_id','champion_name','champion_id','team_position','g_15','kills','deaths','assists','team_kills']].rename(columns={'champion_name':'enemy_champ','champion_id':'enemy_champ_id','g_15':'enemy_g_15','kills':'enemy_kills', 'deaths':'enemy_deaths', 'assists':'enemy_assists', 'team_kills':'enemy_team_kills'})
 red_tmp = red[['match_id','champion_name','champion_id','team_position','g_15','kills','deaths','assists','team_kills']].rename(columns={'champion_name':'enemy_champ','champion_id':'enemy_champ_id','g_15':'enemy_g_15','kills':'enemy_kills', 'deaths':'enemy_deaths', 'assists':'enemy_assists', 'team_kills':'enemy_team_kills'})
-
 #분리한 팀별 테이블 merge해서 비교
 blue_merge = pd.merge(blue,red_tmp, on=['match_id','team_position'])
 red_merge = pd.merge(red,blue_tmp, on=['match_id','team_position'])
-
 # append를 통해서 다시 하나의 테이블로
 result = blue_merge.append(red_merge)
-
-# 인덱스 재설정
-result = result.reset_index(drop=True)
-
-# 게임아이디랑 팀 아이디 별로 정렬
-result = result.sort_values(by=['match_id','team_id'])
-
+# 게임아이디랑 팀 아이디 별로 정렬 후 인덱스 재설정
+result = result.sort_values(by=['match_id','team_id']).reset_index(drop=True)
+#  ---------------------------------------------------------------------------------------------------------------------
+# 매치업 기본 통계
 win_df = result.copy()
-
-# 팀포지션컬럼을 라인으로 리네임
-win_df.rename(columns={'team_position': 'lane'},inplace=True)
-
 # 챔피언 이름 , 라인, 적 챔피언 순으로 그룹화 해서 라인승리 누적횟수와 게임승리 누적횟수를 보여줌
-cnt_df = win_df.groupby(['champion_name','champion_id','lane','enemy_champ','enemy_champ_id'])[['win','g_15','kills','deaths','assists','deal_to_champ','tower_destroy','cs','team_kills','enemy_kills','enemy_deaths','enemy_assists','enemy_team_kills']].sum().rename(columns={'win':'win_cnt'})
-
+cnt_df = win_df.groupby(['champion_name','champion_id','team_position','enemy_champ','enemy_champ_id'])[['win','g_15','kills','deaths','assists','deal_to_champ','tower_destroy','cs','team_kills','enemy_kills','enemy_deaths','enemy_assists','enemy_team_kills']].sum().rename(columns={'win':'match_up_win_cnt'})
 # 전체 게임수를 카운트해서 match_up_cnt 컬럼의 값으로 넣음
-game_df = win_df.groupby(['champion_name','champion_id','lane','enemy_champ','enemy_champ_id'])[['win']].count().rename(columns={'win':'match_up_cnt'})
-
+game_df = win_df.groupby(['champion_name','champion_id','team_position','enemy_champ','enemy_champ_id'])[['win']].count().rename(columns={'win':'match_up_cnt'})
 #merge를 통해 전체 게임수와 누적 승리를 보여줌
-result_df = pd.merge(cnt_df,game_df,on=['champion_name','champion_id','lane','enemy_champ','enemy_champ_id'])
-
+result_df = pd.merge(cnt_df,game_df,on=['champion_name','champion_id','team_position','enemy_champ','enemy_champ_id'])
 # 게임수가 많은 순으로 정렬
 r_df = result_df.sort_values('match_up_cnt',ascending=False)
-
 # 승률
-r_df['win_rate']=round((r_df['win_cnt']/r_df['match_up_cnt'])*100,2)
+r_df['match_up_win_rate']=round((r_df['match_up_win_cnt']/r_df['match_up_cnt'])*100,2)
 #kda
 r_df['kda']=round((r_df['kills']+r_df['assists'])/r_df['deaths'],2)
 #라인킬 확률
@@ -169,104 +245,135 @@ r_df['kill_participation'] = round(( ((r_df['kills']+r_df['assists'])/r_df['team
 r_df['deal_to_champ'] = round(r_df['deal_to_champ']/r_df['match_up_cnt'])
 #15분대의 골드 획득량
 r_df['avg_g_15'] = round(r_df['g_15']/r_df['match_up_cnt'])
-#평균 타워 파괴 횟수
-r_df['avg_tower_kill'] = round(r_df['tower_destroy']/r_df['match_up_cnt'],1)
+#라인 첫 포탑 파괴 시간
+r_df['tower_kill_time'] = round(r_df['tower_destroy']/r_df['match_up_cnt'])
 #평균 cs
 r_df['avg_cs'] = round(r_df['cs']/r_df['match_up_cnt'])
-
-r_df_o = r_df[['lane_kill_rate','kda','kill_participation','deal_to_champ','avg_g_15','avg_tower_kill','avg_cs','win_rate','win_cnt','match_up_cnt']]
-
+match_up = r_df[['lane_kill_rate','kda','kill_participation','deal_to_champ','avg_g_15','tower_kill_time','avg_cs','match_up_win_rate','match_up_win_cnt','match_up_cnt']]
 #인덱스 리셋
-match_up =r_df_o.reset_index()
-
-print(len(r_df))
-
-match_up.rename(columns={'win_rate': 'match_up_win_rate','win_cnt': 'match_up_win_cnt'}, inplace=True)
+match_up =match_up.reset_index()
 # nan , inf 값 제거
 match_up = match_up.dropna()
+# ----------------------------------------------------------------------------------------------------------------------
+# match_up_spell
+# 매치업 스펠 데이터
 
-# multi-level index로 설정된 경우
-match_up.loc[r_df_o.index.get_level_values('champion_name') == 'Yorick']
+spell_df = result[['champion_id','team_position','enemy_champ_id', 'spell_1', 'spell_2', 'win']].copy()
 
+def sort_spells(df):
+    df['spell_1'], df['spell_2'] = np.sort(df[['spell_1', 'spell_2']], axis=1).T # 스펠 순서 정렬을 통해 중복 방지
+    return df.groupby(['champion_id','team_position','enemy_champ_id', 'spell_1', 'spell_2'])['win'].agg(['sum','count']).reset_index() #승리수 와 게임수 계산
+
+spells = sort_spells(spell_df).rename(columns={'count': 'pick_cnt', 'sum': 'win_cnt', 'spell_1': 'd_spell', 'spell_2': 'f_spell'})
+spells['game_cnt'] = spells.groupby(['champion_id','team_position','enemy_champ_id'])[['pick_cnt']].transform('sum')
+spells = spells.sort_values(['champion_id','game_cnt', 'pick_cnt','win_cnt'], ascending=[True,False,False,False])
+top2_spells = spells.groupby(['champion_id','team_position','enemy_champ_id']).head(2).reset_index(drop=True)
+top2_spells['win_rate'] = round((top2_spells['win_cnt'] / top2_spells['pick_cnt']) * 100, 2) #승률 계산
+top2_spells['pick_rate'] = round((top2_spells['pick_cnt'] / top2_spells['game_cnt']) * 100, 2) #픽률 계산
+match_up_spell = top2_spells
+print("스펠 데이터 정제 완료 ")
+
+# ----------------------------------------------------------------------------------------------------------------------
+# match_up_runes
+# 매치업 룬데이터
+rune_df = result[['champion_id','team_position','enemy_champ_id', 'FRAGMENT1_ID', 'FRAGMENT2_ID',
+    'FRAGMENT3_ID', 'MAIN_KEYSTONE_ID', 'MAIN_SUB1_ID','MAIN_SUB2_ID',
+    'MAIN_SUB3_ID', 'MAIN_SUB4_ID', 'SUB_KEYSTONE_ID', 'SUB_SUB1_ID', 'SUB_SUB2_ID','win']].copy()
+
+rune_df = rune_df.groupby(['champion_id','team_position','enemy_champ_id', 'FRAGMENT1_ID', 'FRAGMENT2_ID',
+    'FRAGMENT3_ID', 'MAIN_KEYSTONE_ID', 'MAIN_SUB1_ID','MAIN_SUB2_ID',
+    'MAIN_SUB3_ID', 'MAIN_SUB4_ID', 'SUB_KEYSTONE_ID', 'SUB_SUB1_ID', 'SUB_SUB2_ID'])['win'].agg(['sum','count']).rename(columns={'count': 'pick_cnt', 'sum': 'win_cnt'}).reset_index()
+
+rune_df['game_cnt'] = rune_df.groupby(['champion_id','team_position','enemy_champ_id'])[['pick_cnt']].transform('sum')
+rune_df = rune_df.sort_values(['champion_id','game_cnt', 'pick_cnt','win_cnt'], ascending=[True,False,False,False])
+top2_runes = rune_df.groupby(['champion_id','team_position','enemy_champ_id']).head(2).reset_index(drop=True)
+top2_runes['win_rate'] = round((top2_runes['win_cnt'] / top2_runes['pick_cnt']) * 100, 2) #승률 계산
+top2_runes['pick_rate'] = round((top2_runes['pick_cnt'] / top2_runes['game_cnt']) * 100, 2) #픽률 계산
+match_up_runes = top2_runes
+# ----------------------------------------------------------------------------------------------------------------------
+# match_up_skill
+# 매치업 스킬 빌드
+skill_df = result[['champion_id','team_position','enemy_champ_id','skill_tree','skill_build','win']].copy()
+# 스킬 빌드
+skill_build_df = skill_df.groupby(['champion_id','team_position','enemy_champ_id','skill_build'])['win'].agg(['sum','count']).rename(columns={'count': 'skill_build_pick_cnt', 'sum': 'skill_build_win_cnt'})
+skill_build_df['game_cnt'] = skill_build_df.groupby(['champion_id','team_position','enemy_champ_id'])[['skill_build_pick_cnt']].transform('sum')
+skill_build_df = skill_build_df.sort_values(['champion_id','game_cnt','skill_build_pick_cnt','skill_build_win_cnt'],ascending = [True,False,False,False])
+skill_build_df['skill_build_win_rate'] = round((skill_build_df['skill_build_win_cnt'] / skill_build_df['skill_build_pick_cnt']) * 100, 2) #승률 계산
+skill_build_df['skill_build_pick_rate'] = round((skill_build_df['skill_build_pick_cnt'] / skill_build_df['game_cnt']) * 100, 2) #픽률 계산
+skill_build_df = skill_build_df.groupby(['champion_id','team_position','enemy_champ_id']).head(2).reset_index()
+# 스킬 트리
+skill_tree_df = skill_df[skill_df['skill_tree'].apply(lambda x: len(x.split(','))) >= 12].copy()
+skill_tree_df = skill_tree_df.groupby(['champion_id','team_position','enemy_champ_id','skill_tree','skill_build'])['win'].agg(['sum','count']).rename(columns={'count': 'skill_tree_pick_cnt', 'sum': 'skill_tree_win_cnt'})
+skill_tree_df['game_cnt'] = skill_tree_df.groupby(['champion_id','team_position','enemy_champ_id'])[['skill_tree_pick_cnt']].transform('sum')
+skill_tree_df = skill_tree_df.sort_values(['champion_id','game_cnt','skill_tree_pick_cnt','skill_tree_win_cnt'],ascending = [True,False,False,False])
+skill_tree_df['skill_tree_win_rate'] = round((skill_tree_df['skill_tree_win_cnt'] / skill_tree_df['skill_tree_pick_cnt']) * 100, 2) #승률 계산
+skill_tree_df['skill_tree_pick_rate'] = round((skill_tree_df['skill_tree_pick_cnt'] / skill_tree_df['game_cnt']) * 100, 2) #픽률 계산
+skill_tree_df = skill_tree_df.groupby(['champion_id','team_position','enemy_champ_id','skill_build']).head(1).reset_index()
+# 머지
+match_up_skill_df = pd.merge(skill_build_df,skill_tree_df, on=['champion_id', 'team_position', 'enemy_champ_id', 'skill_build'])
 #  ---------------------------------------------------------------------------------------------------------------------
 # db에 데이터 삽입
-def insert_my(x,conn):
-    query = (
-        f'insert into champion_match_up (champion_name, champion_id, lane, enemy_champ, enemy_champ_id, lane_kill_rate, kda, kill_participation, deal_to_champ, avg_g_15, avg_tower_kill, avg_cs, match_up_win_rate, match_up_win_cnt, match_up_cnt)'
-        f'values({repr(x.champion_name)},{x.champion_id},{repr(x.lane)},{repr(x.enemy_champ)},{x.enemy_champ_id},{x.lane_kill_rate},{x.kda},{x.kill_participation},{x.deal_to_champ},{x.avg_g_15},{x.avg_tower_kill},{x.avg_cs},{x.match_up_win_rate},{x.match_up_win_cnt},{x.match_up_cnt})'
-    )
-    query2 = (
+query_champion_match_up = (
         f'INSERT INTO champion_match_up '
-        f'(champion_name, champion_id, lane, enemy_champ, enemy_champ_id, lane_kill_rate, kda, kill_participation, deal_to_champ, avg_g_15, avg_tower_kill, avg_cs, match_up_win_rate, match_up_win_cnt, match_up_cnt) '
-        f'VALUES ({repr(x.champion_name)}, {x.champion_id}, {repr(x.lane)}, {repr(x.enemy_champ)}, {x.enemy_champ_id}, {x.lane_kill_rate}, {x.kda}, {x.kill_participation}, {x.deal_to_champ}, {x.avg_g_15}, {x.avg_tower_kill}, {x.avg_cs}, {x.match_up_win_rate}, {x.match_up_win_cnt}, {x.match_up_cnt}) '
+        f'(champion_name, champion_id, team_position, enemy_champ, enemy_champ_id, lane_kill_rate, kda, kill_participation, deal_to_champ, avg_g_15, tower_kill_time, avg_cs, match_up_win_rate, match_up_win_cnt, match_up_cnt) '
+        f'VALUES ({repr(match_up.champion_name)}, {match_up.champion_id}, {repr(match_up.team_position)}, {repr(match_up.enemy_champ)}, {match_up.enemy_champ_id}, {match_up.lane_kill_rate}, {match_up.kda}, {match_up.kill_participation}, {match_up.deal_to_champ}, {match_up.avg_g_15}, {match_up.tower_kill_time}, {match_up.avg_cs}, {match_up.match_up_win_rate}, {match_up.match_up_win_cnt}, {match_up.match_up_cnt}) '
         f'ON DUPLICATE KEY UPDATE '
-        f'champion_id = VALUES(champion_id), lane = VALUES(lane), enemy_champ = VALUES(enemy_champ), enemy_champ_id = VALUES(enemy_champ_id), '
+        f'champion_id = VALUES(champion_id), team_position = VALUES(team_position), enemy_champ = VALUES(enemy_champ), enemy_champ_id = VALUES(enemy_champ_id), '
         f'lane_kill_rate = VALUES(lane_kill_rate), kda = VALUES(kda), kill_participation = VALUES(kill_participation), deal_to_champ = VALUES(deal_to_champ), '
-        f'avg_g_15 = VALUES(avg_g_15), avg_tower_kill = VALUES(avg_tower_kill), avg_cs = VALUES(avg_cs), '
+        f'avg_g_15 = VALUES(avg_g_15), tower_kill_time = VALUES(tower_kill_time), avg_cs = VALUES(avg_cs), '
         f'match_up_win_rate = VALUES(match_up_win_rate), match_up_win_cnt = VALUES(match_up_win_cnt), match_up_cnt = VALUES(match_up_cnt)'
     )
+def insert_my(x,conn,query):
     try:
-        mu.mysql_execute(query2,conn)
+        mu.mysql_execute(query,conn)
     except Exception as e:
-        # 중복된 레코드인 경우, 해당 레코드 출력
-        print(f"Duplicated record: {x}")
+        print(e)
     return
 
 conn = mu.connect_mysql()
-match_up.progress_apply(lambda x: insert_my(x,conn),axis =1)
+match_up.progress_apply(lambda x: insert_my(x,conn,query_champion_match_up),axis =1)
 conn.commit()
 conn.close()
+#  ---------------------------------------------------------------------------------------------------------------------
+# 매치업 아이템 빌드
 
-# ---------------------------------------------------------------------------------------------------------------------
-df = fetch_data_from_match_raw(1000)
-df['matches'] = df['matches'].progress_apply(lambda x: json.loads(x))
-df['timeline'] = df['timeline'].progress_apply(lambda x: json.loads(x))
-# ---------------------------------------------------------------------------------------------------------------------
-# match_up_spell
-# 스펠 데이터
+#  ---------------------------------------------------------------------------------------------------------------------
+# riotwatcher library
+watcher = LolWatcher(mu.riot_api_key) #riotwatcher 객체 생성
+my_region = 'kr'
+summoner_name = 'quad'
 
-df.iloc[0]['match_id']['participants']
+response = watcher.summoner.by_name(my_region, summoner_name) # 소환사 정보
+print(response)
+ranked_stats = watcher.league.by_summoner(my_region, response['id']) # 소환사 랭크 스텟
+print(ranked_stats)
+my_matches = watcher.match.matchlist_by_puuid(my_region, response['puuid'], 0, 30) # 최근 게임 30개
+print(my_matches)
 
-result = []
-print("스펠 데이터 정제 시작 ")
-for i in tqdm(range(len(df))):
-    participants = df.iloc[i]['matches']['participants']
-    for summoner in range(len(participants)):
-        lst = [
-            df.iloc[i]['match_id'],
-            participants[summoner]['championId'],
-            participants[summoner]['teamPosition'],
-            participants[summoner]['summoner1Id'],
-            participants[summoner]['summoner2Id'],
-            participants[summoner]['win']
-        ]
-        result.append(lst)
-columns = ['champion_id','teamPosition', 'spell_1', 'spell_2', 'win']
+match_detail = watcher.match.by_id(my_region, my_matches[0]) # 게임 정보
+timeline_detail = watcher.match.timeline_by_match(my_region, my_matches[0]) # 타임라인 정보
 
-spell_df = pd.DataFrame(result, columns=columns)
-
-spell_df['win'] = spell_df['win'].astype(int)
-
-def combine_spells(df):
-    df['spell_1'], df['spell_2'] = np.sort(df[['spell_1', 'spell_2']], axis=1).T # 중복제거
-    return df.groupby(['champion_id','teamPosition', 'spell_1', 'spell_2'])['win'].agg(['sum','count']).reset_index() #승리수 와 게임수 계산
-
-top3_spells = (
-    combine_spells(spell_df)
-    .sort_values(['champion_id', 'sum', 'count'], ascending=[True, False, False])
-    .groupby('champion_id')
-    .head(2)
-    .rename(columns={'count': 'pick_cnt', 'teamPosition': 'lane', 'sum': 'win_cnt', 'spell_1': 'd_spell', 'spell_2': 'f_spell'})
-)
-
-top3_spells['win_rate'] = round((top3_spells['win_cnt'] / top3_spells['pick_cnt']) * 100, 2) #승률 계산
-
-total_game_df = spell_df.groupby(['champion_id']).agg({'win': ['count']}) # 해당 챔피언이 등장한 게임수
-total_game_df.columns = ['total_game']
-total_game_df.reset_index(inplace=True)
-merged_df = pd.merge(top3_spells, total_game_df, on='champion_id')
-merged_df['pick_rate'] = round((merged_df['pick_cnt'] / merged_df['total_game']) * 100, 2)
-final_df = merged_df.drop(columns=['total_game'])
-print("스펠 데이터 정제 완료 ")
-
-spell_data = spell_data(df)
+participants = []
+for row in match_detail['info']['participants']:
+    participants_row = {}
+    participants_row['champion'] = row['championId']
+    participants_row['spell1'] = row['summoner1Id']
+    participants_row['spell2'] = row['summoner2Id']
+    participants_row['win'] = row['win']
+    participants_row['kills'] = row['kills']
+    participants_row['deaths'] = row['deaths']
+    participants_row['assists'] = row['assists']
+    participants_row['totalDamageDealt'] = row['totalDamageDealt']
+    participants_row['goldEarned'] = row['goldEarned']
+    participants_row['champLevel'] = row['champLevel']
+    participants_row['totalMinionsKilled'] = row['totalMinionsKilled']
+    participants_row['item0'] = row['item0']
+    participants_row['item1'] = row['item1']
+    participants_row['item2'] = row['item2']
+    participants_row['item3'] = row['item3']
+    participants_row['item4'] = row['item4']
+    participants_row['item5'] = row['item5']
+    participants_row['item6'] = row['item6']
+    participants.append(participants_row)
+watcher_df = pd.DataFrame(participants)
+watcher_df
