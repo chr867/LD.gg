@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ld.gg.dao.QuestionDao">
+    <select id="select_list_all" resultType="question_post">
+        SELECT * FROM question_post ORDER BY question_id DESC
+    </select>
+    <select id="select_list_by_status" parameterType="int" resultType="question_post">
+        SELECT * FROM question_post where status = #{status} ORDER BY question_id DESC
+    </select>
+    <select id="select_list_by_scrape" parameterType="String" resultType="String">
+        SELECT question_post.question_id, question_post.question_content, question_post.question_title, question_post.question_date, question_post.email
+        FROM question_post
+        INNER JOIN question_scrape
+        ON question_post.question_id = question_scrape.question_id
+        WHERE question_scrape.email = #{email}
+        ORDER BY question_post.question_date DESC
+    </select>
+    <select id="select_list_by_email" parameterType="String" resultType="String">
+        select * from question_post where email = #{email} ORDER BY question_id DESC
+    </select>
+    <insert id="write_question" parameterType="question_post">
+        insert into question_post(question_id, question_content, question_title, question_date, email, status, tag1, tag2)
+        value (null, #{question_content}, #{question_title}, CURRENT_TIMESTAMP(), #{email}, 0, #{tag1}, #{tag2})
+    </insert>
+    <insert id="write_answer" parameterType="answer">
+        insert into question_answer(answer_id, answer_content, answer_date, question_id, answerer_id, answer_status)
+        values (null, #{answer_content}, CURRENT_TIMESTAMP(), #{question_id}, #{answerer_id}, 0)
+    </insert>
+    <select id="select_answer" parameterType="int" resultType="answer">
+        select * from question_answer where question_id = #{question_id}
+    </select>
+    <update id="update_question_status" parameterType="int">
+        update question_post
+        set status = 1
+        where question_id = #{question_id}
+    </update>
+</mapper>

@@ -1,5 +1,5 @@
 /* 세션 정보 */
-const email = $("#email").html().trim();
+const email = $("#chat_room_seq").html().trim();
 const chat_room_seq = $("#chat_room_seq").html().trim();
 const chat_category = $("#chat_category").html().trim();
 
@@ -47,19 +47,46 @@ var stompClient = Stomp.over(socket);
 stompClient.connect({}, function (frame){
     console.log("Connected : " + frame);
     stompClient.subscribe('/topic/' + chat_room_seq, function (message){
-        showMessage(JSON.parse(message.body).chat_content);
+        console.log(message);
+        showMessage(message);
     })
 });
 
 /* 메시지 보내기 */
 function sendMessage() {
+
     const chat_content = $("#send-chat-content").val();
-    console.log("chat_content : " + chat_content);
+
+    /* 시간 관련 */
+    const currentTime = new Date();
+    const options = {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+        timeZone: 'Asia/Seoul' // 한국 표준시간대 (KST)
+    };
+    const time = currentTime.toLocaleString('ko-KR', options)
+        .replace(/\. /g, '-');
+    const datePart = time.slice(0, 10);
+    const timePart = time.slice(11);
+
+    const timeStamp = datePart + " " + timePart;
+
+    console.log(datePart);
+    console.log(timePart);
+
+    console.log("chat_content: " + chat_content);
+    console.log("timestamp: " + timeStamp);
 
     const message = {
         chat_category: parseInt(chat_category),
         chat_content: chat_content,
-        chat_user: email
+        chat_user: email,
+        chat_time : timeStamp
     };
 
     console.info(message);
@@ -68,7 +95,16 @@ function sendMessage() {
 }
 
 /* 메시지 수신 */
-function showMessage(messageContent){
-    var chatting_content = $("#chatting-content").html(rlist);
-    chatting_content += '<div>' + messageContent + '</div>';
+function showMessage(message){
+    const messageBody = JSON.parse(message.body);
+
+    var chatting_content = $("#chatting-content").html();
+
+    console.log("messageContent : ", messageBody);
+
+    chatting_content += '<div> 보낸 사람 : ' + messageBody.chat_user + '</div>';
+    chatting_content += '<div> 보낸 내용 : ' + messageBody.chat_content + '</div>';
+    chatting_content += '<div> 보낸 내용 : ' + messageBody.chat_time + '</div>';
+
+    $("#chatting-content").html(chatting_content);
 }

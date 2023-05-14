@@ -11,11 +11,51 @@
   <title>채팅 리스트</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
+    /* 채팅방 select, insert */
+    function go_chat__(email, chat_category){
+      $.ajax({
+        url: "/chat/go_chat",
+        method: "POST",
+        data: {
+          'chat_category' : chat_category,
+          'chat_receive_user' : email,
+          'chat_send_user' : '${email}'
+        },
+        dataType : "json"
+      }).done(function(resp){
+        console.log(resp);
+
+        // res = 0 실패 => alert
+        // res = chat_room_seq => 팝업창으로 채팅방 열기
+
+        if(resp == 0) {
+          alert("잠시 후 다시 시도해주세요.");
+        }
+        else{
+          console.log(resp);
+          var url = "http://localhost:8080/chat/enter_chatroom?chat_room_seq=" + resp + "&chat_category=" + chat_category;
+
+          console.log(url);
+          // 팝업 창의 크기
+          var width = 500;
+          var height = 500;
+          // 팝업 창을 화면 중앙에 위치시키기 위한 좌표 계산
+          var left = (window.innerWidth / 2) - (width / 2);
+          var top = (window.innerHeight / 2) - (height / 2);
+          // 팝업 창을 열기 위한 window.open 함수 호출
+          //var popup = window.open(url, "popup", "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top);
+          var popup = window.open(url, 'popupView', 'width=430, height=500, location=no, status=no, scrollbars=yes');
+        }
+        console.log(resp);
+      }).fail(function (err){
+        console.log(err);
+      });
+    }
     /* 멘토 리스트 조회 버튼 */
     function get_mentor_list(){
       $.ajax({
         method : "POST",
-        url : "/chat/get_mentor_list",
+        url : "/chat/get_mentoring_list",
         data : {'email' : '${email}'},
         dataType : "json",
       })
@@ -26,7 +66,7 @@
 
                 if(resp !== null){
                   $.each(resp, function(i, resp) {
-                    rlist += '<input type="button" value="' + resp + '" onClick="go_chat_room(this.value, 0)">';
+                    rlist += '<input type="button" value="' + resp + '" onClick="go_chat__(this.value, 0)">';
                   });
                 }
                 else {
@@ -109,7 +149,7 @@
     /* 기존 채팅방 가져오기 */
     function go_exist_chatting(chat_receive_user, chat_category){
       $.ajax({
-        url: "/chat/go_exist_chatting/",
+        url: "/chat/go_exist_chat/",
         method: "POST",
         data: {
           'chat_category' : chat_category,
@@ -118,6 +158,7 @@
         },
         dataType : "json"
       }).done(function(resp){
+
         console.log(resp);
 
         // res = 0 실패 => alert
