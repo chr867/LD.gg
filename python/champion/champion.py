@@ -536,7 +536,7 @@ def item_build_data(raw_data):
         for end_champ, build_champ in zip(item_end_lst, item_build_lst):
             final_champ = [end_champ[0], end_champ[1]]  # 챔피언 아이디를 포함한 리스트 생성
             for item in end_champ[2:]:
-                if item > 2055 and item not in shoe_items and item not in accessories_lst: #item in build_champ and
+                if item > 2055 and item not in shoe_items and item not in accessories_lst:  # item in build_champ and
                     final_champ.append(item)
             final_lst.append(final_champ)
 
@@ -560,23 +560,25 @@ def item_build_data(raw_data):
     top_item_builds = item_build_df.groupby(['championId', 'itemBuild']).size().reset_index(name='pickCount')
     top_item_builds = top_item_builds.sort_values(['championId', 'pickCount'], ascending=[True, False])
     top_2_item_builds = top_item_builds.groupby('championId').head(5)  # 추천 수 설정
-    wins_with_skill_build = item_build_df[item_build_df['win'] == 1].groupby(['championId', 'itemBuild']).size().reset_index(name='winCount')
+    wins_with_skill_build = item_build_df[item_build_df['win'] == 1].groupby(
+        ['championId', 'itemBuild']).size().reset_index(name='winCount')
     top_2_item_builds = pd.merge(top_2_item_builds, wins_with_skill_build, on=['championId', 'itemBuild'],
-                                  how='left')
+                                 how='left')
     top_2_item_builds['winCount'] = top_2_item_builds['winCount'].fillna(0)
 
     total_games_per_champion = item_build_df.groupby('championId').size().reset_index(name='totalGames')
     top_2_item_builds = pd.merge(top_2_item_builds, total_games_per_champion, on='championId')
 
     top_2_item_builds['pickRate'] = round((top_2_item_builds['pickCount'] / top_2_item_builds['totalGames']) * 100,
-                                           2)
+                                          2)
     top_2_item_builds['winRate'] = round((top_2_item_builds['winCount'] / top_2_item_builds['pickCount']) * 100, 2)
     top_2_item_builds['winCount'] = top_2_item_builds['winCount'].astype(int)
     return top_2_item_builds
 
 
 item_build_data = item_build_data(df)
-item_build_sort = item_build_data.sort_values(['pickRate'],ascending=False)
+item_build_sort = item_build_data.sort_values(['pickRate'], ascending=False)
+
 
 # ----------------------------------------------------------------------------------------------------------------------
 # 밴률 데이터
@@ -593,10 +595,44 @@ def ban_rate_data(raw_data):
     ban_rate_df = df.groupby(['championId']).size().reset_index(name='banCount')
 
     ban_rate_df['banTotal'] = ban_rate_df['banCount'].sum()
-    ban_rate_df['banRate'] = round((ban_rate_df['banCount'] / ban_rate_df['banTotal'])*100, 2)
+    ban_rate_df['banRate'] = round((ban_rate_df['banCount'] / ban_rate_df['banTotal']) * 100, 2)
 
     return ban_rate_df
 
 
 ban_rate_df = ban_rate_data(df)
-sort_ban_rate = ban_rate_df.sort_values(['banRate'], ascending = False)
+sort_ban_rate = ban_rate_df.sort_values(['banRate'], ascending=False)
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+# 라인 데이터
+def lane_data(df):
+    result = []
+    for x in tqdm(range(len(df))):
+        summoner = df.iloc[x]['matches']['participants']
+        for player in range(len(summoner)):
+            championId = summoner[player]['championId']
+            teamPosition = summoner[player]['teamPosition']
+            win = summoner[player]['win']
+            result.append([championId, teamPosition, win])
+
+    columns = ['championId', 'teamPosition', 'win']
+    df = pd.DataFrame(result, columns=columns)
+    df['win'] = df['win'].astype(int)
+
+    champion_pick_counts = df.groupby('championId').size().reset_index(name='championPickCount')
+    lane_groupBy = df.groupby(['championId', 'teamPosition']).agg({'win': ['sum', 'size']}).reset_index()
+    lane_groupBy.columns = ['championId', 'teamPosition', 'winCount', 'pickCount']
+    lane_groupBy = lane_groupBy.merge(champion_pick_counts, on='championId')
+    lane_groupBy['pickRate'] = round((lane_groupBy['pickCount'] / lane_groupBy['championPickCount']) * 100, 2)
+    lane_groupBy['winRate'] = round((lane_groupBy['winCount'] / lane_groupBy['pickCount']) * 100, 2)
+    lane_groupBy = lane_groupBy[lane_groupBy['pickRate'] > 5]
+    lane_groupBy.dropna(inplace=True)
+    lane_groupBy.reset_index(drop=True, inplace=True)
+    result_df = lane_groupBy[['championId', 'teamPosition', 'pickCount', 'winCount', 'pickRate', 'winRate']]
+    return result_df
+
+
+lane_data = lane_data(df)
+
+# ----------------------------------------------------------------------------------------------------------------------
