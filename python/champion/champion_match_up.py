@@ -11,7 +11,10 @@ import my_utils as mu
 import json
 import time
 import numpy as np
+from riotwatcher import LolWatcher, ApiError
+import imp
 tqdm.pandas()
+imp.reload(mu)
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -99,8 +102,15 @@ for m_idx, m in tqdm(enumerate(df['matches'])):
             all_events = [event for events in timeline_data for event in events['events']] # 시간대 별 이벤트
             building_kill_events = [event for event in all_events if event['type'] == 'BUILDING_KILL' and event.get('towerType') == 'OUTER_TURRET'] # 외곽 포탑 킬 이벤트 리스트
             skill_level_up_events = [event for event in all_events if event['type'] == 'SKILL_LEVEL_UP'] # 스킬 레벨업 이벤트 리스트
+            item_purchased_events = [event for event in all_events if event['type'] == 'ITEM_PURCHASED'] # 아이템 구매 이벤트 리스트
 
-            tower_destroy = 0
+            item_hiostory=[] # 모든 아이템 구매내역
+            for items in item_purchased_events:
+                if items['participantId'] == p['participantId']:
+                    item_hiostory.append(items['itemId'])
+            item_hiostory_str = ','.join(map(str, item_hiostory))
+
+            tower_destroy = 0 # 포탑 파괴시간
             try:
                 for t_log in building_kill_events:
                     lane = t_log['laneType']
@@ -114,13 +124,13 @@ for m_idx, m in tqdm(enumerate(df['matches'])):
             for skills in skill_level_up_events:
                 if skills['participantId'] == p['participantId']:
                     skill_log.append(skills['skillSlot'])
-                    skill_log_str = ','.join(map(str, skill_log[:12]))
+            skill_log_str = ','.join(map(str, skill_log[:12]))
 
             skill_priority = []  # 스킬 우선순위
             skill_counts = {} # 각 스킬 빈도 수 저장
             last_occurrence = {} # 각 스킬 마지막으로 선택된 위치 저장
             for skill_idx, skill in enumerate(skill_log):
-                if skill == 4:  # 4번 스킬은 무시
+                if skill == 4:  # 4번 스킬(R) 배제
                     continue
                 if skill not in skill_counts:
                     skill_counts[skill] = 0
@@ -215,18 +225,16 @@ result = result.sort_values(by=['match_id','team_id']).reset_index(drop=True)
 #  ---------------------------------------------------------------------------------------------------------------------
 # 매치업 기본 통계
 win_df = result.copy()
-# 팀포지션컬럼을 라인으로 리네임
-win_df.rename(columns={'team_position': 'lane'},inplace=True)
 # 챔피언 이름 , 라인, 적 챔피언 순으로 그룹화 해서 라인승리 누적횟수와 게임승리 누적횟수를 보여줌
-cnt_df = win_df.groupby(['champion_name','champion_id','lane','enemy_champ','enemy_champ_id'])[['win','g_15','kills','deaths','assists','deal_to_champ','tower_destroy','cs','team_kills','enemy_kills','enemy_deaths','enemy_assists','enemy_team_kills']].sum().rename(columns={'win':'win_cnt'})
+cnt_df = win_df.groupby(['champion_name','champion_id','team_position','enemy_champ','enemy_champ_id'])[['win','g_15','kills','deaths','assists','deal_to_champ','tower_destroy','cs','team_kills','enemy_kills','enemy_deaths','enemy_assists','enemy_team_kills']].sum().rename(columns={'win':'match_up_win_cnt'})
 # 전체 게임수를 카운트해서 match_up_cnt 컬럼의 값으로 넣음
-game_df = win_df.groupby(['champion_name','champion_id','lane','enemy_champ','enemy_champ_id'])[['win']].count().rename(columns={'win':'match_up_cnt'})
+game_df = win_df.groupby(['champion_name','champion_id','team_position','enemy_champ','enemy_champ_id'])[['win']].count().rename(columns={'win':'match_up_cnt'})
 #merge를 통해 전체 게임수와 누적 승리를 보여줌
-result_df = pd.merge(cnt_df,game_df,on=['champion_name','champion_id','lane','enemy_champ','enemy_champ_id'])
+result_df = pd.merge(cnt_df,game_df,on=['champion_name','champion_id','team_position','enemy_champ','enemy_champ_id'])
 # 게임수가 많은 순으로 정렬
 r_df = result_df.sort_values('match_up_cnt',ascending=False)
 # 승률
-r_df['win_rate']=round((r_df['win_cnt']/r_df['match_up_cnt'])*100,2)
+r_df['match_up_win_rate']=round((r_df['match_up_win_cnt']/r_df['match_up_cnt'])*100,2)
 #kda
 r_df['kda']=round((r_df['kills']+r_df['assists'])/r_df['deaths'],2)
 #라인킬 확률
@@ -241,39 +249,11 @@ r_df['avg_g_15'] = round(r_df['g_15']/r_df['match_up_cnt'])
 r_df['tower_kill_time'] = round(r_df['tower_destroy']/r_df['match_up_cnt'])
 #평균 cs
 r_df['avg_cs'] = round(r_df['cs']/r_df['match_up_cnt'])
-match_up = r_df[['lane_kill_rate','kda','kill_participation','deal_to_champ','avg_g_15','tower_kill_time','avg_cs','win_rate','win_cnt','match_up_cnt']]
+match_up = r_df[['lane_kill_rate','kda','kill_participation','deal_to_champ','avg_g_15','tower_kill_time','avg_cs','match_up_win_rate','match_up_win_cnt','match_up_cnt']]
 #인덱스 리셋
 match_up =match_up.reset_index()
-match_up.rename(columns={'win_rate': 'match_up_win_rate','win_cnt': 'match_up_win_cnt'}, inplace=True)
 # nan , inf 값 제거
 match_up = match_up.dropna()
-#  ---------------------------------------------------------------------------------------------------------------------
-# db에 데이터 삽입
-def insert_my(x,conn):
-    query = (
-        f'insert into champion_match_up (champion_name, champion_id, lane, enemy_champ, enemy_champ_id, lane_kill_rate, kda, kill_participation, deal_to_champ, avg_g_15, tower_kill_time, avg_cs, match_up_win_rate, match_up_win_cnt, match_up_cnt)'
-        f'values({repr(x.champion_name)},{x.champion_id},{repr(x.lane)},{repr(x.enemy_champ)},{x.enemy_champ_id},{x.lane_kill_rate},{x.kda},{x.kill_participation},{x.deal_to_champ},{x.avg_g_15},{x.tower_kill_time},{x.avg_cs},{x.match_up_win_rate},{x.match_up_win_cnt},{x.match_up_cnt})'
-    )
-    query2 = (
-        f'INSERT INTO champion_match_up '
-        f'(champion_name, champion_id, lane, enemy_champ, enemy_champ_id, lane_kill_rate, kda, kill_participation, deal_to_champ, avg_g_15, tower_kill_time, avg_cs, match_up_win_rate, match_up_win_cnt, match_up_cnt) '
-        f'VALUES ({repr(x.champion_name)}, {x.champion_id}, {repr(x.lane)}, {repr(x.enemy_champ)}, {x.enemy_champ_id}, {x.lane_kill_rate}, {x.kda}, {x.kill_participation}, {x.deal_to_champ}, {x.avg_g_15}, {x.tower_kill_time}, {x.avg_cs}, {x.match_up_win_rate}, {x.match_up_win_cnt}, {x.match_up_cnt}) '
-        f'ON DUPLICATE KEY UPDATE '
-        f'champion_id = VALUES(champion_id), lane = VALUES(lane), enemy_champ = VALUES(enemy_champ), enemy_champ_id = VALUES(enemy_champ_id), '
-        f'lane_kill_rate = VALUES(lane_kill_rate), kda = VALUES(kda), kill_participation = VALUES(kill_participation), deal_to_champ = VALUES(deal_to_champ), '
-        f'avg_g_15 = VALUES(avg_g_15), tower_kill_time = VALUES(tower_kill_time), avg_cs = VALUES(avg_cs), '
-        f'match_up_win_rate = VALUES(match_up_win_rate), match_up_win_cnt = VALUES(match_up_win_cnt), match_up_cnt = VALUES(match_up_cnt)'
-    )
-    try:
-        mu.mysql_execute(query2,conn)
-    except Exception as e:
-        print(e)
-    return
-
-conn = mu.connect_mysql()
-match_up.progress_apply(lambda x: insert_my(x,conn),axis =1)
-conn.commit()
-conn.close()
 # ----------------------------------------------------------------------------------------------------------------------
 # match_up_spell
 # 매치업 스펠 데이터
@@ -331,3 +311,69 @@ skill_tree_df['skill_tree_pick_rate'] = round((skill_tree_df['skill_tree_pick_cn
 skill_tree_df = skill_tree_df.groupby(['champion_id','team_position','enemy_champ_id','skill_build']).head(1).reset_index()
 # 머지
 match_up_skill_df = pd.merge(skill_build_df,skill_tree_df, on=['champion_id', 'team_position', 'enemy_champ_id', 'skill_build'])
+#  ---------------------------------------------------------------------------------------------------------------------
+# db에 데이터 삽입
+query_champion_match_up = (
+        f'INSERT INTO champion_match_up '
+        f'(champion_name, champion_id, team_position, enemy_champ, enemy_champ_id, lane_kill_rate, kda, kill_participation, deal_to_champ, avg_g_15, tower_kill_time, avg_cs, match_up_win_rate, match_up_win_cnt, match_up_cnt) '
+        f'VALUES ({repr(match_up.champion_name)}, {match_up.champion_id}, {repr(match_up.team_position)}, {repr(match_up.enemy_champ)}, {match_up.enemy_champ_id}, {match_up.lane_kill_rate}, {match_up.kda}, {match_up.kill_participation}, {match_up.deal_to_champ}, {match_up.avg_g_15}, {match_up.tower_kill_time}, {match_up.avg_cs}, {match_up.match_up_win_rate}, {match_up.match_up_win_cnt}, {match_up.match_up_cnt}) '
+        f'ON DUPLICATE KEY UPDATE '
+        f'champion_id = VALUES(champion_id), team_position = VALUES(team_position), enemy_champ = VALUES(enemy_champ), enemy_champ_id = VALUES(enemy_champ_id), '
+        f'lane_kill_rate = VALUES(lane_kill_rate), kda = VALUES(kda), kill_participation = VALUES(kill_participation), deal_to_champ = VALUES(deal_to_champ), '
+        f'avg_g_15 = VALUES(avg_g_15), tower_kill_time = VALUES(tower_kill_time), avg_cs = VALUES(avg_cs), '
+        f'match_up_win_rate = VALUES(match_up_win_rate), match_up_win_cnt = VALUES(match_up_win_cnt), match_up_cnt = VALUES(match_up_cnt)'
+    )
+def insert_my(x,conn,query):
+    try:
+        mu.mysql_execute(query,conn)
+    except Exception as e:
+        print(e)
+    return
+
+conn = mu.connect_mysql()
+match_up.progress_apply(lambda x: insert_my(x,conn,query_champion_match_up),axis =1)
+conn.commit()
+conn.close()
+#  ---------------------------------------------------------------------------------------------------------------------
+# 매치업 아이템 빌드
+
+#  ---------------------------------------------------------------------------------------------------------------------
+# riotwatcher library
+watcher = LolWatcher(mu.riot_api_key) #riotwatcher 객체 생성
+my_region = 'kr'
+summoner_name = 'quad'
+
+response = watcher.summoner.by_name(my_region, summoner_name) # 소환사 정보
+print(response)
+ranked_stats = watcher.league.by_summoner(my_region, response['id']) # 소환사 랭크 스텟
+print(ranked_stats)
+my_matches = watcher.match.matchlist_by_puuid(my_region, response['puuid'], 0, 30) # 최근 게임 30개
+print(my_matches)
+
+match_detail = watcher.match.by_id(my_region, my_matches[0]) # 게임 정보
+timeline_detail = watcher.match.timeline_by_match(my_region, my_matches[0]) # 타임라인 정보
+
+participants = []
+for row in match_detail['info']['participants']:
+    participants_row = {}
+    participants_row['champion'] = row['championId']
+    participants_row['spell1'] = row['summoner1Id']
+    participants_row['spell2'] = row['summoner2Id']
+    participants_row['win'] = row['win']
+    participants_row['kills'] = row['kills']
+    participants_row['deaths'] = row['deaths']
+    participants_row['assists'] = row['assists']
+    participants_row['totalDamageDealt'] = row['totalDamageDealt']
+    participants_row['goldEarned'] = row['goldEarned']
+    participants_row['champLevel'] = row['champLevel']
+    participants_row['totalMinionsKilled'] = row['totalMinionsKilled']
+    participants_row['item0'] = row['item0']
+    participants_row['item1'] = row['item1']
+    participants_row['item2'] = row['item2']
+    participants_row['item3'] = row['item3']
+    participants_row['item4'] = row['item4']
+    participants_row['item5'] = row['item5']
+    participants_row['item6'] = row['item6']
+    participants.append(participants_row)
+watcher_df = pd.DataFrame(participants)
+watcher_df
