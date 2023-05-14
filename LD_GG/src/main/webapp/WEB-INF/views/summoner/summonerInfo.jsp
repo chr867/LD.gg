@@ -474,7 +474,6 @@
 		console.log(err)
 	})
 	
-	function info(match_id){
 		$.ajax({
 			  method: 'get',
 			  url: 'summoner/get_record_detail',
@@ -492,7 +491,7 @@
 			  // 3. 'data_header' 내부에 div 태그 3개 생성
 			  let synthesis = $('<div class="synthesis" onclick="synthesis(res.match_id)"><p>종합</p></div>');
 			  let build = $('<div class="build" onclick="build(res.match_id)"><p>빌드</p></div>');
-			  let ranking = $('<div class="ranking" onclick="ranking(res.match_id)"><p>랭킹</p></div>');
+			  let ranking = $('<div class="ranking" onclick="ranking(res.match_id, summoner_name)"><p>랭킹</p></div>');
 			  header.append(synthesis, build, ranking);
 			  
 			  // 4. 'data' 내부에 새로운 div 태그 두 개를 생성
@@ -1396,17 +1395,143 @@
 	}
 	
 	//랭킹 버튼 클릭 시
-	$('#ranking').click(function(){
+	$('#ranking').click(function(match_id,summoner_name){
 		$.ajax({
 			method : 'get',
 			url : '/summoner/getRanking',
 			data : {match_id : '${match_id}'}
 		}).done(res=>{
 			console.log(res)
+			let plyaersDamage = [];
+			let playersTaken = [];
+			let playersKills = [];
+			let playersDeaths = [];
+			let playersAssists = [];
+			let playersGolds = [];
+			let playersRedWards = [];
+			let playersCS = [];
+			
+			$.each(res.dealtDamage, function(i, dealt){
+				playersDamage.push({name : res.summoner_name, dealtDamage : dealt});
+			});
+			playersDamage.sort((a, b) => b.dealtDamage - a.dealtDamage);
+			let playersDamageRank = playersDamage.findIndex(player => player.name === summoner_name) + 1;
+			let thisSummonerDealt = playersDamage.findIndex(player => player.name === summoner_name);
+			
+			$.each(res.takenDamage, function(i, taken){
+				playersTaken.push({name : res.summoner_name, takenDamage : taken});
+			});
+			playersTaken.sort((a, b) => b.takenDamage - a.takenDamage);
+			let playersTakenRank = playersTaken.findIndex(player => player.name === summoner_name) + 1;
+			let thisSummonerTaken = playersTaken.findIndex(player => player.name === summoner_name);
+			
+			$.each(res.kills, function(i, kills){
+				playersKills.push({name : res.summoner_name, Kills : kills});
+			});
+			playersKills.sort((a, b) => b.Kills - a.Kills);
+			let playersKillsRank = playersKills.findIndex(player => player.name === summoner_name) + 1;
+			let thisSummonerKills = playersKills.findIndex(player => player.name === summoner_name);
+			
+			$.each(res.deaths, function(i, deaths){
+				playersDeaths.push({name : res.summoner_name, deaths : deaths});
+			});
+			playersDeaths.sort((a, b) => b.deaths - a.deaths);
+			let playersDeathsRank = playersDeaths.findIndex(player => player.name === summoner_name) + 1;
+			let thisSummonerDeaths = playersDeaths.findIndex(player => player.name === summoner_name);
+			
+			$.each(res.assists, function(i, assists){
+				playersAssists.push({name : res.summoner_name, assists : dealt});
+			});
+			playersAssists.sort((a, b) => b.assists - a.assists);
+			let playersAssistsRank = playersAssists.findIndex(player => player.name === summoner_name) + 1;
+			let thisSummonerAssists = playersAssists.findIndex(player => player.name === summoner_name);
+			
+			$.each(res.golds, function(i, golds){
+				playersGolds.push({name : res.summoner_name, golds : golds});
+			});
+			playersGolds.sort((a, b) => b.golds - a.golds);
+			let playersGoldsRank = playersGolds.findIndex(player => player.name === summoner_name) + 1;
+			let thisSummonerGolds = playersGolds.findIndex(player => player.name === summoner_name);
+			
+			$.each(res.redWards, function(i, redWards){
+				playersRedWards.push({name : res.summoner_name, redWards : redWards});
+			});
+			playersRedWards.sort((a, b) => b.redWards - a.redWards);
+			let playersRedWardsRank = playersRedWards.findIndex(player => player.name === summoner_name) + 1;
+			let thisSummonerRedWards = playersRedWards.findIndex(player => player.name === summoner_name);
+			
+			$.each(res.CS, function(i, CS){
+				playersCS.push({name : res.summoner_name, CS : CS});
+			});
+			playersDamage.sort((a, b) => b.dealtDamage - a.dealtDamage);
+			let playersCSRank = playersCS.findIndex(player => player.name === summoner_name) + 1;
+			let thisSummonerCS = playersCS.findIndex(player => player.name === summoner_name)
+			
+			let dealtDiv = $('<div></div>');
+			let takenDiv = $('<div></div>');
+			let killsDiv = $('<div></div>');
+			let deathsDiv = $('<div></div>');
+			let assistsDiv = $('<div></div>');
+			let goldsDiv = $('<div></div>');
+			let redWardsDiv = $('<div></div>');
+			let csDiv = $('<div></div>');
+			
+			let dealtTitle = $('<div><p>피해량</p></div>');
+			let dealtRank = $('<div>'+playersDamageRank+'위</div>');
+			let dealtGraph = $('<div></div>');
+			let dealtText = $('<div><span><strong>'+thisSummonerDealt+'</strong><span>/'+res.team_dealt+'</span></span></div>');
+			dealtDiv.append(dealtTitle,dealtRank,dealtGraph,dealtText);
+			
+			let takenTitle = $('<div><p>받은 피해량</p></div>');
+			let takenRank = $('<div>'+playersTakenRank+'위</div>');
+			let takenGraph = $('<div></div>');
+			let takenText = $('<div><span><strong>'+thisSummonerTanken+'</strong><span>/'+res.team_taken+'</span></span></div>');
+			takenDiv.append(takenTitle,takenRank,takenGraph,takenText);
+			
+			let killsTitle = $('<div><p>킬</p></div>');
+			let killsRank = $('<div>'+playersKillsRank+'위</div>');
+			let killsGraph = $('<div></div>');
+			let killsText = $('<div><span><strong>'+thisSummonerKills+'</strong><span>/'+res.team_kills+'</span></span></div>');
+			killsDiv.append(killsTitle,killsRank,killsGraph,killsText);
+			
+			let deathsTitle = $('<div><p>데스</p></div>');
+			let deathsRank = $('<div>'+playersDeathsRank+'위</div>');
+			let deathsGraph = $('<div></div>');
+			let deathsText = $('<div><span><strong>'+thisSummonerDeaths+'</strong><span>/'+res.team_deaths+'</span></span></div>');
+			deathsDiv.append(deathsTitle,deathsRank,deathsGraph,deathsText);
+			
+			let assistsTitle = $('<div><p>어시스트</p></div>');
+			let asssitsRank = $('<div>'+playersAssistsRank+'위</div>');
+			let assistsGraph = $('<div></div>');
+			let assistsText = $('<div><span><strong>'+thisSummonerAssists+'</strong><span>/'+res.team_assists+'</span></span></div>');
+			assistsDiv.append(assistsTitle,assistsRank,assistsGraph,assistsText);
+			
+			let goldsTitle = $('<div><p>골드 획득량</p></div>');
+			let goldsRank = $('<div>'+playersGoldsRank+'위</div>');
+			let goldsGraph = $('<div></div>');
+			let goldsText = $('<div><span><strong>'+thisSummonerGolds+'</strong><span>/'+res.team_golds+'</span></span></div>');
+			goldsDiv.append(goldsTitle,goldsRank,goldsGraph,goldsText);
+			
+			let redWardsTitle = $('<div><p>제어와드</p></div>');
+			let redWardsRank = $('<div>'+playersRedWardsRank+'위</div>');
+			let redWardsGraph = $('<div></div>');
+			let redWardsText = $('<div><span><strong>'+thisSummonerRedWards'</strong><span>/'+res.team_redWards+'</span></span></div>');
+			redWardsDiv.append(redWardsTitle,redWardsRank,redWardsGraph,redWardsText);
+			
+			let CSTitle = $('<div><p>CS</p></div>');
+			let CSRank = $('<div>'+playersCSRank+'위</div>');
+			let CSGraph = $('<div></div>');
+			let CSText = $('<div><span><strong>'+thisSummonerCS+'</strong><span>/'+res.team_CS+'</span></span></div>');
+			CSDiv.append(CSTitle,CSRank,CSGraph,CSText);
+			
+			let data_div = $('<div></div>');
+			data_div.append(dealtDiv, takenDiv, killsDiv, deathsDiv, assistsDiv, goldsDiv, redWardsDiv, CSDiv);
+			
+			$('.build_info').html(data_div);
 		}).fail(err=>{
 			console.log(err)
-		})
-	})
+		});
+	});
 	
 	
 	$('.rank_filter').click(function(){
