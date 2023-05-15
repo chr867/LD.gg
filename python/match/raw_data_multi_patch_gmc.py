@@ -11,7 +11,7 @@ import multiprocessing as mp
 import logging
 tqdm.pandas()
 
-riot_api_keys = private.riot_api_key_array
+riot_api_keys = private.riot_api_key_array_summoner
 
 # 티어별 유저 이름, 이름으로 puuid, puuid로 match id
 def load_summoner_names_worker():
@@ -88,7 +88,7 @@ def get_match_info_worker(args):
     match_ids, n = args
     _match_ids = list(match_ids)
     _result = []
-    api_key = riot_api_keys[n]
+    api_key = private.riot_api_key_array[n]
     tmp = set()
     print('get_match_info_worker', len(_match_ids))
 

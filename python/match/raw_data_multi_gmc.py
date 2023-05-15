@@ -11,7 +11,7 @@ import multiprocessing as mp
 import logging
 tqdm.pandas()
 
-riot_api_keys = private.riot_api_key_array
+riot_api_keys = private.riot_api_key_array_summoner
 
 # 티어별 유저 이름, 이름으로 puuid, puuid로 match id
 def load_summoner_names_worker():
@@ -46,7 +46,7 @@ def load_summoner_names_worker():
         random.shuffle(name_lst)
 
         match_set = set()
-        for summoner_name in tqdm(name_lst[:50]):
+        for summoner_name in tqdm(name_lst[:25]):
             while True:
                 index = 0
                 start = 1673485200  # 시즌 시작 Timestamp
@@ -91,7 +91,7 @@ def load_summoner_names_worker():
 def get_match_info_worker(args):
     _match_ids, i = args
     _result = []
-    api_key = riot_api_keys[i]
+    api_key = private.riot_api_key_array[i]
     tmp = set()
     random.shuffle(_match_ids)
 

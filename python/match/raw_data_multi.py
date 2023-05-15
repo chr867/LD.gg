@@ -58,7 +58,7 @@ def load_summoner_names_worker(worker_id):
         random.shuffle(name_lst)
 
         match_set = set()
-        for summoner_name in tqdm(name_lst[:15]):
+        for summoner_name in tqdm(name_lst[:25]):
             while True:
                 index = 0
                 start = 1673362800
@@ -105,7 +105,7 @@ def get_match_info_worker(args):
     tmp = set()
     random.shuffle(_match_ids)
 
-    for match_id in tqdm(_match_ids[:12]):  # 수정점
+    for match_id in tqdm(_match_ids[:500]):  # 수정점
         while True:
             try:
                 get_match_url = f'https://asia.api.riotgames.com/lol/match/v5/matches/{match_id}?api_key={api_key}'
