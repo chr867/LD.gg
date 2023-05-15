@@ -279,12 +279,14 @@ th {
 	<div id="mentor_class_info">
 	</div>
 	<script>
+	// 선택한 포지션 값을 저장할 배열
+	let positions = [];
+	// 이미 추가된 챔피언들의 ID를 저장할 배열
+	let top_selectedChampions = [];
 	
 	$(document).ready(function () {
 		displaySpecializedPosition(); //멘토 특화 포지션을 인풋창에 출력
 		select_by_email_class();
-		// 선택한 포지션 값을 저장할 배열
-		let positions = [];
 		
 		$(".champ-selector-inner").click(function () { //챔피언 선택 펼치기
 			if ($(".filter-champ-wrap").css('display') === 'none') {
@@ -294,8 +296,6 @@ th {
 			}
 		});
 		
-		// 이미 추가된 챔피언들의 ID를 저장할 배열
-		let top_selectedChampions = [];
 
 		$.ajax({ //챔피언 목록 가져오기
 		    url: "/mentor/get-all-champ",
@@ -398,29 +398,6 @@ th {
 		});
 
 		
-		//멘토 프로필 가져오기
-		function displaySpecializedPosition(){
-		$.ajax({
-		  url: '/mentor/get-mentor-profile',
-		  type: 'POST',
-		  contentType: 'application/json;charset=UTF-8',
-		  data: JSON.stringify({ mentor_email: '${member.email}' }),
-		  success: function(data) {
-			  let sp = JSON.parse(data);
-			  let mpsp = JSON.parse(sp.specialized_position);
-			  positions = mpsp;
-			  if (mpsp.length == 2) {
-				    $('#specializedPosition').val(mpsp[0] + '/' + mpsp[1]);
-				  } else {
-				    $('#specializedPosition').val(mpsp[0]);
-				  }
-		  },
-		  error: function(xhr, status, error) {
-		    console.log(error);
-		  }
-		});
-		}
-		
 		$("#submit-btn").click(function(e){
 			e.preventDefault();
 			submitForm();
@@ -434,6 +411,7 @@ th {
 			    const position = $(this).text();
 			    if (position !== "") {  // 빈 문자열이 아닌 경우에만 추가
 			      positions.push(position);
+			    	console.log(positions)
 			    }
 			  });
 			  // 선택된 버튼이 두 개 이상인 경우, 나머지 버튼들은 선택 해제
@@ -450,164 +428,7 @@ th {
 		}, function () {
 			$(this).removeClass("mouse-over");
 		});
-		
-		function submitForm() {
-			  let formData = new FormData($('#mentorProfileForm')[0]);
-			  $.ajax({
-			    url: '/mentor/edit-profile/',
-			    type: 'PUT',
-			    contentType: 'application/json;charset=UTF-8',
-			    data: JSON.stringify({
-			      mentor_email: '${email}',
-			      about_mentor: formData.get('about_mentor'),
-			      specialized_position: JSON.stringify(positions),
-			      top_specialized_champion: formData.get('top_specialized_champion'),
-			      contact_time: formData.get('contact_time'),
-			      careers: formData.get('careers'),
-			      recom_ment: formData.get('recom_ment')
-			    }),
-			    success: function(data) {
-			    	console.log("프로필 작성 성공");
-			        displaySpecializedPosition();
-			      },
-			      error: function(error) {
-			          console.log(error);
-			      }
-			  });
-			  return false;
-			}
-		
-		function deleteClass(class_id) {
-			  $.ajax({
-			    url: "/mentor/delete-mentor-class/",
-			    type: "DELETE",
-			    contentType: "application/json;charset=UTF-8",
-			    data: class_id,
-			    success: function() {
-			      select_by_email_class();
-			      alert("클래스 삭제 성공");
-			    },
-			    error: function() {
-			      console.error("멘토 클래스 삭제 실패");
-			    }
-			  });
-			}
-			
-		function classSubmitForm() {
-			  let formData = $("#classForm").serializeArray();
-			  let mentorClassDTO = {};
-			  $.each(formData, function(index, field){
-			    mentorClassDTO[field.name] = field.value;
-			  });
-			  mentorClassDTO.mentor_email = "${mentor_profile.mentor_email}";
-			  mentorClassDTO.price = parseInt(mentorClassDTO.price);
-			  $.ajax({
-			    url: "/mentor/insert-mentor-class/",
-			    type: "POST",
-			    contentType: "application/json;charset=UTF-8",
-			    data: JSON.stringify(mentorClassDTO),
-			    success: function () {
-			      select_by_email_class();
-			    },
-			    error: function () {
-			      alert("클래스 추가에 실패했습니다.");
-			    }
-			  });
-			  return false;
-			}
 
-	  	
-		function toggleTable() {
-			  let table = $('.scrollable-table');
-			  if (table.css('display') === 'none') {
-			    table.css('display', 'block');
-			  } else {
-			    table.css('display', 'none');
-			  }
-			}
-	    
-		function submitTagForm(tagList) {
-			  let jsonData = JSON.stringify(tagList);
-			  $.ajax({
-			    url: "/mentor/edit-mentor-tag/",
-			    type: "PUT",
-			    contentType: "application/json;charset=UTF-8",
-			    data: jsonData,
-			    success: function () {
-			      console.log("멘토 태그가 저장되었습니다.");
-			    },
-			    error: function () {
-			      console.error("멘토 태그 저장에 실패했습니다.");
-			    }
-			  });
-			  return false;
-			}
-
-
-		function deleteMentorTag() {
-			  let mentorEmail = "${mentor_profile.mentor_email}";
-			  $.ajax({
-			    url: "/mentor/delete-mentor-tag",
-			    type: "DELETE",
-			    contentType: "application/json;charset=UTF-8",
-			    data: mentorEmail,
-			    success: function () {
-			      let checkboxes = $("input[name='selected_tags']");
-			      let tagList = [];
-			      for (let i = 0; i < checkboxes.length; i++) {
-			        if (checkboxes[i].checked) {
-			          let tag = checkboxes[i].value;
-			          let data = {
-			            mentor_email: "${mentor_profile.mentor_email}",
-			            tag_id: tag,
-			          };
-			          tagList.push(data);
-			        }
-			      }
-			      submitTagForm(tagList); // 태그 저장 함수 호출
-			      alert("멘토 태그가 저장되었습니다.");
-			    },
-			    error: function () {
-			    	alert("멘토 태그 저장에 실패했습니다.");
-			    }
-			  });
-			}
-		
-		function select_by_email_class() {
-			  const lol_account = "${member.lol_account}";
-			  $.ajax({
-			    url: "/mentor/select-mentor-class?lol_account=" + lol_account,
-			    type: "GET",
-			    contentType: "application/json;charset=UTF-8",
-			    success: function (class_list) {
-			    	let classList = JSON.parse(class_list);
-			    	console.log(classList);
-			    	
-			      const $mentorClassInfo = $("#mentor_class_info");
-			      $mentorClassInfo.empty();
-
-			      classList.forEach((mentorClass) => {
-			        const classHtml = '<div id="container_by_class">' +
-			          '<div>' +
-			          '<h4>' + mentorClass.class_name + '</h4>' +
-			          '<button class="deleteButton" id="' + mentorClass.class_id + '">삭제</button>' +
-			          '</div>' +
-			          '<div>' +
-			          '<h4>' + mentorClass.price + '</h4>' +
-			          '</div>' +
-			          '<div>' +
-			          '<h4>' + mentorClass.class_info + '</h4>' +
-			          '</div>' +
-			          '</div>';
-
-			        $mentorClassInfo.append(classHtml);
-			      });
-			    },
-			    error: function (xhr, status, error) {
-			      console.error(error);
-			    },
-			  });
-			}
 		
 		$(document).on("click", ".deleteButton", function(){
 		    // 버튼 클릭시 실행할 함수
@@ -618,7 +439,188 @@ th {
 
 	});
 	
+
+	//멘토 프로필 가져오기
+	function displaySpecializedPosition(){
+	$.ajax({
+	  url: '/mentor/get-mentor-profile',
+	  type: 'POST',
+	  contentType: 'application/json;charset=UTF-8',
+	  data: JSON.stringify({ mentor_email: '${member.email}' }),
+	  success: function(data) {
+		  let sp = JSON.parse(data);
+		  let mpsp = JSON.parse(sp.specialized_position);
+		  positions = mpsp;
+		  if (mpsp.length == 2) {
+			    $('#specializedPosition').val(mpsp[0] + '/' + mpsp[1]);
+			  } else {
+			    $('#specializedPosition').val(mpsp[0]);
+			  }
+	  },
+	  error: function(xhr, status, error) {
+	    console.log(error);
+	  }
+	});
+	}
 	
+	function submitForm() {
+		  let formData = new FormData($('#mentorProfileForm')[0]);
+		  $.ajax({
+		    url: '/mentor/edit-profile/',
+		    type: 'PUT',
+		    contentType: 'application/json;charset=UTF-8',
+		    data: JSON.stringify({
+		      mentor_email: '${email}',
+		      about_mentor: formData.get('about_mentor'),
+		      specialized_position: JSON.stringify(positions),
+		      top_specialized_champion: formData.get('top_specialized_champion'),
+		      contact_time: formData.get('contact_time'),
+		      careers: formData.get('careers'),
+		      recom_ment: formData.get('recom_ment')
+		    }),
+		    success: function(data) {
+		    	console.log("프로필 작성 성공");
+		        displaySpecializedPosition();
+		      },
+		      error: function(error) {
+		          console.log(error);
+		      }
+		  });
+		  return false;
+		}
+	
+	function deleteClass(class_id) {
+		  $.ajax({
+		    url: "/mentor/delete-mentor-class/",
+		    type: "DELETE",
+		    contentType: "application/json;charset=UTF-8",
+		    data: class_id,
+		    success: function() {
+		      select_by_email_class();
+		      alert("클래스 삭제 성공");
+		    },
+		    error: function() {
+		      console.error("멘토 클래스 삭제 실패");
+		    }
+		  });
+		}
+		
+	function classSubmitForm() {
+		  let formData = $("#classForm").serializeArray();
+		  let mentorClassDTO = {};
+		  $.each(formData, function(index, field){
+		    mentorClassDTO[field.name] = field.value;
+		  });
+		  mentorClassDTO.mentor_email = "${mentor_profile.mentor_email}";
+		  mentorClassDTO.price = parseInt(mentorClassDTO.price);
+		  $.ajax({
+		    url: "/mentor/insert-mentor-class/",
+		    type: "POST",
+		    contentType: "application/json;charset=UTF-8",
+		    data: JSON.stringify(mentorClassDTO),
+		    success: function () {
+		    	alert("클래스 추가 성공");
+		      select_by_email_class();
+		    },
+		    error: function () {
+		      alert("클래스 추가에 실패했습니다.");
+		    }
+		  });
+		  return false;
+		}
+
+	
+	function toggleTable() {
+		  let table = $('.scrollable-table');
+		  if (table.css('display') === 'none') {
+		    table.css('display', 'block');
+		  } else {
+		    table.css('display', 'none');
+		  }
+		}
+  
+	function submitTagForm(tagList) {
+		  let jsonData = JSON.stringify(tagList);
+		  $.ajax({
+		    url: "/mentor/edit-mentor-tag/",
+		    type: "PUT",
+		    contentType: "application/json;charset=UTF-8",
+		    data: jsonData,
+		    success: function () {
+		    	alert("멘토 태그가 저장되었습니다.");
+		    },
+		    error: function () {
+		    	alert("멘토 태그 저장에 실패했습니다.");
+		    }
+		  });
+		  return false;
+		}
+
+
+	function deleteMentorTag() {
+		  let mentorEmail = "${mentor_profile.mentor_email}";
+		  $.ajax({
+		    url: "/mentor/delete-mentor-tag",
+		    type: "DELETE",
+		    contentType: "application/json;charset=UTF-8",
+		    data: mentorEmail,
+		    success: function () {
+		      let checkboxes = $("input[name='selected_tags']");
+		      let tagList = [];
+		      for (let i = 0; i < checkboxes.length; i++) {
+		        if (checkboxes[i].checked) {
+		          let tag = checkboxes[i].value;
+		          let data = {
+		            mentor_email: "${mentor_profile.mentor_email}",
+		            tag_id: tag,
+		          };
+		          tagList.push(data);
+		        }
+		      }
+		      submitTagForm(tagList); // 태그 저장 함수 호출
+		      alert("멘토 태그가 저장되었습니다.");
+		    },
+		    error: function () {
+		    	alert("멘토 태그 저장에 실패했습니다.");
+		    }
+		  });
+		}
+	
+	function select_by_email_class() {
+		  const lol_account = "${member.lol_account}";
+		  $.ajax({
+		    url: "/mentor/select-mentor-class?lol_account=" + lol_account,
+		    type: "GET",
+		    contentType: "application/json;charset=UTF-8",
+		    success: function (class_list) {
+		    	let classList = JSON.parse(class_list);
+		    	console.log(classList);
+		    	
+		      const $mentorClassInfo = $("#mentor_class_info");
+		      $mentorClassInfo.empty();
+
+		      classList.forEach((mentorClass) => {
+		        const classHtml = '<div id="container_by_class">' +
+		          '<div>' +
+		          '<h4>' + mentorClass.class_name + '</h4>' +
+		          '<button class="deleteButton" id="' + mentorClass.class_id + '">삭제</button>' +
+		          '</div>' +
+		          '<div>' +
+		          '<h4>' + mentorClass.price + '</h4>' +
+		          '</div>' +
+		          '<div>' +
+		          '<h4>' + mentorClass.class_info + '</h4>' +
+		          '</div>' +
+		          '</div>';
+
+		        $mentorClassInfo.append(classHtml);
+		      });
+		    },
+		    error: function (xhr, status, error) {
+		      console.error(error);
+		    },
+		  });
+		}
 
 
 	
