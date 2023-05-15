@@ -10,8 +10,6 @@ import json
 import multiprocessing as mp
 import logging
 import os
-os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 tqdm.pandas()
 
 riot_api_keys = private.riot_api_key_array
@@ -57,28 +55,28 @@ def load_summoner_names_worker(worker_id):
         print('load_summoner_names END', worker_id, len(name_set))
         name_lst = list(name_set)
         match_set = set()
-        for summoner_name in tqdm(name_lst[:50]):
+        for summoner_name in tqdm(name_lst[:25]):
             while True:
                 index = 0
                 start = 1680620400  # 최근 3패치 사용 오래 된 패치 날짜
                 # 13.7 패치 4월 5일 13.8패치 4월 19일 13.9 5월 3일
                 # tmp = 1683904393839
                 try:
-
                     url = f'https://kr.api.riotgames.com/lol/summoner/v4/summoners/{summoner_name}?api_key={api_key}'
                     res = requests.get(url).json()
                     puuid = res['puuid']
 
                     while True:
-                        try:
-                            url = f'https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?startTime={start}&type=ranked&start={index}&count=100&api_key={api_key}'
-                            res = requests.get(url).json()
-                            index += 100
-                            match_set.update(res)
-                        except:
-                            print(f'{res["status"]["message"]}, {api_key}')
+                        url = f'https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?startTime={start}&type=ranked&start={index}&count=100&api_key={api_key}'
+                        res = requests.get(url).json()
+                        index += 100
+                        if len(res) == 1:
+                            print(res)
                             time.sleep(20)
                             continue
+
+                        match_set.update(res)
+                        print(len(res))
 
                         if len(res) < 10:
                             break
@@ -159,6 +157,7 @@ def df_refine(df):
         matches = {
             'gameDuration': match_info['gameDuration'],
             'gameVersion': match_info['gameVersion'],
+            'gameMode': match_info['gameMode'],
             'participants': []
         }
 
@@ -189,8 +188,10 @@ def df_refine(df):
                 'totalMinionsKilled': participant_list[userNum]['totalMinionsKilled'],
                 'championName': participant_list[userNum]['championName'],
                 'championId': participant_list[userNum]['championId'],
+                'champ_level': participant_list[userNum]['champLevel'],
                 'champExperience': participant_list[userNum]['champExperience'],
                 'win': participant_list[userNum]['win'],
+                'total_damage_dealt': participant_list[userNum]['totalDamageDealt'],
                 'totalDamageDealtToChampions': participant_list[userNum]['totalDamageDealtToChampions'],
                 'damageDealtToObjectives': participant_list[userNum]['damageDealtToObjectives'],
                 'totalDamageTaken': participant_list[userNum]['totalDamageTaken'],
@@ -207,15 +208,27 @@ def df_refine(df):
                 'tripleKills': participant_list[userNum]['tripleKills'],
                 'quadraKills': participant_list[userNum]['quadraKills'],
                 'pentaKills': participant_list[userNum]['pentaKills'],
+                'red_ward_placed': participant_list[userNum]['detectorWardsPlaced'],
+                'sight_point': participant_list[userNum]['visionScore'],
+                'total_gold': participant_list[userNum]['goldEarned'],
+                'timeCCingOthers': participant_list[userNum]['timeCCingOthers']
             }
             matches['participants'].append(participant_dict)
+
+            if userNum <= 4:
+                team_idx = 0
+            else:
+                team_idx = 1
+
+            objectives = [match_info['teams'][team_idx]['objectives']]
+            matches['participants'][userNum]['objectives'] = objectives
 
         ban_list = []
         for team in team_list:
             for ban in team['bans']:
                 ban_list.append(ban['championId'])
-
         matches['bans'] = ban_list
+
         return matches
 
     def time_line_data(df):
@@ -225,7 +238,7 @@ def df_refine(df):
             events = []
             for event in frame['events']:
                 if event['type'] == 'SKILL_LEVEL_UP' or event['type'] == 'ITEM_PURCHASED' \
-                        or event['type'] == 'BUILDING_KILL':
+                        or event['type'] == 'BUILDING_KILL' or event['type'] == 'ELITE_MONSTER_KILL':
                     events.append(event)
             result['events'].extend(events)
             try:

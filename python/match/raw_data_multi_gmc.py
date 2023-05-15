@@ -11,12 +11,11 @@ import multiprocessing as mp
 import logging
 tqdm.pandas()
 
-riot_api_keys = private.riot_api_key_array
+riot_api_keys = private.riot_api_key_array_summoner
 
 # 티어별 유저 이름, 이름으로 puuid, puuid로 match id
 def load_summoner_names_worker():
-    api_it = iter(riot_api_keys)
-    api_key = next(api_it)
+    api_key = riot_api_keys[0]
     tier_division = ['C', 'GM', 'M']
     name_set = set()
 
@@ -31,7 +30,7 @@ def load_summoner_names_worker():
             try:
                 res_p = requests.get(url).json()
                 for summoner in res_p['entries']:
-                    name_set.add(summoner['summonerId'])
+                    name_set.add(summoner['summonerName'])
             except Exception:
                 if 'Forbidden' in res_p['status']['message']:
                     break
@@ -42,31 +41,38 @@ def load_summoner_names_worker():
             break
 
         print('load_summoner_names END')
+
         name_lst = list(name_set)
         random.shuffle(name_lst)
-
         match_set = set()
-        for summoner_name in tqdm(name_lst[:50]):
+        api_it = iter(riot_api_keys)
+        for summoner_name in tqdm(name_lst[:25]):
+            try:
+                api_key = next(api_it)
+            except StopIteration:
+                api_it = iter(riot_api_keys)
+                api_key = next(api_it)
+
             while True:
                 index = 0
-                start = 1673485200  # 시즌 시작 Timestamp
+                start = 1673362800  # 시즌 시작 Timestamp
                 # tmp = 1683438967290
                 try:
-
-                    url = f'https://kr.api.riotgames.com/lol/summoner/v4/summoners/{summoner_name}?api_key={api_key}'
+                    url = f'https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/{summoner_name}?api_key={api_key}'
                     res = requests.get(url).json()
                     puuid = res['puuid']
 
                     while True:
-                        try:
-                            url = f'https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?startTime={start}&type=ranked&start={index}&count=100&api_key={api_key}'
-                            res = requests.get(url).json()
-                            index += 100
-                            match_set.update(res)
-                        except:
-                            print(f'{res["status"]["message"]}, {api_key}')
-                            time.sleep(20)
+                        url = f'https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?startTime={start}&type=ranked&start={index}&count=100&api_key={api_key}'
+                        res = requests.get(url).json()
+                        index += 100
+                        if len(res) == 1:
+                            print(res)
+                            time.sleep(5)
                             continue
+
+                        match_set.update(res)
+                        print(f'{i} = {len(res)}')
 
                         if len(res) < 10:
                             break
@@ -91,7 +97,7 @@ def load_summoner_names_worker():
 def get_match_info_worker(args):
     _match_ids, i = args
     _result = []
-    api_key = riot_api_keys[i]
+    api_key = private.riot_api_key_array[i]
     tmp = set()
     random.shuffle(_match_ids)
 
@@ -142,6 +148,7 @@ def df_refine(df):
         matches = {
             'gameDuration': match_info['gameDuration'],
             'gameVersion': match_info['gameVersion'],
+            'gameMode': match_info['gameMode'],
             'participants': []
         }
 
@@ -172,8 +179,10 @@ def df_refine(df):
                 'totalMinionsKilled': participant_list[userNum]['totalMinionsKilled'],
                 'championName': participant_list[userNum]['championName'],
                 'championId': participant_list[userNum]['championId'],
+                'champ_level': participant_list[userNum]['champLevel'],
                 'champExperience': participant_list[userNum]['champExperience'],
                 'win': participant_list[userNum]['win'],
+                'total_damage_dealt': participant_list[userNum]['totalDamageDealt'],
                 'totalDamageDealtToChampions': participant_list[userNum]['totalDamageDealtToChampions'],
                 'damageDealtToObjectives': participant_list[userNum]['damageDealtToObjectives'],
                 'totalDamageTaken': participant_list[userNum]['totalDamageTaken'],
@@ -190,8 +199,21 @@ def df_refine(df):
                 'tripleKills': participant_list[userNum]['tripleKills'],
                 'quadraKills': participant_list[userNum]['quadraKills'],
                 'pentaKills': participant_list[userNum]['pentaKills'],
+                'red_ward_placed': participant_list[userNum]['detectorWardsPlaced'],
+                'sight_point': participant_list[userNum]['visionScore'],
+                'total_gold': participant_list[userNum]['goldEarned'],
+                'timeCCingOthers': participant_list[userNum]['timeCCingOthers']
             }
+
             matches['participants'].append(participant_dict)
+
+            if userNum <= 4:
+                team_idx = 0
+            else:
+                team_idx = 1
+
+            objectives = [match_info['teams'][team_idx]['objectives']]
+            matches['participants'][userNum]['objectives'] = objectives
 
         ban_list = []
         for team in team_list:
@@ -199,6 +221,7 @@ def df_refine(df):
                 ban_list.append(ban['championId'])
 
         matches['bans'] = ban_list
+
         return matches
 
     def time_line_data(df):
@@ -208,7 +231,7 @@ def df_refine(df):
             events = []
             for event in frame['events']:
                 if event['type'] == 'SKILL_LEVEL_UP' or event['type'] == 'ITEM_PURCHASED' \
-                        or event['type'] == 'BUILDING_KILL':
+                        or event['type'] == 'BUILDING_KILL' or event['type'] == 'ELITE_MONSTER_KILL':
                     events.append(event)
             result['events'].extend(events)
             try:

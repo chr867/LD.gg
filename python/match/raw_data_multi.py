@@ -68,15 +68,16 @@ def load_summoner_names_worker(worker_id):
                     puuid = res['puuid']
 
                     while True:
-                        try:
-                            url = f'https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?startTime={start}&type=ranked&start={index}&count=100&api_key={api_key}'
-                            res = requests.get(url).json()
-                            index += 100
-                            match_set.update(res)
-                        except:
-                            print(f'{res["status"]["message"]}, {api_key}')
+                        url = f'https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?startTime={start}&type=ranked&start={index}&count=100&api_key={api_key}'
+                        res = requests.get(url).json()
+                        index += 100
+                        if len(res) == 1:
+                            print(res)
                             time.sleep(20)
                             continue
+
+                        match_set.update(res)
+                        print(len(match_set))
 
                         if len(res) < 10:
                             break
@@ -105,7 +106,7 @@ def get_match_info_worker(args):
     tmp = set()
     random.shuffle(_match_ids)
 
-    for match_id in tqdm(_match_ids[:800]):  # 수정점
+    for match_id in tqdm(_match_ids):  # 수정점
         while True:
             try:
                 get_match_url = f'https://asia.api.riotgames.com/lol/match/v5/matches/{match_id}?api_key={api_key}'
@@ -153,6 +154,7 @@ def df_refine(df):
         matches = {
             'gameDuration': match_info['gameDuration'],
             'gameVersion': match_info['gameVersion'],
+            'gameMode': match_info['gameMode'],
             'participants': []
         }
 
@@ -184,8 +186,10 @@ def df_refine(df):
                     'totalMinionsKilled': participant_list[userNum]['totalMinionsKilled'],
                     'championName': participant_list[userNum]['championName'],
                     'championId': participant_list[userNum]['championId'],
+                    'champ_level': participant_list[userNum]['champLevel'],
                     'champExperience': participant_list[userNum]['champExperience'],
                     'win': participant_list[userNum]['win'],
+                    'total_damage_dealt': participant_list[userNum]['totalDamageDealt'],
                     'totalDamageDealtToChampions': participant_list[userNum]['totalDamageDealtToChampions'],
                     'damageDealtToObjectives': participant_list[userNum]['damageDealtToObjectives'],
                     'totalDamageTaken': participant_list[userNum]['totalDamageTaken'],
@@ -202,16 +206,29 @@ def df_refine(df):
                     'tripleKills': participant_list[userNum]['tripleKills'],
                     'quadraKills': participant_list[userNum]['quadraKills'],
                     'pentaKills': participant_list[userNum]['pentaKills'],
+                    'red_ward_placed': participant_list[userNum]['detectorWardsPlaced'],
+                    'sight_point': participant_list[userNum]['visionScore'],
+                    'total_gold': participant_list[userNum]['goldEarned'],
+                    'timeCCingOthers': participant_list[userNum]['timeCCingOthers']
                 }
                 matches['participants'].append(participant_dict)
             except Exception as e:
                 print(f'{e} participant, {participant_list[userNum]}, {participant_list}')
+
+            if userNum <= 4:
+                team_idx = 0
+            else:
+                team_idx = 1
+
+            objectives = [match_info['teams'][team_idx]['objectives']]
+            matches['participants'][userNum]['objectives'] = objectives
+
         ban_list = []
         for team in team_list:
             for ban in team['bans']:
                 ban_list.append(ban['championId'])
-
         matches['bans'] = ban_list
+
         return matches
 
     def time_line_data(df):
@@ -221,7 +238,7 @@ def df_refine(df):
             events = []
             for event in frame['events']:
                 if event['type'] == 'SKILL_LEVEL_UP' or event['type'] == 'ITEM_PURCHASED' \
-                        or event['type'] == 'BUILDING_KILL':
+                        or event['type'] == 'BUILDING_KILL' or event['type'] == 'ELITE_MONSTER_KILL':
                     events.append(event)
             result['events'].extend(events)
             try:
@@ -283,6 +300,7 @@ def main():
 
     refine_df = pd.concat([df_refine(row) for _, row in merged_df.iterrows()], ignore_index=True)
     sql_conn = mu.connect_mysql()
+    print(refine_df.iloc[0]['matches'])
     refine_df.progress_apply(lambda x: insert(x, sql_conn), axis=1)
     sql_conn.commit()
     sql_conn.close()

@@ -1,21 +1,18 @@
-import datetime
 import time
 import pandas as pd
 import requests
 from tqdm import tqdm
 import my_utils as mu
 import json
-import multiprocessing as mp
-import logging
-from collections import OrderedDict
+import data_load
 tqdm.pandas()
 
 sql_conn = mu.connect_mysql()
-df = pd.DataFrame(mu.mysql_execute_dict('select * from match_raw', sql_conn))
+df = data_load.patch_matches_timeline_data(0)
 sql_conn.close()
 
-df['matches'] = df.apply(lambda x: json.loads(x['matches']), axis=1)
-df['timeline'] = df.apply(lambda x: json.loads(x['timeline']), axis=1)
+df['matches'] = df.progress_apply(lambda x: json.loads(x['matches']), axis=1)
+df['timeline'] = df.progress_apply(lambda x: json.loads(x['timeline']), axis=1)
 
 df_creater = []
 columns = [
@@ -25,6 +22,7 @@ columns = [
     'g_5', 'g_6', 'g_7', 'g_8', 'g_9', 'g_10', 'g_11', 'g_12', 'g_13', 'g_14', 'g_15', 'g_16',
     'g_17', 'g_18', 'g_19', 'g_20', 'g_21', 'g_22', 'g_23', 'g_24', 'g_25'
 ]
+
 for m_idx, m in tqdm(enumerate(df['matches'])):
     if m['gameDuration'] < 900:
         continue
@@ -40,11 +38,24 @@ for m_idx, m in tqdm(enumerate(df['matches'])):
 
         tmp_lst = list(map(lambda x: x['events'], df.iloc[m_idx]['timeline'].values()))
         event_lst = [element for array in tmp_lst for element in array]
-        tower_log = [i for i in event_lst if i['type'] == 'BUILDING_KILL']
+
+        building_log = [i for i in event_lst if i['type'] == 'BUILDING_KILL']
+        tower_log = [i for i in building_log if i['buildingType'] == 'TOWER_BUILDING']
+        inhibitor_log = [i for i in building_log if i['buildingType'] == 'INHIBITOR_BUILDING']
+
+        elite_monster_log = [i for i in event_lst if i['type'] == 'ELITE_MONSTER_KILL']
+        dragon_log = [i for i in elite_monster_log if i['monsterType'] == 'DRAGON']
+        baron_log = [i for i in elite_monster_log if i['monsterType'] == 'BARON_NASHOR']
+
         tower_destroy = 0
         for event in tower_log:
             if p_idx == event['killerId']:
                 tower_destroy += 1
+
+        inhibitor_destroy = 0
+        for event in inhibitor_log:
+            if p_idx == event['killerId']:
+                inhibitor_destroy += 1
 
         if p['teamId'] == 100:
             team = 0
@@ -74,7 +85,7 @@ for m_idx, m in tqdm(enumerate(df['matches'])):
             p['deaths'],
             p['assists'],
             tower_destroy,
-            p['inhibitorKills'],
+            inhibitor_destroy,
             p['damageDealtToObjectives'],
             p['totalDamageDealtToChampions'],
             cs
@@ -90,7 +101,6 @@ for m_idx, m in tqdm(enumerate(df['matches'])):
             except:
                 df_creater[-1].append(0)
 sum_df = pd.DataFrame(df_creater, columns=columns)
-
 
 def summoner_tier(x):
     url = f'https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/{x.summonerId}?api_key={x.api_key}'
