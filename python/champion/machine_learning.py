@@ -8,6 +8,7 @@ import time
 import numpy as np
 import plotly.offline as pyo
 import plotly.graph_objs as go
+
 tqdm.pandas()
 import data_load as dl
 from scipy.stats import zscore
@@ -18,19 +19,22 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 import joblib
+
 # RIOT-API-KEY
 riot_api_key = 'RGAPI-14667a4e-7c3c-45fa-ac8f-e53c7c3f5fe1'
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 # ----------------------------------------------------------------------------------------------------------------------
 start_time = time.time()
-df = dl.match_raw_patch(10000)
+df = dl.match_raw_patch(40000)
 print("JSON 변환 시작")
 df['matches'] = df['matches'].apply(json.loads)
 df['timeline'] = df['timeline'].apply(json.loads)
 end_time = time.time()
 print("변환 시간: {:.2f}초".format(end_time - start_time))
 print("JSON 변환 종료")
+
+
 # ----------------------------------------------------------------------------------------------------------------------
 def champion_stats(df):
     def win_rate_pick_rate_data(raw_data):
@@ -44,16 +48,15 @@ def champion_stats(df):
                 result.append(lst)
 
         columns = ['championId', 'win', 'teamPosition']  # 열 추가
-        df = pd.DataFrame(result, columns=columns)
-        df['win'] = df['win'].astype(int)
-        groupBy_df = df.groupby(['championId', 'teamPosition']).agg({'win': ['sum', 'count']})
+        win_pick_df = pd.DataFrame(result, columns=columns)
+        win_pick_df['win'] = win_pick_df['win'].astype(int)
+        groupBy_df = win_pick_df.groupby(['championId', 'teamPosition']).agg({'win': ['sum', 'count']})
         groupBy_df.columns = ['winCount', 'pickCount']
-        groupBy_df['lineTotalCount'] = groupBy_df.groupby('teamPosition')['pickCount'].transform('sum')  # 각 라인별 총 픽수 계산
+        groupBy_df['lineTotalCount'] = groupBy_df.groupby('teamPosition')['pickCount'].transform('sum')
         groupBy_df['winRate'] = round((groupBy_df['winCount'] / groupBy_df['pickCount']) * 100, 2)
-        groupBy_df['pickRate'] = round((groupBy_df['pickCount'] / groupBy_df['lineTotalCount']) * 100,
-                                       2)  # 각 라인별 pickRate 계산
+        groupBy_df['pickRate'] = round((groupBy_df['pickCount'] / groupBy_df['lineTotalCount']) * 100, 2)
         groupBy_df = groupBy_df.reset_index()  # 인덱스 재설정
-        # groupBy_df = groupBy_df[['championId', 'teamPosition', 'winRate', 'pickRate']]  # 열 순서 조정
+        groupBy_df = groupBy_df[['championId', 'teamPosition', 'winRate', 'pickRate']]  # 열 순서 조정
         return groupBy_df
 
     win_rate_pick_rate_data = win_rate_pick_rate_data(df)
@@ -73,19 +76,20 @@ def champion_stats(df):
                         result.append(lst)
 
         columns = ['teamPosition', 'championId']
-        df = pd.DataFrame(result, columns=columns)
-        ban_rate_df = df.groupby(['teamPosition', 'championId']).size().reset_index(name='banCount')
+        ban_df = pd.DataFrame(result, columns=columns)
+        ban_rate_df = ban_df.groupby(['teamPosition', 'championId']).size().reset_index(name='banCount')
 
         ban_rate_df['banPositionTotal'] = ban_rate_df.groupby('teamPosition')['banCount'].transform('sum')
         ban_rate_df['banRate'] = round((ban_rate_df['banCount'] / ban_rate_df['banPositionTotal']) * 100, 2)
         ban_rate_df = ban_rate_df.dropna()
-        # ban_rate_df = ban_rate_df[['teamPosition', 'championId', 'banRate']]
+        ban_rate_df = ban_rate_df[['teamPosition', 'championId', 'banRate']]
 
         return ban_rate_df
 
     ban_rate_df = ban_rate_data(df)
 
     champion_stats_df = win_rate_pick_rate_data.merge(ban_rate_df, on=['championId', 'teamPosition'])
+
     def meta_score_data(raw_data):
         result = []
         for x in tqdm(range(len(raw_data))):
@@ -98,10 +102,11 @@ def champion_stats(df):
                 lst.append(player['totalDamageDealtToChampions'])
                 lst.append(player['totalDamageTaken'])
                 lst.append(player['timeCCingOthers'])
+                lst.append(player['total_gold'])
                 result.append(lst)
 
         columns = ['championId', 'teamPosition', 'kda', 'totalDamageDealtToChampions', 'totalDamageTaken',
-                   'timeCCingOthers']
+                   'timeCCingOthers', 'total_gold']
 
         meta_score_df = pd.DataFrame(result, columns=columns)
 
@@ -112,28 +117,38 @@ def champion_stats(df):
     meta_score_data = meta_score_data(df)
 
     result_df = champion_stats_df.merge(meta_score_data, on=['championId', 'teamPosition'])
-    result_df = result_df[result_df['pickCount'] > 10]
+    # result_df = result_df[result_df['pickCount'] > 10]
     # Z-score 계산
     result_df[['winRate', 'pickRate', 'banRate', 'kda', 'totalDamageDealtToChampions',
-               'totalDamageTaken', 'timeCCingOthers']] = result_df[['winRate', 'pickRate',
-                                                                    'banRate', 'kda', 'totalDamageDealtToChampions',
-                                                                    'totalDamageTaken',
-                                                                    'timeCCingOthers']].apply(zscore)
-
+               'totalDamageTaken', 'timeCCingOthers', 'total_gold']] = result_df[['winRate', 'pickRate',
+                                                                                  'banRate', 'kda',
+                                                                                  'totalDamageDealtToChampions',
+                                                                                  'totalDamageTaken', 'timeCCingOthers',
+                                                                                  'total_gold']].apply(zscore)
     # Z-score를 이용한 스코어 계산
-    result_df['totalScore'] = result_df['winRate'] * 0.35 + result_df['pickRate'] * 0.25 + \
-                              result_df['banRate'] * 0.2 + result_df['kda'] * 0.05 + \
+    result_df['totalScore'] = result_df['winRate'] * 0.30 + result_df['pickRate'] * 0.25 + \
+                              result_df['banRate'] * 0.15 + result_df['kda'] * 0.05 + \
                               result_df['totalDamageDealtToChampions'] * 0.05 + \
-                              result_df['totalDamageTaken'] * 0.05 + result_df['timeCCingOthers'] * 0.05
+                              result_df['totalDamageTaken'] * 0.05 + result_df['timeCCingOthers'] * 0.05 + \
+                              result_df['total_gold'] * 0.05
 
-    # totalScore를 이용하여 티어 분류
-    result_df['tier'] = pd.qcut(result_df['totalScore'], [0, .20, .40, .60, .80, .95, 1.],
-                                labels=['5', '4', '3', '2', '1', 'OP'])
+    conditions = [
+        (result_df['totalScore'] >= 2),
+        (result_df['totalScore'] >= 1.5) & (result_df['totalScore'] < 2),
+        (result_df['totalScore'] >= 0.5) & (result_df['totalScore'] < 1),
+        (result_df['totalScore'] >= 0) & (result_df['totalScore'] < 0.5),
+        (result_df['totalScore'] < 0),
+        (result_df['totalScore'] < -0.5)
+    ]
+    labels = ['OP', '1', '2', '3', '4', '5']
+    result_df['tier'] = np.select(conditions, labels, default='5')
 
     return result_df
 
+
 champion_stats = champion_stats(df)
 
+sort_stats = champion_stats.sort_values(by=['tier'], ascending=False)
 # One-Hot Encoding
 champion_stats = pd.get_dummies(champion_stats, columns=['teamPosition'])
 
@@ -152,7 +167,9 @@ model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
 print('Accuracy: ', accuracy_score(y_test, y_pred))
 
+# 모델 저장
 joblib.dump(model, 'tierMachineLearning.pkl')
+
 
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -210,6 +227,7 @@ def machine_learning_score(df):
     ban_rate_df = ban_rate_data(df)
 
     champion_stats_df = win_rate_pick_rate_data.merge(ban_rate_df, on=['championId', 'teamPosition'])
+
     def meta_score_data(raw_data):
         result = []
         for x in tqdm(range(len(raw_data))):
@@ -237,8 +255,37 @@ def machine_learning_score(df):
 
     result_df = champion_stats_df.merge(meta_score_data, on=['championId', 'teamPosition'])
     result_df = result_df[result_df['pickCount'] > 10]
+    # Z-score 계산
+    result_df[['winRate', 'pickRate', 'banRate', 'kda', 'totalDamageDealtToChampions', 'totalDamageTaken',
+               'timeCCingOthers']] = result_df[['winRate', 'pickRate', 'banRate', 'kda', 'totalDamageDealtToChampions',
+                                                'totalDamageTaken', 'timeCCingOthers']].apply(zscore)
+
+    # Z-score를 이용한 스코어 계산
+    result_df['totalScore'] = result_df['winRate'] * 0.35 + result_df['pickRate'] * 0.25 + \
+                              result_df['banRate'] * 0.2 + result_df['kda'] * 0.05 + \
+                              result_df['totalDamageDealtToChampions'] * 0.05 + \
+                              result_df['totalDamageTaken'] * 0.05 + result_df['timeCCingOthers'] * 0.05
+
+    # totalScore를 이용하여 티어 분류
+    # result_df['tier'] = pd.qcut(result_df['totalScore'], [0, .20, .40, .60, .80, .95, 1.],
+    #                           labels=['5', '4', '3', '2', '1', 'OP'])
 
     return result_df
 
 
 machine_learning_score = machine_learning_score(df)
+
+# One-Hot Encoding
+encoding_df = pd.get_dummies(machine_learning_score, columns=['teamPosition'])
+# 모델 로드
+model = joblib.load('tierMachineLearning.pkl')
+encoding_df = encoding_df.drop('tier', axis=1)  # 'tier' 열 제거
+predictions = model.predict(encoding_df)  # 예측 수행
+
+# 예측 결과를 'tier' 컬럼으로 추가
+encoding_df['tier'] = predictions
+
+testttt = encoding_df.sort_values('tier', ascending=True)
+print(machine_learning_score.columns)
+
+# ----------------------------------------------------------------------------------------------------------------------
