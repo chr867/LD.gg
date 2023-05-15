@@ -18,7 +18,10 @@
 </select>
 
 <select id="recom_mentor" resultType="mentorProfile" parameterType="String">
-	SELECT mp.mentor_email, mp.about_mentor, mp.specialized_position, mp.specialized_champion, mp.contact_time, mp.careers, mp.recom_ment
+	SELECT mp.mentor_email, mp.about_mentor, mp.specialized_position, 
+	mp.top_specialized_champion, mp.jg_specialized_champion, 
+	mp.mid_specialized_champion, mp.ad_specialized_champion, mp.sup_specialized_champion, 
+	mp.contact_time, mp.careers, mp.recom_ment
 	FROM mentor_profile AS mp
 	JOIN mentor_tag AS mt ON mp.mentor_email = mt.mentor_email
 	WHERE mt.tag_id IN (SELECT tag_id FROM menti_tag WHERE menti_email = #{menti_email})
