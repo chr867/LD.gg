@@ -690,16 +690,6 @@ def champion_stats(df):
 
 
 champion_stats = champion_stats(df)
-champion_stats[:30]
-
-
-df.iloc[0]['matches']['participants'][0]
-
-
-encoded_df = pd.get_dummies(champion_stats['teamPosition'])
-
-# 인코딩 결과 확인
-print(encoded_df)
 
 
 # 특징 선택
