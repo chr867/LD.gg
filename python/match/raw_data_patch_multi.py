@@ -55,7 +55,7 @@ def load_summoner_names_worker(worker_id):
         print('load_summoner_names END', worker_id, len(name_set))
         name_lst = list(name_set)
         match_set = set()
-        for summoner_name in tqdm(name_lst[:20]):
+        for summoner_name in tqdm(name_lst[:25]):
             while True:
                 index = 0
                 start = 1680620400  # 최근 3패치 사용 오래 된 패치 날짜

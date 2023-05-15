@@ -58,7 +58,7 @@ def load_summoner_names_worker(worker_id):
         random.shuffle(name_lst)
 
         match_set = set()
-        for summoner_name in tqdm(name_lst[:20]):
+        for summoner_name in tqdm(name_lst[:25]):
             while True:
                 index = 0
                 start = 1673362800

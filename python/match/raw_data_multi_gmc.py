@@ -46,7 +46,7 @@ def load_summoner_names_worker():
         random.shuffle(name_lst)
         match_set = set()
         api_it = iter(riot_api_keys)
-        for summoner_name in tqdm(name_lst[:20]):
+        for summoner_name in tqdm(name_lst[:25]):
             try:
                 api_key = next(api_it)
             except StopIteration:
