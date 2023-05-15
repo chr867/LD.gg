@@ -30,7 +30,7 @@ def load_summoner_names_worker():
             try:
                 res_p = requests.get(url).json()
                 for summoner in res_p['entries']:
-                    name_set.add(summoner['summonerId'])
+                    name_set.add(summoner['summonerName'])
             except Exception:
                 if 'Forbidden' in res_p['status']['message']:
                     break
@@ -46,19 +46,19 @@ def load_summoner_names_worker():
         random.shuffle(name_lst)
         match_set = set()
         api_it = iter(riot_api_keys)
-        for summoner_name in tqdm(name_lst[:25]):
+        for summoner_name in tqdm(name_lst[:20]):
+            try:
+                api_key = next(api_it)
+            except StopIteration:
+                api_it = iter(riot_api_keys)
+                api_key = next(api_it)
+
             while True:
                 index = 0
                 start = 1673362800  # 시즌 시작 Timestamp
                 # tmp = 1683438967290
                 try:
-                    api_key = next(api_it)
-                except StopIteration:
-                    api_it = iter(riot_api_keys)
-                    api_key = next(api_it)
-
-                try:
-                    url = f'https://kr.api.riotgames.com/lol/summoner/v4/summoners/{summoner_name}?api_key={api_key}'
+                    url = f'https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/{summoner_name}?api_key={api_key}'
                     res = requests.get(url).json()
                     puuid = res['puuid']
 
@@ -72,9 +72,9 @@ def load_summoner_names_worker():
                             continue
 
                         match_set.update(res)
+                        print(f'{i} = {len(res)}')
 
                         if len(res) < 10:
-                            print(len(match_set))
                             break
 
                 except Exception as e:
@@ -148,6 +148,7 @@ def df_refine(df):
         matches = {
             'gameDuration': match_info['gameDuration'],
             'gameVersion': match_info['gameVersion'],
+            'gameMode': match_info['gameMode'],
             'participants': []
         }
 
@@ -206,22 +207,20 @@ def df_refine(df):
 
             matches['participants'].append(participant_dict)
 
+            if userNum <= 4:
+                team_idx = 0
+            else:
+                team_idx = 1
+
+            objectives = [match_info['teams'][team_idx]['objectives']]
+            matches['participants'][userNum]['objectives'] = objectives
+
         ban_list = []
         for team in team_list:
             for ban in team['bans']:
                 ban_list.append(ban['championId'])
 
         matches['bans'] = ban_list
-
-        if userNum < 4:
-            team_idx = 0
-        else:
-            team_idx = 1
-
-        objectives = [{'baron': match_info['teams'][team_idx]['objectives']['baron']},
-                      {'dragon': match_info['teams'][team_idx]['objectives']['dragon']},
-                      {'riftHerald': match_info['teams'][team_idx]['objectives']['riftHerald']}]
-        matches['objectives'] = objectives
 
         return matches
 

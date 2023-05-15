@@ -55,7 +55,7 @@ def load_summoner_names_worker(worker_id):
         print('load_summoner_names END', worker_id, len(name_set))
         name_lst = list(name_set)
         match_set = set()
-        for summoner_name in tqdm(name_lst[:25]):
+        for summoner_name in tqdm(name_lst[:20]):
             while True:
                 index = 0
                 start = 1680620400  # 최근 3패치 사용 오래 된 패치 날짜
@@ -76,9 +76,9 @@ def load_summoner_names_worker(worker_id):
                             continue
 
                         match_set.update(res)
+                        print(len(res))
 
                         if len(res) < 10:
-                            print(len(match_set))
                             break
 
                 except Exception as e:
@@ -105,7 +105,7 @@ def get_match_info_worker(args):
     tmp = set()
     random.shuffle(_match_ids)
 
-    for match_id in tqdm(_match_ids[:500]):  # 수정점
+    for match_id in tqdm(_match_ids):  # 수정점
         while True:
             try:
                 get_match_url = f'https://asia.api.riotgames.com/lol/match/v5/matches/{match_id}?api_key={api_key}'
@@ -157,6 +157,7 @@ def df_refine(df):
         matches = {
             'gameDuration': match_info['gameDuration'],
             'gameVersion': match_info['gameVersion'],
+            'gameMode': match_info['gameMode'],
             'participants': []
         }
 
@@ -214,23 +215,19 @@ def df_refine(df):
             }
             matches['participants'].append(participant_dict)
 
+            if userNum <= 4:
+                team_idx = 0
+            else:
+                team_idx = 1
+
+            objectives = [match_info['teams'][team_idx]['objectives']]
+            matches['participants'][userNum]['objectives'] = objectives
+
         ban_list = []
         for team in team_list:
             for ban in team['bans']:
                 ban_list.append(ban['championId'])
-
         matches['bans'] = ban_list
-
-        if userNum < 4:
-            team_idx = 0
-        else:
-            team_idx = 1
-
-        objectives = []
-        objectives.append({'baron': match_info['teams'][team_idx]['objectives']['baron']})
-        objectives.append({'dragon': match_info['teams'][team_idx]['objectives']['dragon']})
-        objectives.append({'riftHerald': match_info['teams'][team_idx]['objectives']['riftHerald']})
-        matches['objectives'] = objectives
 
         return matches
 
