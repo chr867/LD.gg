@@ -5,18 +5,25 @@ from tqdm import tqdm
 
 import data_load
 import my_utils as mu
-
 tqdm.pandas()
 
 sql_conn = mu.connect_mysql()
-df = data_load.raw_matches_timeline_data(0)
+df = data_load.patch_matches_timeline_data(0)
 sql_conn.close()
 
-df['matches'] = df.apply(lambda x: json.loads(x['matches']), axis=1)
-df['timeline'] = df.apply(lambda x: json.loads(x['timeline']), axis=1)
+df['matches'] = df.progress_apply(lambda x: json.loads(x['matches']), axis=1)
+df['timeline'] = df.progress_apply(lambda x: json.loads(x['timeline']), axis=1)
 
 record_df_creater = []
-for idx, i in enumerate(df['matches']):
+columns = [
+    'match_id', 'summoner_name','game_duration', 'game_mode', 'champ_name', 'champ_level', 'team_id', 'win', 'kills',
+    'deaths', 'assists', 'kda', 'cs', 'main_rune', 'main_rune1', 'main_rune2', 'main_rune3', 'main_rune4', 'sub_rune',
+    'sub_rune1', 'sub_rune2', 'rune_stat1', 'rune_stat2', 'rune_stat3', 'item1', 'item2', 'item3', 'item4', 'item5',
+    'item6', 'item7', 'red_ward_placed', 'total_damage_dealt', 'dealt_to_champ', 'damage_taken', 'lane', 'spell1',
+    'spell2', 'team_baron_kills', 'team_champion_kills', 'team_champion_deaths', 'team_dragon_kills', 'team_tower_kills',
+    'sight_point'
+]
+for idx, i in tqdm(enumerate(df['matches'])):
     for p_idx, p in enumerate(i['participants']):
         if p_idx <= 4:
             versus_index = 6
@@ -25,39 +32,11 @@ for idx, i in enumerate(df['matches']):
             versus_index = 0
             deaths = i['participants'][versus_index]['objectives'][0]['champion']['kills']
 
-        tmp_lst = list(map(lambda x: x['events'], df.iloc[1]['timeline'].values()))
-        event_lst = [element for array in tmp_lst for element in array]
-
-        building_log = [i for i in event_lst if i['type'] == 'BUILDING_KILL']
-        tower_log = [i for i in building_log if i['buildingType'] == 'TOWER_BUILDING']
-        inhibitor_log = [i for i in building_log if i['buildingType'] == 'INHIBITOR_BUILDING']
-
-        elite_monster_log = [i for i in event_lst if i['type'] == 'ELITE_MONSTER_KILL']
-        dragon_log = [i for i in elite_monster_log if i['monsterType'] == 'DRAGON']
-        baron_log = [i for i in elite_monster_log if i['monsterType'] == 'BARON_NASHOR']
-
-        tower_destroy = 0
-        for event in tower_log:
-            if p_idx == event['killerId']:
-                tower_destroy += 1
-
-        inhibitor_destroy = 0
-        for event in inhibitor_log:
-            if p_idx == event['killerId']:
-                inhibitor_destroy += 1
-
-        dragon_kills = 0
-        for event in dragon_log:
-            if p_idx == event['killerId']:
-                dragon_kills += 1
-
-        baron_kills = 0
-        for event in baron_log:
-            if p_idx == event['killerId']:
-                baron_kills += 1
+        obj = p['objectives'][0]
+        row = df.iloc[idx]
 
         record_df_creater.append([
-            df.iloc[idx]['match_id'],
+            row['match_id'],
             p['summonerName'],
             i['gameDuration'],
             i['gameMode'],
@@ -70,8 +49,8 @@ for idx, i in enumerate(df['matches']):
             p['assists'],
             p['kda'],
             # cs
-            (df.iloc[idx]['timeline'][str(len(df.iloc[idx]['timeline']) - 1)]['participantFrames'][p_idx]['minionsKilled'] +
-            df.iloc[idx]['timeline'][str(len(df.iloc[idx]['timeline']) - 1)]['participantFrames'][p_idx]['jungleMinionsKilled']),
+            (row['timeline'][str(len(row['timeline']) - 1)]['participantFrames'][p_idx]['minionsKilled'] +
+            row['timeline'][str(len(row['timeline']) - 1)]['participantFrames'][p_idx]['jungleMinionsKilled']),
             p['style0'],
             p['perks0'][0],
             p['perks0'][1],
@@ -100,23 +79,15 @@ for idx, i in enumerate(df['matches']):
             p['teamPosition'],
             p['summoner1Id'],
             p['summoner2Id'],
-            baron_kills,
-            p['objectives'][0]['champion']['kills'],
+            obj['baron']['kills'],
+            obj['champion']['kills'],
             deaths,
-            dragon_kills,
-            tower_destroy,
+            obj['dragon']['kills'],
+            obj['tower']['kills'],
             p['sight_point']
         ])
 
-columns = ['match_id', 'summoner_name','game_duration', 'game_mode', 'champ_name', 'champ_level',
-           'team_id', 'win', 'kills', 'deaths', 'assists', 'kda', 'cs', 'main_rune', 'main_rune1', 'main_rune2',
-           'main_rune3', 'main_rune4', 'sub_rune', 'sub_rune1', 'sub_rune2', 'rune_stat1', 'rune_stat2', 'rune_stat3',
-           'item1', 'item2', 'item3', 'item4', 'item5', 'item6', 'item7',
-           'red_ward_placed', 'total_damage_dealt', 'dealt_to_champ', 'damage_taken', 'lane', 'spell1', 'spell2',
-           'team_baron_kills', 'team_champion_kills', 'team_champion_deaths', 'team_dragon_kills', 'team_tower_kills',
-           'sight_point']
-
-record_df = pd.DataFrame(record_df_creater, columns=columns)
+record_df = pd.DataFrame.from_records(record_df_creater, columns=columns)
 
 def insert(t, conn):
     sql = (

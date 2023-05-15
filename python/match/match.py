@@ -4,14 +4,15 @@ import requests
 from tqdm import tqdm
 import my_utils as mu
 import json
+import data_load
 tqdm.pandas()
 
 sql_conn = mu.connect_mysql()
-df = pd.DataFrame(mu.mysql_execute_dict('select * from match_raw', sql_conn))
+df = data_load.patch_matches_timeline_data(0)
 sql_conn.close()
 
-df['matches'] = df.apply(lambda x: json.loads(x['matches']), axis=1)
-df['timeline'] = df.apply(lambda x: json.loads(x['timeline']), axis=1)
+df['matches'] = df.progress_apply(lambda x: json.loads(x['matches']), axis=1)
+df['timeline'] = df.progress_apply(lambda x: json.loads(x['timeline']), axis=1)
 
 df_creater = []
 columns = [
@@ -35,7 +36,7 @@ for m_idx, m in tqdm(enumerate(df['matches'])):
         jungle_minions_killed = df.iloc[m_idx]['timeline'][game_end]['participantFrames'][p_idx]['jungleMinionsKilled']
         cs = minions_killed + jungle_minions_killed
 
-        tmp_lst = list(map(lambda x: x['events'], df.iloc[1]['timeline'].values()))
+        tmp_lst = list(map(lambda x: x['events'], df.iloc[m_idx]['timeline'].values()))
         event_lst = [element for array in tmp_lst for element in array]
 
         building_log = [i for i in event_lst if i['type'] == 'BUILDING_KILL']
@@ -100,7 +101,6 @@ for m_idx, m in tqdm(enumerate(df['matches'])):
             except:
                 df_creater[-1].append(0)
 sum_df = pd.DataFrame(df_creater, columns=columns)
-
 
 def summoner_tier(x):
     url = f'https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/{x.summonerId}?api_key={x.api_key}'
