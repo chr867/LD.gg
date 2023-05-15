@@ -229,7 +229,7 @@ def df_refine(df):
             events = []
             for event in frame['events']:
                 if event['type'] == 'SKILL_LEVEL_UP' or event['type'] == 'ITEM_PURCHASED' \
-                        or event['type'] == 'BUILDING_KILL':
+                        or event['type'] == 'BUILDING_KILL' or event['type'] == 'ELITE_MONSTER_KILL':
                     events.append(event)
             result['events'].extend(events)
             try:
