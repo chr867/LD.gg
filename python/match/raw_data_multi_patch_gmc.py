@@ -15,9 +15,9 @@ riot_api_keys = private.riot_api_key_array_summoner
 
 # 티어별 유저 이름, 이름으로 puuid, puuid로 match id
 def load_summoner_names_worker():
+    api_key = riot_api_keys[0]
     tier_division = ['C', 'GM', 'M']
     name_set = set()
-    api_key = riot_api_keys[0]
 
     for i in tqdm(tier_division):
         if i == 'C':
@@ -26,14 +26,7 @@ def load_summoner_names_worker():
             url = f'https://kr.api.riotgames.com/lol/league/v4/grandmasterleagues/by-queue/RANKED_SOLO_5x5?api_key={api_key}'
         else:  # M
             url = f'https://kr.api.riotgames.com/lol/league/v4/masterleagues/by-queue/RANKED_SOLO_5x5?api_key={api_key}'
-        api_it = iter(riot_api_keys)
         while True:
-            try:
-                api_key = next(api_it)
-            except StopIteration:
-                api_it = iter(riot_api_keys)
-                api_key = next(api_it)
-
             try:
                 res_p = requests.get(url).json()
                 for summoner in res_p['entries']:
@@ -47,12 +40,12 @@ def load_summoner_names_worker():
                 continue
             break
         print('load_summoner_names END')
+
         name_lst = list(name_set)
         random.shuffle(name_lst)
-
         match_set = set()
+        api_it = iter(riot_api_keys)
         for summoner_name in tqdm(name_lst[:25]):
-            api_it = iter(riot_api_keys)
             while True:
                 index = 0
                 start = 1680620400  # 시즌 시작 Timestamp

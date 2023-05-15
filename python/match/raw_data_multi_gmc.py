@@ -15,8 +15,7 @@ riot_api_keys = private.riot_api_key_array_summoner
 
 # 티어별 유저 이름, 이름으로 puuid, puuid로 match id
 def load_summoner_names_worker():
-    api_it = iter(riot_api_keys)
-    api_key = next(api_it)
+    api_key = riot_api_keys[0]
     tier_division = ['C', 'GM', 'M']
     name_set = set()
 
@@ -42,10 +41,11 @@ def load_summoner_names_worker():
             break
 
         print('load_summoner_names END')
+
         name_lst = list(name_set)
         random.shuffle(name_lst)
-
         match_set = set()
+        api_it = iter(riot_api_keys)
         for summoner_name in tqdm(name_lst[:25]):
             while True:
                 index = 0
