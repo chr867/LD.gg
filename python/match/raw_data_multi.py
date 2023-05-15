@@ -206,6 +206,8 @@ def df_refine(df):
                     'pentaKills': participant_list[userNum]['pentaKills'],
                     'red_ward_placed': participant_list[userNum]['detectorWardsPlaced'],
                     'sight_point': participant_list[userNum]['visionScore'],
+                    'total_gold': participant_list[userNum]['goldEarned'],
+                    'timeCCingOthers': participant_list[userNum]['timeCCingOthers']
                 }
                 matches['participants'].append(participant_dict)
             except Exception as e:

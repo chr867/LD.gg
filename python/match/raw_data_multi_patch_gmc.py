@@ -169,8 +169,10 @@ def df_refine(df):
                 'totalMinionsKilled': participant_list[userNum]['totalMinionsKilled'],
                 'championName': participant_list[userNum]['championName'],
                 'championId': participant_list[userNum]['championId'],
+                'champ_level': participant_list[userNum]['champLevel'],
                 'champExperience': participant_list[userNum]['champExperience'],
                 'win': participant_list[userNum]['win'],
+                'total_damage_dealt': participant_list[userNum]['totalDamageDealt'],
                 'totalDamageDealtToChampions': participant_list[userNum]['totalDamageDealtToChampions'],
                 'damageDealtToObjectives': participant_list[userNum]['damageDealtToObjectives'],
                 'totalDamageTaken': participant_list[userNum]['totalDamageTaken'],
@@ -187,6 +189,10 @@ def df_refine(df):
                 'tripleKills': participant_list[userNum]['tripleKills'],
                 'quadraKills': participant_list[userNum]['quadraKills'],
                 'pentaKills': participant_list[userNum]['pentaKills'],
+                'red_ward_placed': participant_list[userNum]['detectorWardsPlaced'],
+                'sight_point': participant_list[userNum]['visionScore'],
+                'total_gold': participant_list[userNum]['goldEarned'],
+                'timeCCingOthers': participant_list[userNum]['timeCCingOthers']
             }
             matches['participants'].append(participant_dict)
 
