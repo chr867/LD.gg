@@ -21,7 +21,7 @@ imp.reload(mu)
 # RawData
 def fetch_data_from_match_raw(limit):
     conn = mu.connect_mysql()
-    query = f"SELECT * FROM match_raw LIMIT {limit}"
+    query = f"SELECT * FROM match_raw_patch LIMIT {limit}"
 
     start_time = time.time()
 
@@ -44,7 +44,7 @@ def fetch_data_from_match_raw(limit):
 # ----------------------------------------------------------------------------------------------------------------------
 def fetch_all_data_from_match_raw():
     conn = mu.connect_mysql()
-    query = "SELECT * FROM match_raw"
+    query = "SELECT * FROM match_raw_patch"
 
     start_time = time.time()
 
@@ -65,7 +65,7 @@ def fetch_all_data_from_match_raw():
     df['timeline'] = df['timeline'].progress_apply(lambda x: json.loads(x))
     return df
 # ----------------------------------------------------------------------------------------------------------------------
-df = fetch_data_from_match_raw(10000)
+df = fetch_data_from_match_raw(1000)
 # ----------------------------------------------------------------------------------------------------------------------
 # 매치업 데이터 정제
 df_creater = []
@@ -345,87 +345,162 @@ skill_build_df['skill_build_win_rate'] = round((skill_build_df['skill_build_win_
 skill_build_df['skill_build_pick_rate'] = round((skill_build_df['skill_build_pick_cnt'] / skill_build_df['game_cnt']) * 100, 2) #픽률 계산
 skill_build_df = skill_build_df.groupby(['champion_id','team_position','enemy_champ_id']).head(2).reset_index()
 # 스킬 트리
-skill_tree_df = skill_df[skill_df['skill_tree'].apply(lambda x: len(x.split(','))) >= 12].copy()
-skill_tree_df = skill_tree_df.groupby(['champion_id','team_position','enemy_champ_id','skill_tree','skill_build'])['win'].agg(['sum','count']).rename(columns={'count': 'skill_tree_pick_cnt', 'sum': 'skill_tree_win_cnt'})
+#skill_tree_df = skill_df[skill_df['skill_tree'].apply(lambda x: len(x.split(','))) >= 12].copy()
+skill_tree_df = skill_df.groupby(['champion_id','team_position','enemy_champ_id','skill_tree','skill_build'])['win'].agg(['sum','count']).rename(columns={'count': 'skill_tree_pick_cnt', 'sum': 'skill_tree_win_cnt'})
 skill_tree_df['game_cnt'] = skill_tree_df.groupby(['champion_id','team_position','enemy_champ_id'])[['skill_tree_pick_cnt']].transform('sum')
 skill_tree_df = skill_tree_df.sort_values(['champion_id','game_cnt','skill_tree_pick_cnt','skill_tree_win_cnt'],ascending = [True,False,False,False])
 skill_tree_df['skill_tree_win_rate'] = round((skill_tree_df['skill_tree_win_cnt'] / skill_tree_df['skill_tree_pick_cnt']) * 100, 2) #승률 계산
 skill_tree_df['skill_tree_pick_rate'] = round((skill_tree_df['skill_tree_pick_cnt'] / skill_tree_df['game_cnt']) * 100, 2) #픽률 계산
 skill_tree_df = skill_tree_df.groupby(['champion_id','team_position','enemy_champ_id','skill_build']).head(1).reset_index()
 # 머지
-match_up_skill_df = pd.merge(skill_build_df,skill_tree_df, on=['champion_id', 'team_position', 'enemy_champ_id', 'skill_build'])
+match_up_skill_df = pd.merge(skill_build_df,skill_tree_df, on=['champion_id', 'team_position', 'enemy_champ_id', 'skill_build','game_cnt'])
 #  ---------------------------------------------------------------------------------------------------------------------
 # 매치업 아이템 빌드
 item_df = result[['champion_id','team_position','enemy_champ_id','item_history','start_item','shoe_item','mythic_item','item_build','win']].copy()
 #시작템 승률 픽률
 start_item_df = item_df.groupby(['champion_id','team_position','enemy_champ_id','start_item'])['win'].agg(['sum','count'])\
     .rename(columns={'count': 'start_item_pick_cnt', 'sum': 'start_item_win_cnt'})
-start_item_df['start_item_game_cnt'] = start_item_df.groupby(['champion_id','team_position','enemy_champ_id'])[['start_item_pick_cnt']].transform('sum')
-start_item_df = start_item_df.sort_values(['champion_id','start_item_game_cnt','start_item_pick_cnt','start_item_win_cnt'],ascending = [True,False,False,False])
+start_item_df['game_cnt'] = start_item_df.groupby(['champion_id','team_position','enemy_champ_id'])[['start_item_pick_cnt']].transform('sum')
+start_item_df = start_item_df.sort_values(['champion_id','game_cnt','start_item_pick_cnt','start_item_win_cnt'],ascending = [True,False,False,False])
 start_item_df['start_item_win_rate'] = round((start_item_df['start_item_win_cnt'] / start_item_df['start_item_pick_cnt']) * 100, 2) #승률 계산
-start_item_df['start_item_pick_rate'] = round((start_item_df['start_item_pick_cnt'] / start_item_df['start_item_game_cnt']) * 100, 2) #픽률 계산
+start_item_df['start_item_pick_rate'] = round((start_item_df['start_item_pick_cnt'] / start_item_df['game_cnt']) * 100, 2) #픽률 계산
 start_item_df = start_item_df.groupby(['champion_id','team_position','enemy_champ_id']).head(1).reset_index()
 
 #신발템 승률 픽률
 shoe_item_df = item_df.groupby(['champion_id','team_position','enemy_champ_id','shoe_item'])['win'].agg(['sum','count'])\
     .rename(columns={'count': 'shoe_item_pick_cnt', 'sum': 'shoe_item_win_cnt'})
-shoe_item_df['shoe_item_game_cnt'] = shoe_item_df.groupby(['champion_id','team_position','enemy_champ_id'])[['shoe_item_pick_cnt']].transform('sum')
-shoe_item_df = shoe_item_df.sort_values(['champion_id','shoe_item_game_cnt','shoe_item_pick_cnt','shoe_item_win_cnt'],ascending = [True,False,False,False])
+shoe_item_df['game_cnt'] = shoe_item_df.groupby(['champion_id','team_position','enemy_champ_id'])[['shoe_item_pick_cnt']].transform('sum')
+shoe_item_df = shoe_item_df.sort_values(['champion_id','game_cnt','shoe_item_pick_cnt','shoe_item_win_cnt'],ascending = [True,False,False,False])
 shoe_item_df['shoe_item_win_rate'] = round((shoe_item_df['shoe_item_win_cnt'] / shoe_item_df['shoe_item_pick_cnt']) * 100, 2) #승률 계산
-shoe_item_df['shoe_item_pick_rate'] = round((shoe_item_df['shoe_item_pick_cnt'] / shoe_item_df['shoe_item_game_cnt']) * 100, 2) #픽률 계산
+shoe_item_df['shoe_item_pick_rate'] = round((shoe_item_df['shoe_item_pick_cnt'] / shoe_item_df['game_cnt']) * 100, 2) #픽률 계산
 shoe_item_df = shoe_item_df.groupby(['champion_id','team_position','enemy_champ_id']).head(1).reset_index()
 
 #신화템 승률 픽률
 mythic_item_df = item_df.groupby(['champion_id','team_position','enemy_champ_id','mythic_item'])['win'].agg(['sum','count'])\
     .rename(columns={'count': 'mythic_item_pick_cnt', 'sum': 'mythic_item_win_cnt'})
-mythic_item_df['mythic_item_game_cnt'] = mythic_item_df.groupby(['champion_id','team_position','enemy_champ_id'])[['mythic_item_pick_cnt']].transform('sum')
-mythic_item_df = mythic_item_df.sort_values(['champion_id','mythic_item_game_cnt','mythic_item_pick_cnt','mythic_item_win_cnt'],ascending = [True,False,False,False])
+mythic_item_df['game_cnt'] = mythic_item_df.groupby(['champion_id','team_position','enemy_champ_id'])[['mythic_item_pick_cnt']].transform('sum')
+mythic_item_df = mythic_item_df.sort_values(['champion_id','game_cnt','mythic_item_pick_cnt','mythic_item_win_cnt'],ascending = [True,False,False,False])
 mythic_item_df['mythic_item_win_rate'] = round((mythic_item_df['mythic_item_win_cnt'] / mythic_item_df['mythic_item_pick_cnt']) * 100, 2) #승률 계산
-mythic_item_df['mythic_item_pick_rate'] = round((mythic_item_df['mythic_item_pick_cnt'] / mythic_item_df['mythic_item_game_cnt']) * 100, 2) #픽률 계산
+mythic_item_df['mythic_item_pick_rate'] = round((mythic_item_df['mythic_item_pick_cnt'] / mythic_item_df['game_cnt']) * 100, 2) #픽률 계산
 mythic_item_df = mythic_item_df.groupby(['champion_id','team_position','enemy_champ_id']).head(1).reset_index()
 
 #아이템 빌드 승률 픽률
 item_build_df = item_df.groupby(['champion_id','team_position','enemy_champ_id','item_build'])['win'].agg(['sum','count'])\
     .rename(columns={'count': 'item_build_pick_cnt', 'sum': 'item_build_win_cnt'})
-item_build_df['item_build_game_cnt'] = item_build_df.groupby(['champion_id','team_position','enemy_champ_id'])[['item_build_pick_cnt']].transform('sum')
-item_build_df = item_build_df.sort_values(['champion_id','item_build_game_cnt','item_build_pick_cnt','item_build_win_cnt'],ascending = [True,False,False,False])
+item_build_df['game_cnt'] = item_build_df.groupby(['champion_id','team_position','enemy_champ_id'])[['item_build_pick_cnt']].transform('sum')
+item_build_df = item_build_df.sort_values(['champion_id','game_cnt','item_build_pick_cnt','item_build_win_cnt'],ascending = [True,False,False,False])
 item_build_df['item_build_win_rate'] = round((item_build_df['item_build_win_cnt'] / item_build_df['item_build_pick_cnt']) * 100, 2) #승률 계산
-item_build_df['item_build_pick_rate'] = round((item_build_df['item_build_pick_cnt'] / item_build_df['item_build_game_cnt']) * 100, 2) #픽률 계산
+item_build_df['item_build_pick_rate'] = round((item_build_df['item_build_pick_cnt'] / item_build_df['game_cnt']) * 100, 2) #픽률 계산
 item_build_df = item_build_df.groupby(['champion_id','team_position','enemy_champ_id']).head(1).reset_index()
 
 # 머지
-match_up_item_df = item_build_df.merge(start_item_df, on=['champion_id', 'team_position', 'enemy_champ_id'])\
-    .merge(shoe_item_df, on=['champion_id', 'team_position', 'enemy_champ_id'])\
-    .merge(mythic_item_df, on=['champion_id', 'team_position', 'enemy_champ_id'])
+match_up_item_df = item_build_df.merge(start_item_df, on=['champion_id', 'team_position', 'enemy_champ_id','game_cnt'])\
+    .merge(shoe_item_df, on=['champion_id', 'team_position', 'enemy_champ_id','game_cnt'])\
+    .merge(mythic_item_df, on=['champion_id', 'team_position', 'enemy_champ_id','game_cnt'])
 #  ---------------------------------------------------------------------------------------------------------------------
 # db에 데이터 삽입
-query_champion_match_up = (
+def insert_champion_match_up(x,conn):
+    query = (
+        f'insert into champion_match_up (champion_name, champion_id, team_position, enemy_champ, '
+        f'enemy_champ_id, lane_kill_rate, kda, kill_participation, deal_to_champ, '
+        f'avg_g_15, tower_kill_time, avg_cs, match_up_win_rate, match_up_win_cnt, match_up_cnt)'
+        f'values({repr(x.champion_name)},{x.champion_id},{repr(x.team_position)},{repr(x.enemy_champ)},'
+        f'{x.enemy_champ_id},{x.lane_kill_rate},{x.kda},{x.kill_participation},{x.deal_to_champ},{x.avg_g_15},'
+        f'{x.tower_kill_time},{x.avg_cs},{x.match_up_win_rate},{x.match_up_win_cnt},{x.match_up_cnt})'
+    )
+    query2 = (
         f'INSERT INTO champion_match_up '
-        f'(champion_name, champion_id, team_position, enemy_champ, enemy_champ_id, lane_kill_rate, kda, kill_participation, deal_to_champ, avg_g_15, tower_kill_time, avg_cs, match_up_win_rate, match_up_win_cnt, match_up_cnt) '
-        f'VALUES ({repr(match_up.champion_name)}, {match_up.champion_id}, {repr(match_up.team_position)}, {repr(match_up.enemy_champ)}, {match_up.enemy_champ_id}, {match_up.lane_kill_rate}, {match_up.kda}, {match_up.kill_participation}, {match_up.deal_to_champ}, {match_up.avg_g_15}, {match_up.tower_kill_time}, {match_up.avg_cs}, {match_up.match_up_win_rate}, {match_up.match_up_win_cnt}, {match_up.match_up_cnt}) '
+        f'(champion_name, champion_id, team_position, enemy_champ, enemy_champ_id, lane_kill_rate, kda, '
+        f'kill_participation, deal_to_champ, avg_g_15, tower_kill_time, avg_cs, match_up_win_rate, match_up_win_cnt, match_up_cnt) '
+        f'VALUES ({repr(x.champion_name)}, {x.champion_id}, {repr(x.team_position)}, {repr(x.enemy_champ)}, {x.enemy_champ_id}, '
+        f'{x.lane_kill_rate}, {x.kda}, {x.kill_participation}, {x.deal_to_champ}, {x.avg_g_15}, {x.tower_kill_time}, {x.avg_cs}, {x.match_up_win_rate}, {x.match_up_win_cnt}, {x.match_up_cnt}) '
         f'ON DUPLICATE KEY UPDATE '
         f'champion_id = VALUES(champion_id), team_position = VALUES(team_position), enemy_champ = VALUES(enemy_champ), enemy_champ_id = VALUES(enemy_champ_id), '
         f'lane_kill_rate = VALUES(lane_kill_rate), kda = VALUES(kda), kill_participation = VALUES(kill_participation), deal_to_champ = VALUES(deal_to_champ), '
         f'avg_g_15 = VALUES(avg_g_15), tower_kill_time = VALUES(tower_kill_time), avg_cs = VALUES(avg_cs), '
         f'match_up_win_rate = VALUES(match_up_win_rate), match_up_win_cnt = VALUES(match_up_win_cnt), match_up_cnt = VALUES(match_up_cnt)'
     )
-query_match_up_spell = ()
-query_match_up_rune = ()
-query_match_up_skill = ()
-query_match_up_item = ()
-def insert_my(x,conn,query):
     try:
-        mu.mysql_execute(query,conn)
+        mu.mysql_execute(query2,conn)
+    except Exception as e:
+        print(e)
+    return
+def insert_champion_match_up_spell(x,conn):
+    query = (
+        f'insert into champion_match_up_spell (champion_id, team_position, enemy_champ_id, d_spell, f_spell, win_cnt, pick_cnt, game_cnt, win_rate, pick_rate)'
+        f'values({x.champion_id},{repr(x.team_position)},{x.enemy_champ_id},{x.d_spell},{x.f_spell},{x.win_cnt},{x.pick_cnt},{x.game_cnt},{x.win_rate},{x.pick_rate})'
+    )
+    query2 = (    )
+    try:
+        mu.mysql_execute(query, conn)
+    except Exception as e:
+        print(e)
+    return
+def insert_champion_match_up_rune(x, conn):
+    query = (
+        f'insert into champion_match_up_rune (champion_id, team_position, enemy_champ_id, FRAGMENT1_ID, FRAGMENT2_ID, FRAGMENT3_ID, MAIN_KEYSTONE_ID, MAIN_SUB1_ID, MAIN_SUB2_ID,'
+        f' MAIN_SUB3_ID, MAIN_SUB4_ID, SUB_KEYSTONE_ID, SUB_SUB1_ID, SUB_SUB2_ID, win_cnt, pick_cnt, game_cnt, win_rate, pick_rate)'
+        f'values({x.champion_id},{repr(x.team_position)},{x.enemy_champ_id},{x.FRAGMENT1_ID},{x.FRAGMENT2_ID},{x.FRAGMENT3_ID},{x.MAIN_KEYSTONE_ID},{x.MAIN_SUB1_ID},{x.MAIN_SUB2_ID},{x.MAIN_SUB3_ID},'
+        f'{x.MAIN_SUB4_ID},{x.SUB_KEYSTONE_ID},{x.SUB_SUB1_ID},{x.SUB_SUB2_ID},{x.win_cnt},{x.pick_cnt},{x.game_cnt},{x.win_rate},{x.pick_rate})'
+    )
+    query2 = ()
+    try:
+        mu.mysql_execute(query, conn)
+    except Exception as e:
+        print(e)
+    return
+def insert_champion_match_up_skill(x, conn):
+    query = (
+        f'insert into champion_match_up_skill (champion_id, team_position, enemy_champ_id, skill_build, skill_build_win_cnt, skill_build_pick_cnt, game_cnt, skill_build_win_rate, skill_build_pick_rate, '
+        f' skill_tree, skill_tree_win_cnt, skill_tree_pick_cnt, skill_tree_win_rate, skill_tree_pick_rate)'
+        f'values({x.champion_id},{repr(x.team_position)},{x.enemy_champ_id},{repr(x.skill_build)},{x.skill_build_win_cnt},{x.skill_build_pick_cnt},{x.game_cnt},{x.skill_build_win_rate}'
+        f',{x.skill_build_pick_rate},{repr(x.skill_tree)},{x.skill_tree_win_cnt},{x.skill_tree_pick_cnt},{x.skill_tree_win_rate},{x.skill_tree_pick_rate})'
+    )
+    query2 = ()
+    try:
+        mu.mysql_execute(query, conn)
+    except Exception as e:
+        print(e)
+    return
+def insert_champion_match_up_item(x, conn):
+    query = (
+        f'insert into champion_match_up_item (champion_id, team_position, enemy_champ_id, item_build, item_build_win_cnt, item_build_pick_cnt, game_cnt, item_build_win_rate, item_build_pick_rate,'
+        f'start_item, start_item_win_cnt, start_item_pick_cnt, start_item_win_rate, start_item_pick_rate, shoe_item, shoe_item_win_cnt, shoe_item_pick_cnt, shoe_item_win_rate, shoe_item_pick_rate,'
+        f'mythic_item, mythic_item_win_cnt, mythic_item_pick_cnt, mythic_item_win_rate, mythic_item_pick_rate)'
+        f'values({x.champion_id},{repr(x.team_position)},{x.enemy_champ_id},{repr(x.item_build)},{x.item_build_win_cnt},{x.item_build_pick_cnt},{x.game_cnt},{x.item_build_win_rate},{x.item_build_pick_rate}'
+        f',{repr(x.start_item)},{x.start_item_win_cnt},{x.start_item_pick_cnt},{x.start_item_win_rate},{x.start_item_pick_rate}'
+        f',{x.shoe_item},{x.shoe_item_win_cnt},{x.shoe_item_pick_cnt},{x.shoe_item_win_rate},{x.shoe_item_pick_rate}'
+        f',{x.mythic_item},{x.mythic_item_win_cnt},{x.mythic_item_pick_cnt},{x.mythic_item_win_rate},{x.mythic_item_pick_rate})'
+    )
+    query2 = ()
+    try:
+        mu.mysql_execute(query, conn)
     except Exception as e:
         print(e)
     return
 
 conn = mu.connect_mysql()
-match_up.progress_apply(lambda x: insert_my(x,conn,query_champion_match_up),axis =1)
-match_up_spell.progress_apply(lambda x: insert_my(x,conn,query_match_up_spell),axis =1)
-match_up_runes.progress_apply(lambda x: insert_my(x,conn,query_match_up_rune),axis =1)
-match_up_skill_df.progress_apply(lambda x: insert_my(x,conn,query_match_up_skill),axis =1)
-match_up_item_df.progress_apply(lambda x: insert_my(x,conn,query_match_up_item),axis =1)
+match_up.progress_apply(lambda x: insert_champion_match_up(x,conn),axis =1)
+conn.commit()
+conn.close()
+
+conn = mu.connect_mysql()
+match_up_spell.progress_apply(lambda x: insert_champion_match_up_spell(x,conn),axis =1)
+conn.commit()
+conn.close()
+
+conn = mu.connect_mysql()
+match_up_runes.progress_apply(lambda x: insert_champion_match_up_rune(x,conn),axis =1)
+conn.commit()
+conn.close()
+
+conn = mu.connect_mysql()
+match_up_skill_df.progress_apply(lambda x: insert_champion_match_up_skill(x,conn),axis =1)
+conn.commit()
+conn.close()
+
+conn = mu.connect_mysql()
+match_up_item_df.progress_apply(lambda x: insert_champion_match_up_item(x,conn),axis =1)
 conn.commit()
 conn.close()
 #  ---------------------------------------------------------------------------------------------------------------------
