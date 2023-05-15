@@ -58,7 +58,7 @@ def load_summoner_names_worker(worker_id):
         random.shuffle(name_lst)
 
         match_set = set()
-        for summoner_name in tqdm(name_lst[:25]):
+        for summoner_name in tqdm(name_lst[:15]):
             while True:
                 index = 0
                 start = 1673362800
@@ -105,7 +105,7 @@ def get_match_info_worker(args):
     tmp = set()
     random.shuffle(_match_ids)
 
-    for match_id in tqdm(_match_ids[:800]):  # 수정점
+    for match_id in tqdm(_match_ids[:12]):  # 수정점
         while True:
             try:
                 get_match_url = f'https://asia.api.riotgames.com/lol/match/v5/matches/{match_id}?api_key={api_key}'
@@ -206,12 +206,24 @@ def df_refine(df):
                 matches['participants'].append(participant_dict)
             except Exception as e:
                 print(f'{e} participant, {participant_list[userNum]}, {participant_list}')
+
         ban_list = []
         for team in team_list:
             for ban in team['bans']:
                 ban_list.append(ban['championId'])
-
         matches['bans'] = ban_list
+
+        if userNum < 4:
+            team_idx = 0
+        else:
+            team_idx = 1
+
+        objectives = []
+        objectives.append({'baron': match_info['teams'][team_idx]['objectives']['baron']})
+        objectives.append({'dragon': match_info['teams'][team_idx]['objectives']['dragon']})
+        objectives.append({'riftHerald': match_info['teams'][team_idx]['objectives']['riftHerald']})
+        matches['objectives'] = objectives
+
         return matches
 
     def time_line_data(df):
@@ -283,6 +295,7 @@ def main():
 
     refine_df = pd.concat([df_refine(row) for _, row in merged_df.iterrows()], ignore_index=True)
     sql_conn = mu.connect_mysql()
+    print(refine_df.iloc[0]['matches'])
     refine_df.progress_apply(lambda x: insert(x, sql_conn), axis=1)
     sql_conn.commit()
     sql_conn.close()

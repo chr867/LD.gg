@@ -216,6 +216,18 @@ def df_refine(df):
                 ban_list.append(ban['championId'])
 
         matches['bans'] = ban_list
+
+        if userNum < 4:
+            team_idx = 0
+        else:
+            team_idx = 1
+
+        objectives = []
+        objectives.append({'baron': match_info['teams'][team_idx]['objectives']['baron']})
+        objectives.append({'dragon': match_info['teams'][team_idx]['objectives']['dragon']})
+        objectives.append({'riftHerald': match_info['teams'][team_idx]['objectives']['riftHerald']})
+        matches['objectives'] = objectives
+
         return matches
 
     def time_line_data(df):
