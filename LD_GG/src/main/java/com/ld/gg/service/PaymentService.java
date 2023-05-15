@@ -88,4 +88,13 @@ public class PaymentService {
 		}
 	}
 
+	public boolean checkMentoringApplication(String holder_email, int price) {
+		int pointBalance = PD.checkMentoringApplication(holder_email);
+		if(price > pointBalance | price == pointBalance) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+
 }
