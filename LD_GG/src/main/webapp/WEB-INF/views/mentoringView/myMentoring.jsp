@@ -519,6 +519,32 @@ $(document).ready(function() {
 		      console.error(error);
 		    }
 		  });
+		var today = new Date();
+		var year = today.getFullYear(); // 년도
+		var month = today.getMonth() + 1;  // 월
+		var day = today.getDate();  // 날짜
+		if (month < 10) {
+		    month = "0" + month;
+		}
+		if (day < 10) {
+		    day = "0" + day;
+		}
+		var date = year + "-" + month + "-" + day;
+		$.ajax({
+			method : 'post',
+			url : '/wallet/payment/transaction_history',
+			data : {
+				sender_id : mentiEmail,
+				reciever_id : "${member.lol_account}",
+				tx_data : data,
+				points_sent : point,
+				points_received : point
+			}
+		}).done(res=>{
+			console.log(res);
+		}).fail(err=>{
+			console.log(err);
+		})
 	});
 	
 	$(document).on('click', '.reject-btn', function(event) { //거절 버튼 누를떄 멘토링 내역 수정
