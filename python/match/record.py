@@ -1,12 +1,11 @@
-import datetime
-import time
+import json
+
 import pandas as pd
-import requests
 from tqdm import tqdm
+
 import data_load
 import my_utils as mu
-import json
-import logging
+
 tqdm.pandas()
 
 sql_conn = mu.connect_mysql()
@@ -25,6 +24,37 @@ for idx, i in enumerate(df['matches']):
         else:
             versus_index = 0
             deaths = i['participants'][versus_index]['objectives'][0]['champion']['kills']
+
+        tmp_lst = list(map(lambda x: x['events'], df.iloc[1]['timeline'].values()))
+        event_lst = [element for array in tmp_lst for element in array]
+
+        building_log = [i for i in event_lst if i['type'] == 'BUILDING_KILL']
+        tower_log = [i for i in building_log if i['buildingType'] == 'TOWER_BUILDING']
+        inhibitor_log = [i for i in building_log if i['buildingType'] == 'INHIBITOR_BUILDING']
+
+        elite_monster_log = [i for i in event_lst if i['type'] == 'ELITE_MONSTER_KILL']
+        dragon_log = [i for i in elite_monster_log if i['monsterType'] == 'DRAGON']
+        baron_log = [i for i in elite_monster_log if i['monsterType'] == 'BARON_NASHOR']
+
+        tower_destroy = 0
+        for event in tower_log:
+            if p_idx == event['killerId']:
+                tower_destroy += 1
+
+        inhibitor_destroy = 0
+        for event in inhibitor_log:
+            if p_idx == event['killerId']:
+                inhibitor_destroy += 1
+
+        dragon_kills = 0
+        for event in dragon_log:
+            if p_idx == event['killerId']:
+                dragon_kills += 1
+
+        baron_kills = 0
+        for event in baron_log:
+            if p_idx == event['killerId']:
+                baron_kills += 1
 
         record_df_creater.append([
             df.iloc[idx]['match_id'],
@@ -70,11 +100,11 @@ for idx, i in enumerate(df['matches']):
             p['teamPosition'],
             p['summoner1Id'],
             p['summoner2Id'],
-            p['objectives'][0]['baron']['kills'],
+            baron_kills,
             p['objectives'][0]['champion']['kills'],
             deaths,
-            p['objectives'][0]['dragon']['kills'],
-            p['objectives'][0]['tower']['kills'],
+            dragon_kills,
+            tower_destroy,
             p['sight_point']
         ])
 
