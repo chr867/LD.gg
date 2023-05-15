@@ -65,15 +65,23 @@ def fetch_all_data_from_match_raw():
     df['timeline'] = df['timeline'].progress_apply(lambda x: json.loads(x))
     return df
 # ----------------------------------------------------------------------------------------------------------------------
-df = fetch_data_from_match_raw(1000)
+df = fetch_data_from_match_raw(10000)
 # ----------------------------------------------------------------------------------------------------------------------
 # 매치업 데이터 정제
 df_creater = []
+accessories_lst = [3364, 3340, 3363, 3330, 3513] #장신구
+shoe_items = [3111, 3117, 3009, 3047, 3006, 3158, 3020] # #신발
+legend_item_list =[3003,3004,3011,3026,3031,3033,3036,3040,3041,3042,3046,3050,3053,3065,3068,3071,3072,3074,3075,3083,3085,3089,# 전설 아이템
+ 3091,3094,3095,3100,3102,3107,3109,3110,3115,3116,3119,3121,3124,3135,3139,3142,3143,3153,3156,3157,3161,3165,3179,3181,3193,3222,
+ 3504,3508,3742,3748,3814,4401,4628,4629,4637,4645,6035,6333,6609,6616,6664,6675,6676,6694,6695,6696,8001,8020]
+mythic_item_list = [2065,3001,3078,3084,3152,3190,4005,4633,4636,4644,6617,6630,6631,6632,6653,6655,6656,6657,6662,6665,6667,6671,6672,6673,6691,6692,6693] # 신화 아이템
+
 columns = [
     'match_id', 'game_duration', 'game_version',
     'participant_id', 'champion_name', 'champion_id', 'ban_champion_id', 'team_position',
     'team_id', 'win', 'kills', 'deaths', 'assists', 'tower_destroy',
-    'deal_to_champ', 'cs', 'spell_1', 'spell_2', 'g_15', 'skill_tree', 'skill_build','FRAGMENT1_ID', 'FRAGMENT2_ID',
+    'deal_to_champ', 'cs', 'spell_1', 'spell_2', 'g_15', 'skill_tree', 'skill_build',
+    'item_history','start_item','shoe_item','mythic_item','item_build','FRAGMENT1_ID', 'FRAGMENT2_ID',
     'FRAGMENT3_ID', 'MAIN_KEYSTONE_ID', 'MAIN_SUB1_ID', 'MAIN_SUB2_ID',
     'MAIN_SUB3_ID', 'MAIN_SUB4_ID', 'SUB_KEYSTONE_ID', 'SUB_SUB1_ID', 'SUB_SUB2_ID'
 ]
@@ -103,12 +111,41 @@ for m_idx, m in tqdm(enumerate(df['matches'])):
             building_kill_events = [event for event in all_events if event['type'] == 'BUILDING_KILL' and event.get('towerType') == 'OUTER_TURRET'] # 외곽 포탑 킬 이벤트 리스트
             skill_level_up_events = [event for event in all_events if event['type'] == 'SKILL_LEVEL_UP'] # 스킬 레벨업 이벤트 리스트
             item_purchased_events = [event for event in all_events if event['type'] == 'ITEM_PURCHASED'] # 아이템 구매 이벤트 리스트
+            item_purchased_1m = [event for event in df.iloc[m_idx]['timeline']['1']['events'] if event['type'] == 'ITEM_PURCHASED'] # 1분대의 아이템 구매 이벤트 리스트
+            item_purchased_2m = [event for event in df.iloc[m_idx]['timeline']['2']['events'] if event['type'] == 'ITEM_PURCHASED'] # 2분대의 아이템 구매 이벤트 리스트
 
-            item_hiostory=[] # 모든 아이템 구매내역
+            item_history=[] # 모든 아이템 구매내역
             for items in item_purchased_events:
                 if items['participantId'] == p['participantId']:
-                    item_hiostory.append(items['itemId'])
-            item_hiostory_str = ','.join(map(str, item_hiostory))
+                    item_history.append(items['itemId'])
+            item_history_str = ','.join(map(str, item_history))
+
+            start_items=[] # 시작 아이템
+            for item_in_1m in item_purchased_1m:
+                if item_in_1m['participantId'] == p['participantId']:
+                    start_items.append(item_in_1m['itemId'])
+            for item_in_2m in item_purchased_2m:
+                if item_in_2m['participantId'] == p['participantId']:
+                    start_items.append(item_in_2m['itemId'])
+            start_items.sort(reverse=True) # 숫자가 큰 아이템 부터 정렬
+            start_items = [item for item in start_items if item not in accessories_lst]
+            start_items_str = ','.join(map(str, start_items))
+
+            item_build = [] # 아이템 빌드
+            for build_item in item_history:
+                if build_item in legend_item_list or build_item in mythic_item_list:
+                    item_build.append(build_item)
+            item_build = list(set(item_build))
+            item_build_str = ','.join(map(str, item_build))
+
+            shoes=[] # 신발 아이템
+            for shoe_item in item_history:
+                if shoe_item in shoe_items:
+                    shoes.append(shoe_item)
+            if shoes == []:
+                shoe = 0
+            else:
+                shoe = shoes[-1] # 신발 아이템
 
             tower_destroy = 0 # 포탑 파괴시간
             try:
@@ -163,7 +200,12 @@ for m_idx, m in tqdm(enumerate(df['matches'])):
                 p['summoner2Id'],  # 스펠2
                 df.iloc[m_idx]['timeline']['15']['participantFrames'][p_idx]['totalGold'], # 15분대 골드량
                 skill_log_str, # 스킬 트리
-                skill_priority_str # 스킬 우선순위
+                skill_priority_str, # 스킬 우선순위
+                item_history_str, # 모든 아이템 구매내역
+                start_items_str, # 시작 아이템
+                shoe, # 신발 아이템
+                p.get('mythicItemUsed', 0),  # 신화 아이템
+                item_build_str # 아이템 빌드
             ])
             # 룬 데이터
             df_creater[-1].append(p['defense']) # 룬파편1
@@ -204,7 +246,8 @@ wpb_sample = wpb_sample.sort_values(by=['pick_rate','win_rate','ban_rate'], asce
 
 sample = sum_df[['match_id','champion_name','champion_id','win','team_position','g_15'
                  ,'team_id','kills','deaths','assists','deal_to_champ','tower_destroy'
-                 ,'cs','ban_champion_id','spell_1','spell_2', 'skill_tree', 'skill_build', 'FRAGMENT1_ID', 'FRAGMENT2_ID',
+                 ,'cs','ban_champion_id','spell_1','spell_2', 'skill_tree', 'skill_build',
+    'item_history','start_item','shoe_item','mythic_item','item_build', 'FRAGMENT1_ID', 'FRAGMENT2_ID',
     'FRAGMENT3_ID', 'MAIN_KEYSTONE_ID', 'MAIN_SUB1_ID','MAIN_SUB2_ID',
     'MAIN_SUB3_ID', 'MAIN_SUB4_ID', 'SUB_KEYSTONE_ID', 'SUB_SUB1_ID', 'SUB_SUB2_ID']]
 # 각 팀 킬 수 합쳐서 team_kills 컬럼에 추가
@@ -312,6 +355,49 @@ skill_tree_df = skill_tree_df.groupby(['champion_id','team_position','enemy_cham
 # 머지
 match_up_skill_df = pd.merge(skill_build_df,skill_tree_df, on=['champion_id', 'team_position', 'enemy_champ_id', 'skill_build'])
 #  ---------------------------------------------------------------------------------------------------------------------
+# 매치업 아이템 빌드
+item_df = result[['champion_id','team_position','enemy_champ_id','item_history','start_item','shoe_item','mythic_item','item_build','win']].copy()
+#시작템 승률 픽률
+start_item_df = item_df.groupby(['champion_id','team_position','enemy_champ_id','start_item'])['win'].agg(['sum','count'])\
+    .rename(columns={'count': 'start_item_pick_cnt', 'sum': 'start_item_win_cnt'})
+start_item_df['start_item_game_cnt'] = start_item_df.groupby(['champion_id','team_position','enemy_champ_id'])[['start_item_pick_cnt']].transform('sum')
+start_item_df = start_item_df.sort_values(['champion_id','start_item_game_cnt','start_item_pick_cnt','start_item_win_cnt'],ascending = [True,False,False,False])
+start_item_df['start_item_win_rate'] = round((start_item_df['start_item_win_cnt'] / start_item_df['start_item_pick_cnt']) * 100, 2) #승률 계산
+start_item_df['start_item_pick_rate'] = round((start_item_df['start_item_pick_cnt'] / start_item_df['start_item_game_cnt']) * 100, 2) #픽률 계산
+start_item_df = start_item_df.groupby(['champion_id','team_position','enemy_champ_id']).head(1).reset_index()
+
+#신발템 승률 픽률
+shoe_item_df = item_df.groupby(['champion_id','team_position','enemy_champ_id','shoe_item'])['win'].agg(['sum','count'])\
+    .rename(columns={'count': 'shoe_item_pick_cnt', 'sum': 'shoe_item_win_cnt'})
+shoe_item_df['shoe_item_game_cnt'] = shoe_item_df.groupby(['champion_id','team_position','enemy_champ_id'])[['shoe_item_pick_cnt']].transform('sum')
+shoe_item_df = shoe_item_df.sort_values(['champion_id','shoe_item_game_cnt','shoe_item_pick_cnt','shoe_item_win_cnt'],ascending = [True,False,False,False])
+shoe_item_df['shoe_item_win_rate'] = round((shoe_item_df['shoe_item_win_cnt'] / shoe_item_df['shoe_item_pick_cnt']) * 100, 2) #승률 계산
+shoe_item_df['shoe_item_pick_rate'] = round((shoe_item_df['shoe_item_pick_cnt'] / shoe_item_df['shoe_item_game_cnt']) * 100, 2) #픽률 계산
+shoe_item_df = shoe_item_df.groupby(['champion_id','team_position','enemy_champ_id']).head(1).reset_index()
+
+#신화템 승률 픽률
+mythic_item_df = item_df.groupby(['champion_id','team_position','enemy_champ_id','mythic_item'])['win'].agg(['sum','count'])\
+    .rename(columns={'count': 'mythic_item_pick_cnt', 'sum': 'mythic_item_win_cnt'})
+mythic_item_df['mythic_item_game_cnt'] = mythic_item_df.groupby(['champion_id','team_position','enemy_champ_id'])[['mythic_item_pick_cnt']].transform('sum')
+mythic_item_df = mythic_item_df.sort_values(['champion_id','mythic_item_game_cnt','mythic_item_pick_cnt','mythic_item_win_cnt'],ascending = [True,False,False,False])
+mythic_item_df['mythic_item_win_rate'] = round((mythic_item_df['mythic_item_win_cnt'] / mythic_item_df['mythic_item_pick_cnt']) * 100, 2) #승률 계산
+mythic_item_df['mythic_item_pick_rate'] = round((mythic_item_df['mythic_item_pick_cnt'] / mythic_item_df['mythic_item_game_cnt']) * 100, 2) #픽률 계산
+mythic_item_df = mythic_item_df.groupby(['champion_id','team_position','enemy_champ_id']).head(1).reset_index()
+
+#아이템 빌드 승률 픽률
+item_build_df = item_df.groupby(['champion_id','team_position','enemy_champ_id','item_build'])['win'].agg(['sum','count'])\
+    .rename(columns={'count': 'item_build_pick_cnt', 'sum': 'item_build_win_cnt'})
+item_build_df['item_build_game_cnt'] = item_build_df.groupby(['champion_id','team_position','enemy_champ_id'])[['item_build_pick_cnt']].transform('sum')
+item_build_df = item_build_df.sort_values(['champion_id','item_build_game_cnt','item_build_pick_cnt','item_build_win_cnt'],ascending = [True,False,False,False])
+item_build_df['item_build_win_rate'] = round((item_build_df['item_build_win_cnt'] / item_build_df['item_build_pick_cnt']) * 100, 2) #승률 계산
+item_build_df['item_build_pick_rate'] = round((item_build_df['item_build_pick_cnt'] / item_build_df['item_build_game_cnt']) * 100, 2) #픽률 계산
+item_build_df = item_build_df.groupby(['champion_id','team_position','enemy_champ_id']).head(1).reset_index()
+
+# 머지
+match_up_item_df = item_build_df.merge(start_item_df, on=['champion_id', 'team_position', 'enemy_champ_id'])\
+    .merge(shoe_item_df, on=['champion_id', 'team_position', 'enemy_champ_id'])\
+    .merge(mythic_item_df, on=['champion_id', 'team_position', 'enemy_champ_id'])
+#  ---------------------------------------------------------------------------------------------------------------------
 # db에 데이터 삽입
 query_champion_match_up = (
         f'INSERT INTO champion_match_up '
@@ -323,6 +409,10 @@ query_champion_match_up = (
         f'avg_g_15 = VALUES(avg_g_15), tower_kill_time = VALUES(tower_kill_time), avg_cs = VALUES(avg_cs), '
         f'match_up_win_rate = VALUES(match_up_win_rate), match_up_win_cnt = VALUES(match_up_win_cnt), match_up_cnt = VALUES(match_up_cnt)'
     )
+query_match_up_spell = ()
+query_match_up_rune = ()
+query_match_up_skill = ()
+query_match_up_item = ()
 def insert_my(x,conn,query):
     try:
         mu.mysql_execute(query,conn)
@@ -332,11 +422,12 @@ def insert_my(x,conn,query):
 
 conn = mu.connect_mysql()
 match_up.progress_apply(lambda x: insert_my(x,conn,query_champion_match_up),axis =1)
+match_up_spell.progress_apply(lambda x: insert_my(x,conn,query_match_up_spell),axis =1)
+match_up_runes.progress_apply(lambda x: insert_my(x,conn,query_match_up_rune),axis =1)
+match_up_skill_df.progress_apply(lambda x: insert_my(x,conn,query_match_up_skill),axis =1)
+match_up_item_df.progress_apply(lambda x: insert_my(x,conn,query_match_up_item),axis =1)
 conn.commit()
 conn.close()
-#  ---------------------------------------------------------------------------------------------------------------------
-# 매치업 아이템 빌드
-
 #  ---------------------------------------------------------------------------------------------------------------------
 # riotwatcher library
 watcher = LolWatcher(mu.riot_api_key) #riotwatcher 객체 생성
@@ -350,7 +441,7 @@ print(ranked_stats)
 my_matches = watcher.match.matchlist_by_puuid(my_region, response['puuid'], 0, 30) # 최근 게임 30개
 print(my_matches)
 
-match_detail = watcher.match.by_id(my_region, my_matches[0]) # 게임 정보
+match_detail = watcher.match.by_id(my_region, my_matches[0]) # 매치 정보
 timeline_detail = watcher.match.timeline_by_match(my_region, my_matches[0]) # 타임라인 정보
 
 participants = []

@@ -552,7 +552,7 @@ def item_build_data(raw_data):
         for end_champ, build_champ in zip(item_end_lst, item_build_lst):
             final_champ = [end_champ[0], end_champ[1], end_champ[2]]  # Include 'win' in the final list
             for item in end_champ[3:]:
-                if item > 2055 and item not in shoe_items and item not in accessories_lst:
+                if item > 2055 and item not in shoe_items and item not in accessories_lst: #
                     final_champ.append(item)
             final_lst.append(final_champ)
 
