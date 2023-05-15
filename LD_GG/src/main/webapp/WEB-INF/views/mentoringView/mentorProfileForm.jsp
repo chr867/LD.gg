@@ -429,6 +429,73 @@ th {
 			$(this).removeClass("mouse-over");
 		});
 
+		function submitForm() {
+			  let formData = new FormData($('#mentorProfileForm')[0]);
+			  $.ajax({
+			    url: '/mentor/edit-profile/',
+			    type: 'PUT',
+			    contentType: 'application/json;charset=UTF-8',
+			    data: JSON.stringify({
+			      mentor_email: '${email}',
+			      about_mentor: formData.get('about_mentor'),
+			      specialized_position: JSON.stringify(positions),
+			      top_specialized_champion: formData.get('top_specialized_champion'),
+			      contact_time: formData.get('contact_time'),
+			      careers: formData.get('careers'),
+			      recom_ment: formData.get('recom_ment')
+			    }),
+			    success: function(data) {
+			    	console.log("프로필 작성 성공");
+			        displaySpecializedPosition();
+			      },
+			      error: function(error) {
+			          console.log(error);
+			      }
+			  });
+			  return false;
+			}
+		
+		function deleteClass(class_id) {
+			  $.ajax({
+			    url: "/mentor/delete-mentor-class/",
+			    type: "DELETE",
+			    contentType: "application/json;charset=UTF-8",
+			    data: class_id,
+			    success: function() {
+			      select_by_email_class();
+			      alert("클래스 삭제 성공");
+			    },
+			    error: function() {
+			      console.error("멘토 클래스 삭제 실패");
+			    }
+			  });
+			}
+			
+		function classSubmitForm() {
+			  let formData = $("#classForm").serializeArray();
+			  let mentorClassDTO = {};
+			  $.each(formData, function(index, field){
+			    mentorClassDTO[field.name] = field.value;
+			  });
+			  mentorClassDTO.mentor_email = "${mentor_profile.mentor_email}";
+			  mentorClassDTO.price = parseInt(mentorClassDTO.price);
+			  $.ajax({
+			    url: "/mentor/insert-mentor-class/",
+			    type: "POST",
+			    contentType: "application/json;charset=UTF-8",
+			    data: JSON.stringify(mentorClassDTO),
+			    success: function () {
+			   		alert("클래스가 추가되었습니다.");
+			      select_by_email_class();
+			    },
+			    error: function () {
+			      alert("클래스 추가에 실패했습니다.");
+			    }
+			  });
+			  return false;
+			}
+
+
 		
 		$(document).on("click", ".deleteButton", function(){
 		    // 버튼 클릭시 실행할 함수

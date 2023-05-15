@@ -30,7 +30,7 @@
 		UPDATE point SET point_balance = point_balance + #{point}
 	</update>
 	
-	<select id="checkMentoringApplication" resultType = "int">
+	<select id="checkMentoringApplication" resultType = "Integer">
 		SELECT point_balance FROM point WHERE holder_email = #{holder_email}
 	</select>
 

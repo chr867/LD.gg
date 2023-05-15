@@ -237,9 +237,11 @@ src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 	             }
 			  });
 		  });
+		  
 	    $(".apply-btn").click(function() {
 	    	let class_id =$(this).attr("id");
 	    	let price = $(this).val();
+	    	
 	        $.ajax({
 	            url: "/mentor/check-session",
 	            method: "GET",
@@ -252,15 +254,20 @@ src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 	                            mentor_email: "${mentor.email}"
 	                    };
 	                    
+	                    let applicationData = {
+	                    		holder_email : email,
+                    			price : price.toString()
+                    	};
+	                    
+	                    console.log(applicationData);
+	                    
 	                    $.ajax({
-	                    	url : 'wallet/payment/mentoring-application',
+	                    	url: '/mentor/profile/payment/mentoring-application',
 	                    	method : 'post',
-	                    	data : {
-		                    		holder_email : email,
-	                    			price : price
-	                    	}//수업 신청 버튼 클릭 시, 멘티의 잔액 확인 후 신청 승인 여부 결정
+	                    	contentType : 'application/json; charset=utf-8',
+	                    	data : JSON.stringify(applicationData)	//수업 신청 버튼 클릭 시, 멘티의 잔액 확인 후 신청 승인 여부 결정
 	                    }).done(res=>{
-	                    	console.log(res);
+	                    	
 	                    	if(res){
 	                    		$.ajax({
 	    	                        url: "/mentor/save-mentoring-history",

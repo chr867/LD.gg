@@ -88,13 +88,19 @@ public class PaymentService {
 		}
 	}
 
-	public boolean checkMentoringApplication(String holder_email, int price) {
-		int pointBalance = PD.checkMentoringApplication(holder_email);
-		if(price > pointBalance | price == pointBalance) {
-			return true;
-		}else {
-			return false;
-		}
+	public Boolean checkMentoringApplication(String holder_email, int price) {
+	    int point = 0;
+	    Integer pointBalance = PD.checkMentoringApplication(holder_email);
+	    if (pointBalance == null) {
+	        // null 값을 반환하는 경우에 대한 처리
+	        return false; // 예시로 false를 반환하도록 설정
+	    }
+	    point = pointBalance.intValue();
+	    if (point < price) {
+	        return false;
+	    } else {
+	        return true;
+	    }
 	}
 
 }
