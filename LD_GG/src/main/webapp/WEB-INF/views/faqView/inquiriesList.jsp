@@ -94,6 +94,13 @@
     $(document).ready(function () {
     	loadGrid();
     	
+    	$('#keyword').on('keydown', function(event) {
+    	    if (event.key === 'Enter') { // 인풋창에서 엔터 눌렀을때 검색
+    	      event.preventDefault();
+    	      $('#search').click();
+    	    }
+    	  });
+    	
     	 $("#inquiriesForm").submit(function(event) {
     		    event.preventDefault();
     		    let form_data = {
@@ -271,7 +278,7 @@
 	      		    { name: 'state', index: 'state', width: 50 },
 	      		    { name: 'inquiries_title', index: 'inquiries_title', width: 300 },
 	      		    { name: 'date', index: 'date', width: 90 },
-	      		    { name: 'costomer_email', index: 'costomer_email', width: 80 },
+	      		    { name: 'customer_email', index: 'customer_email', width: 80 },
 	      		    { name: 'views', index: 'views', width: 50 }
 	      		  ],
                 loadtext: '로딩중..',
