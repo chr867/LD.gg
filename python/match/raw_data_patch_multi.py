@@ -70,17 +70,18 @@ def load_summoner_names_worker(worker_id):
                     puuid = res['puuid']
 
                     while True:
-                        try:
-                            url = f'https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?startTime={start}&type=ranked&start={index}&count=100&api_key={api_key}'
-                            res = requests.get(url).json()
-                            index += 100
-                            match_set.update(res)
-                        except:
-                            print(f'{res["status"]["message"]}, {api_key}')
+                        url = f'https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?startTime={start}&type=ranked&start={index}&count=100&api_key={api_key}'
+                        res = requests.get(url).json()
+                        index += 100
+                        if len(res) == 1:
+                            print(res)
                             time.sleep(20)
                             continue
 
+                        match_set.update(res)
+
                         if len(res) < 10:
+                            print(len(match_set))
                             break
 
                 except Exception as e:
@@ -107,7 +108,7 @@ def get_match_info_worker(args):
     tmp = set()
     random.shuffle(_match_ids)
 
-    for match_id in tqdm(_match_ids):  # 수정점
+    for match_id in tqdm(_match_ids[:500]):  # 수정점
         while True:
             try:
                 get_match_url = f'https://asia.api.riotgames.com/lol/match/v5/matches/{match_id}?api_key={api_key}'

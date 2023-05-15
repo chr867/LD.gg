@@ -15,10 +15,9 @@ riot_api_keys = private.riot_api_key_array_summoner
 
 # 티어별 유저 이름, 이름으로 puuid, puuid로 match id
 def load_summoner_names_worker():
-    api_it = iter(riot_api_keys)
-    api_key = next(api_it)
     tier_division = ['C', 'GM', 'M']
     name_set = set()
+    api_key = riot_api_keys[0]
 
     for i in tqdm(tier_division):
         if i == 'C':
@@ -27,7 +26,14 @@ def load_summoner_names_worker():
             url = f'https://kr.api.riotgames.com/lol/league/v4/grandmasterleagues/by-queue/RANKED_SOLO_5x5?api_key={api_key}'
         else:  # M
             url = f'https://kr.api.riotgames.com/lol/league/v4/masterleagues/by-queue/RANKED_SOLO_5x5?api_key={api_key}'
+        api_it = iter(riot_api_keys)
         while True:
+            try:
+                api_key = next(api_it)
+            except StopIteration:
+                api_it = iter(riot_api_keys)
+                api_key = next(api_it)
+
             try:
                 res_p = requests.get(url).json()
                 for summoner in res_p['entries']:
@@ -45,29 +51,38 @@ def load_summoner_names_worker():
         random.shuffle(name_lst)
 
         match_set = set()
-        for summoner_name in tqdm(name_lst[:50]):
+        for summoner_name in tqdm(name_lst[:25]):
+            api_it = iter(riot_api_keys)
             while True:
                 index = 0
                 start = 1680620400  # 시즌 시작 Timestamp
                 # tmp = 1683438967290
+                try:
+                    api_key = next(api_it)
+                except StopIteration:
+                    api_it = iter(riot_api_keys)
+                    api_key = next(api_it)
+
                 try:
                     url = f'https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/{summoner_name}?api_key={api_key}'
                     res = requests.get(url).json()
                     puuid = res['puuid']
 
                     while True:
-                        try:
-                            url = f'https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?startTime={start}&type=ranked&start={index}&count=100&api_key={api_key}'
-                            res = requests.get(url).json()
-                            index += 100
-                            match_set.update(res)
-                        except:
-                            print(f'{res["status"]["message"]}, {api_key}')
+                        url = f'https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?startTime={start}&type=ranked&start={index}&count=100&api_key={api_key}'
+                        res = requests.get(url).json()
+                        index += 100
+                        if len(res) == 1:
+                            print(res)
                             time.sleep(20)
                             continue
 
+                        match_set.update(res)
+
                         if len(res) < 10:
+                            print(len(match_set))
                             break
+
                 except Exception as e:
                     if 'found' in res['status']['message']:
                         print(summoner_name, 'not found')
