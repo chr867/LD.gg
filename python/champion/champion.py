@@ -10,14 +10,18 @@ import numpy as np
 tqdm.pandas()
 import data_load as dl
 
+from sklearn.cluster import KMeans
+
 # RIOT-API-KEY
 riot_api_key = 'RGAPI-14667a4e-7c3c-45fa-ac8f-e53c7c3f5fe1'
+pd.set_option('display.max_columns', None)
+pd.set_option('display.max_rows', None)
 # ----------------------------------------------------------------------------------------------------------------------
 test_df = dl.matches_timeline_data_select(5000)
 asd = dl.matches_timeline_data(10)
 
 start_time = time.time()
-df = dl.matches_timeline_data(30000)
+df = dl.matches_timeline_data(10000)
 print("JSON 변환 시작")
 df['matches'] = df['matches'].apply(json.loads)
 df['timeline'] = df['timeline'].apply(json.loads)
@@ -595,28 +599,6 @@ def item_build_data(raw_data):
 item_build_data = item_build_data(df)
 item_build_sort = item_build_data.sort_values(['pickRate'],ascending=False)
 
-# ----------------------------------------------------------------------------------------------------------------------
-# 밴률 데이터
-def ban_rate_data(raw_data):
-    result = []
-    for x in tqdm(range(len(raw_data))):
-        ban_lst = raw_data.iloc[x]['matches']['bans']
-        for ban in ban_lst:
-            if ban != 0 and ban != -1:
-                result.append(ban)
-
-    columns = ['championId']
-    df = pd.DataFrame(result, columns=columns)
-    ban_rate_df = df.groupby(['championId']).size().reset_index(name='banCount')
-
-    ban_rate_df['banTotal'] = ban_rate_df['banCount'].sum()
-    ban_rate_df['banRate'] = round((ban_rate_df['banCount'] / ban_rate_df['banTotal'])*100, 2)
-
-    return ban_rate_df
-
-
-ban_rate_df = ban_rate_data(df)
-sort_ban_rate = ban_rate_df.sort_values(['banRate'], ascending = False)
 
 # ----------------------------------------------------------------------------------------------------------------------
 # 라인 데이터
@@ -649,25 +631,86 @@ def lane_data(df):
 lane_data = lane_data(df)
 
 # ----------------------------------------------------------------------------------------------------------------------
-df.iloc[0]['matches']['participants'][0]['teamPosition']
+def champion_stats(df):
+    def win_rate_pick_rate_data(raw_data):
+        result = []
+        for x in tqdm(range(len(raw_data))):
+            for player in raw_data.iloc[x]['matches']['participants']:
+                lst = []
+                lst.append(player['championId'])
+                lst.append(player['win'])
+                lst.append(player['teamPosition'])  # 팀 포지션 추가
+                result.append(lst)
+
+        columns = ['championId', 'win', 'teamPosition']  # 열 추가
+        df = pd.DataFrame(result, columns=columns)
+        df['win'] = df['win'].astype(int)
+        groupBy_df = df.groupby(['championId', 'teamPosition']).agg({'win': ['sum', 'count']})
+        groupBy_df.columns = ['winCount', 'pickCount']
+        groupBy_df['lineTotalCount'] = groupBy_df.groupby('teamPosition')['pickCount'].transform('sum')  # 각 라인별 총 픽수 계산
+        groupBy_df['winRate'] = round((groupBy_df['winCount'] / groupBy_df['pickCount']) * 100, 2)
+        groupBy_df['pickRate'] = round((groupBy_df['pickCount'] / groupBy_df['lineTotalCount']) * 100,
+                                       2)  # 각 라인별 pickRate 계산
+        groupBy_df = groupBy_df.reset_index()  # 인덱스 재설정
+        groupBy_df = groupBy_df[['championId', 'teamPosition', 'winRate', 'pickRate']]  # 열 순서 조정
+        return groupBy_df
+
+    win_rate_pick_rate_data = win_rate_pick_rate_data(df)
+
+    # 밴률 데이터
+    def ban_rate_data(raw_data):
+        result = []
+        for x in tqdm(range(len(raw_data))):
+            ban_lst = raw_data.iloc[x]['matches']['bans']
+            for idx, ban in enumerate(ban_lst):
+                if ban != 0 and ban != -1:
+                    lst = []
+                    team_position = raw_data.iloc[x]['matches']['participants'][idx]['teamPosition']
+                    if team_position:
+                        lst.append(team_position)
+                        lst.append(ban)
+                        result.append(lst)
+
+        columns = ['teamPosition', 'championId']
+        df = pd.DataFrame(result, columns=columns)
+        ban_rate_df = df.groupby(['teamPosition', 'championId']).size().reset_index(name='banCount')
+
+        ban_rate_df['banPositionTotal'] = ban_rate_df.groupby('teamPosition')['banCount'].transform('sum')
+        ban_rate_df['banRate'] = round((ban_rate_df['banCount'] / ban_rate_df['banPositionTotal']) * 100, 2)
+        ban_rate_df = ban_rate_df.dropna()
+        ban_rate_df = ban_rate_df[['teamPosition', 'championId', 'banRate']]
+
+        return ban_rate_df
+
+    ban_rate_df = ban_rate_data(df)
+
+    champion_stats_df = win_rate_pick_rate_data.merge(ban_rate_df, on=['championId', 'teamPosition'])
+
+    return champion_stats_df
 
 
+champion_stats = champion_stats(df)
+champion_stats[:30]
 
 
+df.iloc[0]['matches']['participants'][0]
 
 
+encoded_df = pd.get_dummies(champion_stats['teamPosition'])
+
+# 인코딩 결과 확인
+print(encoded_df)
 
 
+# 특징 선택
+features = champion_stats[['winRate', 'pickRate', 'banRate']]
 
+# 모델 선택 및 훈련
+kmeans = KMeans(n_clusters=6, random_state=42)
+kmeans.fit(features)
 
-
-
-
-
-
-
-
-
+# 결과 확인
+champion_stats['tier'] = kmeans.labels_
 
 
 
