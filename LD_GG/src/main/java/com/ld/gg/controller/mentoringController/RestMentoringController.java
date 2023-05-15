@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,6 +39,7 @@ import com.ld.gg.dto.mentoringdto.MyMentoringDTO;
 import com.ld.gg.dto.mentoringdto.TagListDTO;
 import com.ld.gg.dto.mentoringdto.EstimateDTO;
 import com.ld.gg.service.MemberService;
+import com.ld.gg.service.PaymentService;
 import com.ld.gg.service.mentoringService.MentorProfileService;
 
 import oracle.jdbc.proxy.annotation.Post;
@@ -52,6 +54,8 @@ public class RestMentoringController {
 	private MemberDao mbdao;
 	@Autowired
 	private MemberService mbService;
+	@Autowired
+	private PaymentService ps;
 	
 	//모든 챔피언 이름 가져오기
 	@GetMapping("/get-all-champ")
@@ -375,6 +379,17 @@ public class RestMentoringController {
 		String mentor_profile = mtpService.select_by_email_mentor_profile(mentor_email);
 		return mentor_profile;
 	}
+	
+	@PostMapping("/profile/payment/mentoring-application")
+	public ResponseEntity<Boolean> checkMentoringApplication(@RequestBody Map<String, String> requestData) {
+	    String holder_email = requestData.get("holder_email");
+	    String priceString = requestData.get("price");
+	    int price = Integer.parseInt(priceString);
+	    
+	    boolean result = ps.checkMentoringApplication(holder_email, price);
+	    return ResponseEntity.ok(result);
+	}
+
 	
 }
 	

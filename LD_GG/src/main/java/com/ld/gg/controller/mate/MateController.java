@@ -100,8 +100,8 @@ public class MateController {
 				return new ModelAndView("redirect:/");
 			}
 			MateDto mDto = new MateDto();
-			int mate_id = ms.
-			mDto.setMate_id(mate_id);
+			//int mate_id = ms.
+			//mDto.setMate_id(mate_id);
 			mDto.setMate_title(mate_title);
 			mDto.setMate_content(mate_content);
 			log.info("메이트 글 수정 내용"+mDto);

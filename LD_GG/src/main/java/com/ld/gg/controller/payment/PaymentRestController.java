@@ -41,10 +41,5 @@ public class PaymentRestController {
 		return ppd;
 	}
 	
-	@PostMapping("/payment/mentoring-application")//멘토 수업 신청 시 멘티의 잔액 확인
-	public boolean checkMentoringApplication(@RequestParam String holder_email, @RequestParam int price) {
-		boolean result = ps.checkMentoringApplication(holder_email, price);
-		return result;
-	}
 	
 }

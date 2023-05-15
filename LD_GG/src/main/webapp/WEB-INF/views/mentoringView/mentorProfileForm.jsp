@@ -507,6 +507,7 @@ th {
 			    contentType: "application/json;charset=UTF-8",
 			    data: JSON.stringify(mentorClassDTO),
 			    success: function () {
+			   		alert("클래스가 추가되었습니다.");
 			      select_by_email_class();
 			    },
 			    error: function () {
