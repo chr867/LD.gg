@@ -205,10 +205,9 @@ def df_refine(df):
         else:
             team_idx = 1
 
-        objectives = []
-        objectives.append({'baron': match_info['teams'][team_idx]['objectives']['baron']})
-        objectives.append({'dragon': match_info['teams'][team_idx]['objectives']['dragon']})
-        objectives.append({'riftHerald': match_info['teams'][team_idx]['objectives']['riftHerald']})
+        objectives = [{'baron': match_info['teams'][team_idx]['objectives']['baron']},
+                      {'dragon': match_info['teams'][team_idx]['objectives']['dragon']},
+                      {'riftHerald': match_info['teams'][team_idx]['objectives']['riftHerald']}]
         matches['objectives'] = objectives
 
         return matches
