@@ -74,7 +74,7 @@ def load_summoner_names_worker():
                         index += 100
                         if len(res) == 1:
                             print(res)
-                            time.sleep(20)
+                            time.sleep(5)
                             continue
 
                         match_set.update(res)

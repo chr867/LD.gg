@@ -49,10 +49,15 @@ def load_summoner_names_worker():
         for summoner_name in tqdm(name_lst[:25]):
             while True:
                 index = 0
-                start = 1673485200  # 시즌 시작 Timestamp
+                start = 1673362800  # 시즌 시작 Timestamp
                 # tmp = 1683438967290
                 try:
+                    api_key = next(api_it)
+                except StopIteration:
+                    api_it = iter(riot_api_keys)
+                    api_key = next(api_it)
 
+                try:
                     url = f'https://kr.api.riotgames.com/lol/summoner/v4/summoners/{summoner_name}?api_key={api_key}'
                     res = requests.get(url).json()
                     puuid = res['puuid']
@@ -63,7 +68,7 @@ def load_summoner_names_worker():
                         index += 100
                         if len(res) == 1:
                             print(res)
-                            time.sleep(20)
+                            time.sleep(5)
                             continue
 
                         match_set.update(res)

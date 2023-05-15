@@ -10,8 +10,6 @@ import json
 import multiprocessing as mp
 import logging
 import os
-os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 tqdm.pandas()
 
 riot_api_keys = private.riot_api_key_array
@@ -64,7 +62,6 @@ def load_summoner_names_worker(worker_id):
                 # 13.7 패치 4월 5일 13.8패치 4월 19일 13.9 5월 3일
                 # tmp = 1683904393839
                 try:
-
                     url = f'https://kr.api.riotgames.com/lol/summoner/v4/summoners/{summoner_name}?api_key={api_key}'
                     res = requests.get(url).json()
                     puuid = res['puuid']
