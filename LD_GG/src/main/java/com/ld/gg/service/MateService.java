@@ -65,6 +65,11 @@ public class MateService {
 		MateDto MateDetails = mDao.getMateDetails(mate_id);
 		return MateDetails;
 	}
+	public MateDto getMateInfo(int mate_id) {
+		MateDto MateInfo = mDao.getMateInfo(mate_id);
+		return MateInfo;
+	}
+
 
 	public int mateReplyInsert(MateDto mDto) {
 		try {
@@ -90,4 +95,25 @@ public class MateService {
 		return SelectReplyList;
 		
 	}
+	public int mateDelete(int mate_id) {
+		log.info(mate_id+"mate_id");
+		try {
+			Integer mateDeleteResult = mDao.mateDelete(mate_id);
+			log.info(mateDeleteResult+"mateDeleteResult");
+			if (mateDeleteResult != 0) {
+				log.info(mateDeleteResult+"mateDeleteResult");
+				return 1;
+			} else {
+				log.info("메이트 서비스 델리트 실패");
+				return 2;
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+			e.printStackTrace();
+			return 4;
+		}
+
+	}
+
+
 }

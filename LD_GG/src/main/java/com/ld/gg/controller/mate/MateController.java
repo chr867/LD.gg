@@ -1,8 +1,13 @@
 package com.ld.gg.controller.mate;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +30,7 @@ public class MateController {
 	@Autowired
 	private MateService ms;
 
-	@GetMapping("/")
+	@RequestMapping("/")
 	public String goMateList() throws Exception {
 		log.info("메이트 게시판 이동.");
 		return "/mate/list";// 구현중
@@ -36,6 +41,7 @@ public class MateController {
 		log.info("메이트 글쓰기 이동.");
 		return "/mate/write";
 	}
+		
 	@GetMapping("/details")
 	public ModelAndView mateDetails(@RequestParam int mate_id) throws Exception {
 	log.info("메이트 상세 보기 이동");
@@ -45,18 +51,18 @@ public class MateController {
 	log.info("mav 값:"+mav);
 	return mav;
 	}
+
 	@GetMapping("/modify")
 	public ModelAndView mateModify(@RequestParam int mate_id) throws Exception {
-	log.info("메이트 수정 이동");
-	MateDto mateModify = ms.getMateDetails(mate_id);
-	ModelAndView mav =new ModelAndView("mate/modify");
-	
-	mav.addObject("title",mateModify.getMate_title());
-	mav.addObject("content",mateModify.getMate_content());
-	log.info("mateModify mav 값:"+mav);
-	return mav;
+		log.info("메이트 수정 이동");
+		MateDto mateModify = ms.getMateDetails(mate_id);
+		ModelAndView mav =new ModelAndView("mate/modify");
+		
+		mav.addObject("title",mateModify.getMate_title());
+		mav.addObject("content",mateModify.getMate_content());
+		log.info("mateModify mav 값:"+mav);
+		return mav;
 	}
-
 	@PostMapping("/write_mate")
 	public ModelAndView writeMate(@RequestParam String mate_title, @RequestParam String mate_content, HttpSession session)
 			throws Exception {
@@ -89,7 +95,7 @@ public class MateController {
 		
 	
 		@PostMapping("/write_mateModify")
-		public ModelAndView modifyMate(@RequestParam String mate_title, @RequestParam String mate_content, HttpSession session)
+		public ModelAndView modifyMate(@RequestParam String mate_title,@RequestParam int mate_id, @RequestParam String mate_content, HttpSession session)
 				throws Exception {
 			log.info("메이트 글수정 완료 버튼 누름");
 			String email = (String) session.getAttribute("email");
@@ -100,7 +106,10 @@ public class MateController {
 				return new ModelAndView("redirect:/");
 			}
 			MateDto mDto = new MateDto();
-			int mate_id = ms.
+			//int mate_id = ms.getMateList();
+			//int mate_id = ms.getMateList().get(0).getMate_id();
+			mate_id=ms.getMateInfo(mate_id).getMate_id();
+			log.info("모디파이."+mate_id);
 			mDto.setMate_id(mate_id);
 			mDto.setMate_title(mate_title);
 			mDto.setMate_content(mate_content);
@@ -111,7 +120,8 @@ public class MateController {
 				return new ModelAndView("redirect:/mate/");
 			}else {
 				ModelAndView mav = new ModelAndView("/mate/modify");
-				mav.addObject("errorMsg", "글수정에 실패했습니다. 다시 시도해주세요");
+				mav.addObject("errorMsg", "글수정에 실패했습니다. 다시 시도해주세요");			
+				mav.addObject("mate_id", mate_id);
 				mav.addObject("title", mate_title);
 				mav.addObject("content", mate_content);
 				log.info("mav: " + mav.getModel().toString());
