@@ -26,7 +26,7 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 # ----------------------------------------------------------------------------------------------------------------------
 start_time = time.time()
-df = dl.match_raw_patch(1000)
+df = dl.match_raw_patch(1)
 print("JSON 변환 시작")
 df['matches'] = df['matches'].apply(json.loads)
 df['timeline'] = df['timeline'].apply(json.loads)
@@ -36,115 +36,114 @@ print("JSON 변환 종료")
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-def champion_tier_machine_learning(df):
-    def win_rate_pick_rate_data(raw_data):
-        result = []
-        for x in tqdm(range(len(raw_data))):
-            for player in raw_data.iloc[x]['matches']['participants']:
+print("시작!")
+conn = mu.connect_mysql()
+matchId_count = pd.DataFrame(mu.mysql_execute_dict(f"SELECT match_id_substr FROM match_raw_patch", conn))
+conn.close()
+print(f'매치아이디 갯수 : {len(matchId_count.match_id_substr.unique())}개')
+
+batch_size = 1000
+win_pick_lst_result = []
+ban_rate_lst_result = []
+meta_score_lst_result = []
+# len(matchId_count.match_id_substr.unique())
+for limit in tqdm(range(0, len(matchId_count.match_id_substr.unique()), batch_size)):
+    conn = mu.connect_mysql()
+    query = f"SELECT matches, timeline FROM match_raw_patch LIMIT {limit}, {batch_size}"
+    row = pd.DataFrame(mu.mysql_execute_dict(query, conn))
+    conn.close()
+    row['matches'] = row['matches'].apply(json.loads)
+    row['timeline'] = row['timeline'].apply(json.loads)
+
+    for x in range(len(row)):
+        for player in row.iloc[x]['matches']['participants']:
+            lst = []
+            lst.append(player['championId'])
+            lst.append(player['win'])
+            lst.append(player['teamPosition'])
+            win_pick_lst_result.append(lst)
+
+    for x in range(len(row)):
+        ban_lst = row.iloc[x]['matches']['bans']
+        for idx, ban in enumerate(ban_lst):
+            if ban != 0 and ban != -1:
                 lst = []
-                lst.append(player['championId'])
-                lst.append(player['win'])
-                lst.append(player['teamPosition'])
-                result.append(lst)
+                team_position = row.iloc[x]['matches']['participants'][idx]['teamPosition']
+                if team_position:
+                    lst.append(team_position)
+                    lst.append(ban)
+                    ban_rate_lst_result.append(lst)
 
-        columns = ['championId', 'win', 'teamPosition']
-        win_pick_df = pd.DataFrame(result, columns=columns)
-        win_pick_df['win'] = win_pick_df['win'].astype(int)
-        groupBy_df = win_pick_df.groupby(['championId', 'teamPosition']).agg({'win': ['sum', 'count']})
-        groupBy_df.columns = ['winCount', 'pickCount']
-        groupBy_df['lineTotalCount'] = groupBy_df.groupby('teamPosition')['pickCount'].transform('sum')
-        groupBy_df['winRate'] = round((groupBy_df['winCount'] / groupBy_df['pickCount']) * 100, 2)
-        groupBy_df['pickRate'] = round((groupBy_df['pickCount'] / groupBy_df['lineTotalCount']) * 100, 2)
-        groupBy_df = groupBy_df.reset_index()
-        groupBy_df = groupBy_df[['championId', 'teamPosition', 'winRate', 'pickRate']]
-        return groupBy_df
+    for x in range(len(row)):
+        summoner = row.iloc[x]['matches']['participants']
+        for player in summoner:
+            lst = []
+            lst.append(player['championId'])
+            lst.append(player['teamPosition'])
+            lst.append(player['kda'])
+            lst.append(player['totalDamageDealtToChampions'])
+            lst.append(player['totalDamageTaken'])
+            lst.append(player['timeCCingOthers'])
+            lst.append(player['total_gold'])
+            meta_score_lst_result.append(lst)
+print("데이터 셀렉트 및 리스트 저장완료")
+# ----------------------------------------------------------------
+win_pick_columns = ['championId', 'win', 'teamPosition']
+win_pick_df = pd.DataFrame(win_pick_lst_result, columns=win_pick_columns)
+win_pick_df['win'] = win_pick_df['win'].astype(int)
+groupBy_df = win_pick_df.groupby(['championId', 'teamPosition']).agg({'win': ['sum', 'count']})
+groupBy_df.columns = ['winCount', 'pickCount']
+groupBy_df['lineTotalCount'] = groupBy_df.groupby('teamPosition')['pickCount'].transform('sum')
+groupBy_df['winRate'] = round((groupBy_df['winCount'] / groupBy_df['pickCount']) * 100, 2)
+groupBy_df['pickRate'] = round((groupBy_df['pickCount'] / groupBy_df['lineTotalCount']) * 100, 2)
+groupBy_df = groupBy_df.reset_index()
+win_pick_rate_df = groupBy_df[['championId', 'teamPosition', 'winRate', 'pickRate']]
+# ----------------------------------------------------------------
+columns = ['teamPosition', 'championId']
+ban_df = pd.DataFrame(ban_rate_lst_result, columns=columns)
+ban_rate_df = ban_df.groupby(['teamPosition', 'championId']).size().reset_index(name='banCount')
 
-    def ban_rate_data(raw_data):
-        result = []
-        for x in tqdm(range(len(raw_data))):
-            ban_lst = raw_data.iloc[x]['matches']['bans']
-            for idx, ban in enumerate(ban_lst):
-                if ban != 0 and ban != -1:
-                    lst = []
-                    team_position = raw_data.iloc[x]['matches']['participants'][idx]['teamPosition']
-                    if team_position:
-                        lst.append(team_position)
-                        lst.append(ban)
-                        result.append(lst)
+ban_rate_df['banPositionTotal'] = ban_rate_df.groupby('teamPosition')['banCount'].transform('sum')
+ban_rate_df['banRate'] = round((ban_rate_df['banCount'] / ban_rate_df['banPositionTotal']) * 100, 2)
+ban_rate_df = ban_rate_df.dropna()
+ban_rate_df = ban_rate_df[['teamPosition', 'championId', 'banRate']]
+# ----------------------------------------------------------------
+meta_score_columns = ['championId', 'teamPosition', 'kda', 'totalDamageDealtToChampions', 'totalDamageTaken',
+           'timeCCingOthers', 'total_gold']
+meta_score_df = pd.DataFrame(meta_score_lst_result, columns=meta_score_columns)
+meta_score_df = meta_score_df.groupby(['championId', 'teamPosition']).mean().reset_index()
 
-        columns = ['teamPosition', 'championId']
-        ban_df = pd.DataFrame(result, columns=columns)
-        ban_rate_df = ban_df.groupby(['teamPosition', 'championId']).size().reset_index(name='banCount')
-
-        ban_rate_df['banPositionTotal'] = ban_rate_df.groupby('teamPosition')['banCount'].transform('sum')
-        ban_rate_df['banRate'] = round((ban_rate_df['banCount'] / ban_rate_df['banPositionTotal']) * 100, 2)
-        ban_rate_df = ban_rate_df.dropna()
-        ban_rate_df = ban_rate_df[['teamPosition', 'championId', 'banRate']]
-
-        return ban_rate_df
-
-    def meta_score_data(raw_data):
-        result = []
-        for x in tqdm(range(len(raw_data))):
-            summoner = raw_data.iloc[x]['matches']['participants']
-            for player in summoner:
-                lst = []
-                lst.append(player['championId'])
-                lst.append(player['teamPosition'])
-                lst.append(player['kda'])
-                lst.append(player['totalDamageDealtToChampions'])
-                lst.append(player['totalDamageTaken'])
-                lst.append(player['timeCCingOthers'])
-                lst.append(player['total_gold'])
-                result.append(lst)
-
-        columns = ['championId', 'teamPosition', 'kda', 'totalDamageDealtToChampions', 'totalDamageTaken',
-                   'timeCCingOthers', 'total_gold']
-
-        meta_score_df = pd.DataFrame(result, columns=columns)
-
-        meta_score_df = meta_score_df.groupby(['championId', 'teamPosition']).mean().reset_index()
-
-        return meta_score_df
-    # ----------------------------------------------------------------
-    win_rate_pick_rate_data = win_rate_pick_rate_data(df)
-    ban_rate_df = ban_rate_data(df)
-    champion_stats_df = win_rate_pick_rate_data.merge(ban_rate_df, on=['championId', 'teamPosition'])
-    meta_score_data = meta_score_data(df)
-    result_df = champion_stats_df.merge(meta_score_data, on=['championId', 'teamPosition'])
-    # ----------------------------------------------------------------
-    # Zscore 설정
-    result_df[['winRate', 'pickRate', 'banRate', 'kda', 'totalDamageDealtToChampions',
-               'totalDamageTaken', 'timeCCingOthers', 'total_gold']] = result_df[['winRate', 'pickRate',
-                                                                                  'banRate', 'kda',
-                                                                                  'totalDamageDealtToChampions',
-                                                                                  'totalDamageTaken', 'timeCCingOthers',
-                                                                                  'total_gold']].apply(zscore)
-    # Zscore 가중치 연산
-    result_df['totalScore'] = result_df['winRate'] * 0.30 + result_df['pickRate'] * 0.25 + \
-                              result_df['banRate'] * 0.15 + result_df['kda'] * 0.05 + \
-                              result_df['totalDamageDealtToChampions'] * 0.05 + \
-                              result_df['totalDamageTaken'] * 0.05 + result_df['timeCCingOthers'] * 0.05 + \
-                              result_df['total_gold'] * 0.05
-    # Zscore 이용하여 엄격하게 티어분류
-    conditions = [
-        (result_df['totalScore'] >= 2),
-        (result_df['totalScore'] >= 1.5) & (result_df['totalScore'] < 2),
-        (result_df['totalScore'] >= 0.5) & (result_df['totalScore'] < 1),
-        (result_df['totalScore'] >= 0) & (result_df['totalScore'] < 0.5),
-        (result_df['totalScore'] < 0),
-        (result_df['totalScore'] < -0.1)
-    ]
-    # OP = 0
-    labels = ['0', '1', '2', '3', '4', '5']
-    result_df['tier'] = np.select(conditions, labels, default='5')
-
-    return result_df
-
-
-champion_tier_machine_learning = champion_tier_machine_learning(df)
-
-sort_stats = champion_tier_machine_learning.sort_values(by=['tier'], ascending=False)
+# ----------------------------------------------------------------
+champion_stats_df = win_pick_rate_df.merge(ban_rate_df, on=['championId', 'teamPosition'])
+result_df = champion_stats_df.merge(meta_score_df, on=['championId', 'teamPosition'])
+# ----------------------------------------------------------------
+# Zscore 설정
+result_df[['winRate', 'pickRate', 'banRate', 'kda', 'totalDamageDealtToChampions',
+           'totalDamageTaken', 'timeCCingOthers', 'total_gold']] = result_df[['winRate', 'pickRate',
+                                                                              'banRate', 'kda',
+                                                                              'totalDamageDealtToChampions',
+                                                                              'totalDamageTaken', 'timeCCingOthers',
+                                                                              'total_gold']].apply(zscore)
+# Zscore 가중치 연산
+result_df['totalScore'] = result_df['winRate'] * 0.30 + result_df['pickRate'] * 0.25 + \
+                          result_df['banRate'] * 0.15 + result_df['kda'] * 0.05 + \
+                          result_df['totalDamageDealtToChampions'] * 0.05 + \
+                          result_df['totalDamageTaken'] * 0.05 + result_df['timeCCingOthers'] * 0.05 + \
+                          result_df['total_gold'] * 0.05
+# Zscore 이용하여 엄격하게 티어분류
+conditions = [
+    (result_df['totalScore'] >= 2),
+    (result_df['totalScore'] >= 1.5) & (result_df['totalScore'] < 2),
+    (result_df['totalScore'] >= 0.5) & (result_df['totalScore'] < 1),
+    (result_df['totalScore'] >= 0) & (result_df['totalScore'] < 0.5),
+    (result_df['totalScore'] < 0),
+    (result_df['totalScore'] < -0.1)
+]
+# OP = 0
+labels = ['0', '1', '2', '3', '4', '5']
+result_df['tier'] = np.select(conditions, labels, default='5')
+champion_tier_machine_learning = result_df.copy()
+print("데이터 연산 완료")
 # ----------------------------------------------------------------
 # 특성 가중치를 직접 결정하여 간편하고 직관적이지만 특성 가중치 간의 상호작용을 고려하지 못해 데이터의 주관성 발생
 # 이를 머신러닝 데이터 학습을 통하여 최적의 특성 가중치 자동결정 특성간 복잡한 상호작용 고려 및 데이터의 객관성 보완
