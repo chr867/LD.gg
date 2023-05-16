@@ -69,9 +69,9 @@ public class PaymentService {
 		if(result) {//true일 시, 잔액 조회 후 잔액과 충전금을 합산 -> 잔액 포인트 갱신(update) -> 결제자의 이름과 결제 후 보유 잔액 반환
 			int point = PD.checkBalance(email);
 			point = point + price;
-			int pointResult = PD.updateBalance(point);
+			int pointResult = PD.updateBalance(point, email);
 			PointDto ppd = PD.getPaymentInfo(email);
-			
+			System.out.println(pointResult);
 			Connection con = null;
 	        try {
 	            con = datasource.getConnection();
@@ -120,6 +120,10 @@ public class PaymentService {
 		String menti_email = mbdto.get(0).getEmail();
 		tx_history.setSender_id(menti_email);
 		PD.insert_tx_history(tx_history);
+	}
+
+	public void lowerPoint(String holder_email, int price) {
+		PD.lowerPoint(holder_email, price);
 	}
 
 }

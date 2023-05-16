@@ -416,7 +416,14 @@ public class RestMentoringController {
 	    ps.insert_tx_history(tx_history);
 	}
 
-
+	@PostMapping("/application-class/lowerPoint.json")
+	public void lowerPoint(@RequestBody Map<String, String> requestData) {
+		String holder_email = requestData.get("email");
+		String priceStr = requestData.get("price");
+		int price = Integer.parseInt(priceStr);
+		
+		ps.lowerPoint(holder_email, price);
+	}
 	
 }
 	

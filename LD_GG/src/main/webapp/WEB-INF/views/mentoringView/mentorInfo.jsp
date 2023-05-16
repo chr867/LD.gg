@@ -321,6 +321,18 @@
 	    	                        contentType: "application/json; charset=utf-8",
 	    	                        success: function() {
 	    	                            alert("수강 신청이 완료되었습니다.");
+	    	                            
+	    	                            $.ajax({
+	    	                            	url : '/mentor/application-class/lowerPoint.json',
+	    	                            	method : 'POST',
+	    	                            	data : JSON.stringify({price : price.toString(), email : email}),
+	    	                            	contentType : "application/json; charset = utf-8"
+	    	                            }).done(res=>{
+	    	                            	console.log("수강 신청 성공 및 결제액 차감 성공");
+	    	                            }).fail(err=>{
+	    	                            	console.log(err);
+	    	                            })
+	    	                            
 	    	                        },
 	    	                        error: function() {
 	    	                            alert("이미 신청한 수업입니다.");
