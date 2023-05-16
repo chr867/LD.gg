@@ -10,16 +10,63 @@
 .container_by_class {
 	border: 1px solid black;
 }
+
+#flex-add-store {
+	display: none;
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-contents {
+	background-color: #fefefe;
+	margin: 15% auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 80%;
+}
+
+.flex-paymnent-cash {
+	display: flex;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.flex-label {
+	margin-right: 10px;
+}
+
+.flex-payment-button {
+	cursor: pointer;
+}
+
+.close {
+	color: #aaa;
+	float: right;
+	font-size: 14px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.close:hover, .close:focus {
+	color: black;
+	text-decoration: none;
+}
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-	
+
 <script type="text/javascript"
-src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
-	
+	src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+
 <script type="text/javascript">
 	const IMP = window.IMP; // 생략 가능
 	IMP.init("imp26843336"); // 예: imp00000000a, 본인의 가맹점 식별코드
@@ -27,7 +74,7 @@ src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 
 </head>
 <body>
-	<h2>${mentor.lol_account}멘토님의 프로필</h2>
+	<h2>${mentor.lol_account}멘토님의프로필</h2>
 	<button class="like-btn" id="${mentor.lol_account}">찜하기</button>
 
 	<h4>찜한 횟수: ${mentor_profile.num_of_likes}</h4>
@@ -97,7 +144,7 @@ src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 				<div class="flex-label">
 					<strong>10,000 캐시</strong>
 				</div>
-				<input type="button" class="flex-payment-button" value="10,000 원"
+				<input type="checkbox" class="flex-payment-button" value="10,000 원"
 					style="cursor: pointer">
 			</div>
 
@@ -105,7 +152,7 @@ src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 				<div class="flex-label">
 					<strong>30,000 캐시</strong>
 				</div>
-				<input type="button" class="flex-payment-button" value="30,000 원"
+				<input type="checkbox" class="flex-payment-button" value="30,000 원"
 					style="cursor: pointer">
 			</div>
 
@@ -113,7 +160,7 @@ src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 				<div class="flex-label">
 					<strong>50,000 캐시</strong>
 				</div>
-				<input type="button" class="flex-payment-button" value="50,000 원"
+				<input type="checkbox" class="flex-payment-button" value="50,000 원"
 					style="cursor: pointer">
 			</div>
 
@@ -129,7 +176,6 @@ src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 	<script>
 	$(document).ready(function() {
 		displaySpecializedPosition();//멘토 프로필 가져와서 특화 포지션 게시
-	    $('#flex-add-store').hide();  // #flex-add-store 요소를 숨김
 		let avg_grade = ${mentor_profile.total_grade/mentor_profile.num_of_reviews}
 		let roundedGrade = avg_grade.toFixed(1);
 		$('#avg_grade').html('평점: '+roundedGrade);
@@ -267,8 +313,9 @@ src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 	                    	contentType : 'application/json; charset=utf-8',
 	                    	data : JSON.stringify(applicationData)	//수업 신청 버튼 클릭 시, 멘티의 잔액 확인 후 신청 승인 여부 결정
 	                    }).done(res=>{
-	                    	
-	                    	if(res){
+	                    	console.log(res);
+	                    	let response = res.result;
+	                    	if(response){
 	                    		$.ajax({
 	    	                        url: "/mentor/save-mentoring-history",
 	    	                        method: "POST",
@@ -283,7 +330,10 @@ src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 	    	                    });
 	                    	}else{
 	                    		alert("잔액이 부족합니다. 충전 후 이용해주세요.");
-	                    		$('#flex-add-store').fadeIn();
+	                    		$('#flex-add-store').css("display","block");
+	                    		$('.close').click(function(){
+	                    			$('#flex-add-store').css("display","none");
+	                    		})
 	                    	}
 	                    }).fail(err=>{
 	                    	console.log(err);
@@ -357,25 +407,37 @@ src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 			});
 			}
 	    
-	    let price = "";
-	    $('.flex-payment-button').on("click", function(){
-	    	price = $(this).val();
-	    })
 	    
-	    function requestPay(){//추가 결제
+	    
+	});//ready
+	
+	let price = "";
+    $('.flex-payment-button').on("click", function(){
+    	price = $(this).val();
+    })
+    
+    $('.flex-payment-button').on('change',function(){
+	// 체크된 버튼 확인
+	let checked = $(this).prop('checked');
+	
+	if(checked){
+		$('.flex-payment-button').not(this).prop('checked', false);
+	}
+});
+	
+	 function requestPay(){//추가 결제
 	    	let email = "";
 	    	let phone_num = "";
 	    	let lol_account = "";
-	    	
 	    	$.ajax({//결제에 필요한 정보 가져오기
 	        	method : 'post',
-	        	url : '/wallet/payment/userinfo',
-	        	data : {email : "${email}"}
+	        	url : '/mentor/mentoring/adpay',
+	        	data : {lol_account : "${mentor.lol_account}"}
 	        }).done(res=>{
 	        	console.log(res)
 	        	email = res.email;
 	        	phone_num = res.phone_num;
-	        	lol_account = res.lol_account;
+	        	lol_account = mentor.lol_account;
 	        }).fail(err=>{
 	        	console.log(err)
 	        });
@@ -460,8 +522,6 @@ src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 			});
 			
 	    }
-	    
-	});//ready
 		
 </script>
 </body>

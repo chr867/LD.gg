@@ -33,5 +33,13 @@
 	<select id="checkMentoringApplication" resultType = "Integer">
 		SELECT point_balance FROM point WHERE holder_email = #{holder_email}
 	</select>
+	
+	<select id="getInfoForPayment" resultType = "member">
+		SELECT email, phone_num FROM member WHERE lol_account = #{lol_account}
+	</select>
+	
+	<insert id="txHistory">
+		INSERT INTO transaction_history VALUES (#{tx_id}, ${sender_id}, #{reciever_id}, #{tx_date}, #{points_sent}, #{points_received})
+	</insert>
 
 </mapper>

@@ -2,6 +2,7 @@ package com.ld.gg.service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -101,6 +102,23 @@ public class PaymentService {
 	    } else {
 	        return true;
 	    }
+	}
+
+	public List<MemberDto> getInfoForPayment(String lol_account) {
+		List<MemberDto> md = PD.getInfoForPayment(lol_account);
+		return md;
+	}
+
+	public boolean txHistory(String sender_id, String reciever_id, Date tx_date, int points_sent, int points_received) {
+		int tx_id = 0;
+		boolean result = PD.txHistory(tx_id, sender_id, reciever_id, tx_date, points_sent, points_received);
+		if(result) {
+			tx_id += 1;
+			return true;
+		}else {
+			return false;
+		}
+		
 	}
 
 }
