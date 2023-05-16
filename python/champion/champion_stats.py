@@ -21,7 +21,7 @@ test_df = dl.matches_timeline_data_select(5000)
 asd = dl.matches_timeline_data(10)
 
 start_time = time.time()
-df = dl.matches_timeline_data(10000)
+df = dl.match_raw_patch(1000)
 print("JSON 변환 시작")
 df['matches'] = df['matches'].apply(json.loads)
 df['timeline'] = df['timeline'].apply(json.loads)
