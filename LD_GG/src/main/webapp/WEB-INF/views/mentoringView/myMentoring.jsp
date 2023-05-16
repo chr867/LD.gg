@@ -530,18 +530,23 @@ $(document).ready(function() {
 		    day = "0" + day;
 		}
 		var date = year + "-" + month + "-" + day;
-		$.ajax({
+		console.log($(this));
+		let price = $(this).val();
+		let chargedPoint = price - (10 / price) * 100;
+ 		$.ajax({
 			method : 'post',
-			url : '/wallet/payment/transaction_history',
-			data : {
+			url : '/mentor/myMentoring/tx.json',
+			contentType : "application/json; charset=utf-8",
+			data : JSON.stringify({
 				sender_id : mentiEmail,
 				reciever_id : "${member.lol_account}",
-				tx_data : data,
+				tx_date : date,
 				points_sent : point,
-				points_received : point
-			}
+				points_received : chargedPoint
+			})
 		}).done(res=>{
 			console.log(res);
+			alert("승인 되었습니다!");
 		}).fail(err=>{
 			console.log(err);
 		})

@@ -1,6 +1,9 @@
 package com.ld.gg.controller.mentoringController;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -37,6 +40,7 @@ import com.ld.gg.dto.mentoringdto.MentorReviewDTO;
 import com.ld.gg.dto.mentoringdto.MentorTagDTO;
 import com.ld.gg.dto.mentoringdto.MyMentoringDTO;
 import com.ld.gg.dto.mentoringdto.TagListDTO;
+import com.ld.gg.dto.payment.PaymentDto;
 import com.ld.gg.dto.mentoringdto.EstimateDTO;
 import com.ld.gg.service.MemberService;
 import com.ld.gg.service.PaymentService;
@@ -57,67 +61,67 @@ public class RestMentoringController {
 	@Autowired
 	private PaymentService ps;
 	
-	//紐⑤뱺 梨뷀뵾�뼵 �씠由� 媛��졇�삤湲�
+	//모든 챔피언 이름 가져오기
 	@GetMapping("/get-all-champ")
 	public String select_all_champ() throws JsonProcessingException {
 		String champ_name_list_json = mtpService.select_all_champ();
 		return champ_name_list_json;
 	}
 	
-	//梨뷀뵾�뼵 �븘�씠�뵒濡� 梨뷀뵾�뼵 �씠由� 媛��졇�삤湲�
+	//챔피언 아이디로 챔피언 이름 가져오기
 	@GetMapping("/get-champ-name-by-id")
 	public String select_by_id_champ(@RequestParam int id) throws JsonProcessingException {
 		String champ_name = mtpService.select_by_id_champ(id);
 		return champ_name;
 	}
 	
-	//由щ럭�뼱 �씠硫붿씪濡� �궡媛� �벖 由щ럭 媛��졇�삤湲�
+	//리뷰어 이메일로 내가 쓴 리뷰 가져오기
 	@PostMapping("/get-review-by-reviewer")
 	public String select_by_reviewer_email_mentor_review(@RequestBody Map<String,String> reviewer_email) throws JsonProcessingException {
 		String mentor_review_list = mtpService.select_by_reviewer_email_mentor_review(reviewer_email);
 		return mentor_review_list;
 	}
 	
-	//硫섑넗 �씠硫붿씪濡� �굹�뿉寃� �떖由� 由щ럭 媛��졇�삤湲�
+	//멘토 이메일로 나에게 달린 리뷰 가져오기
 	@PostMapping("/get-review-for-me")
 	public String select_by_mentor_email_mentor_review(@RequestBody Map<String,String> reviewer_email) throws JsonProcessingException {
 		String mentor_review_list = mtpService.select_by_mentor_email_mentor_review(reviewer_email);
 		return mentor_review_list;
 	}
 	
-	//由щ럭 �깮�꽦
+	//리뷰 생성
 	@PostMapping("/save-review")
 	public void insert_mentor_review(@RequestBody MentorReviewDTO mentor_review_dto) {
 		mtpService.insert_mentor_review(mentor_review_dto);
 	}
 	
-	//由щ럭 �궘�젣
+	//리뷰 삭제
 	@DeleteMapping("/delete-review")
 	public void insert_mentor_review(@RequestBody Map<String, Integer> review_num) {
 		mtpService.delete_mentor_review(review_num);
 	}
 	
-	//�씠硫붿씪濡� 李쒗븳 硫섑넗 紐⑸줉 媛��졇�삤湲�
+	//이메일로 찜한 멘토 목록 가져오기
 	@PostMapping("/get-like-mentor")
 	public String select_by_email_like_mentor(@RequestBody Map<String, String> emailmap) throws JsonProcessingException{
 		String like_mentor_list_json = mtpService.select_by_email_like_mentor(emailmap);
 		return like_mentor_list_json;
 	}
 	
-	//李쒗븳 硫섑넗 異붽�
+	//찜한 멘토 추가
 	@PostMapping("/insert-like-mentor")
 	public void insert_like_mentor(@RequestBody LikeMentorDTO like_mentor_dto) {
 		mtpService.insert_like_mentor(like_mentor_dto);
 	}
 	
-	//李쒗븳 硫섑넗 �궘�젣
+	//찜한 멘토 삭제
 	@Transactional
 	@DeleteMapping("/delete-like-mentor")
 	public void delete_like_mentor(@RequestBody LikeMentorDTO like_mentor_dto) {
 		mtpService.delete_like_mentor(like_mentor_dto);
 	}
 	
-	//�꽭�뀡 �젙蹂� 泥댄겕
+	//세션 정보 체크
 	@GetMapping("/check-session")
 	public ResponseEntity<Map<String, Object>> checkSession(HttpServletRequest request) {
 	    HttpSession session = request.getSession(false); // �쁽�옱 �꽭�뀡�씠 �뾾�쑝硫� null 諛섑솚
@@ -138,51 +142,51 @@ public class RestMentoringController {
 	    }
 	}
 	
-	//�궡 �씠硫붿씪濡� �굹�쓽 硫섑넗留� �떊泥� �궡�뿭 媛��졇�삤湲�
+	//내 이메일로 나의 멘토링 신청 내역 가져오기
 	@PostMapping("/get-mentoring-history")
 	public String select_by_email_my_mentoring(@RequestBody Map<String,String> emailMap) throws JsonProcessingException{
 		String my_mt_list_json = mtpService.select_by_email_my_mentoring(emailMap);
 		return my_mt_list_json;
 	}
-	//硫섑넗 �씠硫붿씪濡� �굹�뿉寃� �닔媛뺤떊泥��븳 硫섑떚 �궡�뿭 媛��졇�삤湲�
+	//멘토 이메일로 나에게 수강신청한 멘티 내역 가져오기
 	@PostMapping("/get-request-history")
 	public String select_by_mentor_email_my_mentoring(@RequestBody Map<String,String> emailMap) throws JsonProcessingException{
 		String my_mt_list_json = mtpService.select_by_mentor_email_my_mentoring(emailMap);
 		return my_mt_list_json;
 	}
-	//硫섑넗留� �궡�뿭 �닔�젙
+	//멘토링 내역 수적
 	@PutMapping("/update-mentoring-history")
 	public void update_my_mentoring(@RequestBody MyMentoringDTO my_mt_dto) {
 		mtpService.update_my_mentoring(my_mt_dto);
 	}
 	
-	//硫섑넗留� �궡�뿭 異붽�
+	//멘토링 내역 추가
 	@PostMapping("/save-mentoring-history")
 	public void insert_my_mentoring(@RequestBody MyMentoringDTO my_mt_dto) {
 		mtpService.insert_my_mentoring(my_mt_dto);
 	}
-	//硫섑넗留� �궡�뿭 �궘�젣
+	//멘토링 내역 삭제
 	@DeleteMapping("/delete-mentoring-history")
 	public void delete_my_mentoring(@RequestBody MyMentoringDTO my_mt_dto) {
 		mtpService.delete_my_mentoring(my_mt_dto);
 	}
-	//硫섑떚 �냼�솚�궗紐� 諛쏆븘�꽌 硫섑넗留� �궡�뿭 �궘�젣
+	//멘티 소환사명 받아서 멘토링 내역 삭제
 	@DeleteMapping("/reject-mentoring-history")
 	public void reject_my_mentoring(@RequestBody MyMentoringDTO my_mt_dto) {
 		mtpService.reject_my_mentoring(my_mt_dto);
 	}
 	
-	//硫섑넗留� �궡�뿭 �솚遺�
+	//멘토링 내역 환불
 	@Transactional
 	@DeleteMapping("/refund-mentoring-history")
 	public void refund_my_mentoring(@RequestBody MyMentoringDTO my_mt_dto) {
 		mtpService.delete_my_mentoring(my_mt_dto);
-		//�솚遺� �븯�뒗 硫붿꽌�뱶 異붽��빐�빞�븿~~~~~~~~~
-		//�솚遺� �븯�뒗 硫붿꽌�뱶 異붽��빐�빞�븿~~~~~~~~~
-		//�솚遺� �븯�뒗 硫붿꽌�뱶 異붽��빐�빞�븿~~~~~~~~~
+		//환불 하는 메서드 추가해야함~~~~~~~~~
+		//환불 하는 메서드 추가해야함~~~~~~~~~
+		//환불 하는 메서드 추가해야함~~~~~~~~~
 	}
 	
-	//蹂대궦 寃ъ쟻 �궡�뿭 媛��졇�삤湲�
+	//보낸 견적 내역 가져오기
 	@GetMapping("/get-sent-estimate")
 	public String select_by_mentor_email_estimate(HttpServletRequest request) throws JsonProcessingException{
 		HttpSession session = request.getSession();
@@ -193,7 +197,7 @@ public class RestMentoringController {
 		String estList_json = objectMapper.writeValueAsString(estList);
 		return estList_json;
 	}
-	//諛쏆� 寃ъ쟻 �궡�뿭 媛��졇�삤湲�
+	//받은 견적 내역 가져오기
 	@GetMapping("/get-received-estimate")
 	public String select_by_menti_email_estimate(HttpServletRequest request) throws JsonProcessingException{
 		HttpSession session = request.getSession();
@@ -205,19 +209,19 @@ public class RestMentoringController {
 		return estList_json;
 	}
 	
-	//寃ъ쟻 �궡�슜�쓣 諛쏆븘�꽌 寃ъ쟻 �궡�뿭 ���옣
+	//견적 내용을 받아서 견적 내역 저장
 	@PostMapping("/save-estimate")
 	public void insert_estimate(@RequestBody EstimateDTO estdto) {
 		mtpService.insert_estimate(estdto);
 	}
 	
-	//寃ъ쟻�꽌 �븘�씠�뵒濡� 寃ъ쟻 �궡�슜 �궘�젣
+	//견적서 아이디로 견적 내용 삭제
 	@DeleteMapping("/delete-estimate")
 	public void delete_estimate(@RequestBody Map<String , Integer> estid){
 		mtpService.delete_estimate(estid);
 	}
 	
-	//�굹�� �옒 留욌뒗 硫섑떚 異붿쿇
+	//나와 잘 맞는 멘티 추천
 	@GetMapping("/recom-menti")
 	public String recom_menti(HttpServletRequest request) throws JsonProcessingException{
 		HttpSession session = request.getSession();
@@ -228,7 +232,7 @@ public class RestMentoringController {
 		return cmList_json;
 	}
 	
-	//留욎땄硫섑넗 異붿쿇
+	//맞춤멘토 추천
 	@GetMapping("/recom-mentor")
 	public String recom_mentor(HttpServletRequest request) throws JsonProcessingException{
 		HttpSession session = request.getSession();
@@ -239,7 +243,7 @@ public class RestMentoringController {
 		return mtpList_json;
 	}
 	
-	//留욎땄硫섑넗 硫섑떚 �깭洹� ���옣
+	//맞춤멘토 멘티 태그 저장
 	@PostMapping("/save-menti-tag")
 	@Transactional
 	public void save_menti_tag(@RequestBody List<MentiTagDTO> menti_tag_list) {
@@ -248,38 +252,38 @@ public class RestMentoringController {
 		mtpService.insert_menti_tag(menti_tag_list);
 	}
 	
-	//紐⑺몴 �깭洹� 媛��졇�삤湲�
+	//목표 태그 가져오기
 	@GetMapping("/get-target-tag")
 	public String select_taget_tag() throws JsonProcessingException {
 		String taget_tag_list = mtpService.select_taget_tag();
 		return taget_tag_list;
 	}
-	//�닔�뾽諛⑹떇 �깭洹� 媛��졇�삤湲�
+	//수업방식 태그 가져오기
 	@GetMapping("/get-class-method-tag")
 	public String select_class_method_tag() throws JsonProcessingException {
 		String class_method_tag_list = mtpService.select_class_method_tag();
 		return class_method_tag_list;
 	}
-	//�뒪���씪 �깭洹� 媛��졇�삤湲�
+	//스타일 태그 가져오기
 	@GetMapping("/get-style-tag")
 	public String select_style_tag() throws JsonProcessingException {
 		String style_tag_list = mtpService.select_style_tag();
 		return style_tag_list;
 	}
-	//�뒪���씪2 �깭洹� 媛��졇�삤湲�
+	//스타리2 태그 가져오기
 	@GetMapping("/get-style2-tag")
 	public String select_style2_tag() throws JsonProcessingException {
 		String style2_tag_list = mtpService.select_style2_tag();
 		return style2_tag_list;
 	}
-	//寃쎈젰 �깭洹� 媛��졇�삤湲�
+	//경력 태그 가져오기
 	@GetMapping("/get-careers-tag")
 	public String select_careers_tag() throws JsonProcessingException {
 		String careers_tag_list = mtpService.select_careers_tag();
 		return careers_tag_list;
 	}
 	
-	//留욎땄硫섑넗 媛앹껜 諛쏆븘�꽌 �뾽�뜲�씠�듃
+	//맞춤멘토 객체 받아서 업데이트
 	@PostMapping("/save-custom-mentor")
 	@Transactional
 	public void save_custom_mentor(@RequestBody CustomMentorDTO custom_mentor) {
@@ -288,7 +292,7 @@ public class RestMentoringController {
 		mtpService.insert_custom_mentor(custom_mentor);
 	}
 	
-	//�씠硫붿씪濡� 硫섑넗 �겢�옒�뒪 媛��졇�삤湲�
+	//이메일로 멘토 클래스 가져오기
 	@GetMapping("/select-mentor-class")
 	public String select_by_email_mentor_class(@RequestParam String lol_account) throws JsonProcessingException{
 		List<MemberDto> mbdto = mbService.findLolAccount(lol_account);
@@ -298,23 +302,23 @@ public class RestMentoringController {
 		String class_List_json = objectMapper.writeValueAsString(class_list);
 		return class_List_json;
 	}
-	//硫섑넗 �겢�옒�뒪 �씤�꽌�듃
+	//멘토 클래스 인서트
 	@PostMapping("/insert-mentor-class")
 	public void insert_mentor_class(@RequestBody MentorClassDTO mentor_class_dto) {
 		mtpService.insert_mentor_class(mentor_class_dto);
 	}
-	//硫섑넗 �겢�옒�뒪 �뾽�뜲�씠�듃
+	//멘토 클래스 업데이트
 	@PutMapping("/update-mentor-class")
 	public void update_mentor_class(@RequestBody MentorClassDTO mentor_class_dto) {
 		mtpService.update_mentor_class(mentor_class_dto);
 	}
-	//硫섑넗 �겢�옒�뒪 �궘�젣
+	//멘토 클래스 삭제
 	@DeleteMapping("/delete-mentor-class")
 	public void delete_mentor_class(@RequestBody int class_id) {
 		mtpService.delete_mentor_class(class_id);
 	}
 	
-	//硫섑넗 �쉶�썝 紐⑸줉 媛��졇�삤湲�
+	//멘토 회원 목록 가져오기
 	@GetMapping("/find-mentor")
 	public String select_all_mentor_profile() throws JsonProcessingException{
 		List<MentorProfileDTO> mtpList = mtpService.select_all_mentor_profiles();
@@ -331,20 +335,20 @@ public class RestMentoringController {
 		return mtpListjson;
 	}
 	
-	//�씪諛� �쉶�썝�씠 硫섑넗�쉶�썝�쑝濡� �쟾�솚 �븷�븣 硫섑넗 �봽濡쒗븘 異붽�
+	//일반 회원이 멘토회원으로 전환 할때 멘토 프로필 추가
 	@PostMapping("/insert-mentor-list")
 	public void insert_mentor_profile(@RequestBody Map<String, String> email){
 		String mentor_email = email.get("mentor_email");
 		mtpService.insert_mentor_profile(mentor_email);
 	}
 	
-	//�쉶�썝�젙蹂댁뿉 �쉶�썝���엯�씠 硫섑넗�씤 �궗�엺�뱾 硫섑넗�봽濡쒗븘�뿉 �씤�꽌�듃
+	//회원정보에 회원타입이 멘토인 사람을 멘토프로필에 인서트
 	@PostMapping("/renewal-mentor-list")
 	public void renewal_mentor_profile(){
 		mtpService.renewal_mentor_profile();
 	}
 	
-	//mentorProfileForm.jsp�뿉�꽌 �옉�꽦�븳 �봽濡쒗븘 �젙蹂� �벑濡�
+	//mentorProfileForm.jsp에서 작성한 프로필 정보 등록
 	@PutMapping("/edit-profile")
 	public ResponseEntity<?> updateMentorProfile(@RequestBody MentorProfileDTO mentorProfileDTO){
 		System.out.println(mentorProfileDTO);
@@ -352,28 +356,28 @@ public class RestMentoringController {
 	    return ResponseEntity.ok("Success");
 	}
 	
-	//mentor_tag�뿉 泥댄겕�븳 �깭洹몃�� 異붽�
+	//mentor_tag에 체크한 태그를 추가
 	@PutMapping("/edit-mentor-tag")
 	public ResponseEntity<?> insert_mentor_tag(@RequestBody List<MentorTagDTO> mentor_tag_list){
 		mtpService.insert_mentor_tag(mentor_tag_list);
 	    return ResponseEntity.ok("Success");
 	}
 	
-	//硫섑넗 �씠硫붿씪濡� 硫섑넗�깭洹� �젙蹂� �궘�젣
+	//멘토 이메일로 멘토 태그 정보 삭제
 	@DeleteMapping("/delete-mentor-tag")
 	public ResponseEntity<?> delete_mentor_tag(@RequestBody String mentor_email){
 		mtpService.delete_mentor_tag(mentor_email);
 		return ResponseEntity.ok("Success");
 	}
 	
-	//硫섑넗 �쉶�썝�씠 �씪諛섑쉶�썝�쑝濡� �쟾�솚 �븷�븣 硫섑넗 �봽濡쒗븘 �궘�젣
+	//멘토 회원이 일반회원으로 전환 할 때 멘토 프로필 삭제
 	@DeleteMapping("/delete-mentor-profile")
 	public void delete_mentor_profile(@RequestBody Map<String, String> email) {
 		String mentor_email = email.get("mentor_email");
 		mtpService.delete_mentor_profile(mentor_email);
 	}
 	
-	//硫섑넗 �씠硫붿씪濡� 硫섑넗 �봽濡쒗븘 媛��졇�삤湲�
+	//멘토 이메일로 멘토 프로필 가져오기
 	@PostMapping("/get-mentor-profile")
 	public String select_by_email_mentor_profile(@RequestBody Map<String, String> mentor_email) throws JsonProcessingException {
 		String mentor_profile = mtpService.select_by_email_mentor_profile(mentor_email);
@@ -391,6 +395,36 @@ public class RestMentoringController {
 	    System.out.println(result);
 	    return ResponseEntity.ok(Boolean.toString(result));
 	}
+	
+	@PostMapping("/mentoring/adpay")
+	public ResponseEntity<List<MemberDto>> getInfoForPayment(@RequestParam String lol_account){
+		List<MemberDto> md = ps.getInfoForPayment(lol_account);
+		System.out.println(md);
+		return ResponseEntity.ok(md);
+	}
+	
+	@PostMapping("/myMentoring/tx.json")
+	public ResponseEntity<Boolean> txHistory(@RequestBody Map<String, String> requestData){
+	    String sender_id = requestData.get("sender_id");
+	    String reciever_id = requestData.get("reciever_id");
+	    String txDateStr = requestData.get("tx_date");
+	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	    Date tx_date = null;
+	    try {
+	        tx_date = dateFormat.parse(txDateStr);
+	        // tx_date를 원하는 형태로 사용
+	    } catch (ParseException e) {
+	        e.printStackTrace();
+	    }
+	    String psStr = requestData.get("points_sent");
+	    String prStr = requestData.get("points_received");
+	    int points_sent = Integer.parseInt(psStr);
+	    int points_received = Integer.parseInt(prStr);
+	    
+	    boolean result = ps.txHistory(sender_id, reciever_id, tx_date, points_sent, points_received);
+	    return ResponseEntity.ok(result);
+	}
+
 
 	
 }
