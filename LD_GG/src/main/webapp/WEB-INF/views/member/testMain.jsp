@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+	<link rel="stylesheet" href="/resources/css/mainStyles.css">
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
 	rel="stylesheet"
@@ -34,10 +35,47 @@
 	<a href="/tip/">공략페이지</a>
 	<a href="/userinterface/admin">어드민페이지</a>
 	<a href="/">메인페이지</a>
+	<a href="/chat/chat-list">채팅방</a>
+	<a href="/question/question">질문</a>
+	<a href ="/wallet/payment">지갑</a>
+
+	<!-- widget -->
+	<div id="email" hidden>${sessionScope.email}</div>
+	<div class="widget-container">
+		<div>알림...</div>
+	</div>
+	<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+	<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+	<script src="/resources/js/mainWidget.js"></script>
 </body>
 <script type="text/javascript">
 	function logout(){
 		document.querySelector('#logoutFrm').submit();
 	}
+
+	/* widget */
+	var widget = document.querySelector('.widget-container');
+	var isDragging = false;
+	var offsetX = 0;
+	var offsetY = 0;
+
+	widget.addEventListener('mousedown', function(event) {
+		isDragging = true;
+		offsetX = event.clientX - widget.offsetLeft;
+		offsetY = event.clientY - widget.offsetTop;
+	});
+
+	document.addEventListener('mousemove', function(event) {
+		if (isDragging) {
+			widget.style.left = (event.clientX - offsetX) + 'px';
+			widget.style.top = (event.clientY - offsetY) + 'px';
+		}
+	});
+
+	document.addEventListener('mouseup', function(event) {
+		isDragging = false;
+	});
 </script>
 </html>

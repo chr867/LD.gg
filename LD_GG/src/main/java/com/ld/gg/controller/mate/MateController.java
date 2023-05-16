@@ -106,6 +106,7 @@ public class MateController {
 				return new ModelAndView("redirect:/");
 			}
 			MateDto mDto = new MateDto();
+      
 			//int mate_id = ms.getMateList();
 			//int mate_id = ms.getMateList().get(0).getMate_id();
 			mate_id=ms.getMateInfo(mate_id).getMate_id();

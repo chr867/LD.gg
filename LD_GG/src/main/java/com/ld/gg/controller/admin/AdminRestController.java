@@ -125,8 +125,14 @@ public class AdminRestController {
 		}	
 		// 1 = 성공 2 = 실패
 		@PostMapping("/admin/member/stop")
-		public int mbStop(String email) {
+		public int mbStop(String email) throws Exception{
 			int result = as.updateMemberStop(email,4);
+			return result;
+		}
+		
+		@PostMapping("admin/forcedDrop")
+		public int forcedDrop(String email) throws Exception{
+			int result = as.forcedDrop(email);
 			return result;
 		}
 		

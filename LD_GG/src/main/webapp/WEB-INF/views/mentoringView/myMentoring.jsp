@@ -61,8 +61,8 @@
     </div>
   </div>
 </div>
-
 <!-- 리뷰 쓰기 모달 -->
+
 	<div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true" style="display: none;">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -497,20 +497,52 @@ $(document).ready(function() {
         });
 		
 	})
+	
 	$(document).on('click', '.accept-btn', function(event) { //수락 버튼 누를떄 멘토링 내역 수정
-		let mentiEmail = $(this).closest('tr').find('td:eq(0)').text();
+		let mentiEmail = $(this).closest('tr').find('td:eq(0)').text(); //소환사명
+		let class_id = $(this).attr("id");
+		let mentor_email = "${member.email}"
 		$.ajax({
 		    type: "PUT",
 		    url: "/mentor/update-mentoring-history", 
 		    contentType: "application/json; charset=utf-8",
 		    data: JSON.stringify({
 		    	menti_email: mentiEmail, //소환사명
-		        class_id: $(this).attr("id"),
+		        class_id: class_id,
 		        menti_state: 1, // 상태를 업데이트 합니다.
 		    }),
 		    success: function() {
 		      // 성공적으로 업데이트 되었을 경우 처리할 내용을 작성합니다.
-		    	getRequestHistory();
+		      	console.log("1: "+class_id)
+		      	$.ajax({// 클래스 아이디로 클래스 정보 가져오기
+				    url: "/mentor/select-by-id-mentor-class?class_id=" + class_id,
+				    type: "GET",
+				    contentType: "application/json;charset=UTF-8",
+				    success: function (mentor_class) {
+				    	let mentor_class_info = JSON.parse(mentor_class)
+				    	class_price = mentor_class_info.price
+						let chargedPoint = parseInt(class_price - (class_price / 10));
+				 		$.ajax({
+							method : 'post',
+							url : '/mentor/myMentoring/tx.json',
+							contentType : "application/json; charset=utf-8",
+							data : JSON.stringify({
+								sender_id : mentiEmail,
+								receiver_id : mentor_email,
+								points_sent : class_price,
+								points_received : chargedPoint
+							})
+						}).done(res=>{
+							console.log(res);
+							alert("승인 되었습니다!");
+						}).fail(err=>{
+						})
+				    },
+				    error: function (xhr, status, error) {
+				      console.error(error);
+				    },
+				  });
+		      	getRequestHistory();
 		    },
 		    error: function(xhr, status, error) {
 		      console.error(xhr.responseText);
@@ -519,6 +551,29 @@ $(document).ready(function() {
 		    }
 		  });
 	});
+	
+	$(document).on('click', '.reject-btn', function(event) { //거절 버튼 누를떄 멘토링 내역 수정
+		let classId = $(this).attr("id");
+		let mentiEmail = $(this).closest('tr').find('td:eq(0)').text(); //멘티 소환사명
+	    let data ={
+	    	menti_email: mentiEmail,
+	    	class_id: classId
+	    }
+		$(this).closest('tr').remove();
+		$.ajax({
+            url: "/mentor/reject-mentoring-history",
+            type: "DELETE",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            success: function() {
+                alert("수업이 거절되었습니다");
+            },
+            error: function() {
+                alert("거절 실패");
+            }
+        });
+	});
+	
 	$(document).on('click', '.done-btn', function(event) { //수업완료 버튼 누를떄 멘토링 내역 수정
 		let mentiEmail = ""+$(this).closest('tr').find('td:eq(0)').text();
 		const date = new Date();
@@ -574,6 +629,8 @@ $(document).ready(function() {
 	      }
 	    });
 	  });
+	  
+	  
 	  function getRequestHistory() {
 			$.ajax({ //수업 요청 내역 가져오기
 				type: "POST",
@@ -602,9 +659,15 @@ $(document).ready(function() {
 		    			    $("<td>").text(myMt.menti_state === 0 ? "대기중" : myMt.menti_state === 1 ? "진행중" : "수업 완료"),
 		    			    $("<td>").text(myMt.apply_date),
 		    			    $("<td>").text(myMt.done_date),
-		    			    myMt.menti_state === 0 ? $("<button>").addClass("accept-btn")
-		    			    		.attr("id", myMt.class_id)
-		    			    		.text("수락") : null,
+		    			    myMt.menti_state === 0 ? 
+		    			    		$("<div>").append(
+		    			    		    $("<button>").addClass("accept-btn")
+		    			    		        .attr("id", myMt.class_id)
+		    			    		        .text("수락"),
+		    			    		    $("<button>").addClass("reject-btn")
+		    			    		        .attr("id", myMt.class_id)
+		    			    		        .text("거절")
+		    			    		) : null,
 		    			    myMt.menti_state === 1 ? $("<button>").addClass("done-btn")
 		    			    		.attr("id", myMt.class_id)
 		    			    		.text("수업 완료") : null

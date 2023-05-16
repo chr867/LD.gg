@@ -1,8 +1,9 @@
 package com.ld.gg.controller.mentoringController;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,9 +40,14 @@ import com.ld.gg.dto.mentoringdto.MentorReviewDTO;
 import com.ld.gg.dto.mentoringdto.MentorTagDTO;
 import com.ld.gg.dto.mentoringdto.MyMentoringDTO;
 import com.ld.gg.dto.mentoringdto.TagListDTO;
+import com.ld.gg.dto.payment.PaymentDto;
+import com.ld.gg.dto.payment.TransactionHistoryDTO;
 import com.ld.gg.dto.mentoringdto.EstimateDTO;
 import com.ld.gg.service.MemberService;
+import com.ld.gg.service.PaymentService;
 import com.ld.gg.service.mentoringService.MentorProfileService;
+
+import oracle.jdbc.proxy.annotation.Post;
 
 @RestController
 @RequestMapping(value = "/mentor", produces = "text/html; charset=UTF-8")
@@ -52,6 +59,8 @@ public class RestMentoringController {
 	private MemberDao mbdao;
 	@Autowired
 	private MemberService mbService;
+	@Autowired
+	private PaymentService ps;
 	
 	//모든 챔피언 이름 가져오기
 	@GetMapping("/get-all-champ")
@@ -62,8 +71,8 @@ public class RestMentoringController {
 	
 	//챔피언 아이디로 챔피언 이름 가져오기
 	@GetMapping("/get-champ-name-by-id")
-	public Champ_default select_by_id_champ(@RequestParam int id) {
-		Champ_default champ_name = mtpService.select_by_id_champ(id);
+	public String select_by_id_champ(@RequestParam int id) throws JsonProcessingException {
+		String champ_name = mtpService.select_by_id_champ(id);
 		return champ_name;
 	}
 	
@@ -161,6 +170,11 @@ public class RestMentoringController {
 	@DeleteMapping("/delete-mentoring-history")
 	public void delete_my_mentoring(@RequestBody MyMentoringDTO my_mt_dto) {
 		mtpService.delete_my_mentoring(my_mt_dto);
+	}
+	//멘티 소환사명 받아서 멘토링 내역 삭제
+	@DeleteMapping("/reject-mentoring-history")
+	public void reject_my_mentoring(@RequestBody MyMentoringDTO my_mt_dto) {
+		mtpService.reject_my_mentoring(my_mt_dto);
 	}
 	
 	//멘토링 내역 환불
@@ -289,6 +303,12 @@ public class RestMentoringController {
 		String class_List_json = objectMapper.writeValueAsString(class_list);
 		return class_List_json;
 	}
+	// 클래스 아이디로 멘토 클래스 정보 가져오기
+	@GetMapping("/select-by-id-mentor-class")
+	public String select_by_id_mentor_class(@RequestParam int class_id) throws JsonProcessingException {
+		String mentor_class_json = mtpService.select_by_id_mentor_class(class_id);
+		return mentor_class_json;
+	}
 	//멘토 클래스 인서트
 	@PostMapping("/insert-mentor-class")
 	public void insert_mentor_class(@RequestBody MentorClassDTO mentor_class_dto) {
@@ -314,7 +334,7 @@ public class RestMentoringController {
 		List<String> lol_name_list = new ArrayList<>();
 		while (iterator.hasNext()) {
 			MentorProfileDTO mtp = iterator.next();
-		    String mentor_email = mtp.getMentor_email(); // mentor_email 추출
+		    String mentor_email = mtp.getMentor_email(); // mentor_email 異붿텧
 		    MemberDto mbdto = mbdao.getMemberInfo(mentor_email);
 		    lol_name_list.add(mbdto.getLol_account());
 		}
@@ -329,7 +349,7 @@ public class RestMentoringController {
 		mtpService.insert_mentor_profile(mentor_email);
 	}
 	
-	//회원정보에 회원타입이 멘토인 사람들 멘토프로필에 인서트
+	//회원정보에 회원타입이 멘토인 사람을 멘토프로필에 인서트
 	@PostMapping("/renewal-mentor-list")
 	public void renewal_mentor_profile(){
 		mtpService.renewal_mentor_profile();
@@ -338,6 +358,7 @@ public class RestMentoringController {
 	//mentorProfileForm.jsp에서 작성한 프로필 정보 등록
 	@PutMapping("/edit-profile")
 	public ResponseEntity<?> updateMentorProfile(@RequestBody MentorProfileDTO mentorProfileDTO){
+		System.out.println(mentorProfileDTO);
 		mtpService.update_mentor_profile(mentorProfileDTO);
 	    return ResponseEntity.ok("Success");
 	}
@@ -349,7 +370,7 @@ public class RestMentoringController {
 	    return ResponseEntity.ok("Success");
 	}
 	
-	//멘토 이메일로 멘토태그 정보 삭제
+	//멘토 이메일로 멘토 태그 정보 삭제
 	@DeleteMapping("/delete-mentor-tag")
 	public ResponseEntity<?> delete_mentor_tag(@RequestBody String mentor_email){
 		mtpService.delete_mentor_tag(mentor_email);
@@ -362,5 +383,40 @@ public class RestMentoringController {
 		String mentor_email = email.get("mentor_email");
 		mtpService.delete_mentor_profile(mentor_email);
 	}
+	
+	//멘토 이메일로 멘토 프로필 가져오기
+	@PostMapping("/get-mentor-profile")
+	public String select_by_email_mentor_profile(@RequestBody Map<String, String> mentor_email) throws JsonProcessingException {
+		String mentor_profile = mtpService.select_by_email_mentor_profile(mentor_email);
+		return mentor_profile;
+	}
+	
+	@PostMapping("/profile/payment/mentoring-application")
+	public ResponseEntity<String> checkMentoringApplication(@RequestBody Map<String, String> requestData) {
+	    String holder_email = requestData.get("holder_email");
+	    String priceString = requestData.get("price");
+	    int price = Integer.parseInt(priceString);
+	    System.out.println(price);
+	    
+	    boolean result = ps.checkMentoringApplication(holder_email, price);
+	    System.out.println(result);
+	    return ResponseEntity.ok(Boolean.toString(result));
+	}
+	
+	@PostMapping("/mentoring/adpay")
+	public ResponseEntity<List<MemberDto>> getInfoForPayment(@RequestParam String lol_account){
+		List<MemberDto> md = ps.getInfoForPayment(lol_account);
+		System.out.println(md);
+		return ResponseEntity.ok(md);
+	}
+	
+	@PostMapping("/myMentoring/tx.json")
+	public void txHistory(@RequestBody TransactionHistoryDTO tx_history){
+		System.out.println(tx_history);
+	    ps.insert_tx_history(tx_history);
+	}
+
+
+	
 }
 	
