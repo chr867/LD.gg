@@ -285,6 +285,13 @@ public class MentorProfileService {
 		List<MentorClassDTO> mentor_class_dto = mtpdao.select_by_email_mentor_class(mentor_email);
 		return mentor_class_dto;
 	}
+	// 클래스 아이디로 멘토 클래스 정보 가져오기
+	public String select_by_id_mentor_class(int class_id) throws JsonProcessingException {
+		MentorClassDTO mentor_class_dto = mtpdao.select_by_id_mentor_class(class_id);
+		ObjectMapper objectMapper = new ObjectMapper();
+		String mentor_class_json = objectMapper.writeValueAsString(mentor_class_dto);
+		return mentor_class_json;
+	}
 	//멘토 클래스 인서트
 	public void insert_mentor_class(MentorClassDTO mentor_class_dto) {
 		mtpdao.insert_mentor_class(mentor_class_dto);

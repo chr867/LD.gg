@@ -10,10 +10,12 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ld.gg.dao.MemberDao;
 import com.ld.gg.dao.PaymentDao;
 import com.ld.gg.dto.MemberDto;
 import com.ld.gg.dto.payment.PaymentDto;
 import com.ld.gg.dto.payment.PointDto;
+import com.ld.gg.dto.payment.TransactionHistoryDTO;
 
 @Service
 public class PaymentService {
@@ -26,6 +28,9 @@ public class PaymentService {
 	
 	@Autowired
 	private DataSource datasource;
+	
+	@Autowired
+	private MemberDao mbdao;
 
 	public List<MemberDto> getUserInfo(String email) {
 		List<MemberDto> md = PD.getUserInfo(email);
@@ -109,16 +114,12 @@ public class PaymentService {
 		return md;
 	}
 
-	public boolean txHistory(String sender_id, String reciever_id, Date tx_date, int points_sent, int points_received) {
-		int tx_id = 0;
-		boolean result = PD.txHistory(tx_id, sender_id, reciever_id, tx_date, points_sent, points_received);
-		if(result) {
-			tx_id += 1;
-			return true;
-		}else {
-			return false;
-		}
-		
+	public void insert_tx_history(TransactionHistoryDTO tx_history) {
+		String menti_lol_account = tx_history.getSender_id();
+		List<MemberDto> mbdto = mbdao.getMemberLolAccount(menti_lol_account);
+		String menti_email = mbdto.get(0).getEmail();
+		tx_history.setSender_id(menti_email);
+		PD.insert_tx_history(tx_history);
 	}
 
 }

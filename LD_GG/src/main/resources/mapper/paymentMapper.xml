@@ -38,8 +38,9 @@
 		SELECT email, phone_num FROM member WHERE lol_account = #{lol_account}
 	</select>
 	
-	<insert id="txHistory">
-		INSERT INTO transaction_history VALUES (#{tx_id}, ${sender_id}, #{reciever_id}, #{tx_date}, #{points_sent}, #{points_received})
+	<insert id="insert_tx_history" parameterType = "tx">
+		INSERT INTO transaction_history (points_sent, points_received, sender_id, receiver_id) 
+		VALUES (#{points_sent}, #{points_received}, #{sender_id}, #{receiver_id})
 	</insert>
 
 </mapper>

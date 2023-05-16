@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import com.ld.gg.dto.MemberDto;
 import com.ld.gg.dto.payment.PaymentDto;
 import com.ld.gg.dto.payment.PointDto;
+import com.ld.gg.dto.payment.TransactionHistoryDTO;
 
 public interface PaymentDao {
 
@@ -28,6 +29,6 @@ public interface PaymentDao {
 
 	List<MemberDto> getInfoForPayment(String lol_account);
 
-	boolean txHistory(int tx_id, String sender_id, String reciever_id, Date tx_date, int points_sent, int points_received);
+	void insert_tx_history(TransactionHistoryDTO tx_history);
 
 }

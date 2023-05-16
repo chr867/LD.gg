@@ -23,6 +23,7 @@ public interface MentorProfileDAO {
 	void delete_mentor_tag(String mentor_email);
 	
 	List<MentorClassDTO> select_by_email_mentor_class(String mentor_email);
+	MentorClassDTO select_by_id_mentor_class(int class_id);
 	void insert_mentor_class(MentorClassDTO mentor_class_dto);
 	void update_mentor_class(MentorClassDTO mentor_class_dto);
 	void delete_mentor_class(int class_id);
