@@ -4,59 +4,93 @@
 <head>
 <meta charset="EUC-KR">
 <title>멘토 찾기</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<style>
+    .mentor-link {
+        cursor: pointer;
+        padding: 10px;
+        border: 1px solid #ccc;
+        margin-bottom: 10px;
+        background-color: #f9f9f9;
+    }
+    .mentor-link:hover {
+        background-color: #e0e0e0;
+    }
+    .mentor-link span {
+        font-weight: bold;
+    }
+</style>
 </head>
 <body>
 	<h2>멘토 찾기 페이지 입니다~~~</h2>
-	<ul id="mentor-list">
+	<div id="mentor-list">
 	<!-- 멘토 프로필 목록 추가. -->
-	</ul>
+	</div>
 	
-	<script>
+	
+<script>
     function get_mentor_list() {
-        fetch('/mentor/find-mentor/')
-            .then(response => response.json())
-            .then(data => {
-                const mentorList = document.getElementById("mentor-list");
-                for (let i = 0; i < data.length; i++) {
-                    const mentor = data[i];
+    	$.ajax({
+            url: '/mentor/find-mentor/',
+            dataType: 'json',
+            success: function(data) {
+                const mentorList = $("#mentor-list");
+                $.each(data, function(i, mentor) {
                     console.log(mentor);
-                    const listItem = document.createElement('li');
-                    const link = document.createElement('a');
-                    link.href = '/mentor/profile/' + mentor;
-                    link.innerHTML = '<h2>' + mentor + '멘토님 </h2>';
-                    link.onclick = function(event) {  // 클릭 이벤트 핸들러 등록
-                        event.preventDefault();  // 기본 동작 방지
-                        window.location.href = link.href;  // URL 이동
-                    };
-                    listItem.appendChild(link);
-                    mentorList.appendChild(listItem);
-                }
-            })
-            .catch(error => {
+                    const mentorDiv = $("<div></div>").appendTo(mentorList);
+                    mentorDiv
+                        .addClass("mentor-link")
+                        .attr('data-href', '/mentor/profile/' + mentor)
+                        .on('click', function(event) {
+                            event.preventDefault();
+                            window.location.href = $(this).attr('data-href');
+                        })
+                        .append($("<span></span>").text(mentor + '멘토님'));
+                });
+            },
+            error: function(error) {
                 console.error('Error:', error);
-            });
-	    }
-	    function renewal_mentor_list() {
-    	  return fetch('/mentor/renewal-mentor-list', {
-    	    method: 'POST',
-    	    headers: {
-    	      'Content-Type': 'application/json'
-    	    }
-    	  })
-    	  .then(response => {
-    	    if (response.ok) {
-    	      console.log('HTTP POST 요청이 성공적으로 처리되었습니다.');
-    	    } else {
-    	      console.error('HTTP POST 요청이 실패하였습니다.');
-    	    }
-    	  })
-    	  .catch(error => console.error(error));
-    	}
+            }
+        });
+    }
 
-    window.onload = function() {
-        // 페이지 로드가 완료되면 멘토 리스트를 출력
-        get_mentor_list()
-    };
+    function renewal_mentor_list() {
+        return $.ajax({
+            url: '/mentor/renewal-mentor-list',
+            method: 'POST',
+            contentType: 'application/json',
+            success: function(response) {
+                console.log('HTTP POST 요청이 성공적으로 처리되었습니다.');
+            },
+            error: function(error) {
+                console.error(error);
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        renewal_mentor_list().then(function() {
+            // 비동기 작업 완료 후 실행할 작업
+            console.log('mentor list renewal complete!');
+            get_mentor_list(); //멘토 리스트 불러오기
+        }).catch(function(error) {
+            // 에러 처리
+            console.error(error);
+        });
+        
+        $.ajax({
+            url: '/mentor/renewal-point-table',
+            method: 'GET',
+            success: function(response) {
+                console.log('renewal-point-table 요청이 성공적으로 처리되었습니다.');
+            },
+            error: function(error) {
+                console.error('renewal-point-table 요청 처리 중 오류가 발생했습니다.', error);
+            }
+        });
+
+    });
 </script>
+
 </body>
 </html>

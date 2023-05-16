@@ -391,6 +391,12 @@ public class RestMentoringController {
 		return mentor_profile;
 	}
 	
+	//멤버테이블에 있지만 포인트테이블에 없는 사람들 포인트 테이블에 추가
+	@GetMapping("/renewal-point-table")
+	public void renewal_point_0() {
+		ps.renewal_point_0();
+	}
+	
 	@PostMapping("/profile/payment/mentoring-application")
 	public ResponseEntity<String> checkMentoringApplication(@RequestBody Map<String, String> requestData) {
 	    String holder_email = requestData.get("holder_email");
@@ -410,6 +416,7 @@ public class RestMentoringController {
 		return ResponseEntity.ok(md);
 	}
 	
+	//트랜잭션 히스토리에 거래내역 저장
 	@PostMapping("/myMentoring/tx.json")
 	public void txHistory(@RequestBody TransactionHistoryDTO tx_history){
 		System.out.println(tx_history);

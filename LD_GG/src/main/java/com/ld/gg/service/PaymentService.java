@@ -113,7 +113,8 @@ public class PaymentService {
 		List<MemberDto> md = PD.getInfoForPayment(lol_account);
 		return md;
 	}
-
+	
+	//트랜잭션 히스토리에 거래내역 저장
 	public void insert_tx_history(TransactionHistoryDTO tx_history) {
 		String menti_lol_account = tx_history.getSender_id();
 		List<MemberDto> mbdto = mbdao.getMemberLolAccount(menti_lol_account);
@@ -121,5 +122,12 @@ public class PaymentService {
 		tx_history.setSender_id(menti_email);
 		PD.insert_tx_history(tx_history);
 	}
-
+	//이메일을 받아서 포인트 테이블에 포인트 0으로 저장(회원가입 시)
+	public void insert_point_0(String holder_email) {
+		PD.insert_point_0(holder_email);
+	}
+	//멤버테이블에 있지만 포인트테이블에 없는 사람들 포인트 테이블에 추가
+	public void renewal_point_0() {
+		PD.renewal_point_0();
+	}
 }

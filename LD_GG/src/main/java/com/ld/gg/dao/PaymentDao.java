@@ -28,7 +28,12 @@ public interface PaymentDao {
 	Integer checkMentoringApplication(@Param("holder_email") String holder_email);
 
 	List<MemberDto> getInfoForPayment(String lol_account);
-
+	
+	//트랜잭션 히스토리에 거래내역 저장
 	void insert_tx_history(TransactionHistoryDTO tx_history);
+	//이메일을 받아서 포인트 테이블에 포인트 0인 상태로 추가
+	void insert_point_0(String holder_email);
+	//멤버테이블에 있지만 포인트테이블에 없는 사람들 포인트 테이블에 저장
+	void renewal_point_0();
 
 }

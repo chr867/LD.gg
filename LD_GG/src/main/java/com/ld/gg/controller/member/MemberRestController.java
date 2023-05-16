@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ld.gg.dto.MemberDto;
 import com.ld.gg.service.MemberService;
+import com.ld.gg.service.PaymentService;
 import com.ld.gg.userClass.SessionListener;
 
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,9 @@ public class MemberRestController {
 	
     @Autowired
     private SessionListener sessionListener;
+    
+    @Autowired
+    private PaymentService paymentService;
     
     @PostMapping("/logout")
     public ModelAndView logout(HttpSession session, HttpServletRequest request) throws Exception {
@@ -47,6 +51,7 @@ public class MemberRestController {
 		boolean result = ms.join(md);
 
 		if (result) {
+			paymentService.insert_point_0(md.getEmail()); //회원가입 성공시 포인트 테이블에 포인트 0으로 추가
 			return new ModelAndView("redirect:/")
 					.addObject("msg", "회원가입 성공")
 					.addObject("check", 1);
