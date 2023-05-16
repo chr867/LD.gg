@@ -1,6 +1,9 @@
 package com.ld.gg.controller.mentoringController;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -37,6 +40,7 @@ import com.ld.gg.dto.mentoringdto.MentorReviewDTO;
 import com.ld.gg.dto.mentoringdto.MentorTagDTO;
 import com.ld.gg.dto.mentoringdto.MyMentoringDTO;
 import com.ld.gg.dto.mentoringdto.TagListDTO;
+import com.ld.gg.dto.payment.PaymentDto;
 import com.ld.gg.dto.mentoringdto.EstimateDTO;
 import com.ld.gg.service.MemberService;
 import com.ld.gg.service.PaymentService;
@@ -391,6 +395,36 @@ public class RestMentoringController {
 	    System.out.println(result);
 	    return ResponseEntity.ok(Boolean.toString(result));
 	}
+	
+	@PostMapping("/mentoring/adpay")
+	public ResponseEntity<List<MemberDto>> getInfoForPayment(@RequestParam String lol_account){
+		List<MemberDto> md = ps.getInfoForPayment(lol_account);
+		System.out.println(md);
+		return ResponseEntity.ok(md);
+	}
+	
+	@PostMapping("/myMentoring/tx.json")
+	public ResponseEntity<Boolean> txHistory(@RequestBody Map<String, String> requestData){
+	    String sender_id = requestData.get("sender_id");
+	    String reciever_id = requestData.get("reciever_id");
+	    String txDateStr = requestData.get("tx_date");
+	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	    Date tx_date = null;
+	    try {
+	        tx_date = dateFormat.parse(txDateStr);
+	        // tx_date를 원하는 형태로 사용
+	    } catch (ParseException e) {
+	        e.printStackTrace();
+	    }
+	    String psStr = requestData.get("points_sent");
+	    String prStr = requestData.get("points_received");
+	    int points_sent = Integer.parseInt(psStr);
+	    int points_received = Integer.parseInt(prStr);
+	    
+	    boolean result = ps.txHistory(sender_id, reciever_id, tx_date, points_sent, points_received);
+	    return ResponseEntity.ok(result);
+	}
+
 
 	
 }

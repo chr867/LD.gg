@@ -1,5 +1,6 @@
 package com.ld.gg.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -24,5 +25,9 @@ public interface PaymentDao {
 	int updateBalance(int point);
 
 	Integer checkMentoringApplication(@Param("holder_email") String holder_email);
+
+	List<MemberDto> getInfoForPayment(String lol_account);
+
+	boolean txHistory(int tx_id, String sender_id, String reciever_id, Date tx_date, int points_sent, int points_received);
 
 }
