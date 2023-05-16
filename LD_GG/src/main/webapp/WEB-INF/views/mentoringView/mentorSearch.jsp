@@ -69,15 +69,8 @@
     }
 
     $(document).ready(function() {
-        renewal_mentor_list().then(function() {
-            // 비동기 작업 완료 후 실행할 작업
-            console.log('mentor list renewal complete!');
-            get_mentor_list(); //멘토 리스트 불러오기
-        }).catch(function(error) {
-            // 에러 처리
-            console.error(error);
-        });
-        
+    	get_mentor_list(); //멘토 목록 불러오기
+    	
         $.ajax({
             url: '/mentor/renewal-point-table',
             method: 'GET',
