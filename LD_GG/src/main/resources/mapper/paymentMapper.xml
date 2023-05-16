@@ -40,7 +40,18 @@
 	
 	<insert id="insert_tx_history" parameterType = "tx">
 		INSERT INTO transaction_history (points_sent, points_received, sender_id, receiver_id) 
-		VALUES (#{points_sent}, #{points_received}, #{sender_id}, #{receiver_id})
+		VALUES (#{points_sent}, #{points_received}, #{sender_id}, #{receiver_id});
+	</insert>
+	
+	<insert id="insert_point_0" parameterType="String">
+	  INSERT INTO point (holder_email) VALUES (#{holder_email});
+	</insert>
+	
+	<insert id="renewal_point_0">
+	  INSERT INTO point (holder_email)
+	  SELECT email FROM member
+	  WHERE NOT EXISTS(
+	  SELECT 1 FROM point WHERE point.holder_email = member.email);
 	</insert>
 
 </mapper>
