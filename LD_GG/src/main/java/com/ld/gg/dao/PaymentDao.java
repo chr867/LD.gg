@@ -23,12 +23,14 @@ public interface PaymentDao {
 
 	int checkBalance(String email);
 
-	int updateBalance(int point);
+	int updateBalance(int point, String email);
 
 	Integer checkMentoringApplication(@Param("holder_email") String holder_email);
 
 	List<MemberDto> getInfoForPayment(String lol_account);
 
 	void insert_tx_history(TransactionHistoryDTO tx_history);
+
+	void lowerPoint(String holder_email, int price);
 
 }
