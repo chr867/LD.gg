@@ -511,6 +511,9 @@ $(document).ready(function() {
 		    }),
 		    success: function() {
 		      // 성공적으로 업데이트 되었을 경우 처리할 내용을 작성합니다.
+		      	console.log("1: "+class_id)
+		      	let mentor_class_id = select_by_id_mentor_class(class_id);
+		      	console.log("3: "+mentor_class_id)
 		    	getRequestHistory();
 		    },
 		    error: function(xhr, status, error) {
@@ -629,6 +632,22 @@ $(document).ready(function() {
 	      }
 	    });
 	  });
+	  
+	  function select_by_id_mentor_class(class_id) {//////////////////////////////
+		  $.ajax({
+		    url: "/mentor/select-by-id-mentor-class?class_id=" + class_id,
+		    type: "GET",
+		    contentType: "application/json;charset=UTF-8",
+		    success: function (mentor_class) {
+		    	console.log("멘토 클래스: "+mentor_class)
+		    	return mentor_class.price
+		    },
+		    error: function (xhr, status, error) {
+		      console.error(error);
+		    },
+		  });
+		}
+	  
 	  function getRequestHistory() {
 			$.ajax({ //수업 요청 내역 가져오기
 				type: "POST",

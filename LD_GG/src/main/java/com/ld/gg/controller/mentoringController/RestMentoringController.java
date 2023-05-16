@@ -124,9 +124,9 @@ public class RestMentoringController {
 	//세션 정보 체크
 	@GetMapping("/check-session")
 	public ResponseEntity<Map<String, Object>> checkSession(HttpServletRequest request) {
-	    HttpSession session = request.getSession(false); // �쁽�옱 �꽭�뀡�씠 �뾾�쑝硫� null 諛섑솚
+	    HttpSession session = request.getSession(false); // 현재 세션이 없으면 null 반환
 	    if (session != null && session.getAttribute("email") != null) {
-	        String email = (String) session.getAttribute("email"); // �꽭�뀡�뿉�꽌 email �젙蹂� 媛��졇�삤湲�
+	        String email = (String) session.getAttribute("email"); // 세션에서 email 정보 가져오기
 	        Map<String, Object> response = new HashMap<>();
 	        response.put("isLoggedIn", true);
 	        response.put("email", email);
@@ -154,7 +154,7 @@ public class RestMentoringController {
 		String my_mt_list_json = mtpService.select_by_mentor_email_my_mentoring(emailMap);
 		return my_mt_list_json;
 	}
-	//멘토링 내역 수적
+	//멘토링 내역 수정
 	@PutMapping("/update-mentoring-history")
 	public void update_my_mentoring(@RequestBody MyMentoringDTO my_mt_dto) {
 		mtpService.update_my_mentoring(my_mt_dto);
@@ -193,7 +193,7 @@ public class RestMentoringController {
 		String mentor_email = (String)session.getAttribute("email");
 		List<EstimateDTO> estList = mtpService.select_by_mentor_email_estimate(mentor_email);
 		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.registerModule(new JavaTimeModule()); //LocalDateTime ���엯 蹂��닔 json�쑝濡� 蹂��솚
+		objectMapper.registerModule(new JavaTimeModule()); //LocalDateTime 타입 변수 json으로 변환
 		String estList_json = objectMapper.writeValueAsString(estList);
 		return estList_json;
 	}
@@ -204,7 +204,7 @@ public class RestMentoringController {
 		String menti_email = (String)session.getAttribute("email");
 		List<EstimateDTO> estList = mtpService.select_by_menti_email_estimate(menti_email);
 		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.registerModule(new JavaTimeModule()); //LocalDateTime ���엯 蹂��닔 json�쑝濡� 蹂��솚
+		objectMapper.registerModule(new JavaTimeModule()); //LocalDateTime 타입 변수 json으로 변환
 		String estList_json = objectMapper.writeValueAsString(estList);
 		return estList_json;
 	}
@@ -270,7 +270,7 @@ public class RestMentoringController {
 		String style_tag_list = mtpService.select_style_tag();
 		return style_tag_list;
 	}
-	//스타리2 태그 가져오기
+	//스타일2 태그 가져오기
 	@GetMapping("/get-style2-tag")
 	public String select_style2_tag() throws JsonProcessingException {
 		String style2_tag_list = mtpService.select_style2_tag();
@@ -301,6 +301,12 @@ public class RestMentoringController {
 		ObjectMapper objectMapper = new ObjectMapper();
 		String class_List_json = objectMapper.writeValueAsString(class_list);
 		return class_List_json;
+	}
+	// 클래스 아이디로 멘토 클래스 정보 가져오기
+	@GetMapping("/select-by-id-mentor-class")
+	public String select_by_id_mentor_class(@RequestParam int class_id) throws JsonProcessingException {
+		String mentor_class_json = mtpService.select_by_id_mentor_class(class_id);
+		return mentor_class_json;
 	}
 	//멘토 클래스 인서트
 	@PostMapping("/insert-mentor-class")
@@ -370,7 +376,7 @@ public class RestMentoringController {
 		return ResponseEntity.ok("Success");
 	}
 	
-	//멘토 회원이 일반회원으로 전환 할 때 멘토 프로필 삭제
+	//멘토 회원이 일반회원으로 전환 할때 멘토 프로필 삭제
 	@DeleteMapping("/delete-mentor-profile")
 	public void delete_mentor_profile(@RequestBody Map<String, String> email) {
 		String mentor_email = email.get("mentor_email");
