@@ -214,7 +214,6 @@
 		        contentType: "application/json; charset=utf-8",
 		        dataType: "json",
 		        success: function (champion) {
-		            console.log(top_specialized_champion);
 		            let imageUrl = "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +champion.champion_en_name + ".png?&amp;retry=0";
 		            let champImg = $("<img>").addClass("champ-icon").attr("src", imageUrl);
 		            let champName = $("<p>").addClass("champ-name").text(champion.champion_kr_name);
@@ -305,7 +304,6 @@
                     			price : price.toString()
                     	};
 	                    
-	                    console.log(applicationData);
 	                    
 	                    $.ajax({
 	                    	url: '/mentor/profile/payment/mentoring-application',

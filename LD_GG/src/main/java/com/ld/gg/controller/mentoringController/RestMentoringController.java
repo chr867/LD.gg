@@ -41,6 +41,7 @@ import com.ld.gg.dto.mentoringdto.MentorTagDTO;
 import com.ld.gg.dto.mentoringdto.MyMentoringDTO;
 import com.ld.gg.dto.mentoringdto.TagListDTO;
 import com.ld.gg.dto.payment.PaymentDto;
+import com.ld.gg.dto.payment.TransactionHistoryDTO;
 import com.ld.gg.dto.mentoringdto.EstimateDTO;
 import com.ld.gg.service.MemberService;
 import com.ld.gg.service.PaymentService;
@@ -410,25 +411,9 @@ public class RestMentoringController {
 	}
 	
 	@PostMapping("/myMentoring/tx.json")
-	public ResponseEntity<Boolean> txHistory(@RequestBody Map<String, String> requestData){
-	    String sender_id = requestData.get("sender_id");
-	    String reciever_id = requestData.get("reciever_id");
-	    String txDateStr = requestData.get("tx_date");
-	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-	    Date tx_date = null;
-	    try {
-	        tx_date = dateFormat.parse(txDateStr);
-	        // tx_date를 원하는 형태로 사용
-	    } catch (ParseException e) {
-	        e.printStackTrace();
-	    }
-	    String psStr = requestData.get("points_sent");
-	    String prStr = requestData.get("points_received");
-	    int points_sent = Integer.parseInt(psStr);
-	    int points_received = Integer.parseInt(prStr);
-	    
-	    boolean result = ps.txHistory(sender_id, reciever_id, tx_date, points_sent, points_received);
-	    return ResponseEntity.ok(result);
+	public void txHistory(@RequestBody TransactionHistoryDTO tx_history){
+		System.out.println(tx_history);
+	    ps.insert_tx_history(tx_history);
 	}
 
 

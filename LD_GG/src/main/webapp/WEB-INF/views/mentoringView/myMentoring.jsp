@@ -500,21 +500,49 @@ $(document).ready(function() {
 	
 	$(document).on('click', '.accept-btn', function(event) { //수락 버튼 누를떄 멘토링 내역 수정
 		let mentiEmail = $(this).closest('tr').find('td:eq(0)').text(); //소환사명
+		let class_id = $(this).attr("id");
+		let mentor_email = "${member.email}"
 		$.ajax({
 		    type: "PUT",
 		    url: "/mentor/update-mentoring-history", 
 		    contentType: "application/json; charset=utf-8",
 		    data: JSON.stringify({
 		    	menti_email: mentiEmail, //소환사명
-		        class_id: $(this).attr("id"),
+		        class_id: class_id,
 		        menti_state: 1, // 상태를 업데이트 합니다.
 		    }),
 		    success: function() {
 		      // 성공적으로 업데이트 되었을 경우 처리할 내용을 작성합니다.
 		      	console.log("1: "+class_id)
-		      	let mentor_class_id = select_by_id_mentor_class(class_id);
-		      	console.log("3: "+mentor_class_id)
-		    	getRequestHistory();
+		      	$.ajax({// 클래스 아이디로 클래스 정보 가져오기
+				    url: "/mentor/select-by-id-mentor-class?class_id=" + class_id,
+				    type: "GET",
+				    contentType: "application/json;charset=UTF-8",
+				    success: function (mentor_class) {
+				    	let mentor_class_info = JSON.parse(mentor_class)
+				    	class_price = mentor_class_info.price
+						let chargedPoint = parseInt(class_price - (class_price / 10));
+				 		$.ajax({
+							method : 'post',
+							url : '/mentor/myMentoring/tx.json',
+							contentType : "application/json; charset=utf-8",
+							data : JSON.stringify({
+								sender_id : mentiEmail,
+								receiver_id : mentor_email,
+								points_sent : class_price,
+								points_received : chargedPoint
+							})
+						}).done(res=>{
+							console.log(res);
+							alert("승인 되었습니다!");
+						}).fail(err=>{
+						})
+				    },
+				    error: function (xhr, status, error) {
+				      console.error(error);
+				    },
+				  });
+		      	getRequestHistory();
 		    },
 		    error: function(xhr, status, error) {
 		      console.error(xhr.responseText);
@@ -522,37 +550,6 @@ $(document).ready(function() {
 		      console.error(error);
 		    }
 		  });
-		var today = new Date();
-		var year = today.getFullYear(); // 년도
-		var month = today.getMonth() + 1;  // 월
-		var day = today.getDate();  // 날짜
-		if (month < 10) {
-		    month = "0" + month;
-		}
-		if (day < 10) {
-		    day = "0" + day;
-		}
-		var date = year + "-" + month + "-" + day;
-		console.log($(this));
-		let price = $(this).val();
-		let chargedPoint = price - (10 / price) * 100;
- 		$.ajax({
-			method : 'post',
-			url : '/mentor/myMentoring/tx.json',
-			contentType : "application/json; charset=utf-8",
-			data : JSON.stringify({
-				sender_id : mentiEmail,
-				reciever_id : "${member.lol_account}",
-				tx_date : date,
-				points_sent : point,
-				points_received : chargedPoint
-			})
-		}).done(res=>{
-			console.log(res);
-			alert("승인 되었습니다!");
-		}).fail(err=>{
-			console.log(err);
-		})
 	});
 	
 	$(document).on('click', '.reject-btn', function(event) { //거절 버튼 누를떄 멘토링 내역 수정
@@ -633,20 +630,6 @@ $(document).ready(function() {
 	    });
 	  });
 	  
-	  function select_by_id_mentor_class(class_id) {//////////////////////////////
-		  $.ajax({
-		    url: "/mentor/select-by-id-mentor-class?class_id=" + class_id,
-		    type: "GET",
-		    contentType: "application/json;charset=UTF-8",
-		    success: function (mentor_class) {
-		    	console.log("멘토 클래스: "+mentor_class)
-		    	return mentor_class.price
-		    },
-		    error: function (xhr, status, error) {
-		      console.error(error);
-		    },
-		  });
-		}
 	  
 	  function getRequestHistory() {
 			$.ajax({ //수업 요청 내역 가져오기
