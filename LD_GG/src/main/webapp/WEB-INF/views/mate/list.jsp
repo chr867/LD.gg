@@ -162,7 +162,7 @@ a[href="/tip/write"] {
 		onSelectRow : function(rowid) {
 			location.href = `/mate/details?mate_id=\${rowid}`
 		}
-	});
+	}).trigger("reloadGrid");
 /* 	document.getElementById("search") */
 </script>
 

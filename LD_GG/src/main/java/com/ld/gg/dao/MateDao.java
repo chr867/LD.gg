@@ -10,8 +10,10 @@ public interface MateDao {
 	List<MateDto> getReplyList(int mate_id);
 	
 	MateDto getMateDetails(int mate_id);
+	MateDto getMateInfo(int mate_id);
 	Integer insertMate(MateDto mDto);
 	
 	Integer mateReplyInsert(MateDto mDto);
 	Integer mateModify(MateDto mDto);
+	Integer mateDelete(int mate_id);
 }

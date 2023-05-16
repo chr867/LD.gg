@@ -1,13 +1,18 @@
 package com.ld.gg.controller.mate;
 
+import java.net.URI;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -39,6 +44,7 @@ public class MateRestController {
 	@GetMapping("/reply/list")
 	public List<MateDto> getReplyList(int mate_id) throws Exception{
 		log.info("메이트레스트 컨트롤러 탔어용-리플가져오기");
+		log.info("메이트 아이디 "+mate_id);
 		List<MateDto> mReplyList= ms.getReplyList(mate_id);
 		return mReplyList;
 	}
@@ -62,6 +68,56 @@ public class MateRestController {
 		log.info("replyInsertResult"+replyInsertResult);	
 		return replyInsertResult;
 	}
+	// 1 = 성공 , 2 = 실패, 3 = 이메일매칭 x, 4 = 오류
+	@PostMapping("/delete")
+	public  int deleteMate(@RequestParam int mate_id, HttpSession session)
+			throws Exception {
+		log.info("메이트 삭제 버튼 누름");
+		String email = (String) session.getAttribute("email");
+		log.info("이메일 정보: " + email);
+		if (email == null) {
+			// 로그인되어 있지 않으면 로그인 페이지로 이동
+			log.info("로그인이 필요합니다.");
+
+			return 3;
+		}
+		//int mate_id = ms.getMateList();
+		int replyInsertResult = ms.mateDelete(mate_id);
+		log.info("replyInsertResult"+replyInsertResult);	
+		return replyInsertResult;
+		
+		
+	}
+	/*@PostMapping("/delete")
+	public ResponseEntity<String> deleteMate(@RequestParam int mate_id, HttpSession session) throws Exception {
+	    log.info("메이트 삭제 버튼 누름");
+	    String email = (String) session.getAttribute("email");
+	    log.info("이메일 정보: " + email);
+	    HttpHeaders headers = new HttpHeaders();
+	    if (email == null) {
+	        // 로그인되어 있지 않으면 로그인 페이지로 리다이렉트
+	        log.info("로그인이 필요합니다.");
+	        headers.setLocation(URI.create("/"));
+	        return new ResponseEntity<>(null, headers, HttpStatus.FOUND);
+
+	    }
+	    
+	    boolean isSuccess = ms.mateDelete(mate_id);
+	    log.info("메이트 글 삭제 결과:" + isSuccess);
+	    
+	    if (isSuccess) {
+	        log.info("가즈아 ");
+	        headers.setLocation(URI.create("/mate/"));
+	        return new ResponseEntity<>(null, headers, HttpStatus.FOUND);
+	    } else {
+	        log.info("레스트 컨트롤러 메이트 글 삭제 오류");
+	        headers.setLocation(URI.create("/mate/"));
+	        return new ResponseEntity<>(null, headers, HttpStatus.FOUND);
+	    }
+	}*/
+
+
+
 	
 /*	@GetMapping("/search.json")//상세페이지 제작후 만들기
 	public String mateSearch(String keyword) {

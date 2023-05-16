@@ -167,7 +167,7 @@ th {
 		</table>
 		<button onclick=mateModify(${MateDetails.mate_id}) id="modifyButton">게시물
 			수정하기</button>
-		<button onclick=deleteTip(${MateDetails.mate_id}) id="deleteButton">게시물
+		<button onclick=mateDelete(${MateDetails.mate_id}) id="deleteButton">게시물
 			삭제하기</button>
 		<br>
 		<h2>댓글</h2>
@@ -202,6 +202,23 @@ if(writeEmail === myEmail){
 }
 function mateModify(mate_id) {
 	location.href = "/mate/modify?mate_id="+mate_id;
+}
+function mateDelete(mate_id){
+	$.ajax({
+		method: 'post',
+		url:'/mate/delete',
+		data: {mate_id:mate_id}
+		}).done(res=>{
+			if(res){
+			console.log('델리트 에이작스 res 값'+res);
+			alert("게시물 삭제 성공");
+			location.href="/mate/"
+			}else{
+			console.log('델리트 에이작스 실패');
+			alert("게시물 삭제 실패");
+			}
+		}).fail(err=>{console.log(err);});
+	
 }
 
 function submitComment(){
