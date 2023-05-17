@@ -40,7 +40,7 @@ matchId_count = pd.DataFrame(mu.mysql_execute_dict(f"SELECT match_id_substr FROM
 conn.close()
 print(f'매치아이디 갯수 : {len(matchId_count.match_id_substr.unique())}개')
 
-batch_size = 30000
+batch_size = 20000
 win_pick_lst_result = []
 ban_rate_lst_result = []
 meta_score_lst_result = []
@@ -173,7 +173,7 @@ y_pred = model.predict(X_test)
 print('Accuracy: ', accuracy_score(y_test, y_pred))
 
 # 모델 저장
-joblib.dump(model, 'tierMachineLearning.pkl')
+joblib.dump(model, 'championTierPredictionModel.pkl')
 
 
 # ----------------------------------------------------------------------------------------------------------------------
