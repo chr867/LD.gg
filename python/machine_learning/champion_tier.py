@@ -19,7 +19,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 import joblib
-import dask.dataframe as dd
+
 # RIOT-API-KEY
 riot_api_key = 'RGAPI-14667a4e-7c3c-45fa-ac8f-e53c7c3f5fe1'
 pd.set_option('display.max_columns', None)
@@ -33,21 +33,6 @@ df['timeline'] = df['timeline'].apply(json.loads)
 end_time = time.time()
 print("변환 시간: {:.2f}초".format(end_time - start_time))
 print("JSON 변환 종료")
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-# CSV 파일을 Dask 데이터프레임으로 읽기
-df = dd.read_csv('D:/match_raw_patch_202305162012.csv')
-df_head = df.head()
-
-# 실제 데이터를 읽어오기
-df_head_computed = df_head.compute().result()
-
-# 데이터프레임 출력
-print(df_head_computed)
-df['matches'] = df['matches'].apply(json.loads)
-df['timeline'] = df['timeline'].apply(json.loads)
-
 # ----------------------------------------------------------------------------------------------------------------------
 print("시작!")
 conn = mu.connect_mysql()
@@ -55,7 +40,7 @@ matchId_count = pd.DataFrame(mu.mysql_execute_dict(f"SELECT match_id_substr FROM
 conn.close()
 print(f'매치아이디 갯수 : {len(matchId_count.match_id_substr.unique())}개')
 
-batch_size = 1000
+batch_size = 30000
 win_pick_lst_result = []
 ban_rate_lst_result = []
 meta_score_lst_result = []
