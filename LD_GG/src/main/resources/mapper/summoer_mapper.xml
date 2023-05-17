@@ -7,10 +7,10 @@
 
 	<select id="getRankLoadingData" resultType="summoner_rank">
 		SELECT
-		sr.summoner_name,
-		si.profile_icon_id, si.s_level, LOWER(sr.tier) as
-		tier, sr.division,
-		sr.wins, sr.losses, sr.lp,
+		sr.summoner_name as summoner_name,
+		si.profile_icon_id as profile_icon_id, si.s_level as s_level, LOWER(sr.tier) as
+		tier, sr.division as division,
+		sr.wins as wins, sr.losses as losses, sr.lp as lp,
 		round((sr.wins/(si.games))*100,2) as
 		winrate
 		FROM summoner_rank sr

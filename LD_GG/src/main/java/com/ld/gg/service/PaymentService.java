@@ -69,7 +69,7 @@ public class PaymentService {
 		if(result) {//true일 시, 잔액 조회 후 잔액과 충전금을 합산 -> 잔액 포인트 갱신(update) -> 결제자의 이름과 결제 후 보유 잔액 반환
 			int point = PD.checkBalance(email);
 			point = point + price;
-			PD.updateBalance(point);
+			PD.updateBalance(email,point);
 			PointDto ppd = PD.getPaymentInfo(email);
 			
 			return ppd;

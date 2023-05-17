@@ -26,8 +26,8 @@
 		SELECT point_balance FROM point WHERE holder_email = #{email} 
 	</select>
 	
-	<update id="updateBalance" parameterType = "Integer">
-		UPDATE point SET point_balance = point_balance + #{point}
+	<update id="updateBalance" parameterType = "Map">
+		UPDATE point SET point_balance = #{point} WHERE holder_email = #{email}
 	</update>
 	
 	<select id="checkMentoringApplication" resultType = "Integer">

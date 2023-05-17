@@ -23,7 +23,7 @@ public interface PaymentDao {
 
 	int checkBalance(String email);
 
-	void updateBalance(int point);
+	void updateBalance(@Param("email")String email, @Param("point") int point);
 
 	Integer checkMentoringApplication(@Param("holder_email") String holder_email);
 

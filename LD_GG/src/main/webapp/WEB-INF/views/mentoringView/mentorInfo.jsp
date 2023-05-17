@@ -329,8 +329,7 @@
 	                    	data : JSON.stringify(applicationData)	//수업 신청 버튼 클릭 시, 멘티의 잔액 확인 후 신청 승인 여부 결정
 	                    }).done(res=>{
 	                    	console.log(res);
-	                    	let response = res.result;
-	                    	if(response){
+	                    	if(res){
 	                    		$.ajax({
 	    	                        url: "/mentor/save-mentoring-history",
 	    	                        method: "POST",

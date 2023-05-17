@@ -137,7 +137,7 @@ img{
 		loadonce : true,
 		multiselect : false,
 		pager : '#pager',
-		rowNum : 10,
+		rowNum : 100,
 		sortname : 'date',
 		sortorder : 'desc',
 		width : 1000,
@@ -193,6 +193,9 @@ img{
 			align : "center"
 		} ]
 	});
+	
+	console.log($('#summoner_rank_table').jqGrid('getGridParam', 'colModel'));
+
 	
 		$('#solo_rank').click(function(){
 			$('#summoner_rank_table').jqGrid({
