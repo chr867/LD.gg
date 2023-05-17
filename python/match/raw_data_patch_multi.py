@@ -112,12 +112,12 @@ def get_match_info_worker(args):
                 get_match_res = requests.get(get_match_url).json()
                 tmp.update(get_match_res['metadata'])
 
-                gameversion_split = get_match_res['info']['gameVersion'].split('.')
-                gameversion = float(gameversion_split[0] + '.' + gameversion_split[1])
-                gameduration = get_match_res['info']['gameDuration']
-                if gameversion < 13.7:
+                game_version_split = get_match_res['info']['gameVersion'].split('.')
+                game_version = float(game_version_split[0] + '.' + game_version_split[1])
+                game_duration = get_match_res['info']['gameDuration']
+                if game_version < 13.7:
                     break
-                if gameduration < 900:
+                if game_duration < 900:
                     break
             except Exception as e:
                 print(f'{e} match, {get_match_res["status"]["message"]},{api_key}')
