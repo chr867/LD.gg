@@ -29,6 +29,7 @@ public class MentorProfileDTO {
     private int num_of_reviews;
     private int num_of_likes;
     private float total_grade;
+    private String lol_account;
     
 }
 
