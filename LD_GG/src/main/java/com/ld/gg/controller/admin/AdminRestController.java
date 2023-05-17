@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ld.gg.dto.MemberDto;
 import com.ld.gg.dto.admin.AdDto;
 import com.ld.gg.dto.admin.NoticeDto;
+import com.ld.gg.dto.admin.NoticeReply;
 import com.ld.gg.service.AdminService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +49,18 @@ public class AdminRestController {
 			return json;
 		}
 		
+		@GetMapping("/notice/reply-list.json")
+		public String notice_reply_list(Integer t_b_num) throws Exception{
+			List<NoticeReply> rp_list = as.get_notice_reply_list(t_b_num);
+			log.info("notcie_reply : {}", rp_list);
+			
+			ObjectMapper mapper = new ObjectMapper();
+			String json = null;
+			json = mapper.writeValueAsString(rp_list);
+
+			return json;
+		}
+
 		@PostMapping("/admin/ad/regist")
 		public boolean adInsert(String ad_advertiser, String ad_name, String ad_start, String ad_end, int ad_pay) {
 			

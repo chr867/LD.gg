@@ -5,6 +5,7 @@ import java.util.List;
 import com.ld.gg.dto.MemberDto;
 import com.ld.gg.dto.admin.AdDto;
 import com.ld.gg.dto.admin.NoticeDto;
+import com.ld.gg.dto.admin.NoticeReply;
 
 
 public interface AdminDao {
@@ -20,6 +21,8 @@ public interface AdminDao {
 	boolean write_notice(NoticeDto nd);
 
 	boolean modify_notice(NoticeDto nd);
+
+	List<NoticeReply> get_notice_reply_list(Integer t_b_num);
 
 	int insertAd(AdDto aDto);
 

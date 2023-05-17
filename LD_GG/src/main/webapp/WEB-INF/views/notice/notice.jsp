@@ -34,6 +34,5 @@
 </div>
 
 <script src="/resources/js/notice/notice.js"></script>
-
 </body>
 </html>

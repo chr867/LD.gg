@@ -23,7 +23,7 @@ $("#grid").jqGrid({
 	pager:'#pager',
 	rowNum: 10,
 	rowList: [10, 20, 50],
-	sortname: 'date',
+	sortname: 't_b_num',
 	sortorder: 'desc',
 	height: 600,
 	onSelectRow: function(rowid){
@@ -54,7 +54,7 @@ document.getElementById("search").addEventListener("click", function() {
  */		pager:'#pager',
 		rowNum: 10,
 		rowList: [10, 20, 50],
-		sortname: 'date',
+		sortname: 't_b_num',
 		sortorder: 'desc',
 		height: 250,
 		onSelectRow: function(rowid){
