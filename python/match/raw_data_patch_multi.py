@@ -1,15 +1,17 @@
 import datetime
+import json
+import logging
+import multiprocessing as mp
 import random
 import time
+
 import pandas as pd
 import requests
 from tqdm import tqdm
-import private
+
 import my_utils as mu
-import json
-import multiprocessing as mp
-import logging
-import os
+import private
+
 tqdm.pandas()
 
 riot_api_keys = private.riot_api_key_array
@@ -30,7 +32,7 @@ def load_summoner_names_worker(worker_id):
     for i in tqdm(tier_division[worker_id]):
         tier = i[0]
         division = i[1]
-        page_p = 1
+        page_p = random.randrange(1, 50)
         name_set = set()
 
         while True:
@@ -50,12 +52,11 @@ def load_summoner_names_worker(worker_id):
 
             if len(res_p) < 200:
                 break
-            page_p += 1
             break
         print('load_summoner_names END', worker_id, len(name_set))
         name_lst = list(name_set)
         match_set = set()
-        for summoner_name in tqdm(name_lst[:25]):
+        for summoner_name in tqdm(name_lst[:15]):
             while True:
                 index = 0
                 start = 1680620400  # 최근 3패치 사용 오래 된 패치 날짜
@@ -76,7 +77,6 @@ def load_summoner_names_worker(worker_id):
                             continue
 
                         match_set.update(res)
-                        print(len(res))
 
                         if len(res) < 10:
                             break
@@ -119,6 +119,7 @@ def get_match_info_worker(args):
                     break
                 if gameduration < 900:
                     break
+
             except Exception as e:
                 print(f'{e} match, {get_match_res["status"]["message"]},{api_key}')
                 if 'found' in get_match_res['status']['message']:
@@ -127,6 +128,7 @@ def get_match_info_worker(args):
                     break
                 time.sleep(20)
                 continue
+
             try:
                 get_timeline_url = f'https://asia.api.riotgames.com/lol/match/v5/matches/{match_id}/timeline?api_key={api_key}'
                 get_timeline_res = requests.get(get_timeline_url).json()
