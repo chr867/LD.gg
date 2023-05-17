@@ -409,9 +409,9 @@ public class RestMentoringController {
 	    return ResponseEntity.ok(Boolean.toString(result));
 	}
 	
-	@PostMapping("/mentoring/adpay")
-	public ResponseEntity<List<MemberDto>> getInfoForPayment(@RequestParam String lol_account){
-		List<MemberDto> md = ps.getInfoForPayment(lol_account);
+	@PostMapping(value = "/mentoring/adpay", produces = "application/json")
+	public ResponseEntity<List<MemberDto>> getInfoForPayment(@RequestParam String email){
+		List<MemberDto> md = ps.getInfoForPayment(email);
 		System.out.println(md);
 		return ResponseEntity.ok(md);
 	}
@@ -422,8 +422,6 @@ public class RestMentoringController {
 		System.out.println(tx_history);
 	    ps.insert_tx_history(tx_history);
 	}
-
-
 	
 }
 	

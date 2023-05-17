@@ -69,24 +69,8 @@ public class PaymentService {
 		if(result) {//true일 시, 잔액 조회 후 잔액과 충전금을 합산 -> 잔액 포인트 갱신(update) -> 결제자의 이름과 결제 후 보유 잔액 반환
 			int point = PD.checkBalance(email);
 			point = point + price;
-			int pointResult = PD.updateBalance(point);
+			PD.updateBalance(point);
 			PointDto ppd = PD.getPaymentInfo(email);
-			
-			Connection con = null;
-	        try {
-	            con = datasource.getConnection();
-	            con.commit(); // 트랜잭션 커밋
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        } finally {
-	            if (con != null) {
-	                try {
-	                    con.close();
-	                } catch (SQLException e) {
-	                    e.printStackTrace();
-	                }
-	            }
-	        }
 			
 			return ppd;
 		}else {
@@ -109,8 +93,8 @@ public class PaymentService {
 	    }
 	}
 
-	public List<MemberDto> getInfoForPayment(String lol_account) {
-		List<MemberDto> md = PD.getInfoForPayment(lol_account);
+	public List<MemberDto> getInfoForPayment(String email) {
+		List<MemberDto> md = PD.getInfoForPayment(email);
 		return md;
 	}
 	

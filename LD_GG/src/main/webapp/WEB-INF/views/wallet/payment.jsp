@@ -201,6 +201,7 @@
 		$.ajax({
 			method : 'post',
 			url : '/wallet/payment/getOrderId',
+			async : false
 		}).done(res=>{
 			orderId = res;
 			console.log(orderId);

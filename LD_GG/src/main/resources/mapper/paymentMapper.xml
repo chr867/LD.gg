@@ -35,7 +35,7 @@
 	</select>
 	
 	<select id="getInfoForPayment" resultType = "member">
-		SELECT email, phone_num FROM member WHERE lol_account = #{lol_account}
+		SELECT email, lol_account, phone_num FROM member WHERE email = #{email}
 	</select>
 	
 	<insert id="insert_tx_history" parameterType = "tx">
