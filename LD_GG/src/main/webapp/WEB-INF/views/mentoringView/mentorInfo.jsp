@@ -174,7 +174,26 @@
 	<a href="/mentor/list">목록</a>
 
 	<script>
+	let GlobalEmail = "";
+	let GlobalPhone_num = "";
+	let GlobalLol_account = "";
+	let price = 0;
 	$(document).ready(function() {
+	    $.ajax({
+	    	method : 'post',
+	    	url : '/wallet/payment/userinfo',
+	    	data : {email : "${email}"}
+	    }).done(res=>{
+	    	console.log(res);
+	    	GlobalEmail = res[0].email;
+	    	GlobalPhone_num = res[0].phone_num;
+	    	GlobalLol_account = res[0].lol_account;
+	    	console.log(res[0].email);
+	    	console.log(GlobalEmail, GlobalPhone_num, GlobalLol_account);
+	    }).fail(err=>{
+	    	console.log(err)
+	    })
+				
 		displaySpecializedPosition();//멘토 프로필 가져와서 특화 포지션 게시
 		let avg_grade = ${mentor_profile.total_grade/mentor_profile.num_of_reviews}
 		let roundedGrade = avg_grade.toFixed(1);
@@ -285,7 +304,7 @@
 		  
 	    $(".apply-btn").click(function() {
 	    	let class_id =$(this).attr("id");
-	    	let price = $(this).val();
+	    	price = $(this).val();
 	    	
 	        $.ajax({
 	            url: "/mentor/check-session",
@@ -303,8 +322,6 @@
 	                    		holder_email : email,
                     			price : price.toString()
                     	};
-	                    
-	                    
 	                    $.ajax({
 	                    	url: '/mentor/profile/payment/mentoring-application',
 	                    	method : 'post',
@@ -404,123 +421,85 @@
 			  }
 			});
 			}
-	    
-	    
-	    
 	});//ready
-	
-	let price = "";
-    $('.flex-payment-button').on("click", function(){
-    	price = $(this).val();
-    })
-    
-    $('.flex-payment-button').on('change',function(){
-	// 체크된 버튼 확인
-	let checked = $(this).prop('checked');
-	
-	if(checked){
-		$('.flex-payment-button').not(this).prop('checked', false);
-	}
-});
-	
-	 function requestPay(){//추가 결제
-	    	let email = "";
-	    	let phone_num = "";
-	    	let lol_account = "";
-	    	$.ajax({//결제에 필요한 정보 가져오기
-	        	method : 'post',
-	        	url : '/mentor/mentoring/adpay',
-	        	data : {lol_account : "${mentor.lol_account}"}
-	        }).done(res=>{
-	        	console.log(res)
-	        	email = res.email;
-	        	phone_num = res.phone_num;
-	        	lol_account = mentor.lol_account;
-	        }).fail(err=>{
-	        	console.log(err)
-	        });
-	    	
-	    	
-	    	let orderId = "";//주문번호 생성
-			
-			if(price === "1 원"){
-				let regex = /\d+/;
-				price = parseInt(price.match(regex)[0]);
-				console.log(price);
-			}else{
-				price = parseInt(price.replace(/,/g, ""));
-				console.log(price);
-			}
-			
+	function requestPay() {
+		if(price === "1 원"){
+			let regex = /\d+/;
+			price = parseInt(price.match(regex)[0]);
+			console.log(price);
+		}else{
+			price = parseInt(price.replace(/,/g, ""));
+			console.log(price);
+		}
+		let orderId = "";
+		$.ajax({
+			method: 'post',
+			url: '/wallet/payment/getOrderId',
+			async : false
+		}).done(res => {
+			orderId = res;
+		}).fail(err => {
+			console.log(err);
+		});
+		
+		// IMP.request_pay() 호출 부분을 이동
+		IMP.request_pay({
+			pg: "kakaopay.TC0ONETIME",
+			pay_method: "card",
+			merchant_uid: orderId,
+			name: "테스트용 상품",
+			amount: price,
+			buyer_email : GlobalEmail,
+			buyer_name : GlobalLol_account,
+			buyer_tel : GlobalPhone_num,
+		}, function (rsp) {
+			if (rsp.success) {
+			console.log(rsp);
 			$.ajax({
-				method : 'post',
-				url : '/wallet/payment/getOrderId',
-			}).done(res=>{
-				orderId = res;
-				console.log(orderId);
-			}).fail(err=>{
+				url: "/wallet/payment/kakaopay/success",
+				method: "POST",
+				data: {
+				imp_uid: rsp.imp_uid,
+				merchant_uid: rsp.merchant_uid,
+				price: rsp.paid_amount,
+				email: GlobalEmail,
+				lol_account: GlobalLol_account,
+				phone_num: GlobalPhone_num,
+				payment_status: "success",
+				payment_method: rsp.pg_type
+				}
+			}).done(res => {
+				alert("결제가 완료되었습니다");
+				console.log(res);
+				location.reload();
+			}).fail(err => {
 				console.log(err);
 			});
-			
-			IMP.request_pay({//결제 진행
-				pg : "kakaopay.TC0ONETIME",
-				pay_method : "card",
-				merchant_uid : orderId, // 주문번호
-				name : "테스트용 상품",
-				amount : price, // 숫자 타입
-				buyer_email : email,
-				buyer_name : lol_account,
-				buyer_tel : phone_num,
-			}, function(rsp) {
-				if (rsp.success) {
-					alert("결제가 완료되었습니다");
-					// 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
-					// jQuery로 HTTP 요청
-					console.log(rsp)
-					$.ajax({//결제 데이터 저장
-						url : "/wallet/payment/kakaopay/success",
-						method : "POST",
-						data : {
-							imp_uid : rsp.imp_uid, // 결제 고유번호
-							merchant_uid : rsp.merchant_uid, // 주문번호
-							price : rsp.paid_amount,
-							email : email,
-							lol_account : lol_account,
-							phone_num : phone_num,
-							payment_status : "success",
-							payment_method : rsp.pg_type
-						}
-					}).done(res=>{
-						// 가맹점 서버 결제 API 성공시 로직
-						console.log(res);
-						location.reload();
-					}).fail(err=>{
-						console.log(err);
-					})
-				} else {
-					$.ajax({
-						url : "/wallet/payment/kakaopay/fail",
-						method : "POST",
-						data : {
-							imp_uid : rsp.imp_uid, // 결제 고유번호
-							merchant_uid : rsp.merchant_uid, // 주문번호
-							price : rsp.paid_amount,
-							email : email,
-							lol_account : lol_account,
-							phone_num : phone_num,
-							payment_status : "fail",
-							payment_method : rsp.pg_type
-						}
-					}).done(res=>{
-						console.log(res);
-					})
-					alert("결제에 실패하였습니다. 에러 내용: " + rsp.error_msg);
-					location.reload();
+			} else {
+			$.ajax({
+				url: "/wallet/payment/kakaopay/fail",
+				method: "POST",
+				data: {
+				imp_uid: rsp.imp_uid,
+				merchant_uid: rsp.merchant_uid,
+				price: rsp.paid_amount,
+				email: GlobalEmail,
+				lol_account: GlobalLol_account,
+				phone_num: GlobalPhone_num,
+				payment_status: "fail",
+				payment_method: rsp.pg_type
 				}
-			});
+			}).done(res => {
+				console.log(res);
+			})
 			
-	    }
-		
+			alert("결제에 실패하였습니다. 에러 내용: " + rsp.error_msg);
+			location.reload();
+			}
+	
+			});
+	}
+	
 </script>
 </body>
 </html>

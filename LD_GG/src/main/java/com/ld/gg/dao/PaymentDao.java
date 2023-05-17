@@ -23,11 +23,11 @@ public interface PaymentDao {
 
 	int checkBalance(String email);
 
-	int updateBalance(int point);
+	void updateBalance(int point);
 
 	Integer checkMentoringApplication(@Param("holder_email") String holder_email);
 
-	List<MemberDto> getInfoForPayment(String lol_account);
+	List<MemberDto> getInfoForPayment(String email);
 	
 	//트랜잭션 히스토리에 거래내역 저장
 	void insert_tx_history(TransactionHistoryDTO tx_history);
