@@ -18,7 +18,7 @@
 <style>
   /* 사이드바 CSS */
   .sidebar {
-    position: absolute;
+    position: fixed;
     left: -230px;
     width: 300px;
     height: 100%;
@@ -429,6 +429,44 @@ header{
     border-top: none;
   }
 </style>
+
+<style>
+  footer{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    background-color: #f7f5f5;
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    border-top: 1px solid #c5c7ce;
+    display: flex;
+  }
+  .team-name-box{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    margin-left: 110px;
+  }
+  .team-name-img{
+    width: 50px;
+    height: 50px;
+    opacity: 0.9;
+  }
+  .team-name-h5{
+    margin-left: 30px;
+    color: #aaaaaa;
+  }
+  .team-members-box{
+    display: flex;
+    margin-left: auto;
+    margin-right: 10px;
+    color: #aaaaaa;
+  }
+</style>
 <!----------------------------------------------------------------------------------------------------------------->
 <!-- 사이드바 -->
 <div class="sidebar">
@@ -608,7 +646,6 @@ header{
 <!----------------------------------------------------------------------------------------------------------------->
 <!----------------------------------------------------------------------------------------------------------------->
 <!-- 로그인 모달박스 -->
-<!-- Modal -->
 <div class="modal fade" id="login-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content">
@@ -648,6 +685,21 @@ header{
       </div>
     </div>
   </div>
+</div>
+<!----------------------------------------------------------------------------------------------------------------->
+<!----------------------------------------------------------------------------------------------------------------->
+<!-- 푸터 -->
+<div class="footer-container">
+  <footer>
+    <div class="team-name-box">
+      <img src="/src/main/webapp/resources/img/logo/team_name_logo.png" alt="" class="team-name-img">
+      <h5 class="team-name-h5">TEAM : Loling Thunder</h5>
+    </div>
+    
+    <div class="team-members-box">
+      <h5 class="team-members-box">TEAM MEMBERS: 오건오, 박민규, 채희정, 최형로, 김시현, 이태현</h5>
+    </div>
+  </footer>
 </div>
 <!--BOOTSTRAP JavaScript-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
