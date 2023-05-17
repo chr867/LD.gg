@@ -1,14 +1,10 @@
-import datetime
-import random
 import time
-import numpy as np
+
 import pandas as pd
 import requests
 from tqdm import tqdm
+
 import my_utils as mu
-import json
-import multiprocessing as mp
-import logging
 import private
 tqdm.pandas()
 
@@ -18,6 +14,7 @@ api_keys = private.riot_api_key_array_summoner
 
 api_it = iter(api_keys)
 summoner_leagues = []
+## 전체 유저 버전
 for tier in tqdm(tiers):
     for division in tqdm(divisions):
         print(tier, division)
@@ -45,6 +42,49 @@ for tier in tqdm(tiers):
             if len(res_p) < 50:
                 break
             page_p += 1
+##
+
+# 그마챌 만
+name_list = []
+api_it = iter(api_keys)
+tiers = ['C', 'GM', 'M']
+for i in tqdm(tiers):
+    while True:
+        try:
+            api_key = next(api_it)
+        except StopIteration:
+            api_it = iter(api_keys)
+            api_key = next(api_it)
+        if i == 'C':
+            url = f'https://kr.api.riotgames.com/lol/league/v4/challengerleagues/by-queue/RANKED_SOLO_5x5?api_key={api_key}'
+        elif i == 'GM':
+            url = f'https://kr.api.riotgames.com/lol/league/v4/grandmasterleagues/by-queue/RANKED_SOLO_5x5?api_key={api_key}'
+        else:  # M
+            url = f'https://kr.api.riotgames.com/lol/league/v4/masterleagues/by-queue/RANKED_SOLO_5x5?api_key={api_key}'
+        while True:
+            try:
+                res_p = requests.get(url).json()
+                for summoner in res_p['entries']:
+                    name_list.append([
+                        res_p['tier'],
+                        res_p['leagueId'],
+                        res_p['queue'],
+                        summoner['summonerName'],
+                        summoner['leaguePoints'],
+                        summoner['wins'],
+                        summoner['losses'],
+                        1
+                    ])
+            except Exception:
+                if 'Forbidden' in res_p['status']['message']:
+                    break
+
+                print(f'suummoner names 예외 발생 {res_p["status"]["message"]}, {api_key}')
+                time.sleep(20)
+                continue
+            break
+        break
+
 
 def tier_int(t):
     if t.tier == 'IRON':
@@ -66,8 +106,8 @@ def tier_int(t):
     elif t.tier == 'CHALLENGER':
         return 9
 
-
-rank_df = pd.DataFrame(summoner_leagues)
+columns = ['tier', 'leagueId', 'queueType', 'summonerName', 'leaguePoints', 'wins', 'losses', 'rank']
+rank_df = pd.DataFrame(name_list, columns=columns)
 rank_result_df = rank_df[['tier', 'leagueId', 'queueType', 'summonerName', 'leaguePoints', 'wins', 'losses', 'rank']]
 rank_result_df['match_count'] = rank_result_df['wins'] + rank_result_df['losses']
 rank_result_df['tier_int'] = rank_result_df.apply(lambda x: tier_int(x), axis=1)

@@ -93,4 +93,9 @@
 		DELETE FROM member
 		WHERE email = #{email}
 	</delete>
+	
+	<insert id="insert_notice_reply" parameterType="notice_reply">
+		INSERT INTO NOTICE_REPLY (T_B_NUM, T_R_CONTENT, EMAIL)
+		VALUES (#{notice_reply.t_b_num}, #{notice_reply.t_r_content}, #{notice_reply.email})
+	</insert>
 </mapper>

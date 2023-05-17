@@ -3,7 +3,6 @@ package com.ld.gg.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.ld.gg.dao.AdminDao;
@@ -13,6 +12,7 @@ import com.ld.gg.dto.MemberDto;
 import com.ld.gg.dto.SessionDto;
 import com.ld.gg.dto.admin.AdDto;
 import com.ld.gg.dto.admin.NoticeDto;
+import com.ld.gg.dto.admin.NoticeReply;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -67,6 +67,13 @@ public class AdminService {
 		log.info("공지 수정 결과 = {}", b_result);
 		return b_result;
 	}
+	
+  public List<NoticeReply> get_notice_reply_list(Integer t_b_num) {
+		List<NoticeReply> rp_list = ad.get_notice_reply_list(t_b_num);
+		log.info("공지 댓글 = {}", rp_list);
+
+    return rp_list;
+  }
 
 	public boolean AdInsert(AdDto aDto) {
 		int insertResult = ad.insertAd(aDto);
@@ -128,6 +135,9 @@ public class AdminService {
 		}
 	}
 
-	
+	public boolean insert_notice_reply(NoticeReply reply) {
+		boolean result = ad.insert_notice_reply(reply);
+		return result;
+	}
 
 }

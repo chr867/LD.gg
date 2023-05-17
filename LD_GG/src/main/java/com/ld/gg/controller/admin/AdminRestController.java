@@ -2,6 +2,8 @@ package com.ld.gg.controller.admin;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ld.gg.dto.MemberDto;
 import com.ld.gg.dto.admin.AdDto;
 import com.ld.gg.dto.admin.NoticeDto;
+import com.ld.gg.dto.admin.NoticeReply;
 import com.ld.gg.service.AdminService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +51,24 @@ public class AdminRestController {
 			return json;
 		}
 		
+		@GetMapping("/notice/reply-list.json")
+		public List<NoticeReply> notice_reply_list(Integer t_b_num) throws Exception{
+			List<NoticeReply> rp_list = as.get_notice_reply_list(t_b_num);
+			log.info("notcie_reply : {}", rp_list);
+			
+			return rp_list;
+		}
+
+		@PostMapping("/notice/reply-insert.do")
+		public boolean notice_reply_insert(HttpSession session, Integer t_b_num, String t_r_content) throws Exception{
+			String email = session.getAttribute("email").toString();
+			NoticeReply reply = new NoticeReply();
+			reply.setEmail(email).setT_b_num(t_b_num).setT_r_content(t_r_content);
+			
+			boolean result = as.insert_notice_reply(reply);
+			return result;
+		}
+
 		@PostMapping("/admin/ad/regist")
 		public boolean adInsert(String ad_advertiser, String ad_name, String ad_start, String ad_end, int ad_pay) {
 			

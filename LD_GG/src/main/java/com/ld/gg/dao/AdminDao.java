@@ -2,9 +2,12 @@ package com.ld.gg.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.ld.gg.dto.MemberDto;
 import com.ld.gg.dto.admin.AdDto;
 import com.ld.gg.dto.admin.NoticeDto;
+import com.ld.gg.dto.admin.NoticeReply;
 
 
 public interface AdminDao {
@@ -21,6 +24,8 @@ public interface AdminDao {
 
 	boolean modify_notice(NoticeDto nd);
 
+	List<NoticeReply> get_notice_reply_list(Integer t_b_num);
+
 	int insertAd(AdDto aDto);
 
 	List<AdDto> getAdList();
@@ -36,5 +41,7 @@ public interface AdminDao {
 	List<MemberDto> getSearchMemberHistoryLists(String keyword);
 
 	int deleteForcedDrop(String email);
+
+	boolean insert_notice_reply(NoticeReply reply);
 
 }

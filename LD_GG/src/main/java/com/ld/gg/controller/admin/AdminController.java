@@ -27,7 +27,7 @@ public class AdminController {
 	}
 	
 	@GetMapping("/notice/detail")
-	public String deatil_notice(Model model,int t_b_num) throws Exception{
+	public String deatil_notice(Model model, int t_b_num) throws Exception{
 		as.increase_views(t_b_num);
 		NoticeDto notice = as.get_notice_detail(t_b_num);
 		model.addAttribute("notice", notice);
