@@ -30,8 +30,23 @@
   top_specialized_champion = #{top_specialized_champion}, jg_specialized_champion = #{jg_specialized_champion},
   mid_specialized_champion = #{mid_specialized_champion},ad_specialized_champion = #{ad_specialized_champion},
   sup_specialized_champion = #{sup_specialized_champion}, contact_time = #{contact_time}, careers = #{careers}, 
-  recom_ment = #{recom_ment}, num_of_lessons = #{num_of_lessons}, num_of_reviews = #{num_of_reviews}, 
-  num_of_likes = #{num_of_likes}, total_grade = #{total_grade} WHERE mentor_email = #{mentor_email};
+  recom_ment = #{recom_ment} WHERE mentor_email = #{mentor_email};
+</update>
+
+<update id="update_mentor_profile_lessons" parameterType="mentorProfile">
+  UPDATE mentor_profile SET num_of_lessons = #{num_of_lessons} WHERE mentor_email = #{mentor_email};
+</update>
+
+<update id="update_mentor_profile_reviews" parameterType="mentorProfile">
+  UPDATE mentor_profile SET num_of_reviews = #{num_of_reviews} WHERE mentor_email = #{mentor_email};
+</update>
+
+<update id="update_mentor_profile_likes" parameterType="mentorProfile">
+  UPDATE mentor_profile SET num_of_likes = #{num_of_likes} WHERE mentor_email = #{mentor_email};
+</update>
+
+<update id="update_mentor_profile_grade" parameterType="mentorProfile">
+  UPDATE mentor_profile SET total_grade = #{total_grade} WHERE mentor_email = #{mentor_email};
 </update>
 
 <delete id="delete_mentor_profile" parameterType="String">

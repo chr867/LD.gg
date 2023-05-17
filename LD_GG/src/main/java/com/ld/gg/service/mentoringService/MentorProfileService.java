@@ -97,8 +97,10 @@ public class MentorProfileService {
 		int reviews = mtpdto.getNum_of_reviews(); //멘토 프로필 리뷰수
 		float total_grade = mtpdto.getTotal_grade(); //멘토 프로필 점수
 		mtpdto.setNum_of_reviews(reviews+1);
+		mtpdao.update_mentor_profile_reviews(mtpdto); //멘토 프로필에 리뷰수+1 적용
 		mtpdto.setTotal_grade(total_grade+grade);
-		mtpdao.update_mentor_profile(mtpdto); //멘토 프로필에 리뷰수+1 평점 적용
+		mtpdao.update_mentor_profile_grade(mtpdto); //멘토 프로필에 평점 적용
+		
 	}
 	
 	//리뷰 삭제
@@ -112,8 +114,9 @@ public class MentorProfileService {
 		int reviews = mtpdto.getNum_of_reviews(); //멘토 프로필 리뷰수
 		float total_grade = mtpdto.getTotal_grade(); //멘토 프로필 점수
 		mtpdto.setNum_of_reviews(reviews-1);
+		mtpdao.update_mentor_profile_reviews(mtpdto); //멘토 프로필에 리뷰수-1 적용
 		mtpdto.setTotal_grade(total_grade-grade);
-		mtpdao.update_mentor_profile(mtpdto); //멘토 프로필에 리뷰수-1 평점 -적용
+		mtpdao.update_mentor_profile_grade(mtpdto); //멘토 프로필에 평점 -적용
 		mentidao.delete_mentor_review(review_num); //리뷰 삭제
 	}
 	
@@ -139,7 +142,7 @@ public class MentorProfileService {
 		MentorProfileDTO mtpdto= mtpdao.select_by_email_mentor_profile(mentor_email);
 		int likes = mtpdto.getNum_of_likes();
 		MentorProfileDTO like_mtp_dto = mtpdto.setNum_of_likes(likes+1); //찜한 횟수 추가
-		update_mentor_profile(like_mtp_dto);
+		mtpdao.update_mentor_profile_likes(like_mtp_dto);
 	}
 	
 	//찜한 멘토 삭제
@@ -150,7 +153,7 @@ public class MentorProfileService {
 		MentorProfileDTO mtpdto= mtpdao.select_by_email_mentor_profile(mentor_email);
 		int likes = mtpdto.getNum_of_likes();
 		MentorProfileDTO like_mtp_dto = mtpdto.setNum_of_likes(likes-1); //찜한 횟수 감소
-		update_mentor_profile(like_mtp_dto);
+		mtpdao.update_mentor_profile_likes(like_mtp_dto);
 	}
 	
 	//멘토 이메일로 견적서 가져오기
@@ -209,7 +212,7 @@ public class MentorProfileService {
 			MentorProfileDTO mtpdto = mtpdao.select_by_email_mentor_profile(mentor_email);
 			int lessons = mtpdto.getNum_of_lessons();
 			MentorProfileDTO lessons_mtp_dto = mtpdto.setNum_of_lessons(lessons+1); //레슨 수 증가
-			update_mentor_profile(lessons_mtp_dto); //멘토 프로필 수정
+			mtpdao.update_mentor_profile_lessons(lessons_mtp_dto); //멘토 프로필 수정
 		}
 	}
 	//멘토링 내역 삭제
