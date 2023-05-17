@@ -1,15 +1,11 @@
-import datetime
-import random
 import time
+
 import pandas as pd
 import requests
 from tqdm import tqdm
-import private
+
 import my_utils as mu
-import json
-import multiprocessing as mp
-import numpy as np
-import logging
+import private
 tqdm.pandas()
 
 def tier_int(t):
@@ -33,7 +29,7 @@ def tier_int(t):
         return 9
 
 def get_summoner_info(k_):
-    print('get_summoner_info', len(k_[:1000]))
+    print('get_summoner_info', len(k_))
     result = []
     for k in tqdm(k_):
         while True:
@@ -61,96 +57,75 @@ def info_insert(s, conn):
     )
     mu.mysql_execute_dict(insert_query, conn)
 
-def main():
-    tiers = ['IRON', 'BRONZE', 'SILVER', 'GOLD', 'PLATINUM', 'DIAMOND']
-    divisions = ['IV', 'III', 'II', 'I']
-    api_keys = private.riot_api_key_array_summoner
-
-    api_it = iter(api_keys)
-    summoner_leagues = []
-    result = []
-    for tier in tqdm(tiers):
-        for division in tqdm(divisions):
-            print(tier, division)
-            tmp_lst = []
-            page_p = random.randrange(1, 50)
-            while True:
-                try:
-                    api_key = next(api_it)
-                except StopIteration:
-                    api_it = iter(api_keys)
-                    api_key = next(api_it)
-
-                try:
-                    url = f'https://kr.api.riotgames.com/lol/league/v4/entries/RANKED_SOLO_5x5/{tier}/{division}?page={page_p}&api_key={api_key}'
-                    res_p = requests.get(url).json()
-                    tmp_lst.append(res_p[0]['summonerId'])
-                    test = [{'summonerId': i['summonerId'], 'api_key': api_key} for i in res_p]
-                    result.append(test)
-                except IndexError:
+api_keys = private.riot_api_key_array_summoner
+# 그마챌 만
+info_list = []
+rank_list = []
+api_it = iter(api_keys)
+tiers = ['C', 'GM', 'M']
+for i in tqdm(tiers):
+    while True:
+        try:
+            api_key = next(api_it)
+        except StopIteration:
+            api_it = iter(api_keys)
+            api_key = next(api_it)
+        if i == 'C':
+            url = f'https://kr.api.riotgames.com/lol/league/v4/challengerleagues/by-queue/RANKED_SOLO_5x5?api_key={api_key}'
+        elif i == 'GM':
+            url = f'https://kr.api.riotgames.com/lol/league/v4/grandmasterleagues/by-queue/RANKED_SOLO_5x5?api_key={api_key}'
+        else:  # M
+            url = f'https://kr.api.riotgames.com/lol/league/v4/masterleagues/by-queue/RANKED_SOLO_5x5?api_key={api_key}'
+        while True:
+            try:
+                res_p = requests.get(url).json()
+                for summoner in res_p['entries']:
+                    info_list.append({
+                        'summonerId': summoner['summonerId'],
+                        'api_key': api_key
+                    })
+                    rank_list.append({
+                        'tier': res_p['tier'],
+                        'leagueId': res_p['leagueId'],
+                        'queueType': res_p['queue'],
+                        'summonerName': summoner['summonerName'],
+                        'leaguePoints': summoner['leaguePoints'],
+                        'wins': summoner['wins'],
+                        'losses': summoner['losses'],
+                        'rank': summoner['rank']
+                    })
+            except Exception:
+                if 'Forbidden' in res_p['status']['message']:
                     break
-                except Exception as e:
-                    print(f'suummoner names {e} 예외 발생 {res_p}, {api_key}')
-                    time.sleep(10)
-                    continue
+                print(f'suummoner names 예외 발생 {res_p["status"]["message"]}, {api_key}')
+                time.sleep(20)
+                continue
+            break
+        break
 
-                summoner_leagues.extend(res_p)
-                if len(res_p) < 50:
-                    break
+rank_result_df = pd.DataFrame(rank_list)
+rank_result_df['match_count'] = rank_result_df['wins'] + rank_result_df['losses']
+rank_result_df['tier_int'] = rank_result_df.apply(lambda x: tier_int(x), axis=1)
+rank_result_df.columns = [
+    ['tier', 'league_id', 'queue', 'summoner_name', 'lp', 'wins', 'losses', 'division', 'match_count', 'tier_int']]
 
-                if len(summoner_leagues) >= 500:
-                    break
 
-    rank_df = pd.DataFrame(summoner_leagues)
-    rank_result_df = rank_df[
-        ['tier', 'leagueId', 'queueType', 'summonerName', 'leaguePoints', 'wins', 'losses', 'rank']]
-    rank_result_df['match_count'] = rank_result_df['wins'] + rank_result_df['losses']
-    rank_result_df['tier_int'] = rank_result_df.apply(lambda x: tier_int(x), axis=1)
-    rank_result_df.columns = [
-        ['tier', 'league_id', 'queue', 'summoner_name', 'lp', 'wins', 'losses', 'division', 'match_count', 'tier_int']]
+summoner_info = get_summoner_info(info_list)
 
-    result_splits = []
-    chunk_size = len(result) // 4
-    start = 0
-    for _ in range(4):
-        end = start + chunk_size
-        result_splits.extend(result[start:end])
-        start = end
+info_df = pd.DataFrame(summoner_info)
+info_result_df = info_df[['name', 'summonerLevel', 'profileIconId', 'revisionDate']]
+info_result_df.columns = ['summoner_name', 's_level', 'profile_icon_id', 'revision_date']
 
-    summoner_info = []
-    with mp.Pool(processes=4) as pool:
-        results = list(tqdm(pool.imap(get_summoner_info, result_splits), total=len(result_splits)))
-        for result in results:
-            for dict in result:
-                summoner_info.append(dict)
+for_merge_df = rank_result_df[['summoner_name', 'match_count', 'tier', 'wins', 'losses', 'lp', 'division', 'tier_int']]
+for_merge_df.columns = ['summoner_name', 'games', 'tier', 'wins', 'losses', 'lp', 'ranking', 'tier_int']
 
-    info_df = pd.DataFrame(summoner_info)
-    info_result_df = info_df[['name', 'summonerLevel', 'profileIconId', 'revisionDate']]
-    info_result_df.columns = ['summoner_name', 's_level', 'profile_icon_id', 'revision_date']
+info_merged_df = pd.merge(info_result_df, for_merge_df)
+print(len(info_merged_df))
 
-    for_merge_df = rank_result_df[['summoner_name', 'match_count', 'tier', 'wins', 'losses', 'lp', 'division', 'tier_int']]
-    for_merge_df.columns = ['summoner_name', 'games', 'tier', 'wins', 'losses', 'lp', 'ranking', 'tier_int']
+sql_conn = mu.connect_mysql()
+print('insert')
+info_merged_df.progress_apply(lambda x: info_insert(x, sql_conn), axis=1)
 
-    info_result_df['summoner_name'].unique()
-    for_merge_df['summoner_name'].unique()
-
-    info_merged_df = pd.merge(info_result_df, for_merge_df)
-    print(len(info_merged_df))
-
-    sql_conn = mu.connect_mysql()
-    print('insert')
-    info_merged_df.progress_apply(lambda x: info_insert(x, sql_conn), axis=1)
-
-    # 작업이 완료될 때까지 대기
-    pool.close()
-    pool.join()
-
-    sql_conn.commit()
-    sql_conn.close()
-    print('done')
-
-if __name__ == '__main__':
-    for _ in range(24):
-        main()
-        print('sleep')
-        time.sleep(20)
+sql_conn.commit()
+sql_conn.close()
+print('done')
