@@ -57,6 +57,12 @@
 	color: black;
 	text-decoration: none;
 }
+.top-champ {
+  display: flex;
+  flex-direction: row;
+}
+
+
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script
@@ -74,14 +80,14 @@
 
 </head>
 <body>
-	<h2>${mentor.lol_account}멘토님의프로필</h2>
+	<h2>${mentor.lol_account}&nbsp멘토님의 프로필</h2>
 	<button class="like-btn" id="${mentor.lol_account}">찜하기</button>
 
-	<h4>찜한 횟수: ${mentor_profile.num_of_likes}</h4>
+	<span >찜한 횟수: <em class = "mentor_likes">${mentor_profile.num_of_likes}</em></span>
 
-	<h4>수업 횟수: ${mentor_profile.num_of_lessons}</h4>
+	<span>수업 횟수: <em>${mentor_profile.num_of_lessons}</em></span>
 
-	<h4>리뷰 횟수: ${mentor_profile.num_of_reviews}</h4>
+	<span>리뷰 횟수: <em>${mentor_profile.num_of_reviews}</em></span>
 
 	<h4 id="avg_grade">평점:
 		${mentor_profile.total_grade/mentor_profile.num_of_reviews}</h4>
@@ -91,20 +97,25 @@
 
 	<h4>특화 챔피언</h4>
 	<div id="specializedChampion">
+		<h3>탑</h3>
+		<hr/>
 		<div class="top-champ">
-			<p>탑</p>
 		</div>
+		<h3>정글</h3>
+		<hr/>
 		<div class="jungle-champ">
-			<p>정글</p>
 		</div>
+		<h3>미드</h3>
+		<hr/>
 		<div class="mid-champ">
-			<p>미드</p>
 		</div>
+		<h3>바텀</h3>
+		<hr/>
 		<div class="bottom-champ">
-			<p>바텀</p>
 		</div>
+		<h3>서포터</h3>
+		<hr/>
 		<div class="supporter-champ">
-			<p>서포터</p>
 		</div>
 	</div>
 
@@ -236,8 +247,10 @@
 		            let imageUrl = "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +champion.champion_en_name + ".png?&amp;retry=0";
 		            let champImg = $("<img>").addClass("champ-icon").attr("src", imageUrl);
 		            let champName = $("<p>").addClass("champ-name").text(champion.champion_kr_name);
-		            $(".top-champ").append(champImg);
-		            $(".top-champ").append(champName);
+		            let champDiv = $("<div>").addClass("champ-post");
+		            champDiv.append(champImg);
+		            champDiv.append(champName);
+		            $(".top-champ").append(champDiv);
 		        },
 		        error: function (request, status, error) {
 		            console.error(error);
@@ -268,6 +281,8 @@
 			                    contentType: "application/json; charset=utf-8",
 			                    success: function() {
 			                        alert("찜 목록에서 삭제되었습니다.");
+			                        let current_likes = parseInt($('.mentor_likes').text());
+			                        $('.mentor_likes').text(current_likes-1);
 			                    },
 			                    error: function() {
 			                        alert("삭제 실패.");
@@ -288,6 +303,8 @@
 			                    contentType: "application/json; charset=utf-8",
 			                    success: function() {
 			                        alert("찜 목록에 추가되었습니다.");
+			                        let current_likes = parseInt($('.mentor_likes').text());
+			                        $('.mentor_likes').text(current_likes+1);
 			                    },
 			                    error: function() {
 			                        alert("찜 목록 추가에 실패했습니다.");
