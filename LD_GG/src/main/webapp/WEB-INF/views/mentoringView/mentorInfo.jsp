@@ -57,6 +57,12 @@
 	color: black;
 	text-decoration: none;
 }
+.top-champ {
+  display: flex;
+  flex-direction: row;
+}
+
+
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script
@@ -91,20 +97,25 @@
 
 	<h4>특화 챔피언</h4>
 	<div id="specializedChampion">
+		<h3>탑</h3>
+		<hr/>
 		<div class="top-champ">
-			<p>탑</p>
 		</div>
+		<h3>정글</h3>
+		<hr/>
 		<div class="jungle-champ">
-			<p>정글</p>
 		</div>
+		<h3>미드</h3>
+		<hr/>
 		<div class="mid-champ">
-			<p>미드</p>
 		</div>
+		<h3>바텀</h3>
+		<hr/>
 		<div class="bottom-champ">
-			<p>바텀</p>
 		</div>
+		<h3>서포터</h3>
+		<hr/>
 		<div class="supporter-champ">
-			<p>서포터</p>
 		</div>
 	</div>
 
@@ -236,8 +247,10 @@
 		            let imageUrl = "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +champion.champion_en_name + ".png?&amp;retry=0";
 		            let champImg = $("<img>").addClass("champ-icon").attr("src", imageUrl);
 		            let champName = $("<p>").addClass("champ-name").text(champion.champion_kr_name);
-		            $(".top-champ").append(champImg);
-		            $(".top-champ").append(champName);
+		            let champDiv = $("<div>").addClass("champ-post");
+		            champDiv.append(champImg);
+		            champDiv.append(champName);
+		            $(".top-champ").append(champDiv);
 		        },
 		        error: function (request, status, error) {
 		            console.error(error);

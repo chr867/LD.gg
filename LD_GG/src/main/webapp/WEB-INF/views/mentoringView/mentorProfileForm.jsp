@@ -118,8 +118,16 @@ th {
   margin: 1rem 0;
   padding: 1rem;
 }
-
-.delete-button {
+#submit-btn{
+background-color: #4CAF50;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.deleteButton {
   background-color: #f44336;
   color: #fff;
   padding: 0.5rem 1rem;
@@ -129,7 +137,7 @@ th {
   cursor: pointer;
 }
 
-.delete-button:hover {
+.deleteButton:hover {
   background-color: #d32f2f;
 }
 
@@ -160,8 +168,12 @@ th {
 #container_by_class {
 	border: 1px solid black;
 }
+.position-buttons button{
+width: 70px;
+}
 
 .position-buttons button.selected {
+	
   background-color: yellow;
   color: black;
   /* 다른 스타일 추가 가능 */
@@ -186,6 +198,14 @@ th {
   #dropdown-input option {
     color: #000;
   }
+  
+  .champ-selector-inner {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid #000;
+  border-radius: 10px;
+}
+  
 
 </style>
 </head>
@@ -194,13 +214,15 @@ th {
 	<form id="mentorProfileForm" onsubmit="return submitForm()">
 		<h2>${member.lol_account}멘토님</h2>
 		
-		<h4>찜한 횟수: ${mentor_profile.num_of_likes}</h4>
+		<span >찜한 횟수: <em class = "mentor_likes">${mentor_profile.num_of_likes}</em></span>
 
-		<h4>수업 횟수: ${mentor_profile.num_of_lessons}</h4>
+		<span>수업 횟수: <em>${mentor_profile.num_of_lessons}</em></span>
 	
-		<h4>리뷰 횟수: ${mentor_profile.num_of_reviews}</h4>
-		
-		<h4 id="avg_grade">평점:</h4>
+		<span>리뷰 횟수: <em>${mentor_profile.num_of_reviews}</em></span>
+	
+		<span id="avg_grade">평점:
+			<em>${mentor_profile.total_grade/mentor_profile.num_of_reviews}</em></span>
+
 		
 		<label for="about_mentor">멘토 소개:</label> <input type="text"
 			id="about_mentor" name="about_mentor"
@@ -211,17 +233,20 @@ th {
 			
 			<div class="position-buttons">
 			<button type="button" id="top-button"><img
-					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_top_grey.svg" class="position-img">탑</button>
+					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_top_grey.svg" 
+					class="position-img"><p>탑</p></button>
 			<button type="button" id="jungle-button"><img
-					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_jg_grey.svg" class="position-img">정글</button>
+					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_jg_grey.svg" 
+					class="position-img"><p>정글</p></button>
 			<button type="button" id="mid-button"><img
 					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_mid_grey.svg"
-					class="position-img">미드</button>
+					class="position-img"><p>미드</p></button>
 			<button type="button" id="bot-button"><img
-					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_ad_grey.svg" class="position-img">바텀</button>
+					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_ad_grey.svg" 
+					class="position-img"><p>바텀</p></button>
 			<button type="button" id="support-button"><img
 					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_sup_grey.svg"
-					class="position-img">서포터</button>
+					class="position-img"><p>서포터</p></button>
 		</div><br><br>
 			
 		<br> <label for="top_specializedChampion">특화 챔피언(탑):</label> <input
@@ -229,10 +254,11 @@ th {
 			value="${mentor_profile.top_specialized_champion}"><br>
 			
 		<div class="champ-selector-inner">
-			<div class="champ-info"><span><img retry-img="" src="" cdn-img="" class="champ-img">
-					<p class="champ-name">특화 챔피언(탑)을 선택 해주세요</p>
-				</span></div><img src="https://online.gamecoach.pro/img/icon/icon-arrow-down-grey.svg"
-				class="arrow-icon">
+				<div class="champ-info">
+					<img retry-img="" src="" cdn-img="" class="champ-icon">
+					<span class="champ-name">특화 챔피언(탑)을 선택 해주세요</span>
+				</div>
+			<img src="https://online.gamecoach.pro/img/icon/icon-arrow-down-grey.svg" class="arrow-icon">
 		</div>
 		<div class="filter-champ-wrap" style="display: none">
 			<div class="filter-title-wrap">
@@ -242,23 +268,30 @@ th {
 			</div>
 			<div win-rate-filter-champ="">
 				<span text-input="" class="input-champ-keyword white">
-					<input placeholder="챔피언을 검색하세요" tabindex="0" type="text" class="champ-search">
+					<input placeholder="챔피언을 검색하세요" tabindex="0" type="text" class="champ-search" list='fruitslist'>
+					<datalist id="fruitslist">
+					  <option value="apple">
+					  <option value="banana">
+					  <option value="grape">
+					  <option value="orange">
+					</datalist>
 				</span>
 				<div class="champ-list">
 				</div>
 			</div>
-		</div><br><br>	
+		</div><br>
 			
 			
 		<br> <label for="contactTime">수업 가능 시간:</label> 
 		<select id="dropdown-input" onchange="selectValue(this)">
-		  <option value="">구분</option>
+		  <option value="">선택</option>
 		  <option value="매일">매일</option>
 		  <option value="주말">주말</option>
 		  <option value="평일">평일</option>
 		</select>
-		<p><input type="time" id="contactTimeFrom1" name="contact_time1" value="12:00"></p>
-		<p><input type="time" id="contactTimeFrom2" name="contact_time2" value="16:00"></p>
+		<span>&nbsp<input type="time" id="contactTimeFrom1" name="contact_time1" value="12:00"></span>
+		<span>&nbsp~&nbsp</span>
+		<span><input type="time" id="contactTimeFrom2" name="contact_time2" value="16:00"></span>
 		<br>
 			
 		<br> <label for="careers">경력:</label> <input type="text"
@@ -267,7 +300,7 @@ th {
 		<br> <label for="recom_ment">이런 분들께 추천해요:</label> <input
 			type="text" id="recom_ment" name="recom_ment"
 			value="${mentor_profile.recom_ment}"><br>
-	<br> <button id="submit-btn" >작성</button>
+	<br> <button type="button" id="submit-btn" >작성</button>
 	</form>
 	
 
@@ -314,6 +347,12 @@ th {
 	let positions = [];
 	// 이미 추가된 챔피언들의 ID를 저장할 배열
 	let top_selectedChampions = [];
+	let current_tsc = "${mentor_profile.top_specialized_champion}";
+	const championIds = current_tsc.split(",");
+	for (let i = 0; i < championIds.length; i++) {
+		  const parsedId = parseInt(championIds[i]);
+		  top_selectedChampions.push(parsedId);
+		}
 	
 	let c_time = "${mentor_profile.contact_time}";
 	let c1_time = c_time.split(" ")[0];
@@ -395,12 +434,12 @@ th {
 		                // 새로운 챔피언을 추가
 		                top_selectedChampions.push(champion.champion_id);
 		                
-		                if ($(".champ-img").attr("src")==""){
+		                if ($(".champ-icon").attr("src")==""){
 		                	$('.champ-info').remove();  
 		                	
 		                	let championDiv = $("<div>").addClass("champ-info").attr("id",champion.champion_id);
 				            let champImg = $("<img>").addClass("champ-icon").attr("src", imageUrl);
-				            let champName = $("<span>").text(champion.champion_kr_name);
+				            let champName = $("<p>").text(champion.champion_kr_name);
 				            championDiv.append(champImg);
 				            championDiv.append(champName);
 				            $(".arrow-icon").before(championDiv);
@@ -410,7 +449,7 @@ th {
 		                }else{
 		                	let championDiv = $("<div>").addClass("champ-info").attr("id",champion.champion_id);
 				            let champImg = $("<img>").addClass("champ-icon").attr("src", imageUrl);
-				            let champName = $("<span>").text(champion.champion_kr_name);
+				            let champName = $("<p>").text(champion.champion_kr_name);
 				            championDiv.append(champImg);
 				            championDiv.append(champName);
 				            $(".arrow-icon").before(championDiv);
@@ -421,7 +460,7 @@ th {
 		            });
 		            let championDiv = $("<div>").attr("id", "champion");
 		            let champImg = $("<img>").addClass("champ-icon").attr("src", imageUrl);
-		            let champName = $("<span>").text(champion.champion_kr_name);
+		            let champName = $("<p>").text(champion.champion_kr_name);
 		            championDiv.append(champImg);
 		            championDiv.append(champName);
 		            champItem.append(championDiv);
@@ -430,7 +469,10 @@ th {
 		            let rateBarBg = $("<div>").addClass("rate-bar-bg");
 		            rateBarWrap.append(rateBarBg);
 		            rateWrap.append(rateBarWrap);
-		            let pickRate = $("<p>").addClass("pick-rate").text("픽률 " + 0 + "%");
+		            let pickRate = $("<span>").addClass("pick-rate").text("픽률 " + 0 + "%");
+		            let pickMeter = $("<meter>").addClass("pick-meter").attr("min", 0).attr("max", 100)
+		            			.attr("low", 30).attr("high", 65).attr("optimum", 90).val(11);
+		            rateWrap.append(pickMeter);
 		            rateWrap.append(pickRate);
 		            champItem.append(rateWrap);
 		            $(".champ-list").append(champItem);
@@ -486,7 +528,7 @@ th {
 			      mentor_email: '${email}',
 			      about_mentor: formData.get('about_mentor'),
 			      specialized_position: JSON.stringify(positions),
-			      top_specialized_champion: formData.get('top_specialized_champion'),
+			      top_specialized_champion: top_selectedChampions.join(","),
 			      contact_time: time0 + " " + time1 + " ~ " + time2,
 			      careers: formData.get('careers'),
 			      recom_ment: formData.get('recom_ment')
@@ -566,7 +608,7 @@ th {
 		  let mpsp = JSON.parse(sp.specialized_position);
 		  positions = mpsp;
 		  if (mpsp.length == 2) {
-			    $('#specializedPosition').val(mpsp[0] + '/' + mpsp[1]);
+			    $('#specializedPosition').val(mpsp[0] + ' / ' + mpsp[1]);
 			  } else {
 			    $('#specializedPosition').val(mpsp[0]);
 			  }
@@ -703,38 +745,48 @@ th {
 	function select_by_email_class() {
 		  const lol_account = "${member.lol_account}";
 		  $.ajax({
-		    url: "/mentor/select-mentor-class?lol_account=" + lol_account,
+			url: "/mentor/select-mentor-class?lol_account=" + lol_account,
 		    type: "GET",
 		    contentType: "application/json;charset=UTF-8",
 		    success: function (class_list) {
-		    	let classList = JSON.parse(class_list);
-		    	console.log(classList);
-		    	
-		      const $mentorClassInfo = $("#mentor_class_info");
-		      $mentorClassInfo.empty();
-
-		      classList.forEach((mentorClass) => {
-		        const classHtml = '<div id="container_by_class">' +
-		          '<div>' +
-		          '<h4>' + mentorClass.class_name + '</h4>' +
-		          '<button class="deleteButton" id="' + mentorClass.class_id + '">삭제</button>' +
-		          '</div>' +
-		          '<div>' +
-		          '<h4>' + mentorClass.price + '</h4>' +
-		          '</div>' +
-		          '<div>' +
-		          '<h4>' + mentorClass.class_info + '</h4>' +
-		          '</div>' +
-		          '</div>';
-
-		        $mentorClassInfo.append(classHtml);
-		      });
+		    let classList = JSON.parse(class_list);
+		      handleClassList(classList);
 		    },
 		    error: function (xhr, status, error) {
-		      console.error(error);
+		      console.log(error);
 		    },
 		  });
 		}
+
+	
+	function handleClassList(classList) {
+		  const $mentorClassInfo = $("#mentor_class_info");
+		  $mentorClassInfo.empty();
+
+		  classList.forEach((mentorClass) => {
+		    const classHtml = createClassHtml(mentorClass);
+		    $mentorClassInfo.append(classHtml);
+		  });
+		}
+
+	function createClassHtml(mentorClass) {
+	  const { class_name, class_id, price, class_info } = mentorClass;
+
+	  const $container = $("<div>").attr("id", "container_by_class");
+	  const $classInfo = $("<div>");
+	  const $classTitle = $("<h4>").text(class_name);
+	  const $deleteButton = $("<button>")
+	    .addClass("deleteButton")
+	    .attr("id", class_id)
+	    .text("삭제");
+	  const $classPrice = $("<div>").html("<h4>" + "가격: " + price + "</h4>");
+	  const $classDescription = $("<div>").html("<h4>" + class_info + "</h4>");
+
+	  $classInfo.append($classTitle, $deleteButton);
+	  $container.append($classInfo, $classPrice, $classDescription);
+
+	  return $container;
+	}
 
 
 	
