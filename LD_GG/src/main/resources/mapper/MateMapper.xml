@@ -61,7 +61,7 @@
 		ORDER BY mr.mate_r_id desc
 	</select>
 	<select id="getReplyList" resultType="mate">
-		SELECT lol_account,mate_r_content,mate_r_date,mate_apply,mate_id,mate_r_id,mr.email
+		SELECT lol_account,mate_r_content,mate_r_date,mate_apply,mate_id,mate_r_id,mr.email,mr.mate_select
 		FROM mate_request mr JOIN (
 			SELECT *
 			FROM member
@@ -69,6 +69,15 @@
 		ON mr.mate_apply = M.EMAIL
 		where mate_id =#{mate_id}
 		ORDER BY mr.mate_r_id desc
+	</select>
+	<select id="getReplySelect" resultType="mate">
+		SELECT lol_account,mate_r_content,mate_r_date,mate_apply,mate_id,mate_r_id,mr.email,mr.mate_select
+		FROM mate_request mr JOIN (
+			SELECT *
+			FROM member
+			) as M
+		ON mr.mate_apply = M.EMAIL
+		where mate_id =#{mate_id} and mate_select = 1
 	</select>
 	<delete id="mateDelete" parameterType="mate">
 		DELETE FROM mate_post WHERE mate_id = #{mate_id}
@@ -79,5 +88,13 @@
 		mate_content=#{mate_content},
 		mate_date=default
 		WHERE mate_id =#{mate_id}
+	</update>
+	<update id="replyMateModify" parameterType="mate">
+		UPDATE mate_request
+		SET mate_select = CASE
+			WHEN mate_id = #{mate_id} AND mate_r_id = #{mate_r_id} 
+			THEN 1
+			ELSE 0
+			END
 	</update>
 </mapper>

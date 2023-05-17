@@ -60,6 +60,23 @@ public class MateService {
 		}
 
 	}
+	public boolean replyMateModify(MateDto mDto) {
+		log.info(mDto+"replyMateModify-Dto");
+		try {
+			Integer replyMateModifyResult = mDao.replyMateModify(mDto);
+			if (replyMateModifyResult != 0) {
+				log.info(replyMateModifyResult+"replyMateModifyResult");
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
 
 	public MateDto getMateDetails(int mate_id) {
 		MateDto MateDetails = mDao.getMateDetails(mate_id);
@@ -68,6 +85,10 @@ public class MateService {
 	public MateDto getMateInfo(int mate_id) {
 		MateDto MateInfo = mDao.getMateInfo(mate_id);
 		return MateInfo;
+	}
+	public MateDto getReplyInfo(int mate_id) {
+		MateDto MateReplyInfo = mDao.getReplyInfo(mate_id);
+		return MateReplyInfo;
 	}
 
 
@@ -90,11 +111,11 @@ public class MateService {
 		}
 
 	}
-	public MateDto getSelectReplyList(int mate_r_id) {
+	/*public MateDto getSelectReplyList(int mate_r_id) {
 		MateDto SelectReplyList = mDao.getMateDetails(mate_r_id);
 		return SelectReplyList;
 		
-	}
+	}*/
 	public int mateDelete(int mate_id) {
 		log.info(mate_id+"mate_id");
 		try {
@@ -113,6 +134,11 @@ public class MateService {
 			return 4;
 		}
 
+	}
+	public MateDto getReplySelect(int mate_id) {
+		MateDto getReplySelect = mDao.getReplySelect(mate_id);
+		log.info("getReplySelect"+getReplySelect);
+		return getReplySelect;
 	}
 
 

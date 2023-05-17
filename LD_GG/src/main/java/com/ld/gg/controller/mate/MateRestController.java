@@ -41,6 +41,15 @@ public class MateRestController {
 		
 		return json;
 	}
+	@GetMapping("/reply/select")
+	public MateDto getReplySelect(int mate_id) throws Exception{
+		log.info("메이트레스트 컨트롤러 탔어용-선택 가져오기");
+		log.info("메이트 아이디 "+mate_id);
+		MateDto mDto= ms.getReplySelect(mate_id);
+		log.info("메이트  선택 디티오"+mDto);
+		return mDto;
+	}
+	
 	@GetMapping("/reply/list")
 	public List<MateDto> getReplyList(int mate_id) throws Exception{
 		log.info("메이트레스트 컨트롤러 탔어용-리플가져오기");

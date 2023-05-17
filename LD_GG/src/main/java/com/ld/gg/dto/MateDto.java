@@ -13,6 +13,7 @@ import lombok.experimental.Accessors;
 public class MateDto {
 	//게시글
 	private int mate_id;//메이트 게시글 번호
+	private int mate_r_id;//메이트 게시글 번호
 	private String email;//메이트 게시글 작성자
 	private String mate_content;//메이트 게시글 내용
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")private String mate_date;//메이트 게시글 작성일자
@@ -26,7 +27,7 @@ public class MateDto {
 	private String mate_r_content;//메이트 신청 글 내용
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private	String mate_r_date;//메이트 신청 시간
-	
+	private int mate_select;//  메이트 간택
 	
 	
 }

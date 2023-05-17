@@ -127,8 +127,30 @@ public class MateController {
 				mav.addObject("content", mate_content);
 				log.info("mav: " + mav.getModel().toString());
 				return mav;
-			}
-			
-			
+			}	
 	}
+		@PostMapping("/reply/modify")
+		public ModelAndView replyMateModify(@RequestParam int mate_id,@RequestParam int mate_r_id,HttpSession session)
+				throws Exception {
+			log.info("메이트 선택 버튼 누름");
+			String email = (String) session.getAttribute("email");
+			log.info("이메일 정보: " + email);
+			if (email == null) {
+				// 로그인되어 있지 않으면 로그인 페이지로 이동
+				log.info("로그인이 필요합니다.");
+				return new ModelAndView("redirect:/");
+			}
+			MateDto mDto = new MateDto();
+			mDto.setMate_r_id(mate_r_id);
+			mDto.setMate_id(mate_id);
+			log.info("메이트 선택 내용"+mDto);
+			boolean isSuccess = ms.replyMateModify(mDto);
+			log.info("메이트 선택 결과:"+isSuccess);
+			if (isSuccess) {
+				return new ModelAndView("redirect:/mate/");
+			}else {
+				log.info("isSuccess 메이트 선택 실패");
+				return new ModelAndView("redirect:/");
+			}	
+		}
 }
