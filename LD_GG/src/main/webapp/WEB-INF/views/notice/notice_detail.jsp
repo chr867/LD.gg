@@ -10,9 +10,11 @@
 
 </head>
 <body>
+<p style="display: none;" id="email">${sessionScope.email}</p>
 
 <div class="container">
 	<h1>공지사항 상세</h1>
+	<div>
 			<table>
 			<tr>
 				<th class="label">글 번호</th>
@@ -40,11 +42,20 @@
 				<td class="value">${notice.t_b_date}</td>
 			</tr>
 		</table>
-		
-		
-	<button onclick="modify(${notice.t_b_num})">수정</button>
-	<button onclick="go_list()">목록</button>
-	
+			
+		<button onclick="modify(${notice.t_b_num})">수정</button>
+		<button onclick="go_list()">목록</button>
+	</div>
+
+	<div>
+		<div id="comment-form">
+			<input type="text" placeholder="댓글을 입력해주세요" id="comment-textarea">
+			<button id="comment-submit-btn" onclick="submitComment()">등록</button>
+		</div>
+
+		<table id="reply_table"/>
+	</div>
+
 </div>
 
 

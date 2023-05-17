@@ -1,6 +1,5 @@
 package com.ld.gg.dto.admin;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 import org.apache.ibatis.type.Alias;
@@ -16,6 +15,7 @@ public class NoticeReply {
   private int t_r_num;
   private int t_b_num;
   private String t_r_content;
+  private String email;
 
   @DateTimeFormat(pattern="yyyy-MM-dd")
   private Date t_r_date;

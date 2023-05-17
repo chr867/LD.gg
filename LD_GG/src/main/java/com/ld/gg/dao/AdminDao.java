@@ -2,6 +2,8 @@ package com.ld.gg.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.ld.gg.dto.MemberDto;
 import com.ld.gg.dto.admin.AdDto;
 import com.ld.gg.dto.admin.NoticeDto;
@@ -39,5 +41,7 @@ public interface AdminDao {
 	List<MemberDto> getSearchMemberHistoryLists(String keyword);
 
 	int deleteForcedDrop(String email);
+
+	boolean insert_notice_reply(NoticeReply reply);
 
 }

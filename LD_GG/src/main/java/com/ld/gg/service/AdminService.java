@@ -135,4 +135,9 @@ public class AdminService {
 		}
 	}
 
+	public boolean insert_notice_reply(NoticeReply reply) {
+		boolean result = ad.insert_notice_reply(reply);
+		return result;
+	}
+
 }
