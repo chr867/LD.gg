@@ -257,8 +257,8 @@ th {
 		  <option value="주말">주말</option>
 		  <option value="평일">평일</option>
 		</select>
-		<p><input type="time" id="contactTimeFrom" name="contact_time1" value="${mentor_profile.contact_time}"></p>
-		<p><input type="time" id="contactTimeFrom" name="contact_time2" ></p>
+		<p><input type="time" id="contactTimeFrom1" name="contact_time1" value="12:00"></p>
+		<p><input type="time" id="contactTimeFrom2" name="contact_time2" value="16:00"></p>
 		<br>
 			
 		<br> <label for="careers">경력:</label> <input type="text"
@@ -314,6 +314,19 @@ th {
 	let positions = [];
 	// 이미 추가된 챔피언들의 ID를 저장할 배열
 	let top_selectedChampions = [];
+	
+	let c_time = "${mentor_profile.contact_time}";
+	let c1_time = c_time.split(" ")[0];
+	let c2_time = c_time.split(" ")[1];
+	let c3_time = c_time.split(" ")[3];
+	$("#dropdown-input").val(c1_time);
+	$("#contactTimeFrom1").val(c2_time);
+	$("#contactTimeFrom2").val(c3_time);
+	
+	function selectValue(selectElement) {
+	  let selectedValue = $(selectElement).val();
+	  console.log(selectedValue);
+	}
 	
 	$(document).ready(function () {
 		displaySpecializedPosition(); //멘토 특화 포지션을 인풋창에 출력

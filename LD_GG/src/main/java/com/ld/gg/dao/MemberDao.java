@@ -29,5 +29,7 @@ public interface MemberDao {
 	Integer deleteAccount(String email);
 
 	int updateUserType(@Param("email") String email, @Param("user_type") Integer user_type);
+
+	List<MemberDto> getMemberLolAccountByKeyword(String lol_account_keyword);
 	
 }

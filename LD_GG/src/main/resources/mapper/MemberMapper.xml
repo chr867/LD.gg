@@ -32,6 +32,11 @@
 		SELECT email,lol_account FROM MEMBER WHERE
 		lol_account=#{lol_account}
 	</select>
+	
+	<select id="getMemberLolAccountByKeyword" resultType="member">
+		SELECT email,lol_account FROM MEMBER WHERE
+		lol_account LIKE CONCAT('%', #{lol_account_keyword}, '%')
+	</select>
 
 	<select id="getMemberPhoneNum" parameterType="member"
 		resultType="String">

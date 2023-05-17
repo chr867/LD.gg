@@ -10,7 +10,10 @@
 </select>
 
 <select id="select_by_email_mentor_profile" resultType="mentorProfile">
-  SELECT * FROM mentor_profile WHERE mentor_email = #{mentor_email};
+	SELECT *
+	FROM mentor_profile AS mp
+	JOIN member AS m ON mp.mentor_email = m.email 
+	WHERE mentor_email = #{mentor_email};
 </select>
 
 <insert id="insert_mentor_profile" parameterType="String">

@@ -76,6 +76,13 @@ public class RestMentoringController {
 		return champ_name;
 	}
 	
+	//롤 닉네임으로 회원 정보 가져오기
+	@GetMapping("/get-member-info")
+	public String get_member_info(@RequestParam String lol_account_keyword) throws JsonProcessingException {
+		String mb_list_json = mbService.findLolAccountByKeyword(lol_account_keyword);
+		return mb_list_json;
+	}
+	
 	//리뷰어 이메일로 내가 쓴 리뷰 가져오기
 	@PostMapping("/get-review-by-reviewer")
 	public String select_by_reviewer_email_mentor_review(@RequestBody Map<String,String> reviewer_email) throws JsonProcessingException {
@@ -325,8 +332,8 @@ public class RestMentoringController {
 		mtpService.delete_mentor_class(class_id);
 	}
 	
-	//멘토 회원 목록 가져오기
-	@GetMapping("/find-mentor")
+	//모든 멘토 회원 목록 가져오기
+	@GetMapping("/find-all-mentor")
 	public String select_all_mentor_profile() throws JsonProcessingException{
 		List<MentorProfileDTO> mtpList = mtpService.select_all_mentor_profiles();
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -334,7 +341,7 @@ public class RestMentoringController {
 		List<String> lol_name_list = new ArrayList<>();
 		while (iterator.hasNext()) {
 			MentorProfileDTO mtp = iterator.next();
-		    String mentor_email = mtp.getMentor_email(); // mentor_email 異붿텧
+		    String mentor_email = mtp.getMentor_email(); // mentor_email 변환
 		    MemberDto mbdto = mbdao.getMemberInfo(mentor_email);
 		    lol_name_list.add(mbdto.getLol_account());
 		}

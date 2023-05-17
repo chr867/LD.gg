@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ld.gg.dao.MemberDao;
 import com.ld.gg.dto.MemberDto;
 
@@ -80,6 +82,13 @@ public class MemberService {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	//롤 닉네임 키워드로 회원정보 찾기
+	public String findLolAccountByKeyword(String lol_account_keyword) throws JsonProcessingException {
+		List<MemberDto> memberList = mDao.getMemberLolAccountByKeyword(lol_account_keyword);
+		ObjectMapper objectMapper = new ObjectMapper();
+		String mb_list_json = objectMapper.writeValueAsString(memberList);
+		return mb_list_json;
 	}
 
 	public boolean findMemberPhoneNum(String phone_num) {
