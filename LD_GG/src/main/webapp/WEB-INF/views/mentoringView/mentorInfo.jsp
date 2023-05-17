@@ -74,14 +74,14 @@
 
 </head>
 <body>
-	<h2>${mentor.lol_account}멘토님의프로필</h2>
+	<h2>${mentor.lol_account}&nbsp멘토님의 프로필</h2>
 	<button class="like-btn" id="${mentor.lol_account}">찜하기</button>
 
-	<h4>찜한 횟수: ${mentor_profile.num_of_likes}</h4>
+	<span >찜한 횟수: <em class = "mentor_likes">${mentor_profile.num_of_likes}</em></span>
 
-	<h4>수업 횟수: ${mentor_profile.num_of_lessons}</h4>
+	<span>수업 횟수: <em>${mentor_profile.num_of_lessons}</em></span>
 
-	<h4>리뷰 횟수: ${mentor_profile.num_of_reviews}</h4>
+	<span>리뷰 횟수: <em>${mentor_profile.num_of_reviews}</em></span>
 
 	<h4 id="avg_grade">평점:
 		${mentor_profile.total_grade/mentor_profile.num_of_reviews}</h4>
@@ -268,6 +268,8 @@
 			                    contentType: "application/json; charset=utf-8",
 			                    success: function() {
 			                        alert("찜 목록에서 삭제되었습니다.");
+			                        let current_likes = parseInt($('.mentor_likes').text());
+			                        $('.mentor_likes').text(current_likes-1);
 			                    },
 			                    error: function() {
 			                        alert("삭제 실패.");
@@ -288,6 +290,8 @@
 			                    contentType: "application/json; charset=utf-8",
 			                    success: function() {
 			                        alert("찜 목록에 추가되었습니다.");
+			                        let current_likes = parseInt($('.mentor_likes').text());
+			                        $('.mentor_likes').text(current_likes+1);
 			                    },
 			                    error: function() {
 			                        alert("찜 목록 추가에 실패했습니다.");
