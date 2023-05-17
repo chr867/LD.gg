@@ -174,6 +174,18 @@ th {
 			box-sizing: border-box;
 			border: 1px solid #d5d5de;
 		}
+#dropdown-input {
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #f1f1f1;
+    cursor: pointer;
+  }
+
+  /* 드롭다운 메뉴 옵션 스타일 */
+  #dropdown-input option {
+    color: #000;
+  }
 
 </style>
 </head>
@@ -181,6 +193,14 @@ th {
 	<h1>멘토 프로필 작성</h1>
 	<form id="mentorProfileForm" onsubmit="return submitForm()">
 		<h2>${member.lol_account}멘토님</h2>
+		
+		<h4>찜한 횟수: ${mentor_profile.num_of_likes}</h4>
+
+		<h4>수업 횟수: ${mentor_profile.num_of_lessons}</h4>
+	
+		<h4>리뷰 횟수: ${mentor_profile.num_of_reviews}</h4>
+		
+		<h4 id="avg_grade">평점:</h4>
 		
 		<label for="about_mentor">멘토 소개:</label> <input type="text"
 			id="about_mentor" name="about_mentor"
@@ -230,9 +250,16 @@ th {
 		</div><br><br>	
 			
 			
-		<br> <label for="contactTime">수업 가능 시간:</label> <input
-			type="text" id="contactTime" name="contact_time"
-			value="${mentor_profile.contact_time}"><br>
+		<br> <label for="contactTime">수업 가능 시간:</label> 
+		<select id="dropdown-input" onchange="selectValue(this)">
+		  <option value="">구분</option>
+		  <option value="매일">매일</option>
+		  <option value="주말">주말</option>
+		  <option value="평일">평일</option>
+		</select>
+		<p><input type="time" id="contactTimeFrom" name="contact_time1" value="${mentor_profile.contact_time}"></p>
+		<p><input type="time" id="contactTimeFrom" name="contact_time2" ></p>
+		<br>
 			
 		<br> <label for="careers">경력:</label> <input type="text"
 			id="careers" name="careers" value="${mentor_profile.careers}"><br>
@@ -279,6 +306,10 @@ th {
 	<div id="mentor_class_info">
 	</div>
 	<script>
+	//평균 평점 계산
+	let avg_grade = ${mentor_profile.total_grade/mentor_profile.num_of_reviews}
+	let roundedGrade = avg_grade.toFixed(1);
+	$('#avg_grade').html('평점: '+roundedGrade);
 	// 선택한 포지션 값을 저장할 배열
 	let positions = [];
 	// 이미 추가된 챔피언들의 ID를 저장할 배열
@@ -431,6 +462,9 @@ th {
 
 		function submitForm() {
 			  let formData = new FormData($('#mentorProfileForm')[0]);
+			  let time0 = $('#dropdown-input').val();
+			  let time1 = formData.get('contact_time1')
+			  let time2 = formData.get('contact_time2')
 			  $.ajax({
 			    url: '/mentor/edit-profile/',
 			    type: 'PUT',
@@ -440,12 +474,12 @@ th {
 			      about_mentor: formData.get('about_mentor'),
 			      specialized_position: JSON.stringify(positions),
 			      top_specialized_champion: formData.get('top_specialized_champion'),
-			      contact_time: formData.get('contact_time'),
+			      contact_time: time0 + " " + time1 + " ~ " + time2,
 			      careers: formData.get('careers'),
 			      recom_ment: formData.get('recom_ment')
 			    }),
 			    success: function(data) {
-			    	console.log("프로필 작성 성공");
+			    	alert("프로필 작성 성공");
 			        displaySpecializedPosition();
 			      },
 			      error: function(error) {

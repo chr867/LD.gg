@@ -15,6 +15,10 @@ public interface MentorProfileDAO {
 	void renewal_mentor_profile();
 	void insert_mentor_profile(String mentor_email);
 	void update_mentor_profile(MentorProfileDTO mentor_profile);
+	void update_mentor_profile_lessons(MentorProfileDTO mentor_profile);
+	void update_mentor_profile_reviews(MentorProfileDTO mentor_profile);
+	void update_mentor_profile_likes(MentorProfileDTO mentor_profile);
+	void update_mentor_profile_grade(MentorProfileDTO mentor_profile);
 	void delete_mentor_profile(String mentor_email);
 	
 	
