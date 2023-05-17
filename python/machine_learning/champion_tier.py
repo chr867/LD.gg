@@ -19,7 +19,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 import joblib
-
+import dask.dataframe as dd
 # RIOT-API-KEY
 riot_api_key = 'RGAPI-14667a4e-7c3c-45fa-ac8f-e53c7c3f5fe1'
 pd.set_option('display.max_columns', None)
@@ -34,6 +34,19 @@ end_time = time.time()
 print("변환 시간: {:.2f}초".format(end_time - start_time))
 print("JSON 변환 종료")
 
+
+# ----------------------------------------------------------------------------------------------------------------------
+# CSV 파일을 Dask 데이터프레임으로 읽기
+df = dd.read_csv('D:/match_raw_patch_202305162012.csv')
+df_head = df.head()
+
+# 실제 데이터를 읽어오기
+df_head_computed = df_head.compute().result()
+
+# 데이터프레임 출력
+print(df_head_computed)
+df['matches'] = df['matches'].apply(json.loads)
+df['timeline'] = df['timeline'].apply(json.loads)
 
 # ----------------------------------------------------------------------------------------------------------------------
 print("시작!")
@@ -52,6 +65,10 @@ for limit in tqdm(range(0, len(matchId_count.match_id_substr.unique()), batch_si
     query = f"SELECT matches, timeline FROM match_raw_patch LIMIT {limit}, {batch_size}"
     row = pd.DataFrame(mu.mysql_execute_dict(query, conn))
     conn.close()
+# csv_file = 'D:\match_raw_patch_202305162012.csv'
+# row = pd.read_csv(r'D:/match_raw_patch_202305162012.csv', encoding='utf-8')
+
+
     row['matches'] = row['matches'].apply(json.loads)
     row['timeline'] = row['timeline'].apply(json.loads)
 
