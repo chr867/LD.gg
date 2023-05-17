@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 
 <head>
   <meta charset="UTF-8">
@@ -11,15 +11,20 @@
     integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 </head>
 <style>
+  body{
+    background-color: #E4E6EF;
+  }
+</style>
+<style>
   /* 사이드바 CSS */
   .sidebar {
-    position: absolute;
+    position: fixed;
     left: -230px;
     width: 300px;
     height: 100%;
     padding: 10px;
     background-color: #202B46;
-    transition: left 0.5s;
+    transition: left 0.3s;
     z-index: 2;
   }
 
@@ -76,11 +81,6 @@
   border-top-right-radius: inherit;
   border-top-left-radius: inherit;
   border-radius: 4rem;
-
-}
-.sidebar-area {
-  opacity: 1;
-  transition: opacity 0.3s ease-in-out;
 }
 
 .accordion-button:focus{
@@ -101,11 +101,10 @@
 }
 .sidebar:not(:hover) .sidebar-area{
   display: none;
-  opacity: 0;
+
 }
 .sidebar:not(:hover) .sidebar-nothover-menu{
   display: block;
-  opacity: 1;
 }
 
 .sidebar-nothover-menu{
@@ -119,7 +118,7 @@
   padding: 20px 20px 10px 20px;
 }
 </style>
-
+<!-- 헤더 CSS -->
 <style>
 header{
   position: fixed;
@@ -127,13 +126,11 @@ header{
     right: 0;
     top: 0;
     height: 4.5rem;
-    background: #FFF;
+    background: #f7f5f5;
     line-height: 4rem;
     align-content: center;
     align-items: center;
     border-bottom: 1px solid #c5c7ce;
-    text-align: center;
-    justify-content: center;
     display: flex;
     padding: 10px; 
 }
@@ -141,13 +138,17 @@ header{
   width: 30px;
   height: 30px;
   margin: 5px 0 0 30px;
-  
+  filter: invert(32%) sepia(66%) saturate(0%) hue-rotate(220deg) brightness(125%) contrast(119%);
 } 
+.search-bar-icon:hover{
+  filter: none;
+}
 .search-bar-logo{
   width: 40px;
   height: 40px;
   margin: 0 15px 0 0;
   border-right: 1px solid #c5c7ce;
+  
 }
 
 .search-bar-box{
@@ -156,12 +157,15 @@ header{
   border: 1px solid #3d424e;
   border-radius: 4rem;
   padding: 4px 30px 0 50px;
-  box-shadow: 2px 2px gray;
+  box-shadow: 2px 2px #c5c7ce;
   display: flex;
   flex-direction: row;
+  margin-left: 100px;
 
 }
+
 .search-bar-box .search-bar-input{
+  background-color: #f7f5f5;
   width: 600px;
   height: 40px;
   border: none;
@@ -169,20 +173,299 @@ header{
 }
 .header-icon-box{
   display: flex;
+  margin-left: auto;
 }
+
 .message-icon-img{
   width: 40px;
   height: 40px;
+  margin-left: 30px;
+  filter: invert(32%) sepia(66%) saturate(0%) hue-rotate(220deg) brightness(125%) contrast(119%);
 }
 
 .alarm-icon-img{
   width: 40px;
   height: 40px;
+  margin-left: 30px;
+  filter: invert(32%) sepia(66%) saturate(0%) hue-rotate(220deg) brightness(125%) contrast(119%);
 }
 .bookmark-icon-img{
   width: 30px;
   height: 30px;
+  margin-left: 30px;
+  filter: invert(32%) sepia(66%) saturate(0%) hue-rotate(220deg) brightness(125%) contrast(119%);
 }
+.message-icon-img:hover,
+.alarm-icon-img:hover,
+.bookmark-icon-img:hover {
+  filter: none;
+}
+
+.login-button-box{
+  margin-top: auto;
+  margin-left: 40px;
+}
+.login-button{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: #202B46;
+  color: #c5c7ce;
+  font-size: 20px;
+  font-weight: 700;
+  width: 150px;
+  height: 50px;
+  border-radius: 4rem;
+}
+.login-button:hover{
+  background-color: #2f3f68;
+}
+.message-notification{
+  position: relative;
+  right: 12px;
+  bottom: 10px;
+  background-color: rgb(255, 27, 27);
+  opacity: 0.9;
+  width: 15px;
+  height: 15px;
+  border-radius: 4rem;
+  z-index: 1;
+}
+.message-icon-box{
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  display: flex;
+}
+.alarm-icon-box{
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  display: flex;
+}
+.alarm-notification{
+  position: relative;
+  right: 15px;
+  bottom: 10px;
+  background-color: rgb(255, 27, 27);
+  opacity: 0.9;
+  width: 15px;
+  height: 15px;
+  border-radius: 4rem;
+  z-index: 1;
+}
+.user-info-box{
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  display: flex;
+  margin-left: 40px;
+}
+.summoner-profile-icon-box img{
+  width: 50px;
+  height: 50px;
+  border-radius: 1rem;
+}
+.summoner-name-box{
+  margin-left: 10px;
+  background-color: #2f3f68;
+  height: 50px;
+  padding: 10px;
+  border-radius: 1rem;
+  padding-top: 12px;
+  color: #ececec; 
+}
+
+.user-type-common{
+  padding-top: 6px;
+  margin-left: 10px;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  display: flex;
+  color: #ececec;
+  background-color: #2f3f68;
+  width: 130px;
+  height: 50px;
+  border-radius: 1rem;
+}
+.user-type-mentor{
+  padding-top: 6px;
+  margin-left: 10px;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  display: flex;
+  color: #edf1ff;
+  background-color: #1f52dd;
+  width: 130px;
+  height: 50px;
+  border-radius: 2rem;
+}
+.user-type-admin{
+  padding-top: 6px;
+  margin-left: 10px;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  display: flex;
+  color: #ffffff;
+  background-color: #00d4b8;
+  width: 130px;
+  height: 50px;
+  border-radius: 2rem;
+}
+.user-type-stop{
+  padding-top: 6px;
+  margin-left: 10px;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  display: flex;
+  color: #ffffff;
+  background-color: #ff0000;
+  width: 130px;
+  height: 50px;
+  border-radius: 2rem;
+}
+.logout-button-box{
+  margin-top: auto;
+  margin-left: 40px;
+}
+.logout-button{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: #202B46;
+  color: #c5c7ce;
+  font-size: 20px;
+  font-weight: 700;
+  width: 150px;
+  height: 50px;
+  border-radius: 4rem;
+}
+.logout-button:hover{
+  background-color: #2f3f68;
+}
+</style>
+
+<!-- 로그인 모달박스 CSS -->
+<style>
+  .login-modal-body {
+    display: flex;
+    /* Flex container로 설정 */
+    justify-content: center;
+    /* 아이템을 가운데로 정렬 */
+    align-items: center;
+    /* 아이템을 수직 가운데로 정렬 */
+    background-image: url(/src/main/webapp/resources/img/logo/2020_key_art_Banner.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    /* filter: blur(1px); */
+  }
+
+  .login-box {
+    width: 100%;
+    height: 600px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    background-color: #ffffff;
+    background: linear-gradient(135deg, transparent 30px, rgb(255, 255, 255) 0);
+    opacity: 0.95;
+  }
+
+  .login-img-box {
+    width: 50%;
+    height: 100%;
+  }
+
+  .input-area input {
+    width: 400px;
+    height: 60px;
+    border: none;
+    border-bottom: 2px solid #c9c9c9;
+    transition: .2s;
+  }
+
+  .input-area input::placeholder {
+    color: #c9c9c9;
+  }
+
+  .input-area input:active,
+  .input-area input:focus,
+  .input-area input:hover {
+    outline: none;
+    border-bottom-color: #777777;
+  }
+
+  .login-modal-button {
+    width: 400px;
+    height: 60px;
+    border: 2px solid #F6F6F6;
+    border-radius: 5rem;
+    background-color: #F6F6F6;
+    transition: .5s;
+  }
+
+  .login-modal-button:active,
+  .login-modal-button:hover{
+    background-color: #c5c5c5;
+  }
+
+  .input-area div {
+    margin: 25px 0 0 0;
+  }
+
+  .find-tag{
+    color: #777777;
+  }
+  .modal-header{
+    border-bottom: none;
+  }
+  .modal-footer{
+    border-top: none;
+  }
+</style>
+
+<style>
+  footer{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    background-color: #f7f5f5;
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    border-top: 1px solid #c5c7ce;
+    display: flex;
+  }
+  .team-name-box{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    margin-left: 110px;
+  }
+  .team-name-img{
+    width: 50px;
+    height: 50px;
+    opacity: 0.9;
+  }
+  .team-name-h5{
+    margin-left: 30px;
+    color: #aaaaaa;
+  }
+  .team-members-box{
+    display: flex;
+    margin-left: auto;
+    margin-right: 10px;
+    color: #aaaaaa;
+  }
 </style>
 <!----------------------------------------------------------------------------------------------------------------->
 <!-- 사이드바 -->
@@ -190,40 +473,40 @@ header{
   
   <div class="sidebar-nothover-menu">
     <div class="sidebar-menu" style="padding: 8px 0px 8px 12px;">
-      <img src="img/favicon.png" alt="" style="width: 40px; height: 40px;">
+      <img src="/src/main/webapp/resources/img/logo/LD_logo_gray.png" alt="" style="width: 40px; height: 40px;">
     </div>  
     <div class="sidebar-menu" style="padding: 18px;">
       <img src="" alt="">
     </div>  
     <div class="sidebar-menu">
-      <img src="img/icon/free-icon-ranking-3162263.png" alt="" class="side-bar-icon">
+      <img src="/src/main/webapp/resources/img/icon/free-icon-ranking-3162263.png" alt="" class="side-bar-icon">
     </div>  
     <div class="sidebar-menu">
-      <img src="img/icon/free-icon-community-3594834.png" alt="" class="side-bar-icon">
+      <img src="/src/main/webapp/resources/img/icon/free-icon-community-3594834.png" alt="" class="side-bar-icon">
     </div>  
     <div class="sidebar-menu">
-      <img src="img/icon/free-icon-mentorship-8920780.png" alt="" class="side-bar-icon">
+      <img src="/src/main/webapp/resources/img/icon/free-icon-mentorship-8920780.png" alt="" class="side-bar-icon">
     </div>  
     <div class="sidebar-menu">
-      <img src="img/icon/free-icon-game-control-4315528.png" alt="" class="side-bar-icon">
+      <img src="/src/main/webapp/resources/img/icon/free-icon-game-control-4315528.png" alt="" class="side-bar-icon">
     </div> 
     <div class="sidebar-menu">
-      <img src="img/icon/free-icon-user-996484.png" alt="" class="side-bar-icon">
+      <img src="/src/main/webapp/resources/img/icon/free-icon-user-996484.png" alt="" class="side-bar-icon">
     </div>
     <div class="sidebar-menu">
-      <img src="img/icon/free-icon-megaphone-92206.png" alt="" class="side-bar-icon">
+      <img src="/src/main/webapp/resources/img/icon/free-icon-megaphone-92206.png" alt="" class="side-bar-icon">
     </div>  
   </div>
 
   <div class="sidebar-area">
-    <div class="sidebar-logo-box"><img src="img/LoLing in the Deep2.svg" alt="LD.GG로고"></div>
+    <div class="sidebar-logo-box"><img src="/src/main/webapp/resources/img/logo/LoLing in the Deep2.svg" alt="LD.GG로고"></div>
 
     <div class="accordion" id="accordionExample">
 
       <div class="accordion-item">
         <h2 class="accordion-header" id="headingOne">
           <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-            <img src="img/icon/free-icon-ranking-3162263.png" alt="" class="side-bar-icon"> 랭킹
+            <img src="/src/main/webapp/resources/img/icon/free-icon-ranking-3162263.png" alt="" class="side-bar-icon"> 랭킹
           </button>
         </h2>
         <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
@@ -237,7 +520,7 @@ header{
       <div class="accordion-item">
         <h2 class="accordion-header" id="headingTwo">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-            <img src="img/icon/free-icon-community-3594834.png" alt="" class="side-bar-icon"> 커뮤니티
+            <img src="/src/main/webapp/resources/img/icon/free-icon-community-3594834.png" alt="" class="side-bar-icon"> 커뮤니티
           </button>
         </h2>
         <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
@@ -251,7 +534,7 @@ header{
       <div class="accordion-item">
         <h2 class="accordion-header" id="headingThree">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-            <img src="img/icon/free-icon-mentorship-8920780.png" alt="" class="side-bar-icon"> 멘토링
+            <img src="/src/main/webapp/resources/img/icon/free-icon-mentorship-8920780.png" alt="" class="side-bar-icon"> 멘토링
           </button>
         </h2>
         <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
@@ -265,7 +548,7 @@ header{
       <div class="accordion-item">
         <h2 class="accordion-header" id="headingFour">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-            <img src="img/icon/free-icon-game-control-4315528.png" alt="" class="side-bar-icon"> 미니게임
+            <img src="/src/main/webapp/resources/img/icon/free-icon-game-control-4315528.png" alt="" class="side-bar-icon"> 미니게임
           </button>
         </h2>
         <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
@@ -278,7 +561,7 @@ header{
       <div class="accordion-item">
         <h2 class="accordion-header" id="headingFive">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-            <img src="img/icon/free-icon-user-996484.png" alt="" class="side-bar-icon"> 마이 메뉴
+            <img src="/src/main/webapp/resources/img/icon/free-icon-user-996484.png" alt="" class="side-bar-icon"> 마이 메뉴
           </button>
         </h2>
         <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionExample">
@@ -295,7 +578,7 @@ header{
       <div class="accordion-item">
         <h2 class="accordion-header" id="headingSix">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
-            <img src="img/icon/free-icon-megaphone-92206.png" alt="" class="side-bar-icon"> 고객지원
+            <img src="/src/main/webapp/resources/img/icon/free-icon-megaphone-92206.png" alt="" class="side-bar-icon"> 고객지원
           </button>
         </h2>
         <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#accordionExample">
@@ -314,25 +597,110 @@ header{
 <!-- 헤더 -->
 <div class="header-container">
   <header>
+
     <div class="search-bar-box">
-      <img src="img/favicon.png" alt="" class="search-bar-logo">
+      <img src="/src/main/webapp/resources/img/logo/LD_logo_bluered.png" alt="" class="search-bar-logo">
       <input type="text" class="search-bar-input" placeholder="소환사명을 입력해주세요">
-      <img src="img/icon/free-icon-magnifying-glass-49116.png" alt="" class="search-bar-icon">
+      <img src="/src/main/webapp/resources/img/icon/free-icon-magnifying-glass-49116.png" alt="" class="search-bar-icon">
     </div>
+
     <div class="header-icon-box">
       <div class="message-icon-box">
-        <img src="img/icon/free-icon-message-5941217.png" alt="" class="message-icon-img">
+        <img src="/src/main/webapp/resources/img/icon/free-icon-message-5941217.png" alt="" class="message-icon-img">
+        <div class="message-notification"></div>
       </div>
       <div class="alarm-icon-box">
-        <img src="img/icon/free-icon-notification-bell-3680267.png" alt="" class="alarm-icon-img">
+        <img src="/src/main/webapp/resources/img/icon/free-icon-notification-bell-3680267.png" alt="" class="alarm-icon-img">
+        <span class="alarm-notification"></span>
       </div>
       <div class="bookmark-icon-box">
-        <img src="img/icon/free-icon-bookmark-white-25667.png" alt="" class="bookmark-icon-img">
+        <img src="/src/main/webapp/resources/img/icon/free-icon-bookmark-white-25667.png" alt="" class="bookmark-icon-img">
       </div>
     </div>
+
+    <div class="user-info-box">
+      <div class="summoner-profile-icon-box">
+        <img src="/src/main/webapp/resources/img/icon/profileIcon5626.webp" alt="">
+      </div>
+      <div class="summoner-name-box">
+        <h5>파오리치킨 님</h5> 
+      </div>
+      <div class="user-type-box">
+        <div class="user-type-common"><h5>일반회원</h5></div>
+        <div class="user-type-mentor" style="display: none;"><h5>멘토회원</h5></div>
+        <div class="user-type-admin" style="display: none;"><h5>어드민</h5></div>
+        <div class="user-type-stop" style="display: none;"><h5>정지회원</h5></div>
+      </div>
+    </div>
+
+    <div class="login-button-box">
+      <button class="login-button" data-bs-toggle="modal" data-bs-target="#login-modal">LOGIN</button>
+    </div>
+
+    <div class="logout-button-box" style="display: none;">
+      <button class="logout-button">LOGOUT</button>
+    </div>
+    
   </header>
 </div>
-
+<!----------------------------------------------------------------------------------------------------------------->
+<!----------------------------------------------------------------------------------------------------------------->
+<!-- 로그인 모달박스 -->
+<div class="modal fade" id="login-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #172B36;">
+        <h1 class="modal-title fs-5" id="exampleModalLabel"></h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: #ffffff;"></button>
+      </div>
+      <div class="modal-body login-modal-body">
+        <div class="login-img-box">
+          <img src="/src/main/webapp/resources/img/logo/main.png" alt="로그인 이미지">
+        </div>
+        <div class="login-box">
+          <div class="input-area">
+            <div><img src="/src/main/webapp/resources/img/logo/LD_logo.svg" alt="LD_logo" style="width: 100px; height: 100px;"></div>
+            <div class="input-id">
+              <input type="email" placeholder="아이디">
+            </div>
+            <div class="input-pw">
+              <input type="password" placeholder="비밀번호">
+            </div>
+            <div>
+              <button class="login-modal-button">로그인</button>
+            </div>
+            <div>
+              <button class="login-modal-button">회원가입</button>
+            </div>
+            <div>
+              <a href="" class="find-tag">아이디 찾기</a>
+            </div>
+            <div>
+              <a href="" class="find-tag">비밀번호 찾기</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" style="background-color: #1E3D4F;">
+      </div>
+    </div>
+  </div>
+</div>
+<!----------------------------------------------------------------------------------------------------------------->
+<!----------------------------------------------------------------------------------------------------------------->
+<!-- 푸터 -->
+<div class="footer-container">
+  <footer>
+    <div class="team-name-box">
+      <img src="/src/main/webapp/resources/img/logo/team_name_logo.png" alt="" class="team-name-img">
+      <h5 class="team-name-h5">TEAM : Loling Thunder</h5>
+    </div>
+    
+    <div class="team-members-box">
+      <h5 class="team-members-box">TEAM MEMBERS: 오건오, 박민규, 채희정, 최형로, 김시현, 이태현</h5>
+    </div>
+  </footer>
+</div>
 <!--BOOTSTRAP JavaScript-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
   integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
