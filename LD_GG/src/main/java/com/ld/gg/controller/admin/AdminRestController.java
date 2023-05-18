@@ -63,9 +63,18 @@ public class AdminRestController {
 		public boolean notice_reply_insert(HttpSession session, Integer t_b_num, String t_r_content) throws Exception{
 			String email = session.getAttribute("email").toString();
 			NoticeReply reply = new NoticeReply();
+			log.info("reply email : {}", email);
 			reply.setEmail(email).setT_b_num(t_b_num).setT_r_content(t_r_content);
 			
 			boolean result = as.insert_notice_reply(reply);
+			return result;
+		}
+
+		@PostMapping("/notice/reply-delete.do")
+		public int notice_reply_delete(HttpSession session, Integer t_r_num){
+			String email = (String)session.getAttribute("email");
+			int result = as.notice_reply_delete(email, t_r_num);
+
 			return result;
 		}
 
@@ -147,7 +156,7 @@ public class AdminRestController {
 		// 1 = 성공 2 = 실패
 		@PostMapping("/admin/member/stop")
 		public int mbStop(String email) throws Exception{
-			int result = as.updateMemberStop(email,4);
+			int result = as.updateMemberStop(email, 4);
 			return result;
 		}
 		

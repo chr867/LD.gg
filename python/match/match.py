@@ -8,7 +8,7 @@ import data_load
 tqdm.pandas()
 
 sql_conn = mu.connect_mysql()
-df = data_load.patch_matches_timeline_data(0)
+df = data_load.match_raw_patch(0)
 sql_conn.close()
 
 df['matches'] = df.progress_apply(lambda x: json.loads(x['matches']), axis=1)

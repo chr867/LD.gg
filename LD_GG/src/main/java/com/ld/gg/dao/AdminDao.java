@@ -44,4 +44,8 @@ public interface AdminDao {
 
 	boolean insert_notice_reply(NoticeReply reply);
 
+	NoticeReply get_notice_reply(Integer t_r_num);
+
+	boolean delete_notice_reply(Integer t_r_num);
+
 }

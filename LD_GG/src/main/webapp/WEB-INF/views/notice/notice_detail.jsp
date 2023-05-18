@@ -43,7 +43,7 @@
 			</tr>
 		</table>
 			
-		<button onclick="modify(${notice.t_b_num})">수정</button>
+		<!-- <button onclick="modify(${notice.t_b_num})">수정</button> -->
 		<button onclick="go_list()">목록</button>
 	</div>
 

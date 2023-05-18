@@ -140,4 +140,22 @@ public class AdminService {
 		return result;
 	}
 
+  public int notice_reply_delete(String email, Integer t_r_num) {
+		int val;
+		NoticeReply n_reply = ad.get_notice_reply(t_r_num);
+
+		if(!email.equals(n_reply.getEmail())){
+			val = 3;
+		}else{
+			boolean result = ad.delete_notice_reply(t_r_num);
+			if(result){
+				val = 1;
+			}else{
+				val = 2;
+			}
+		}
+
+		return val;
+  }
+
 }

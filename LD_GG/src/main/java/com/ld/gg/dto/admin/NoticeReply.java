@@ -12,11 +12,11 @@ import lombok.experimental.Accessors;
 @Accessors(chain=true)
 @Alias("notice_reply")
 public class NoticeReply {
-  private int t_r_num;
-  private int t_b_num;
-  private String t_r_content;
-  private String email;
+	private int t_r_num;
+	private int t_b_num;
+	private String t_r_content;
+	private String email;
 
-  @DateTimeFormat(pattern="yyyy-MM-dd")
-  private Date t_r_date;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	private Date t_r_date;
 }

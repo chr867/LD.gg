@@ -77,7 +77,10 @@ def match_raw_patch(count):
     conn = mu.connect_mysql()
     print("데이터 SELECT 시작")
     start_time = time.time()
-    df = pd.DataFrame(mu.mysql_execute_dict(f"SELECT matches,timeline FROM match_raw_patch LIMIT {count}", conn))
+    if count == 0:
+        df = pd.DataFrame(mu.mysql_execute_dict(f"SELECT * FROM match_raw_patch", conn))
+    else:
+        df = pd.DataFrame(mu.mysql_execute_dict(f"SELECT matches,timeline FROM match_raw_patch LIMIT {count}", conn))
     conn.close()
     end_time = time.time()
     print("데이터로딩 시간: {:.2f}초".format(end_time - start_time))

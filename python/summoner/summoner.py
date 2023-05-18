@@ -42,7 +42,7 @@ for tier in tqdm(tiers):
             if len(res_p) < 50:
                 break
             page_p += 1
-##
+## 전체 유저 끝
 
 # 그마챌 만
 name_list = []
@@ -84,7 +84,7 @@ for i in tqdm(tiers):
                 continue
             break
         break
-
+## 그마챌 끝
 
 def tier_int(t):
     if t.tier == 'IRON':
