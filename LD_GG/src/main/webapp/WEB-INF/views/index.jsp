@@ -47,7 +47,7 @@
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/main/loginModal.css">
 <!--로그인 및 세션관련 JS-->
-<script src="resources/js/main/loginSession.js"></script>
+<script src="/resources/js/main/loginSession.js" defer></script>
 </head>
 <style>
 body {
@@ -60,6 +60,8 @@ body {
 }
 </style>
 <body>
+	<div id="session-summoner-name" style="display: none">${sessionScope.lol_account}</div>
+	<div id="session-user-type" style="display: none">>${sessionScope.user_type}</div>
 	<!----------------------------------------------------------------------------------------------------------------->
 	<!-- 사이드바 -->
 	<div class="sidebar">
@@ -98,7 +100,7 @@ body {
 		</div>
 
 		<div class="sidebar-area">
-			<div class="sidebar-logo-box">
+			<div class="sidebar-logo-box" onclick="moveMain()">
 				<img src="/resources/img/logo/LoLing in the Deep2.svg" alt="LD.GG로고">
 			</div>
 
@@ -117,10 +119,10 @@ body {
 						aria-labelledby="headingOne" data-bs-parent="#accordionExample">
 						<div class="accordion-body">
 							<div class="accordion-body-menu">
-								<a href="" class="accordion-body-link"><span>• 챔피언 티어</span></a>
+								<a href="/champion/rank" class="accordion-body-link"><span>• 챔피언 티어</span></a>
 							</div>
 							<div class="accordion-body-menu">
-								<a href="" class="accordion-body-link"><span>• 소환사 랭킹</span></a>
+								<a href="/summoner/rank" class="accordion-body-link"><span>• 소환사 랭킹</span></a>
 							</div>
 						</div>
 					</div>
@@ -140,10 +142,10 @@ body {
 						<div class="accordion-body">
 							<span class="bullet bullet-dot"></span>
 							<div class="accordion-body-menu">
-								<a href="" class="accordion-body-link"><span>• 챔피언 공략</span></a>
+								<a href="/tip/" class="accordion-body-link"><span>• 챔피언 공략</span></a>
 							</div>
 							<div class="accordion-body-menu">
-								<a href="" class="accordion-body-link"><span>• 롤 메이트</span></a>
+								<a href="/mate/" class="accordion-body-link"><span>• 롤 메이트</span></a>
 							</div>
 						</div>
 					</div>
@@ -162,10 +164,10 @@ body {
 						aria-labelledby="headingThree" data-bs-parent="#accordionExample">
 						<div class="accordion-body">
 							<div class="accordion-body-menu">
-								<a href="" class="accordion-body-link"><span>• 멘토 요청</span></a>
+								<a href="/mentor/custom-mentor" class="accordion-body-link"><span>• 멘토 요청</span></a>
 							</div>
 							<div class="accordion-body-menu">
-								<a href="" class="accordion-body-link"><span>• 멘토 찾기</span></a>
+								<a href="/mentor/list" class="accordion-body-link"><span>• 멘토 찾기</span></a>
 							</div>
 						</div>
 					</div>
@@ -213,7 +215,7 @@ body {
 										수정</span></a>
 							</div>
 							<div class="accordion-body-menu">
-								<a href="" class="accordion-body-link"><span>• 마이 멘토링</span></a>
+								<a href="/mentor/my-mentoring" class="accordion-body-link"><span>• 마이 멘토링</span></a>
 							</div>
 							<div class="accordion-body-menu">
 								<a href="" class="accordion-body-link"><span>• 내 지갑</span></a>
@@ -404,10 +406,5 @@ body {
 		</form>
 	</div>
 </body>
-<script type="text/javascript">
-
-sessionCheck('${sessionScope.lol_account}','${sessionScope.user_type}');
-loginReturnNumber(${check});
-</script>
 
 </html>

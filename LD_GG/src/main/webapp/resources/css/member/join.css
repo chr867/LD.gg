@@ -1,0 +1,148 @@
+body {
+  background-color: #202B46;
+}
+
+.main-container {
+  display: flex;
+  justify-content: center;
+}
+
+.join-container {
+  height: 100vh;
+  width: 50%;
+  display: flex;
+  margin-left: auto;
+  background-color: #f7f5f5;
+  justify-content: center;
+  text-align: center;
+}
+
+.join-main-logo-container {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  margin-right: auto;
+  margin-top: 160px;
+}
+
+.join-main-log-box {
+  margin-left: 180px;
+}
+
+.join-main-logo-img {
+  width: 500px;
+  height: 500px;
+}
+
+.join-box {
+  margin-top: 100px;
+}
+
+.input-area input {
+  background-color: #f7f5f5;
+  padding-left: 20px;
+  width: 400px;
+  height: 60px;
+  border: none;
+  border-bottom: 2px solid #c9c9c9;
+  transition: .2s;
+  color: #000;
+}
+
+.input-area input::placeholder {
+  color: #c9c9c9;
+}
+
+.input-area input:active,
+.input-area input:focus,
+.input-area input:hover {
+  outline: none;
+  border-bottom-color: #777777;
+}
+
+.input-area .join-button,
+.move-main-button {
+  width: 400px;
+  height: 60px;
+  border: none;
+  border-radius: 5rem;
+  background-color: #FFF;
+  transition: .5s;
+  margin-bottom: 20px; 
+}
+
+.input-area .join-button:active,
+.input-area .join-button:hover,
+.move-main-button:active,
+.move-main-button:hover {
+  background-color: #c5c5c5;
+}
+
+.input-area div {
+  margin: 25px 0 0 0;
+}
+
+.duplicate-inspection-button-box button {
+  border: none;
+  background-color: #f7f5f5;
+  color: #777777;
+  transition: .5s;
+}
+
+.duplicate-inspection-button-box button:hover {
+  color: #000;
+}
+
+.input-id,
+.input-phone,
+.input-summoner {
+  display: flex;
+  justify-content: center;
+  padding-left: 40px;
+}
+
+.duplicate-inspection-button-box {
+  position: relative;
+  right: 50px;
+  bottom: 5px;
+}
+
+.duplicate-warning,.duplicate-pass {
+  display: flex;
+  padding-left: 40px;
+}
+
+.duplicate-warning p {
+  font-size: 12px;
+  color: red;
+}
+
+.input-area .radio_box {
+  margin: 0;
+  width: 20px;
+  height: 20px;
+  align-items: center;
+}
+
+.input-area label {
+  color: #777777;
+}
+
+.radio-button-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 100px 0 100px;
+  text-align: center;
+  align-items: center;
+  text-align: center;
+}
+
+.duplicate-pass {
+  display: flex;
+  margin-right: 354px;
+}
+
+.duplicate-pass p {
+  font-size: 12px;
+  color: blue;
+}
