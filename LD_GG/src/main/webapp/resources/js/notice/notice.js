@@ -51,14 +51,16 @@ document.getElementById("search").addEventListener("click", function() {
 			{name:'t_b_recom', index:'t_b_recom', width:90, align: "center"},
 			{name:'t_b_date', index:'t_b_date', width:90, align: "center"}
 			],
-		autowidth: true,
-/* 		multiselect: true,
- */		pager:'#pager',
-		rowNum: 10,
-		rowList: [10, 20, 50],
-		sortname: 't_b_num',
-		sortorder: 'desc',
-		height: 250,
+			sortable : true,
+			loadonce : true,
+			autowidth: true,
+			multiselect: true,
+			pager:'#pager',
+			rowNum: 10,
+			rowList: [10, 20, 50],
+			sortname: 't_b_num',
+			sortorder: 'desc',
+			height: 600,
 		onCellSelect: function(rowid, icol){
 			if(icol != 0){
 			location.href = `/userinterface/notice/detail?t_b_num=${rowid}`

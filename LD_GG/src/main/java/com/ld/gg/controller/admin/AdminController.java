@@ -1,6 +1,7 @@
 package com.ld.gg.controller.admin;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
@@ -17,6 +19,9 @@ import com.ld.gg.dto.admin.NoticeDto;
 
 import com.ld.gg.service.AdminService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 @RequestMapping("/userinterface")
 public class AdminController {
@@ -52,9 +57,9 @@ public class AdminController {
 		String tmp = null;
 		
 		if(result) {
-			tmp = "/notice/notice";
+			tmp = "redirect:/userinterface/admin";
 		}else {
-			tmp = "/notice/notice_write";
+			tmp = "redirect:/userinterface/notice/notice_write";
 		}
 		
 		return tmp;
@@ -87,18 +92,12 @@ public class AdminController {
 		return s_result;
 	}
 	
-	@PostMapping("/notice/delete.do")
-	public String notice_delete_do(ArrayList<Integer> t_b_num) throws Exception{
-		String result = as.notice_delete(t_b_num);
-		
-		return result;
-	}
-	
 	@GetMapping("/admin")
 	public String goAdPage() {
 		return "/admin/adminPage";
 	}
 	
+
 	@GetMapping("/ad/management")
 	public String goAbMangement() {
 		return "/admin/adManagement";
