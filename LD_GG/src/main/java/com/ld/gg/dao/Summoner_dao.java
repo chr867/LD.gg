@@ -5,9 +5,11 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import com.ld.gg.dto.summoner.BuildDto;
 import com.ld.gg.dto.summoner.ChampRecordDto;
 import com.ld.gg.dto.summoner.RecordDto;
 import com.ld.gg.dto.summoner.RecordInfoDto;
+import com.ld.gg.dto.summoner.RecordRankingDto;
 import com.ld.gg.dto.summoner.SummonerDto;
 import com.ld.gg.dto.summoner.SummonerRankDto;
 
@@ -40,5 +42,9 @@ public interface Summoner_dao {
 	List<ChampRecordDto> getChampFlex(String summoner_name);
 
 	List<ChampRecordDto> getChampClassic(String summoner_name);
+
+	List<BuildDto> getBuild(String match_id, String summoner_name);
+
+	List<RecordRankingDto> getRanking(String match_id, String summoner_name);
 
 }
