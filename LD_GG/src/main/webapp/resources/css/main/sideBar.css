@@ -1,3 +1,6 @@
+body {
+	background-color: #E4E6EF;
+}
 .sidebar {
   position: fixed;
   left: -230px;
@@ -80,7 +83,9 @@
 .accordion-body-menu {
   margin-bottom: 20px;
 }
-
+.accordion-body-menu:hover{
+	background-color: #222E4E;
+}
 .accordion-body-link {
   color: #a8abb6;
   text-decoration: none;

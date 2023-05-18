@@ -35,156 +35,12 @@
 <script
 	src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.0/jquery.validate.min.js"></script>
 </head>
-<style>
-body {
-  background-color: #202B46;
-}
+<!--JOIN CSS-->
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/member/join.css">
+<!--JOIN JS-->
+<script src="/resources/js/member/join.js" defer></script>
 
-.main-container {
-  display: flex;
-  justify-content: center;
-}
-
-.join-container {
-  height: 100vh;
-  width: 50%;
-  display: flex;
-  margin-left: auto;
-  background-color: #f7f5f5;
-  justify-content: center;
-  text-align: center;
-}
-
-.join-main-logo-container {
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  margin-right: auto;
-  margin-top: 160px;
-}
-
-.join-main-log-box {
-  margin-left: 180px;
-}
-
-.join-main-logo-img {
-  width: 500px;
-  height: 500px;
-}
-
-.join-box {
-  margin-top: 100px;
-}
-
-.input-area input {
-  background-color: #f7f5f5;
-  padding-left: 20px;
-  width: 400px;
-  height: 60px;
-  border: none;
-  border-bottom: 2px solid #c9c9c9;
-  transition: .2s;
-  color: #000;
-}
-
-.input-area input::placeholder {
-  color: #c9c9c9;
-}
-
-.input-area input:active,
-.input-area input:focus,
-.input-area input:hover {
-  outline: none;
-  border-bottom-color: #777777;
-}
-
-.input-area .join-button,
-.move-main-button {
-  width: 400px;
-  height: 60px;
-  border: none;
-  border-radius: 5rem;
-  background-color: #FFF;
-  transition: .5s;
-}
-
-.input-area .join-button:active,
-.input-area .join-button:hover,
-.move-main-button:active,
-.move-main-button:hover {
-  background-color: #c5c5c5;
-}
-
-.input-area div {
-  margin: 25px 0 0 0;
-}
-
-.duplicate-inspection-button-box button {
-  border: none;
-  background-color: #f7f5f5;
-  color: #777777;
-  transition: .5s;
-}
-
-.duplicate-inspection-button-box button:hover {
-  color: #000;
-}
-
-.input-id,
-.input-phone,
-.input-summoner {
-  display: flex;
-  justify-content: center;
-  padding-left: 40px;
-}
-
-.duplicate-inspection-button-box {
-  position: relative;
-  right: 50px;
-  bottom: 5px;
-}
-
-.duplicate-warning {
-  display: flex;
-  /* margin-right: 0px; */
-}
-
-.duplicate-warning p {
-  font-size: 12px;
-  color: red;
-}
-
-.input-area .radio_box {
-  margin: 0;
-  width: 20px;
-  height: 20px;
-  align-items: center;
-}
-
-.input-area label {
-  color: #777777;
-}
-
-.radio-button-container {
-  display: flex;
-  justify-content: space-between;
-  padding: 0 100px 0 100px;
-  text-align: center;
-  align-items: center;
-  text-align: center;
-}
-
-.duplicate-pass {
-  display: flex;
-  margin-right: 354px;
-}
-
-.duplicate-pass p {
-  font-size: 12px;
-  color: blue;
-}
-
-</style>
 <body style="text-align: center; justify-content: center;">
 	<!-- 메인 컨테이너 -->
 	<div class="main-container">
@@ -206,7 +62,7 @@ body {
 							<input type="text" placeholder="아이디" id="email" name="email"
 								autocomplete="off">
 							<div class="duplicate-inspection-button-box">
-								<button class="duplicate-inspection-email" id="check_email">확인</button>
+								<button class="duplicate-inspection-email" id="check_email" type="button">확인</button>
 							</div>
 						</div>
 						<span class="duplicate-warning" id="eamlil-duplicate"
@@ -221,7 +77,7 @@ body {
 							<input type="number" placeholder="전화번호" name="phone" id="phone"
 								autocomplete="off">
 							<div class="duplicate-inspection-button-box">
-								<button class="duplicate-inspection-phone" id="check_phone_num">확인</button>
+								<button class="duplicate-inspection-phone" id="check_phone_num" type="button">확인</button>
 							</div>
 						</div>
 						<span class="duplicate-warning" id="phone-duplicate"
@@ -233,7 +89,7 @@ body {
 								id="summoner" autocomplete="off">
 							<div class="duplicate-inspection-button-box">
 								<button class="duplicate-inspection-summoner"
-									id="check_lol_account">확인</button>
+									id="check_lol_account" type="button">확인</button>
 							</div>
 						</div>
 						<span class="duplicate-warning" id="summoner-duplicate"
@@ -246,10 +102,10 @@ body {
 								class="radio_box" type="radio" value="2" name="user_type">
 							<label>멘토회원</label>
 						</div>
-
 						<div>
 							<input type="submit" id="submit" class="join-button join-container-button" value="회원가입">
 						</div>
+					</div>
 				</form>
 				
 				<div>
@@ -261,122 +117,4 @@ body {
 		</div>
 	</div>
 </body>
-<script type="text/javascript">
-
-	function moveMain() {
-		event.preventDefault();
-		location.href = "/"
-	}
-	
-	let emailSubmit = false;
-	let accountSubmit = false;
-	let phoneSubmit = false;
-	
-	function check() {
-		let frm = document.joinFrm;
-		  let inputs = frm.getElementsByTagName("input");
-
-		  for (let i = 0; i < inputs.length; i++) {
-		    if (inputs[i].type === "text" || inputs[i].type === "password") {
-		      if (inputs[i].value.trim() === "") {
-		        alert(inputs[i].placeholder + "을(를) 입력하세요!!");
-		        inputs[i].focus();
-		        return false; // 실패시
-		      }
-		    }
-		  }
-		
-		if(!emailSubmit){
-			alert("이메일 중복검사를 다시해주세요")
-			return false;
-		}
-		
-		if(!accountSubmit){
-			alert("소환사계정 중복검사를 다시해주세요")
-			return false;
-		}
-		
-		if(!phoneSubmit){
-			alert("전화번호 중복검사를 다시해주세요")
-			return false;
-		}
-		return true;//성공시 서버로 전송
-	}//end function
-	
-	$('#check_lol_account').on('click',function(){
-		if($('#summoner').val() !=''){
-			$.ajax({
-				method: 'get',
-				url: '/member/check_lol_account',
-				data: {lol_account:$('#summoner').val()},
-			}).done(res=>{
-				if(res.length === 0){
-					$('#summoner-duplicate').hide();
-					$('#summoner-duplicate-pass').show()
-				}else{
-					$('#summoner-duplicate').show();
-					$('#summoner-duplicate-pass').hide()
-					$('#summoner').val("");
-					accountSubmit = false;
-				}
-				
-			}).fail(err=>{
-				console.log(err);
-			})
-		}
-	})
-	
-	$('#check_email').on('click',function(){
-		event.preventDefault();
-		if($('#email').val() !=''){
-			$.ajax({
-				method: 'get',
-				url: '/member/check_email',
-				data: {email:$('#email').val()},
-				//dataType: 'html', //json,html(text)
-			}).done(res=>{
-				if(res == true){
-					$('#eamlil-duplicate-pass').show();
-					$('#eamlil-duplicate').hide();
-					console.log('res : '+res);
-					emailSubmit = true;
-				}else{
-					$('#eamlil-duplicate-pass').hide();
-					$('#eamlil-duplicate').show();
-					$('#email').val("");
-					emailSubmit = false;
-				}
-				
-			}).fail(err=>{
-				console.log(err);
-			})
-		}
-	})
-	
-	$('#check_phone_num').on('click',function(){
-		if($('#phone').val() !=''){
-			$.ajax({
-				method: 'get',
-				url: '/member/check_phone_num',
-				data: {phone_num:$('#phone').val()},
-				//dataType: 'html', //json,html(text)
-			}).done(res=>{
-				if(res == true){
-					$('#phone-duplicate-pass').show();
-					$('#phone-duplicate').hide();
-					console.log('res : '+res);
-					phoneSubmit = true;
-				}else{
-					$('#phone-duplicate-pass').hide();
-					$('#phone-duplicate').show();
-					$('#phone').val("");
-					phoneSubmit = false;
-				}
-				
-			}).fail(err=>{
-				console.log(err);
-			})
-		}
-	})
-</script>
 </html>

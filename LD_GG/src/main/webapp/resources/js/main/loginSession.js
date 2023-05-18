@@ -1,3 +1,10 @@
+$(document).ready(function() {
+	var summonerName = document.getElementById('session-summoner-name').innerText;
+	var userType = document.getElementById('session-user-type').innerText;
+
+  sessionCheck(summonerName, userType);
+});
+
 function sessionCheck(summonerName,userType) {
 
   if (summonerName == '') {
@@ -27,7 +34,6 @@ function sessionCheck(summonerName,userType) {
     }
   }
 } 
-
 
 //로그인 체크 메소드 로그인버튼 클릭시 실행 
 function loginCheck() {
@@ -70,4 +76,9 @@ function loginReturnNumber(check) {
 //회원가입 페이지 이동 메소드
 function join() {
 	location.href="/member/join"
+}
+
+//메인페이지 이동 메소드 
+function moveMain() {
+	location.href="/"
 }
