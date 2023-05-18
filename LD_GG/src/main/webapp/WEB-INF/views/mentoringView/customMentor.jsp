@@ -9,6 +9,8 @@
 	<title>맞춤 멘토</title>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<style>
+.container {
+}
 		.tag-button.selected {
 			background-color: #2196F3;
 			color: white;
@@ -43,9 +45,11 @@
 			background-color: #ddd;
 		}
 	</style>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 </head>
 
 <body>
+<div class="container">
 	<h2>맞춤 멘토 페이지 입니다~</h2>
 	<form id="customMentorForm" onsubmit="return submitForm()">
 
@@ -55,11 +59,6 @@
 		<div class="progress">
 		<progress value="20" max="100"></progress>
 		<em>1</em>/6
-		</div>
-		
-		<div>
-		  <input type="checkbox" id="myCheckbox">
-		  <label for="myCheckbox">체크박스</label>
 		</div>
 
 		<div class="summoner-wrap">
@@ -85,14 +84,17 @@
 
 		<div class="position-buttons">
 			<button type="button" id="top-button"><img
-					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_top_grey.svg" class="position-img">탑</button>
+					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_top_grey.svg" 
+					class="position-img">탑</button>
 			<button type="button" id="jungle-button"><img
-					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_jg_grey.svg" class="position-img">정글</button>
+					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_jg_grey.svg" 
+					class="position-img">정글</button>
 			<button type="button" id="mid-button"><img
 					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_mid_grey.svg"
 					class="position-img">미드</button>
 			<button type="button" id="bot-button"><img
-					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_ad_grey.svg" class="position-img">바텀</button>
+					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_ad_grey.svg" 
+					class="position-img">바텀</button>
 			<button type="button" id="support-button"><img
 					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_sup_grey.svg"
 					class="position-img">서포터</button>
@@ -211,13 +213,16 @@
 	</form>
 
 	<div class="tag-table">
-
+	
 	</div>
 	<button class="save_tag" onclick="saveMentiTag()">태그 저장</button><br><br>
 
 	<button id="recom-mentor-btn">추천 멘토 찾기</button>
 	<div id="recom_mentor_list">
 	</div>
+	
+</div><!-- container -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 	<script>
 		$(document).ready(function () {
 
