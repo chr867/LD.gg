@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>faq</title>
+</head>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<style>
+  /* CSS 스타일을 여기에 작성합니다. */
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    padding: 20px;
+  }
+
+  summary {
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  li {
+    margin-bottom: 5px;
+  }
+</style>
+
+<body>
+  faq 페이지입니다~~
+  <div>
+    <details>
+      <summary>오늘의 환율</summary>
+        <span>달러($) : 1,135.90</span>
+    </details>
+  </div>
+  <div>
+    <details>
+      <summary>오늘의 환율</summary>
+        <span>달러($) : 1,135.90</span>
+    </details>
+  </div>
+  <script>
+    $(document).ready(function() {
+      const currencies = [
+        { name: '오늘의 환율', rate: '달러($) : 1,135.90' },
+        { name: '오늘의 환율', rate: '달러($) : 1,135.90' },
+        { name: '오늘의 환율', rate: '달러($) : 1,135.90' }
+      ];
+
+      currencies.forEach(currency => {
+        const html = `<div>
+                        <details>
+                          <summary>${currency.name}</summary>
+                          <span>${currency.rate}</span>
+                        </details>
+                      </div>`;
+        $('body').append(html);
+      });
+    });
+  </script>
+</body>
+
+</html>
