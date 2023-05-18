@@ -26,8 +26,8 @@
 	</select>
 
 	<insert id="write_notice" parameterType="notice">
-		INSERT INTO NOTICE_BOARD
-		VALUES (2, #{t_b_content}, default, default, default, #{t_b_title})
+		INSERT INTO NOTICE_BOARD (t_b_content, t_b_title)
+		VALUES (#{t_b_content}, #{t_b_title})
 	</insert>
 
 	<update id="modify_notice" parameterType="notice">

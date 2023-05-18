@@ -1,13 +1,17 @@
 package com.ld.gg.controller.admin;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -50,6 +54,14 @@ public class AdminRestController {
 			
 			return json;
 		}
+		
+		@PostMapping(value = "/admin/delete.do", produces = "text/plain;charset=UTF-8")
+		public String notice_delete_do(@RequestParam("t_b_num") List<Integer> t_b_num) throws Exception {
+		    log.info("t_b_num = {}", t_b_num);
+		    String result = as.notice_delete(t_b_num);
+		    return result;
+		}
+
 		
 		@GetMapping("/notice/reply-list.json")
 		public List<NoticeReply> notice_reply_list(Integer t_b_num) throws Exception{

@@ -171,8 +171,9 @@ public class AdminService {
 	}
 
 	@Transactional
-	public String notice_delete(ArrayList<Integer> t_b_nums) {
+	public String notice_delete(List<Integer> t_b_nums) {
 		for(Integer t_b_num : t_b_nums) {
+			log.info("t_b_num = {}", t_b_num);
 			boolean tmp = ad.notice_delete(t_b_num);
 			if(!tmp) {
 				return "공지 삭제 실패";

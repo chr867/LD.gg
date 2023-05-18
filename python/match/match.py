@@ -7,6 +7,39 @@ import json
 import data_load
 tqdm.pandas()
 
+
+def summoner_tier(x):
+    url = f'https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/{x.summonerId}?api_key={x.api_key}'
+    res = requests.get(url).json()
+    try:
+        res = res[0]['tier']
+    except Exception as e:
+        if 'status' in res:
+            print(res)
+            time.sleep(20)
+            res = summoner_tier(x)
+        print(f'Error: {e}, {res} {x.summonerName}')
+        res = 0
+
+    return res
+
+def insert(t, conn):
+    sql = (
+        f"insert ignore into match_solr_rank (api_key, match_id, gameDuration, gameVersion, summonerName, summonerId," 
+        f"summonerTier, summonerLevel, participantId, championName, championId, ban_champion_id, champExperience, teamPosition,"
+        f"teamId, win, kills, deaths, assists, towerDestroy, inhibitorDestroy, dealToObject, dealToChamp, cs,"
+        f"g_5, g_6, g_7, g_8, g_9, g_10, g_11, g_12, g_13, g_14, g_15, g_16, g_17, g_18, g_19, g_20, g_21, g_22,"
+        f"g_23, g_24, g_25) "
+        f"values ({repr(t.api_key)}, {repr(t.match_id)}, {t.gameDuration}, {repr(t.gameVersion)}, {repr(t.summonerName)},"
+        f"{repr(t.summonerId)}, {repr(t.summonerTier)}, {t.summonerLevel}, {t.participantId}, {repr(t.championName)}, {t.championId},"
+        f"{t.ban_champion_id}, {t.champExperience}, {repr(t.teamPosition)}, {repr(t.teamId)}, {repr(t.win)}, {t.kills},"
+        f"{t.deaths}, {t.assists}, {t.towerDestroy}, {t.inhibitorDestroy}, {t.dealToObject}, {t.dealToChamp}, {t.cs},"
+        f"{t.g_5}, {t.g_6}, {t.g_7}, {t.g_8}, {t.g_9}, {t.g_10}, {t.g_11}, {t.g_12}, {t.g_13}, {t.g_14}, {t.g_15},"
+        f"{t.g_16}, {t.g_17}, {t.g_18}, {t.g_19}, {t.g_20}, {t.g_21}, {t.g_22}, {t.g_23}, {t.g_24}, {t.g_25})"
+    )
+    mu.mysql_execute(sql, conn)
+
+
 print("시작!")
 conn = mu.connect_mysql()
 matchId_count = pd.DataFrame(mu.mysql_execute_dict(f"SELECT match_id_substr FROM match_raw_patch", conn))
@@ -119,35 +152,3 @@ for limit in tqdm(range(0, len(matchId_count.match_id_substr.unique()), batch_si
     sum_df.progress_apply(lambda x: insert(x, sql_conn), axis=1)
     sql_conn.commit()
     sql_conn.close()
-
-def summoner_tier(x):
-    url = f'https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/{x.summonerId}?api_key={x.api_key}'
-    res = requests.get(url).json()
-    try:
-        res = res[0]['tier']
-    except Exception as e:
-        if 'status' in res:
-            print(res)
-            time.sleep(20)
-            res = summoner_tier(x)
-        print(f'Error: {e}, {res} {x.summonerName}')
-        res = 0
-
-    return res
-
-def insert(t, conn):
-    sql = (
-        f"insert ignore into match_solr_rank (api_key, match_id, gameDuration, gameVersion, summonerName, summonerId," 
-        f"summonerTier, summonerLevel, participantId, championName, championId, ban_champion_id, champExperience, teamPosition,"
-        f"teamId, win, kills, deaths, assists, towerDestroy, inhibitorDestroy, dealToObject, dealToChamp, cs,"
-        f"g_5, g_6, g_7, g_8, g_9, g_10, g_11, g_12, g_13, g_14, g_15, g_16, g_17, g_18, g_19, g_20, g_21, g_22,"
-        f"g_23, g_24, g_25) "
-        f"values ({repr(t.api_key)}, {repr(t.match_id)}, {t.gameDuration}, {repr(t.gameVersion)}, {repr(t.summonerName)},"
-        f"{repr(t.summonerId)}, {repr(t.summonerTier)}, {t.summonerLevel}, {t.participantId}, {repr(t.championName)}, {t.championId},"
-        f"{t.ban_champion_id}, {t.champExperience}, {repr(t.teamPosition)}, {repr(t.teamId)}, {repr(t.win)}, {t.kills},"
-        f"{t.deaths}, {t.assists}, {t.towerDestroy}, {t.inhibitorDestroy}, {t.dealToObject}, {t.dealToChamp}, {t.cs},"
-        f"{t.g_5}, {t.g_6}, {t.g_7}, {t.g_8}, {t.g_9}, {t.g_10}, {t.g_11}, {t.g_12}, {t.g_13}, {t.g_14}, {t.g_15},"
-        f"{t.g_16}, {t.g_17}, {t.g_18}, {t.g_19}, {t.g_20}, {t.g_21}, {t.g_22}, {t.g_23}, {t.g_24}, {t.g_25})"
-    )
-    mu.mysql_execute(sql, conn)
-

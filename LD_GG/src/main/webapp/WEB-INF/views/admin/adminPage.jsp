@@ -47,10 +47,11 @@
 		</div>
 	</div>
 	
+</div>
+<div>
+	<div id="user_type" style="display: none;">${sessionScope.user_type}</div>
 	<span id="msg" style="display: none;">${msg}</span>
 </div>
-
-<div id="user_type" style="display: none;">${sessionScope.user_type}</div>
 </body>
 <script src="/resources/js/admin/admin.js"></script>
 </html>
