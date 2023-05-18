@@ -1,5 +1,7 @@
 package com.ld.gg.controller.admin;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -63,7 +65,6 @@ public class AdminController {
 		NoticeDto nd = as.get_notice_detail(t_b_num);
 		model.addAttribute("nd", nd);
 		
-		
 		return "/notice/notice_modify";
 	}
 	
@@ -84,6 +85,13 @@ public class AdminController {
 		}
 
 		return s_result;
+	}
+	
+	@PostMapping("/notice/delete.do")
+	public String notice_delete_do(ArrayList<Integer> t_b_num) throws Exception{
+		String result = as.notice_delete(t_b_num);
+		
+		return result;
 	}
 	
 	@GetMapping("/admin")

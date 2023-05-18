@@ -44,4 +44,12 @@ public interface AdminDao {
 
 	boolean insert_notice_reply(NoticeReply reply);
 
+	NoticeReply get_notice_reply(Integer t_r_num);
+
+	boolean delete_notice_reply(Integer t_r_num);
+
+  boolean notice_reply_update(@Param("t_r_num")int t_r_num, @Param("t_r_content")String t_r_content);
+
+boolean notice_delete(Integer t_b_num);
+
 }

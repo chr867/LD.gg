@@ -1,9 +1,11 @@
 package com.ld.gg.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ld.gg.dao.AdminDao;
 import com.ld.gg.dao.MemberDao;
@@ -138,6 +140,45 @@ public class AdminService {
 	public boolean insert_notice_reply(NoticeReply reply) {
 		boolean result = ad.insert_notice_reply(reply);
 		return result;
+	}
+
+  public int notice_reply_delete(String email, Integer t_r_num) {
+		int val;
+		NoticeReply n_reply = ad.get_notice_reply(t_r_num);
+
+		if(!email.equals(n_reply.getEmail())){
+			val = 3;
+		}else{
+			boolean result = ad.delete_notice_reply(t_r_num);
+			if(result){
+				val = 1;
+			}else{
+				val = 2;
+			}
+		}
+
+		return val;
+  }
+
+  public boolean notice_reply_update(int t_r_num, String t_r_content) {
+		boolean result = ad.notice_reply_update(t_r_num, t_r_content);
+		return result;
+  }
+
+	public NoticeReply get_reply_info(int t_r_num) {
+		NoticeReply n_reply = ad.get_notice_reply(t_r_num);
+		return n_reply;
+	}
+
+	@Transactional
+	public String notice_delete(ArrayList<Integer> t_b_nums) {
+		for(Integer t_b_num : t_b_nums) {
+			boolean tmp = ad.notice_delete(t_b_num);
+			if(!tmp) {
+				return "공지 삭제 실패";
+			}
+		}
+		return "공지 삭제 성공";
 	}
 
 }

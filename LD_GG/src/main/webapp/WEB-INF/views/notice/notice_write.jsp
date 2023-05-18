@@ -23,7 +23,7 @@
 	src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/lang/summernote-ko-KR.js"></script>
 <body>
 	<h1>공지 작성 페이지</h1>
-	<h2 style="text-align: center;">글 작성</h2>
+	<h2 style="text-align: center;">공지 작성</h2>
 
 	<div style="width: 60%; margin: auto;">
 		<form method="post" action="/userinterface/notice/write.do">
@@ -32,7 +32,7 @@
 				placeholder="제목" value="${title}"/> <br> <br>
 			<textarea id="summernote" name="t_b_content">${content}</textarea>
 			<br>
-			<input id="subBtn" type="button" value="글 작성" onclick="goWrite(this.form)" />
+			<input id="subBtn" type="button" value="공지 작성" onclick="goWrite(this.form)" />
 			<input id="reset" type="reset" value="취소">
 		</form>
 	</div>

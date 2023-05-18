@@ -96,6 +96,32 @@
 	
 	<insert id="insert_notice_reply" parameterType="notice_reply">
 		INSERT INTO NOTICE_REPLY (T_B_NUM, T_R_CONTENT, EMAIL)
-		VALUES (#{notice_reply.t_b_num}, #{notice_reply.t_r_content}, #{notice_reply.email})
+		VALUES (#{t_b_num}, #{t_r_content}, #{email})
 	</insert>
+	
+	<select id="get_notice_reply_list" resultType="notice_reply">
+		SELECT * FROM NOTICE_REPLY 
+		WHERE T_b_NUM = #{t_b_num}
+	</select>
+	
+	<select id="get_notice_reply" resultType="notice_reply">
+		SELECT * FROM NOTICE_REPLY
+		WHERE T_R_NUM = #{t_r_num}
+	</select>
+
+	<delete id="delete_notice_reply" parameterType="notice_reply">
+		DELETE FROM NOTICE_REPLY
+		WHERE T_R_NUM = #{t_r_num}	
+	</delete>
+	
+	<update id="notice_reply_update" parameterType="notice_reply">
+		UPDATE NOTICE_REPLY 
+		SET T_R_CONTENT = #{t_r_content} 
+		WHERE t_r_num = #{t_r_num}
+	</update>
+	
+	<delete id="notice_delete" parameterType="notice">
+		DELETE FROM NOTICE_BOARD
+		WHERE T_B_NUM = #{t_b_num}
+	</delete>
 </mapper>

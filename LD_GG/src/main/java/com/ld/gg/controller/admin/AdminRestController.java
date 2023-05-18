@@ -63,10 +63,38 @@ public class AdminRestController {
 		public boolean notice_reply_insert(HttpSession session, Integer t_b_num, String t_r_content) throws Exception{
 			String email = session.getAttribute("email").toString();
 			NoticeReply reply = new NoticeReply();
+			log.info("reply email : {}", email);
 			reply.setEmail(email).setT_b_num(t_b_num).setT_r_content(t_r_content);
 			
 			boolean result = as.insert_notice_reply(reply);
 			return result;
+		}
+
+		@PostMapping("/notice/reply-delete.do")
+		public int notice_reply_delete(HttpSession session, Integer t_r_num){
+			String email = (String)session.getAttribute("email");
+			int result = as.notice_reply_delete(email, t_r_num);
+
+			return result;
+		}
+
+		@PostMapping("/notice/reply-modify")
+		public boolean notice_reply_modify(HttpSession session, int t_r_num) {
+			log.info(t_r_num+"번 댓글 데이터 가져오기 시작");
+			String email = (String)session.getAttribute("email");
+			NoticeReply repylInfo = as.get_reply_info(t_r_num);
+			return email.equals(repylInfo.getEmail());
+		}
+
+		@PostMapping("/notice/reply-modify.do")
+		public boolean notice_reply_modify(int t_r_num, String t_r_content) {
+			log.info("댓글번호!"+t_r_num);
+			log.info("댓글내용!"+t_r_content);
+			NoticeReply n_reply = new NoticeReply();
+			n_reply.setT_r_num(t_r_num).setT_r_content(t_r_content);
+			boolean updateResult = as.notice_reply_update(t_r_num, t_r_content);
+			
+			return updateResult;
 		}
 
 		@PostMapping("/admin/ad/regist")
@@ -147,7 +175,7 @@ public class AdminRestController {
 		// 1 = 성공 2 = 실패
 		@PostMapping("/admin/member/stop")
 		public int mbStop(String email) throws Exception{
-			int result = as.updateMemberStop(email,4);
+			int result = as.updateMemberStop(email, 4);
 			return result;
 		}
 		
