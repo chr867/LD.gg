@@ -310,24 +310,15 @@ flex-basis: 10%;
 	
 
 	<div class="scrollable-table">
-		<table>
-			<thead>
-				<tr>
-					<th>선택</th>
-					<th>태그</th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:forEach items="${tag_list}" var="tag_list">
-					<c:if test="${not empty tag_list.mentor_version}">
-				      <tr>
-				        <td><input type="checkbox" name="selected_tags" value="${tag_list.tag_id}"></td>
-				        <td>${tag_list.mentor_version}</td>
-				      </tr>
-				    </c:if>
-				</c:forEach>
-			</tbody>
-		</table>
+		<c:forEach items="${tag_list}" var="tag_list">
+			<c:if test="${not empty tag_list.mentor_version}">
+				<div>
+				  <input type="checkbox" id="${tag_list.tag_id}" name="selected_tags" value="${tag_list.tag_id}">
+				  <label for="${tag_list.tag_id}">${tag_list.mentor_version}</label>
+				</div>
+		    </c:if>
+		</c:forEach>
+		
 	</div>
 	<button type="button" class="save_tag" onclick="deleteMentorTag()">태그 저장</button>
 
@@ -375,7 +366,7 @@ flex-basis: 10%;
 	}
 	
 	$(document).ready(function () {
-		displaySpecializedPosition(); //멘토 특화 포지션을 인풋창에 출력
+		displaySpecializedPosition(); //멘토 특화 포지션과 특화 챔피언을 인풋창에 출력
 		select_by_email_class();
 		
 		$(".champ-selector-inner").click(function () { //챔피언 선택 펼치기
@@ -614,12 +605,17 @@ flex-basis: 10%;
 		  let sp = JSON.parse(data);
 		  let mpsp = JSON.parse(sp.specialized_position);
 		  positions = mpsp;
-		  
-		  if (mpsp.length == 2) {
+		  if (mpsp !== null && mpsp !== '') {
+			  if (mpsp.length === 2) {
 			    $('#specializedPosition').val(mpsp[0] + ' / ' + mpsp[1]);
+			    $("button[name='" + mpsp[0] + "']").toggleClass("selected");
+			    $("button[name='" + mpsp[1] + "']").toggleClass("selected");
+			    $(".position-buttons button:not(.selected)").prop("disabled", true);
 			  } else {
 			    $('#specializedPosition').val(mpsp[0]);
+			    $("button[name='" + mpsp[0] + "']").toggleClass("selected");
 			  }
+			}
 		  if(sp.top_specialized_champion != null && sp.top_specialized_champion != ''){
 			  $('.champ-info').remove();  
 			  for (let i =0; i < top_selectedChampions.length; i++){
