@@ -120,4 +120,8 @@
 		WHERE t_r_num = #{t_r_num}
 	</update>
 	
+	<delete id="notice_delete" parameterType="notice">
+		DELETE FROM NOTICE_BOARD
+		WHERE T_B_NUM = #{t_b_num}
+	</delete>
 </mapper>

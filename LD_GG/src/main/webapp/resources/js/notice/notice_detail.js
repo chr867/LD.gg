@@ -1,8 +1,8 @@
 let myEmail = document.getElementById("email").textContent;
 
-// function modify(t_b_num) {
-//   location.href = `/userinterface/notice/modify?t_b_num=${t_b_num}`
-// }
+function modify(t_b_num) {
+  location.href = `/userinterface/notice/modify?t_b_num=${t_b_num}`
+}
 
 function go_list(){
   location.href = '/userinterface/notice'
@@ -22,7 +22,7 @@ function loadComments(){  // 댓글 리스트
       let modifyButton = '';
       let date = new Date(reply.t_r_date)
       let localTime = date.toLocaleString();
-      if(myEmail===reply.email){
+      if(myEmail===reply.email || myEmail=='admin@ld.gg'){
         deleteButton = '<td><button id="comment-delete-btn-'+reply.t_r_num+'" onclick="deleteComment('+reply.t_r_num+')" class="per_button">삭제</button></td>'
         modifyButton = '<td><button id="comment-modify-btn-'+reply.t_r_num+'" onclick="modifyReplyBtn('+reply.t_r_num+')" class="per_button">수정</button></td>'
       }
@@ -40,7 +40,6 @@ function loadComments(){  // 댓글 리스트
   })
 
 }
-
 
 function submitComment() {  // 댓글 작성
 	let t_r_content = document.getElementById("comment-textarea").value;

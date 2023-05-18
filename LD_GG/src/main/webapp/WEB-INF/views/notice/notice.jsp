@@ -17,7 +17,6 @@
 <h1>공지사항</h1>
 
 <div>
-
 	<div class="grid full-height full-height-strict">
 		<table id="grid" class="full-size-jq-grid"></table>
 	</div>
@@ -27,10 +26,10 @@
 		<div class="element">
 			<input type="text" id="keyword" name="keyword">
 			<button id='search'>검색</button>
-			<a href="/userinterface/notice/write">작성</a>
 		</div>
 	</div>
-<span id="msg" style="display:none;">${msg}</span>
+	
+	<span id="msg" style="display:none;">${msg}</span>
 </div>
 
 <script src="/resources/js/notice/notice.js"></script>

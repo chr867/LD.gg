@@ -1,9 +1,11 @@
 package com.ld.gg.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ld.gg.dao.AdminDao;
 import com.ld.gg.dao.MemberDao;
@@ -166,6 +168,17 @@ public class AdminService {
 	public NoticeReply get_reply_info(int t_r_num) {
 		NoticeReply n_reply = ad.get_notice_reply(t_r_num);
 		return n_reply;
+	}
+
+	@Transactional
+	public String notice_delete(ArrayList<Integer> t_b_nums) {
+		for(Integer t_b_num : t_b_nums) {
+			boolean tmp = ad.notice_delete(t_b_num);
+			if(!tmp) {
+				return "공지 삭제 실패";
+			}
+		}
+		return "공지 삭제 성공";
 	}
 
 }

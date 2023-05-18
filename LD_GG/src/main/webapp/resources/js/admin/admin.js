@@ -1,6 +1,9 @@
-const msg = document.getElementById("msg").innerHTML
-if(msg){
-	alert(msg)
+const user_type = document.getElementById('user_type').innerHTML
+console.log(user_type)
+
+if(user_type != 3){
+  alert("접근 권한이 없습니다")
+  location.href = "/member/testMain"
 }
 
 // 공지 목록
@@ -15,7 +18,7 @@ $("#grid").jqGrid({
 		{name:'t_b_views', index:'t_b_views', width:90, align: "center"},
 		{name:'t_b_recom', index:'t_b_recom', width:90, align: "center"},
 		{name:'t_b_date', index:'t_b_date', width:90, align: "center"}
-		],
+	],
 	sortable : true,
 	loadonce : true,
  	autowidth: true,
@@ -50,7 +53,7 @@ document.getElementById("search").addEventListener("click", function() {
 			{name:'t_b_views', index:'t_b_views', width:90, align: "center"},
 			{name:'t_b_recom', index:'t_b_recom', width:90, align: "center"},
 			{name:'t_b_date', index:'t_b_date', width:90, align: "center"}
-			],
+		],
 		autowidth: true,
 /* 		multiselect: true,
  */		pager:'#pager',
@@ -59,12 +62,24 @@ document.getElementById("search").addEventListener("click", function() {
 		sortname: 't_b_num',
 		sortorder: 'desc',
 		height: 250,
-		onCellSelect: function(rowid, icol){
-			if(icol != 0){
+	onCellSelect: function(rowid, icol){
+		if(icol != 0){
 			location.href = `/userinterface/notice/detail?t_b_num=${rowid}`
-			}
 		}
-	}).trigger("reloadGrid");
-	console.log('jq 끝')
+	}
+}).trigger("reloadGrid");
+console.log('jq 끝')
 });
-//검색 끝
+// 검색 끝
+
+// 삭제
+function notice_del(){
+
+	let selectedRows = $("#grid").jqGrid('getGridParam', 'selarrrow');
+	console.log(selectedRows)
+	let confirmation = confirm("삭제하시겠습니까?");
+	
+	
+	
+}
+// 삭제 끝
