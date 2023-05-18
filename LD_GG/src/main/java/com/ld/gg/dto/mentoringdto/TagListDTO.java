@@ -16,4 +16,5 @@ public class TagListDTO {
 	private int tag_id; //pk
 	private String tag_info;
 	private String tag_type;
+	private String mentor_version;
 }

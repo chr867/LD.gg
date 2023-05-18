@@ -25,4 +25,5 @@ public class CustomerInquiriesDTO {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy년 MM월 dd일 HH:mm:ss")
 	private LocalDateTime date;
 	private int views;
+	private String lol_account;
 }

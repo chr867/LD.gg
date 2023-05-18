@@ -19,6 +19,11 @@ public class FaqContoroller {
 	private MemberDao mbdao;
 	
 	@GetMapping
+	public String go_faq() {
+		return "faqView/faq";
+	}
+	
+	@GetMapping("/inquiries")
 	public ModelAndView go_inquiries_list(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		String email = (String) session.getAttribute("email");

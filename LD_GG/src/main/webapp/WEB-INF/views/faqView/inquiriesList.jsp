@@ -28,8 +28,42 @@
 
 </head>
 <style>
+/* 테이블 전체 스타일 */
+#gview_grid {
+  width: 100%; /* 테이블 너비 조정 */
+  border-collapse: collapse; /* 테이블 셀 경계 병합 */
+}
+
+/* 테이블 헤더 스타일 */
+#grid th {
+  background-color: #f2f2f2; /* 헤더 배경색 */
+  border: 1px solid #ddd; /* 헤더 테두리 스타일 */
+  padding: 8px; /* 헤더 셀 안쪽 여백 */
+  text-align: left; /* 헤더 텍스트 정렬 */
+}
+
+/* 테이블 내용 스타일 */
+#grid td {
+  border: 1px solid #ddd; /* 셀 테두리 스타일 */
+  padding: 8px; /* 셀 안쪽 여백 */
+}
+
+/* 짝수 행 배경색 스타일 */
+#grid tr:nth-child(even) {
+  background-color: #f9f9f9; /* 짝수 행 배경색 */
+}
+
+/* 홀수 행 배경색 스타일 */
+#grid tr:nth-child(odd) {
+  background-color: #fff; /* 홀수 행 배경색 */
+}
+
 .modal-backdrop {
     z-index: 0; 
+}
+.textarea {
+  width: 100%;
+  max-width: 500px; /* 최대 너비 설정 */
 }
 </style>
 <body>
@@ -49,6 +83,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="inquiriesModalLabel"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body"> 
         <form id="inquiriesForm">
@@ -61,7 +96,6 @@
             <textarea class="form-control" id="inquiriesContent" name="inquiriesContent" rows="5"></textarea>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             <button type="submit" class="btn btn-primary">전송</button>
           </div>
         </form>
@@ -117,7 +151,7 @@
     		      success: function(data) {
     		        alert("질문이 등록되었습니다.");
     		        $("#inquiriesModal").modal("hide");
-    		        loadGrid();
+    		        location.reload();
     		      },
     		      error: function(xhr, status, error) {
     		        console.error(xhr.responseText);
@@ -138,131 +172,7 @@
     		$("#inquiriesModal").modal("hide");
     	});
     	
-    	function loadGrid(){
-    	$("#grid").jqGrid({
-    		  url: "/faq/get-all-ci", //고객 문의사항 가져오기
-    		  datatype: "json",
-    		  colNames: ['번호','상태', '제목', '작성일', '작성자', '조회수'],
-    		  colModel: [
-    		    { name: 'inquiries_id', index: 'inquiries_id' , width:'5%'},
-    		    { name: 'state', index: 'state', width:'10%'},
-    		    { name: 'inquiries_title', index: 'inquiries_title', width:'60%'},
-    		    { name: 'date', index: 'date', width:'20%'},
-    		    { name: 'customer_email', index: 'customer_email', width:'20%'},
-    		    { name: 'views', index: 'views', width:'5%'}
-    		  ],
-    		  loadtext: '로딩중..',
-    		  sortable: true,
-    		  loadonce: true,
-    		  multiselect: false,
-    		  pager: '#pager',
-    		  rowNum: 10,
-    		  sortname: 'createdDate',
-    		  sortorder: 'desc',
-    		  autowidth: true,
-  			shrinkToFit: true,
-    		  height: "auto",
-    		  pgbuttons: true,
-    		  pgtext: null,
-    		  viewrecords: false,
-    		  recordpos: 'left',
-    		  pagerpos: 'center',
-    		  pginput: false,
-    		  onSelectRow: function (row_id) {
-    			  $('tr.inquiries-info').remove(); // 이미 생성된 답변 창을 모두 닫음
-    			  $('tr.answer-row').remove();
-    			  $('tr.cs-info').remove();
-    			  let row_data = $("#grid").jqGrid('getRowData', row_id);// 행데이터
-    			  let id = row_data.inquiries_id;//글 번호
-    			  let $inquiries_info_tr = $('<tr>').addClass('inquiries-info'); //질문 내용 보여줄 tr 태그
-    			  let $inquiries_info_td1 = $('<td>').attr('colspan', 2);
-    			  let $inquiries_info_td2 = $('<td>').attr('colspan', 4);
-    			  $.ajax({//질문 내용 가져오기
-				    type: "GET",
-				    url: "/faq/get-by-id-ci/"+id,
-				    dataType: "json",
-				    success: function(res) {
-				      let row = $('#' + row_id);//행 선택
-				      $inquiries_info_tr.append($inquiries_info_td1, $inquiries_info_td2);
-				      row.after($inquiries_info_tr);
-				      var inquiries = res.inquiries_info;// 질문 내용
-				      $inquiries_info_td1.text("문의 내용");
-				      $inquiries_info_td2.text(inquiries);
-				      
-				      $.ajax({//고객 응대 가져오기
-						    type: "GET",
-						    url: "/faq/get-cs/"+id,
-						    dataType: "json",
-						    success: function(res) {
-						      if(res!=null){//답변이 있는 경우
-						    	  console.log(res);
-						    	  console.log(row_data);
-						    	  
-						    	  let cs_info_tr = $('<tr>').addClass('cs-info'); //질문 내용 보여줄 tr 태그
-				    			  let cs_info_td1 = $('<td>').attr('colspan', 2);
-				    			  let cs_info_td2 = $('<td>').attr('colspan', 4);
-				    			  cs_info_tr.append(cs_info_td1,cs_info_td2)
-				    			  $inquiries_info_tr.after(cs_info_tr);
-				    			  
-				    			  var answer = res.cs_info;
-				    			  cs_info_td1.text("답변 내용");
-							      cs_info_td2.text(answer);
-						      }else{//답변이 없는 경우
-						    	  console.log("답변이 없습니다");
-						      
-					    		    var $newRow = $('<tr>').addClass('answer-row');
-					    		    var $newCell = $('<td>').attr('colspan', 5);
-					    		    var $answerForm = $('<form>').addClass('answer-form');
-					    		    var $answerTextarea = $('<textarea>').attr('name', 'answer');
-					    		    var $answerSubmit = $('<input>').attr({
-					    		      'type': 'submit',
-					    		      'value': '답변 등록'
-					    		    });
-					    		    $answerForm.append($answerTextarea, $answerSubmit);
-					    		    $newCell.append($answerForm);
-					    		    $newRow.append($newCell);
-					    		    $inquiries_info_tr.after($newRow);
-					    		    
-					    		    $answerSubmit.on('click', function(e) { //저장 버튼을 눌렀을때
-					   		    	  e.preventDefault(); // 폼 전송을 막습니다.
-					   		    	  let cs_id = row_data.inquiries_id;
-					   		    	  let cs_title = row_data.inquiries_title;
-					   		    	  let cs_info = $('textarea[name="answer"]').val();
-					   		    	  
-					   		    	  let data = {
-					   		    			cs_id: cs_id,
-					   		    	        cs_title: cs_title,
-					   		    			cs_info : cs_info,
-					   		    			cs_answerer_email : "${member.email}"
-					   		    	  }
-						   		    	$.ajax({// cs 저장
-						   		    	  type: 'POST',
-						   		    	  url: '/faq/save-cs',
-						   		    	contentType: "application/json;charset=UTF-8",
-						   		    	  data: JSON.stringify(data),
-						   		    	  success: function(data) {
-						   		    		alert("답변이 등록되었습니다");
-						   		    	  },
-						   		    	  error: function(xhr, status, error) {
-						   		    		console.log(error);
-						   		    	  }
-						   		    	});
-
-					   		    	});//답변 등록
-						      }
-						    },
-						    error: function(jqXHR, textStatus, errorThrown) {
-						      console.log("AJAX Error: " + textStatus);
-						    }
-						  });
-				    },
-				    error: function(jqXHR, textStatus, errorThrown) {
-				      console.log("AJAX Error: " + textStatus);
-				    }
-				  });
-    		  }//onSelectRow
-    		});
-    	}
+    	
 
 
         $("#search").on("click", function () { //검색
@@ -278,7 +188,7 @@
 	      		    { name: 'state', index: 'state', width: 50 },
 	      		    { name: 'inquiries_title', index: 'inquiries_title', width: 300 },
 	      		    { name: 'date', index: 'date', width: 90 },
-	      		    { name: 'customer_email', index: 'customer_email', width: 80 },
+	      		    { name: 'lol_account', index: 'lol_account', width: 80 },
 	      		    { name: 'views', index: 'views', width: 50 }
 	      		  ],
                 loadtext: '로딩중..',
@@ -394,6 +304,133 @@
         });
         
     });
+    function loadGrid(){
+    	$("#grid").jqGrid({
+    		  url: "/faq/get-all-ci", //고객 문의사항 가져오기
+    		  datatype: "json",
+    		  colNames: ['번호','상태', '제목', '작성일', '작성자', '조회수'],
+    		  colModel: [
+    		    { name: 'inquiries_id', index: 'inquiries_id'},
+    		    { name: 'state', index: 'state'},
+    		    { name: 'inquiries_title', index: 'inquiries_title'},
+    		    { name: 'date', index: 'date'},
+    		    { name: 'lol_account', index: 'lol_account'},
+    		    { name: 'views', index: 'views'}
+    		  ],
+    		  loadtext: '로딩중..',
+    		  sortable: true,
+    		  loadonce: true,
+    		  multiselect: false,
+    		  pager: '#pager',
+    		  rowNum: 10,
+    		  sortname: 'createdDate',
+    		  sortorder: 'desc',
+    		  autowidth: true,
+  			shrinkToFit: true,
+    		  height: "auto",
+    		  pgbuttons: true,
+    		  pgtext: null,
+    		  viewrecords: false,
+    		  recordpos: 'left',
+    		  pagerpos: 'center',
+    		  pginput: false,
+    		  onSelectRow: function (row_id) {
+    			  $('tr.inquiries-info').remove(); // 이미 생성된 답변 창을 모두 닫음
+    			  $('tr.answer-row').remove();
+    			  $('tr.cs-info').remove();
+    			  let row_data = $("#grid").jqGrid('getRowData', row_id);// 행데이터
+    			  let id = row_data.inquiries_id;//글 번호
+    			  let $inquiries_info_tr = $('<tr>').addClass('inquiries-info'); //질문 내용 보여줄 tr 태그
+    			  let $inquiries_info_td1 = $('<td>').attr('colspan', 2);
+    			  let $inquiries_info_td2 = $('<td>').attr('colspan', 4);
+    			  $.ajax({//질문 내용 가져오기
+				    type: "GET",
+				    url: "/faq/get-by-id-ci/"+id,
+				    dataType: "json",
+				    success: function(res) {
+				      let row = $('#' + row_id);//행 선택
+				      $inquiries_info_tr.append($inquiries_info_td1, $inquiries_info_td2);
+				      row.after($inquiries_info_tr);
+				      var inquiries = res.inquiries_info;// 질문 내용
+				      $inquiries_info_td1.text("문의 내용");
+				      $inquiries_info_td2.text(inquiries);
+				      
+				      $.ajax({//고객 응대 가져오기
+						    type: "GET",
+						    url: "/faq/get-cs/"+id,
+						    dataType: "json",
+						    success: function(res) {
+						      if(res!=null && res != ''){//답변이 있는 경우
+						    	  console.log(res);
+						    	  console.log(row_data);
+						    	  
+						    	  let cs_info_tr = $('<tr>').addClass('cs-info'); //질문 내용 보여줄 tr 태그
+				    			  let cs_info_td1 = $('<td>').attr('colspan', 2);
+				    			  let cs_info_td2 = $('<td>').attr('colspan', 4);
+				    			  cs_info_tr.append(cs_info_td1,cs_info_td2)
+				    			  $inquiries_info_tr.after(cs_info_tr);
+				    			  
+				    			  var answer = res.cs_info;
+				    			  cs_info_td1.text("답변 내용");
+							      cs_info_td2.text(answer);
+						      }else{//답변이 없는 경우
+						    	  console.log("답변이 없습니다");
+						      
+					    		    var $newRow = $('<tr>').addClass('answer-row');
+					    		    var $newCell = $('<td>').attr('colspan', 6);
+					    		    var $answerForm = $('<form>').addClass('answer-form');
+					    		    var $answerTextarea = $('<textarea>').attr('name', 'answer')
+					    		    	.css('width', '100%').css('height', '75px');;
+					    		    var $answerSubmit = $('<input>').attr({
+					    		      'type': 'submit',
+					    		      'value': '답변 등록'
+					    		    });
+					    		    $answerForm.append($answerTextarea, $answerSubmit);
+					    		    $newCell.append($answerForm);
+					    		    $newRow.append($newCell);
+					    		    $inquiries_info_tr.after($newRow);
+					    		    
+					    		    $answerSubmit.on('click', function(e) { //저장 버튼을 눌렀을때
+					   		    	  e.preventDefault(); // 폼 전송을 막습니다.
+					   		    	  let cs_id = row_data.inquiries_id;
+					   		    	  let cs_title = row_data.inquiries_title;
+					   		    	  let cs_info = $('textarea[name="answer"]').val();
+					   		    	  
+					   		    	  let data = {
+					   		    			cs_id: cs_id,
+					   		    	        cs_title: cs_title,
+					   		    			cs_info : cs_info,
+					   		    			cs_answerer_email : "${member.email}"
+					   		    	  }
+						   		    	$.ajax({// cs 저장
+						   		    	  type: 'POST',
+						   		    	  url: '/faq/save-cs',
+						   		    	contentType: "application/json;charset=UTF-8",
+						   		    	  data: JSON.stringify(data),
+						   		    	  success: function(data) {
+						   		    		alert("답변이 등록되었습니다");
+						   		    		loadGrid();
+						   		    	  },
+						   		    	  error: function(xhr, status, error) {
+						   		    		console.log(error);
+						   		    	  }
+						   		    	});
+
+					   		    	});//답변 등록
+						      }
+						    },
+						    error: function(jqXHR, textStatus, errorThrown) {
+						      console.log("AJAX Error: " + textStatus);
+						    }
+						  });
+				    },
+				    error: function(jqXHR, textStatus, errorThrown) {
+				      console.log("AJAX Error: " + textStatus);
+				    }
+				  });
+    		  }//onSelectRow
+    		});
+    	}
 </script>
 </body>
 </html>

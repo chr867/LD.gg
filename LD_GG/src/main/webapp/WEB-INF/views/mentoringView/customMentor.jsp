@@ -15,8 +15,7 @@
 		}
 
 		.tag-button.mouse-over {
-			background-color: #2196F3;
-			color: white;
+			background-color: #ddd;
 		}
 
 		.champ-list {
@@ -52,6 +51,16 @@
 
 		<h4>나에게 딱 맞는 멘토님을 찾기위해</h4>
 		<h4><img src=""><em>목표를 설정해 볼까요?</em></h4>
+		
+		<div class="progress">
+		<progress value="20" max="100"></progress>
+		<em>1</em>/6
+		</div>
+		
+		<div>
+		  <input type="checkbox" id="myCheckbox">
+		  <label for="myCheckbox">체크박스</label>
+		</div>
 
 		<div class="summoner-wrap">
 			<!---->

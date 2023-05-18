@@ -55,7 +55,6 @@ form input[type="text"], form input[type="number"] {
   font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 0.5rem;
-  width: 100%;
   margin-bottom: 1rem;
 }
 
@@ -73,14 +72,13 @@ form input[type="submit"]:hover {
   background-color: #3e8e41;
 }
 
-.scrollable-table {
+/* .scrollable-table {
   height: 200px;
   overflow: auto;
   margin-top: 1rem;
-}
+} */
 
 table {
-  width: 100%;
   border-collapse: collapse;
 }
 
@@ -155,10 +153,6 @@ background-color: #4CAF50;
     width: 45%;
   }
 }
-.scrollable-table {
-	height: 200px;
-	overflow: auto;
-}
 
 .toggle-button {
 	display: block;
@@ -180,11 +174,15 @@ width: 70px;
 }
 
 .champ-list {
+width: 35%;
 			height: 336px;
 			border-radius: 12px;
 			overflow-y: scroll;
 			box-sizing: border-box;
 			border: 1px solid #d5d5de;
+			display: flex;
+    flex-direction: row;
+    align-items: center;
 		}
 #dropdown-input {
     padding: 10px;
@@ -201,9 +199,17 @@ width: 70px;
   
   .champ-selector-inner {
   display: flex;
+  width: 35%;
+  height: 8%;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
   border: 1px solid #000;
   border-radius: 10px;
+}
+.champ-item{
+flex-basis: 10%;
+
 }
   
 
@@ -232,19 +238,19 @@ width: 70px;
 		<input type="text" id="specializedPosition" name="specialized_position" value=""><br>
 			
 			<div class="position-buttons">
-			<button type="button" id="top-button"><img
+			<button type="button" id="top-button" name="탑"><img
 					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_top_grey.svg" 
 					class="position-img"><p>탑</p></button>
-			<button type="button" id="jungle-button"><img
+			<button type="button" id="jungle-button" name="정글"><img
 					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_jg_grey.svg" 
 					class="position-img"><p>정글</p></button>
-			<button type="button" id="mid-button"><img
+			<button type="button" id="mid-button" name="미드" ><img
 					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_mid_grey.svg"
 					class="position-img"><p>미드</p></button>
-			<button type="button" id="bot-button"><img
+			<button type="button" id="bot-button" name="바텀"><img
 					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_ad_grey.svg" 
 					class="position-img"><p>바텀</p></button>
-			<button type="button" id="support-button"><img
+			<button type="button" id="support-button" name="서포터"><img
 					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_sup_grey.svg"
 					class="position-img"><p>서포터</p></button>
 		</div><br><br>
@@ -268,12 +274,11 @@ width: 70px;
 			</div>
 			<div win-rate-filter-champ="">
 				<span text-input="" class="input-champ-keyword white">
-					<input placeholder="챔피언을 검색하세요" tabindex="0" type="text" class="champ-search" list='fruitslist'>
-					<datalist id="fruitslist">
+					<input placeholder="챔피언을 검색하세요" tabindex="0" type="text" class="champ-search" list='champ-name-list'>
+					<datalist id="champ-name-list">
 					  <option value="apple">
 					  <option value="banana">
 					  <option value="grape">
-					  <option value="orange">
 					</datalist>
 				</span>
 				<div class="champ-list">
@@ -305,26 +310,17 @@ width: 70px;
 	
 
 	<div class="scrollable-table">
-		<table>
-			<thead>
-				<tr>
-					<th>선택</th>
-					<th>태그</th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:forEach items="${tag_list}" var="tag_list">
-					<tr>
-						<td><input type="checkbox" name="selected_tags"
-							value="${tag_list.tag_id}"></td>
-						<td>${tag_list.tag_info}</td>
-					</tr>
-				</c:forEach>
-			</tbody>
-		</table>
+		<c:forEach items="${tag_list}" var="tag_list">
+			<c:if test="${not empty tag_list.mentor_version}">
+				<div>
+				  <input type="checkbox" id="${tag_list.tag_id}" name="selected_tags" value="${tag_list.tag_id}">
+				  <label for="${tag_list.tag_id}">${tag_list.mentor_version}</label>
+				</div>
+		    </c:if>
+		</c:forEach>
+		
 	</div>
 	<button type="button" class="save_tag" onclick="deleteMentorTag()">태그 저장</button>
-	<button type="button" class="toggle-button" onclick="toggleTable()">숨기기</button>
 
 	<form id="classForm" onsubmit="return classSubmitForm()">
 		<label for="class_name">수업명:</label> <input type="text"
@@ -349,10 +345,12 @@ width: 70px;
 	let top_selectedChampions = [];
 	let current_tsc = "${mentor_profile.top_specialized_champion}";
 	const championIds = current_tsc.split(",");
-	for (let i = 0; i < championIds.length; i++) {
+	if (current_tsc != null && current_tsc != ''){
+		for (let i = 0; i < championIds.length; i++) {
 		  const parsedId = parseInt(championIds[i]);
 		  top_selectedChampions.push(parsedId);
 		}
+	}
 	
 	let c_time = "${mentor_profile.contact_time}";
 	let c1_time = c_time.split(" ")[0];
@@ -368,7 +366,7 @@ width: 70px;
 	}
 	
 	$(document).ready(function () {
-		displaySpecializedPosition(); //멘토 특화 포지션을 인풋창에 출력
+		displaySpecializedPosition(); //멘토 특화 포지션과 특화 챔피언을 인풋창에 출력
 		select_by_email_class();
 		
 		$(".champ-selector-inner").click(function () { //챔피언 선택 펼치기
@@ -607,11 +605,38 @@ width: 70px;
 		  let sp = JSON.parse(data);
 		  let mpsp = JSON.parse(sp.specialized_position);
 		  positions = mpsp;
-		  if (mpsp.length == 2) {
+		  if (mpsp !== null && mpsp !== '') {
+			  if (mpsp.length === 2) {
 			    $('#specializedPosition').val(mpsp[0] + ' / ' + mpsp[1]);
+			    $("button[name='" + mpsp[0] + "']").toggleClass("selected");
+			    $("button[name='" + mpsp[1] + "']").toggleClass("selected");
+			    $(".position-buttons button:not(.selected)").prop("disabled", true);
 			  } else {
 			    $('#specializedPosition').val(mpsp[0]);
+			    $("button[name='" + mpsp[0] + "']").toggleClass("selected");
 			  }
+			}
+		  if(sp.top_specialized_champion != null && sp.top_specialized_champion != ''){
+			  $('.champ-info').remove();  
+			  for (let i =0; i < top_selectedChampions.length; i++){
+			  	$.ajax({ //챔피언 아이디로 정보 가져오기
+				    url: "/mentor/get-champ-name-by-id?id=" + top_selectedChampions[i],
+				    type: "GET",
+				    success: function (data) {
+				    	let champion_data = JSON.parse(data);
+				    	let championDiv = $("<div>").addClass("champ-info").attr("id",top_selectedChampions[i]);
+			            let champImg = $("<img>").addClass("champ-icon")
+			            .attr("src", "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +
+			            		champion_data.champion_en_name + ".png?&amp;retry=0");
+			            let champName = $("<p>").text(champion_data.champion_kr_name);
+			            championDiv.append(champImg);
+			            championDiv.append(champName);
+			            $(".arrow-icon").before(championDiv);
+				    	}
+				    });
+			  }
+      		
+		  }
 	  },
 	  error: function(xhr, status, error) {
 	    console.log(error);
@@ -779,7 +804,7 @@ width: 70px;
 	    .addClass("deleteButton")
 	    .attr("id", class_id)
 	    .text("삭제");
-	  const $classPrice = $("<div>").html("<h4>" + "가격: " + price + "</h4>");
+	  const $classPrice = $("<div>").html("<h4>" + "가격: " + price.toLocaleString() + "</h4>");
 	  const $classDescription = $("<div>").html("<h4>" + class_info + "</h4>");
 
 	  $classInfo.append($classTitle, $deleteButton);
