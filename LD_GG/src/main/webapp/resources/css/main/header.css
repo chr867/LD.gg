@@ -1,0 +1,250 @@
+header {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 4.5rem;
+  background: #f7f5f5;
+  line-height: 4rem;
+  align-content: center;
+  align-items: center;
+  border-bottom: 1px solid #c5c7ce;
+  display: flex;
+  padding: 10px;
+}
+
+.search-bar-icon {
+  width: 30px;
+  height: 30px;
+  margin: 5px 0 0 30px;
+  filter: invert(32%) sepia(66%) saturate(0%) hue-rotate(220deg) brightness(125%) contrast(119%);
+}
+
+.search-bar-icon:hover {
+  filter: none;
+}
+
+.search-bar-logo {
+  width: 40px;
+  height: 40px;
+  margin: 0 15px 0 0;
+  border-right: 1px solid #c5c7ce;
+
+}
+
+.search-bar-box {
+  width: 800px;
+  height: 50px;
+  border: 1px solid #3d424e;
+  border-radius: 4rem;
+  padding: 4px 30px 0 50px;
+  box-shadow: 2px 2px #c5c7ce;
+  display: flex;
+  flex-direction: row;
+  margin-left: 100px;
+
+}
+
+.search-bar-box .search-bar-input {
+  background-color: #f7f5f5;
+  width: 600px;
+  height: 40px;
+  border: none;
+  outline: none;
+}
+
+.header-icon-box {
+  display: flex;
+  margin-left: auto;
+}
+
+.message-icon-img {
+  width: 40px;
+  height: 40px;
+  margin-left: 30px;
+  filter: invert(32%) sepia(66%) saturate(0%) hue-rotate(220deg) brightness(125%) contrast(119%);
+}
+
+.alarm-icon-img {
+  width: 40px;
+  height: 40px;
+  margin-left: 30px;
+  filter: invert(32%) sepia(66%) saturate(0%) hue-rotate(220deg) brightness(125%) contrast(119%);
+}
+
+.bookmark-icon-img {
+  width: 30px;
+  height: 30px;
+  margin-left: 30px;
+  filter: invert(32%) sepia(66%) saturate(0%) hue-rotate(220deg) brightness(125%) contrast(119%);
+}
+
+.message-icon-img:hover,
+.alarm-icon-img:hover,
+.bookmark-icon-img:hover {
+  filter: none;
+}
+
+.login-button-box {
+  margin-top: auto;
+  margin-left: 40px;
+}
+
+.login-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: #202B46;
+  color: #c5c7ce;
+  font-size: 20px;
+  font-weight: 700;
+  width: 150px;
+  height: 50px;
+  border-radius: 4rem;
+}
+
+.login-button:hover {
+  background-color: #2f3f68;
+}
+
+.message-notification {
+  position: relative;
+  right: 12px;
+  bottom: 10px;
+  background-color: rgb(255, 27, 27);
+  opacity: 0.9;
+  width: 15px;
+  height: 15px;
+  border-radius: 4rem;
+  z-index: 1;
+}
+
+.message-icon-box {
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  display: flex;
+}
+
+.alarm-icon-box {
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  display: flex;
+}
+
+.alarm-notification {
+  position: relative;
+  right: 15px;
+  bottom: 10px;
+  background-color: rgb(255, 27, 27);
+  opacity: 0.9;
+  width: 15px;
+  height: 15px;
+  border-radius: 4rem;
+  z-index: 1;
+}
+
+.user-info-box {
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  display: flex;
+  margin-left: 40px;
+}
+
+.summoner-profile-icon-box img {
+  width: 50px;
+  height: 50px;
+  border-radius: 1rem;
+}
+
+.summoner-name-box {
+  margin-left: 10px;
+  background-color: #2f3f68;
+  height: 50px;
+  padding: 10px;
+  border-radius: 1rem;
+  padding-top: 12px;
+  color: #ececec;
+}
+
+.user-type-common {
+  padding-top: 6px;
+  margin-left: 10px;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  display: flex;
+  color: #ececec;
+  background-color: #2f3f68;
+  width: 130px;
+  height: 50px;
+  border-radius: 1rem;
+}
+
+.user-type-mentor {
+  padding-top: 6px;
+  margin-left: 10px;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  display: flex;
+  color: #edf1ff;
+  background-color: #1f52dd;
+  width: 130px;
+  height: 50px;
+  border-radius: 2rem;
+}
+
+.user-type-admin {
+  padding-top: 6px;
+  margin-left: 10px;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  display: flex;
+  color: #ffffff;
+  background-color: #00d4b8;
+  width: 130px;
+  height: 50px;
+  border-radius: 2rem;
+}
+
+.user-type-stop {
+  padding-top: 6px;
+  margin-left: 10px;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  display: flex;
+  color: #ffffff;
+  background-color: #ff0000;
+  width: 130px;
+  height: 50px;
+  border-radius: 2rem;
+}
+
+.logout-button-box {
+  margin-top: auto;
+  margin-left: 40px;
+}
+
+.logout-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: #202B46;
+  color: #c5c7ce;
+  font-size: 20px;
+  font-weight: 700;
+  width: 150px;
+  height: 50px;
+  border-radius: 4rem;
+}
+
+.logout-button:hover {
+  background-color: #2f3f68;
+}
