@@ -158,4 +158,14 @@ public class AdminService {
 		return val;
   }
 
+  public boolean notice_reply_update(int t_r_num, String t_r_content) {
+		boolean result = ad.notice_reply_update(t_r_num, t_r_content);
+		return result;
+  }
+
+	public NoticeReply get_reply_info(int t_r_num) {
+		NoticeReply n_reply = ad.get_notice_reply(t_r_num);
+		return n_reply;
+	}
+
 }

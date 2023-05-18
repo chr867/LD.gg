@@ -96,7 +96,7 @@ function deleteComment(t_r_num) {  // 댓글 삭제
 
 function modifyReplyBtn(t_r_num) {  // 댓글 수정
   $.ajax({
-      method: 'get',
+      method: 'post',
       url: '/userinterface/notice/reply-modify',
       data: {t_r_num: t_r_num},
   }).done(res => {
@@ -125,4 +125,26 @@ function modifyReplyBtn(t_r_num) {  // 댓글 수정
   }).fail(err => {
       console.log(err);
   });
+}
+
+function submitModifiedComment(t_r_num) {  // 댓글 수정 작업
+	console.log(t_r_num);
+
+    const t_r_content = document.getElementById('content_input_num_' + t_r_num).value;
+    $.ajax({
+        method: 'post',
+        url: '/userinterface/notice/reply-modify.do',
+        data: {t_r_num: t_r_num, t_r_content: t_r_content},
+      }).done(res=>{
+        console.log(res);
+        if (res) {
+            console.log(res);
+            loadComments(); //댓글 수정시 비동기로 댓글로드
+        } else {
+            console.log(res)
+            alert("댓글 수정 실패")
+        } 
+      }).fail(err=>{
+        console.log(err);
+      }); 
 }

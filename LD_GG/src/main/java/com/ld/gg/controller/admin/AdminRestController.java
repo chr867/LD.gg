@@ -78,6 +78,25 @@ public class AdminRestController {
 			return result;
 		}
 
+		@PostMapping("/notice/reply-modify")
+		public boolean notice_reply_modify(HttpSession session, int t_r_num) {
+			log.info(t_r_num+"번 댓글 데이터 가져오기 시작");
+			String email = (String)session.getAttribute("email");
+			NoticeReply repylInfo = as.get_reply_info(t_r_num);
+			return email.equals(repylInfo.getEmail());
+		}
+
+		@PostMapping("/notice/reply-modify.do")
+		public boolean notice_reply_modify(int t_r_num, String t_r_content) {
+			log.info("댓글번호!"+t_r_num);
+			log.info("댓글내용!"+t_r_content);
+			NoticeReply n_reply = new NoticeReply();
+			n_reply.setT_r_num(t_r_num).setT_r_content(t_r_content);
+			boolean updateResult = as.notice_reply_update(t_r_num, t_r_content);
+			
+			return updateResult;
+		}
+
 		@PostMapping("/admin/ad/regist")
 		public boolean adInsert(String ad_advertiser, String ad_name, String ad_start, String ad_end, int ad_pay) {
 			

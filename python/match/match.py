@@ -7,100 +7,118 @@ import json
 import data_load
 tqdm.pandas()
 
-sql_conn = mu.connect_mysql()
-df = data_load.match_raw_patch(0)
-sql_conn.close()
+print("시작!")
+conn = mu.connect_mysql()
+matchId_count = pd.DataFrame(mu.mysql_execute_dict(f"SELECT match_id_substr FROM match_raw_patch", conn))
+conn.close()
+print(f'매치아이디 갯수 : {len(matchId_count.match_id_substr.unique())}개')
 
-df['matches'] = df.progress_apply(lambda x: json.loads(x['matches']), axis=1)
-df['timeline'] = df.progress_apply(lambda x: json.loads(x['timeline']), axis=1)
+batch_size = 20000
+win_pick_lst_result = []
+ban_rate_lst_result = []
+meta_score_lst_result = []
+# len(matchId_count.match_id_substr.unique())
+for limit in tqdm(range(0, len(matchId_count.match_id_substr.unique()), batch_size)):
+    conn = mu.connect_mysql()
+    query = f"SELECT * FROM match_raw_patch LIMIT {limit}, {batch_size}"
+    df = pd.DataFrame(mu.mysql_execute_dict(query, conn))
+    conn.close()
 
-df_creater = []
-columns = [
-    'api_key', 'match_id', 'gameDuration', 'gameVersion', 'summonerName', 'summonerId', 'summonerLevel', 'participantId', 'championName',
-    'championId', 'ban_champion_id', 'champExperience', 'teamPosition', 'teamId', 'win', 'kills', 'deaths', 'assists', 'towerDestroy', 'inhibitorDestroy',
-    'dealToObject', 'dealToChamp', 'cs',
-    'g_5', 'g_6', 'g_7', 'g_8', 'g_9', 'g_10', 'g_11', 'g_12', 'g_13', 'g_14', 'g_15', 'g_16',
-    'g_17', 'g_18', 'g_19', 'g_20', 'g_21', 'g_22', 'g_23', 'g_24', 'g_25'
-]
+    df['matches'] = df.progress_apply(lambda x: json.loads(x['matches']), axis=1)
+    df['timeline'] = df.progress_apply(lambda x: json.loads(x['timeline']), axis=1)
 
-for m_idx, m in tqdm(enumerate(df['matches'])):
-    if m['gameDuration'] < 900:
-        continue
-    p_idx = 1
-    tower_destroy = 0
-    bans = 0
+    df_creater = []
+    columns = [
+        'api_key', 'match_id', 'gameDuration', 'gameVersion', 'summonerName', 'summonerId', 'summonerLevel', 'participantId', 'championName',
+        'championId', 'ban_champion_id', 'champExperience', 'teamPosition', 'teamId', 'win', 'kills', 'deaths', 'assists', 'towerDestroy', 'inhibitorDestroy',
+        'dealToObject', 'dealToChamp', 'cs',
+        'g_5', 'g_6', 'g_7', 'g_8', 'g_9', 'g_10', 'g_11', 'g_12', 'g_13', 'g_14', 'g_15', 'g_16',
+        'g_17', 'g_18', 'g_19', 'g_20', 'g_21', 'g_22', 'g_23', 'g_24', 'g_25'
+    ]
 
-    for p_idx, p in enumerate(m['participants']):
-        game_end = list(df.iloc[m_idx]['timeline'].keys())[-1]
-        minions_killed = df.iloc[m_idx]['timeline'][game_end]['participantFrames'][p_idx]['minionsKilled']
-        jungle_minions_killed = df.iloc[m_idx]['timeline'][game_end]['participantFrames'][p_idx]['jungleMinionsKilled']
-        cs = minions_killed + jungle_minions_killed
-
-        tmp_lst = list(map(lambda x: x['events'], df.iloc[m_idx]['timeline'].values()))
-        event_lst = [element for array in tmp_lst for element in array]
-
-        building_log = [i for i in event_lst if i['type'] == 'BUILDING_KILL']
-        tower_log = [i for i in building_log if i['buildingType'] == 'TOWER_BUILDING']
-        inhibitor_log = [i for i in building_log if i['buildingType'] == 'INHIBITOR_BUILDING']
-
-        elite_monster_log = [i for i in event_lst if i['type'] == 'ELITE_MONSTER_KILL']
-        dragon_log = [i for i in elite_monster_log if i['monsterType'] == 'DRAGON']
-        baron_log = [i for i in elite_monster_log if i['monsterType'] == 'BARON_NASHOR']
-
+    for m_idx, m in tqdm(enumerate(df['matches'])):
+        if m['gameDuration'] < 900:
+            continue
+        p_idx = 1
         tower_destroy = 0
-        for event in tower_log:
-            if p_idx == event['killerId']:
-                tower_destroy += 1
+        bans = 0
 
-        inhibitor_destroy = 0
-        for event in inhibitor_log:
-            if p_idx == event['killerId']:
-                inhibitor_destroy += 1
+        for p_idx, p in enumerate(m['participants']):
+            game_end = list(df.iloc[m_idx]['timeline'].keys())[-1]
+            minions_killed = df.iloc[m_idx]['timeline'][game_end]['participantFrames'][p_idx]['minionsKilled']
+            jungle_minions_killed = df.iloc[m_idx]['timeline'][game_end]['participantFrames'][p_idx]['jungleMinionsKilled']
+            cs = minions_killed + jungle_minions_killed
 
-        if p['teamId'] == 100:
-            team = 0
-        else:
-            team = 1
+            tmp_lst = list(map(lambda x: x['events'], df.iloc[m_idx]['timeline'].values()))
+            event_lst = [element for array in tmp_lst for element in array]
 
-        if bans == 5:
-            bans = 0
+            building_log = [i for i in event_lst if i['type'] == 'BUILDING_KILL']
+            tower_log = [i for i in building_log if i['buildingType'] == 'TOWER_BUILDING']
+            inhibitor_log = [i for i in building_log if i['buildingType'] == 'INHIBITOR_BUILDING']
 
-        df_creater.append([
-            df['api_key'][m_idx],
-            df.iloc[m_idx]['match_id'],
-            m['gameDuration'],
-            m['gameVersion'],
-            p['summonerName'],
-            p['summonerId'],
-            p['summonerLevel'],
-            p['participantId'],
-            p['championName'],
-            p['championId'],
-            m['bans'][p_idx],
-            p['champExperience'],
-            p['teamPosition'],
-            p['teamId'],
-            p['win'],
-            p['kills'],
-            p['deaths'],
-            p['assists'],
-            tower_destroy,
-            inhibitor_destroy,
-            p['damageDealtToObjectives'],
-            p['totalDamageDealtToChampions'],
-            cs
-        ])
-        p_idx += 1
-        bans += 1
-        p_id = 0
-        for t in range(5, 26):
-            try:
-                g_each = df.iloc[m_idx]['timeline'][str(t)]['participantFrames'][p_id]['totalGold']
-                df_creater[-1].append(g_each)
-                p_id += 1
-            except:
-                df_creater[-1].append(0)
-sum_df = pd.DataFrame(df_creater, columns=columns)
+            elite_monster_log = [i for i in event_lst if i['type'] == 'ELITE_MONSTER_KILL']
+            dragon_log = [i for i in elite_monster_log if i['monsterType'] == 'DRAGON']
+            baron_log = [i for i in elite_monster_log if i['monsterType'] == 'BARON_NASHOR']
+
+            tower_destroy = 0
+            for event in tower_log:
+                if p_idx == event['killerId']:
+                    tower_destroy += 1
+
+            inhibitor_destroy = 0
+            for event in inhibitor_log:
+                if p_idx == event['killerId']:
+                    inhibitor_destroy += 1
+
+            if p['teamId'] == 100:
+                team = 0
+            else:
+                team = 1
+
+            if bans == 5:
+                bans = 0
+
+            df_creater.append([
+                df['api_key'][m_idx],
+                df.iloc[m_idx]['match_id'],
+                m['gameDuration'],
+                m['gameVersion'],
+                p['summonerName'],
+                p['summonerId'],
+                p['summonerLevel'],
+                p['participantId'],
+                p['championName'],
+                p['championId'],
+                m['bans'][p_idx],
+                p['champExperience'],
+                p['teamPosition'],
+                p['teamId'],
+                p['win'],
+                p['kills'],
+                p['deaths'],
+                p['assists'],
+                tower_destroy,
+                inhibitor_destroy,
+                p['damageDealtToObjectives'],
+                p['totalDamageDealtToChampions'],
+                cs
+            ])
+            p_idx += 1
+            bans += 1
+            p_id = 0
+            for t in range(5, 26):
+                try:
+                    g_each = df.iloc[m_idx]['timeline'][str(t)]['participantFrames'][p_id]['totalGold']
+                    df_creater[-1].append(g_each)
+                    p_id += 1
+                except:
+                    df_creater[-1].append(0)
+    sum_df = pd.DataFrame(df_creater, columns=columns)
+    sum_df['summonerTier'] = sum_df.progress_apply(lambda x: summoner_tier(x), axis=1)
+    sql_conn = mu.connect_mysql()
+    sum_df.progress_apply(lambda x: insert(x, sql_conn), axis=1)
+    sql_conn.commit()
+    sql_conn.close()
 
 def summoner_tier(x):
     url = f'https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/{x.summonerId}?api_key={x.api_key}'
@@ -116,8 +134,6 @@ def summoner_tier(x):
         res = 0
 
     return res
-
-sum_df['summonerTier'] = sum_df.progress_apply(lambda x: summoner_tier(x), axis=1)
 
 def insert(t, conn):
     sql = (
@@ -135,7 +151,3 @@ def insert(t, conn):
     )
     mu.mysql_execute(sql, conn)
 
-sql_conn = mu.connect_mysql()
-sum_df.progress_apply(lambda x: insert(x, sql_conn), axis=1)
-sql_conn.commit()
-sql_conn.close()
