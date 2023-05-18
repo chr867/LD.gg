@@ -210,12 +210,12 @@
         <img src="/resources/img/icon/free-icon-message-5941217.png" alt="" class="message-icon-img">
         <div class="message-notification"></div>
       </div>
-      <div class="alarm-icon-box" style="display: none;">
+      <div class="alarm-icon-box">
         <img src="/resources/img/icon/free-icon-notification-bell-3680267.png" alt=""
           class="alarm-icon-img">
         <span class="alarm-notification"></span>
       </div>
-      <div class="bookmark-icon-box" style="display: none;">
+      <div class="bookmark-icon-box">
         <img src="/resources/img/icon/free-icon-bookmark-white-25667.png" alt=""
           class="bookmark-icon-img">
       </div>
@@ -249,7 +249,9 @@
     </div>
 
     <div class="logout-button-box" style="display: none;">
-      <button class="logout-button" onclick="logout()">LOGOUT</button>
+      	<form id="logoutFrm" action="/member/logout" method="post">
+    		<button class="logout-button" onclick="logout()">LOGOUT</button>
+		</form>
     </div>
 
   </header>
@@ -321,36 +323,12 @@
 <!-- 메인 컨테이너 -->
 <div class="main-container">
   <h1>index.jsp</h1>
-  <form action="/member/login" name="logFrm" method="post">
-    <table border="1">
-      <tr>
-        <td colspan="2" align="center">로그인</td>
-      </tr>
-      <tr>
-        <td><input type="text" name="email"></td>
-        <td rowspan="2"><button>로그인</button>
-      </tr>
-      <tr>
-        <td><input type="password" name="password"></td>
-      </tr>
-      <tr>
-        <td colspan="2" align="center" bgcolor="skyblue">마 쪼리나?</td>
-      </tr>
-      <tr>
-        <td colspan="2" align="center"><a href="/member/join">회원가입</a></td>
-      </tr>
-    </table>
-  </form>
-  <a href="/member/findEmail">이메일 찾기</a>
-  <a href="/member/findPassword">비밀번호 찾기</a>
-  <p>이메일 : ${sessionScope.email}</p>
-  <p>롤 계정 : ${sessionScope.lol_account}</p>
-  <p>유저 타입 : ${sessionScope.user_type}</p>
-  <form id="logoutFrm" action="/member/logout" method="post">
-    <a href="javascript:logout()">로그아웃</a>
-  </form>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>			
   <a href="/member/testMain">테스트메인</a>
-  <button onclick="loginCheck()">로그인확인버튼</button>
   <br>
   <br>
   <br>
@@ -367,53 +345,39 @@
 </div>
 </body>
 <script type="text/javascript">
-/* 	document.addEventListener("DOMContentLoaded", function () {
-		let email = "${sessionScope.email}";
-		if (email !== "") {
-			var loginForm = document.querySelector('form[name="logFrm"]');
-			loginForm.style.display = 'none';
-		}
-	}); */
+//세션 체크 메소드 페이지 로드시 메소스 실행 필요 
 function sessionCheck() {
-	let summonerName = ${sessionScope.lol_account}
-	let userType = ${sessionScope.user_type}
-	if(summonerName == ''){
-		document.getElementsByClassName('user-info-box').style.display = 'none'
-		document.getElementsByClassName('header-icon-box').style.display = 'none'
-	}else{
-		document.getElementsByClassName('user-info-box').style.display = 'block'
-		document.getElementsByClassName('header-icon-box').style.display = 'block'
-		document.getElementsByClassName('logout-button-box').style.display = 'block'
-		document.getElementsByClassName('login-button-box').style.display = 'none'
-		switch (userType) {
-		  case 1:
-			  document.getElementsByClassName('user-type-common').style.display = 'none'
-			  document.getElementsByClassName('user-type-mentor').style.display = 'block'
-			  document.getElementsByClassName('user-type-admin').style.display = 'block'
-			  document.getElementsByClassName('user-type-stop').style.display = 'block'
-		    break;
-		  case 2:
-			  document.getElementsByClassName('user-type-common').style.display = 'block'
-		      document.getElementsByClassName('user-type-mentor').style.display = 'none'
-			  document.getElementsByClassName('user-type-admin').style.display = 'block'
-			  document.getElementsByClassName('user-type-stop').style.display = 'block'
-		    break;
-		  case 3:
-			  document.getElementsByClassName('user-type-common').style.display = 'block'
-			  document.getElementsByClassName('user-type-mentor').style.display = 'block'
-			  document.getElementsByClassName('user-type-admin').style.display = 'none'
-			  document.getElementsByClassName('user-type-stop').style.display = 'block'
-		    break;
-		  case 4:
-			  document.getElementsByClassName('user-type-common').style.display = 'block'
-			  document.getElementsByClassName('user-type-mentor').style.display = 'block'
-			  document.getElementsByClassName('user-type-admin').style.display = 'block'
-			  document.getElementsByClassName('user-type-stop').style.display = 'none'
-		    break;
-		}
-	}
+	  let summonerName = '${sessionScope.lol_account}';
+	  let userType = '${sessionScope.user_type}';
+
+	  if (summonerName == '') {
+	    $('.user-info-box, .header-icon-box').hide();
+	  } else {
+	    $('.user-info-box, .header-icon-box').show();
+	    $('.logout-button-box').show();
+	    $('.login-button-box').hide();
+
+	    switch (userType) {
+	      case '1':
+	        $('.user-type-common').show();
+	        $('.user-type-mentor, .user-type-admin, .user-type-stop').hide();
+	        break;
+	      case '2':
+	        $('.user-type-common, .user-type-admin, .user-type-stop').hide();
+	        $('.user-type-mentor').show();
+	        break;
+	      case '3':
+	        $('.user-type-common, .user-type-mentor, .user-type-stop').hide();
+	        $('.user-type-admin').show();
+	        break;
+	      case '4':
+	        $('.user-type-common, .user-type-mentor, .user-type-admin').hide();
+	        $('.user-type-stop').show();
+	        break;
+    }
+  }
 }
-	
+sessionCheck();
 //로그인 체크 메소드 로그인버튼 클릭시 실행 
 function loginCheck() {
 	$.ajax({
@@ -428,29 +392,32 @@ function loginCheck() {
 		console.log(err);
 	});
 }
+
 //로그아웃 버튼 메소드
 function logout() {
 	document.querySelector('#logoutFrm').submit();
+	alert("로그아웃 되었습니다.");
 }
 
-	let check = ${check}
-	 
-	console.log(check);
-	if (check === 1) {
-		Swal.fire({
-			icon: 'success',
-			title: '회원가입성공',
-			text: '로그인해주세요!!!'
-		})
-		//alert('회원가입 성공');
-	} else if (check === 2) {
-		//alert('로그인 실패');
-		Swal.fire({
-			icon: 'error',
-			title: '로그인 실패',
-			text: '아이디 또는 비번 오류입니다!!'
-		})
+function loginReturnNumber(check) {
+	  if (check === 1) {
+	    Swal.fire({
+	      icon: 'success',
+	      title: '회원가입 성공',
+	      text: '로그인해주세요!!!'
+	    });
+	  } else if (check === 2) {
+	    Swal.fire({
+	      icon: 'error',
+	      title: '로그인 실패',
+	      text: '아이디 또는 비번 오류입니다!!'
+	    });
+	  }
 	}
+
+// loginReturnNumber 호출 시 적절한 값을 전달해야 합니다.
+loginReturnNumber(${check});
+
 </script>
 
 </html>

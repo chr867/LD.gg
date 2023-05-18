@@ -54,7 +54,7 @@ public class MemberController {
 		    sl.login(member.getEmail(),request);
             
 			ra.addFlashAttribute("msg", "로그인 성공");
-			return new ModelAndView("redirect:/member/testMain");
+			return new ModelAndView("redirect:/");
 		}
 		ra.addFlashAttribute("msg", "로그인 실패");
 		ra.addFlashAttribute("check", 2);
