@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,9 +29,10 @@ public class SummonerController {
 	}
 
 	@GetMapping(value = "/info")
-	public ModelAndView summoner_info(@RequestParam String summoner_name) {
-	    List<SummonerDto> s = ss.get_summoner_info(summoner_name);
-	    return new ModelAndView("summonerInfo").addObject("summoner", s);
+	public String summonerInfo(@RequestParam String summoner_name, Model model) {
+	    List<SummonerDto> summonerInfo = ss.get_summoner_info(summoner_name);
+	    model.addAttribute("summoner", summonerInfo);
+	    return "summonerInfo";
 	}
 
 	@PostMapping(value = "/renewal")
