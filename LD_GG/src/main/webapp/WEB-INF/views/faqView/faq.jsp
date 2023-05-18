@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>faq</title>
-</head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
   /* CSS 스타일을 여기에 작성합니다. */
@@ -29,13 +29,15 @@
   }
 </style>
 
+</head>
 <body>
   faq 페이지입니다~~
   <p class="question-title">궁금한 점이 있으신가요?<br>먼저 아래의 자주 묻는 질문을 확인해주세요!</p>
   
-  <div class="question-list-box" id="faqListBox">
+  <div class="accordion" id="faqListBox">
   </div>
   
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
   <script>
     $(document).ready(function() {
     	$.ajax({
@@ -44,20 +46,44 @@
     		  success: function(res) {
     		    // 서버로부터 받은 데이터(response)를 처리합니다.
     		    let faq_list = JSON.parse(res);
-    		    faq_list.forEach(faq => {
-    		    	const $details = $("<details>");
-	   		    	  const $summary = $("<summary>").text(faq.questions_list);
-	   		    	$details.append($summary)
-	   		    	  let questions_line = faq.answers_list.split('/')
-	   		    	  const $ul = $("<ul>"); // 새로운 ul 요소 생성
-	   		    	  for(let i =0; i < questions_line.length ; i++){
-	   		    		const $li = $("<li>").text(questions_line[i]); // 질문을 li 요소로 생성
-	   		    	    $ul.append($li); // li 요소를 ul 요소에 추가
-	   		    	  }
-	   		    	$details.append($ul);
-	   		    	const $div = $("<div>").append($details);
-    		        $('.question-list-box').append($div);
-    		      });
+    		    faq_list.forEach((faq, index) => {
+    		    	  const $details = $("<details>");
+    		    	  const $summary = $("<summary>").text(faq.questions_list);
+    		    	  $details.append($summary);
+
+    		    	  const questions_line = faq.answers_list.split('/');
+    		    	  const $ul = $("<ul>");
+    		    	  questions_line.forEach((question) => {
+    		    	    const $li = $("<li>").text(question);
+    		    	    $ul.append($li);
+    		    	  });
+    		    	  $details.append($ul);
+
+    		    	  const $div = $("<div>").append($details);
+    		    	  const accordionItem = $('<div>').addClass('accordion-item');
+    		    	  const accordionHeader = $('<h2>').addClass('accordion-header');
+    		    	  const accordionButton = $('<button>').addClass('accordion-button collapsed').attr({
+    		    	    'type': 'button',
+    		    	    'data-bs-toggle': 'collapse',
+    		    	    'data-bs-target': '#collapse' + index,
+    		    	    'aria-expanded': 'false',
+    		    	    'aria-controls': 'collapse' + index
+    		    	  }).text(faq.questions_list);
+    		    	  accordionHeader.append(accordionButton);
+
+    		    	  const accordionCollapse = $('<div>').attr({
+    		    	    'id': 'collapse' + index,
+    		    	    'class': 'accordion-collapse collapse',
+    		    	    'data-bs-parent': '#accordion'
+    		    	  });
+    		    	  const accordionBody = $('<div>').addClass('accordion-body').html(faq.answers_list);
+    		    	  accordionCollapse.append(accordionBody);
+
+    		    	  accordionItem.append(accordionHeader);
+    		    	  accordionItem.append(accordionCollapse);
+
+    		    	  $('.accordion').append(accordionItem);
+    		    	});
     		  },
     		  error: function(error) {
     		    // 요청이 실패했을 때의 처리를 수행합니다.

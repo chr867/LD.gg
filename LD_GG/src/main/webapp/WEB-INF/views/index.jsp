@@ -162,10 +162,10 @@ body {
 						aria-labelledby="headingThree" data-bs-parent="#accordionExample">
 						<div class="accordion-body">
 							<div class="accordion-body-menu">
-								<a href="" class="accordion-body-link"><span>• 멘토 요청</span></a>
+								<a href="/mentor/custom-mentor/" class="accordion-body-link"><span>• 맞춤 멘토</span></a>
 							</div>
 							<div class="accordion-body-menu">
-								<a href="" class="accordion-body-link"><span>• 멘토 찾기</span></a>
+								<a href="/mentor/list/" class="accordion-body-link"><span>• 멘토 찾기</span></a>
 							</div>
 						</div>
 					</div>
@@ -206,14 +206,14 @@ body {
 								<a href="" class="accordion-body-link"><span>• 대시보드</span></a>
 							</div>
 							<div class="accordion-body-menu">
-								<a href="" class="accordion-body-link"><span>• 프로필</span></a>
+								<a href="/mentor/write-profile" class="accordion-body-link"><span>• 프로필</span></a>
 							</div>
 							<div class="accordion-body-menu">
 								<a href="" class="accordion-body-link"><span>• 개인정보
 										수정</span></a>
 							</div>
 							<div class="accordion-body-menu">
-								<a href="" class="accordion-body-link"><span>• 마이 멘토링</span></a>
+								<a href="/mentor/my-mentoring/" class="accordion-body-link"><span>• 마이 멘토링</span></a>
 							</div>
 							<div class="accordion-body-menu">
 								<a href="" class="accordion-body-link"><span>• 내 지갑</span></a>
@@ -238,7 +238,10 @@ body {
 								<a href="" class="accordion-body-link"><span>• 공지사항</span></a>
 							</div>
 							<div class="accordion-body-menu">
-								<a href="" class="accordion-body-link"><span>• FAQ</span></a>
+								<a href="/faq/" class="accordion-body-link"><span>• FAQ</span></a>
+							</div>
+							<div class="accordion-body-menu">
+								<a href="/faq/inquiries/" class="accordion-body-link"><span>• 문의사항</span></a>
 							</div>
 						</div>
 					</div>

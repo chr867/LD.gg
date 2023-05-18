@@ -31,20 +31,5 @@ public class FaqContoroller {
 		return new ModelAndView("faqView/inquiriesList")
 				.addObject("member", mbdto);
 	}
-	
-	@GetMapping("/detail")
-	public String go_inquiries_detail() {
-		return "faqView/inquiriesDetails";
-	}
-	
-	@GetMapping("/write")
-	public String go_inquiries_write() {
-		return "faqView/inquiriesWrite";
-	}
-	
-	@GetMapping("/modify")
-	public String go_inquiries_modify() {
-		return "faqView/inquiriesModify";
-	}
 
 }
