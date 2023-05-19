@@ -133,20 +133,72 @@ a[href="/tip/write"] {
   line-height: 40px;
 }
 
- .lane-select-box{
- 	display: flex;
- 	height: 50px;
- 	justify-content: center;
-	width: 90%;
-	margin: auto;
-	margin-top: 10px;
-	background-color: navy;
-	box-sizing: border-box;
+ .lane-select-box {
+    display: flex;
+    height: 50px;
+    justify-content: space-between;
+    width: 90%;
+    margin: auto;
+    margin-top: 10px;
+    background-color: #E4E6EF;
+    box-sizing: border-box;
+    padding: 0 50px 0 50px;
+    margin-bottom: 20px;
 }
-.lane{
-	width: 50px;
-	height: 50px;
-	background-color: #fff;
+
+.lane-img img {
+    width: 50px;
+    height: 50px;
+}
+
+.lane-img {
+    border-radius: 0.5rem;
+    transition: 0.5s;
+}
+
+.lane-img:hover,
+.lane-img:active {
+    background-color: #fff;
+}
+
+.champion-img-container {
+    width: 90%;
+    background-color: #E4E6EF;
+    height: 600px;
+    margin: auto;
+    box-sizing: border-box;
+    overflow-y: auto;
+    max-height: 600px;
+}
+
+.champions {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: center;
+    box-sizing: border-box;
+    flex-wrap: wrap;
+    padding: 5px;
+}
+
+.champions img {
+    width: 60px;
+    height: 60px;
+    border-radius: 1rem;
+    border: 5px solid #fff;
+    transition : 0.5s;
+}
+.champions img:hover{
+    transform: scale(1.3);
+    z-index: 1;
+}
+
+.champion {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin: 5px;
+    flex-grow: 1;
 }
 </style>
 <body>
@@ -488,11 +540,16 @@ a[href="/tip/write"] {
 	<div class="main-container">
 		<div class="champion-container">
 			<div class="lane-select-box">
-				<div class="lane">TOP</div>
-				<div class="lane">JUN</div>
-				<div class="lane">MID</div>
-				<div class="lane">BOT</div>
-				<div class="lane">SUP</div>
+				<div class="lane-img lane-top" onclick="selectLane('TOP')"><img src="/resources/img/ranked-positions/Position_Silver-Top.png" alt="로그인 이미지"></div>
+				<div class="lane-img lane-jungle" onclick="selectLane('JUNGLE')"><img src="/resources/img/ranked-positions/Position_Silver-Jungle.png" alt="로그인 이미지"></div>
+				<div class="lane-img lane-middle" onclick="selectLane('MIDDLE')"><img src="/resources/img/ranked-positions/Position_Silver-Mid.png" alt="로그인 이미지"></div>
+				<div class="lane-img lane-bottom" onclick="selectLane('BOTTOM')"><img src="/resources/img/ranked-positions/Position_Silver-Bot.png" alt="로그인 이미지"></div>
+				<div class="lane-img lane-support" onclick="selectLane('UTILITY')"><img src="/resources/img/ranked-positions/Position_Silver-Support.png" alt="로그인 이미지"></div>
+			</div>
+			<div class="champion-img-container">
+				<div class="champions">
+
+				</div>
 			</div>
 		</div>
 		<div class="tip-list-container">
@@ -588,6 +645,47 @@ let keyword = document.getElementById('keyword').value;
 		}
 	}).trigger("reloadGrid");
 })
+
+function championList() {
+    $.ajax({
+        method: 'get',
+        url: '/tip/champion/list'
+    }).done(res => {
+        var championHTML = '';
+        res.forEach(function(champion) {
+        	championHTML += '<div class="champion">';
+        	championHTML += '<img alt="' + champion.champion_kr_name + '" class="bg-image champion-img" src="/resources/img/champion_img/square/' + champion.champion_img + '"/>';
+        	championHTML += '</div>';
+        });
+
+        $('.champions').html(championHTML);
+    }).fail(err => {
+        console.log(err);
+    });
+}
+
+championList();
+
+
+function selectLane(team_position) {
+	$('.champions').empty();
+	$.ajax({
+		method: 'get',
+		url: '/tip/champion/lane',
+		data: {team_position:team_position},
+	}).done(res=>{
+        var championHTML = '';
+        res.forEach(function(champion) {
+        	championHTML += '<div class="champion">';
+        	championHTML += '<img alt="' + champion.champion_kr_name + '" class="bg-image champion-img" src="/resources/img/champion_img/square/' + champion.champion_img + '"/>';
+        	championHTML += '</div>';
+        });
+
+        $('.champions').html(championHTML);
+	}).fail(err=>{
+		console.log(err);
+	})
+} 
 
 </script>
 </html>
