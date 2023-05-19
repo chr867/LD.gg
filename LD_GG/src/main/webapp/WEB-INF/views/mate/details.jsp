@@ -171,6 +171,10 @@ th {
 		<button onclick=mateDelete(${MateDetails.mate_id}) id="deleteButton">게시물
 			삭제하기</button>
 		<br>
+		<table id="comment-select">
+
+		</table>
+		<br>
 		<h2>댓글</h2>
 		<div id="comment-section">
 			<div id="comment-form">
@@ -178,9 +182,7 @@ th {
 				<button id="comment-submit-btn" onclick="submitComment()">등록</button>
 			</div>
 
-			<table id="comment-select">
 
-			</table>
 			<table id="comment-list">
 
 			</table>
@@ -257,8 +259,7 @@ function loadComments() {
         	if(myEmail===reply.email && myEmail !=reply.mate_apply &&reply.mate_select===0){
         		selectButton = '<td><button id="comment-select-btn-'+reply.mate_r_id+'" onclick="selectCommentModify('+reply.mate_id+','+reply.mate_r_id+')">선택</button></td>'
         	}else if(myEmail===reply.mate_apply){
-        		deleteButton = '<td><button id="comment-delete-btn-'+reply.mate_r_id+'" onclick="deleteComment('+reply.mate_r_id+')">삭제</button></td>'
-        		modifyButton = '<td><button id="comment-modify-btn-'+reply.mate_r_id+'" onclick="modifyReplyBtn('+reply.mate_r_id+')">수정</button></td>'
+        		selectButton = '<td><button id="comment-delete-btn-'+reply.mate_r_id+'" onclick="deleteComment('+reply.mate_id+','+reply.mate_r_id+')">삭제</button></td>'
         	}
         	replyList += '<tr height="35" align="center" id="reply_box_'+reply.mate_r_id+'">'
         	replyList += '<td width="100">'+reply.lol_account+'</td>'
@@ -267,7 +268,6 @@ function loadComments() {
         	replyList += '<td width="100">'+reply.mate_r_date+'</td>'
         	replyList += selectButton
         	replyList += deleteButton
-        	replyList += modifyButton
         	replyList += '</tr>'
         });
         console.log(replyList);
@@ -311,20 +311,43 @@ function selectComment() {
     	let selectList="";
     	
         	selectList += '<h2>메이트 메칭</h2>'
+        	selectList += '<tr>'
+        	selectList += '<td width="100">소환사명</td>'
+        	selectList += '<td width="300" id="content_num_'+res.mate_r_id+'">내용</td>'
+        	selectList += '<td width="100">최근승률</td>'
+        	selectList += '</tr>'
+        	selectList += '<tr>'
         	selectList += '<td width="100">'+res.lol_account+'</td>'
         	selectList += '<td width="300" id="content_num_'+res.mate_r_id+'">'+res.mate_r_content+'</td>'
-        	selectList += '<td width="100">최근승률 자리</td>'
+        	selectList += '<td width="100">최근승률 자리(티어,라인등 기타정보)</td>'
         	selectList += '</tr>'
         	console.log(selectList);
         	loadComments();
         $('#comment-select').html(selectList)
-    	}else{
-    		alert("메이트선택 오류")
-    		location.href = "/mate/modify?mate_id="+mate_id;
     	}
     }).fail(err => {
         console.log(err);
     }); 
+}
+function deleteComment(mate_id,mate_r_id) {
+		$.ajax({
+	        method: 'post',
+	        url: '/mate/reply/delete',
+	        data: {mate_id : mate_id, mate_r_id : mate_r_id}
+	    }).	done(res=>{
+	    	if(res){
+	    		console.log("res"+res)
+	    		alert("댓글 삭제 성공");
+    			location.href = "/mate/details?mate_id="+mate_id;
+	    	}else{
+	    		alert("댓글 삭제 실패");
+    			location.href = "/mate/details?mate_id="+mate_id;
+	    	}
+	    }).fail(err => {
+	        console.log(err);
+	    });
+	
+	
 }
 /*function selectComment() {
     $.ajax({

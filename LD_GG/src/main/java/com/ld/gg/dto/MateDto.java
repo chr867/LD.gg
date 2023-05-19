@@ -25,6 +25,8 @@ public class MateDto {
 //	private String email;//메이트 게시글 작성자
 	private String mate_apply;//메이트 신청 유저
 	private String mate_r_content;//메이트 신청 글 내용
+	private String bookmark_page;//즐겨찾기 페이지명
+	private int bookmark_val;//즐겨찾기 val 값
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private	String mate_r_date;//메이트 신청 시간
 	private int mate_select;//  메이트 간택

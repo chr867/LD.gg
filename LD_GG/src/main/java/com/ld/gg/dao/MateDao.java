@@ -1,6 +1,9 @@
 package com.ld.gg.dao;
 
 import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
 
 import com.ld.gg.dto.MateDto;
 import com.ld.gg.dto.TipDto;
@@ -19,4 +22,7 @@ public interface MateDao {
 	Integer mateModify(MateDto mDto);
 	Integer replyMateModify(MateDto mDto);
 	Integer mateDelete(int mate_id);
+	Integer replydelete(@Param("mate_id") int mate_id,@Param("mate_r_id") int mate_r_id);
+	List<MateDto> getSearchList(String keyword);
+	Integer modifybookmark(MateDto mDto);
 }

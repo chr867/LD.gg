@@ -1,6 +1,8 @@
 package com.ld.gg.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -141,5 +143,74 @@ public class MateService {
 		return getReplySelect;
 	}
 
+		/*public int mateReplyDelete(int mate_id, int mate_r_id) {
+		log.info(mate_id+"mate_id");
+		log.info(mate_r_id+"mate_r_id");
+		try {
+			Integer replydeleteResult = mDao.replydelete(mate_id,mate_r_id);
+			log.info(replydeleteResult+"replydeleteResult");
+			if (replydeleteResult != 0) {
+				log.info(replydeleteResult+"replydeleteResult");
+				return 1;
+			} else {
+				log.info("메이트 서비스 리플델리트 실패");
+				return 2;
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+			e.printStackTrace();
+			return 4;
+		}
 
+	}*/
+	public int mateReplyDelete(int mate_id, int mate_r_id) {
+	    log.info(mate_id + "mate_id");
+	    log.info(mate_r_id + "mate_r_id");
+	    
+	    try {
+	       /* Map<String, Object> params = new HashMap<>();
+	        params.put("mate_id", mate_id);
+	        params.put("mate_r_id", mate_r_id);
+	        log.info(params + "params");*/
+	        
+	        int replydeleteResult = mDao.replydelete(mate_id, mate_r_id);
+	        
+	        if (replydeleteResult != 0) {
+	            log.info(replydeleteResult + "replydeleteResult");
+	            return 1;
+	        } else {
+	            log.info("메이트 서비스 리플델리트 실패");
+	            return 2;
+	        }
+	    } catch (Exception e) {
+	        System.out.println(e);
+	        e.printStackTrace();
+	        return 4;
+	    }
+	}
+	public List<MateDto> getSearchList(String keyword) {
+		log.info("keyword 는", keyword);
+		
+		List<MateDto> sList = mDao.getSearchList(keyword);
+		log.info("{}", sList);
+		return sList;
+	}
+	public boolean modifybookmark(MateDto mDto) {
+		log.info(mDto+"modifybookmark-Dto");
+		try {
+			Integer modifybookmarkResult = mDao.modifybookmark(mDto);
+			if (modifybookmarkResult != 0) {
+				log.info(modifybookmarkResult+"replyMateModifyResult");
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
 }
+

@@ -52,6 +52,17 @@ public class MateController {
 	return mav;
 	}
 
+	@GetMapping("/bookmark/insert")
+	public ModelAndView bookmarkInsert(@RequestParam int mate_id) throws Exception {
+		log.info("북마크 인설트 이동");
+		MateDto mateModify = ms.getMateDetails(mate_id);
+		ModelAndView mav =new ModelAndView("mate/modify");
+		
+		mav.addObject("title",mateModify.getMate_title());
+		mav.addObject("content",mateModify.getMate_content());
+		log.info("mateModify mav 값:"+mav);
+		return mav;
+	}
 	@GetMapping("/modify")
 	public ModelAndView mateModify(@RequestParam int mate_id) throws Exception {
 		log.info("메이트 수정 이동");
@@ -150,6 +161,53 @@ public class MateController {
 				return new ModelAndView("redirect:/mate/");
 			}else {
 				log.info("isSuccess 메이트 선택 실패");
+				return new ModelAndView("redirect:/");
+			}	
+		}
+		@PostMapping("/bookmark/modify")
+		public ModelAndView modifybookmark(@RequestParam String email,@RequestParam String url,@RequestParam int val, HttpSession session)
+				throws Exception {
+			log.info("북마크 버튼 누름");
+			log.info("이메일 정보: " + email);
+			log.info("url 정보: " + url);
+			log.info("val 정보: " + val);
+			if (email == null) {
+				// 로그인되어 있지 않으면 로그인 페이지로 이동
+				log.info("로그인이 필요합니다.");
+				return new ModelAndView("redirect:/");
+			}
+			
+		    String bookmark_page; // W 변수 선언
+		    switch (url) {
+		        case "/myPage/"://member/myPage
+		        	bookmark_page = "my_page";
+		            break;
+		        case "/tip/":
+		        	bookmark_page = "tip_page";
+		            break;
+		        case "/mate/":
+		        	bookmark_page = "mate_page";
+		            break;
+		        default:
+		        	bookmark_page = ""; // 기본값 설정
+		        	
+		            break;
+		    }
+		    log.info("북마크 page :"+bookmark_page);
+			
+			
+			MateDto mDto = new MateDto();
+			mDto.setBookmark_page(bookmark_page);
+			mDto.setBookmark_val(val);
+			mDto.setEmail(email);
+			boolean isSuccess = ms.modifybookmark(mDto);
+			
+			log.info("북마크 mDto :"+mDto);
+			log.info("북마크 결과:"+isSuccess);
+			if (isSuccess) {
+				return new ModelAndView("redirect:/mate/");
+			}else {
+				log.info("isSuccess 북마크 클릭 실패");
 				return new ModelAndView("redirect:/");
 			}	
 		}

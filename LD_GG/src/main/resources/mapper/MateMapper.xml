@@ -82,6 +82,19 @@
 	<delete id="mateDelete" parameterType="mate">
 		DELETE FROM mate_post WHERE mate_id = #{mate_id}
 	</delete>
+	
+	<delete id="replydelete">
+		DELETE FROM mate_request WHERE mate_id = #{mate_id} AND mate_r_id = #{mate_r_id}
+	</delete>
+	
+	<select id="getSearchList" resultType="mate">
+		SELECT * FROM mate_post
+		WHERE mate_content LIKE CONCAT('%', #{keyword}, '%')
+		OR mate_title LIKE
+		CONCAT('%', #{keyword}, '%')
+		ORDER BY mate_content DESC
+	</select>
+
 	<update id="mateModify" parameterType="mate">
 		UPDATE MATE_POST SET
 		mate_title=#{mate_title},
@@ -89,12 +102,17 @@
 		mate_date=default
 		WHERE mate_id =#{mate_id}
 	</update>
-	<update id="replyMateModify" parameterType="mate">
+	<update id="replyMateModify" >
 		UPDATE mate_request
 		SET mate_select = CASE
 			WHEN mate_id = #{mate_id} AND mate_r_id = #{mate_r_id} 
 			THEN 1
 			ELSE 0
 			END
+	</update>
+	<update id="modifybookmark" parameterType="Mate">
+		UPDATE BOOKMARK
+		SET #{bookmark_page} = #{bookmark_val}
+		WHERE email = #{email}
 	</update>
 </mapper>
