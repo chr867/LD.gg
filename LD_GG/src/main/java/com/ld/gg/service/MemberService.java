@@ -281,4 +281,13 @@ public class MemberService {
 		}
 	}
 
+	public SummonerDto getSummonerIcon(MemberDto md) {
+		SummonerDto result = mDao.getSummonerIcon(md);
+		if(result != null) {
+			return result;
+		}else {
+			return null;	
+		}
+	}
+
 }

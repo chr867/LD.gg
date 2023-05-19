@@ -61,7 +61,9 @@ body {
 </style>
 <body>
 	<div id="session-summoner-name" style="display: none">${sessionScope.lol_account}</div>
-	<div id="session-user-type" style="display: none">>${sessionScope.user_type}</div>
+	<div id="session-user-type" style="display: none">${sessionScope.user_type}</div>
+	<div id="session-summoner-name" style="display: none">${sessionScope.summoner_name}</div>
+	<div id="session-summoner-icon" style="display: none">${sessionScope.summoner_icon}</div>
 	<!----------------------------------------------------------------------------------------------------------------->
 	<!-- 사이드바 -->
 	<div class="sidebar">

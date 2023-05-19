@@ -71,15 +71,18 @@ function setSummoner(name) {
   function confirmSummoner() {
     $('#exampleModal').modal('hide');
     document.getElementById("summoner").readOnly = true;
+    accountSubmit = true;
   }
   
 $('#check_lol_account').on('click', function() {
   if ($('#summoner').val() != '') {
+  $('.modal-body table').empty();
     $.ajax({
       method: 'get',
       url: '/member/check_lol_account',
       data: { summoner_name: $('#summoner').val(), lol_account: $('#summoner').val() },
     }).done(function(res) {
+      console.log(res)
       if (res.length === 0) {
         $('#summoner-duplicate').show();
         $('#summoner-duplicate-pass').hide();

@@ -34,5 +34,7 @@ public interface MemberDao {
 	List<MemberDto> getMemberLolAccountByKeyword(String lol_account_keyword);
 
 	String checkLolAccount(String lol_account);
+
+	SummonerDto getSummonerIcon(MemberDto md);
 	
 }
