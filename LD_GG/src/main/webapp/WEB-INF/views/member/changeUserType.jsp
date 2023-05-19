@@ -48,70 +48,15 @@
 	href="/resources/css/main/loginModal.css">
 <!--로그인 및 세션관련 JS-->
 <script src="/resources/js/main/loginSession.js" defer></script>
+<!--CHANGE USER TYPE CSS-->
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/member/changeUserType.css">
+<!--CHANGE USER TYPE JS-->
+<script src="/resources/js/member/changeUserType.js" defer></script>
 
-<style>
-.main-container {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	height: 100vh;
-}
-
-.change-usertype-container {
-	padding: 20px;
-	width: 70%;
-	max-width: 500px;
-	height: 80%;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	background:linear-gradient(135deg, transparent 30px, rgb(252, 252, 252) 0);
-}
-
-.change-usertype-container h3,
-.change-usertype-container input {
-	margin-bottom: 50px;
-}
-
-.change-usertype-container input[type="password"] {
-	background-color: #E4E6EF;
-	padding-left: 20px;
-	width: 400px;
-	height: 60px;
-	border: none;
-	border-bottom: 2px solid #c9c9c9;
-	transition: .2s;
-	color: #000;
-}
-.change-usertype-container input::placeholder {
-  color: #7E7E7E;
-}
-
-.change-usertype-container input:active,
-.change-usertype-container input:focus,
-.change-usertype-container input:hover {
-  outline: none;
-  border-bottom-color: #777777;
-}
-
-.change-usertype-container input[type="button"] {
-	width: 400px;
-  	height: 60px;
- 	border: none;
-  	border-radius: 5rem;
-  	background-color: #E4E6EF;
-  	transition: .5s;
-  	margin-bottom: 20px; 
-}
-.change-usertype-container input[type="button"]:active,
-.change-usertype-container input[type="button"]:hover{
-  background-color: #C0C0C0;
-}
-</style>
 <body>
 	<div id="session-summoner-name" style="display: none">${sessionScope.lol_account}</div>
-	<div id="session-user-type" style="display: none">>${sessionScope.user_type}</div>
+	<div id="session-user-type" style="display: none">${sessionScope.user_type}</div>
 	<!----------------------------------------------------------------------------------------------------------------->
 	<!-- 사이드바 -->
 	<div class="sidebar">
@@ -449,57 +394,13 @@
 	<div class="main-container">
 		<div class="change-usertype-container">
 			<h3>유저타입 변경</h3>
+			<h4 id="userTypeText"></h4>
 			<input class="input" type="password" id="password" name="password"
 				placeholder="비밀번호를 입력해주세요">
-			<input type="button" id="userTypeChange" value="탈퇴하기">
+			<input type="button" id="userTypeChange" value="변경하기">
 			<span id="result"></span>
 		</div>
 	</div>
 </body>
-<script type="text/javascript">
-const userType = ${sessionScope.user_type};
 
-if(userType == 1){
-	document.getElementById("userTypeText").innerHTML = "멘토회원으로 전환하기";
-}else if(userType == 2){
-	document.getElementById("userTypeText").innerHTML = "일반회원으로 전환하기";
-}else{
-	document.getElementById("userTypeText").innerHTML = "로그인 후 이용할 수 있습니다";
-}
-
-document.getElementById("userTypeChange").addEventListener("click", function() {
-	let changeType = 0;
-	let password = document.getElementById('password').value;
-	
-	if(userType == 1){
-		changeType = 2;
-	}else if(userType == 2){
-		changeType = 1;
-	}else{
-		alert("로그인 후 이용해주세요")
-	}
-	
-	if(changeType != 0){
-		$.ajax({
-	        method: 'post',
-	        url: '/member/change_usertype',
-	        data: {email:'${sessionScope.email}',password:password, user_type:changeType},
-	      }).done(res=>{
-	        console.log(res);
-	        if (res) {
-	        	  console.log()
-	        	  location.href = '/member/testMain';
-	        	} else {
-	        	  console.log(res)
-	        	  document.getElementById("result").innerHTML = "유저타입 변경 실패";
-	        	  document.getElementById("result").style.color = "red";
-	        	} 
-	      }).fail(err=>{
-	        console.log(err);
-	      }); 
-	}else{
-		alert("유저타입 변경 실패");
-	}
-});	
-</script>
 </html>
