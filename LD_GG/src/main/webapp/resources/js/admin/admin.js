@@ -79,9 +79,8 @@ console.log('jq 끝')
 // 삭제
 function notice_del(){
 	let t_b_num = $("#grid").jqGrid('getGridParam', 'selarrrow');
-	let t_b_num_json = JSON.stringify(t_b_num);
 	let confirmation = confirm("삭제하시겠습니까?");
-	console.log(t_b_num);
+	
 	if(confirmation){
 		$.ajax({
 		    url: '/userinterface/admin/delete.do',
@@ -89,8 +88,8 @@ function notice_del(){
 		    data: {t_b_num: t_b_num},
 			traditional: true
 		}).done(res=>{
-		    notice_lst();
 		    alert(res);
+				notice_lst();
 		}).fail(err=>{
 		    alert(err);
 		});

@@ -58,6 +58,7 @@ body {
 	justify-content: center;
 	text-align: center;
 }
+
 </style>
 <body>
 	<div id="session-summoner-name" style="display: none">${sessionScope.lol_account}</div>
@@ -241,7 +242,7 @@ body {
 						aria-labelledby="headingSix" data-bs-parent="#accordionExample">
 						<div class="accordion-body">
 							<div class="accordion-body-menu">
-								<a href="" class="accordion-body-link"><span>• 공지사항</span></a>
+								<a href="/userinterface/notice" class="accordion-body-link"><span>• 공지사항</span></a>
 							</div>
 							<div class="accordion-body-menu">
 								<a href="/faq/" class="accordion-body-link"><span>• FAQ</span></a>
@@ -289,7 +290,7 @@ body {
 				</div>
 			</div>
 
-			<div class="user-info-box" style="display: none;">
+			<div class="user-info-box" style="display: none;" onclick="go_mypage()">
 				<div class="summoner-profile-icon-box">
 					<img src="/resources/img/icon/profileIcon5626.webp" alt="">
 				</div>
@@ -400,18 +401,62 @@ body {
 		<h1>index.jsp</h1>
 		<br> <br> <br> <br> <br> <a
 			href="/member/testMain">테스트메인</a> <br> <br> <br>
-		<form action="/champion/champ-recom.json">
-			<input type="text" name="lane"> <input type="text" name="tag">
-			<input type="text" name="right_champion">
+		
+		<span>LD.gg의 통계를 이용, 카운터 챔피언 추천</span>
+		<form id=champ_recom>
+			<select name="lane">
+				<option value="holder">라인 선택</option>
+				<option value="TOP">탑</option>
+				<option value="JUNGLE">정글</option>
+				<option value="MIDDLE">미드</option>
+				<option value="BOTTOM">원딜</option>
+				<option value="UTILITY">서포터</option>
+			</select>
+			<select name="tag">
+				<option value="holder">역할군 선택</option>
+				<option value="Assassin">암살자</option>
+				<option value="Fighter">전사</option>
+				<option value="Mage">마법사</option>
+				<option value="Marksman">원거리 딜러</option>
+				<option value="Controller">서포터</option>
+				<option value="Tank">탱커</option>
+			</select>
+			<input type="text" name="right_champion" placeholder="상대 챔피언">
 			<button>추천 챔피언</button>
 		</form>
 
+		<span>LD.gg의 통계를 이용, 맞춤 빌드 추천</span>
 		<form action="/champion/build-recom.json">
-			<input type="text" name="left_champion"> <input type="text"
-				name="right_champion">
+			<input type="text" name="left_champion" placeholder="내 챔피언">
+			<input type="text" name="right_champion" placeholder="상대 챔피언">
 			<button>빌드</button>
 		</form>
+		
+		<!-- 추천 챔피언, 맞춤 빌드 div -->
+		<div></div> 
+		
 	</div>
+	
+<script type="text/javascript">
+	function go_mypage(){
+		location.href="/member/mypage"
+	}
+	
+	$('#champ_recom').submit(function(event){
+		event.preventDefault();
+		let formData = $(this).serialize();
+
+		$.ajax({
+			url: "/champion/champ-recom.json",
+			type: 'POST',
+			data: formData,
+		}).done(res=>{
+			console.log(res)
+		}).fail(err=>{
+			console.log(err)
+		})
+	})
+</script>	
 </body>
 
 </html>

@@ -3,7 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.ld.gg.dao.champ.Champ_dao">
+<mapper namespace="com.ld.gg.dao.ChampDao">
 	<select id="champ_rank" resultType="champ_analytics">
 		select * from
 		champion_analytics
@@ -25,16 +25,17 @@
 		champion_info
 		where champion_kr_name = #{champion_kr_name}
 	</select>
-
-	<select id="champ_recom" resultType="champ_match_up">
-		SELECT * FROM champion_match_up
-		WHERE RIGHT_CHAMPION = #{right_champion}
-		AND LEFT_CHAMPION IN (
-			SELECT champion_id
-			FROM champion_info
-			WHERE champion_tag LIKE '%${tag}%'
-			AND MATCH_UP_LANE = #{lane}
-		);
+	
+	<select id="champ_recom" resultType="champ_match_up">  
+		SELECT cmu.*
+		FROM champion_info ci
+		JOIN champion_match_up cmu ON ci.champion_id = cmu.champion_id
+		JOIN champion_info enemy_ci ON enemy_ci.champion_id = cmu.enemy_champ_id
+		WHERE enemy_ci.champion_kr_name = #{right_champion}
+			AND cmu.team_position = #{lane}
+			AND ci.champion_tag LIKE '%${tag}%'
+		ORDER BY cmu.match_up_win_rate DESC
+		LIMIT 5;
 	</select>
 	
 	<select id="build_recom_spell" resultType="champ_match_up_spell">
