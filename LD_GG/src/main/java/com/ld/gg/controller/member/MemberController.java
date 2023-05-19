@@ -111,6 +111,10 @@ public class MemberController {
 	public String goMemberRank() {
 		return "/member/rank";
 	}
+	@GetMapping("/changeUserType")
+	public String changeUserType() {
+		return "/member/changeUserType";
+	}
 	
 	
 }
