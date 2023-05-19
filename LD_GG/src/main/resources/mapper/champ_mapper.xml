@@ -39,26 +39,38 @@
 	</select>
 	
 	<select id="build_recom_spell" resultType="champ_match_up_spell">
-		select * from champion_match_up_spell
-		where left_champion = #{left_champion}
-		and right_champion = #{right_champion}
+		SELECT cms.*, left_champion.champion_kr_name AS champion_name, right_champion.champion_kr_name AS enemy_champ
+		FROM champion_match_up_spell cms
+		JOIN champion_info left_champion ON cms.champion_id = left_champion.champion_id
+		JOIN champion_info right_champion ON cms.enemy_champ_id = right_champion.champion_id
+		WHERE left_champion.champion_kr_name = #{left_champion}
+		AND right_champion.champion_kr_name = #{right_champion}
 	</select>
 	
 	<select id="build_recom_item" resultType="champ_match_up_item">
-		select * from champion_match_up_item
-		where left_champion = #{left_champion}
-		and right_champion = #{right_champion}
+		SELECT cmi.*, left_champion.champion_kr_name AS champion_name, right_champion.champion_kr_name AS enemy_champ
+		FROM champion_match_up_item cmi
+		JOIN champion_info left_champion ON cmi.champion_id = left_champion.champion_id
+		JOIN champion_info right_champion ON cmi.enemy_champ_id = right_champion.champion_id
+		WHERE left_champion.champion_kr_name = #{left_champion}
+		AND right_champion.champion_kr_name = #{right_champion}
 	</select>
 	
 	<select id="build_recom_rune" resultType="champ_match_up_rune">
-		select * from champion_match_up_rune
-		where left_champion = #{left_champion}
-		and right_champion = #{right_champion}
+		SELECT cmr.*, left_champion.champion_kr_name AS champion_name, right_champion.champion_kr_name AS enemy_champ
+		FROM champion_match_up_rune cmr
+		JOIN champion_info left_champion ON cmr.champion_id = left_champion.champion_id
+		JOIN champion_info right_champion ON cmr.enemy_champ_id = right_champion.champion_id
+		WHERE left_champion.champion_kr_name = #{left_champion}
+		AND right_champion.champion_kr_name = #{right_champion}
 	</select>
 	
 	<select id="build_recom_skill" resultType="champ_match_up_skill">
-		select * from champion_match_up_skill
-		where left_champion = #{left_champion}
-		and right_champion = #{right_champion}
+		SELECT cms.*, left_champion.champion_kr_name AS champion_name, right_champion.champion_kr_name AS enemy_champ
+		FROM champion_match_up_skill cms
+		JOIN champion_info left_champion ON cms.champion_id = left_champion.champion_id
+		JOIN champion_info right_champion ON cms.enemy_champ_id = right_champion.champion_id
+		WHERE left_champion.champion_kr_name = #{left_champion}
+		AND right_champion.champion_kr_name = #{right_champion}
 	</select>
 </mapper>

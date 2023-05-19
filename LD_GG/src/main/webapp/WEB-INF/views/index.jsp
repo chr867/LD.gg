@@ -426,7 +426,7 @@ body {
 		</form>
 
 		<span>LD.gg의 통계를 이용, 맞춤 빌드 추천</span>
-		<form action="/champion/build-recom.json">
+		<form id=build_recom>
 			<input type="text" name="left_champion" placeholder="내 챔피언">
 			<input type="text" name="right_champion" placeholder="상대 챔피언">
 			<button>빌드</button>
@@ -456,6 +456,22 @@ body {
 			console.log(err)
 		})
 	})
+
+	$('#build_recom').submit(function(event){
+		event.preventDefault();
+		let formData = $(this).serialize();
+
+		$.ajax({
+			url: "/champion/build-recom.json",
+			type: 'POST',
+			data: formData,
+		}).done(res=>{
+			console.log(res)
+		}).fail(err=>{
+			console.log(err)
+		})
+	})
+
 </script>	
 </body>
 
