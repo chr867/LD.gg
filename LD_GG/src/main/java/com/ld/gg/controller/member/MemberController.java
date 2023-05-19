@@ -81,7 +81,7 @@ public class MemberController {
 		return "/member/changePassword";
 	}
 	
-	@GetMapping("/myPage")
+	@GetMapping("/mypage")
 	public String goMypage(HttpServletRequest request, Model model) {
 		HttpSession session = request.getSession();
 		String email = (String)session.getAttribute("email");
