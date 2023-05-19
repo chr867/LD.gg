@@ -15,7 +15,7 @@ public class SummonerDto {
 	private String profile_icon_id;
 	private int games;
 	private int wins;
-	private int lose;
+	private int losses;
 	private double winrate;
 	private int lp;
 	private String most_champ_name1;
@@ -25,4 +25,6 @@ public class SummonerDto {
 	private String game_mode;
 	private String ranking;
 	private String main_lane;
+	private int tier_int;
+	private String revision_date;
 }

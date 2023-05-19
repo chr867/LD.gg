@@ -12,7 +12,9 @@ public class RecordDto {
 	private String match_id;
 	private String summoner_name;
 	private String game_mode;
-	private String champ_id;
+	private String champ_name;
+	private int champ_level;
+	private String team_id;
 	private int win;
 	private int kills;
 	private int deaths;
@@ -40,11 +42,11 @@ public class RecordDto {
 	private String item5;
 	private String item6;
 	private String item7;
-	private int wards_placed;
-	private int wards_destroyed;
-	private int red_ward;
+	private int red_ward_placed;
 	private int dealt_to_champ;
 	private int damage_taken;
 	private String lane;
-
+	private String spell1;
+	private String spell2;
+	private int sight_point;
 }

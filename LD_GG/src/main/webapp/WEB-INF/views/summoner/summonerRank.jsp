@@ -177,13 +177,20 @@ img {
 										width : 90,
 										align : "center",
 										key : true,
-										formatter : function(cellvalue,	options, rowObject) {
-											return "<img src='https://ddragon.leagueoflegends.com/cdn/13.8.1/img/profileicon/" + rowObject.profile_icon_id + ".png'/>" + cellvalue;
+										formatter : function(cellvalue,
+												options, rowObject) {
+											return "<img src='https://ddragon.leagueoflegends.com/cdn/13.8.1/img/profileicon/" + rowObject.profile_icon_id + ".png'/>"
+													+ cellvalue;
 										},
-										cellattr: function(rowId, val, rawObject) {
-											  var summonerName = encodeURIComponent(val.summoner_name);
-											  return 'onclick="location.href=\'/summoner/info/?summoner_name=\'+' + summonerName + '"';
-											}
+										cellattr : function(rowId, val,
+												rawObject) {
+											let decodeStr = (rawObject.summoner_name);
+											let summonerName = encodeURIComponent(decodeStr);
+											let decodedSummonerName = decodeURIComponent(summonerName);
+											return 'onclick="handleClick('
+													+ rowId + ', \''
+													+ summonerName + '\')"';
+										}
 									}, {
 										name : 's_level',
 										index : 's_level',
@@ -459,6 +466,13 @@ img {
 														} ]
 											})
 						})
+						
+		function handleClick(rowId, summonerName) {
+		    let decodedSummonerName = decodeURIComponent(summonerName);
+		    let encodedSummonerName = encodeURIComponent(decodedSummonerName);
+		    let redirectUrl = '/summoner/info?summoner_name=' + encodedSummonerName;
+		    location.href = redirectUrl;
+		}
 	</script>
 
 </body>
