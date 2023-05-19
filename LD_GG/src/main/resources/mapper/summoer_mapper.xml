@@ -414,7 +414,7 @@
 		); </select> -->
 
 	<select id="getSummoner" resultType="summoner">
-		select summoner_name,
+		select DISTINCT summoner_name,
 		LOWER(tier) as tier,
 		profile_icon_id,
 		games,
