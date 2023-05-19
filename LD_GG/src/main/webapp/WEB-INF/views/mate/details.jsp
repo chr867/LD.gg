@@ -134,6 +134,7 @@ th {
 <body>
 	<div class="container">
 		<h1>메이트 게시판 상세페이지</h1>
+		<h3 style="text-align: center; color:red;">${errorMsg}</h3>
 		<table>
 			<tr>
 				<th class="label">글 번호</th>
@@ -170,6 +171,10 @@ th {
 		<button onclick=mateDelete(${MateDetails.mate_id}) id="deleteButton">게시물
 			삭제하기</button>
 		<br>
+		<table id="comment-select">
+
+		</table>
+		<br>
 		<h2>댓글</h2>
 		<div id="comment-section">
 			<div id="comment-form">
@@ -177,9 +182,7 @@ th {
 				<button id="comment-submit-btn" onclick="submitComment()">등록</button>
 			</div>
 
-			<table id="select-list">
 
-			</table>
 			<table id="comment-list">
 
 			</table>
@@ -253,8 +256,116 @@ function loadComments() {
         	let selectButton = '';
         	let deleteButton = '';
         	let modifyButton = '';
-        	if(myEmail===reply.email){
-        		selectButton = '<td><button id="comment-select-btn onclick="selectComment())">선택</button></td>'
+        	if(myEmail===reply.email && myEmail !=reply.mate_apply &&reply.mate_select===0){
+        		selectButton = '<td><button id="comment-select-btn-'+reply.mate_r_id+'" onclick="selectCommentModify('+reply.mate_id+','+reply.mate_r_id+')">선택</button></td>'
+        	}else if(myEmail===reply.mate_apply){
+        		selectButton = '<td><button id="comment-delete-btn-'+reply.mate_r_id+'" onclick="deleteComment('+reply.mate_id+','+reply.mate_r_id+')">삭제</button></td>'
+        	}
+        	replyList += '<tr height="35" align="center" id="reply_box_'+reply.mate_r_id+'">'
+        	replyList += '<td width="100">'+reply.lol_account+'</td>'
+        	replyList += '<td width="300" id="content_num_'+reply.mate_r_id+'">'+reply.mate_r_content+'</td>'
+        	replyList += '<td width="100">최근승률 자리</td>'
+        	replyList += '<td width="100">'+reply.mate_r_date+'</td>'
+        	replyList += selectButton
+        	replyList += deleteButton
+        	replyList += '</tr>'
+        });
+        console.log(replyList);
+        $('#comment-list').html(replyList)
+    }).fail(err => {
+        console.log(err);
+    }); 
+}	
+//모디파이 스타일로 바꿔서 만들기 선택하면 값변경 디비로 올리는 식
+	
+function selectCommentModify(mate_id,mate_r_id) {
+	
+	$.ajax({
+        method: 'post',
+        url: '/mate/reply/modify',
+        data: {mate_id:mate_id,mate_r_id:mate_r_id}
+    }).done(res => {
+    	if (res){
+    		console.log(res);
+    		alert("메이트 메칭 성공");
+    		selectComment();
+    	}else{
+    		console.log(res)
+    		alert("메이트 메칭 실패")
+    		
+    		}
+		}).fail(err=>{
+			console.log(err);
+		});
+}
+function selectComment() {
+	let mate_id=${MateDetails.mate_id}
+	
+    $.ajax({
+        method: 'get',
+        url: '/mate/reply/select',
+        data: {mate_id:mate_id},
+    }).done(res => {
+    	console.log(res);
+    	if(res){
+    	let selectList="";
+    	
+        	selectList += '<h2>메이트 메칭</h2>'
+        	selectList += '<tr>'
+        	selectList += '<td width="100">소환사명</td>'
+        	selectList += '<td width="300" id="content_num_'+res.mate_r_id+'">내용</td>'
+        	selectList += '<td width="100">최근승률</td>'
+        	selectList += '</tr>'
+        	selectList += '<tr>'
+        	selectList += '<td width="100">'+res.lol_account+'</td>'
+        	selectList += '<td width="300" id="content_num_'+res.mate_r_id+'">'+res.mate_r_content+'</td>'
+        	selectList += '<td width="100">최근승률 자리(티어,라인등 기타정보)</td>'
+        	selectList += '</tr>'
+        	console.log(selectList);
+        	loadComments();
+        $('#comment-select').html(selectList)
+    	}
+    }).fail(err => {
+        console.log(err);
+    }); 
+}
+function deleteComment(mate_id,mate_r_id) {
+		$.ajax({
+	        method: 'post',
+	        url: '/mate/reply/delete',
+	        data: {mate_id : mate_id, mate_r_id : mate_r_id}
+	    }).	done(res=>{
+	    	if(res){
+	    		console.log("res"+res)
+	    		alert("댓글 삭제 성공");
+    			location.href = "/mate/details?mate_id="+mate_id;
+	    	}else{
+	    		alert("댓글 삭제 실패");
+    			location.href = "/mate/details?mate_id="+mate_id;
+	    	}
+	    }).fail(err => {
+	        console.log(err);
+	    });
+	
+	
+}
+/*function selectComment() {
+    $.ajax({
+        method: 'get',
+        url: '/mate/reply/select',
+        data: {mate_id: ${MateReplyInfo.mate_id},
+        	   mate_r_id:${MateReplyInfo.mate_r_id}},
+        	   mate_r_date:${MateReplyInfo.mate_r_date}
+    }).done(res => {
+    	console.log(res);
+    	let replyList = "";
+        res.forEach(reply => {
+        	let selectButton = '';
+        	let deleteButton = '';
+        	let modifyButton = '';
+        	if(myEmail===reply.email && myEmail !=reply.mate_apply &&reply.mate_select===0){
+        		selectButton = '<td><button id="comment-select-btn onclick=selectComment()">선택</button></td>'
+        	}else if(myEmail===reply.mate_apply){
         		deleteButton = '<td><button id="comment-delete-btn-'+reply.mate_r_id+'" onclick="deleteComment('+reply.t_r_num+')">삭제</button></td>'
         		modifyButton = '<td><button id="comment-modify-btn-'+reply.mate_r_id+'" onclick="modifyReplyBtn('+reply.t_r_num+')">수정</button></td>'
         	}
@@ -273,12 +384,8 @@ function loadComments() {
     }).fail(err => {
         console.log(err);
     }); 
-}
-function selectComment(){
-	
-//모디파이 스타일로 바꿔서 만들기 선택하면 값변경 디비로 올리는 식
-	
-}
+}*/
 loadComments();
+selectComment();
 </script>
 </html>
