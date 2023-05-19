@@ -88,7 +88,7 @@ public class MentorProfileService {
 	@Transactional
 	public void insert_mentor_review(MentorReviewDTO mentor_review_dto) {
 		String mentor_lol_account = mentor_review_dto.getMentor_email();
-		List<MemberDto> mbdto= mbdao.getMemberLolAccount(mentor_lol_account);
+		List<MemberDto> mbdto= mbdao.getUserLolAccount(mentor_lol_account);
 		String mentor_email = mbdto.get(0).getEmail();
 		mentor_review_dto.setMentor_email(mentor_email);
 		mentidao.insert_mentor_review(mentor_review_dto); //리뷰 인서트
@@ -168,7 +168,7 @@ public class MentorProfileService {
 	}
 	//견적서 추가
 	public void insert_estimate(EstimateDTO estdto) {
-		List<MemberDto> mb = mbService.findLolAccount(estdto.getMenti_email());
+		List<MemberDto> mb = mbService.findUserLolAccount(estdto.getMenti_email());
 		EstimateDTO newest = estdto.setMenti_email(mb.get(0).getEmail());
 		mymtdao.insert_estimate(newest);
 	}
@@ -202,7 +202,7 @@ public class MentorProfileService {
 	//멘토링 내역 수정
 	@Transactional
 	public void update_my_mentoring(MyMentoringDTO my_mt_dto) {
-		List<MemberDto> mb = mbService.findLolAccount(my_mt_dto.getMenti_email()); //소환사명으로 회원정보 조회
+		List<MemberDto> mb = mbService.findUserLolAccount(my_mt_dto.getMenti_email()); //소환사명으로 회원정보 조회
 		String email = mb.get(0).getEmail(); //회원 정보에서 이메일 추출
 		MyMentoringDTO newest = my_mt_dto.setMenti_email(email); //추출한 이메일로 dto 다시 세팅
 		mymtdao.update_my_mentoring(newest); //멘토링 내역 수정
@@ -222,7 +222,7 @@ public class MentorProfileService {
 	//멘티 소환사명 받아서 멘토링 내역 삭제
 	public void reject_my_mentoring(MyMentoringDTO my_mt_dto) {
 		String summoner_name = my_mt_dto.getMenti_email();
-		List<MemberDto> mbdto = mbdao.getMemberLolAccount(summoner_name);
+		List<MemberDto> mbdto = mbdao.getUserLolAccount(summoner_name);
 		String menti_email = mbdto.get(0).getEmail();
 		my_mt_dto.setMenti_email(menti_email);
 		mymtdao.delete_my_mentoring(my_mt_dto);

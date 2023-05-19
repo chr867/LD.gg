@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.ld.gg.dto.MemberDto;
+import com.ld.gg.dto.summoner.SummonerDto;
 
 public interface MemberDao {
 
@@ -16,7 +17,7 @@ public interface MemberDao {
 
 	String getMemberEmail(String email);
 
-	List<MemberDto> getMemberLolAccount(String lol_account);
+	List<SummonerDto> getMemberLolAccount(String summoner_name);
 
 	String getMemberPhoneNum(String phone_num);
 
@@ -31,5 +32,11 @@ public interface MemberDao {
 	int updateUserType(@Param("email") String email, @Param("user_type") Integer user_type);
 
 	List<MemberDto> getMemberLolAccountByKeyword(String lol_account_keyword);
+
+	MemberDto checkLolAccount(String lol_account);
+
+	SummonerDto getSummonerIcon(MemberDto md);
+
+	List<MemberDto> getUserLolAccount(String lol_account);
 	
 }

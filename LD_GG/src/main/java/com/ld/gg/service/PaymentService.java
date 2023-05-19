@@ -101,7 +101,7 @@ public class PaymentService {
 	//트랜잭션 히스토리에 거래내역 저장
 	public void insert_tx_history(TransactionHistoryDTO tx_history) {
 		String menti_lol_account = tx_history.getSender_id();
-		List<MemberDto> mbdto = mbdao.getMemberLolAccount(menti_lol_account);
+		List<MemberDto> mbdto = mbdao.getUserLolAccount(menti_lol_account);
 		String menti_email = mbdto.get(0).getEmail();
 		tx_history.setSender_id(menti_email);
 		PD.insert_tx_history(tx_history);

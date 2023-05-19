@@ -303,7 +303,7 @@ public class RestMentoringController {
 	//이메일로 멘토 클래스 가져오기
 	@GetMapping("/select-mentor-class")
 	public String select_by_email_mentor_class(@RequestParam String lol_account) throws JsonProcessingException{
-		List<MemberDto> mbdto = mbService.findLolAccount(lol_account);
+		List<MemberDto> mbdto = mbService.findUserLolAccount(lol_account);
 		String email = mbdto.get(0).getEmail();
 		List<MentorClassDTO> class_list = mtpService.select_by_email_mentor_class(email);
 		ObjectMapper objectMapper = new ObjectMapper();
