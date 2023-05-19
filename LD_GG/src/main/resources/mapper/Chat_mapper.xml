@@ -17,7 +17,7 @@
 	<select id="select_chatroomSEQ" parameterType="chatroom" resultType="Integer">
 		select chat_room_seq from chat_room where chat_category = #{chat_category} and chat_send_user = #{chat_send_user} and chat_receive_user = #{chat_receive_user} limit 1
 	</select>
-	<select id="select_chatroomSEQ_reverse" parameterType="chatroom" resultType="int">
+	<select id="select_chatroomSEQ_reverse" parameterType="chatroom" resultType="Integer">
 		select chat_room_seq from chat_room where chat_category = #{chat_category} and chat_send_user = #{chat_receive_user} and chat_receive_user = #{chat_send_user} limit 1
 	</select>
 
@@ -60,4 +60,30 @@
 	<select id="select_user" parameterType="int" resultType="chatroom">
 		select chat_send_user, chat_receive_user from chat_room where chat_room_seq = #{chat_room_seq}
 	</select>
+
+	<select id="get_mentor" parameterType="String" resultType="member">
+		select distinct my_m.mentor_email as email, mem.lol_account as lol_account
+		from my_mentoring my_m
+			join member mem on mem.email= my_m.menti_email
+		where menti_email = #{email}
+	</select>
+	<select id="get_menti" parameterType="String" resultType="member">
+		select distinct my_m.menti_email as email, mem.lol_account as lol_account
+		from my_mentoring my_m
+			join member mem on mem.email= my_m.menti_email
+		where mentor_email = #{email}
+	</select>
+	<select id="get_mateapp" parameterType="String" resultType="member">
+		select distinct mate.mate_apply as email, mem.lol_account as lol_account
+		from mate_request mate
+			join member mem on mem.email = mate.mate_apply
+		where mate.email = #{email}
+	</select>
+	<select id="get_mate" parameterType="String" resultType="member">
+		select distinct mate.email as email, mem.lol_account as lol_account
+		from mate_request mate
+			join member mem on mem.email = mate.email
+		where mate.mate_apply = #{email}
+	</select>
+
 </mapper>

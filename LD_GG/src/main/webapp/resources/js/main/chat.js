@@ -8,6 +8,6 @@ $(document).ready(function() {
 });
 
 function chatPopup(){
-    url = "http://localhost:8080/chat/list"
-    window.open(url, "_blank", "width=500,height=500,alwaysRaised=yes");
+    url = "/chat/list"
+    window.open(url, "_blank", "width=400,height=600,alwaysRaised=yes");
 }
