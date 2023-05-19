@@ -2,10 +2,10 @@
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-
 <head>
 <meta charset="UTF-8">
-<title>LD.GG</title>
+<title>Insert title here</title>
+</head>
 <!--BOOTSTRAP CSS-->
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
@@ -48,25 +48,70 @@
 	href="/resources/css/main/loginModal.css">
 <!--로그인 및 세션관련 JS-->
 <script src="/resources/js/main/loginSession.js" defer></script>
-	<!-- 채팅 관련 JS-->
-	<script src="/resources/js/main/chat.js" defer></script>
-</head>
+
 <style>
-body {
-	background-color: #E4E6EF;
-}
-
 .main-container {
+	display: flex;
+	align-items: center;
 	justify-content: center;
-	text-align: center;
+	height: 100vh;
 }
 
+.change-usertype-container {
+	padding: 20px;
+	width: 70%;
+	max-width: 500px;
+	height: 80%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background:linear-gradient(135deg, transparent 30px, rgb(252, 252, 252) 0);
+}
+
+.change-usertype-container h3,
+.change-usertype-container input {
+	margin-bottom: 50px;
+}
+
+.change-usertype-container input[type="password"] {
+	background-color: #E4E6EF;
+	padding-left: 20px;
+	width: 400px;
+	height: 60px;
+	border: none;
+	border-bottom: 2px solid #c9c9c9;
+	transition: .2s;
+	color: #000;
+}
+.change-usertype-container input::placeholder {
+  color: #7E7E7E;
+}
+
+.change-usertype-container input:active,
+.change-usertype-container input:focus,
+.change-usertype-container input:hover {
+  outline: none;
+  border-bottom-color: #777777;
+}
+
+.change-usertype-container input[type="button"] {
+	width: 400px;
+  	height: 60px;
+ 	border: none;
+  	border-radius: 5rem;
+  	background-color: #E4E6EF;
+  	transition: .5s;
+  	margin-bottom: 20px; 
+}
+.change-usertype-container input[type="button"]:active,
+.change-usertype-container input[type="button"]:hover{
+  background-color: #C0C0C0;
+}
 </style>
 <body>
 	<div id="session-summoner-name" style="display: none">${sessionScope.lol_account}</div>
-	<div id="session-user-type" style="display: none">${sessionScope.user_type}</div>
-	<div id="session-summoner-name" style="display: none">${sessionScope.summoner_name}</div>
-	<div id="session-summoner-icon" style="display: none">${sessionScope.summoner_icon}</div>
+	<div id="session-user-type" style="display: none">>${sessionScope.user_type}</div>
 	<!----------------------------------------------------------------------------------------------------------------->
 	<!-- 사이드바 -->
 	<div class="sidebar">
@@ -124,10 +169,12 @@ body {
 						aria-labelledby="headingOne" data-bs-parent="#accordionExample">
 						<div class="accordion-body">
 							<div class="accordion-body-menu">
-								<a href="/champion/rank" class="accordion-body-link"><span>• 챔피언 티어</span></a>
+								<a href="/champion/rank" class="accordion-body-link"><span>•
+										챔피언 티어</span></a>
 							</div>
 							<div class="accordion-body-menu">
-								<a href="/summoner/rank" class="accordion-body-link"><span>• 소환사 랭킹</span></a>
+								<a href="/summoner/rank" class="accordion-body-link"><span>•
+										소환사 랭킹</span></a>
 							</div>
 						</div>
 					</div>
@@ -147,10 +194,12 @@ body {
 						<div class="accordion-body">
 							<span class="bullet bullet-dot"></span>
 							<div class="accordion-body-menu">
-								<a href="/tip/" class="accordion-body-link"><span>• 챔피언 공략</span></a>
+								<a href="/tip/" class="accordion-body-link"><span>•
+										챔피언 공략</span></a>
 							</div>
 							<div class="accordion-body-menu">
-								<a href="/mate/" class="accordion-body-link"><span>• 롤 메이트</span></a>
+								<a href="/mate/" class="accordion-body-link"><span>•
+										롤 메이트</span></a>
 							</div>
 						</div>
 					</div>
@@ -169,10 +218,12 @@ body {
 						aria-labelledby="headingThree" data-bs-parent="#accordionExample">
 						<div class="accordion-body">
 							<div class="accordion-body-menu">
-								<a href="/mentor/custom-mentor/" class="accordion-body-link"><span>• 맞춤 멘토</span></a>
+								<a href="/mentor/custom-mentor" class="accordion-body-link"><span>•
+										멘토 요청</span></a>
 							</div>
 							<div class="accordion-body-menu">
-								<a href="/mentor/list/" class="accordion-body-link"><span>• 멘토 찾기</span></a>
+								<a href="/mentor/list" class="accordion-body-link"><span>•
+										멘토 찾기</span></a>
 							</div>
 						</div>
 					</div>
@@ -213,14 +264,15 @@ body {
 								<a href="" class="accordion-body-link"><span>• 대시보드</span></a>
 							</div>
 							<div class="accordion-body-menu">
-								<a href="/mentor/write-profile" class="accordion-body-link"><span>• 프로필</span></a>
+								<a href="" class="accordion-body-link"><span>• 프로필</span></a>
 							</div>
 							<div class="accordion-body-menu">
 								<a href="" class="accordion-body-link"><span>• 개인정보
 										수정</span></a>
 							</div>
 							<div class="accordion-body-menu">
-								<a href="/mentor/my-mentoring/" class="accordion-body-link"><span>• 마이 멘토링</span></a>
+								<a href="/mentor/my-mentoring" class="accordion-body-link"><span>•
+										마이 멘토링</span></a>
 							</div>
 							<div class="accordion-body-menu">
 								<a href="" class="accordion-body-link"><span>• 내 지갑</span></a>
@@ -242,13 +294,10 @@ body {
 						aria-labelledby="headingSix" data-bs-parent="#accordionExample">
 						<div class="accordion-body">
 							<div class="accordion-body-menu">
-								<a href="/userinterface/notice" class="accordion-body-link"><span>• 공지사항</span></a>
+								<a href="" class="accordion-body-link"><span>• 공지사항</span></a>
 							</div>
 							<div class="accordion-body-menu">
-								<a href="/faq/" class="accordion-body-link"><span>• FAQ</span></a>
-							</div>
-							<div class="accordion-body-menu">
-								<a href="/faq/inquiries/" class="accordion-body-link"><span>• 문의사항</span></a>
+								<a href="" class="accordion-body-link"><span>• FAQ</span></a>
 							</div>
 						</div>
 					</div>
@@ -275,7 +324,7 @@ body {
 			<div class="header-icon-box" style="display: none;">
 				<div class="message-icon-box">
 					<img src="/resources/img/icon/free-icon-message-5941217.png" alt=""
-						class="message-icon-img" onclick="chatPopup();">
+						class="message-icon-img">
 					<div class="message-notification"></div>
 				</div>
 				<div class="alarm-icon-box">
@@ -290,12 +339,12 @@ body {
 				</div>
 			</div>
 
-			<div class="user-info-box" style="display: none;" onclick="go_mypage()">
+			<div class="user-info-box" style="display: none;">
 				<div class="summoner-profile-icon-box">
 					<img src="/resources/img/icon/profileIcon5626.webp" alt="">
 				</div>
 				<div class="summoner-name-box">
-					<h5>${sessionScope.lol_account} 님</h5>
+					<h5>${sessionScope.lol_account}님</h5>
 				</div>
 				<div class="user-type-box">
 					<div class="user-type-common" style="display: none;">
@@ -398,81 +447,59 @@ body {
 	<!----------------------------------------------------------------------------------------------------------------->
 	<!-- 메인 컨테이너 -->
 	<div class="main-container">
-		<h1>index.jsp</h1>
-		<br> <br> <br> <br> <br> <a
-			href="/member/testMain">테스트메인</a> <br> <br> <br>
-		
-		<span>LD.gg의 통계를 이용, 카운터 챔피언 추천</span>
-		<form id=champ_recom>
-			<select name="lane">
-				<option value="holder">라인 선택</option>
-				<option value="TOP">탑</option>
-				<option value="JUNGLE">정글</option>
-				<option value="MIDDLE">미드</option>
-				<option value="BOTTOM">원딜</option>
-				<option value="UTILITY">서포터</option>
-			</select>
-			<select name="tag">
-				<option value="holder">역할군 선택</option>
-				<option value="Assassin">암살자</option>
-				<option value="Fighter">전사</option>
-				<option value="Mage">마법사</option>
-				<option value="Marksman">원거리 딜러</option>
-				<option value="Controller">서포터</option>
-				<option value="Tank">탱커</option>
-			</select>
-			<input type="text" name="right_champion" placeholder="상대 챔피언">
-			<button>추천 챔피언</button>
-		</form>
-
-		<span>LD.gg의 통계를 이용, 맞춤 빌드 추천</span>
-		<form id=build_recom>
-			<input type="text" name="left_champion" placeholder="내 챔피언">
-			<input type="text" name="right_champion" placeholder="상대 챔피언">
-			<button>빌드</button>
-		</form>
-		
-		<!-- 추천 챔피언, 맞춤 빌드 div -->
-		<div></div> 
-		
+		<div class="change-usertype-container">
+			<h3>유저타입 변경</h3>
+			<input class="input" type="password" id="password" name="password"
+				placeholder="비밀번호를 입력해주세요">
+			<input type="button" id="userTypeChange" value="탈퇴하기">
+			<span id="result"></span>
+		</div>
 	</div>
-	
+</body>
 <script type="text/javascript">
-	function go_mypage(){
-		location.href="/member/mypage"
+const userType = ${sessionScope.user_type};
+
+if(userType == 1){
+	document.getElementById("userTypeText").innerHTML = "멘토회원으로 전환하기";
+}else if(userType == 2){
+	document.getElementById("userTypeText").innerHTML = "일반회원으로 전환하기";
+}else{
+	document.getElementById("userTypeText").innerHTML = "로그인 후 이용할 수 있습니다";
+}
+
+document.getElementById("userTypeChange").addEventListener("click", function() {
+	let changeType = 0;
+	let password = document.getElementById('password').value;
+	
+	if(userType == 1){
+		changeType = 2;
+	}else if(userType == 2){
+		changeType = 1;
+	}else{
+		alert("로그인 후 이용해주세요")
 	}
 	
-	$('#champ_recom').submit(function(event){
-		event.preventDefault();
-		let formData = $(this).serialize();
-
+	if(changeType != 0){
 		$.ajax({
-			url: "/champion/champ-recom.json",
-			type: 'POST',
-			data: formData,
-		}).done(res=>{
-			console.log(res)
-		}).fail(err=>{
-			console.log(err)
-		})
-	})
-
-	$('#build_recom').submit(function(event){
-		event.preventDefault();
-		let formData = $(this).serialize();
-
-		$.ajax({
-			url: "/champion/build-recom.json",
-			type: 'POST',
-			data: formData,
-		}).done(res=>{
-			console.log(res)
-		}).fail(err=>{
-			console.log(err)
-		})
-	})
-
-</script>	
-</body>
-
+	        method: 'post',
+	        url: '/member/change_usertype',
+	        data: {email:'${sessionScope.email}',password:password, user_type:changeType},
+	      }).done(res=>{
+	        console.log(res);
+	        if (res) {
+	        	  console.log()
+	        	  location.href = '/member/testMain';
+	        	} else {
+	        	  console.log(res)
+	        	  document.getElementById("result").innerHTML = "유저타입 변경 실패";
+	        	  document.getElementById("result").style.color = "red";
+	        	} 
+	      }).fail(err=>{
+	        console.log(err);
+	      }); 
+	}else{
+		alert("유저타입 변경 실패");
+	}
+});	
+</script>
 </html>

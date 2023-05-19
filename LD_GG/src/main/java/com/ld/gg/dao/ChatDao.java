@@ -1,5 +1,6 @@
 package com.ld.gg.dao;
 
+import com.ld.gg.dto.MemberDto;
 import com.ld.gg.dto.chat.ChatDto_mini;
 import com.ld.gg.dto.chat.ChatListDto;
 import com.ld.gg.dto.chat.ChatroomDto;
@@ -29,9 +30,17 @@ public interface ChatDao {
 
 	int insert_chatroomSEQ(ChatroomDto chatroomDto);
 
-	int select_chatroomSEQ_reverse(ChatroomDto chatroomDto);
+	Integer select_chatroomSEQ_reverse(ChatroomDto chatroomDto);
 
 	Integer select_chatroomSEQ(ChatroomDto chatroomDto);
 
 	ChatroomDto select_user(int chatRoomSeq);
+
+	List<MemberDto> get_mentor(String email);
+
+	List<MemberDto> get_menti(String email);
+
+	List<MemberDto> get_mateapp(String email);
+
+	List<MemberDto> get_mate(String email);
 }

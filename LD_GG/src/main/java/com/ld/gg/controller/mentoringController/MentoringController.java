@@ -84,7 +84,7 @@ public class MentoringController {
 		HttpSession session = request.getSession(); // 현재 접속중인 회원의 아이디 확인
 		String email = (String) session.getAttribute("email");
 		MemberDto mbdto = mbdao.getMemberInfo(email);
-		List<MemberDto> mbList = mbService.findLolAccount(lol_account);
+		List<MemberDto> mbList = mbService.findUserLolAccount(lol_account);
 		String mentor_email = mbList.get(0).getEmail();
 		List<MentorClassDTO> mentor_class_list = mtpService.select_by_email_mentor_class(mentor_email);
 		MentorProfileDTO mtp = mtpdao.select_by_email_mentor_profile(mentor_email);

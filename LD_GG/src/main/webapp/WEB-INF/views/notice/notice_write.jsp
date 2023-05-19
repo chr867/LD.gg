@@ -49,7 +49,6 @@
 			focus : true, // 에디터 로딩후 포커스를 맞출지 여부
 			lang : "ko-KR", // 한글 설정
 			placeholder : '최대 2048자까지 쓸 수 있습니다' //placeholder 설정
-
 		});
 	});
 
@@ -57,6 +56,7 @@
 		let title = frm.t_b_title.value;
 		console.log(title);
 		let contents = frm.t_b_content.value; //공백 => &nbsp 
+		contents = contents.replace(/<\/?p[^>]*>/g, '');
 		console.log(contents);
 		
 		if (title.trim() == '') {

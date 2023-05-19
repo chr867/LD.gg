@@ -11,4 +11,9 @@ import lombok.experimental.Accessors;
 public class Champ_match_up_spell extends Champ_match_up_default{
 	private int d_spell;
 	private int f_spell;
+	private int win_cnt;
+	private int pick_cnt;
+	private int game_cnt;
+	private double win_rate;
+	private double pick_rate;
 }

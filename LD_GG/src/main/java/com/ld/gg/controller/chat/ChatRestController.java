@@ -6,13 +6,16 @@ import com.ld.gg.service.ChatService;
 import lombok.extern.slf4j.Slf4j;
 import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequestMapping("/chat")
@@ -25,6 +28,10 @@ public class ChatRestController {
     @PostMapping("/go_chat")
     public int go_chat(ChatroomDto chatroomDto){
         System.out.println("go_chat...");
+
+        log.info("{} : ", chatroomDto);
+
+
         /* chat_room_seq select*/
         int chatroomSEQList = chatService.find_chatroomSEQ(chatroomDto);
 
@@ -103,5 +110,14 @@ public class ChatRestController {
         System.out.println(chat_content_list);
 
         return chat_content_list;
+    }
+
+    @PostMapping("/get_mento_mate")
+    public Map<String, List<?>> get_mento_mate(String email){
+        Map<String, List<?>> map_mento_mate = new HashMap<>();
+
+        map_mento_mate = chatService.get_mento_mate(email);
+
+        return map_mento_mate;
     }
 }

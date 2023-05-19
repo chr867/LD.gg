@@ -27,13 +27,11 @@ public class ChatController {
     @Autowired
     public ChatService chatService;
 
-    /* 채팅방 목록으로 이동 */
-    @GetMapping("/chat-list")
-    public ModelAndView go_chatlist(HttpServletRequest request) {
+    /* 채팅 페이지로 이동 */
+    @GetMapping("/list")
+    public ModelAndView go_chat(HttpServletRequest request) {
         HttpSession session = request.getSession();
         String email = (String) session.getAttribute("email");
-
-        System.out.println(email);
 
         return new ModelAndView("/chat/chatList").addObject("email", email);
     }
