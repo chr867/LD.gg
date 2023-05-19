@@ -1,6 +1,8 @@
 package com.ld.gg.controller.mate;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -52,6 +54,17 @@ public class MateController {
 	return mav;
 	}
 
+	/*@GetMapping("/bookmark/insert")
+	public ModelAndView bookmarkInsert(@RequestParam int mate_id) throws Exception {
+		log.info("북마크 인설트 이동");
+		MateDto mateModify = ms.getMateDetails(mate_id);
+		ModelAndView mav =new ModelAndView("mate/modify");
+		
+		mav.addObject("title",mateModify.getMate_title());
+		mav.addObject("content",mateModify.getMate_content());
+		log.info("mateModify mav 값:"+mav);
+		return mav;
+	}*/
 	@GetMapping("/modify")
 	public ModelAndView mateModify(@RequestParam int mate_id) throws Exception {
 		log.info("메이트 수정 이동");
@@ -127,8 +140,71 @@ public class MateController {
 				mav.addObject("content", mate_content);
 				log.info("mav: " + mav.getModel().toString());
 				return mav;
+			}	
+	}
+		@PostMapping("/reply/modify")
+		public ModelAndView replyMateModify(@RequestParam int mate_id,@RequestParam int mate_r_id,HttpSession session)
+				throws Exception {
+			log.info("메이트 선택 버튼 누름");
+			String email = (String) session.getAttribute("email");
+			log.info("이메일 정보: " + email);
+			if (email == null) {
+				// 로그인되어 있지 않으면 로그인 페이지로 이동
+				log.info("로그인이 필요합니다.");
+				return new ModelAndView("redirect:/");
+			}
+			MateDto mDto = new MateDto();
+			mDto.setMate_r_id(mate_r_id);
+			mDto.setMate_id(mate_id);
+			log.info("메이트 선택 내용"+mDto);
+			boolean isSuccess = ms.replyMateModify(mDto);
+			log.info("메이트 선택 결과:"+isSuccess);
+			if (isSuccess) {
+				return new ModelAndView("redirect:/mate/");
+			}else {
+				log.info("isSuccess 메이트 선택 실패");
+				return new ModelAndView("redirect:/");
+			}	
+		}
+		@PostMapping("/bookmark/modify")
+		public ModelAndView modifybookmark(@RequestParam String email,@RequestParam String bookmark_page,@RequestParam int bookmark_val, HttpSession session)
+				throws Exception {
+			log.info("북마크 버튼 누름");
+			log.info("이메일 정보: " + email);
+			log.info("url 정보: " + bookmark_page);
+			log.info("val 정보: " + bookmark_val);
+			if (email == null) {
+				// 로그인되어 있지 않으면 로그인 페이지로 이동
+				log.info("로그인이 필요합니다.");
+				return new ModelAndView("redirect:/");
 			}
 			
+		    
+		    switch (bookmark_page) {
+		        case "/myPage/"://member/myPage
+		        	bookmark_page = "my_page";
+		            break;
+		        case "/tip/":
+		        	bookmark_page = "tip_page";
+		            break;
+		        case "/mate/":
+		        	bookmark_page = "mate_page";
+		            break;
+		       /* default:
+		        	bookmark_page = ""; // 기본값 설정
+		        	
+		            break;*/
+		    }
+		    log.info("북마크 page :"+bookmark_page);
 			
-	}
+			
+			boolean isSuccess = ms.modifybookmark(bookmark_page,bookmark_val,email);
+			log.info("북마크 결과:"+isSuccess);
+			if (isSuccess) {
+				return new ModelAndView("redirect:/mate/");
+			}else {
+				log.info("isSuccess 북마크 클릭 실패");
+				return new ModelAndView("redirect:/");
+			}	
+		}
 }

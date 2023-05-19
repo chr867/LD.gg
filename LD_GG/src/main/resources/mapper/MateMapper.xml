@@ -61,7 +61,7 @@
 		ORDER BY mr.mate_r_id desc
 	</select>
 	<select id="getReplyList" resultType="mate">
-		SELECT lol_account,mate_r_content,mate_r_date,mate_apply,mate_id,mate_r_id,mr.email
+		SELECT lol_account,mate_r_content,mate_r_date,mate_apply,mate_id,mate_r_id,mr.email,mr.mate_select
 		FROM mate_request mr JOIN (
 			SELECT *
 			FROM member
@@ -70,14 +70,54 @@
 		where mate_id =#{mate_id}
 		ORDER BY mr.mate_r_id desc
 	</select>
+	<select id="getReplySelect" resultType="mate">
+		SELECT lol_account,mate_r_content,mate_r_date,mate_apply,mate_id,mate_r_id,mr.email,mr.mate_select
+		FROM mate_request mr JOIN (
+			SELECT *
+			FROM member
+			) as M
+		ON mr.mate_apply = M.EMAIL
+		where mate_id =#{mate_id} and mate_select = 1
+	</select>
+	<select id="getBookmark" resultType="mate">
+		select my_page ,mate_page ,tip_page 
+		from bookmark
+		where email =#{email}
+	</select>
 	<delete id="mateDelete" parameterType="mate">
 		DELETE FROM mate_post WHERE mate_id = #{mate_id}
 	</delete>
+	
+	<delete id="replydelete">
+		DELETE FROM mate_request WHERE mate_id = #{mate_id} AND mate_r_id = #{mate_r_id}
+	</delete>
+	
+	<select id="getSearchList" resultType="mate">
+		SELECT * FROM mate_post
+		WHERE mate_content LIKE CONCAT('%', #{keyword}, '%')
+		OR mate_title LIKE
+		CONCAT('%', #{keyword}, '%')
+		ORDER BY mate_content DESC
+	</select>
+
 	<update id="mateModify" parameterType="mate">
 		UPDATE MATE_POST SET
 		mate_title=#{mate_title},
 		mate_content=#{mate_content},
 		mate_date=default
 		WHERE mate_id =#{mate_id}
+	</update>
+	<update id="replyMateModify" >
+		UPDATE mate_request
+		SET mate_select = CASE
+			WHEN mate_id = #{mate_id} AND mate_r_id = #{mate_r_id} 
+			THEN 1
+			ELSE 0
+			END
+	</update>
+	<update id="modifybookmark" >
+		UPDATE BOOKMARK
+		SET ${bookmark_page} = #{bookmark_val}
+		WHERE email = #{email}
 	</update>
 </mapper>
