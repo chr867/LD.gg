@@ -6,6 +6,7 @@
 		INSERT INTO MINI_GAME_CHAT 
 		VALUES(#{mini_game_send_user}, #{mini_game_chat_content}, #{mini_game_chat_time})
 	</insert>
+
 	<select id="select_mentor" parameterType="String" resultType="String">
 		select distinct mentor_email from my_mentoring where menti_email = #{email}
 	</select>
