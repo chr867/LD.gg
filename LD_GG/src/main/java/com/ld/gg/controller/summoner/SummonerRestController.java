@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ld.gg.dto.admin.AdDto;
 import com.ld.gg.dto.summoner.BuildDto;
 import com.ld.gg.dto.summoner.ChampRecordDto;
+import com.ld.gg.dto.summoner.DashBoardDto;
 import com.ld.gg.dto.summoner.RecordDto;
 import com.ld.gg.dto.summoner.RecordInfoDto;
 import com.ld.gg.dto.summoner.RecordRankingDto;
@@ -128,6 +129,12 @@ public class SummonerRestController {
 	public List<RecordRankingDto> getRanking(String match_id, String summoner_name){
 		List<RecordRankingDto> rrd = ss.getRanking(match_id, summoner_name);
 		return rrd;
+	}
+	
+	@GetMapping("/dashboard/kda")
+	public DashBoardDto getDashBoardKDA(String summoner_name){
+		DashBoardDto dbd = ss.getDashBoardKDA(summoner_name);
+		return dbd;
 	}
 
 }

@@ -209,7 +209,7 @@ body {
 						aria-labelledby="headingFive" data-bs-parent="#accordionExample">
 						<div class="accordion-body">
 							<div class="accordion-body-menu">
-								<a href="" class="accordion-body-link"><span>• 대시보드</span></a>
+								<a href="/summoner/testDashBoard" class="accordion-body-link"><span>• 대시보드</span></a>
 							</div>
 							<div class="accordion-body-menu">
 								<a href="/mentor/write-profile" class="accordion-body-link"><span>• 프로필</span></a>
