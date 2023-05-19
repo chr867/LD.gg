@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ld.gg.dto.MemberDto;
+import com.ld.gg.dto.summoner.SummonerDto;
 import com.ld.gg.service.MemberService;
 import com.ld.gg.service.PaymentService;
 import com.ld.gg.userClass.SessionListener;
@@ -76,15 +77,21 @@ public class MemberRestController {
 	}
 
 	@GetMapping("/check_lol_account")
-	public List<MemberDto> check_lol_account(String lol_account) throws Exception {
-		System.out.println(lol_account);
-		List<MemberDto> findResult = ms.findLolAccount(lol_account);
-		System.out.println(findResult);
-		if (findResult.isEmpty()) {
-			System.out.println("비어있음");
+	public List<SummonerDto> check_lol_account(String summoner_name, String lol_account) throws Exception {
+		System.out.println(summoner_name);
+		
+		boolean duplicateResult = ms.duplicateLolAccount(lol_account);
+		if(duplicateResult) {
+			List<SummonerDto> findResult = ms.findLolAccount(summoner_name);
+			System.out.println(findResult);
+			if (findResult.isEmpty()) {
+				System.out.println("비어있음");
+				return null;
+			} else {
+				return findResult;
+			}
+		}else {
 			return null;
-		} else {
-			return findResult;
 		}
 	}
 	

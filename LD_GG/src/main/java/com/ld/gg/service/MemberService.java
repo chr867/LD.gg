@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ld.gg.dao.MemberDao;
 import com.ld.gg.dto.MemberDto;
+import com.ld.gg.dto.summoner.SummonerDto;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -74,9 +75,9 @@ public class MemberService {
 		}
 	}
 
-	public List<MemberDto> findLolAccount(String lol_account) {
+	public List<SummonerDto> findLolAccount(String summoner_name) {
 		try {
-			return mDao.getMemberLolAccount(lol_account);
+			return mDao.getMemberLolAccount(summoner_name);
 		} catch (Exception e) {
 			System.out.println(e);
 			e.printStackTrace();
@@ -261,6 +262,20 @@ public class MemberService {
 			}
 		} catch (Exception e) {
 			System.out.println(e);
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public boolean duplicateLolAccount(String lol_account) {
+		try {
+			String checkResult = mDao.checkLolAccount(lol_account);
+			if(checkResult == null) {
+				return true;
+			}else {
+				return false;
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}

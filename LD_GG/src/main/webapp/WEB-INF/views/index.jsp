@@ -167,7 +167,6 @@ body {
 								<a href="/mentor/custom-mentor/" class="accordion-body-link"><span>• 맞춤 멘토</span></a>
 							</div>
 							<div class="accordion-body-menu">
-								<a href="/mentor/list/" class="accordion-body-link"><span>• 멘토 찾기</span></a>
 								<a href="/mentor/custom-mentor" class="accordion-body-link"><span>• 멘토 요청</span></a>
 							</div>
 							<div class="accordion-body-menu">
