@@ -33,8 +33,6 @@ df['timeline'] = df['timeline'].apply(json.loads)
 end_time = time.time()
 print("변환 시간: {:.2f}초".format(end_time - start_time))
 print("JSON 변환 종료")
-
-
 # ----------------------------------------------------------------------------------------------------------------------
 print("시작!")
 conn = mu.connect_mysql()
@@ -42,7 +40,7 @@ matchId_count = pd.DataFrame(mu.mysql_execute_dict(f"SELECT match_id_substr FROM
 conn.close()
 print(f'매치아이디 갯수 : {len(matchId_count.match_id_substr.unique())}개')
 
-batch_size = 1000
+batch_size = 20000
 win_pick_lst_result = []
 ban_rate_lst_result = []
 meta_score_lst_result = []
@@ -52,6 +50,10 @@ for limit in tqdm(range(0, len(matchId_count.match_id_substr.unique()), batch_si
     query = f"SELECT matches, timeline FROM match_raw_patch LIMIT {limit}, {batch_size}"
     row = pd.DataFrame(mu.mysql_execute_dict(query, conn))
     conn.close()
+# csv_file = 'D:\match_raw_patch_202305162012.csv'
+# row = pd.read_csv(r'D:/match_raw_patch_202305162012.csv', encoding='utf-8')
+
+
     row['matches'] = row['matches'].apply(json.loads)
     row['timeline'] = row['timeline'].apply(json.loads)
 
@@ -160,7 +162,7 @@ X = champion_tier_machine_learning.drop('tier', axis=1)  # 'tier' 열을 제외�
 y = champion_tier_machine_learning['tier']  # 'tier' 열을 레이블로 사용
 
 # 학습 데이터와 테스트 데이터 분리
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=42)
 
 # 랜덤 포레스트 분류기 학습
 model = RandomForestClassifier(n_estimators=100, random_state=42)
@@ -171,92 +173,92 @@ y_pred = model.predict(X_test)
 print('Accuracy: ', accuracy_score(y_test, y_pred))
 
 # 모델 저장
-joblib.dump(model, 'tierMachineLearning.pkl')
+joblib.dump(model, 'championTierPredictionModel.pkl')
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-def machine_learning_score(df):
-    def win_rate_pick_rate_data(raw_data):
-        result = []
-        for x in tqdm(range(len(raw_data))):
-            for player in raw_data.iloc[x]['matches']['participants']:
-                lst = []
-                lst.append(player['championId'])
-                lst.append(player['win'])
-                lst.append(player['teamPosition'])  # 팀 포지션 추가
-                result.append(lst)
-
-        columns = ['championId', 'win', 'teamPosition']  # 열 추가
-        win_pick_df = pd.DataFrame(result, columns=columns)
-        win_pick_df['win'] = win_pick_df['win'].astype(int)
-        groupBy_df = win_pick_df.groupby(['championId', 'teamPosition']).agg({'win': ['sum', 'count']})
-        groupBy_df.columns = ['winCount', 'pickCount']
-        groupBy_df['lineTotalCount'] = groupBy_df.groupby('teamPosition')['pickCount'].transform('sum')
-        groupBy_df['winRate'] = round((groupBy_df['winCount'] / groupBy_df['pickCount']) * 100, 2)
-        groupBy_df['pickRate'] = round((groupBy_df['pickCount'] / groupBy_df['lineTotalCount']) * 100, 2)
-        groupBy_df = groupBy_df.reset_index()  # 인덱스 재설정
-        groupBy_df = groupBy_df[['championId', 'teamPosition', 'winRate', 'pickRate']]  # 열 순서 조정
-        return groupBy_df
-
-    win_rate_pick_rate_data = win_rate_pick_rate_data(df)
-
-    # 밴률 데이터
-    def ban_rate_data(raw_data):
-        result = []
-        for x in tqdm(range(len(raw_data))):
-            ban_lst = raw_data.iloc[x]['matches']['bans']
-            for idx, ban in enumerate(ban_lst):
-                if ban != 0 and ban != -1:
-                    lst = []
-                    team_position = raw_data.iloc[x]['matches']['participants'][idx]['teamPosition']
-                    if team_position:
-                        lst.append(team_position)
-                        lst.append(ban)
-                        result.append(lst)
-
-        columns = ['teamPosition', 'championId']
-        ban_df = pd.DataFrame(result, columns=columns)
-        ban_rate_df = ban_df.groupby(['teamPosition', 'championId']).size().reset_index(name='banCount')
-
-        ban_rate_df['banPositionTotal'] = ban_rate_df.groupby('teamPosition')['banCount'].transform('sum')
-        ban_rate_df['banRate'] = round((ban_rate_df['banCount'] / ban_rate_df['banPositionTotal']) * 100, 2)
-        ban_rate_df = ban_rate_df.dropna()
-        ban_rate_df = ban_rate_df[['teamPosition', 'championId', 'banRate']]
-
-        return ban_rate_df
-
-    ban_rate_df = ban_rate_data(df)
-
-    champion_stats_df = win_rate_pick_rate_data.merge(ban_rate_df, on=['championId', 'teamPosition'])
-
-    def meta_score_data(raw_data):
-        result = []
-        for x in tqdm(range(len(raw_data))):
-            summoner = raw_data.iloc[x]['matches']['participants']
-            for player in summoner:
-                lst = []
-                lst.append(player['championId'])
-                lst.append(player['teamPosition'])
-                lst.append(player['kda'])
-                lst.append(player['totalDamageDealtToChampions'])
-                lst.append(player['totalDamageTaken'])
-                lst.append(player['timeCCingOthers'])
-                lst.append(player['total_gold'])
-                result.append(lst)
-
-        columns = ['championId', 'teamPosition', 'kda', 'totalDamageDealtToChampions', 'totalDamageTaken',
-                   'timeCCingOthers', 'total_gold']
-
-        meta_score_df = pd.DataFrame(result, columns=columns)
-
-        meta_score_df = meta_score_df.groupby(['championId', 'teamPosition']).mean().reset_index()
-
-        return meta_score_df
-
-    meta_score_data = meta_score_data(df)
-
-    result_df = champion_stats_df.merge(meta_score_data, on=['championId', 'teamPosition'])
+def machine_learning_score(result_df):
+    # def win_rate_pick_rate_data(raw_data):
+    #     result = []
+    #     for x in tqdm(range(len(raw_data))):
+    #         for player in raw_data.iloc[x]['matches']['participants']:
+    #             lst = []
+    #             lst.append(player['championId'])
+    #             lst.append(player['win'])
+    #             lst.append(player['teamPosition'])  # 팀 포지션 추가
+    #             result.append(lst)
+    #
+    #     columns = ['championId', 'win', 'teamPosition']  # 열 추가
+    #     win_pick_df = pd.DataFrame(result, columns=columns)
+    #     win_pick_df['win'] = win_pick_df['win'].astype(int)
+    #     groupBy_df = win_pick_df.groupby(['championId', 'teamPosition']).agg({'win': ['sum', 'count']})
+    #     groupBy_df.columns = ['winCount', 'pickCount']
+    #     groupBy_df['lineTotalCount'] = groupBy_df.groupby('teamPosition')['pickCount'].transform('sum')
+    #     groupBy_df['winRate'] = round((groupBy_df['winCount'] / groupBy_df['pickCount']) * 100, 2)
+    #     groupBy_df['pickRate'] = round((groupBy_df['pickCount'] / groupBy_df['lineTotalCount']) * 100, 2)
+    #     groupBy_df = groupBy_df.reset_index()  # 인덱스 재설정
+    #     groupBy_df = groupBy_df[['championId', 'teamPosition', 'winRate', 'pickRate']]  # 열 순서 조정
+    #     return groupBy_df
+    #
+    # win_rate_pick_rate_data = win_rate_pick_rate_data(df)
+    #
+    # # 밴률 데이터
+    # def ban_rate_data(raw_data):
+    #     result = []
+    #     for x in tqdm(range(len(raw_data))):
+    #         ban_lst = raw_data.iloc[x]['matches']['bans']
+    #         for idx, ban in enumerate(ban_lst):
+    #             if ban != 0 and ban != -1:
+    #                 lst = []
+    #                 team_position = raw_data.iloc[x]['matches']['participants'][idx]['teamPosition']
+    #                 if team_position:
+    #                     lst.append(team_position)
+    #                     lst.append(ban)
+    #                     result.append(lst)
+    #
+    #     columns = ['teamPosition', 'championId']
+    #     ban_df = pd.DataFrame(result, columns=columns)
+    #     ban_rate_df = ban_df.groupby(['teamPosition', 'championId']).size().reset_index(name='banCount')
+    #
+    #     ban_rate_df['banPositionTotal'] = ban_rate_df.groupby('teamPosition')['banCount'].transform('sum')
+    #     ban_rate_df['banRate'] = round((ban_rate_df['banCount'] / ban_rate_df['banPositionTotal']) * 100, 2)
+    #     ban_rate_df = ban_rate_df.dropna()
+    #     ban_rate_df = ban_rate_df[['teamPosition', 'championId', 'banRate']]
+    #
+    #     return ban_rate_df
+    #
+    # ban_rate_df = ban_rate_data(df)
+    #
+    # champion_stats_df = win_rate_pick_rate_data.merge(ban_rate_df, on=['championId', 'teamPosition'])
+    #
+    # def meta_score_data(raw_data):
+    #     result = []
+    #     for x in tqdm(range(len(raw_data))):
+    #         summoner = raw_data.iloc[x]['matches']['participants']
+    #         for player in summoner:
+    #             lst = []
+    #             lst.append(player['championId'])
+    #             lst.append(player['teamPosition'])
+    #             lst.append(player['kda'])
+    #             lst.append(player['totalDamageDealtToChampions'])
+    #             lst.append(player['totalDamageTaken'])
+    #             lst.append(player['timeCCingOthers'])
+    #             lst.append(player['total_gold'])
+    #             result.append(lst)
+    #
+    #     columns = ['championId', 'teamPosition', 'kda', 'totalDamageDealtToChampions', 'totalDamageTaken',
+    #                'timeCCingOthers', 'total_gold']
+    #
+    #     meta_score_df = pd.DataFrame(result, columns=columns)
+    #
+    #     meta_score_df = meta_score_df.groupby(['championId', 'teamPosition']).mean().reset_index()
+    #
+    #     return meta_score_df
+    #
+    # meta_score_data = meta_score_data(df)
+    #
+    # result_df = champion_stats_df.merge(meta_score_data, on=['championId', 'teamPosition'])
     result_df_copy = result_df.copy()
     result_df[['winRate', 'pickRate', 'banRate', 'kda', 'totalDamageDealtToChampions',
                'totalDamageTaken', 'timeCCingOthers', 'total_gold']] = result_df[['winRate', 'pickRate',
@@ -270,7 +272,7 @@ def machine_learning_score(df):
                               result_df['totalDamageTaken'] * 0.05 + result_df['timeCCingOthers'] * 0.05 + \
                               result_df['total_gold'] * 0.05
     result_df = pd.get_dummies(result_df, columns=['teamPosition'])
-    model = joblib.load('tierMachineLearning.pkl')  # 모델 로드
+    model = joblib.load('championTierPredictionModel.pkl')  # 모델 로드
     predictions = model.predict(result_df)  # 예측 수행
     result_df['tier'] = predictions  # 예측 결과를 'tier' 컬럼으로 추가
     columns_to_consider = ['teamPosition_BOTTOM', 'teamPosition_JUNGLE', 'teamPosition_MIDDLE', 'teamPosition_TOP',
@@ -280,8 +282,8 @@ def machine_learning_score(df):
     result_df = result_df[['championId', 'teamPosition', 'tier']]
     final_df = result_df_copy.merge(result_df, on=['championId', 'teamPosition'])
     final_df = final_df[['championId', 'teamPosition', 'winRate', 'pickRate', 'banRate', 'tier']]
-    return final_df
+    return result_df
 
 
-machine_learning_score = machine_learning_score(df)
+machine_learning_score = machine_learning_score(result_df)
 sort_machine_learning_score = machine_learning_score.sort_values(by=['tier'])

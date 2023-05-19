@@ -5,8 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ld.gg.dao.MemberDao;
 import com.ld.gg.dto.MemberDto;
+import com.ld.gg.dto.summoner.SummonerDto;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -72,14 +75,21 @@ public class MemberService {
 		}
 	}
 
-	public List<MemberDto> findLolAccount(String lol_account) {
+	public List<SummonerDto> findLolAccount(String summoner_name) {
 		try {
-			return mDao.getMemberLolAccount(lol_account);
+			return mDao.getMemberLolAccount(summoner_name);
 		} catch (Exception e) {
 			System.out.println(e);
 			e.printStackTrace();
 			return null;
 		}
+	}
+	//롤 닉네임 키워드로 회원정보 찾기
+	public String findLolAccountByKeyword(String lol_account_keyword) throws JsonProcessingException {
+		List<MemberDto> memberList = mDao.getMemberLolAccountByKeyword(lol_account_keyword);
+		ObjectMapper objectMapper = new ObjectMapper();
+		String mb_list_json = objectMapper.writeValueAsString(memberList);
+		return mb_list_json;
 	}
 
 	public boolean findMemberPhoneNum(String phone_num) {
@@ -254,6 +264,39 @@ public class MemberService {
 			System.out.println(e);
 			e.printStackTrace();
 			return false;
+		}
+	}
+
+	public boolean duplicateLolAccount(String lol_account) {
+		try {
+			MemberDto checkResult = mDao.checkLolAccount(lol_account);
+			if(checkResult == null) {
+				return true;
+			}else {
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public SummonerDto getSummonerIcon(MemberDto md) {
+		SummonerDto result = mDao.getSummonerIcon(md);
+		if(result != null) {
+			return result;
+		}else {
+			return null;	
+		}
+	}
+
+	public List<MemberDto> findUserLolAccount(String lol_account) {
+		try {
+			return mDao.getUserLolAccount(lol_account);
+		} catch (Exception e) {
+			System.out.println(e);
+			e.printStackTrace();
+			return null;
 		}
 	}
 

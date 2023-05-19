@@ -9,9 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ld.gg.dto.admin.AdDto;
+import com.ld.gg.dto.summoner.BuildDto;
 import com.ld.gg.dto.summoner.ChampRecordDto;
+import com.ld.gg.dto.summoner.DashBoardDto;
 import com.ld.gg.dto.summoner.RecordDto;
 import com.ld.gg.dto.summoner.RecordInfoDto;
+import com.ld.gg.dto.summoner.RecordRankingDto;
 import com.ld.gg.dto.summoner.SummonerDto;
 import com.ld.gg.dto.summoner.SummonerRankDto;
 import com.ld.gg.service.SummonerService;
@@ -114,6 +117,24 @@ public class SummonerRestController {
 	public List<RecordDto> get_record_detail(String match_id) {
 		List<RecordDto> rd = ss.get_record_detail(match_id);
 		return rd;
+	}
+	
+	@GetMapping("/info/getBuild")
+	public List<BuildDto> getBuild(String match_id, String summoner_name){
+		List<BuildDto> bd = ss.getBuild(match_id, summoner_name);
+		return bd;
+	}
+	
+	@GetMapping("/getRanking")
+	public List<RecordRankingDto> getRanking(String match_id, String summoner_name){
+		List<RecordRankingDto> rrd = ss.getRanking(match_id, summoner_name);
+		return rrd;
+	}
+	
+	@GetMapping("/dashboard/kda")
+	public DashBoardDto getDashBoardKDA(String summoner_name){
+		DashBoardDto dbd = ss.getDashBoardKDA(summoner_name);
+		return dbd;
 	}
 
 }

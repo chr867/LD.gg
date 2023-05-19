@@ -45,12 +45,17 @@ public class MentoringController {
 		HttpSession session = request.getSession();
 		String email = (String) session.getAttribute("email");
 		MemberDto mbdto = mbdao.getMemberInfo(email);
-		if (mbdto.getUser_type() == 2) {
+		if (mbdto.getUser_type() == 2) { //멘토일 경우
 			return new ModelAndView("mentoringView/myMentoring")
 					.addObject("member", mbdto);
-		} else {
+		} else if (mbdto.getUser_type() == 1) { //일반 회원일 경우
 			return new ModelAndView("mentoringView/myMentoringMemberOnly")
 					.addObject("member", mbdto);
+		}else if (mbdto.getUser_type() == 3) { // 관리자일 경우
+			return new ModelAndView("mentoringView/myMentoring")
+					.addObject("member", mbdto);
+		}else {
+			return new ModelAndView("/");
 		}
 		
 	}
@@ -79,7 +84,7 @@ public class MentoringController {
 		HttpSession session = request.getSession(); // 현재 접속중인 회원의 아이디 확인
 		String email = (String) session.getAttribute("email");
 		MemberDto mbdto = mbdao.getMemberInfo(email);
-		List<MemberDto> mbList = mbService.findLolAccount(lol_account);
+		List<MemberDto> mbList = mbService.findUserLolAccount(lol_account);
 		String mentor_email = mbList.get(0).getEmail();
 		List<MentorClassDTO> mentor_class_list = mtpService.select_by_email_mentor_class(mentor_email);
 		MentorProfileDTO mtp = mtpdao.select_by_email_mentor_profile(mentor_email);

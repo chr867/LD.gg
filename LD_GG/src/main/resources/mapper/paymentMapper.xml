@@ -26,8 +26,8 @@
 		SELECT point_balance FROM point WHERE holder_email = #{email} 
 	</select>
 	
-	<update id="updateBalance" parameterType = "Integer">
-		UPDATE point SET point_balance = point_balance + #{point}
+	<update id="updateBalance" parameterType = "Map">
+		UPDATE point SET point_balance = #{point} WHERE holder_email = #{email}
 	</update>
 	
 	<select id="checkMentoringApplication" resultType = "Integer">
@@ -35,7 +35,7 @@
 	</select>
 	
 	<select id="getInfoForPayment" resultType = "member">
-		SELECT email, phone_num FROM member WHERE lol_account = #{lol_account}
+		SELECT email, lol_account, phone_num FROM member WHERE email = #{email}
 	</select>
 	
 	<insert id="insert_tx_history" parameterType = "tx">

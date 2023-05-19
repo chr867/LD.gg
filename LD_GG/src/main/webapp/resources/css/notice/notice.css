@@ -1,0 +1,16 @@
+a{
+  text-decoration: none;
+}
+
+.search_box{
+  width: 100%;
+}
+
+.search_box .element{
+  position: relative;
+  left: 45%;
+}
+
+.search_box .element a{
+	padding-left: 35%;
+}

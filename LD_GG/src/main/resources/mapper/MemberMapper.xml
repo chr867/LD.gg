@@ -27,10 +27,15 @@
 		SELECT email FROM MEMBER WHERE email=#{email}
 	</select>
 
-	<select id="getMemberLolAccount" parameterType="member"
-		resultType="member">
+	<select id="getMemberLolAccount" parameterType="summoner"
+		resultType="summoner">
+		SELECT summoner_name,s_level,profile_icon_id FROM summoner_info WHERE
+		summoner_name=#{summoner_name} ORDER BY revision_date DESC LIMIT 1;
+	</select>
+	
+	<select id="getMemberLolAccountByKeyword" resultType="member">
 		SELECT email,lol_account FROM MEMBER WHERE
-		lol_account=#{lol_account}
+		lol_account LIKE CONCAT('%', #{lol_account_keyword}, '%')
 	</select>
 
 	<select id="getMemberPhoneNum" parameterType="member"
@@ -63,4 +68,23 @@
 		UPDATE MEMBER SET
 		user_type = #{user_type} WHERE email = #{email}
 	</update>
+
+	
+	<select id="checkLolAccount" parameterType="member"
+		resultType="member">
+		SELECT lol_account FROM MEMBER WHERE lol_account=#{lol_account}
+	</select>
+	
+	
+	<select id="getSummonerIcon" parameterType="member"
+		resultType="summoner">
+		SELECT summoner_name, profile_icon_id FROM summoner_info WHERE summoner_name = #{lol_account}
+		ORDER BY revision_date DESC LIMIT 1
+	</select>
+	
+	<select id="getUserLolAccount" parameterType="member"
+		resultType="member">
+		SELECT email,lol_account FROM MEMBER WHERE
+		lol_account=#{lol_account}
+	</select>
 </mapper>

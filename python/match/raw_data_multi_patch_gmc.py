@@ -107,6 +107,14 @@ def get_match_info_worker(args):
                 get_match_url = f'https://asia.api.riotgames.com/lol/match/v5/matches/{match_id}?api_key={api_key}'
                 get_match_res = requests.get(get_match_url).json()
                 tmp.update(get_match_res['metadata'])
+
+                game_version_split = get_match_res['info']['gameVersion'].split('.')
+                game_version = float(game_version_split[0] + '.' + game_version_split[1])
+                game_duration = get_match_res['info']['gameDuration']
+                if game_version < 13.7:
+                    break
+                if game_duration < 900:
+                    break
             except Exception as e:
                 print(f'{e} match, {get_match_res["status"]["message"]},{api_key}')
                 if 'found' in get_match_res['status']['message']:

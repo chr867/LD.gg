@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ld.gg.dto.MemberDto;
+import com.ld.gg.dto.summoner.SummonerDto;
 import com.ld.gg.service.MemberService;
 import com.ld.gg.userClass.SessionListener;
 
@@ -43,18 +44,23 @@ public class MemberController {
 	@PostMapping("/login")
 	public ModelAndView login(HttpServletRequest request,MemberDto md, HttpSession session, RedirectAttributes ra) throws Exception {
 		MemberDto member = ms.login(md);
-		log.info("{}",member);
+		SummonerDto sDto = ms.getSummonerIcon(member);
+		log.info("--------------SDTO 결과 !!!!{}",sDto);
+		log.info("{}",md);
+		log.info("--------------MDTO 결과 !!!!{}",member);
 		System.out.println("로그인 반환 결과:"+member);
-		if (member != null) {
+		if (member != null) { 
 			session.setAttribute("email", member.getEmail());
 			session.setAttribute("lol_account", member.getLol_account());
 			session.setAttribute("user_type", member.getUser_type());
+			session.setAttribute("summoner_name", sDto.getSummoner_name());
+			session.setAttribute("summoner_icon", sDto.getProfile_icon_id());
 			
 
 		    sl.login(member.getEmail(),request);
             
 			ra.addFlashAttribute("msg", "로그인 성공");
-			return new ModelAndView("redirect:/member/testMain");
+			return new ModelAndView("redirect:/");
 		}
 		ra.addFlashAttribute("msg", "로그인 실패");
 		ra.addFlashAttribute("check", 2);
@@ -81,7 +87,7 @@ public class MemberController {
 		return "/member/changePassword";
 	}
 	
-	@GetMapping("/myPage")
+	@GetMapping("/mypage")
 	public String goMypage(HttpServletRequest request, Model model) {
 		HttpSession session = request.getSession();
 		String email = (String)session.getAttribute("email");
@@ -104,6 +110,10 @@ public class MemberController {
 	@GetMapping("/rank")
 	public String goMemberRank() {
 		return "/member/rank";
+	}
+	@GetMapping("/changeUserType")
+	public String changeUserType() {
+		return "/member/changeUserType";
 	}
 	
 	

@@ -7,7 +7,8 @@
 
 
 <select id="select_by_email_mentor_class" resultType="mentorClass">
-  SELECT * FROM mentor_class WHERE mentor_email = #{mentor_email};
+  SELECT * FROM mentor_class WHERE mentor_email = #{mentor_email}
+  ORDER BY class_id DESC;
 </select>
 
 <select id="select_by_id_mentor_class" resultType="mentorClass">

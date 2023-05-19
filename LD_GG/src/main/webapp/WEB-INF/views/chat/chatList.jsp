@@ -10,9 +10,13 @@
 <head>
   <title>채팅 리스트</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="/resources/js/chat/chatList.js" defer></script>
   <script>
     /* 채팅방 select, insert */
     function go_chat__(email, chat_category){
+      console.log(email);
+      console.log(chat_category);
+
       $.ajax({
         url: "/chat/go_chat",
         method: "POST",
@@ -33,7 +37,7 @@
         }
         else{
           console.log(resp);
-          var url = "http://localhost:8080/chat/enter_chatroom?chat_room_seq=" + resp + "&chat_category=" + chat_category;
+          var url = "/chat/enter_chatroom?chat_room_seq=" + resp + "&chat_category=" + chat_category;
 
           console.log(url);
           // 팝업 창의 크기
@@ -191,6 +195,21 @@
   </script>
 </head>
 <body>
+  <div id="email" hidden="true">
+    ${email}
+  </div>
+  <div id="mento_list">
+    <div id="mento">
+      <div id="mento_profile">프로필</div>
+      <div id="mento_name">닉네임</div>
+    </div>
+  </div>
+  <div id="mate_list">
+    <div id="mate">
+      <div id="mate_profile">프로필</div>
+      <div id="mate_name">닉네임</div>
+    </div>
+  </div>
   ${email}의 채팅방 페이지입니다. <br>
   멘토링과 메이트를 조회하시고 이메일을 클릭하세요.<br><br>
   멘토링<br>
@@ -201,38 +220,5 @@
   <button id="get_mate" onclick="get_mate_list()">메이트</button>
   <div id="mate-list">
   </div>
-
-  기존 채팅방을 이용하고 싶으시다면 아래에서 이메일을 입력하세요.<br>
-  <div id="chatroom-list">
-  </div>
-  <script>
-    /* 기존 채팅방 리스트를 얻어옵니다. */
-    console.log('${email}');
-    $.ajax({
-      url: "/chat/get_chatting_list/",
-      method: "POST",
-      data: {
-        'email' : '${email}'
-      },
-      dataType : "json"
-    }).done(function (resp){
-      console.log(resp);
-
-      let rlist = '';
-
-      for(key of resp){
-        const miter = "'" + key.chat_receive_user +"', " + key.chat_category;
-        console.log(miter);
-        rlist += '<input type="button" value="';
-        rlist += '${email}' == key.chat_receive_user ? key.chat_send_user : key.chat_receive_user +
-                '" onclick="go_exist_chatting(' + miter +')">';
-      }
-
-      $("#chatroom-list").html(rlist);
-
-    }).fail(function (err){
-      console.log(err);
-    })
-  </script>
 </body>
 </html>

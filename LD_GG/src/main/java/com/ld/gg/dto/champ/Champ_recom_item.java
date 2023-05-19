@@ -10,11 +10,10 @@ import lombok.experimental.Accessors;
 @Alias("champ_recom_item")
 public class Champ_recom_item {
 	private int champion_id;
-	private int start_item;
-	private int shoes;
-	private int first_core;
-	private int second_core;
-	private int third_core;
-	private int fourth_core;
-	private int fifth_core;
+	private String team_position;
+	private int iteam_id;
+	private int pick_count;
+	private int win_count;
+	private double win_rate;
+	private double pick_rate;
 }

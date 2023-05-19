@@ -19,27 +19,17 @@ public class FaqContoroller {
 	private MemberDao mbdao;
 	
 	@GetMapping
+	public String go_faq() {
+		return "faqView/faq";
+	}
+	
+	@GetMapping("/inquiries")
 	public ModelAndView go_inquiries_list(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		String email = (String) session.getAttribute("email");
 		MemberDto mbdto = mbdao.getMemberInfo(email);
 		return new ModelAndView("faqView/inquiriesList")
 				.addObject("member", mbdto);
-	}
-	
-	@GetMapping("/detail")
-	public String go_inquiries_detail() {
-		return "faqView/inquiriesDetails";
-	}
-	
-	@GetMapping("/write")
-	public String go_inquiries_write() {
-		return "faqView/inquiriesWrite";
-	}
-	
-	@GetMapping("/modify")
-	public String go_inquiries_modify() {
-		return "faqView/inquiriesModify";
 	}
 
 }

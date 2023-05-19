@@ -6,9 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ld.gg.dao.Summoner_dao;
+import com.ld.gg.dto.summoner.BuildDto;
 import com.ld.gg.dto.summoner.ChampRecordDto;
+import com.ld.gg.dto.summoner.DashBoardDto;
 import com.ld.gg.dto.summoner.RecordDto;
 import com.ld.gg.dto.summoner.RecordInfoDto;
+import com.ld.gg.dto.summoner.RecordRankingDto;
 import com.ld.gg.dto.summoner.SummonerDto;
 import com.ld.gg.dto.summoner.SummonerRankDto;
 
@@ -33,8 +36,8 @@ public class SummonerService {
 		return sd;
 	}
 
-	public List<SummonerDto> get_summoner_info(String summoner_name) {
-		List<SummonerDto> sd = SD.get_summoner_info(summoner_name);
+	public SummonerDto get_summoner_info(String summoner_name) {
+		SummonerDto sd = SD.get_summoner_info(summoner_name);
 		return sd;
 	}
 
@@ -86,6 +89,26 @@ public class SummonerService {
 	public List<ChampRecordDto> getChampClassic(String summoner_name) {
 		List<ChampRecordDto> crd = SD.getChampClassic(summoner_name);
 		return crd;
+	}
+
+	public List<BuildDto> getBuild(String match_id, String summoner_name) {
+		List<BuildDto> bd = SD.getBuild(match_id, summoner_name);
+		return bd;
+	}
+
+	public List<RecordRankingDto> getRanking(String match_id, String summoner_name) {
+		List<RecordRankingDto> rrd = SD.getRanking(match_id, summoner_name);
+		return rrd;
+	}
+
+	public SummonerDto getSummoner(String lol_account) {
+		SummonerDto sd = SD.getSummoner(lol_account);
+		return sd;
+	}
+
+	public DashBoardDto getDashBoardKDA(String summoner_name) {
+		DashBoardDto dbd = SD.getDashBoardKDA(summoner_name);
+		return dbd;
 	}
 
 }
