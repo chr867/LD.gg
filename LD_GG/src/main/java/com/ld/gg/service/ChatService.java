@@ -1,6 +1,8 @@
 package com.ld.gg.service;
 
 import com.ld.gg.dao.mentoringdao.MentiDAO;
+import com.ld.gg.dao.mentoringdao.MentorProfileDAO;
+import com.ld.gg.dto.MemberDto;
 import com.ld.gg.dto.chat.ChatListDto;
 import com.ld.gg.dto.chat.ChatroomDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +13,9 @@ import com.ld.gg.dto.chat.ChatDto_mini;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -124,10 +128,11 @@ public class ChatService {
 		System.out.println("cd.select_chatroomSEQ(chatroomDto) : " + chatroomSEQ);
 
 		if(chatroomSEQ == null){
-			System.out.println("find_chatroomSEQ : " + chatroomSEQ);
+			System.out.println("111 1find_chatroomSEQ : " + chatroomSEQ);
 			chatroomSEQ = cd.select_chatroomSEQ_reverse(chatroomDto);
+			System.out.println("fffff : " + chatroomSEQ);
 			if(chatroomSEQ == null){
-				System.out.println("find_chatroomSEQ : " + chatroomSEQ);
+				System.out.println("2222find_chatroomSEQ : " + chatroomSEQ);
 				chatroomSEQ = cd.insert_chatroomSEQ(chatroomDto);
 			}
 		}
@@ -141,4 +146,25 @@ public class ChatService {
 
 		return chatroomDto;
 	}
+
+	/* mento, menti, mate 가져오기 */
+    public Map<String, List<?>> get_mento_mate(String email) {
+		Map<String, List<?>> map_mento_mate = new HashMap<>();
+
+		/* mentoring */
+		List<MemberDto> mentor_list = cd.get_mentor(email);
+		List<MemberDto> menti_list = cd.get_menti(email);
+
+		/* mate */
+		List<MemberDto> mateapp_list = cd.get_mateapp(email);
+		List<MemberDto> mate_list = cd.get_mate(email);
+
+		map_mento_mate.put("mentor_list", mentor_list);
+		map_mento_mate.put("menti_list", menti_list);
+
+		map_mento_mate.put("mateapp_list", mateapp_list);
+		map_mento_mate.put("mate_list", mate_list);
+
+		return map_mento_mate;
+    }
 }
