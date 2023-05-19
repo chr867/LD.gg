@@ -269,7 +269,7 @@ public class MemberService {
 
 	public boolean duplicateLolAccount(String lol_account) {
 		try {
-			String checkResult = mDao.checkLolAccount(lol_account);
+			MemberDto checkResult = mDao.checkLolAccount(lol_account);
 			if(checkResult == null) {
 				return true;
 			}else {
