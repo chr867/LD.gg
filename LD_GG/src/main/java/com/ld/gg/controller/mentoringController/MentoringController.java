@@ -45,12 +45,17 @@ public class MentoringController {
 		HttpSession session = request.getSession();
 		String email = (String) session.getAttribute("email");
 		MemberDto mbdto = mbdao.getMemberInfo(email);
-		if (mbdto.getUser_type() == 2) {
+		if (mbdto.getUser_type() == 2) { //멘토일 경우
 			return new ModelAndView("mentoringView/myMentoring")
 					.addObject("member", mbdto);
-		} else {
+		} else if (mbdto.getUser_type() == 1) { //일반 회원일 경우
 			return new ModelAndView("mentoringView/myMentoringMemberOnly")
 					.addObject("member", mbdto);
+		}else if (mbdto.getUser_type() == 3) { // 관리자일 경우
+			return new ModelAndView("mentoringView/myMentoring")
+					.addObject("member", mbdto);
+		}else {
+			return new ModelAndView("/");
 		}
 		
 	}
