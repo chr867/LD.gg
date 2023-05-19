@@ -259,6 +259,7 @@ function modifybookmark(bookmark_val) {
 function loadBookmark() {
 	let email='${sessionScope.email}';
 	let now_page = window.location.pathname;
+        	console.log("now_page"+now_page)
     $.ajax({
         method: 'post',
         url: '/mate/bookmark',
@@ -273,21 +274,34 @@ function loadBookmark() {
         	console.log("res.my_page"+res.my_page)
         	console.log("res.tip_page"+res.tip_page)
         	console.log("res.mate_page"+res.mate_page)
-        	checkBookmark(now_page,res);
-        	if (res.my_page === 1 && now_page !="/member/myPage" ) {
-        		  my_page = '<td><button id="bookmarkBt" onclick="goUrl(\'/member/myPage)">my_page로 이동</button></td>';
-        		} else if (res.tip_page === 1 && now_page !="/tip/") {
-        		  tip_page = '<td><button id="bookmarkBt" onclick="goUrl(\'/tip/\')">tip_page로 이동</button></td>';
-        		} else if (res.mate_page === 1 && now_page !="/mate/" ) {
-        		  mate_page = '<td><button id="bookmarkBt" onclick="goUrl(\'/mate/\')">mate_page로 이동</button></td>';
-        		}
-
+        	
+        	  if (now_page === '/member/myPage') {
+        		  if(res.tip_page ===1){
+    				tip_page = '<td><button class="bookmarkBt" onclick="goUrl(\'/tip/\')">tip_page로 이동</button></td>';
+        		  }if(res.mate_page === 1){
+     			 	mate_page = '<td><button class="bookmarkBt" onclick="goUrl(\'/mate/\')">mate_page로 이동</button></td>';  
+        		  }
+        	  }
+        	  else if (now_page === '/tip/') {
+        		  if(res.my_page ===1){
+    				my_page = '<td><button class="bookmarkBt" onclick="goUrl(\'/member/myPage)">my_page로 이동</button></td>';
+        		  }if(res.mate_page === 1){
+     			 	mate_page = '<td><button class="bookmarkBt" onclick="goUrl(\'/mate/\')">mate_page로 이동</button></td>';  
+        		  }
+        	  }
+        	  else if (now_page === '/mate/') {
+        		  if(res.my_page ===1){
+    				my_page = '<td><button class="bookmarkBt" onclick="goUrl(\'/member/myPage)">my_page로 이동</button></td>';
+        		  }if(res.tip_page === 1){
+    				tip_page = '<td><button class="bookmarkBt" onclick="goUrl(\'/tip/\')">tip_page로 이동</button></td>';
+        		  }
+        	  }
         	bookmarkList += '<tr>'
         	bookmarkList += my_page
         	bookmarkList += tip_page
         	bookmarkList += mate_page
         	bookmarkList += '</tr>'
-     
+        	checkBookmark(now_page,res);
         console.log(bookmarkList);
         $('#bookmark-list').html(bookmarkList)
     }).fail(err => {
@@ -310,7 +324,7 @@ function loadBookmark() {
             button.setAttribute("src", "/resources/img/bf-bookmark.png");
         }
     }
-
+    loadBookmark();
 	/* 	document.getElementById("search") */
 </script>
 
