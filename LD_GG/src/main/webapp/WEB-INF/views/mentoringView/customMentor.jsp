@@ -671,7 +671,6 @@
 			let formData = new FormData($("#customMentorForm")[0]);
 			let customMentorDTO = {
 				menti_email: "${member.email}",
-				summoner_name: "${member.lol_account}",
 				position_to_learn: formData.get("position_to_learn"),
 				champion_to_learn: formData.get("champion_to_learn"),
 				target_tier: formData.get("target_tier")
