@@ -49,7 +49,7 @@ public class MemberController {
 		log.info("{}",md);
 		log.info("--------------MDTO 결과 !!!!{}",member);
 		System.out.println("로그인 반환 결과:"+member);
-		if (member != null && sDto != null) { 
+		if (member != null) { 
 			session.setAttribute("email", member.getEmail());
 			session.setAttribute("lol_account", member.getLol_account());
 			session.setAttribute("user_type", member.getUser_type());

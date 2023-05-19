@@ -295,7 +295,7 @@ body {
 					<img src="/resources/img/icon/profileIcon5626.webp" alt="">
 				</div>
 				<div class="summoner-name-box">
-					<h5>${sessionScope.lol_account}님</h5>
+					<h5>${sessionScope.lol_account} 님</h5>
 				</div>
 				<div class="user-type-box">
 					<div class="user-type-common" style="display: none;">

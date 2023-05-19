@@ -290,4 +290,14 @@ public class MemberService {
 		}
 	}
 
+	public List<MemberDto> findUserLolAccount(String lol_account) {
+		try {
+			return mDao.getUserLolAccount(lol_account);
+		} catch (Exception e) {
+			System.out.println(e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 }

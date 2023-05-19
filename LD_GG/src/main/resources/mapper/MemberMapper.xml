@@ -81,4 +81,10 @@
 		SELECT summoner_name, profile_icon_id FROM summoner_info WHERE summoner_name = #{lol_account}
 		ORDER BY revision_date DESC LIMIT 1
 	</select>
+	
+	<select id="getUserLolAccount" parameterType="member"
+		resultType="member">
+		SELECT email,lol_account FROM MEMBER WHERE
+		lol_account=#{lol_account}
+	</select>
 </mapper>
