@@ -20,7 +20,7 @@ public class SessionInterceptor implements HandlerInterceptor {
 
 		Integer userType = (Integer) request.getSession().getAttribute("user_type");
         if (userType == null) { // 로그인하지 않은 경우
-        	log.info("로그인을 해야합니다");
+        	log.info("세션인터셉터 : 로그인을 해야합니다");
             response.sendRedirect("/"); // 홈페이지로 이동
             return false;
         }else if(userType == 4){

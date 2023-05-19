@@ -32,9 +32,10 @@
 </select>
 
 <select id="recom_menti" resultType="customMentor" parameterType="String">
-	SELECT cm.menti_email , cm.summoner_name , cm.position_to_learn , cm.champion_to_learn , cm.target_tier
+	SELECT cm.menti_email , m.lol_account , cm.position_to_learn , cm.champion_to_learn , cm.target_tier
 	FROM custom_mentor AS cm
 	JOIN menti_tag AS mt ON cm.menti_email = mt.menti_email
+	JOIN member AS m ON cm.menti_email = m.email
 	WHERE mt.tag_id IN (SELECT tag_id FROM mentor_tag WHERE mentor_email = #{mentor_email})
 	GROUP BY cm.menti_email
 	HAVING COUNT(DISTINCT mt.tag_id) >= 2
@@ -42,16 +43,23 @@
 </select>
 
 <select id="select_all_custom_mentor" resultType="customMentor">
-  SELECT * FROM custom_mentor;
+  SELECT * 
+  FROM custom_mentor AS cm
+  JOIN member AS m
+  ON cm.menti_email = m.email;
 </select>
 
 <select id="select_by_email_custom_mentor" resultType="customMentor">
-  SELECT * FROM custom_mentor WHERE menti_email = #{menti_email};
+  SELECT * 
+  FROM custom_mentor AS cm
+  JOIN member AS m
+  ON cm.menti_email = m.email
+  WHERE cm.menti_email = #{menti_email};
 </select>
 
 <insert id="insert_custom_mentor" parameterType="customMentor">
-  INSERT INTO custom_mentor (menti_email, summoner_name, position_to_learn, champion_to_learn, target_tier) 
-  VALUES (#{menti_email},#{summoner_name},#{position_to_learn},#{champion_to_learn},#{target_tier});
+  INSERT INTO custom_mentor (menti_email, position_to_learn, champion_to_learn, target_tier) 
+  VALUES (#{menti_email},#{position_to_learn},#{champion_to_learn},#{target_tier});
 </insert>
 
 <update id="update_custom_mentor" parameterType="customMentor">

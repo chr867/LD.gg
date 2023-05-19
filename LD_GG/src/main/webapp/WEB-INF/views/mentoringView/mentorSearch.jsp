@@ -6,35 +6,9 @@
 <title>멘토 찾기</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
-.search-container {
-  display: flex;
-  align-items: center;
-}
-
-#search-input {
-  padding: 8px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-#search-button {
-  padding: 8px 16px;
-  font-size: 16px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-#search-button:hover {
-  background-color: #45a049;
-}
 
     .mentor-link {
         cursor: pointer;
-        width: 500px;
         padding: 10px;
         border: 1px solid #ccc;
         margin-bottom: 10px;
@@ -47,18 +21,49 @@
         font-weight: bold;
     }
 </style>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 </head>
 <body>
-	<h2>멘토 찾기 페이지 입니다~~~</h2>
-	<div class="search-container">
-	  <input type="text" id="search-input" placeholder="검색어를 입력하세요">
-	  <button id="search-button">검색</button>
+
+<div class='container text-center'>
+	<div class='row'>
+		<div class='col-4'>
+			<div class='row'>
+			<div class="form-floating">
+			  <input type="text" class="form-control" id="search-input" placeholder="소환사명으로 검색">
+			  <label for="search-input">소환사명으로 검색</label>
+			  <button class="btn" id="search-button">검색</button>
+			</div>
+			</div>
+			<div class='row'>
+			<div id="tag_box">
+			  <button type="button" class='btn'>태그</button>
+			  <button type="button" class='btn'>태그</button>
+			  <button type="button" class='btn'>태그</button>
+			  <button type="button" class='btn'>태그</button>
+			</div>
+			</div>
+			
+			<div class='row'>			
+			<div id="ordered_box">
+			  <button type="button" class='btn'>정렬</button>
+			  <button type="button" class='btn'>정렬</button>
+			  <button type="button" class='btn'>정렬</button>
+			  <button type="button" class='btn'>정렬</button>
+			</div>
+			</div>
+			
+		</div>
+		<div class='col-8'>
+			<h4>멘토 찾기</h4>
+			<div id="mentor-list">
+				<!-- 멘토 프로필 목록 추가. -->
+			</div>
+		</div>
 	</div>
-	<div id="mentor-list">
-	<!-- 멘토 프로필 목록 추가. -->
-	</div>
-	
-	
+</div><!-- container -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 <script>
     function get_mentor_list() {
     	$.ajax({
@@ -106,7 +111,10 @@
     	 
         $("#search-button").on("click", function() {
         	  var searchKeyword = $("#search-input").val();
-        	  console.log("검색어:", searchKeyword);
+        	  if(searchKeyword == '' || searchKeyword ==null){
+        		  location.reload();
+        		  console.log("검색어:", searchKeyword);
+        	  } else{
         	  $.ajax({
         		  url: '/mentor/get-member-info',
         		  type: 'GET',
@@ -116,6 +124,10 @@
         		  success: function(member_list_json) {
         			  $("#mentor-list").text("");
 	       			  let member_list = JSON.parse(member_list_json);
+	       			  if(member_list =='' || member_list ==null){
+	       				  alert('검색 결과가 없습니다');
+	       				location.reload();
+	       			  }
 	       			  for (var i = 0; i < member_list.length; i++) {
 	       			        let mentor_email = member_list[i].email;
 	       			        
@@ -152,7 +164,7 @@
         		    console.error(error); // 에러 메시지를 콘솔에 출력하거나 에러 처리를 수행합니다
         		  }
         		});
-
+        	  }
        	});
 
     	

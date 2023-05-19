@@ -28,11 +28,11 @@
 			border: 1px solid #d5d5de;
 		}
 
-		.position-buttons {
+		#position-buttons {
 			display: flex;
 		}
 
-		.position-buttons button {
+		#position-buttons button {
 			background-color: #f2f2f2;
 			border: none;
 			color: black;
@@ -41,7 +41,7 @@
 			cursor: pointer;
 		}
 
-		.position-buttons button:hover {
+		#position-buttons button:hover {
 			background-color: #ddd;
 		}
 	</style>
@@ -82,20 +82,20 @@
 		<input type="text" id="position_to_learn" name="position_to_learn"
 			value="${mentor_profile.about_mentor}"><br><br>
 
-		<div class="position-buttons">
-			<button type="button" id="top-button"><img
+		<div id="position-buttons" class="btn-group" role="group" aria-label="Basic example">
+			<button type="button" id="top-button" class="btn"><img
 					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_top_grey.svg" 
 					class="position-img">탑</button>
-			<button type="button" id="jungle-button"><img
+			<button type="button" id="jungle-button" class="btn"><img
 					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_jg_grey.svg" 
 					class="position-img">정글</button>
-			<button type="button" id="mid-button"><img
+			<button type="button" id="mid-button" class="btn"><img
 					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_mid_grey.svg"
 					class="position-img">미드</button>
-			<button type="button" id="bot-button"><img
+			<button type="button" id="bot-button" class="btn"><img
 					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_ad_grey.svg" 
 					class="position-img">바텀</button>
-			<button type="button" id="support-button"><img
+			<button type="button" id="support-button" class="btn"><img
 					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_sup_grey.svg"
 					class="position-img">서포터</button>
 		</div><br><br>
@@ -267,10 +267,10 @@
 			// 선택한 포지션 값을 저장할 배열
 			let positions = [];
 
-			$(".position-buttons button").click(function () {
+			$("#position-buttons button").click(function () {
 				$(this).toggleClass("selected");
 			});
-			$(".position-buttons button").hover(function () {
+			$("#position-buttons button").hover(function () {
 				$(this).addClass("mouse-over");
 			}, function () {
 				$(this).removeClass("mouse-over");
