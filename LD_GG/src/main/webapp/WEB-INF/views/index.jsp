@@ -48,6 +48,8 @@
 	href="/resources/css/main/loginModal.css">
 <!--로그인 및 세션관련 JS-->
 <script src="/resources/js/main/loginSession.js" defer></script>
+	<!-- 채팅 관련 JS-->
+	<script src="/resources/js/main/chat.js" defer></script>
 </head>
 <style>
 body {
@@ -274,7 +276,7 @@ body {
 			<div class="header-icon-box" style="display: none;">
 				<div class="message-icon-box">
 					<img src="/resources/img/icon/free-icon-message-5941217.png" alt=""
-						class="message-icon-img">
+						class="message-icon-img" onclick="chatPopup();">
 					<div class="message-notification"></div>
 				</div>
 				<div class="alarm-icon-box">
