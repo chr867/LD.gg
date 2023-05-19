@@ -79,6 +79,11 @@
 		ON mr.mate_apply = M.EMAIL
 		where mate_id =#{mate_id} and mate_select = 1
 	</select>
+	<select id="getBookmark" resultType="mate">
+		select my_page ,mate_page ,tip_page 
+		from bookmark
+		where email =#{email}
+	</select>
 	<delete id="mateDelete" parameterType="mate">
 		DELETE FROM mate_post WHERE mate_id = #{mate_id}
 	</delete>
@@ -110,9 +115,9 @@
 			ELSE 0
 			END
 	</update>
-	<update id="modifybookmark" parameterType="Mate">
+	<update id="modifybookmark" >
 		UPDATE BOOKMARK
-		SET #{bookmark_page} = #{bookmark_val}
+		SET ${bookmark_page} = #{bookmark_val}
 		WHERE email = #{email}
 	</update>
 </mapper>

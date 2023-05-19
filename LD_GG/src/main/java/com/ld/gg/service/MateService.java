@@ -195,10 +195,13 @@ public class MateService {
 		log.info("{}", sList);
 		return sList;
 	}
-	public boolean modifybookmark(MateDto mDto) {
-		log.info(mDto+"modifybookmark-Dto");
+	public boolean modifybookmark(String bookmark_page,int bookmark_val,String email) {
+		log.info("bookmark_page"+bookmark_page);
+		log.info("bookmark_val"+bookmark_val);
+		log.info("email"+email);
 		try {
-			Integer modifybookmarkResult = mDao.modifybookmark(mDto);
+			Integer modifybookmarkResult = mDao.modifybookmark(bookmark_page,bookmark_val,email);
+			
 			if (modifybookmarkResult != 0) {
 				log.info(modifybookmarkResult+"replyMateModifyResult");
 				return true;
@@ -211,6 +214,11 @@ public class MateService {
 			return false;
 		}
 		
+	}
+	public MateDto getBookmark(String email) {
+		MateDto getBookmark = mDao.getBookmark(email);
+		log.info("getBookmark"+getBookmark);
+		return getBookmark;
 	}
 }
 

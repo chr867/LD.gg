@@ -24,5 +24,6 @@ public interface MateDao {
 	Integer mateDelete(int mate_id);
 	Integer replydelete(@Param("mate_id") int mate_id,@Param("mate_r_id") int mate_r_id);
 	List<MateDto> getSearchList(String keyword);
-	Integer modifybookmark(MateDto mDto);
+	Integer modifybookmark( @Param("bookmark_page")String bookmark_page,@Param("bookmark_val") int bookmark_val,@Param("email") String email);
+	MateDto getBookmark(String email);
 }

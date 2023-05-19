@@ -49,6 +49,14 @@ public class MateRestController {
 		log.info("메이트  선택 디티오"+mDto);
 		return mDto;
 	}
+	@PostMapping("/bookmark")
+	public MateDto getBookmark(String email) throws Exception{
+		log.info("메이트레스트 컨트롤러 탔어용-북마크 가져오기");
+		log.info("메이트 email "+email);
+		MateDto mDto= ms.getBookmark(email);
+		log.info("메이트  북마크 디티오"+mDto);
+		return mDto;
+	}
 	
 	@GetMapping("/reply/list")
 	public List<MateDto> getReplyList(int mate_id) throws Exception{

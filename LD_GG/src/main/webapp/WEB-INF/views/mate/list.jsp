@@ -128,6 +128,7 @@ a[href="/mate/write"] {
 		src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/jquery.jqgrid.min.js"></script>
 </body>
 <script type="text/javascript">
+
 	$("#grid").jqGrid({
 		url : "/mate/list.json",
 		datatype : "json",
@@ -222,85 +223,93 @@ function insertBookmark(){
      val=0;
      if (currentSrc === "/resources/img/bf-bookmark.png") {
     	 button.setAttribute("src", "/resources/img/af-bookmark.png");
-    	 val=1;
-    	 alert(val);
+    	 bookmark_val=1;
+    	 //alert(bookmark_val);
    		} else {
          button.setAttribute("src", "/resources/img/bf-bookmark.png");
-    	 val=0;
-    	 alert(val)
+         bookmark_val=0;
+    	 //alert(bookmark_val);
             }
-    	 modifybookmark(val);
+    	 modifybookmark(bookmark_val);
 }	
-function modifybookmark(val) {
+function modifybookmark(bookmark_val) {
 	email='${sessionScope.email}';
-	let url = window.location.pathname;
-	console.log(url+"현화면 유알엘");
+	let bookmark_page = window.location.pathname;
+	console.log(bookmark_page+"현화면 유알엘");
 	console.log(email+"현화면 email");
-	console.log(val+"현화면 val");
+	console.log(bookmark_val+"현화면 bookmark_val");
 	$.ajax({
         method: 'post',
         url: '/mate/bookmark/modify',
-        data: {email:email,url:url,val:val}
+        data: {email:email,bookmark_page:bookmark_page,bookmark_val:bookmark_val}
     }).done(res => {
     	if (res){
     		console.log(res);
-    		alert("북마크 성공");
+    		//alert("북마크 성공");
+    		loadBookmark();
     	}else{
     		console.log(res)
-    		alert("북마크 성공")
+    		//alert("북마크 성공")
     		
     		}
 		}).fail(err=>{
 			console.log(err);
 		});
-	
-    /*$.ajax({
-        method: 'get',
-        url: '/bookmark/insert',
-        data: {mate_id: ${MateDetails.mate_id}},
+}
+function loadBookmark() {
+	let email='${sessionScope.email}';
+	let now_page = window.location.pathname;
+    $.ajax({
+        method: 'post',
+        url: '/mate/bookmark',
+        data: {email:email},
     }).done(res => {
+    	console.log("res북마크"+res);
     	console.log(res);
     	let bookmarkList = "";
-        res.forEach(bookmark => {
-        	let selectButton = '';
-        	}
-        });
-        console.log(replyList);
+        	let my_page = '';
+        	let tip_page = '';
+        	let mate_page = '';
+        	console.log("res.my_page"+res.my_page)
+        	console.log("res.tip_page"+res.tip_page)
+        	console.log("res.mate_page"+res.mate_page)
+        	checkBookmark(now_page,res);
+        	if (res.my_page === 1 && now_page !="/member/myPage" ) {
+        		  my_page = '<td><button id="bookmarkBt" onclick="goUrl(\'/member/myPage)">my_page로 이동</button></td>';
+        		} else if (res.tip_page === 1 && now_page !="/tip/") {
+        		  tip_page = '<td><button id="bookmarkBt" onclick="goUrl(\'/tip/\')">tip_page로 이동</button></td>';
+        		} else if (res.mate_page === 1 && now_page !="/mate/" ) {
+        		  mate_page = '<td><button id="bookmarkBt" onclick="goUrl(\'/mate/\')">mate_page로 이동</button></td>';
+        		}
+
+        	bookmarkList += '<tr>'
+        	bookmarkList += my_page
+        	bookmarkList += tip_page
+        	bookmarkList += mate_page
+        	bookmarkList += '</tr>'
+     
+        console.log(bookmarkList);
         $('#bookmark-list').html(bookmarkList)
     }).fail(err => {
         console.log(err);
-    }); */
-	
-}
-/*function loadbookmark() {
-    $.ajax({
-        method: 'get',
-        url: '/mate/reply/list',
-        data: {mate_id: ${MateDetails.mate_id}},
-    }).done(res => {
-    	console.log(res);
-    	let replyList = "";
-        res.forEach(reply => {
-        	let selectButton = '';
-        	let deleteButton = '';
-        	let modifyButton = '';
-        	//if(myEmail===reply.email){
-        	selectButton = '<td><button id="comment-select-btn-'+reply.mate_r_id+'" onclick="selectCommentModify('+reply.mate_id+','+reply.mate_r_id+')">선택</button></td>'
-        	//}
-        	bookmarkList += '<tr height="35" align="center" id="reply_box_'+reply.mate_r_id+'">'
-        	bookmarkList += '<td width="100">'+reply.lol_account+'</td>'
-        	bookmarkList += '<td width="300" id="content_num_'+reply.mate_r_id+'">'+reply.mate_r_content+'</td>'
-        	bookmarkList += '<td width="100">최근승률 자리</td>'
-        	bookmarkList += '<td width="100">'+reply.mate_r_date+'</td>'
-        	bookmarkList += selectButton
-        	bookmarkList += deleteButton
-        	bookmarkList += '</tr>'
-        });
-        console.log(replyList);
-        $('#comment-list').html(replyList)
-    }).fail(err => {
-        console.log(err);
-    }); */
+    }); 
+    }
+    function goUrl(url) {
+    	location.href = url;
+    }
+    function checkBookmark(now_page,res) {
+        let button = document.getElementById("bookmarkicon");
+        
+        if (now_page === '/member/myPage' && res.my_page === 1) {
+            button.setAttribute("src", "/resources/img/af-bookmark.png");
+        } else if (now_page === '/tip/' && res.tip_page === 1) {
+            button.setAttribute("src", "/resources/img/af-bookmark.png");
+        } else if (now_page === '/mate/' && res.mate_page === 1) {
+            button.setAttribute("src", "/resources/img/af-bookmark.png");
+        } else {
+            button.setAttribute("src", "/resources/img/bf-bookmark.png");
+        }
+    }
 
 	/* 	document.getElementById("search") */
 </script>

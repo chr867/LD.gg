@@ -31,5 +31,11 @@ public class MateDto {
 	private	String mate_r_date;//메이트 신청 시간
 	private int mate_select;//  메이트 간택
 	
+	//북마크
+	private	int my_page;//마이페이지 등록여부
+	private	int mate_page;//메이트페이지 등록여부
+	private	int tip_page;//공략페이지 등록여부
+	
+	
 	
 }
