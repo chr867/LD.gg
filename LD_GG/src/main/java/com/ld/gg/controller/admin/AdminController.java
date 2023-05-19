@@ -49,6 +49,9 @@ public class AdminController {
 	
 	@PostMapping("/notice/write.do")
 	public String write_notice_do(@RequestParam String t_b_title, @RequestParam String t_b_content) throws Exception{
+		t_b_content = t_b_content.replaceAll("<p[^>]*>|<\\/p[^>]*>", "");
+		log.info("t_b_content : {}", t_b_content);
+		
 		NoticeDto nd = new NoticeDto();
 		nd.setT_b_title(t_b_title);
 		nd.setT_b_content(t_b_content);
