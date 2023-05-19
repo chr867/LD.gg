@@ -292,7 +292,7 @@ body {
 
 			<div class="user-info-box" style="display: none;" onclick="go_mypage()">
 				<div class="summoner-profile-icon-box">
-					<img src="/resources/img/icon/profileIcon5626.webp" alt="">
+					<img src="/resources/img/profileicon/${sessionScope.summoner_icon}.png" alt="">
 				</div>
 				<div class="summoner-name-box">
 					<h5>${sessionScope.lol_account} 님</h5>

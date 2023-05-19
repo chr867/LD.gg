@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.ld.gg.dao.TipDao;
 import com.ld.gg.dto.TipDto;
+import com.ld.gg.dto.champ.Champ_list;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -205,6 +206,28 @@ public class TipService {
 			System.out.println(e);
 			e.printStackTrace();
 			return 4;
+		}
+	}
+
+	public List<Champ_list> getChampionList() {
+		try {
+			List<Champ_list> cList = tDao.getChampionList();
+			return cList;
+		} catch (Exception e) {
+			System.out.println(e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public List<Champ_list> getChampionLane(String team_position) {
+		try {
+			List<Champ_list> cList = tDao.getChampionLane(team_position);
+			return cList;
+		} catch (Exception e) {
+			System.out.println(e);
+			e.printStackTrace();
+			return null;
 		}
 	}
 

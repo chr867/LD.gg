@@ -138,4 +138,16 @@
 		VALUES (#{t_b_num}, #{t_r_content}, #{email}, #{t_r_num});
 
 	</insert>
+	
+	<select id="getChampionLane" resultType="champ_list">
+		SELECT c.champion_kr_name, c.champion_img
+		FROM champion_info AS c
+		JOIN champion_lane AS cl ON c.champion_id = cl.champion_id
+		WHERE cl.team_position = #{team_position}
+		ORDER BY c.champion_kr_name ASC
+	</select>
+	
+	<select id="getChampionList" resultType="champ_list">
+		select champion_kr_name, champion_img from champion_info ORDER BY champion_kr_name ASC
+	</select>
 </mapper>

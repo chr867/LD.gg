@@ -41,4 +41,5 @@ public class ChampionRestController {
 		Map<String, Object>build_map = cs.build_recom(left_champion, right_champion);
 		return build_map;
 	}
+	
 }
