@@ -131,6 +131,7 @@
 	       			  for (var i = 0; i < member_list.length; i++) {
 	       			        let mentor_email = member_list[i].email;
 	       			        
+	       			     
 	       			        $.ajax({
 	       			            url: '/mentor/get-mentor-profile/',
 	       			            method: 'POST',
@@ -140,6 +141,7 @@
 	       			    	    	mentor_email: mentor_email
 	       			    		}),
 	       			            success: function(data) {
+	       			            	if(data != null){
 	       			                const mentorList = $("#mentor-list");
 	      			                    const mentorDiv = $("<div></div>").appendTo(mentorList);
 	      			                    
@@ -151,13 +153,18 @@
 	      			                            window.location.href = $(this).attr('data-href');
 	      			                        })
 	      			                        .append($("<span></span>").text(data.lol_account + ' 멘토님'));
+	       			            	}else {
+	       			            		alert('검색 결과가 없습니다');
+	       			       				location.reload();
+	      	       			      }
 	       			            },
 	       			            error: function(error) {
 	       			                console.error('Error:', error);
 	       			            }
-	       			        });
+	       			        })
 	       			        
-	       			      }
+	       			      
+	       			  }
         		  },
         		  error: function(xhr, status, error) {
         		    // 요청이 실패했을 때 실행할 코드를 작성합니다
