@@ -7,17 +7,17 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
 
-    .mentor-link {
+    #mentor-link {
         cursor: pointer;
         padding: 10px;
         border: 1px solid #ccc;
         margin-bottom: 10px;
         background-color: #f9f9f9;
     }
-    .mentor-link:hover {
+    #mentor-link:hover {
         background-color: #e0e0e0;
     }
-    .mentor-link span {
+    #mentor-link span {
         font-weight: bold;
     }
 </style>
@@ -25,39 +25,50 @@
 </head>
 <body>
 
-<div class='container text-center'>
+<div class='container'>
 	<div class='row'>
-		<div class='col-4'>
-			<div class='row'>
-			<div class="form-floating">
-			  <input type="text" class="form-control" id="search-input" placeholder="소환사명으로 검색">
-			  <label for="search-input">소환사명으로 검색</label>
-			  <button class="btn" id="search-button">검색</button>
+		<div class='col-3'>
+			<div class='row text-center'>
+			<div class="d-flex">
+			  <div class="form-floating">
+			    <input type="text" class="form-control" id="searchInput" placeholder="소환사명으로 검색">
+			    <label for="search-input">소환사명으로 검색</label>
+			  </div>
+			  <button class="btn" id="searchButton">검색</button>
 			</div>
 			</div>
 			<div class='row'>
 			<div id="tag_box">
-			  <button type="button" class='btn'>태그</button>
-			  <button type="button" class='btn'>태그</button>
-			  <button type="button" class='btn'>태그</button>
-			  <button type="button" class='btn'>태그</button>
+				<h3>태그</h3>
+			  <button type="button" class='btn'>유쾌한</button>
+			  <button type="button" class='btn'>입문자 추천</button>
+			  <button type="button" class='btn'>브실골 탈출</button>
+			  <button type="button" class='btn'>프로 경력</button>
+			  <button type="button" class='btn'>대회 입상</button>
 			</div>
 			</div>
 			
 			<div class='row'>			
 			<div id="ordered_box">
-			  <button type="button" class='btn'>정렬</button>
-			  <button type="button" class='btn'>정렬</button>
-			  <button type="button" class='btn'>정렬</button>
-			  <button type="button" class='btn'>정렬</button>
+			<h3>정렬순서</h3>
+			  <button type="button" class='btn'>수업 횟수 많은</button>
+			  <button type="button" class='btn'>가격 낮은</button>
+			  <button type="button" class='btn'>후기 많은</button>
+			  <button type="button" class='btn'>평점 높은</button>
 			</div>
 			</div>
 			
 		</div>
-		<div class='col-8'>
+		<div class='col-9'>
 			<h4>멘토 찾기</h4>
-			<div id="mentor-list">
-				<!-- 멘토 프로필 목록 추가. -->
+			<div id="mentor-search-list">
+			<div id= "summary">
+				<span id="mentor-count"><em>0</em>명의 멘토님
+				</span>
+			</div>
+				<div id="mentor-list">
+					<!-- 멘토 프로필 목록 추가. -->
+				</div>
 			</div>
 		</div>
 	</div>
@@ -70,18 +81,35 @@
             url: '/mentor/find-all-mentor/',
             method: 'GET',
             dataType: 'json',
+            contentType: 'application/json',
             success: function(data) {
+            	console.log(data);
+            	$('#mentor-count em').text(data.length);
                 const mentorList = $("#mentor-list");
                 $.each(data, function(i, mentor) {
-                    const mentorDiv = $("<div></div>").appendTo(mentorList);
+                    const mentorDiv = $("<div></div>").appendTo(mentorList); //멘토 div
                     mentorDiv
-                        .addClass("mentor-link")
-                        .attr('data-href', '/mentor/profile/' + mentor)
+                        .addClass("row")
+                        .attr("id","mentor-link")
+                        .attr('data-href', '/mentor/profile/' + mentor.lol_account)
                         .on('click', function(event) {
                             event.preventDefault();
                             window.location.href = $(this).attr('data-href');
-                        })
-                        .append($("<span></span>").text(mentor + ' 멘토님'));
+                        });
+                        
+                    const mentorImg = $("<img>").addClass("col-2")
+                    						.attr("src","http://ddragon.leagueoflegends.com/cdn/13.10.1/img/profileicon/588.png")
+                	mentorImg.appendTo(mentorDiv);//멘토 프로필 사진
+                	const mentorIntro = $("<div>").addClass("col-10")
+						                	.attr('id','mentor-intro')
+						                	.appendTo(mentorDiv);//멘토 정보div
+                	const mentorName = $("<div>").attr('id','mentor-name')
+                							.appendTo(mentorIntro);//멘토 이름
+                	mentorName.append($("<span></span>").text(mentor.lol_account + ' 멘토님'));
+                	const mentorCareers =$("<div>").attr('id','mentor-careers')
+                							.appendTo(mentorIntro);//멘토 경력
+                	mentorCareers.text(mentor.about_mentor);
+                    
                 });
             },
             error: function(error) {
@@ -108,72 +136,86 @@
     $(document).ready(function() {
     	get_mentor_list(); //멘토 목록 불러오기
     	
-    	 
-        $("#search-button").on("click", function() {
-        	  var searchKeyword = $("#search-input").val();
-        	  if(searchKeyword == '' || searchKeyword ==null){
-        		  location.reload();
-        		  console.log("검색어:", searchKeyword);
-        	  } else{
-        	  $.ajax({
-        		  url: '/mentor/get-member-info',
-        		  type: 'GET',
-        		  data: {
-        			lol_account_keyword: searchKeyword // 요청에 필요한 파라미터를 전달합니다
-        		  },
-        		  success: function(member_list_json) {
-        			  $("#mentor-list").text("");
-	       			  let member_list = JSON.parse(member_list_json);
-	       			  if(member_list =='' || member_list ==null){
-	       				  alert('검색 결과가 없습니다');
-	       				location.reload();
-	       			  }
-	       			  for (var i = 0; i < member_list.length; i++) {
-	       			        let mentor_email = member_list[i].email;
-	       			        
-	       			     
-	       			        $.ajax({
-	       			            url: '/mentor/get-mentor-profile/',
-	       			            method: 'POST',
-	       			            contentType: "application/json; charset=utf-8",
-	       			    	    dataType: "json",
-	       			    	    data: JSON.stringify({
-	       			    	    	mentor_email: mentor_email
-	       			    		}),
-	       			            success: function(data) {
-	       			            	if(data != null){
-	       			                const mentorList = $("#mentor-list");
-	      			                    const mentorDiv = $("<div></div>").appendTo(mentorList);
-	      			                    
-	      			                    mentorDiv
-	      			                        .addClass("mentor-link")
-	      			                        .attr('data-href', '/mentor/profile/' + data.lol_account)
-	      			                        .on('click', function(event) {
-	      			                            event.preventDefault();
-	      			                            window.location.href = $(this).attr('data-href');
-	      			                        })
-	      			                        .append($("<span></span>").text(data.lol_account + ' 멘토님'));
-	       			            	}else {
-	       			            		alert('검색 결과가 없습니다');
-	       			       				location.reload();
-	      	       			      }
-	       			            },
-	       			            error: function(error) {
-	       			                console.error('Error:', error);
-	       			            }
-	       			        })
-	       			        
-	       			      
-	       			  }
-        		  },
-        		  error: function(xhr, status, error) {
-        		    // 요청이 실패했을 때 실행할 코드를 작성합니다
-        		    console.error(error); // 에러 메시지를 콘솔에 출력하거나 에러 처리를 수행합니다
-        		  }
-        		});
-        	  }
-       	});
+    	// 엔터 키 이벤트 핸들러
+    	$("#searchInput").on("keydown", function(event) {
+    	      if (event.keyCode === 13) {
+    	        event.preventDefault();
+    	        performSearch();
+    	      }
+    	    });
 
+   	    // 검색 버튼 클릭 이벤트 핸들러
+   	    $("#searchButton").on("click", performSearch);
+    	
+    	function performSearch() {
+    	      var searchKeyword = $("#searchInput").val();
+    	      if (searchKeyword === '' || searchKeyword === null) {
+    	        alert('검색어를 입력해주세요');
+    	        location.reload();
+    	      } else {
+    	        // 검색에 필요한 AJAX 요청 코드
+    	        $.ajax({
+    	          url: '/mentor/get-member-info',
+    	          type: 'GET',
+    	          data: {
+    	            lol_account_keyword: searchKeyword
+    	          },
+    	          success: function(member_list_json) {
+    	            let member_list = JSON.parse(member_list_json);
+    	            if (member_list == '' || member_list == null) {
+    	              alert('검색 결과가 없습니다');
+    	            }
+    	            for (var i = 0; i < member_list.length; i++) {
+    	            	let nul_count = 0
+    	              if(member_list[i].user_type == 2){
+    	            let mentor_email = member_list[i].email;
+    	              $.ajax({
+    	                url: '/mentor/get-mentor-profile/',
+    	                method: 'POST',
+    	                contentType: "application/json; charset=utf-8",
+    	                dataType: "json",
+    	                data: JSON.stringify({
+    	                  mentor_email: mentor_email
+    	                }),
+    	                success: function(data) {
+    	                  if (data != null) {
+    	                	  let dataLen = [];
+    	                	  dataLen.push(data);
+    	                	  $('#mentor-count em').text(dataLen.length);
+    	                	  $("#mentor-list").text('');
+    	                    const mentorList = $("#mentor-list");
+    	                    const mentorDiv = $("<div></div>").appendTo(mentorList);
+    	                    mentorDiv
+    	                      .addClass("row")
+    	                      .attr("id","mentor-link")
+    	                      .attr('data-href', '/mentor/profile/' + data.lol_account)
+    	                      .on('click', function(event) {
+    	                        event.preventDefault();
+    	                        window.location.href = $(this).attr('data-href');
+    	                      })
+    	                      .append($("<span></span>").text(data.lol_account + ' 멘토님'));
+    	                  }
+    	                },
+    	                error: function(error) {
+    	                	alert('검색 결과가 없습니다');
+    	                  console.error('Error:', error);
+    	                }
+    	              })
+    	              }else{
+    	            	  nul_count = nul_count + 1;
+    	            	  if(nul_count == member_list.length){
+    	            		  alert('검색 결과가 없습니다')
+    	            	  }
+    	              }
+    	            }
+    	          
+    	          },
+    	          error: function(xhr, status, error) {
+    	            console.error(error);
+    	          }
+    	        });
+    	      }
+    	    }
     	
         $.ajax({
             url: '/mentor/renewal-point-table',

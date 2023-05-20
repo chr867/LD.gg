@@ -6,7 +6,10 @@
 <mapper namespace="com.ld.gg.dao.mentoringdao.MentorProfileDAO">
 
 <select id="select_all_mentor_profiles" resultType="mentorProfile">
-  SELECT * FROM mentor_profile;
+  SELECT *
+	FROM mentor_profile AS mp
+	JOIN member AS m ON mp.mentor_email = m.email 
+	WHERE mp.mentor_email = m.email;
 </select>
 
 <select id="select_by_email_mentor_profile" resultType="mentorProfile">

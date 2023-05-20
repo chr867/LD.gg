@@ -335,18 +335,8 @@ public class RestMentoringController {
 	//모든 멘토 회원 목록 가져오기
 	@GetMapping("/find-all-mentor")
 	public String select_all_mentor_profile() throws JsonProcessingException{
-		List<MentorProfileDTO> mtpList = mtpService.select_all_mentor_profiles();
-		ObjectMapper objectMapper = new ObjectMapper();
-		Iterator<MentorProfileDTO> iterator = mtpList.iterator();
-		List<String> lol_name_list = new ArrayList<>();
-		while (iterator.hasNext()) {
-			MentorProfileDTO mtp = iterator.next();
-		    String mentor_email = mtp.getMentor_email(); // mentor_email 변환
-		    MemberDto mbdto = mbdao.getMemberInfo(mentor_email);
-		    lol_name_list.add(mbdto.getLol_account());
-		}
-		String mtpListjson = objectMapper.writeValueAsString(lol_name_list);
-		return mtpListjson;
+		String mtpListJson = mtpService.select_all_mentor_profiles();
+		return mtpListJson;
 	}
 	
 	//일반 회원이 멘토회원으로 전환 할때 멘토 프로필 추가

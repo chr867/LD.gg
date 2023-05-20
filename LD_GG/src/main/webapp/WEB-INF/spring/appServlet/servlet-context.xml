@@ -39,8 +39,8 @@
 	<interceptors>
 		<interceptor>
 			<mapping path="/mentor/write-profile"/> <!-- 인터셉터 적용할 페이지 -->
-			<mapping path="/mypage"/> <!-- 인터셉터 적용할 페이지 -->
-			<mapping path="/mentor/custom-mentor"/> <!-- 인터셉터 적용할 페이지 -->
+			<mapping path="/mentor/my-mentoring/**"/> <!-- 인터셉터 적용할 페이지 -->
+			<mapping path="/mentor/custom-mentor/**"/> <!-- 인터셉터 적용할 페이지 -->
 			<exclude-mapping path="/"/> <!-- 인터셉터 예외 처리할 페이지 -->
 			<beans:bean class="com.ld.gg.userClass.SessionInterceptor"/>
 		</interceptor>

@@ -372,9 +372,10 @@ public class MentorProfileService {
 	}
 	
 	//모든 멘토 프로필 리스트 가져오기
-	public List<MentorProfileDTO> select_all_mentor_profiles(){
+	public String select_all_mentor_profiles() throws JsonProcessingException{
 		List<MentorProfileDTO> mtpdto =mtpdao.select_all_mentor_profiles();
-		return mtpdto;
+		String mtpListjson = objectMapper.writeValueAsString(mtpdto);
+		return mtpListjson;
 	}
 	
 	//이메일로 멘토 프로필 가져오기

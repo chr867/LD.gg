@@ -34,7 +34,7 @@
 	</select>
 	
 	<select id="getMemberLolAccountByKeyword" resultType="member">
-		SELECT email,lol_account FROM MEMBER WHERE
+		SELECT email,lol_account,user_type FROM MEMBER WHERE
 		lol_account LIKE CONCAT('%', #{lol_account_keyword}, '%')
 	</select>
 
