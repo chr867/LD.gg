@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 @Alias("champ_record")
 @Accessors(chain = true)
 public class ChampRecordDto {
-	private String pick_position;
+	private String lane;
 	private double pick_rate;
 	private String champ_name;
 	private int games;
