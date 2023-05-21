@@ -378,7 +378,7 @@ GROUP BY
    #{summonerName}
 </select>
 
-<resultMap id="recordRanking" type="recordRanking">
+<!-- <resultMap id="recordRanking" type="recordRanking">
     <id property="self_dealt" column="self_dealt"/>
     <id property="self_taken" column="self_taken"/>
     <id property="self_kills" column="self_kills"/>
@@ -439,7 +439,7 @@ GROUP BY
    (select SUM(assists) from record where match_id = #{match_id} and team_id = (SELECT team_id FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as team_champion_assists,
    (select sum(red_ward_placed) from record where match_id = #{match_id} and team_id = (SELECT team_id FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as team_total_red_ward,
    (select sum(cs) from record where match_id = #{match_id} and team_id = (SELECT team_id FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as team_total_cs;
-</select>
+</select> -->
 
 <select id="getSummoner" resultType="summoner">
    select summoner_name,
