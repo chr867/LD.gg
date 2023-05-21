@@ -144,11 +144,12 @@ a[href="/tip/write"] {
     box-sizing: border-box;
     padding: 0 50px 0 50px;
     margin-bottom: 20px;
+    align-items: center;
 }
 
 .lane-img img {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
 }
 
 .lane-img {
@@ -199,6 +200,17 @@ a[href="/tip/write"] {
     flex-direction: column;
     margin: 5px;
     flex-grow: 1;
+}
+::-webkit-scrollbar {
+  width: 5px; /* 스크롤바의 너비 */
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* 스크롤바의 트랙(배경) 색상 */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #888; /* 스크롤바의 썸(막대) 색상 */
 }
 </style>
 <body>
