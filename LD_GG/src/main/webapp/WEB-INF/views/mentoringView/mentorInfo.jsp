@@ -178,26 +178,7 @@ padding:24px;
 				<section class="border rounded">
 					<h4>특화 챔피언</h4>
 					<div id="specializedChampion">
-						<h3>탑</h3>
-						<hr/>
-						<div class="top-champ">
-						</div>
-						<h3>정글</h3>
-						<hr/>
-						<div class="jungle-champ">
-						</div>
-						<h3>미드</h3>
-						<hr/>
-						<div class="mid-champ">
-						</div>
-						<h3>바텀</h3>
-						<hr/>
-						<div class="bottom-champ">
-						</div>
-						<h3>서포터</h3>
-						<hr/>
-						<div class="supporter-champ">
-						</div>
+						
 					</div><!-- specializedChampion -->
 				</section>
 		  </div>
@@ -207,10 +188,16 @@ padding:24px;
 		  </div>
 		  <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
 			<section class="border rounded">
-				<h4>수업 가능 시간: ${mentor_profile.contact_time}</h4>
+				<h4>수업 가능 시간</h4>
+				<span>${mentor_profile.contact_time}</span>
 			</section>
 			<section class="border rounded">
-				<h4>이런 분들께 추천해요: ${mentor_profile.recom_ment}</h4>
+				<h4>이런 분들께 추천해요</h4>
+				<span>${mentor_profile.recom_ment}</span>
+			</section>
+			<section id="class-box">
+				<h4>수업 내용</h4>
+				<!-- 수업 내용 -->
 			</section>
 		  </div>
 		</div>
@@ -330,29 +317,41 @@ padding:24px;
 		});
 		
 		//탑 특화 챔피언
-		let top_specialized_champion = [${mentor_profile.top_specialized_champion}];
+		if (${mentor_profile.top_specialized_champion} !== null){
+			let laneChampBox = $("<div>");
+			laneChampBox.appendTo($("#specializedChampion"));
+			let laneBox = $("<div>");
+			laneBox.appendTo(laneChampBox);
+			laneBox.append($("<img>").attr("src","https://online.gamecoach.pro/img/icon/lol/ico_lol_top_grey.svg"));
+			laneBox.append($("<span>").text("TOP"));
+			laneBox.append($("<hr>"));
+			let champBox = $("<div>").addClass("row d-flex align-items-start justify-content-start");
+			champBox.appendTo(laneChampBox);
+			let top_specialized_champion = [${mentor_profile.top_specialized_champion}];
+			top_specialized_champion.forEach(function (id) {
+			    $.ajax({ //챔피언 id로 이름 가져오기
+			        type: "GET",
+			        url: "/mentor/get-champ-name-by-id?id=" + id,
+			        contentType: "application/json; charset=utf-8",
+			        dataType: "json",
+			        success: function (champion) {
+			        	let laneTop = $("<div>").attr("id",'lane-top')
+			            let imageUrl = "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +champion.champion_en_name + ".png?&amp;retry=0";
+			            let champImg = $("<img>").css("width","80px").addClass("rounded").attr("src", imageUrl);
+			            let champName = $("<span>").addClass("text-center").text(champion.champion_kr_name);
+			            let champDiv = $("<div>").addClass("col-2 d-flex flex-column align-items-center");
+			            champDiv.append(champImg);
+			            champDiv.append(champName);
+			            champBox.append(champDiv);
+			        },
+			        error: function (request, status, error) {
+			            console.error(error);
+			            // 오류 처리
+			        }
+			    });
+			});
+		}
 		
-		top_specialized_champion.forEach(function (id) {
-		    $.ajax({ //챔피언 id로 이름 가져오기
-		        type: "GET",
-		        url: "/mentor/get-champ-name-by-id?id=" + id,
-		        contentType: "application/json; charset=utf-8",
-		        dataType: "json",
-		        success: function (champion) {
-		            let imageUrl = "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +champion.champion_en_name + ".png?&amp;retry=0";
-		            let champImg = $("<img>").addClass("rounded").attr("src", imageUrl);
-		            let champName = $("<p>").addClass("text-center").text(champion.champion_kr_name);
-		            let champDiv = $("<div>").addClass("champ-post");
-		            champDiv.append(champImg);
-		            champDiv.append(champName);
-		            $(".top-champ").append(champDiv);
-		        },
-		        error: function (request, status, error) {
-		            console.error(error);
-		            // 오류 처리
-		        }
-		    });
-		});
 		
     	//멘토 찜하기 기능
 		  $('#like-btn').click(function() {
