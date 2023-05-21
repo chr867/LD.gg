@@ -9,6 +9,9 @@
 	.container{
 		margin-top: 30px;
 	}
+	#tag-order-box .btn {
+        margin-bottom: 5px; 
+    }
 	#search-box, #tag_box {
 	margin-bottom: 20px;
 	}
@@ -85,7 +88,7 @@
 					  <button type="button" class='btn btn-outline-warning'>수업 횟수 많은</button>
 					  <button type="button" class='btn btn-outline-warning'>가격 낮은</button>
 					  <button type="button" class='btn btn-outline-warning'>후기 많은</button>
-					  <button type="button" class='btn btn-outline-warning'>평점 높은</button>
+					  <button type="button" class='btn btn-outline-warning'>티어 높은</button>
 					</div>
 				</div>
 			</div>
@@ -268,25 +271,94 @@
     	                data: JSON.stringify({
     	                  mentor_email: mentor_email
     	                }),
-    	                success: function(data) {
-    	                	console.log(data);
-    	                  if (data != null) {
-    	                	  let dataLen = [];
-    	                	  dataLen.push(data);
-    	                	  $('#summary').prepend($("<span>").text("(으)로 검색 된 ").prepend($("<em>").text(searchKeyword)));
-    	                	  $('#mentor-count em').text(dataLen.length);
-    	                	  $("#mentor-list").text('');
+    	                success: function(mentor) {
+    	                	console.log(mentor);
+    	                  if (mentor != null) {
+   	                	  let dataLen = [];
+   	                	  dataLen.push(mentor);
+   	                	  $('#summary').prepend($("<span>").text("(으)로 검색 된 ").prepend($("<em>").text(searchKeyword)));
+   	                	  $('#mentor-count em').text(dataLen.length);
+   	                	  $("#mentor-list").text('');
     	                    const mentorList = $("#mentor-list");
-    	                    const mentorDiv = $("<div></div>").appendTo(mentorList);
+    	                    const mentorDiv = $("<div></div>").appendTo(mentorList); //멘토 div
     	                    mentorDiv
-    	                      .addClass("row")
-    	                      .attr("id","mentor-link")
-    	                      .attr('data-href', '/mentor/profile/' + data.lol_account)
-    	                      .on('click', function(event) {
-    	                        event.preventDefault();
-    	                        window.location.href = $(this).attr('data-href');
-    	                      })
-    	                      .append($("<span></span>").text(data.lol_account + ' 멘토님'));
+    	                        .addClass("row")
+    	                        .attr("id","mentor-link")
+    	                        .attr('data-href', '/mentor/profile/' + mentor.lol_account)
+    	                        .on('click', function(event) {
+    	                            event.preventDefault();
+    	                            window.location.href = $(this).attr('data-href');
+    	                        });
+    	                    let grade = mentor.total_grade/mentor.num_of_reviews;
+    						grade = grade.toFixed(1);
+    						if (grade == "NaN"){
+    							grade=0;
+    						}
+    	                    const mentorImg = $("<div>").addClass("col-2 d-flex flex-column align-items-center justify-content-center")
+    							                    .attr("id",'mentor-img')
+    							                    .append($("<img>").addClass("row rounded")
+    							                    .css('width','128px')
+    							                    .attr("src","http://ddragon.leagueoflegends.com/cdn/13.10.1/img/profileicon/"+mentor.profile_icon_id+".png"))
+    							                    .append($("<span>").text("LV "+mentor.s_level).css("padding-top","15px").addClass("text-center"));
+    	                	mentorImg.appendTo(mentorDiv); //멘토 프로필 사진
+    	                	const mentorInfo = $("<div>").addClass("col-10")
+    							                	.attr('id','mentor-info')
+    							                	.appendTo(mentorDiv);//멘토 정보div
+    							                	
+    	              			const mentorHeader =$("<div>").addClass("row")
+    	              								.attr('id','mentor-header')
+    												.appendTo(mentorInfo);     	
+    							                	
+    	               			const mentorMain =$("<div>").addClass("col-9")
+    	               								.attr('id','mentor-main')
+    												.appendTo(mentorHeader);
+    							                	
+    		                	const mentorName = $("<div>").addClass("row")
+    		                							.attr('id','mentor-name')
+    		                							.appendTo(mentorMain);//멘토 이름
+    		                	mentorName.append($("<span></span>").text("["+mentor.lol_account + '] 멘토님'));
+    		                							
+    		                	const mentorCareers =$("<div>").addClass("row")
+    		                							.attr('id','mentor-careers')
+    		                							.appendTo(mentorMain);//멘토 소개
+    		                	mentorCareers.append($("<dd>").text(mentor.about_mentor));
+    		                							
+    		                	const mentorTier =$("<div>").addClass("col-3 d-flex flex-column align-items-center justify-content-center")
+    													.attr('id','mentor-tier')
+    													.appendTo(mentorHeader)
+    													.append($("<img>").addClass("row").attr('id','tier-img').attr('src',"https://online.gamecoach.pro/img/lol/emblem-"+mentor.tier+".svg"))
+    													.append($("<span>").addClass("row text-center").text(mentor.tier));
+    		                							
+    		                	const mentorViewBox = $("<div>").addClass("row d-flex align-items-center text-center justify-content-evenly")
+    		                							.attr('id','mentor-view-box')
+    		                							.appendTo(mentorInfo);
+    		                	
+    			                	const mentorPosition = $("<div>").addClass("col")
+    			                							.attr('id','mentor-position')
+    			                							.appendTo(mentorViewBox)
+    			                							.append($("<dd>").text('특화 포지션'))
+    			                							.append($("<dt>").text(JSON.parse(mentor.specialized_position))); //멘토 특화 포지션
+    			                							
+    			                	const mentorReview = $("<div>").addClass("col")
+    														.attr('id','mentor-review')
+    			                							.appendTo(mentorViewBox)
+    									                	.append($("<dd>").text('후기'))
+    														.append($("<dt>").text(mentor.num_of_reviews+'개')); //멘토 리뷰 횟수
+    								const mentorGrade = $("<div>").addClass("col")
+    														.attr('id','mentor-grade')
+    			                							.appendTo(mentorViewBox)
+    									                	.append($("<dd>").text('평점'))
+    														.append($("<dt>").text(grade+'점')); //멘토 리뷰 점수
+    			                	const mentorLesson = $("<div>").addClass("col")
+    														.attr('id','mentor-lesson')
+    			                							.appendTo(mentorViewBox)
+    									                	.append($("<dd>").text('멘토링'))
+    														.append($("<dt>").text(mentor.num_of_lessons+'건')); //멘토 수업 횟수
+    			                	const mentorPrice = $("<div>").addClass("col-3")
+    														.attr('id','mentor-price')
+    			                							.appendTo(mentorViewBox)
+    			                							.append($("<dd>").text('연락 가능 시간'))
+    			                							.append($("<dt>").text(mentor.contact_time));
     	                  }
     	                },
     	                error: function(error) {

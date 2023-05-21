@@ -17,6 +17,7 @@ public class MentorReviewDTO {
 	private int review_num;
 	private String reviewer_email;
 	private int class_id;
+	private int mentoring_id;
 	private String review_content;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy년 MM월 dd일 HH:mm:ss")
 	private LocalDateTime review_date;

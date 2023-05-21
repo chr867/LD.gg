@@ -97,7 +97,7 @@ public class MentoringController {
 				.addObject("mentor_profile", mtp) //해당 페이지 멘토 프로필
 				.addObject("class_list", mentor_class_list) //해당 페이지 멘토 클래스
 				.addObject("mentor", mbList.get(0)) //해당 페이지 멘토 회원정보
-				.addObject("member", mbdto) //해당 페이지 멘토 회원정보
+				.addObject("member", mbdto) //접속한 사람 회원정보
 				.addObject("like_mentor", like_mentor_list); //접속한 사람 찜한 멘토 목록
     }
 	

@@ -87,6 +87,7 @@ public class MentorProfileService {
 	//리뷰 생성
 	@Transactional
 	public void insert_mentor_review(MentorReviewDTO mentor_review_dto) {
+		System.out.println(mentor_review_dto);
 		String mentor_lol_account = mentor_review_dto.getMentor_email();
 		List<MemberDto> mbdto= mbdao.getUserLolAccount(mentor_lol_account);
 		String mentor_email = mbdto.get(0).getEmail();
@@ -309,9 +310,12 @@ public class MentorProfileService {
 	}
 	
 	//이메일로 멘토 태그 가져오기
-	public List<MentorTagDTO> select_by_email_mentor_tag(String mentor_email){
+	public String select_by_email_mentor_tag(Map<String,String> mentor_email_map) throws JsonProcessingException{
+		String mentor_email = mentor_email_map.get("mentor_email");
 		List<MentorTagDTO> mentor_tag_dto = mtpdao.select_by_email_mentor_tag(mentor_email);
-		return mentor_tag_dto;
+		ObjectMapper objectMapper = new ObjectMapper();
+		String mentor_tag_json = objectMapper.writeValueAsString(mentor_tag_dto);
+		return mentor_tag_json;
 	}
 	
 	//멘토 태그 등록

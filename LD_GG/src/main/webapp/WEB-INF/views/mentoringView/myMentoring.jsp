@@ -210,13 +210,13 @@ $(document).ready(function() {
 	                $("<td>").text(myMt.done_date),
 	                myMt.menti_state === 0 ? $("<button>").attr("type","button")
 	                		.addClass("btn btn-outline-warning")
-	                    .attr("id", myMt.class_id)
+	                    .attr("id", myMt.mentoring_id)
 	                    .text("신청 취소").on('click', function(event) { //수업 신청 취소
-	                		let classId = $(this).attr("id");
+	                		let mentoring_id = $(this).attr("id");
 	                	    let mentiEmail = "${member.email}";
 	                	    let data ={
 	                	    	menti_email: mentiEmail,
-	                	    	class_id: classId
+	                	    	mentoring_id: mentoring_id
 	                	    }
 	                		$(this).closest('tr').remove();
 	                		$.ajax({
@@ -235,13 +235,13 @@ $(document).ready(function() {
 	                	}) : null,
 	                myMt.menti_state === 1 ? $("<button>").attr("type","button")
 	                		.addClass("btn btn-outline-danger")
-	                    .attr("id", myMt.class_id)
+	                    .attr("id", myMt.mentoring_id)
 	                    .text("환불").on('click', function(event) { //수업 환불
-	                		let classId = $(this).attr("id");
+	                		let mentoring_id = $(this).attr("id");
 	                	    let mentiEmail = "${member.email}";
 	                	    let data ={
 	                		    	menti_email: mentiEmail,
-	                		    	class_id: classId
+	                		    	mentoring_id: mentoring_id
 	                		    }
 	                		$(this).closest('tr').remove();
 	                	    $.ajax({
@@ -260,15 +260,16 @@ $(document).ready(function() {
 	                	}) : null,
 	                myMt.menti_state === 2 ? $("<button>").attr("type","button")
 	                		.addClass("btn btn-outline-primary")
-	                    .attr("id", myMt.mentoring_id)
-	                    .attr("name", myMt.class_id)
+	                    .attr("id", myMt.mentor_lol_account)
+	                    .attr("name", myMt.mentoring_id)
+	                    .attr("data", myMt.class_id)
 	                    .text("리뷰 쓰기").on('click', function() {
 	        	            let mentor_name = this.id;
-	        	            let class_id = this.name;
-	        	            console.log(class_id);
+	        	            let mentoring_id = this.name;
 	        	            $("#reviewModal").modal("show"); //리뷰 모달 켜기
 	        	            $(".modal-title").attr("id",mentor_name);
-	        	            $(".modal-title").attr("name",class_id);
+	        	            $(".modal-title").attr("name",mentoring_id);
+	        	            $(".modal-title").attr("data", myMt.class_id);
 	        	            $(".modal-title").text(mentor_name+"님에게 리뷰 쓰기");
 	        	        }) : null
 	            );
@@ -286,8 +287,8 @@ $(document).ready(function() {
 	                    success: function(data) {
 	                        for (let i = 0; i < data.length; i++) {
 	                            let myReview = data[i];
-	                            if (myReview.class_id === myMt.class_id) {
-	                            	 row.find("#"+myMt.mentoring_id+"").hide();
+	                            if (myReview.mentoring_id === myMt.mentoring_id) {
+	                            	row.find("[name='" + myMt.mentoring_id + "']").hide();
 	                                break;
 	                            }
 	                        }
@@ -325,11 +326,13 @@ $(document).ready(function() {
 	    event.preventDefault();
 	    let form_data = {
     		reviewer_email: "${member.email}",
-    		class_id: $(".modal-title").attr('name'),
+    		mentoring_id: $(".modal-title").attr('name'),
+    		class_id: $(".modal-title").attr('data'),
 	    	review_content: $("#reviewContent").val(),
 	    	mentor_email: $(".modal-title").attr("id"),
 	      	grade: grade
 	    };
+	    console.log(form_data);
 	    $.ajax({ //리뷰 보내기 기능
 	      type: "POST",
 	      url: "/mentor/save-review",
@@ -543,51 +546,6 @@ $(document).ready(function() {
         }
     });
 	
-	/* $(document).on('click', '.cancel-btn', function(event) { //수업 신청 취소
-		let classId = $(this).attr("id");
-	    let mentiEmail = "${member.email}";
-	    let data ={
-	    	menti_email: mentiEmail,
-	    	class_id: classId
-	    }
-		$(this).closest('tr').remove();
-		$.ajax({
-            url: "/mentor/delete-mentoring-history",
-            type: "DELETE",
-            data: JSON.stringify(data),
-            contentType: "application/json; charset=utf-8",
-            success: function() {
-                alert("수업 신청이 취소되었습니다");
-            },
-            error: function() {
-                alert("수업 신청 취소 실패");
-            }
-        });
-		
-	}) */
-	/* $(document).on('click', '.refund-btn', function(event) { //수업 환불
-		let classId = $(this).attr("id");
-	    let mentiEmail = "${member.email}";
-	    let data ={
-		    	menti_email: mentiEmail,
-		    	class_id: classId
-		    }
-		$(this).closest('tr').remove();
-	    $.ajax({
-            url: "/mentor/refund-mentoring-history",
-            type: "DELETE",
-            data: JSON.stringify(data),
-            contentType: "application/json; charset=utf-8",
-            success: function() {
-                alert("수업 환불 완료");
-            },
-            error: function() {
-                alert("환불 실패");
-            }
-        });
-		
-	}) */
-	
 	$(".btn-close").click(()=>{ //견적서 모달 끄기
 		$("#estimateModal").modal("hide");
 	});
@@ -654,10 +612,12 @@ $(document).ready(function() {
 		    			    myMt.menti_state === 0 ? 
 		    			    		$("<div>").append(
 		    			    		    $("<button>").attr("type","button").addClass("btn btn-outline-primary")
-		    			    		        .attr("id", myMt.class_id)
+		    			    		        .attr("id", myMt.mentoring_id)
+		    			    		        .attr("data", myMt.class_id)
 		    			    		        .text("수락").on('click', function(event) { //수락 버튼 누를떄 멘토링 내역 수정
 		    			    		    		let mentiEmail = $(this).closest('tr').find('td:eq(0)').text(); //소환사명
-		    			    		    		let class_id = $(this).attr("id");
+		    			    		    		let mentoring_id = $(this).attr("id");
+		    			    		    		let class_id = $(this).attr("data");
 		    			    		    		let mentor_email = "${member.email}"
 		    			    		    		$.ajax({
 		    			    		    		    type: "PUT",
@@ -665,12 +625,12 @@ $(document).ready(function() {
 		    			    		    		    contentType: "application/json; charset=utf-8",
 		    			    		    		    data: JSON.stringify({
 		    			    		    		    	menti_email: mentiEmail, //소환사명
-		    			    		    		        class_id: class_id,
+		    			    		    		    	mentoring_id: mentoring_id,
 		    			    		    		        menti_state: 1, // 상태를 업데이트 합니다.
 		    			    		    		    }),
 		    			    		    		    success: function() {
 		    			    		    		      // 성공적으로 업데이트 되었을 경우 처리할 내용을 작성합니다.
-		    			    		    		      	console.log("1: "+class_id)
+		    			    		    		      	console.log("클래스 아이디: "+class_id)
 		    			    		    		      	$.ajax({// 클래스 아이디로 클래스 정보 가져오기
 		    			    		    				    url: "/mentor/select-by-id-mentor-class?class_id=" + class_id,
 		    			    		    				    type: "GET",
@@ -709,13 +669,13 @@ $(document).ready(function() {
 		    			    		    		  });
 		    			    		    	}),
 		    			    		    $("<button>").attr("type","button").addClass("btn btn-outline-danger")
-		    			    		        .attr("id", myMt.class_id)
+		    			    		        .attr("id", myMt.mentoring_id)
 		    			    		        .text("거절").on('click', function(event) { //거절 버튼 누를떄 멘토링 내역 수정
-		    			    		    		let classId = $(this).attr("id");
+		    			    		    		let mentoringId = $(this).attr("id");
 		    			    		    		let mentiEmail = $(this).closest('tr').find('td:eq(0)').text(); //멘티 소환사명
 		    			    		    	    let data ={
 		    			    		    	    	menti_email: mentiEmail,
-		    			    		    	    	class_id: classId
+		    			    		    	    	mentoring_id: mentoringId
 		    			    		    	    }
 		    			    		    		$(this).closest('tr').remove();
 		    			    		    		$.ajax({
@@ -734,7 +694,7 @@ $(document).ready(function() {
 		    			    		) : null,
 		    			    myMt.menti_state === 1 ? $("<button>")
 		    			    		.attr("type","button").addClass("btn btn-outline-success")
-		    			    		.attr("id", myMt.class_id)
+		    			    		.attr("id", myMt.mentoring_id)
 		    			    		.text("수업 완료").on('click', function(event) { //수업완료 버튼 누를떄 멘토링 내역 수정
 		    			    			let mentiEmail = ""+$(this).closest('tr').find('td:eq(0)').text();
 		    			    			const date = new Date();
@@ -746,7 +706,7 @@ $(document).ready(function() {
 		    			    			    contentType: "application/json; charset=utf-8",
 		    			    			    data: JSON.stringify({
 		    			    			    	menti_email: mentiEmail, //소환사명
-		    			    			        class_id: $(this).attr("id"),
+		    			    			    	mentoring_id: $(this).attr("id"),
 		    			    			        mentor_email: "${member.email}",
 		    			    			        menti_state: 2, // 상태를 업데이트 합니다.
 		    			    					done_date: localeTime

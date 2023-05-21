@@ -14,5 +14,7 @@ import lombok.experimental.Accessors;
 @Alias("mentorTag")
 public class MentorTagDTO {
 	private String mentor_email; //pk
+	private String tag_type; //pk
+	private String mentor_version; //pk
 	private int tag_id; //pk
 }
