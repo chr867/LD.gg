@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ld.gg.dto.TipDto;
+import com.ld.gg.dto.champ.Champ_list;
 import com.ld.gg.service.TipService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -163,6 +164,19 @@ public class TipRestController {
 		int subReplyInsertResult = ts.subReplyInsert(tDto);
 		
 		return subReplyInsertResult;
+	}
+	
+	@GetMapping("/champion/list")
+	public List<Champ_list> chmapionList(){
+		log.info("메소드 진입");
+		List<Champ_list> cList = ts.getChampionList();
+		return cList;
+	}
+	
+	@GetMapping("/champion/lane")
+	public List<Champ_list> championLane(String team_position){
+		List<Champ_list> cList = ts.getChampionLane(team_position);
+		return cList;
 	}
 	
 }

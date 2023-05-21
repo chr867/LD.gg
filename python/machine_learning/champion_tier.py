@@ -15,7 +15,7 @@ from scipy.stats import zscore
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 import joblib
@@ -168,6 +168,12 @@ model.fit(X_train, y_train)
 # 예측 및 평가
 y_pred = model.predict(X_test)
 print('Accuracy: ', accuracy_score(y_test, y_pred))
+
+# 교차 검증
+scores = cross_val_score(model, X, y, cv=5)
+# 교차 검증 결과 출력
+print("Cross Validation Scores:", scores)
+print("Mean Accuracy:", scores.mean())
 
 # 모델 저장
 joblib.dump(model, 'championTierPredictionModel.pkl')

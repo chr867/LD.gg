@@ -42,6 +42,7 @@ public class MentoringController {
 	//마이멘토링 페이지로 이동
 	@GetMapping("/my-mentoring")
 	public ModelAndView go_my_mentoring(HttpServletRequest request) {
+		System.out.println("마이멘토링 페이지로 이동합니다.");
 		HttpSession session = request.getSession();
 		String email = (String) session.getAttribute("email");
 		MemberDto mbdto = mbdao.getMemberInfo(email);
@@ -52,7 +53,7 @@ public class MentoringController {
 			return new ModelAndView("mentoringView/myMentoringMemberOnly")
 					.addObject("member", mbdto);
 		}else if (mbdto.getUser_type() == 3) { // 관리자일 경우
-			return new ModelAndView("mentoringView/myMentoring")
+			return new ModelAndView("mentoringView/myMentoringMemberOnly")
 					.addObject("member", mbdto);
 		}else {
 			return new ModelAndView("/");
@@ -63,6 +64,7 @@ public class MentoringController {
 	//맞춤 멘토 페이지로 이동
 	@GetMapping("/custom-mentor")
 	public ModelAndView go_custom_mentor(HttpServletRequest request) {
+		System.out.println("컨트롤러 : 맞춤멘토 페이지로 이동합니다.");
 		HttpSession session = request.getSession();
 		String email = (String) session.getAttribute("email");
 		MemberDto mbdto = mbdao.getMemberInfo(email);
@@ -75,12 +77,14 @@ public class MentoringController {
 	//멘토 찾기 페이지로 이동
 	@GetMapping("/list")
     public String go_find_mentor() {
+		System.out.println("컨트롤러 : 멘토찾기 페이지로 이동합니다.");
         return "mentoringView/mentorSearch";
     }
 	
 	//멘토 아이디를 입력해서 멘토 프로필 페이지로 이동
 	@GetMapping("/profile/{lol_account}")
     public ModelAndView go_mentor_profile(@PathVariable String lol_account, HttpServletRequest request) {
+		System.out.println("컨트롤러 : 멘토 프로필 페이지로 이동합니다.");
 		HttpSession session = request.getSession(); // 현재 접속중인 회원의 아이디 확인
 		String email = (String) session.getAttribute("email");
 		MemberDto mbdto = mbdao.getMemberInfo(email);
@@ -93,13 +97,14 @@ public class MentoringController {
 				.addObject("mentor_profile", mtp) //해당 페이지 멘토 프로필
 				.addObject("class_list", mentor_class_list) //해당 페이지 멘토 클래스
 				.addObject("mentor", mbList.get(0)) //해당 페이지 멘토 회원정보
-				.addObject("member", mbdto) //해당 페이지 멘토 회원정보
+				.addObject("member", mbdto) //접속한 사람 회원정보
 				.addObject("like_mentor", like_mentor_list); //접속한 사람 찜한 멘토 목록
     }
 	
 	//멘토 프로필 작성 페이지로 이동
 	@GetMapping("/write-profile")
     public ModelAndView go_mentor_profile_edit(HttpServletRequest request) {
+		System.out.println("컨트롤러 : 멘토 프로필 작성 페이지로 이동합니다.");
 		HttpSession session = request.getSession();
 		String email = (String) session.getAttribute("email");
 		Integer user_type = (Integer)session.getAttribute("user_type");

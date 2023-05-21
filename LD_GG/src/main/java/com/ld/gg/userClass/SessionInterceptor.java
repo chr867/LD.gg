@@ -2,22 +2,18 @@ package com.ld.gg.userClass;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ld.gg.dao.SessionDao;
-import com.ld.gg.dto.SessionDto;
-
 import lombok.extern.slf4j.Slf4j;
 @Slf4j
+@Component
 public class SessionInterceptor implements HandlerInterceptor {
-
 	
 	@Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
+		log.info("세션인터셉터 동작중");
 		Integer userType = (Integer) request.getSession().getAttribute("user_type");
         if (userType == null) { // 로그인하지 않은 경우
         	log.info("세션인터셉터 : 로그인을 해야합니다");
