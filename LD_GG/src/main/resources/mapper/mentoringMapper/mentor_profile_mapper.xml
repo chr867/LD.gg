@@ -6,17 +6,35 @@
 <mapper namespace="com.ld.gg.dao.mentoringdao.MentorProfileDAO">
 
 <select id="select_all_mentor_profiles" resultType="mentorProfile">
-  SELECT *
-	FROM mentor_profile AS mp
-	JOIN member AS m ON mp.mentor_email = m.email 
-	WHERE mp.mentor_email = m.email;
+SELECT mp.*, m.*, si.*
+FROM mentor_profile AS mp
+JOIN member AS m ON mp.mentor_email = m.email
+JOIN (
+    SELECT si1.*
+    FROM summoner_info si1
+    JOIN (
+        SELECT summoner_name, MAX(revision_date) AS MaxRevision
+        FROM summoner_info
+        GROUP BY summoner_name
+    ) si2 ON si1.summoner_name = si2.summoner_name AND si1.revision_date = si2.MaxRevision
+) si ON m.lol_account = si.summoner_name
+WHERE mp.mentor_email = m.email;
 </select>
 
 <select id="select_by_email_mentor_profile" resultType="mentorProfile">
-	SELECT *
-	FROM mentor_profile AS mp
-	JOIN member AS m ON mp.mentor_email = m.email 
-	WHERE mentor_email = #{mentor_email};
+SELECT mp.*, m.*, si.*
+FROM mentor_profile AS mp
+JOIN member AS m ON mp.mentor_email = m.email
+JOIN (
+    SELECT si1.*
+    FROM summoner_info si1
+    JOIN (
+        SELECT summoner_name, MAX(revision_date) AS MaxRevision
+        FROM summoner_info
+        GROUP BY summoner_name
+    ) si2 ON si1.summoner_name = si2.summoner_name AND si1.revision_date = si2.MaxRevision
+) si ON m.lol_account = si.summoner_name
+WHERE mentor_email = #{mentor_email};
 </select>
 
 <insert id="insert_mentor_profile" parameterType="String">
