@@ -38,11 +38,12 @@
 
 <update id="update_my_mentoring" parameterType="myMentoring">
   UPDATE my_mentoring SET menti_state = #{menti_state}, done_date = #{done_date}
-  WHERE menti_email = #{menti_email} AND class_id = #{class_id};
+  WHERE mentoring_id = #{mentoring_id};
 </update>
 
 <delete id="delete_my_mentoring" parameterType="myMentoring">
-  DELETE FROM my_mentoring WHERE menti_email = #{menti_email} AND class_id = #{class_id};
+  DELETE FROM my_mentoring 
+  WHERE mentoring_id = #{mentoring_id};
 </delete>
 
 
