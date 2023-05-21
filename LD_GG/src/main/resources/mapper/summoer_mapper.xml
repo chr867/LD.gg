@@ -5,278 +5,278 @@
 
 <mapper namespace="com.ld.gg.dao.Summoner_dao">
 
-	<select id="getRankLoadingData" resultType="summoner_rank">
-		SELECT DISTINCT
-		sr.summoner_name as summoner_name,
-		si.profile_icon_id as
-		profile_icon_id, si.s_level as s_level, LOWER(sr.tier) as
-		tier,
-		sr.division as division,
-		sr.wins as wins, sr.losses as losses, sr.lp as
-		lp,
-		round((sr.wins/(si.games))*100,2) as
-		winrate
-		FROM summoner_rank sr
-		INNER
-		JOIN summoner_info si ON sr.summoner_name = si.summoner_name
-		WHERE
-		sr.queue = 'RANKED_SOLO_5x5' AND LOWER(sr.tier) IN ('challenger',
-		'grandmaster', 'master')
-		ORDER BY sr.lp DESC;
-	</select>
+   <select id="getRankLoadingData" resultType="summoner_rank">
+      SELECT DISTINCT
+      sr.summoner_name as summoner_name,
+      si.profile_icon_id as
+      profile_icon_id, si.s_level as s_level, LOWER(sr.tier) as
+      tier,
+      sr.division as division,
+      sr.wins as wins, sr.losses as losses, sr.lp as
+      lp,
+      round((sr.wins/(si.games))*100,2) as
+      winrate
+      FROM summoner_rank sr
+      INNER
+      JOIN summoner_info si ON sr.summoner_name = si.summoner_name
+      WHERE
+      sr.queue = 'RANKED_SOLO_5x5' AND LOWER(sr.tier) IN ('challenger',
+      'grandmaster', 'master')
+      ORDER BY sr.lp DESC;
+   </select>
 
-	<select id="getRankSoloData" resultType="summoner_rank">
-		SELECT sr.summoner_name,
-		si.profile_icon_id, si.s_level, LOWER(sr.tier) as tier, sr.division,
-		sr.wins, sr.losses, sr.lp, round((sr.wins/(si.games))*100,2) as
-		winrate
-		FROM summoner_rank sr
-		INNER JOIN summoner_info si ON
-		sr.summoner_name = si.summoner_name
-		WHERE sr.queue = 'RANKED_SOLO_5x5'
-		AND LOWER(sr.tier) IN ('challenger',
-		'grandmaster', 'master')
-		ORDER BY
-		sr.lp DESC;
-	</select>
+   <select id="getRankSoloData" resultType="summoner_rank">
+      SELECT sr.summoner_name,
+      si.profile_icon_id, si.s_level, LOWER(sr.tier) as tier, sr.division,
+      sr.wins, sr.losses, sr.lp, round((sr.wins/(si.games))*100,2) as
+      winrate
+      FROM summoner_rank sr
+      INNER JOIN summoner_info si ON
+      sr.summoner_name = si.summoner_name
+      WHERE sr.queue = 'RANKED_SOLO_5x5'
+      AND LOWER(sr.tier) IN ('challenger',
+      'grandmaster', 'master')
+      ORDER BY
+      sr.lp DESC;
+   </select>
 
-	<select id="getRankFlexData" resultType="summoner_rank">
-		SELECT sr.summoner_name,
-		si.profile_icon_id, si.s_level, LOWER(sr.tier) as tier, sr.division,
-		sr.wins, sr.losses, sr.lp, round((sr.wins/(si.games))*100,2) as
-		winrate
-		FROM summoner_rank sr
-		INNER JOIN summoner_info si ON
-		sr.summoner_name = si.summoner_name
-		WHERE sr.queue = 'RANKED_FLEX_5x5'
-		AND LOWER(sr.tier) IN ('challenger',
-		'grandmaster', 'master')
-		ORDER BY
-		sr.lp DESC;
-	</select>
+   <select id="getRankFlexData" resultType="summoner_rank">
+      SELECT sr.summoner_name,
+      si.profile_icon_id, si.s_level, LOWER(sr.tier) as tier, sr.division,
+      sr.wins, sr.losses, sr.lp, round((sr.wins/(si.games))*100,2) as
+      winrate
+      FROM summoner_rank sr
+      INNER JOIN summoner_info si ON
+      sr.summoner_name = si.summoner_name
+      WHERE sr.queue = 'RANKED_FLEX_5x5'
+      AND LOWER(sr.tier) IN ('challenger',
+      'grandmaster', 'master')
+      ORDER BY
+      sr.lp DESC;
+   </select>
 
-	<select id="getRankLevelData" resultType="summoner">
-		SELECT
-		sr.summoner_name,
-		si.profile_icon_id, si.s_level, LOWER(sr.tier) as
-		tier, sr.division,
-		sr.wins, sr.losses, sr.lp,
-		round((sr.wins/(si.games))*100,2) as
-		winrate
-		FROM summoner_rank sr
-		INNER
-		JOIN summoner_info si ON
-		sr.summoner_name = si.summoner_name
-		WHERE
-		sr.queue = 'RANKED_SOLO_5x5'
-		ORDER BY
-		si.s_level DESC;
-	</select>
+   <select id="getRankLevelData" resultType="summoner">
+      SELECT
+      sr.summoner_name,
+      si.profile_icon_id, si.s_level, LOWER(sr.tier) as
+      tier, sr.division,
+      sr.wins, sr.losses, sr.lp,
+      round((sr.wins/(si.games))*100,2) as
+      winrate
+      FROM summoner_rank sr
+      INNER
+      JOIN summoner_info si ON
+      sr.summoner_name = si.summoner_name
+      WHERE
+      sr.queue = 'RANKED_SOLO_5x5'
+      ORDER BY
+      si.s_level DESC;
+   </select>
 
-	<select id="get_summoner_info" resultType="summoner">
-		SELECT DISTINCT
-		summoner_name, s_level, profile_icon_id, games, LOWER(tier)
-		as tier,
-		wins, losses, lp, ranking, MIN(revision_date) as
-		revision_date,
-		tier_int
-		FROM summoner_info
-		WHERE summoner_name = #{summoner_name}
-		GROUP
-		BY summoner_name, s_level, profile_icon_id, games, LOWER(tier), wins,
-		losses, lp, ranking, tier_int;
-	</select>
+   <select id="get_summoner_info" resultType="summoner">
+      SELECT DISTINCT
+      summoner_name, s_level, profile_icon_id, games, LOWER(tier)
+      as tier,
+      wins, losses, lp, ranking, MIN(revision_date) as
+      revision_date,
+      tier_int
+      FROM summoner_info
+      WHERE summoner_name = #{summoner_name}
+      GROUP
+      BY summoner_name, s_level, profile_icon_id, games, LOWER(tier), wins,
+      losses, lp, ranking, tier_int;
+   </select>
 
-	<select id="get_renewal_info" resultType="summoner">
-		SELECT * FROM
-		SUMMONER_INFO
-		WHERE summoner_name = ${summoner_name}
-	</select>
+   <select id="get_renewal_info" resultType="summoner">
+      SELECT * FROM
+      SUMMONER_INFO
+      WHERE summoner_name = ${summoner_name}
+   </select>
 
-	<select id="get_summoner_record" resultType="record">
-		SELECT
-		match_id,
-		win,
-		champ_name,
-		champ_level,
-		team_id,
-		main_rune,
-		sub_rune,
-		spell1,
-		spell2,
-		kda,
-		kills,
-		deaths,
-		assists,
-		cs,
-		sight_points,
-		red_wards_placed,
-		ROUND(team_champion_kills / kills, 2) AS kill_involve,
-		item1,
-		item2,
-		item3,
-		item4,
-		item5,
-		item6,
-		item7,
-		t.summoner_name,
-		t.champion_name AS
-		player_champion_name,
-		team_id,
-		team_champion_kills
-		FROM
-		RECORD
-		JOIN
-		(SELECT
-		summoner_name,
-		champion_name
-		FROM
-		RECORD
-		WHERE
-		summoner_name =
-		#{summoner_name}) AS t
-		ON
-		RECORD.match_id = t.match_id;
-	</select>
+   <select id="get_summoner_record" resultType="record">
+      SELECT
+      match_id,
+      win,
+      champ_name,
+      champ_level,
+      team_id,
+      main_rune,
+      sub_rune,
+      spell1,
+      spell2,
+      kda,
+      kills,
+      deaths,
+      assists,
+      cs,
+      sight_points,
+      red_wards_placed,
+      ROUND(team_champion_kills / kills, 2) AS kill_involve,
+      item1,
+      item2,
+      item3,
+      item4,
+      item5,
+      item6,
+      item7,
+      t.summoner_name,
+      t.champion_name AS
+      player_champion_name,
+      team_id,
+      team_champion_kills
+      FROM
+      RECORD
+      JOIN
+      (SELECT
+      summoner_name,
+      champion_name
+      FROM
+      RECORD
+      WHERE
+      summoner_name =
+      #{summoner_name}) AS t
+      ON
+      RECORD.match_id = t.match_id;
+   </select>
 
-	<select id="get_champ_record" resultType="champ_record">
-		SELECT
-		(SELECT COUNT(*) FROM record WHERE summoner_name = #{summoner_name} AND win = 1) AS
-		wins,
-		(SELECT COUNT(*) FROM record WHERE summoner_name = #{summoner_name} AND win = 0) AS
-		losses,
-		champ_name,
-		COUNT(*) AS games,
-		(SUM(CASE WHEN win = 1 THEN 1 ELSE 0 END) / COUNT(*)) * 100 AS winrate,
-		(SUM(kills) + SUM(assists)) / SUM(deaths) AS KDA,
-		SUM(kills) AS kills,
-		SUM(deaths) AS deaths,
-		SUM(assists) AS assists,
-		SUM(CS) AS CS,
-		ROUND(SUM(CS) / COUNT(*), 2) AS CS_per_minute
-		FROM
-		record
-		WHERE
-		summoner_name = #{summoner_name}
-		GROUP BY
-		champ_name;
-	</select>
+   <select id="get_champ_record" resultType="champ_record">
+      SELECT
+      (SELECT COUNT(*) FROM record WHERE summoner_name = #{summoner_name} AND win = 1) AS
+      wins,
+      (SELECT COUNT(*) FROM record WHERE summoner_name = #{summoner_name} AND win = 0) AS
+      losses,
+      champ_name,
+      COUNT(*) AS games,
+      (SUM(CASE WHEN win = 1 THEN 1 ELSE 0 END) / COUNT(*)) * 100 AS winrate,
+      (SUM(kills) + SUM(assists)) / SUM(deaths) AS KDA,
+      SUM(kills) AS kills,
+      SUM(deaths) AS deaths,
+      SUM(assists) AS assists,
+      SUM(CS) AS CS,
+      ROUND(SUM(CS) / COUNT(*), 2) AS CS_per_minute
+      FROM
+      record
+      WHERE
+      summoner_name = #{summoner_name}
+      GROUP BY
+      champ_name;
+   </select>
 
-	<select id="getChampSolo">
-		SELECT
-		(SELECT COUNT(*) FROM record WHERE summoner_name = #{summoner_name} AND win = 1) AS
-		wins,
-		(SELECT COUNT(*) FROM record WHERE summoner_name = #{summoner_name} AND win = 0) AS
-		losses,
-		champ_name,
-		COUNT(*) AS games,
-		(SUM(CASE WHEN win = 1 THEN 1 ELSE 0 END) / COUNT(*)) * 100 AS winrate,
-		(SUM(kills) + SUM(assists)) / SUM(deaths) AS KDA,
-		SUM(kills) AS kills,
-		SUM(deaths) AS deaths,
-		SUM(assists) AS assists,
-		SUM(CS) AS CS,
-		ROUND(SUM(CS) / COUNT(*), 2) AS CS_per_minute
-		FROM
-		record
-		WHERE
-		summoner_name = #{summoner_name}
-		GROUP BY
-		champ_name;
-	</select>
+   <select id="getChampSolo">
+      SELECT
+      (SELECT COUNT(*) FROM record WHERE summoner_name = #{summoner_name} AND win = 1) AS
+      wins,
+      (SELECT COUNT(*) FROM record WHERE summoner_name = #{summoner_name} AND win = 0) AS
+      losses,
+      champ_name,
+      COUNT(*) AS games,
+      (SUM(CASE WHEN win = 1 THEN 1 ELSE 0 END) / COUNT(*)) * 100 AS winrate,
+      (SUM(kills) + SUM(assists)) / SUM(deaths) AS KDA,
+      SUM(kills) AS kills,
+      SUM(deaths) AS deaths,
+      SUM(assists) AS assists,
+      SUM(CS) AS CS,
+      ROUND(SUM(CS) / COUNT(*), 2) AS CS_per_minute
+      FROM
+      record
+      WHERE
+      summoner_name = #{summoner_name}
+      GROUP BY
+      champ_name;
+   </select>
 
-	<select id="getChampFlex">
-		SELECT
-		(SELECT COUNT(*) FROM record WHERE summoner_name = #{summoner_name} AND win = 1) AS
-		wins,
-		(SELECT COUNT(*) FROM record WHERE summoner_name = #{summoner_name} AND win = 0) AS
-		losses,
-		champ_name,
-		COUNT(*) AS games,
-		(SUM(CASE WHEN win = 1 THEN 1 ELSE 0 END) / COUNT(*)) * 100 AS winrate,
-		(SUM(kills) + SUM(assists)) / SUM(deaths) AS KDA,
-		SUM(kills) AS kills,
-		SUM(deaths) AS deaths,
-		SUM(assists) AS assists,
-		SUM(CS) AS CS,
-		ROUND(SUM(CS) / COUNT(*), 2) AS CS_per_minute
-		FROM
-		record
-		WHERE
-		summoner_name = #{summoner_name}
-		GROUP BY
-		champ_name;
-	</select>
+   <select id="getChampFlex">
+      SELECT
+      (SELECT COUNT(*) FROM record WHERE summoner_name = #{summoner_name} AND win = 1) AS
+      wins,
+      (SELECT COUNT(*) FROM record WHERE summoner_name = #{summoner_name} AND win = 0) AS
+      losses,
+      champ_name,
+      COUNT(*) AS games,
+      (SUM(CASE WHEN win = 1 THEN 1 ELSE 0 END) / COUNT(*)) * 100 AS winrate,
+      (SUM(kills) + SUM(assists)) / SUM(deaths) AS KDA,
+      SUM(kills) AS kills,
+      SUM(deaths) AS deaths,
+      SUM(assists) AS assists,
+      SUM(CS) AS CS,
+      ROUND(SUM(CS) / COUNT(*), 2) AS CS_per_minute
+      FROM
+      record
+      WHERE
+      summoner_name = #{summoner_name}
+      GROUP BY
+      champ_name;
+   </select>
 
-	<select id="getChampClassic">
-		SELECT
-		(SELECT COUNT(*) FROM record WHERE summoner_name = #{summoner_name} AND win = 1) AS
-		wins,
-		(SELECT COUNT(*) FROM record WHERE summoner_name = #{summoner_name} AND win = 0) AS
-		losses,
-		champ_name,
-		COUNT(*) AS games,
-		(SUM(CASE WHEN win = 1 THEN 1 ELSE 0 END) / COUNT(*)) * 100 AS winrate,
-		(SUM(kills) + SUM(assists)) / SUM(deaths) AS KDA,
-		SUM(kills) AS kills,
-		SUM(deaths) AS deaths,
-		SUM(assists) AS assists,
-		SUM(CS) AS CS,
-		ROUND(SUM(CS) / COUNT(*), 2) AS CS_per_minute
-		FROM
-		record
-		WHERE
-		summoner_name = #{summoner_name}
-		GROUP BY
-		champ_name;
-	</select>
+   <select id="getChampClassic">
+      SELECT
+      (SELECT COUNT(*) FROM record WHERE summoner_name = #{summoner_name} AND win = 1) AS
+      wins,
+      (SELECT COUNT(*) FROM record WHERE summoner_name = #{summoner_name} AND win = 0) AS
+      losses,
+      champ_name,
+      COUNT(*) AS games,
+      (SUM(CASE WHEN win = 1 THEN 1 ELSE 0 END) / COUNT(*)) * 100 AS winrate,
+      (SUM(kills) + SUM(assists)) / SUM(deaths) AS KDA,
+      SUM(kills) AS kills,
+      SUM(deaths) AS deaths,
+      SUM(assists) AS assists,
+      SUM(CS) AS CS,
+      ROUND(SUM(CS) / COUNT(*), 2) AS CS_per_minute
+      FROM
+      record
+      WHERE
+      summoner_name = #{summoner_name}
+      GROUP BY
+      champ_name;
+   </select>
 
-	<select id="get_20games_summary" resultType = "recordsummary">
-		SELECT
-  		(SELECT COUNT(*) FROM record WHERE summoner_name = '#{summoner_name}' AND win = 1) AS wins,
-  		(SELECT COUNT(*) FROM record WHERE summoner_name = '#{summoner_name}' AND win = 0) AS losses,
-  		ROUND((SUM(CASE WHEN win = 1 THEN 1 ELSE 0 END) / COUNT(*)) * 100, 2) AS winrate,
-  		ROUND(SUM(kills) / COUNT(*), 1) AS kills_avg,
-		ROUND(SUM(deaths) / COUNT(*), 1) AS deaths_avg,
-		ROUND(SUM(assists) / COUNT(*), 1) AS assists_avg,
-		ROUND(SUM(kda) / COUNT(*), 2) AS kda_avg,
-		MAX(kda) AS max_kda,
-		(SELECT kills FROM record WHERE summoner_name = '#{summoner_name}' ORDER BY kda DESC LIMIT 1) AS max_kills,
-		(SELECT deaths FROM record WHERE summoner_name = '#{summoner_name}' ORDER BY kda DESC LIMIT 1) AS max_deaths,
-		(SELECT assists FROM record WHERE summoner_name = '#{summoner_name}' ORDER BY kda DESC LIMIT 1) AS max_assists,
-		(SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 1) AS subquery1) AS top_champ1,
-		(SELECT COUNT(*) FROM record WHERE summoner_name = '#{summoner_name}' AND champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 1) AS subquery1) AND win = 1) AS top_champ1_wins,
-		(SELECT COUNT(*) FROM record WHERE summoner_name = '#{summoner_name}' AND champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 1) AS subquery1) AND win = 0) AS top_champ1_losses,
-		ROUND((SELECT COUNT(*) FROM record WHERE summoner_name = '#{summoner_name}' AND champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 1) AS subquery1) AND win = 1) / (SELECT COUNT(*) FROM record WHERE summoner_name = '#{summoner_name}' AND champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 1) AS subquery1)) * 100, 2) AS top_champ1_winrate,
-		ROUND(SUM(CASE WHEN champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 1) AS subquery1) THEN kda ELSE 0 END) / COUNT(*), 2) AS top_champ1_kda_avg,
-		(SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 1, 1) AS subquery2) AS top_champ2,
-		(SELECT COUNT(*) FROM record WHERE summoner_name = '#{summoner_name}' AND champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 1, 1) AS subquery2) AND win = 1) AS top_champ2_wins,
-		(SELECT COUNT(*) FROM record WHERE summoner_name = '#{summoner_name}' AND champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 1, 1) AS subquery2) AND win = 0) AS top_champ2_losses,
-		ROUND((SELECT COUNT(*) FROM record WHERE summoner_name = '#{summoner_name}' AND champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 1, 1) AS subquery2) AND win = 1) / (SELECT COUNT(*) FROM record WHERE summoner_name = '#{summoner_name}' AND champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 1, 1) AS subquery2)) * 100, 2) AS top_champ2_winrate,
-		ROUND(SUM(CASE WHEN champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 1, 1) AS subquery2) THEN kda ELSE 0 END) / COUNT(*), 2) AS top_champ2_kda_avg,
-		(SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 2, 1) AS subquery3) AS top_champ3,
-		(SELECT COUNT(*) FROM record WHERE summoner_name = '#{summoner_name}' AND champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 2, 1) AS subquery3) AND win = 1) AS top_champ3_wins,
-		(SELECT COUNT(*) FROM record WHERE summoner_name = '#{summoner_name}' AND champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 2, 1) AS subquery3) AND win = 0) AS top_champ3_losses,
-		ROUND((SELECT COUNT(*) FROM record WHERE summoner_name = '#{summoner_name}' AND champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 2, 1) AS subquery3) AND win = 1) / (SELECT COUNT(*) FROM record WHERE summoner_name = '#{summoner_name}' AND champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 2, 1) AS subquery3)) * 100, 2) AS top_champ3_winrate,
-		ROUND(SUM(CASE WHEN champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 2, 1) AS subquery3) THEN kda ELSE 0 END) / COUNT(*), 2) AS top_champ3_kda_avg
-		FROM record
-		WHERE summoner_name = '#{summoner_name}';
-	</select>
+   <select id="get_20games_summary" resultType = "recordsummary">
+      SELECT
+        (SELECT COUNT(*) FROM record WHERE summoner_name = '#{summoner_name}' AND win = 1) AS wins,
+        (SELECT COUNT(*) FROM record WHERE summoner_name = '#{summoner_name}' AND win = 0) AS losses,
+        ROUND((SUM(CASE WHEN win = 1 THEN 1 ELSE 0 END) / COUNT(*)) * 100, 2) AS winrate,
+        ROUND(SUM(kills) / COUNT(*), 1) AS kills_avg,
+      ROUND(SUM(deaths) / COUNT(*), 1) AS deaths_avg,
+      ROUND(SUM(assists) / COUNT(*), 1) AS assists_avg,
+      ROUND(SUM(kda) / COUNT(*), 2) AS kda_avg,
+      MAX(kda) AS max_kda,
+      (SELECT kills FROM record WHERE summoner_name = '#{summoner_name}' ORDER BY kda DESC LIMIT 1) AS max_kills,
+      (SELECT deaths FROM record WHERE summoner_name = '#{summoner_name}' ORDER BY kda DESC LIMIT 1) AS max_deaths,
+      (SELECT assists FROM record WHERE summoner_name = '#{summoner_name}' ORDER BY kda DESC LIMIT 1) AS max_assists,
+      (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 1) AS subquery1) AS top_champ1,
+      (SELECT COUNT(*) FROM record WHERE summoner_name = '#{summoner_name}' AND champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 1) AS subquery1) AND win = 1) AS top_champ1_wins,
+      (SELECT COUNT(*) FROM record WHERE summoner_name = '#{summoner_name}' AND champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 1) AS subquery1) AND win = 0) AS top_champ1_losses,
+      ROUND((SELECT COUNT(*) FROM record WHERE summoner_name = '#{summoner_name}' AND champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 1) AS subquery1) AND win = 1) / (SELECT COUNT(*) FROM record WHERE summoner_name = '#{summoner_name}' AND champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 1) AS subquery1)) * 100, 2) AS top_champ1_winrate,
+      ROUND(SUM(CASE WHEN champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 1) AS subquery1) THEN kda ELSE 0 END) / COUNT(*), 2) AS top_champ1_kda_avg,
+      (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 1, 1) AS subquery2) AS top_champ2,
+      (SELECT COUNT(*) FROM record WHERE summoner_name = '#{summoner_name}' AND champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 1, 1) AS subquery2) AND win = 1) AS top_champ2_wins,
+      (SELECT COUNT(*) FROM record WHERE summoner_name = '#{summoner_name}' AND champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 1, 1) AS subquery2) AND win = 0) AS top_champ2_losses,
+      ROUND((SELECT COUNT(*) FROM record WHERE summoner_name = '#{summoner_name}' AND champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 1, 1) AS subquery2) AND win = 1) / (SELECT COUNT(*) FROM record WHERE summoner_name = '#{summoner_name}' AND champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 1, 1) AS subquery2)) * 100, 2) AS top_champ2_winrate,
+      ROUND(SUM(CASE WHEN champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 1, 1) AS subquery2) THEN kda ELSE 0 END) / COUNT(*), 2) AS top_champ2_kda_avg,
+      (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 2, 1) AS subquery3) AS top_champ3,
+      (SELECT COUNT(*) FROM record WHERE summoner_name = '#{summoner_name}' AND champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 2, 1) AS subquery3) AND win = 1) AS top_champ3_wins,
+      (SELECT COUNT(*) FROM record WHERE summoner_name = '#{summoner_name}' AND champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 2, 1) AS subquery3) AND win = 0) AS top_champ3_losses,
+      ROUND((SELECT COUNT(*) FROM record WHERE summoner_name = '#{summoner_name}' AND champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 2, 1) AS subquery3) AND win = 1) / (SELECT COUNT(*) FROM record WHERE summoner_name = '#{summoner_name}' AND champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 2, 1) AS subquery3)) * 100, 2) AS top_champ3_winrate,
+      ROUND(SUM(CASE WHEN champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = '#{summoner_name}' GROUP BY champ_name ORDER BY champ_count DESC LIMIT 2, 1) AS subquery3) THEN kda ELSE 0 END) / COUNT(*), 2) AS top_champ3_kda_avg
+      FROM record
+      WHERE summoner_name = '#{summoner_name}';
+   </select>
 
-	<select id="get_champ_position_filter"
-		resultMap="positionPickRateMap">
-		SELECT lane, COUNT(*) / (SELECT COUNT(*) FROM record WHERE summoner_name = #{summoner_name}) * 100 AS pick_rate
-		FROM record
-		WHERE summoner_name = #{summoner_name}
-		GROUP BY lane
-		ORDER BY COUNT(*) DESC
-		LIMIT 3;
-	</select>
+   <select id="get_champ_position_filter"
+      resultMap="positionPickRateMap">
+      SELECT lane, COUNT(*) / (SELECT COUNT(*) FROM record WHERE summoner_name = #{summoner_name}) * 100 AS pick_rate
+      FROM record
+      WHERE summoner_name = #{summoner_name}
+      GROUP BY lane
+      ORDER BY COUNT(*) DESC
+      LIMIT 3;
+   </select>
 
-	<resultMap id="positionPickRateMap" type="champ_record">
-		<result property="lane" column="lane" />
-		<result property="pick_rate" column="pick_rate" />
-	</resultMap>
+   <resultMap id="positionPickRateMap" type="champ_record">
+      <result property="lane" column="lane" />
+      <result property="pick_rate" column="pick_rate" />
+   </resultMap>
 
 <select id="get_record_detail" resultType="record">
 SELECT
@@ -351,78 +351,121 @@ GROUP BY
 </select>
 
 <select id="getBuild" resultType="build">
-	SELECT
-	t.mini_t_time AS
-	timestamp,
-	t.item_id,
-	t.mini_t_skill_slot,
-	r.main_rune,
-	r.main_rune1,
-	r.main_rune2,
-	r.main_rune3,
-	r.main_rune4,
-	r.sub_rune,
-	r.sub_rune1,
-	r.sub_rune2,
-	r.rune_stat1,
-	r.rune_stat2,
-	r.rune_stat3
-	FROM
-	time_line_data t
-	LEFT JOIN
-	record r ON t.match_id = r.match_id AND t.summoner_name =
-	r.summoner_name
-	WHERE
-	t.match_id = #{matchId}
-	AND t.summoner_name =
-	#{summonerName}
+   SELECT
+   t.mini_t_time AS
+   timestamp,
+   t.item_id,
+   t.mini_t_skill_slot,
+   r.main_rune,
+   r.main_rune1,
+   r.main_rune2,
+   r.main_rune3,
+   r.main_rune4,
+   r.sub_rune,
+   r.sub_rune1,
+   r.sub_rune2,
+   r.rune_stat1,
+   r.rune_stat2,
+   r.rune_stat3
+   FROM
+   time_line_data t
+   LEFT JOIN
+   record r ON t.match_id = r.match_id AND t.summoner_name =
+   r.summoner_name
+   WHERE
+   t.match_id = #{matchId}
+   AND t.summoner_name =
+   #{summonerName}
 </select>
 
-	<!-- <select id="getRanking" resultType="recordRanking"> SELECT '본인' AS 
-		player_type, self_dealt AS dealt, self_taken AS taken, self_kills AS kills, 
-		self_deaths AS deaths, self_assists AS assists, self_red_wards AS red_wards, 
-		self_cs AS cs FROM record WHERE match_id = #{matchId} AND summoner_name = 
-		#{summonerName} UNION SELECT '팀원' AS player_type, team_dealt1 AS dealt, team_taken1 
-		AS taken, team_kills1 AS kills, team_deaths1 AS deaths, team_assists1 AS 
-		assists, team_red_wards1 AS red_wards, team_cs1 AS cs FROM record WHERE match_id 
-		= #{matchId} AND summoner_name <> #{summonerName} AND team_id = ( SELECT 
-		team_id FROM record WHERE match_id = #{matchId} AND summoner_name = #{summonerName} 
-		) UNION SELECT '팀원' AS player_type, team_dealt2 AS dealt, team_taken2 AS 
-		taken, team_kills2 AS kills, team_deaths2 AS deaths, team_assists2 AS assists, 
-		team_red_wards2 AS red_wards, team_cs2 AS cs FROM record WHERE match_id = 
-		#{matchId} AND summoner_name <> #{summonerName} AND team_id = ( SELECT team_id 
-		FROM record WHERE match_id = #{matchId} AND summoner_name = #{summonerName} 
-		) UNION SELECT '팀원' AS player_type, team_dealt3 AS dealt, team_taken3 AS 
-		taken, team_kills3 AS kills, team_deaths3 AS deaths, team_assists3 AS assists, 
-		team_red_wards3 AS red_wards, team_cs3 AS cs FROM record WHERE match_id = 
-		#{matchId} AND summoner_name <> #{summonerName} AND team_id = ( SELECT team_id 
-		FROM record WHERE match_id = #{matchId} AND summoner_name = #{summonerName} 
-		) UNION SELECT '팀원' AS player_type, team_dealt4 AS dealt, team_taken4 AS 
-		taken, team_kills4 AS kills, team_deaths4 AS deaths, team_assists4 AS assists, 
-		team_red_wards4 AS red_wards, team_cs4 AS cs FROM record WHERE match_id = 
-		#{matchId} AND summoner_name <> #{summonerName} AND team_id = ( SELECT team_id 
-		FROM record WHERE match_id = #{matchId} AND summoner_name = #{summonerName} 
-		); </select> -->
+<resultMap id="recordRanking" type="recordRanking">
+    <id property="self_dealt" column="self_dealt"/>
+    <id property="self_taken" column="self_taken"/>
+    <id property="self_kills" column="self_kills"/>
+    <id property="self_deaths" column="self_deaths"/>
+    <id property="self_assists" column="self_assists"/>
+    <id property="self_red_ward_placed" column="self_red_ward_placed"/>
+    <id property="self_cs" column="self_cs"/>
+    <id property="total_dealt" column="total_dealt"/>
+    <id property="total_taken" column="total_taken"/>
+    <id property="team_champion_kills" column="team_champion_kills"/>
+    <id property="team_champion_deaths" column="team_champion_deaths"/>
+    <id property="team_champion_assists" column="team_champion_assists"/>
+    <id property="team_total_red_ward" column="team_total_red_ward"/>
+    <id property="team_total_cs" column="team_total_cs"/>
+    <collection property="team_dealt" ofType="recordRanking" javaType = "java.util.ArrayList">
+        <id property="team_dealt" column="team_dealt"/>
+    </collection>
+    <collection property="team_taken" ofType="recordRanking" javaType = "java.util.ArrayList">
+        <id property="team_taken" column="team_taken"/>
+    </collection>
+    <collection property="team_kills" ofType="recordRanking" javaType = "java.util.ArrayList">
+        <id property="team_kills" column="team_kills"/>
+    </collection>
+    <collection property="team_deaths" ofType="recordRanking" javaType = "java.util.ArrayList">
+        <id property="team_deaths" column="team_deaths"/>
+    </collection>
+    <collection property="team_assists" ofType="recordRanking" javaType = "java.util.ArrayList">
+        <id property="team_assists" column="team_assists"/>
+    </collection>
+    <collection property="team_red_ward_placed" ofType="recordRanking">
+        <id property="team_red_ward_placed" column="team_red_ward_placed"/>
+    </collection>
+    <collection property="team_cs" ofType="recordRankingCSType">
+        <id property="team_cs" column="team_cs"/>
+    </collection>    
+</resultMap>
 
-	<select id="getSummoner" resultType="summoner">
-		select summoner_name,
-		LOWER(tier) as tier,
-		profile_icon_id,
-		games,
-		wins,
-		losses,
-		lp,
-		round((wins /
-		games) * 100,2) as winrate
-		from summoner_info
-		where summoner_name =
-		"8찬이하밥상엎음"
-	</select>
+<select id="getRanking" resultType="recordRanking">
+   select
+   (select dealt_to_champ from record where match_id = #{match_id} and summoner_name = #{summoner_name}) as self_dealt,
+   (select damage_taken from record where match_id = #{match_id} and summoner_name = #{summoner_name}) as self_taken,
+   (select kills from record where match_id = #{match_id} and summoner_name = #{summoner_name}) as self_kills,
+   (select deaths from record where match_id = #{match_id} and summoner_name = #{summoner_name}) as self_deaths,
+   (select assists from record where match_id = #{match_id} and summoner_name = #{summoner_name}) as self_assists,
+   (select red_ward_placed from record where match_id = #{match_id} and summoner_name = #{summoner_name}) as self_red_ward_placed,
+   (select cs from record where match_id = #{match_id} and summoner_name = #{summoner_name}) as self_cs,
+   (SELECT dealt_to_champ FROM record WHERE match_id = #{match_id} AND summoner_name &lt;&gt; #{summoner_name} AND team_id = (SELECT team_id FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as team_dealt,
+   (SELECT damage_taken FROM record WHERE match_id = #{match_id} AND summoner_name &lt;&gt; #{summoner_name} AND team_id = (SELECT team_id FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as team_taken,
+   (SELECT kills FROM record WHERE match_id = #{match_id} AND summoner_name &lt;&gt; #{summoner_name} AND team_id = (SELECT team_id FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as team_kills,
+   (SELECT deaths FROM record WHERE match_id = #{match_id} AND summoner_name &lt;&gt; #{summoner_name} AND team_id = (SELECT team_id FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as team_deaths,
+   (SELECT assists FROM record WHERE match_id = #{match_id} AND summoner_name &lt;&gt; #{summoner_name} AND team_id = (SELECT team_id FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as team_assists,
+   (SELECT red_ward_placed FROM record WHERE match_id = #{match_id} AND summoner_name &lt;&gt; #{summoner_name} AND team_id = (SELECT team_id FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as team_red_ward_placed,
+   (SELECT cs FROM record WHERE match_id = #{match_id} AND summoner_name &lt;&gt; #{summoner_name} AND team_id = (SELECT team_id FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as team_cs,
+   (select SUM(dealt_to_champ) from record where match_id = #{match_id} and team_id = (SELECT team_id FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as total_dealt,
+   (select SUM(damage_taken) from record where match_id = #{match_id} and team_id = (SELECT team_id FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as total_taken,
+   (select team_champion_kills from record where match_id = #{match_id} and summoner_name = #{summoner_name} and team_id = (SELECT team_id FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as team_champion_kills,
+   (select team_champion_deaths from record where match_id = #{match_id} and summoner_name = #{summoner_name} and team_id = (SELECT team_id FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as team_champion_deaths,
+   (select SUM(assists) from record where match_id = #{match_id} and team_id = (SELECT team_id FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as team_champion_assists,
+   (select sum(red_ward_placed) from record where match_id = #{match_id} and team_id = (SELECT team_id FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as team_total_red_ward,
+   (select sum(cs) from record where match_id = #{match_id} and team_id = (SELECT team_id FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as team_total_cs;
+</select>
 
-	<!-- <select id="getDashBoardKDA" resultType="dashboard"> SELECT COUNT(CASE 
-		WHEN win = 1 THEN 1 END) AS wins, COUNT(CASE WHEN win = 0 THEN 1 END) AS 
-		losses, SUM(kills) / 20 AS kills_avg, SUM(deaths) / 20 AS deaths_avg, SUM(assists) 
-		/ 20 AS assists_avg, SUM(kda) / 20 AS kda_avg FROM record WHERE summoner_name 
-		= #{summoner_name} LIMIT 20; </select> -->
+<select id="getSummoner" resultType="summoner">
+   select summoner_name,
+   LOWER(tier) as tier,
+   profile_icon_id,
+   games,
+   wins,
+   losses,
+   lp,
+   round((wins /
+   games) * 100,2) as winrate
+   from summoner_info
+   where summoner_name =
+   "8찬이하밥상엎음"
+</select>
+
+<select id="getDashBoardKDA" resultType="dashboard">
+SELECT COUNT(CASE WHEN win = 1 THEN 1 END) AS wins,
+COUNT(CASE WHEN win = 0 THEN 1 END) AS losses,
+SUM(kills) / 20 AS kills_avg,
+SUM(deaths) / 20 AS deaths_avg,
+SUM(assists) / 20 AS assists_avg,
+SUM(kda) / 20 AS kda_avg
+FROM record
+WHERE summoner_name 
+= #{summoner_name} LIMIT 20;
+</select>
 
 </mapper>
