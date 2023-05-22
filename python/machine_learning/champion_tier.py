@@ -40,7 +40,7 @@ matchId_count = pd.DataFrame(mu.mysql_execute_dict(f"SELECT match_id_substr FROM
 conn.close()
 print(f'매치아이디 갯수 : {len(matchId_count.match_id_substr.unique())}개')
 
-batch_size = 20000
+batch_size = 40000
 win_pick_lst_result = []
 ban_rate_lst_result = []
 meta_score_lst_result = []
@@ -108,7 +108,7 @@ ban_rate_df = ban_rate_df.dropna()
 ban_rate_df = ban_rate_df[['teamPosition', 'championId', 'banRate']]
 # ----------------------------------------------------------------
 meta_score_columns = ['championId', 'teamPosition', 'kda', 'totalDamageDealtToChampions', 'totalDamageTaken',
-           'timeCCingOthers', 'total_gold']
+                      'timeCCingOthers', 'total_gold']
 meta_score_df = pd.DataFrame(meta_score_lst_result, columns=meta_score_columns)
 meta_score_df = meta_score_df.groupby(['championId', 'teamPosition']).mean().reset_index()
 
@@ -281,7 +281,7 @@ def machine_learning_score(df):
     columns_to_consider = ['teamPosition_BOTTOM', 'teamPosition_JUNGLE', 'teamPosition_MIDDLE', 'teamPosition_TOP',
                            'teamPosition_UTILITY']
     result_df['teamPosition'] = result_df[columns_to_consider].idxmax(axis=1)
-    result_df['teamPosition'] = result_df['teamPosition'].str.replace('teamPosition_', '') #이진벡터값 다시 범주형으로 복원
+    result_df['teamPosition'] = result_df['teamPosition'].str.replace('teamPosition_', '')  # 이진벡터값 다시 범주형으로 복원
     result_df = result_df[['championId', 'teamPosition', 'tier']]
     final_df = result_df_copy.merge(result_df, on=['championId', 'teamPosition'])
     final_df = final_df[['championId', 'teamPosition', 'winRate', 'pickRate', 'banRate', 'tier']]
@@ -290,3 +290,99 @@ def machine_learning_score(df):
 
 machine_learning_score = machine_learning_score(df)
 sort_machine_learning_score = machine_learning_score.sort_values(by=['tier'])
+
+# -----------------------------------------------------------------------------------------------------------------------
+def machine_learning_score(win_pick_lst,ban_lst,meta_lst):
+    def win_rate_pick_rate_data(result):
+        columns = ['championId', 'win', 'teamPosition']  # 열 추가
+        win_pick_df = pd.DataFrame(result, columns=columns)
+        win_pick_df['win'] = win_pick_df['win'].astype(int)
+        groupBy_df = win_pick_df.groupby(['championId', 'teamPosition']).agg({'win': ['sum', 'count']})
+        groupBy_df.columns = ['winCount', 'pickCount']
+        groupBy_df['lineTotalCount'] = groupBy_df.groupby('teamPosition')['pickCount'].transform('sum')
+        groupBy_df['winRate'] = round((groupBy_df['winCount'] / groupBy_df['pickCount']) * 100, 2)
+        groupBy_df['pickRate'] = round((groupBy_df['pickCount'] / groupBy_df['lineTotalCount']) * 100, 2)
+        groupBy_df = groupBy_df.reset_index()  # 인덱스 재설정
+        groupBy_df = groupBy_df[['championId', 'teamPosition', 'winRate', 'pickRate']]  # 열 순서 조정
+        return groupBy_df
+
+    win_rate_pick_rate_data = win_rate_pick_rate_data(win_pick_lst)
+
+    # 밴률 데이터
+    def ban_rate_data(result):
+        columns = ['teamPosition', 'championId']
+        ban_df = pd.DataFrame(result, columns=columns)
+        ban_rate_df = ban_df.groupby(['teamPosition', 'championId']).size().reset_index(name='banCount')
+
+        ban_rate_df['banPositionTotal'] = ban_rate_df.groupby('teamPosition')['banCount'].transform('sum')
+        ban_rate_df['banRate'] = round((ban_rate_df['banCount'] / ban_rate_df['banPositionTotal']) * 100, 2)
+        ban_rate_df = ban_rate_df.dropna()
+        ban_rate_df = ban_rate_df[['teamPosition', 'championId', 'banRate']]
+
+        return ban_rate_df
+
+    ban_rate_df = ban_rate_data(ban_lst)
+
+    champion_stats_df = win_rate_pick_rate_data.merge(ban_rate_df, on=['championId', 'teamPosition'])
+
+    def meta_score_data(result):
+        columns = ['championId', 'teamPosition', 'kda', 'totalDamageDealtToChampions', 'totalDamageTaken',
+                   'timeCCingOthers', 'total_gold']
+        meta_score_df = pd.DataFrame(result, columns=columns)
+
+        meta_score_df = meta_score_df.groupby(['championId', 'teamPosition']).mean().reset_index()
+
+        return meta_score_df
+
+    meta_score_data = meta_score_data(meta_lst)
+
+    result_df = champion_stats_df.merge(meta_score_data, on=['championId', 'teamPosition'])
+    result_df_copy = result_df.copy()
+    result_df[['winRate', 'pickRate', 'banRate', 'kda', 'totalDamageDealtToChampions',
+               'totalDamageTaken', 'timeCCingOthers', 'total_gold']] = result_df[['winRate', 'pickRate',
+                                                                                  'banRate', 'kda',
+                                                                                  'totalDamageDealtToChampions',
+                                                                                  'totalDamageTaken', 'timeCCingOthers',
+                                                                                  'total_gold']].apply(zscore)
+    result_df['totalScore'] = result_df['winRate'] * 0.30 + result_df['pickRate'] * 0.25 + \
+                              result_df['banRate'] * 0.15 + result_df['kda'] * 0.05 + \
+                              result_df['totalDamageDealtToChampions'] * 0.05 + \
+                              result_df['totalDamageTaken'] * 0.05 + result_df['timeCCingOthers'] * 0.05 + \
+                              result_df['total_gold'] * 0.05
+    result_df = pd.get_dummies(result_df, columns=['teamPosition'])
+    model = joblib.load('championTierPredictionModel.pkl')  # 모델 로드
+    predictions = model.predict(result_df)  # 예측 수행
+    result_df['tier'] = predictions  # 예측 결과를 'tier' 컬럼으로 추가
+    columns_to_consider = ['teamPosition_BOTTOM', 'teamPosition_JUNGLE', 'teamPosition_MIDDLE', 'teamPosition_TOP',
+                           'teamPosition_UTILITY']
+    result_df['teamPosition'] = result_df[columns_to_consider].idxmax(axis=1)
+    result_df['teamPosition'] = result_df['teamPosition'].str.replace('teamPosition_', '')  # 이진벡터값 다시 범주형으로 복원
+    result_df = result_df[['championId', 'teamPosition', 'tier']]
+    final_df = result_df_copy.merge(result_df, on=['championId', 'teamPosition'])
+    final_df = final_df[['championId', 'teamPosition', 'winRate', 'pickRate', 'banRate', 'tier']]
+    return final_df
+
+machine_learning_score = machine_learning_score(win_pick_lst_result,ban_rate_lst_result,meta_score_lst_result)
+
+
+
+
+result_df.columns
+machine_learning_score = machine_learning_score(df)
+sort_machine_learning_score = machine_learning_score.sort_values(by=['tier'])
+
+def insert_tier_data(x, conn):
+    query = (
+        f"INSERT INTO champion_tier (champion_id, team_position , win_rate ,"
+        f" pick_rate,ban_rate ,tier) "
+        f"VALUES ({x.championId}, {repr(x.teamPosition)}, {x.winRate}, {x.pickRate},{x.banRate},{x.tier})"
+    )
+    try:
+        mu.mysql_execute(query, conn)
+    except Exception as e:
+        print(e)
+    return
+
+conn = mu.connect_mysql()
+machine_learning_score.progress_apply(lambda x: insert_tier_data(x, conn), axis=1)
+conn.commit()
