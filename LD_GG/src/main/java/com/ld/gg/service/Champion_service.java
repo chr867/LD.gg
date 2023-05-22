@@ -52,6 +52,13 @@ public class Champion_service {
 		return champion_en_name;
 	}
 
+	public String champ_search_eng(String champion_en_name) {
+		String champion_kr_name = cd.champ_search_eng(champion_en_name);
+		log.info("champion_kr_name = {}", champion_kr_name);
+		
+		return champion_kr_name;
+	}
+	
 	public List<Champ_match_up_default> champ_recom(String lane, String tag, String right_champion) {
 		if(tag.equals("all")){
 			tag="";

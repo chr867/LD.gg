@@ -110,7 +110,7 @@ body {
 }
 
 #recom_champ img{
-	width: 100px;
+	width: 140px;
 	height: 140px;
 	margin-right: 20px;
 	border-radius: 70%;
@@ -453,7 +453,6 @@ body {
 	<!-- 메인 컨테이너 -->
 	<div class="main-container">
 		<br> <br> <br> <br> <br>
-		 <!-- <a href="/member/testMain">테스트메인</a>  -->
 		 <br> <br> <br>
 		
 		<div id="my_champion">
@@ -461,7 +460,7 @@ body {
 				<form id=champ_search>
 			 	<input id='champion_name_input' type="text" name="champion_kr_name" placeholder="내 챔피언 검색">
 				</form>
-				<img id="my_champion_img" alt="my_champion" src="/resources/img/img/champion_img/tiles/0.png">
+				<img id="my_champion_img" src="/resources/img/img/champion_img/tiles/0.png">
 			</div>
 			<div id="build_recom_box">
 				<span></span>
@@ -486,6 +485,7 @@ body {
 				</select>
 				<select name="tag">
 					<option value="holder">역할군 선택</option>
+					<option value="all">전체</option>
 					<option value="Assassin">암살자</option>
 					<option value="Fighter">전사</option>
 					<option value="Mage">마법사</option>
@@ -501,27 +501,64 @@ body {
 				<form id=right_champ_search>
 				 	<input id='right_champ_name_input' type="text" name="champion_kr_name" placeholder="상대 챔피언 검색">
 				</form>
-				<img id="right_champion_img" alt="my_champion" src="/resources/img/img/champion_img/tiles/0.png">
+				<img id="right_champion_img" src="/resources/img/img/champion_img/tiles/0.png">
 				<span></span>
 			</div>
 		</div>
 		
 		<div id="recom_champ">
-			<img src="/resources/img/img/champion_img/tiles/0.png" alt="" id="recom_champ_0">
-			<img src="/resources/img/img/champion_img/tiles/0.png" alt="" id="recom_champ_1">
-			<img src="/resources/img/img/champion_img/tiles/0.png" alt="" id="recom_champ_2">
-			<img src="/resources/img/img/champion_img/tiles/0.png" alt="" id="recom_champ_3">
-			<img src="/resources/img/img/champion_img/tiles/0.png" alt="" id="recom_champ_4">
+			<div>
+				<img src="/resources/img/img/champion_img/tiles/0.png" class="champ1" alt="" id="recom_champ_0" onclick="recom_click(this)">
+				<img src="/resources/img/img/champion_img/tiles/0.png" class="champ2" alt="" id="recom_champ_1" onclick="recom_click(this)">
+				<img src="/resources/img/img/champion_img/tiles/0.png" class="champ3" alt="" id="recom_champ_2" onclick="recom_click(this)">
+				<img src="/resources/img/img/champion_img/tiles/0.png" class="champ4" alt="" id="recom_champ_3" onclick="recom_click(this)">
+				<img src="/resources/img/img/champion_img/tiles/0.png" class="champ5" alt="" id="recom_champ_4" onclick="recom_click(this)">
+			</div>
+			<div id="recom_champ_name">
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+			</div>
+			<div id="lane_kill_rate">
+				<span>만난 횟수</span>
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+			</div>
+			<div id="match_up_win_rate">
+				<span>승률</span>
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+			</div>
 		</div>
-		<!-- 추천 챔피언, 맞춤 빌드 div -->
-		
-	</div>
-	
+		<!-- 추천 빌드 모달 -->
+
 <script type="text/javascript">
 	function go_mypage(){
 		location.href="/member/mypage"
 	}
 	
+	function recom_click(champ){
+		$('#my_champion_img').attr('src', champ.src);
+		$('#build_recom_left_val').attr('value', $(champ).attr('class'));
+		$.ajax({
+			url: "/champion/search-eng.json",
+			type: 'POST',
+			data: {champion_en_name: $(champ).attr('class')},
+		}).done(res=>{
+			$('#build_recom_box span').text(res);
+		}).fail(err=>{
+			$('#build_recom_box span').text('챔피언을 선택해 주세요');
+		})
+	}
+
 	$('#champ_recom').submit(function(event){
 		event.preventDefault();
 		let formData = $(this).serialize();
@@ -533,8 +570,13 @@ body {
 		}).done(res=>{
 			res.forEach(champ=>{
 				let idx = res.indexOf(champ)
-				let champ_name = champ.champion_name
-				$(`#recom_champ_\${idx}`).attr('src', `/resources/img/img/champion_img/tiles/\${champ_name}_0.jpg`);
+				let champ_name = champ.cm.champion_name
+				let path = `/resources/img/img/champion_img/tiles/\${champ_name}_0.jpg`
+				$(`#recom_champ_\${idx}`).attr('src', path);
+				$(`#recom_champ_\${idx}`).attr('class', champ_name);
+				$('#recom_champ_name span').eq(idx).text(champ.name)
+				$('#lane_kill_rate span:not(:first)').eq(idx).text(champ.cm.match_up_cnt);
+				$('#match_up_win_rate span:not(:first)').eq(idx).text(champ.cm.match_up_win_rate);
 			})
 		}).fail(err=>{
 			console.log(err)
@@ -551,11 +593,10 @@ body {
 			type: 'POST',
 			data: formData,
 		}).done(res=>{
-			console.log(res)
-			res.forEach(champ=>{
-				console.log(champ)
-			})
-			
+			console.log(res);
+/* 	        $('#modalData').html(res);
+	        $('#myModal').modal('show'); */
+						
 		}).fail(err=>{
 			console.log(err)
 		})
@@ -577,7 +618,7 @@ body {
 		}).done(res=>{
 			if(res){
 				$('#my_champion_img').attr('src', `/resources/img/img/champion_img/tiles/\${res}_0.jpg`);
-				$('#build_recom_left_val').attr('value', $('#build_recom_box span').text());
+				$('#build_recom_left_val').attr('value', res);
 			}else{
 				$('#build_recom_box span').text('챔피언 이름을 확인해주세요');
 			}
@@ -604,8 +645,8 @@ body {
 		}).done(res=>{
 			if(res){
 				$('#right_champion_img').attr('src', `/resources/img/img/champion_img/tiles/\${res}_0.jpg`);
-				$('#champ_recom_right_val').attr('value', right_champ_name);
-				$('#build_recom_right_val').attr('value', right_champ_name);
+				$('#champ_recom_right_val').attr('value', res);
+				$('#build_recom_right_val').attr('value', res);
 			}else{
 				$('#right_champ_search_box span').text('챔피언 이름을 확인해주세요');
 			}
