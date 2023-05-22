@@ -53,6 +53,20 @@ public class TipRestController {
 		
 		return json;
 	}
+	
+	@GetMapping("/searchId.json")
+	public String tipSearchId(int keyword) throws Exception {
+
+        List<TipDto> searchList = ts.getSearchIdList(keyword);
+        
+        ObjectMapper mapper = new ObjectMapper();
+		String json = null;
+		json = mapper.writeValueAsString(searchList);
+		
+		return json;
+	}
+	
+	
 	// 1 = 삭제성공 , 2 = 삭제실패, 3 = 이메일매칭 x, 4 = 오류
 	@PostMapping("/delete")
 	public int tipDelete(HttpSession session, int t_b_num) throws Exception{
@@ -111,8 +125,9 @@ public class TipRestController {
 	public int replyDelete(HttpSession session, int t_r_num) throws Exception{
 		log.info(t_r_num+"번 댓글 삭제 시작");
 		String email = (String)session.getAttribute("email");
+		int userType = (int)session.getAttribute("user_type");
 		TipDto repylInfo = ts.getReplyinfo(t_r_num);
-		if(email.equals(repylInfo.getEmail())) {
+		if(email.equals(repylInfo.getEmail()) || userType == 3) {
 			int deleteResult = ts.replyDelete(t_r_num);
 			return deleteResult;
 		}else{
@@ -122,6 +137,10 @@ public class TipRestController {
 	
 	@GetMapping("/reply/match")
 	public boolean replyMatch(HttpSession session, int t_r_num) throws Exception{
+		int userType = (int)session.getAttribute("user_type");
+		if(userType == 3) {
+			return true;
+		}
 		log.info(t_r_num+"번 댓글 데이터 가져오기 시작");
 		String email = (String)session.getAttribute("email");
 		TipDto repylInfo = ts.getReplyinfo(t_r_num);

@@ -44,6 +44,11 @@ public class TipService {
 		log.info("{}", sList);
 		return sList;
 	}
+	public List<TipDto> getSearchIdList(int keyword) throws Exception {
+		List<TipDto> sList = tDao.getSearchIdList(keyword);
+		log.info("{}", sList);
+		return sList;
+	}
 
 	public TipDto getTipDetails(int t_b_num) throws Exception {
 		return tDao.getTipDetails(t_b_num);

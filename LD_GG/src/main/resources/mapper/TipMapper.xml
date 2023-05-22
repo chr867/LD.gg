@@ -14,40 +14,67 @@
 	</insert>
 
 	<select id="getBoardList" resultType="tip">
+		SELECT tb.*, 
+		    ci.champion_kr_name,
+		    IFNULL(tr.t_b_recom, 0) AS t_b_recom
+		FROM tip_board tb
+		LEFT JOIN (
+		    SELECT COUNT(*) AS t_b_recom, t_b_num
+		    FROM tip_recom
+		    GROUP BY t_b_num
+		) tr ON tb.t_b_num = tr.t_b_num
+		LEFT JOIN champion_info ci ON tb.champion_id = ci.champion_id
+		ORDER BY tb.t_b_num desc
+	</select>
+
+	<select id="getSearchList" resultType="tip">
+		SELECT tb.*, 
+		       ci.champion_kr_name, 
+		       ci.champion_id, 
+		       IFNULL(tr.t_b_recom, 0) AS t_b_recom
+		FROM tip_board tb
+		LEFT JOIN (
+		    SELECT COUNT(*) AS t_b_recom, t_b_num
+		    FROM tip_recom
+		    GROUP BY t_b_num
+		) tr ON tb.t_b_num = tr.t_b_num
+		LEFT JOIN champion_info ci ON tb.champion_id = ci.champion_id
+		WHERE tb.t_b_content LIKE CONCAT('%', #{keyword}, '%')
+		OR tb.t_b_title LIKE CONCAT('%', #{keyword}, '%')
+		ORDER BY tb.t_b_num DESC
+	</select>
+	
+	<select id="getSearchIdList" resultType="tip">
 		SELECT tb.*,
+		ci.champion_kr_name,
+		ci.champion_id,
 		IFNULL(tr.t_b_recom, 0) AS t_b_recom
 		FROM tip_board tb
 		LEFT JOIN (
 		SELECT COUNT(*) AS t_b_recom, t_b_num
 		FROM tip_recom
 		GROUP BY t_b_num
-		)
-		tr ON tb.t_b_num = tr.t_b_num
-		ORDER BY tb.t_b_num desc;
-
-	</select>
-
-	<select id="getSearchList" resultType="tip">
-		SELECT * FROM tip_board
-		WHERE t_b_content LIKE CONCAT('%', #{keyword}, '%')
-		OR t_b_title LIKE
-		CONCAT('%', #{keyword}, '%')
-		ORDER BY t_b_content DESC
+		) tr ON tb.t_b_num = tr.t_b_num
+		LEFT JOIN champion_info ci ON tb.champion_id = ci.champion_id
+		WHERE tb.champion_id = #{keyword}
+		ORDER BY tb.t_b_num DESC
 	</select>
 
 	<select id="getTipDetails" resultType="tip">
 		SELECT tb.*,
-		IFNULL(tr.t_b_recom, 0) AS t_b_recom
+		ci.champion_kr_name,
+		IFNULL(tr.t_b_recom, 0) AS t_b_recom,
+		m.lol_account
 		FROM tip_board tb
 		LEFT JOIN (
 		SELECT COUNT(*) AS t_b_recom, t_b_num
 		FROM tip_recom
-		WHERE t_b_num =
-		#{t_b_num}
 		GROUP BY t_b_num
 		) tr ON tb.t_b_num = tr.t_b_num
-		WHERE
-		tb.t_b_num = #{t_b_num}
+		LEFT JOIN champion_info ci ON tb.champion_id = ci.champion_id
+		LEFT JOIN member m ON tb.email = m.email
+		WHERE tb.t_b_num = #{t_b_num}
+
 	</select>
 
 	<update id="updateView" parameterType="tip">
@@ -95,10 +122,11 @@
 	</insert>
 
 	<select id="getReplyList" resultType="tip">
-		SELECT * FROM tip_reply
-		WHERE t_b_num = #{t_b_num} AND t_r_parents_num IS NULL
-		ORDER BY t_r_num
-		DESC
+		SELECT tr.*, m.lol_account
+		FROM tip_reply tr
+		LEFT JOIN member m ON tr.email = m.email
+		WHERE tr.t_b_num = #{t_b_num} AND tr.t_r_parents_num IS NULL
+		ORDER BY tr.t_r_num DESC
 	</select>
 
 	<select id="getsubReplyList" resultType="tip">
@@ -140,7 +168,7 @@
 	</insert>
 	
 	<select id="getChampionLane" resultType="champ_list">
-		SELECT c.champion_kr_name, c.champion_img
+		SELECT c.champion_id, c.champion_kr_name, c.champion_img, c.champion_en_name
 		FROM champion_info AS c
 		JOIN champion_lane AS cl ON c.champion_id = cl.champion_id
 		WHERE cl.team_position = #{team_position}
@@ -148,6 +176,6 @@
 	</select>
 	
 	<select id="getChampionList" resultType="champ_list">
-		select champion_kr_name, champion_img from champion_info ORDER BY champion_kr_name ASC
+		select champion_id, champion_kr_name,champion_en_name, champion_img from champion_info ORDER BY champion_kr_name ASC
 	</select>
 </mapper>
