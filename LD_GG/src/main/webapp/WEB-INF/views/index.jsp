@@ -63,24 +63,58 @@ body {
 
 #my_champion{
 	position: absolute;
-	top: 20%;
+	top: 15%;
 	left: 15%;
 }
 
+#champ_search_box input{
+	width: 220px;
+	border-radius: 5px;
+}
+
 #my_champion_img{
-	width: 300px;
-	height: 300px;
+	width: 370px;
+	height: 400px;
 	padding-top: 20px;
+	padding-bottom: 15px;
 	border-radius: 70%;
+}
+
+#build_recom_box button{
+	margin-top: 20px;
 }
 
 #counter_champion{
 	position: absolute;
+	height: auto;
 	top: 25%;
 	left: 55%;
-
 }
 
+#right_champion_img{
+	width: 140px;
+	height: 140px;
+	border-radius: 70%;
+}
+
+#right_champ_search_box{
+	position: relative;
+	left: -30%;
+	top: 30%;
+}
+
+#recom_champ{
+	position: absolute;
+	left: 36%;
+	top: 67%;
+}
+
+#recom_champ img{
+	width: 100px;
+	height: 140px;
+	margin-right: 20px;
+	border-radius: 70%;
+}
 </style>
 <body>
 	<div id="session-summoner-name" style="display: none">${sessionScope.lol_account}</div>
@@ -418,51 +452,67 @@ body {
 	<!----------------------------------------------------------------------------------------------------------------->
 	<!-- 메인 컨테이너 -->
 	<div class="main-container">
-		<br> <br> <br> <br> <br> <a href="/member/testMain">테스트메인</a> <br> <br> <br>
+		<br> <br> <br> <br> <br>
+		 <!-- <a href="/member/testMain">테스트메인</a>  -->
+		 <br> <br> <br>
 		
 		<div id="my_champion">
-			<div>
+			<div id="champ_search_box">
 				<form id=champ_search>
-			 	<input id='champion_name_input' type="text" name="champion_kr_name" placeholder="챔피언 이름을 입력하세요">
+			 	<input id='champion_name_input' type="text" name="champion_kr_name" placeholder="내 챔피언 검색">
 				</form>
 				<img id="my_champion_img" alt="my_champion" src="/resources/img/img/champion_img/tiles/0.png">
-				
 			</div>
-			
-		<span>LD.gg의 통계를 이용, 맞춤 빌드 추천</span>
-		<form id=build_recom>
-			<input type="text" name="left_champion" placeholder="내 챔피언">
-			<input type="text" name="right_champion" placeholder="상대 챔피언">
-			<button>빌드</button>
-		</form>
+			<div id="build_recom_box">
+				<span></span>
+				<form id=build_recom>
+					<input id="build_recom_left_val" type="text" name="left_champion" style="display: none">
+					<input id="build_recom_right_val" type="text" name="right_champion" style="display: none">
+					<button>추천 빌드</button>
+				</form>
+			</div>
 		</div>
+
 		
 		<div id="counter_champion">
-		<span>LD.gg의 통계를 이용, 카운터 챔피언 추천</span>
-		<form id=champ_recom>
-			<select name="lane">
-				<option value="holder">라인 선택</option>
-				<option value="TOP">탑</option>
-				<option value="JUNGLE">정글</option>
-				<option value="MIDDLE">미드</option>
-				<option value="BOTTOM">원딜</option>
-				<option value="UTILITY">서포터</option>
-			</select>
-			<select name="tag">
-				<option value="holder">역할군 선택</option>
-				<option value="Assassin">암살자</option>
-				<option value="Fighter">전사</option>
-				<option value="Mage">마법사</option>
-				<option value="Marksman">원거리 딜러</option>
-				<option value="Controller">서포터</option>
-				<option value="Tank">탱커</option>
-			</select>
-			<input type="text" name="right_champion" placeholder="상대 챔피언">
-			<button>추천 챔피언</button>
-		</form>
+			<form id=champ_recom>
+				<select name="lane">
+					<option value="holder">라인 선택</option>
+					<option value="TOP">탑</option>
+					<option value="JUNGLE">정글</option>
+					<option value="MIDDLE">미드</option>
+					<option value="BOTTOM">원딜</option>
+					<option value="UTILITY">서포터</option>
+				</select>
+				<select name="tag">
+					<option value="holder">역할군 선택</option>
+					<option value="Assassin">암살자</option>
+					<option value="Fighter">전사</option>
+					<option value="Mage">마법사</option>
+					<option value="Marksman">원거리 딜러</option>
+					<option value="Controller">서포터</option>
+					<option value="Tank">탱커</option>
+				</select>
+				<input id="champ_recom_right_val" type="text" name="right_champion" style="display: none;">
+				<button>추천 챔피언</button>
+			</form>
+			
+			<div id="right_champ_search_box">
+				<form id=right_champ_search>
+				 	<input id='right_champ_name_input' type="text" name="champion_kr_name" placeholder="상대 챔피언 검색">
+				</form>
+				<img id="right_champion_img" alt="my_champion" src="/resources/img/img/champion_img/tiles/0.png">
+				<span></span>
+			</div>
 		</div>
 		
-		<div></div> 
+		<div id="recom_champ">
+			<img src="/resources/img/img/champion_img/tiles/0.png" alt="" id="recom_champ_0">
+			<img src="/resources/img/img/champion_img/tiles/0.png" alt="" id="recom_champ_1">
+			<img src="/resources/img/img/champion_img/tiles/0.png" alt="" id="recom_champ_2">
+			<img src="/resources/img/img/champion_img/tiles/0.png" alt="" id="recom_champ_3">
+			<img src="/resources/img/img/champion_img/tiles/0.png" alt="" id="recom_champ_4">
+		</div>
 		<!-- 추천 챔피언, 맞춤 빌드 div -->
 		
 	</div>
@@ -481,7 +531,11 @@ body {
 			type: 'POST',
 			data: formData,
 		}).done(res=>{
-			console.log(res)
+			res.forEach(champ=>{
+				let idx = res.indexOf(champ)
+				let champ_name = champ.champion_name
+				$(`#recom_champ_\${idx}`).attr('src', `/resources/img/img/champion_img/tiles/\${champ_name}_0.jpg`);
+			})
 		}).fail(err=>{
 			console.log(err)
 		})
@@ -498,15 +552,22 @@ body {
 			data: formData,
 		}).done(res=>{
 			console.log(res)
+			res.forEach(champ=>{
+				console.log(champ)
+			})
+			
 		}).fail(err=>{
 			console.log(err)
 		})
 		
 	})
 
+// left 챔피언
 	$('#champ_search').submit(function(event){		
 		event.preventDefault();
-		let formData = $(this).serialize();
+		let formData = $(this).serialize();		
+		
+		$('#build_recom_box span').text($('#champion_name_input').val());
 		$('#champion_name_input').val('');
 		
 		$.ajax({
@@ -514,15 +575,47 @@ body {
 			type: 'POST',
 			data: formData,
 		}).done(res=>{
-			$('#my_champion_img').attr('src', `/resources/img/img/champion_img/tiles/\${res}_0.jpg`);
-			console.log($('#my_champion_img').attr('src'));
+			if(res){
+				$('#my_champion_img').attr('src', `/resources/img/img/champion_img/tiles/\${res}_0.jpg`);
+				$('#build_recom_left_val').attr('value', $('#build_recom_box span').text());
+			}else{
+				$('#build_recom_box span').text('챔피언 이름을 확인해주세요');
+			}
 			
 		}).fail(err=>{
 			console.log(err)
 		})
 		
 	})
-	
+// left 챔피언 끝
+
+// right 챔피언
+	$('#right_champ_search').submit(function(evt){
+		event.preventDefault();
+		let formData = $(this).serialize();		
+		let right_champ_name = $('#right_champ_name_input').val()
+		$('#right_champ_search_box span').text(right_champ_name);
+		$('#right_champ_name_input').val('');
+		
+		$.ajax({
+			url: "/champion/search.json",
+			type: 'POST',
+			data: formData,
+		}).done(res=>{
+			if(res){
+				$('#right_champion_img').attr('src', `/resources/img/img/champion_img/tiles/\${res}_0.jpg`);
+				$('#champ_recom_right_val').attr('value', right_champ_name);
+				$('#build_recom_right_val').attr('value', right_champ_name);
+			}else{
+				$('#right_champ_search_box span').text('챔피언 이름을 확인해주세요');
+			}
+			
+		}).fail(err=>{
+			console.log(err)
+		})
+		
+	})
+// right 챔피언 끝
 </script>	
 </body>
 
