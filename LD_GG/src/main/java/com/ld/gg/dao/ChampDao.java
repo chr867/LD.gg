@@ -14,7 +14,7 @@ import com.ld.gg.dto.champ.Champ_match_up_spell;
 
 public interface ChampDao {
 
-	Champ_analytics champ_rank(@Param("lane")String lane, @Param("tier")String tier);
+	List<Champ_analytics> champ_rank(@Param("lane")String lane, @Param("tier")String tier);
 
 	List<Champ_match_up_default> champ_match_up(Integer left_champion);
 

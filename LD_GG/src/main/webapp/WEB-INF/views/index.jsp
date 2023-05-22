@@ -115,6 +115,11 @@ body {
 	margin-right: 20px;
 	border-radius: 70%;
 }
+
+#span_container{
+	display: grid;
+}
+
 </style>
 <body>
 	<div id="session-summoner-name" style="display: none">${sessionScope.lol_account}</div>
@@ -514,28 +519,30 @@ body {
 				<img src="/resources/img/img/champion_img/tiles/0.png" class="champ4" alt="" id="recom_champ_3" onclick="recom_click(this)">
 				<img src="/resources/img/img/champion_img/tiles/0.png" class="champ5" alt="" id="recom_champ_4" onclick="recom_click(this)">
 			</div>
-			<div id="recom_champ_name">
-				<span></span>
-				<span></span>
-				<span></span>
-				<span></span>
-				<span></span>
-			</div>
-			<div id="lane_kill_rate">
-				<span>만난 횟수</span>
-				<span></span>
-				<span></span>
-				<span></span>
-				<span></span>
-				<span></span>
-			</div>
-			<div id="match_up_win_rate">
-				<span>승률</span>
-				<span></span>
-				<span></span>
-				<span></span>
-				<span></span>
-				<span></span>
+				<div id="span_container">
+					<div id="recom_champ_name">
+						<span></span>
+						<span></span>
+						<span></span>
+						<span></span>
+						<span></span>
+					</div>
+					<div id="lane_kill_rate">
+						<span>만난 횟수</span>
+						<span></span>
+						<span></span>
+						<span></span>
+						<span></span>
+						<span></span>
+					</div>
+					<div id="match_up_win_rate">
+						<span>승률</span>
+						<span></span>
+						<span></span>
+						<span></span>
+						<span></span>
+						<span></span>
+					</div>
 			</div>
 		</div>
 		<!-- 추천 빌드 모달 -->
@@ -594,8 +601,6 @@ body {
 			data: formData,
 		}).done(res=>{
 			console.log(res);
-/* 	        $('#modalData').html(res);
-	        $('#myModal').modal('show'); */
 						
 		}).fail(err=>{
 			console.log(err)

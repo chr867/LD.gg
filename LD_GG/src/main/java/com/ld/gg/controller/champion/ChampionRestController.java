@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ld.gg.dto.champ.Champ_analytics;
 import com.ld.gg.dto.champ.Champ_match_up_default;
 import com.ld.gg.service.Champion_service;
 
@@ -22,6 +23,12 @@ import lombok.extern.slf4j.Slf4j;
 public class ChampionRestController {
 	@Autowired
 	Champion_service cs;
+	
+	@PostMapping("/rank.json")
+	public List<Champ_analytics> get_champion_rank(String lane, String tier) throws Exception{
+		List<Champ_analytics> champ_rank = cs.champ_rank(lane, tier);
+		return champ_rank;
+	}
 	
 	@PostMapping("/search.json")
 	public String champ_search(String champion_kr_name) throws Exception{
