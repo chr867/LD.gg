@@ -11,13 +11,19 @@
   background-color: yellow;
   color: black;
 }
+.position-buttons button{
+	width:100px;
+	height:70px;
+}
 section{
   padding:24px;
   border-bottom: 1px solid #dee2e6;
  }
  #champ-icon{
   width: 80px;
-  margin-right: 8px;
+ }
+ #champ-info{
+ margin:0 20px;
  }
 #btn-check{
 margin: 5px;
@@ -34,6 +40,34 @@ margin-bottom:12px;
 }
 #mentor-intro{
 padding:24px;
+}
+#champ-item{
+padding: 10px 0;
+}
+#champ-item:hover{
+background-color: white;
+cursor: pointer;
+}
+#champ-list{
+padding: 8px;
+height: 370px;
+margin: 10px 0;
+border: 1px solid #dee2e6;
+border-radius: 5px;
+overflow: auto; /* 스크롤바를 추가하기 위해 overflow 속성 설정 */
+}
+#filter-champ-wrap {
+  width: 430px;
+  height: 500px; /* 원하는 높이로 설정 */
+  top: 20px;
+  right: 20px;
+  background-color: #f8f9fa;
+  padding: 24px;
+  border-radius: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+#champ-selector-inner{
+margin:18px 0;
 }
 
 </style>
@@ -93,19 +127,19 @@ padding:24px;
 			</div>
 			
 			<div class="position-buttons">
-			<button type="button" id="top-button" name="탑"><img
+			<button type="button" class="btn" id="top-button" name="탑"><img
 					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_top_grey.svg" 
 					class="position-img"><p>탑</p></button>
-			<button type="button" id="jungle-button" name="정글"><img
+			<button type="button" class="btn" id="jungle-button" name="정글"><img
 					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_jg_grey.svg" 
 					class="position-img"><p>정글</p></button>
-			<button type="button" id="mid-button" name="미드" ><img
+			<button type="button" class="btn" id="mid-button" name="미드" ><img
 					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_mid_grey.svg"
 					class="position-img"><p>미드</p></button>
-			<button type="button" id="bot-button" name="바텀"><img
+			<button type="button" class="btn" id="bot-button" name="바텀"><img
 					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_ad_grey.svg" 
 					class="position-img"><p>바텀</p></button>
-			<button type="button" id="support-button" name="서포터"><img
+			<button type="button" class="btn" id="support-button" name="서포터"><img
 					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_sup_grey.svg"
 					class="position-img"><p>서포터</p></button>
 			</div>
@@ -125,26 +159,24 @@ padding:24px;
 			value="${mentor_profile.top_specialized_champion}">
 			
 		<div id="champ-selector-inner" class="d-flex align-items-center text-center">
-				<div class="champ-info">
+				<div id="champ-info">
 					<img src="" id="champ-icon" class="rounded">
 					<span class="champ-name">특화 챔피언(탑)을 선택 해주세요</span>
 				</div>
 			<img src="https://online.gamecoach.pro/img/icon/icon-arrow-down-grey.svg" class="arrow-icon">
 		</div>
-		<div class="filter-champ-wrap" style="display: none">
-			<div class="filter-title-wrap">
-				<div>
-					<h4 class="filter-text">챔피언</h4>
+		<div id="filter-champ-wrap" style="display: none">
+			<div id="filter-title-wrap">
+				<div class="d-flex justify-content-between">
+					<h5><strong>챔피언</strong></h5>
+					<button type="button" class="btn-close" id="champ-wrap-close" aria-label="Close"></button>
 				</div>
 			</div>
-			<div win-rate-filter-champ="">
-				<span text-input="" class="input-champ-keyword white">
-					<input placeholder="챔피언을 검색하세요" tabindex="0" type="text" class="champ-search" list='champ-name-list'>
-					<datalist id="champ-name-list">
-					  <option value="apple">
-					</datalist>
-				</span>
-				<div class="champ-list">
+			<div>
+				<div>
+					<input placeholder="챔피언을 검색하세요" class="form-control" type="text" id="champ-search">
+				</div>
+				<div id="champ-list">
 				</div>
 			</div>
 		</div>
@@ -173,7 +205,10 @@ padding:24px;
 		<section>
 			<h5><strong>이런 분들께 추천해요</strong></h5>
 			<span>${mentor_profile.recom_ment}</span>
-			<input type="text" id="recom_ment" name="recom_ment" value="${mentor_profile.recom_ment}">
+			<div class="form-floating">
+			  <textarea class="form-control" placeholder="Leave a comment here" id="recom_ment" style="height: 100px">${mentor_profile.recom_ment}</textarea>
+			  <label for="recom_ment">소개 글을 작성해보세요</label>
+			</div>
 		</section>
 		<div class="d-flex justify-content-end">
 			<button type="button" class="btn btn-success" id="submit-btn" >작성</button>
@@ -210,7 +245,7 @@ padding:24px;
 	<section>
 		<div class="d-flex justify-content-between">
 			<h5><strong>수업 내용</strong></h5>
-			<button class="btn btn-dark btn-lg">새로운 수업 만들기</button>
+			<button id="create-class" class="btn btn-dark btn-lg">신규 수업 등록</button>
 		</div>
 		<div id="mentor_class_info">
 			<!-- 클래스 정보 -->
@@ -228,7 +263,39 @@ padding:24px;
 	</form>
 	
 		
+	</div><!-- container -->
+	
+	<!-- 수업 만들기 모달 -->
+	<div class="modal fade" id="classModal" tabindex="-1" aria-labelledby="classModalLabel" aria-hidden="true" style="display: none;">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="classModalLabel">새로운 클래스를 등록해 보세요</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+	      </div>
+	      <div class="modal-body">
+	        <form id="classForm">
+		        <div class="mb-3">
+		            <label for="classTitle" class="form-label">수업 이름</label>
+		            <input type="text" class="form-control" id="classTitle" name="classTitle">
+	          	</div>
+	          	<div class="mb-3">
+		            <label for="classPrice" class="form-label">가격</label>
+		            <input type="text" class="form-control" id="classPrice" name="classPrice">
+	          	</div>
+	          <div class="mb-3">
+	            <label for="classInfo" class="form-label">수업 내용</label>
+	            <textarea class="form-control" id="classInfo" rows="5"></textarea>
+	          </div>
+	          <div class="modal-footer">
+	            <button type="submit" class="btn btn-primary">전송</button>
+	          </div>
+	        </form>
+	      </div>
+	    </div>
+	  </div>
 	</div>
+	
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 <script>
 	//평균 평점 계산
@@ -265,6 +332,192 @@ padding:24px;
 	}
 	
 	$(document).ready(function () {
+		
+		$("#create-class").click(()=>{
+			$("#classModal").modal("show");
+		})
+		
+		$("#classPrice").on("input", function() {
+		    // 입력 값 가져오기
+		    let input = $(this).val();
+		    // 양의 정수 유효성 검사
+		    if (input !== "" && !(/^\d+$/.test(input))) {
+		      // 양의 정수가 아닌 경우 입력 값을 초기화
+		      $(this).val("");
+		    }
+		  });
+		/* 
+		function classSubmitForm() { //새로운 수업 만들기
+			  let formData = $("#classForm").serializeArray();
+			  let mentorClassDTO = {};
+			  $.each(formData, function(index, field){
+			    mentorClassDTO[field.name] = field.value;
+			  });
+			  mentorClassDTO.mentor_email = "${mentor_profile.mentor_email}";
+			  mentorClassDTO.price = parseInt(mentorClassDTO.price);
+			  $.ajax({
+			    url: "/mentor/insert-mentor-class/",
+			    type: "POST",
+			    contentType: "application/json;charset=UTF-8",
+			    data: JSON.stringify(mentorClassDTO),
+			    success: function () {
+			   		alert("클래스가 추가되었습니다.");
+			      select_by_email_class();
+			    },
+			    error: function () {
+			      alert("클래스 추가에 실패했습니다.");
+			    }
+			  });
+			  return false;
+			} */
+		
+		$("#classForm").submit(function(event) {
+		    event.preventDefault();
+		    let form_data = {
+		    	mentor_email: mentor_profile.mentor_email,
+	    		class_name: $("#classTitle").text(),
+	    		class_info: $("#classInfo").text(),
+	    		price: $("#classPrice").text()
+		    };
+		    console.log(form_data);
+		    $.ajax({ //클래스 작성 기능
+		      type: "POST",
+		      url: "/mentor/insert-mentor-class/",
+		      data: JSON.stringify(form_data),
+		      contentType: "application/json; charset=utf-8",
+		      success: function(data) {
+		    	  alert("클래스가 추가되었습니다.");
+		        $("#classModal").modal("hide");
+		      },
+		      error: function(xhr, status, error) {
+		    	  alert("클래스 추가에 실패했습니다.");
+		        console.error(xhr.responseText);
+		        console.error(status);
+		        console.error(error);
+		      }
+		    });
+		  });
+		
+		$("#champ-search").on("input", function() { // 검색창 입력할 때마다 불러오기
+			var searchText = $(this).val();
+		      $.ajax({
+		        url: "/mentor/get-champ-name-by-keyword",//키워드로 챔피언 찾기
+		        type: "GET",
+		        data: {
+		        	keyword: searchText
+		        },
+		        success: function(data) {
+		          console.log(data);
+		          $("#champ-list").text("");
+		          let championList = JSON.parse(data);
+			        championList.forEach(function (champion) {
+			            let imageUrl =
+			                "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +
+			                champion.champion_en_name + ".png?&amp;retry=0";
+			            let champItem = $("<div>").addClass("d-flex align-items-center justify-content-between hover-div").attr("id","champ-item").click(function () {
+			            	if (top_selectedChampions.length >= 3){ //세명 골랐을때 
+			            		// 이미 추가된 챔피언인지 검사
+				                if (top_selectedChampions.includes(champion.champion_id)) {
+				                	let index = top_selectedChampions.indexOf(champion.champion_id);
+				                	top_selectedChampions.splice(index, 1); //클릭한 챔피언 삭제
+				                	console.log(top_selectedChampions);
+				                	$("#top_specializedChampion").val(top_selectedChampions);
+				                	$('div#champ-info[data="' + champion.champion_id + '"]').remove();
+				                    return;
+				                }else{
+			            		let delChampId = top_selectedChampions[0];
+			            		top_selectedChampions.shift(); //가장 앞에 있는 챔피언 삭제
+			            		$("#champ-info[data='" + delChampId + "']").remove();
+			            		top_selectedChampions.push(champion.champion_id); //클릭한 챔피언 추가
+			            		let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+					            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+					            let champName = $("<span>").text(champion.champion_kr_name);
+					            championDiv.append(champImg);
+					            championDiv.append(champName);
+					            $(".arrow-icon").before(championDiv);
+				                $("#top_specializedChampion").val(top_selectedChampions);
+			            		console.log(top_selectedChampions);
+			            		return;
+				                }
+			            	}
+			                // 이미 추가된 챔피언인지 검사
+			                else if (top_selectedChampions.includes(champion.champion_id)) {
+			                	if (top_selectedChampions.length === 1) { //champ-selector-inner 안에 champ-info가 하나 남았을때 삭제했을시
+			                		let index = top_selectedChampions.indexOf(champion.champion_id);
+			                		top_selectedChampions.splice(index, 1);
+				                	console.log(top_selectedChampions);
+				                	$("#top_specializedChampion").val(top_selectedChampions);
+				                	$('div#champ-info[data="' + champion.champion_id + '"]').remove(); 
+			                		console.log('이미지가 비었습니다.');
+			                		let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+						            let champImg = $("<img>").addClass("rounded").attr("id","champ-icon").attr("src", "");
+						            let champName = $("<span>").text("특화 챔피언(탑)을 선택해주세요");
+						            championDiv.append(champImg);
+						            championDiv.append(champName);
+						            $(".arrow-icon").before(championDiv);
+			                		  return;
+			                		}else{
+			                			let index = top_selectedChampions.indexOf(champion.champion_id);
+			                			top_selectedChampions.splice(index, 1);
+					                	console.log(top_selectedChampions);
+					                	$("#top_specializedChampion").val(top_selectedChampions);
+					                	$('div#champ-info[data="' + champion.champion_id + '"]').remove();
+					                    return;
+			                		}
+			                }else{
+			                // 새로운 챔피언을 추가
+			                top_selectedChampions.push(champion.champion_id);
+			                
+			                if ($("#champ-icon").attr("src")==""){
+			                	$('#champ-info').remove();  
+			                	
+			                	let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+					            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+					            let champName = $("<span>").text(champion.champion_kr_name);
+					            championDiv.append(champImg);
+					            championDiv.append(champName);
+					            $(".arrow-icon").before(championDiv);
+				                
+				                $("#top_specializedChampion").val(top_selectedChampions);
+				                console.log(top_selectedChampions);
+			                }else{
+			                	let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+					            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+					            let champName = $("<span>").text(champion.champion_kr_name);
+					            championDiv.append(champImg);
+					            championDiv.append(champName);
+					            $(".arrow-icon").before(championDiv);
+					            $("#top_specializedChampion").val(top_selectedChampions);
+					            console.log(top_selectedChampions);
+			                }
+			                }
+			            });
+			            let championDiv = $("<div>").attr("id", "champion");
+			            let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+			            let champName = $("<span>").text(champion.champion_kr_name);
+			            championDiv.append(champImg);
+			            championDiv.append(champName);
+			            champItem.append(championDiv);
+			            let rateWrap = $("<div>").addClass("rate-wrap");
+			            let rateBarWrap = $("<div>").addClass("rate-bar-wrap");
+			            let rateBarBg = $("<div>").addClass("rate-bar-bg");
+			            rateBarWrap.append(rateBarBg);
+			            rateWrap.append(rateBarWrap);
+			            let pickRate = $("<span>").addClass("pick-rate").text("픽률 " + 0 + "%");
+			            let pickMeter = $("<meter>").addClass("pick-meter").attr("min", 0).attr("max", 100)
+			            			.attr("low", 30).attr("high", 65).attr("optimum", 90).val(11);
+			            rateWrap.append(pickMeter);
+			            rateWrap.append(pickRate);
+			            champItem.append(rateWrap);
+			            $("#champ-list").append(champItem);
+			        });
+			    },
+			    error: function () {
+			        console.error("챔피언 정보를 불러오는데 실패했습니다.");
+		          
+		        }
+		      });
+		  });
 		
 		$.ajax({ //멘토 태그 가져오기
 	        type: "POST",
@@ -327,11 +580,14 @@ padding:24px;
 		select_by_email_class();
 		
 		$("#champ-selector-inner").click(function () { //챔피언 선택 펼치기
-			if ($(".filter-champ-wrap").css('display') === 'none') {
-				$(".filter-champ-wrap").css('display', 'block');
+			if ($("#filter-champ-wrap").css('display') === 'none') {
+				$("#filter-champ-wrap").css('display', 'block');
 			} else {
-				$(".filter-champ-wrap").css('display', 'none');
+				$("#filter-champ-wrap").css('display', 'none');
 			}
+		});
+		$("#champ-wrap-close").click(function () { //챔피언 선택 닫기
+			$("#filter-champ-wrap").css('display', 'none');
 		});
 		
 
@@ -344,7 +600,7 @@ padding:24px;
 		            let imageUrl =
 		                "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +
 		                champion.champion_en_name + ".png?&amp;retry=0";
-		            let champItem = $("<div>").addClass("champ-item").click(function () {
+		            let champItem = $("<div>").addClass("d-flex align-items-center justify-content-between hover-div").attr("id","champ-item").click(function () {
 		            	if (top_selectedChampions.length >= 3){ //세명 골랐을때 
 		            		// 이미 추가된 챔피언인지 검사
 			                if (top_selectedChampions.includes(champion.champion_id)) {
@@ -352,25 +608,34 @@ padding:24px;
 			                	top_selectedChampions.splice(index, 1); //클릭한 챔피언 삭제
 			                	console.log(top_selectedChampions);
 			                	$("#top_specializedChampion").val(top_selectedChampions);
-			                	$('.champ-info#'+champion.champion_id).remove();
+			                	$('div#champ-info[data="' + champion.champion_id + '"]').remove();
 			                    return;
 			                }else{
-		            		alert("특화 챔피언은 3명까지만 선택 가능합니다")
+		            		let delChampId = top_selectedChampions[0];
+		            		top_selectedChampions.shift(); //가장 앞에 있는 챔피언 삭제
+		            		$("#champ-info[data='" + delChampId + "']").remove();
+		            		top_selectedChampions.push(champion.champion_id); //클릭한 챔피언 추가
+		            		let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+				            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+				            let champName = $("<span>").text(champion.champion_kr_name);
+				            championDiv.append(champImg);
+				            championDiv.append(champName);
+				            $(".arrow-icon").before(championDiv);
+			                $("#top_specializedChampion").val(top_selectedChampions);
 		            		console.log(top_selectedChampions);
-		            		$(".filter-champ-wrap").css('display', 'none');
 		            		return;
 			                }
 		            	}
 		                // 이미 추가된 챔피언인지 검사
 		                else if (top_selectedChampions.includes(champion.champion_id)) {
-		                	if ($('#champ-selector-inner').find('.champ-info').length === 1) { //champ-selector-inner 안에 champ-info가 하나 남았을때 삭제했을시
+		                	if (top_selectedChampions.length === 1) { //champ-selector-inner 안에 champ-info가 하나 남았을때 삭제했을시
 		                		let index = top_selectedChampions.indexOf(champion.champion_id);
 		                		top_selectedChampions.splice(index, 1);
 			                	console.log(top_selectedChampions);
 			                	$("#top_specializedChampion").val(top_selectedChampions);
-			                	$('.champ-info#'+champion.champion_id).remove();  
+			                	$('div#champ-info[data="' + champion.champion_id + '"]').remove(); 
 		                		console.log('이미지가 비었습니다.');
-		                		let championDiv = $("<div>").addClass("champ-info").attr("id","");
+		                		let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
 					            let champImg = $("<img>").addClass("rounded").attr("id","champ-icon").attr("src", "");
 					            let champName = $("<span>").text("특화 챔피언(탑)을 선택해주세요");
 					            championDiv.append(champImg);
@@ -382,7 +647,7 @@ padding:24px;
 		                			top_selectedChampions.splice(index, 1);
 				                	console.log(top_selectedChampions);
 				                	$("#top_specializedChampion").val(top_selectedChampions);
-				                	$('.champ-info#'+champion.champion_id).remove();
+				                	$('div#champ-info[data="' + champion.champion_id + '"]').remove();
 				                    return;
 		                		}
 		                }else{
@@ -390,11 +655,11 @@ padding:24px;
 		                top_selectedChampions.push(champion.champion_id);
 		                
 		                if ($("#champ-icon").attr("src")==""){
-		                	$('.champ-info').remove();  
+		                	$('#champ-info').remove();  
 		                	
-		                	let championDiv = $("<div>").addClass("champ-info").attr("id",champion.champion_id);
+		                	let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
 				            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
-				            let champName = $("<p>").text(champion.champion_kr_name);
+				            let champName = $("<span>").text(champion.champion_kr_name);
 				            championDiv.append(champImg);
 				            championDiv.append(champName);
 				            $(".arrow-icon").before(championDiv);
@@ -402,9 +667,9 @@ padding:24px;
 			                $("#top_specializedChampion").val(top_selectedChampions);
 			                console.log(top_selectedChampions);
 		                }else{
-		                	let championDiv = $("<div>").addClass("champ-info").attr("id",champion.champion_id);
+		                	let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
 				            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
-				            let champName = $("<p>").text(champion.champion_kr_name);
+				            let champName = $("<span>").text(champion.champion_kr_name);
 				            championDiv.append(champImg);
 				            championDiv.append(champName);
 				            $(".arrow-icon").before(championDiv);
@@ -414,8 +679,8 @@ padding:24px;
 		                }
 		            });
 		            let championDiv = $("<div>").attr("id", "champion");
-		            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
-		            let champName = $("<p>").text(champion.champion_kr_name);
+		            let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+		            let champName = $("<span>").text(champion.champion_kr_name);
 		            championDiv.append(champImg);
 		            championDiv.append(champName);
 		            champItem.append(championDiv);
@@ -430,7 +695,7 @@ padding:24px;
 		            rateWrap.append(pickMeter);
 		            rateWrap.append(pickRate);
 		            champItem.append(rateWrap);
-		            $(".champ-list").append(champItem);
+		            $("#champ-list").append(champItem);
 		        });
 		    },
 		    error: function () {
@@ -438,7 +703,6 @@ padding:24px;
 		    }
 		});
 
-		
 		$(".position-buttons button").click(function () {
 			  $(this).toggleClass("selected");
 			  // 현재 선택된 버튼들을 찾아서 positions 배열에 추가 또는 삭제
@@ -489,6 +753,8 @@ padding:24px;
 			    }),
 			    success: function(data) {
 			    	alert("프로필 작성 성공");
+			    	$('#champ-info').remove();
+			    	$('#champ-info').remove();
 			        displaySpecializedPosition();
 			      },
 			      error: function(error) {
@@ -513,31 +779,6 @@ padding:24px;
 			    }
 			  });
 			}
-			
-		function classSubmitForm() { //새로운 수업 만들기
-			  let formData = $("#classForm").serializeArray();
-			  let mentorClassDTO = {};
-			  $.each(formData, function(index, field){
-			    mentorClassDTO[field.name] = field.value;
-			  });
-			  mentorClassDTO.mentor_email = "${mentor_profile.mentor_email}";
-			  mentorClassDTO.price = parseInt(mentorClassDTO.price);
-			  $.ajax({
-			    url: "/mentor/insert-mentor-class/",
-			    type: "POST",
-			    contentType: "application/json;charset=UTF-8",
-			    data: JSON.stringify(mentorClassDTO),
-			    success: function () {
-			   		alert("클래스가 추가되었습니다.");
-			      select_by_email_class();
-			    },
-			    error: function () {
-			      alert("클래스 추가에 실패했습니다.");
-			    }
-			  });
-			  return false;
-			}
-
 		
 		$(document).on("click", "#deleteButton", function(){
 		    // 버튼 클릭시 실행할 함수
@@ -549,54 +790,73 @@ padding:24px;
 	
 
 	//멘토 프로필 가져오기
-	function displaySpecializedPosition(){
-	$.ajax({
-	  url: '/mentor/get-mentor-profile',
-	  type: 'POST',
-	  contentType: 'application/json;charset=UTF-8',
-	  data: JSON.stringify({ mentor_email: '${member.email}' }),
-	  success: function(data) {
-		  let sp = JSON.parse(data);
-		  let mpsp = JSON.parse(sp.specialized_position);
-		  positions = mpsp;
-		  if (mpsp !== null && mpsp !== '') {
-			  if (mpsp.length === 2) {
-			    $('#specializedPosition').val(mpsp[0] + ' / ' + mpsp[1]);
-			    $("button[name='" + mpsp[0] + "']").toggleClass("selected");
-			    $("button[name='" + mpsp[1] + "']").toggleClass("selected");
-			    $(".position-buttons button:not(.selected)").prop("disabled", true);
-			  } else {
-			    $('#specializedPosition').val(mpsp[0]);
-			    $("button[name='" + mpsp[0] + "']").toggleClass("selected");
-			  }
-			}
-		  if(sp.top_specialized_champion != null && sp.top_specialized_champion != ''){
-			  $('.champ-info').remove();  
-			  for (let i =0; i < top_selectedChampions.length; i++){
-			  	$.ajax({ //챔피언 아이디로 정보 가져오기
-				    url: "/mentor/get-champ-name-by-id?id=" + top_selectedChampions[i],
-				    type: "GET",
-				    success: function (data) {
-				    	let champion_data = JSON.parse(data);
-				    	let championDiv = $("<div>").addClass("champ-info").attr("id",top_selectedChampions[i]);
-			            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded")
-			            .attr("src", "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +
-			            		champion_data.champion_en_name + ".png?&amp;retry=0");
-			            let champName = $("<p>").text(champion_data.champion_kr_name);
-			            championDiv.append(champImg);
-			            championDiv.append(champName);
-			            $(".arrow-icon").before(championDiv);
-				    	}
-				    });
-			  }
-      		
+	function displaySpecializedPosition() {
+		  $.ajax({
+		    url: '/mentor/get-mentor-profile',
+		    type: 'POST',
+		    contentType: 'application/json;charset=UTF-8',
+		    data: JSON.stringify({ mentor_email: '${member.email}' }),
+		    success: function(data) {
+		      let sp = JSON.parse(data);
+		      let mpsp = JSON.parse(sp.specialized_position);
+		      positions = mpsp;
+		      if (mpsp !== null && mpsp !== '') {
+		        if (mpsp.length === 2) {
+		          $('#specializedPosition').val(mpsp[0] + ' / ' + mpsp[1]);
+		          $("button[name='" + mpsp[0] + "']").toggleClass("selected");
+		          $("button[name='" + mpsp[1] + "']").toggleClass("selected");
+		          $(".position-buttons button:not(.selected)").prop("disabled", true);
+		        } else {
+		          $('#specializedPosition').val(mpsp[0]);
+		          $("button[name='" + mpsp[0] + "']").toggleClass("selected");
+		        }
+		      }
+		      if (sp.top_specialized_champion != null && sp.top_specialized_champion != '') {
+		        $('#champ-info').remove();
+		        loadChampionInfo();
+		      }
+		    },
+		    error: function(xhr, status, error) {
+		      console.log(error);
+		    }
+		  });
+		}
+		
+		async function loadChampionInfo() {
+		  for (let i = 0; i < top_selectedChampions.length; i++) {
+		    try {
+		      await getChampionInfo(top_selectedChampions[i]);
+		    } catch (error) {
+		      console.error("챔피언 정보 로드 중 오류:", error);
+		    }
 		  }
-	  },
-	  error: function(xhr, status, error) {
-	    console.log(error);
-	  }
-	});
-	}
+		}
+		
+		function getChampionInfo(championId) {
+			  return new Promise(function(resolve, reject) {
+			    $.ajax({
+			      url: "/mentor/get-champ-name-by-id?id=" + championId,
+			      type: "GET",
+			      success: function(data) {
+			        let champion_data = JSON.parse(data);
+			        let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion_data.champion_id);
+			        let champImg = $("<img>").attr("id", "champ-icon").addClass("rounded")
+			          .attr("src", "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +
+			            champion_data.champion_en_name + ".png?&amp;retry=0");
+			        let champName = $("<span>").text(champion_data.champion_kr_name);
+			        championDiv.append(champImg);
+			        championDiv.append(champName);
+			        $(".arrow-icon").before(championDiv);
+
+			        resolve(); // 성공적으로 완료되었음을 알림
+			      },
+			      error: function(xhr, status, error) {
+			        reject(error); // 오류 발생시 reject를 호출하여 오류를 알림
+			      }
+			    });
+			  });
+			}
+
 	
 	function deleteClass(class_id) {
 		  $.ajax({
@@ -614,7 +874,7 @@ padding:24px;
 		  });
 		}
 		
-	function classSubmitForm() {
+	/* function classSubmitForm() {
 		  let formData = $("#classForm").serializeArray();
 		  let mentorClassDTO = {};
 		  $.each(formData, function(index, field){
@@ -636,7 +896,7 @@ padding:24px;
 		    }
 		  });
 		  return false;
-		}
+		} */
 
   
 	function submitTagForm(tagList) {

@@ -89,6 +89,13 @@ public class RestMentoringController {
 		return champ_name;
 	}
 	
+	//챔피언 키워드로 챔피언 이름 가져오기
+	@GetMapping("/get-champ-name-by-keyword")
+	public String select_by_keyword_champ(@RequestParam String keyword) throws JsonProcessingException {
+		String champ_name = mtpService.select_by_keyword_champ(keyword);
+		return champ_name;
+	}
+	
 	//롤 닉네임으로 회원 정보 가져오기
 	@GetMapping("/get-member-info")
 	public String get_member_info(@RequestParam String lol_account_keyword) throws JsonProcessingException {
