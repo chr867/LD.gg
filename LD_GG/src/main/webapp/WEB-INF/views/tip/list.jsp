@@ -73,13 +73,36 @@
 	height: 80vh;
 	background-color: #fff;
 	box-sizing: border-box;
+	padding: 50px 30px 0 30px;
+}
+.tip-list-container h3{
+	text-align: center;
+	margin-bottom: 30px;
+}
+.jqGrid_wrapper {
+    display: flex;
+    justify-content: center;
 }
 /* 그리드 헤더 */
 .ui-jqgrid .ui-jqgrid-htable th div {
-  background-color: #f2f2f2;
-  background-image: linear-gradient(to bottom, #f2f2f2, #d9d9d9);
-  border: none;
-  padding: 10px;
+/*   background-color: #f2f2f2; */
+/*   border: none; */
+/*   padding: 10px; */
+}
+.ui-jqgrid .ui-jqgrid-btable td {
+    text-align: center; /* 셀 안의 텍스트를 중앙에 위치시킵니다. */
+}
+
+.ui-jqgrid .ui-jqgrid-htable th {
+	background: #202B46;
+	color: #fff;
+	border: 3px solid #fff ;
+    text-align: center; /* 헤더 셀 안의 텍스트를 중앙에 위치시킵니다. */
+}
+
+.ui-jqgrid .ui-jqgrid-btable tr {
+    background: #E4E6EF; /* 행의 배경색을 설정합니다. */
+    border: 3px solid #fff ;
 }
 
 /* 그리드 셀 */
@@ -92,12 +115,18 @@
   color: #333;
   font-size: 14px;
 }
+
+.ui-jqgrid .ui-jqgrid-btable tr:hover {
+    background: #DCDDE4; /* 마우스 오버시 행의 배경색을 설정합니다. */
+}
+.ui-jqgrid .ui-jqgrid-btable td,
+.ui-jqgrid .ui-jqgrid-htable th {
+    padding: 10px 15px; /* 셀 안의 패딩을 설정합니다. */
+}
 /* 검색 버튼 */
 #search {
-  background-color: #f2f2f2;
-  background-image: linear-gradient(to bottom, #f2f2f2, #d9d9d9);
-  border: none;
-  color: #333;
+  background-color: #202B46;
+  color: #fff;
   padding: 8px;
   font-size: 14px;
   cursor: pointer;
@@ -105,32 +134,41 @@
 
 /* 글 작성 버튼 */
 a[href="/tip/write"] {
-  background-color: #f2f2f2;
-  background-image: linear-gradient(to bottom, #f2f2f2, #d9d9d9);
+  background-color: #202B46;
   border: none;
-  color: #333;
+  color: #fff;
   padding: 8px;
   font-size: 14px;
   text-decoration: none;
+  position: relative;
+  left: 250px;
 }
+/* 페이징 버튼 */
 .ui-pg-table .ui-pg-button {
-    background-color: #4CAF50;
+    background-color: #202B46;
     border: none;
     color: white;
     padding: 8px 16px;
     font-size: 16px;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 10px;
     margin-left: 10px;
 }
 
 .ui-pg-table .ui-pg-button:hover {
-    background-color: #3e8e41;
+    background-color: #52618A;
 }
 .ui-jqgrid .ui-pg-table .ui-pg-button {
   width: 40px;
   height: 40px;
   line-height: 40px;
+}
+.ui-jqgrid-view{
+	margin-top: 20px;
+}
+.search-container{
+	text-align: center;
+	justify-content: space-between;
 }
 
  .lane-select-box {
@@ -565,7 +603,7 @@ a[href="/tip/write"] {
 			</div>
 		</div>
 		<div class="tip-list-container">
-			<h1>공략 게시판</h1>
+			<h3>공략 게시판</h3>
 				<div class="row search-container">
 					<div class="col-md-6">
 						<div class="input-group">
@@ -591,13 +629,13 @@ a[href="/tip/write"] {
 	url : "/tip/list.json",
 	datatype : "json",
 	colNames : ['번호', '제목', '조회수', '추천 수', '날짜'],
-	colModel:[
-		{name:'t_b_num', index:'t_b_num', width:90, align: "center", key:true},
-		{name:'t_b_title', index:'t_b_num', width:90, align: "center", sortable : false},
-		{name:'t_b_views', index:'t_b_num', width:90, align: "center"},
-		{name:'t_b_recom', index:'t_b_num', width:90, align: "center"},
-		{name:'t_b_date', index:'t_b_num', width:90, align: "center"}
-		],
+    colModel:[
+        {name:'t_b_num', index:'t_b_num', width: 50, align: "center", key:true},
+        {name:'t_b_title', index:'t_b_num', width:700, align: "center", sortable : false},
+        {name:'t_b_views', index:'t_b_num', width:50, align: "center"},
+        {name:'t_b_recom', index:'t_b_num', width:50, align: "center"},
+        {name:'t_b_date', index:'t_b_num', width:150, align: "center"}
+    ],
 	loadtext : '로딩중..',
 	sortable : true,
 	loadonce : true,
@@ -606,8 +644,8 @@ a[href="/tip/write"] {
 	rowNum: 10,
 	sortname: 'date',
 	sortorder: 'desc',
-	width: 1000,
-	height: 500,
+	width: 1150,
+	height: 400,
     pgbuttons: true,  // 이전/다음 버튼 표시 여부
     pgtext: null,      // 페이징 정보(1 - 10 / 100) 표시 여부
     viewrecords: false, // 레코드 수 표시 여부
@@ -629,13 +667,13 @@ let keyword = document.getElementById('keyword').value;
 		datatype : "json",
 		postData: {keyword: keyword},
 		colNames : ['번호', '제목', '조회수', '추천 수', '날짜'],
-		colModel:[
-			{name:'t_b_num', index:'t_b_num', width:90, align: "center", key:true},
-			{name:'t_b_title', index:'t_b_num', width:90, align: "center"},
-			{name:'t_b_views', index:'t_b_num', width:90, align: "center"},
-			{name:'t_b_recom', index:'t_b_num', width:90, align: "center"},
-			{name:'t_b_date', index:'t_b_num', width:90, align: "center"}
-			],
+	    colModel:[
+	        {name:'t_b_num', index:'t_b_num', width: 50, align: "center", key:true},
+	        {name:'t_b_title', index:'t_b_num', width:700, align: "center", sortable : false},
+	        {name:'t_b_views', index:'t_b_num', width:50, align: "center"},
+	        {name:'t_b_recom', index:'t_b_num', width:50, align: "center"},
+	        {name:'t_b_date', index:'t_b_num', width:150, align: "center"}
+	    ],
 			loadtext : '로딩중..',
 			sortable : true,
 			loadonce : true,
@@ -644,8 +682,8 @@ let keyword = document.getElementById('keyword').value;
 			rowNum: 10,
 			sortname: 'date',
 			sortorder: 'desc',
-			width: 1000,
-			height: 500,
+			width: 1150,
+			height: 400,
 		    pgbuttons: true,  // 이전/다음 버튼 표시 여부
 		    pgtext: null,      // 페이징 정보(1 - 10 / 100) 표시 여부
 		    viewrecords: false, // 레코드 수 표시 여부
@@ -658,6 +696,44 @@ let keyword = document.getElementById('keyword').value;
 	}).trigger("reloadGrid");
 })
 
+function selectChampion(champion) {
+	
+	console.log(keyword);
+	
+	$("#grid").jqGrid('setGridParam',{
+		url : "/tip/search.json",
+		datatype : "json",
+		postData: {keyword: champion},
+		colNames : ['번호', '제목', '조회수', '추천 수', '날짜'],
+	    colModel:[
+	        {name:'t_b_num', index:'t_b_num', width: 50, align: "center", key:true},
+	        {name:'t_b_title', index:'t_b_num', width:700, align: "center", sortable : false},
+	        {name:'t_b_views', index:'t_b_num', width:50, align: "center"},
+	        {name:'t_b_recom', index:'t_b_num', width:50, align: "center"},
+	        {name:'t_b_date', index:'t_b_num', width:150, align: "center"}
+	    ],
+			loadtext : '로딩중..',
+			sortable : true,
+			loadonce : true,
+			multiselect: false,
+			pager:'#pager',
+			rowNum: 10,
+			sortname: 'date',
+			sortorder: 'desc',
+			width: 1150,
+			height: 400,
+		    pgbuttons: true,  // 이전/다음 버튼 표시 여부
+		    pgtext: null,      // 페이징 정보(1 - 10 / 100) 표시 여부
+		    viewrecords: false, // 레코드 수 표시 여부
+		    recordpos: 'left', // 레코드 수 위치
+		    pagerpos: 'center', // 페이징 버튼 위치
+		    pginput: false, 
+		onSelectRow: function(rowid){
+			location.href = `/tip/details?t_b_num=\${rowid}`
+		}
+	}).trigger("reloadGrid");
+}
+
 function championList() {
     $.ajax({
         method: 'get',
@@ -666,7 +742,8 @@ function championList() {
         var championHTML = '';
         res.forEach(function(champion) {
         	championHTML += '<div class="champion">';
-        	championHTML += '<img alt="' + champion.champion_kr_name + '" class="bg-image champion-img" src="/resources/img/champion_img/square/' + champion.champion_img + '"/>';
+        	championHTML += '<img alt="' + champion.champion_kr_name + '" class="bg-image champion-img" src="/resources/img/champion_img/square/'
+            + champion.champion_img + '"/ onclick="selectChampion(\'' + champion.champion_kr_name + '\')">'; 
         	championHTML += '</div>';
         });
 
@@ -689,7 +766,8 @@ function selectLane(team_position) {
         var championHTML = '';
         res.forEach(function(champion) {
         	championHTML += '<div class="champion">';
-        	championHTML += '<img alt="' + champion.champion_kr_name + '" class="bg-image champion-img" src="/resources/img/champion_img/square/' + champion.champion_img + '"/>';
+        	championHTML += '<img alt="' + champion.champion_kr_name + '" class="bg-image champion-img" src="/resources/img/champion_img/square/'
+            + champion.champion_img + '"/ onclick="selectChampion(\'' + champion.champion_kr_name + '\')">'; 
         	championHTML += '</div>';
         });
 
