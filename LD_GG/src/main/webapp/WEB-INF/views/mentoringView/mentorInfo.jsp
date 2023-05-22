@@ -65,6 +65,14 @@
 #mentor-tags button{
 	margin : 2px;
 }
+#review-section{
+margin-bottom:12px;
+padding:12px;
+}
+#class-section{
+margin-bottom:12px;
+padding:24px;
+}
 section{
 margin-bottom:48px;
 padding:24px;
@@ -72,8 +80,18 @@ padding:24px;
 .tab-content{
 padding-top:30px;
 }
+#class-check-box{
+padding-bottom: 16px;
+}
 #tag-box{
 margin-bottom:12px;
+}
+#pos-box{
+padding: 10px;
+margin-right: 10px;
+}
+#pos-img{
+margin-right: 8px;
 }
 #mentor-name{
 margin-bottom:12px;
@@ -83,6 +101,10 @@ padding:24px;
 }
 #mentor_class_info{
 padding:24px;
+}
+#mentor_class_info {
+     position: sticky;
+    top: 30px;
 }
 
 </style>
@@ -100,7 +122,7 @@ padding:24px;
 		</a>
 	</div>
 <div id="mentor-detail" class="row">
-<div id="mentor-info" class="col-9">
+<div id="mentor-info" class="col-8">
 	<div class="d-flex justify-content-end">
 		<button id="like-btn" class="btn btn-outline-danger btn-sm">찜 하기</button>
 	</div>
@@ -111,7 +133,7 @@ padding:24px;
 			</div>
 			<div class="col" id="mentor-intro">
 				<div id= "mentor-name" class="row">
-					<span class='col'><span class="h3">${mentor_profile.lol_account}</span><em>&nbsp멘토님</em></span>
+					<span class='col'><span class="h3"><strong>${mentor_profile.lol_account}</strong></span><em>&nbsp멘토님</em></span>
 				</div>
 				<div id="mentor-stat" class="row">
 					<div id="mentor-spec" class="col-10">
@@ -173,8 +195,9 @@ padding:24px;
 				</section>
 				<section class="border rounded">
 					<h4>특화 포지션</h4>
-					<div id="specializedPosition">${mentor_profile.specialized_position}</div>
+					<div id="specializedPosition" class="d-flex"></div>
 				</section>
+				
 				<section class="border rounded">
 					<h4>특화 챔피언</h4>
 					<div id="specializedChampion">
@@ -195,31 +218,32 @@ padding:24px;
 				<h4>이런 분들께 추천해요</h4>
 				<span>${mentor_profile.recom_ment}</span>
 			</section>
-			<section id="class-box">
+			<div id="class-box">
 				<h4>수업 내용</h4>
 				<!-- 수업 내용 -->
-			</section>
+			</div>
 		  </div>
 		</div>
 	</div>
 	</div><!-- mentor-info -->
-	<article class="col-3">
+	<article class="col-4">
 		<div id="mentor_class_info" class="border rounded">
-			<c:forEach items="${class_list}" var="class_list">
-				<div class="container_by_class">
-					<div>
-						<h4>${class_list.class_name}</h4>
-						<button class="apply-btn" id="${class_list.class_id}"
-							value="${class_list.price}">수업신청</button>
-					</div>
-					<div>
-						<h4>${class_list.price}</h4>
-					</div>
-					<div>
-						<h4>${class_list.class_info}</h4>
-					</div>
-				</div>
+			<h5><strong>수업 신청하기</strong></h5>
+			<hr>
+			<c:forEach items="${class_list}" var="class_list" varStatus="status">
+			  <div id="class-check-box" class="form-check">
+			    <input class="form-check-input" type="radio" name="flexRadioDefault" id="${class_list.class_id}">
+			    <label class="form-check-label d-flex justify-content-between" for="${class_list.class_id}">
+			      <span>${class_list.class_name}</span>
+			      <span><span id="class-price">${class_list.price}</span><em>P</em></span>
+			    </label>
+			  </div>
 			</c:forEach>
+			<hr>
+			<div class="d-flex justify-content-evenly">
+				<button class="col-5 btn btn-dark" id="apply-btn">수업신청</button>
+				<button class="col-5 btn btn-dark" id="chat-btn">1:1 상담</button>
+			</div>
 		</div>
 	</article>
 	</div><!-- mentor detail -->
@@ -266,6 +290,42 @@ padding:24px;
 		const IMP = window.IMP; // 생략 가능
 		//IMP.init("imp26843336"); // 예: imp00000000a, 본인의 가맹점 식별코드
 		
+		let spec_pos = ${mentor_profile.specialized_position};
+		$.each(spec_pos, function(i,pos){
+			console.log(pos);
+			if (pos=="탑"){
+				let posImg = $("<img>").attr("id","pos-img").attr("src","https://online.gamecoach.pro/img/coaching/lol-line-black/TOP.png")
+				let posName = $("<strong>").text(pos);
+				let posBox = $("<div>").attr("id","pos-box").addClass("border rounded");
+				posBox.append(posImg,posName);
+				$("#specializedPosition").append(posBox);
+			}else if (pos=="바텀"){
+				let posImg = $("<img>").attr("id","pos-img").attr("src","https://online.gamecoach.pro/img/coaching/lol-line-black/AD_CARRY.png")
+				let posName = $("<strong>").text(pos);
+				let posBox = $("<div>").attr("id","pos-box").addClass("border rounded");
+				posBox.append(posImg,posName);
+				$("#specializedPosition").append(posBox);
+			}else if (pos=="서포터"){
+				let posImg = $("<img>").attr("id","pos-img").attr("src","https://online.gamecoach.pro/img/coaching/lol-line-black/SUPPORT.png")
+				let posName = $("<strong>").text(pos);
+				let posBox = $("<div>").attr("id","pos-box").addClass("border rounded");
+				posBox.append(posImg,posName);
+				$("#specializedPosition").append(posBox);
+			}else if (pos=="정글"){
+				let posImg = $("<img>").attr("id","pos-img").attr("src","https://online.gamecoach.pro/img/coaching/lol-line-black/JUNGLE.png")
+				let posName = $("<strong>").text(pos);
+				let posBox = $("<div>").attr("id","pos-box").addClass("border rounded");
+				posBox.append(posImg,posName);
+				$("#specializedPosition").append(posBox);
+			}else if (pos=="미드"){
+				let posImg = $("<img>").attr("id","pos-img").attr("src","https://online.gamecoach.pro/img/coaching/lol-line-black/MID.png")
+				let posName = $("<strong>").text(pos);
+				let posBox = $("<div>").attr("id","pos-box").addClass("border rounded");
+				posBox.append(posImg,posName);
+				$("#specializedPosition").append(posBox);
+			}
+		})
+		
 	    $.ajax({
 	    	method : 'post',
 	    	url : '/wallet/payment/userinfo',
@@ -278,7 +338,7 @@ padding:24px;
 	    	console.log(err)
 	    })
 				
-		displaySpecializedPosition();//멘토 프로필 가져와서 특화 포지션 게시
+		//displaySpecializedPosition();//멘토 프로필 가져와서 특화 포지션 게시
 		
 		//평점 적용
 		let avg_grade = ${mentor_profile.total_grade/mentor_profile.num_of_reviews}
@@ -291,7 +351,8 @@ padding:24px;
 		//자기 자신의 프로필 볼때 버튼 사라지게 하기
     	if("${member.email}" === "${mentor.email}"){
     		$('#like-btn').prop('disabled', true);
-    		$(".apply-btn").prop('disabled', true);
+    		$("#apply-btn").prop('disabled', true);
+    		$("#chat-btn").prop('disabled', true);
     	}
     	
     	//멘토 찜버튼 이미 찜했을 시 찜해제로 변경하는 기능
@@ -319,8 +380,9 @@ padding:24px;
 		//탑 특화 챔피언
 		if (${mentor_profile.top_specialized_champion} !== null){
 			let laneChampBox = $("<div>");
+			$("<hr>").prependTo($("#specializedChampion"));
 			laneChampBox.appendTo($("#specializedChampion"));
-			let laneBox = $("<div>");
+			let laneBox = $("<div>").css("padding-bottom","10px").addClass("d-flex align-items-center");
 			laneBox.appendTo(laneChampBox);
 			laneBox.append($("<img>").attr("src","https://online.gamecoach.pro/img/icon/lol/ico_lol_top_grey.svg"));
 			laneBox.append($("<span>").text("TOP"));
@@ -414,9 +476,9 @@ padding:24px;
 		  });
     	
     	//수업 신청하기 기능
-	    $(".apply-btn").click(function() {
-	    	let class_id =$(this).attr("id");
-	    	price = $(this).val();
+	    $("#apply-btn").click(function() {
+	    	let class_id = $('input:checked').attr('id');
+	    	price = $('input:checked').next('label').find('#class-price').text();
 	        $.ajax({
 	            url: "/mentor/check-session",
 	            method: "GET",
@@ -426,7 +488,7 @@ padding:24px;
 	                    let data = {
 	                    		menti_email: email,
 	                            class_id: class_id,
-	                            mentor_email: "${mentor.email}"
+	                            mentor_email: "${mentor_profile.mentor_email}"
 	                    };
 	                    let applicationData = {
 	                    		holder_email : email,
@@ -489,7 +551,31 @@ padding:24px;
 	        }
 	    });
 	    
-	    $.ajax({ //내게 달린 리뷰
+	    $.ajax({ //멘토 클래스 가져오기
+			url: "/mentor/select-mentor-class?lol_account=" + "${mentor_profile.lol_account}",
+		    type: "GET",
+		    contentType: "application/json;charset=UTF-8",
+		    success: function (class_list) {
+		    let classList = JSON.parse(class_list);
+		    $.each(classList, function(i,mentor_class){
+		    	let section = $("<section>").attr("id","class-section").addClass("border rounded");
+		    	section.appendTo($("#class-box"));
+		    	let class_name = $("<div>").append($("<span>").addClass("h5").text(mentor_class.class_name));
+		    	let class_price = $("<div>").addClass("d-flex justify-content-end").append($("<span>").text(mentor_class.price+" P"));
+		    	let class_info = $("<ul>").append($("<li>").text(mentor_class.class_info));
+		    	section.append(
+		    			class_name,
+		    			class_price,
+		    			class_info
+		    		);
+		    	})
+		    },
+		    error: function (xhr, status, error) {
+		      console.log(error);
+		    },
+		  });
+	    
+	    $.ajax({ //멘토에게 달린 리뷰
 			url: "/mentor/get-review-for-me",
 			type: "POST",
 	        contentType: "application/json; charset=utf-8",
@@ -499,31 +585,54 @@ padding:24px;
 			}),
 	        success: function(data) {
 	    		  let reviewForMeList = $("#review_for_me");
-	    		  let $section = $("<section>").addClass("border rounded");
-	    		  let table = $("<table>").addClass("review-for-me-table");
-	    		  let header = $("<tr>").append(
-	    		    $("<th>").text("작성자"),
-	    		    $("<th>").text("멘토"),
-	    		    $("<th>").text("수업 이름"),
-	    		    $("<th>").text("리뷰 내용"),
-	    		    $("<th>").text("작성일"),
-	    		    $("<th>").text("평점")
-	    		  );
-	    		  table.append(header);
+	    		  
 	    		  for (let i = 0; i < data.length; i++) {
-	    		    let review_for_me = data[i];
-	    		    let row = $("<tr>").append(
-	    		      $("<td>").text(review_for_me.reviewer_lol_account),
-	    		      $("<td>").text(review_for_me.mentor_lol_account),
-	    		      $("<td>").text(review_for_me.class_name),
-	    		      $("<td>").text(review_for_me.review_content),
-	    		      $("<td>").text(review_for_me.review_date),
-	    		      $("<td>").text(review_for_me.grade+'점')
-	    		    );
-	    		    table.append(row);
+	    			  let $section =""
+	    			  $section = $("<section>").attr("id","review-section").addClass("border rounded");
+	    		      let review = data[i];
+	    			  $.ajax({
+	  	        	    url: '/mentor/get-summoner-info',
+	  	        	    type: 'GET',
+	  	        	    data: {
+	  	        	        summoner_name: review.reviewer_lol_account
+	  	        	    },
+	  	        	    success: function(data) {
+	  	        	        let reviewer_info = JSON.parse(data);
+	  	        	        let reviewer_profile_icon_id = (reviewer_info.profile_icon_id)
+	  	        	          let reviewBox = $("<div>").addClass("row");
+			    		      let reviewerIcon = $("<div>").addClass("col");
+				    		  let reviewInfo = $("<div>").addClass("col-8");
+				    		  let reviewGrade = $("<div>").addClass("col");
+				    		  reviewBox.append(
+				    				  reviewerIcon,
+				    				  reviewInfo,
+				    				  reviewGrade
+				    		  );
+				    		  reviewerIcon.append(
+				    				$("<img>").css("width","56px").attr("src","http://ddragon.leagueoflegends.com/cdn/13.10.1/img/profileicon/"+reviewer_profile_icon_id+".png")	  
+				    		  );
+				    		  let reviewContentBox = $("<div>").append($("<span>").text('"'+review.review_content+'"'));
+				    		  let reviewerInfoBox = $("<div>").append(
+				    				$("<em>").text("["+review.reviewer_lol_account+"]님 | "),
+					    			$("<em>").text(review.review_date+"작성됨 | "),
+					    			$("<em>").text("("+review.class_name+")")
+				    		  );
+				    		  reviewInfo.append(
+				    				  reviewContentBox,
+				    				  reviewerInfoBox
+				    		  );
+				    		  reviewGrade.append(
+				    				  $("<span>").text(review.grade+"점")
+				    		  )
+				    		  $section.append(reviewBox)
+		    		  $section.appendTo(reviewForMeList)
+			  	        	    },
+			  	        	    error: function(xhr, status, error) {
+			  	        	        console.error(error);
+			  	        	    }
+			  	        	});
+	    			  
 	    		  }
-	    		  $section.append(table)
-	    		  reviewForMeList.empty().append($section);
 			},
 	        error: function(xhr, status, error) {
 	            console.error(xhr.responseText);
@@ -532,7 +641,7 @@ padding:24px;
 	        }
 	    });
 	    
-	    function displaySpecializedPosition(){
+	   /*  function displaySpecializedPosition(){
 			$.ajax({
 			  url: '/mentor/get-mentor-profile',
 			  type: 'POST',
@@ -551,7 +660,7 @@ padding:24px;
 			    console.log(error);
 			  }
 			});
-			}
+			} */
 	});//ready
 	function requestPay() {
 		if(price === "1 원"){

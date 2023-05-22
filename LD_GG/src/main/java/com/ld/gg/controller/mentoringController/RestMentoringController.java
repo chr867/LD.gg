@@ -42,9 +42,11 @@ import com.ld.gg.dto.mentoringdto.MyMentoringDTO;
 import com.ld.gg.dto.mentoringdto.TagListDTO;
 import com.ld.gg.dto.payment.PaymentDto;
 import com.ld.gg.dto.payment.TransactionHistoryDTO;
+import com.ld.gg.dto.summoner.SummonerDto;
 import com.ld.gg.dto.mentoringdto.EstimateDTO;
 import com.ld.gg.service.MemberService;
 import com.ld.gg.service.PaymentService;
+import com.ld.gg.service.SummonerService;
 import com.ld.gg.service.mentoringService.MentorProfileService;
 
 import oracle.jdbc.proxy.annotation.Post;
@@ -61,7 +63,18 @@ public class RestMentoringController {
 	private MemberService mbService;
 	@Autowired
 	private PaymentService ps;
+	@Autowired
+	private SummonerService summonerService;
 	
+	
+	//소환사 이름으로 소환사 정보 가져오기
+	@GetMapping("/get-summoner-info")
+	public String get_summoner_info(@RequestParam String summoner_name) throws JsonProcessingException {
+	SummonerDto sd = summonerService.get_summoner_info(summoner_name);
+	ObjectMapper objectMapper = new ObjectMapper();
+	String summoner_json = objectMapper.writeValueAsString(sd);
+	return summoner_json;
+	}
 	//모든 챔피언 이름 가져오기
 	@GetMapping("/get-all-champ")
 	public String select_all_champ() throws JsonProcessingException {
