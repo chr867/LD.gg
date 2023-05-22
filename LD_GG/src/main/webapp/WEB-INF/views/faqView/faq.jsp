@@ -31,7 +31,6 @@
 
 </head>
 <body>
-  faq 페이지입니다~~
   <p class="question-title">궁금한 점이 있으신가요?<br>먼저 아래의 자주 묻는 질문을 확인해주세요!</p>
   
   <div class="accordion" id="faqListBox">
@@ -68,7 +67,7 @@
     		    	    'data-bs-target': '#collapse' + index,
     		    	    'aria-expanded': 'false',
     		    	    'aria-controls': 'collapse' + index
-    		    	  }).text(faq.questions_list);
+    		    	  }).append($("<strong>").text(faq.questions_list));
     		    	  accordionHeader.append(accordionButton);
 
     		    	  const accordionCollapse = $('<div>').attr({
