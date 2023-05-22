@@ -21,11 +21,11 @@ public class ChampionRestController {
 	@Autowired
 	Champion_service cs;
 	
-	@GetMapping("/search.json")
-	public List<Integer> champ_search(String champion_kr_name) throws Exception{
+	@PostMapping("/search.json")
+	public Integer champ_search(String champion_kr_name) throws Exception{
 
-		List<Integer> c_list = cs.champ_search(champion_kr_name);
-		return c_list;
+		Integer champion_id = cs.champ_search(champion_kr_name);
+		return champion_id;
 	}
 
 	@PostMapping("/champ-recom.json")

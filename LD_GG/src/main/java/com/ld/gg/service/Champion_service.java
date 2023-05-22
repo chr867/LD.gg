@@ -45,14 +45,17 @@ public class Champion_service {
 		return cm_list;
 	}
 
-	public List<Integer> champ_search(String champion_kr_name) {
-		List<Integer> c_list = cd.champ_search(champion_kr_name);
-		log.info("c_list = {}", c_list);
+	public Integer champ_search(String champion_kr_name) {
+		Integer champion_id = cd.champ_search(champion_kr_name);
+		log.info("champion_id = {}", champion_id);
 		
-		return c_list;
+		return champion_id;
 	}
 
 	public List<Champ_match_up_default> champ_recom(String lane, String tag, String right_champion) {
+		if(tag.equals("all")){
+			tag="";
+		}
 		List<Champ_match_up_default> cm_list = cd.champ_recom(lane, tag, right_champion);
 		log.info("cm_list = {}", cm_list);
 		
