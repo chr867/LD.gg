@@ -195,7 +195,9 @@ padding:24px;
 				</section>
 				<section class="border rounded">
 					<h4>특화 포지션</h4>
-					<div id="specializedPosition" class="d-flex"></div>
+					<div id="specializedPosition" class="d-flex">
+					
+					</div>
 				</section>
 				
 				<section class="border rounded">
