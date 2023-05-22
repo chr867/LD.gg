@@ -20,4 +20,5 @@ public class SummonerRankDto {
 	private double winrate;
 	private int s_level;
 	private String profile_icon_id;
+	private String revision_date;
 }
