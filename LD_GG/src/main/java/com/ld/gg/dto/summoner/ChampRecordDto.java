@@ -1,5 +1,7 @@
 package com.ld.gg.dto.summoner;
 
+import java.util.List;
+
 import org.apache.ibatis.type.Alias;
 
 import lombok.Data;
@@ -9,17 +11,15 @@ import lombok.experimental.Accessors;
 @Alias("champ_record")
 @Accessors(chain = true)
 public class ChampRecordDto {
-	private String lane;
-	private double pick_rate;
-	private String champ_name;
 	private int games;
-	private int wins;
-	private int losses;
-	private double winrate;
-	private double KDA;
+	private float winrate;
+	private float kda;
 	private int kills;
 	private int deaths;
 	private int assists;
-	private int CS;
-	private double CS_per_minute;
+	private int cs;
+	private float cs_per_minute;
+	private int wins;
+	private int losses;
+	private String champ_name;
 }

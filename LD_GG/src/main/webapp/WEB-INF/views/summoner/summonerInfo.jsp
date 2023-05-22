@@ -4,37 +4,31 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>${summoner.summoner_name} - 소환사 전적</title>
 
 <script src="https://code.jquery.com/jquery-3.6.3.js"
 	integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
 	crossorigin="anonymous"></script>
 
+<link  href = "/resources/css/summoner/summonerInfo.css" rel = "stylesheet">
 
 </head>
 <body>
 
-	<div id="whole_div">
+	<div id="flex_div">
+	
 		<div id="background-profile">
 			<div id="summoner-profile">
-
 				<div id="profile-icon">
-					<img alt="#"
-						src="https://ddragon.leagueoflegends.com/cdn/13.8.1/img/profileicon/${summoner.profile_icon_id}.png">
+					<img class = "flex-profile-img" alt="#" src="https://ddragon.leagueoflegends.com/cdn/13.8.1/img/profileicon/${summoner.profile_icon_id}.png">
+					<div class = "flex-summoner-level"> <p id="summoner-level">${summoner.s_level}</p> </div>
 				</div>
-
-				<p id="summoner-level">${summoner.s_level}</p>
-
 				<button id="renewal" value="전적 갱신">전적 갱신</button>
-
 			</div>
-
 		</div>
-		<!-- 소환사 프로필 배경 -->
 
 		<div id="solo-rank">
-			<img alt="#"
-				src="https://opgg-static.akamaized.net/images/medals_new/${summoner.tier}.png">
+			<img class = "flex-tier" alt="#" src="https://opgg-static.akamaized.net/images/medals_new/${summoner.tier}.png">
 		</div>
 
 		<div id="tier-graph"></div>
@@ -50,59 +44,48 @@
 
 			<div id="champ_position_filter"></div>
 
-			<div>
-				<header>챔피언 통계</header>
-				<div>
-					<div>
-						<div class = "champion_category"></div>
-						<div class = "champ_data"></div>
-					</div>
-					<div>
-						<div class = "winrate_category"></div>
-						<div class = "winrate_data"></div>
-					</div>
-					<div>
-						<div class = "games_category"></div>
-						<div class = "games_data"></div>
-					</div>
-					<div>
-						<div class = "wins_category"></div>
-						<div class = "wins_data"></div>
-					</div>
-					<div>
-						<div class = "losses_category"></div>
-						<div class = "losses_data"></div>
-					</div>
-					<div>
-						<div class = "kda_category"></div>
-						<div class = "kda_data"></div>
-					</div>
-					<div>
-						<div class = "kills_category"></div>
-						<div class = "kills_data"></div>
-					</div>
-					<div>
-						<div class = "deaths_category"></div>
-						<div class = "deaths_data"></div>
-					</div>
-					<div>
-						<div class = "assists_category"></div>
-						<div class = "assists_data"></div>
-					</div>
-					<div>
-						<div class = "cs_category"></div>
-						<div class = "cs_data"></div>
-					</div>
-					<div>
-						<div class = "cs_pm_category"></div>
-						<div class = "cs_pm_data"></div>
-					</div>
-					<div class = "flex-champ-record"></div>
+			<div class = "flex-champ-div">
+				<header class = "flex-header">챔피언 통계</header>
+				<div class = "flex-category">
+						<div class = "champion_category">
+							<div class = "champ_data">챔피언</div>
+						</div>
+						<div class = "winrate_category">
+							<div class = "winrate_data">승률</div>
+						</div>
+						<div class = "games_category">
+							<div class = "games_data">게임 수</div>
+						</div>
+						<div class = "wins_category">
+							<div class = "wins_data">승리</div>
+						</div>
+						<div class = "losses_category">
+							<div class = "losses_data">패배</div>
+						</div>
+						<div class = "kda_category">
+							<div class = "kda_data">KDA</div>
+						</div>
+						<div class = "kills_category">
+							<div class = "kills_data">킬</div>
+						</div>
+						<div class = "deaths_category">
+							<div class = "deaths_data">데스</div>
+						</div>
+						<div class = "assists_category">
+							<div class = "assists_data">어시스트</div>
+						</div>
+						<div class = "cs_category">
+							<div class = "cs_data">CS</div>
+						</div>
+						<div class = "cs_pm_category">
+							<div class = "cs_pm_data">분당 CS</div>
+						</div>
 				</div>
 			</div>
+			
+			<div class = "flex-champ-record"></div>
 
 		</div>
-		<!-- 해당 소환사의 Top3 챔피언 통계 -->
 
 		<div>
 			<div id="match_history">
@@ -198,64 +181,64 @@
 		data: { summoner_name: '${summoner.summoner_name}' }
 	}).done(res => {
 		console.log(res);
-		let champ_div = $('<div></div>');
-		let winrate_div = $('<div></div>');
-		let games_div = $('<div></div>');
-		let wins_div = $('<div></div>');
-		let losses_div = $('<div></div>');
-		let kda_div = $('<div></div>');
-		let kills_div = $('<div></div>');
-		let deaths_div = $('<div></div>');
-		let assists_div = $('<div></div>');
-		let cs_div = $('<div></div>');
-		let cs_pm_div = $('<div></div>');
+		let champ_div = $('<div class = "flex-champ"></div>');
+		let winrate_div = $('<div class = "flex-champ-winrate"></div>');
+		let games_div = $('<div class = "flex-chamnp-games"></div>');
+		let wins_div = $('<div class = "flex-champ-wins"></div>');
+		let losses_div = $('<div class = "flex-champ-losses"></div>');
+		let kda_div = $('<div class = "flex-champ-kda"></div>');
+		let kills_div = $('<div class = "flex-champ-kills"></div>');
+		let deaths_div = $('<div class = "flex-champ-deaths"></div>');
+		let assists_div = $('<div class = "flex-champ-assists"></div>');
+		let cs_div = $('<div class = "flex-champ-cs"></div>');
+		let cs_pm_div = $('<div class = "flex-champ-cs-pm"></div>');
 		$.each(res, function (i, champ) {
 			console.log(i, champ.champ_name);
-			let champ_img = $('<img alt="#" src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+champ.champ_name+'.png">');
-			let champ_name_text = $('<span>' + champ.champ_name + '</span>');
-			champ_div.append(champ_img, champ_name_text);
+			let champ_img = $('<img class = "flex-champ-img" alt="#" src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+champ.champ_name+'.png"><span class = "flex-champ-name">' + champ.champ_name + '</span>');
+			//let champ_name_text = $('<span class = "flex-champ-name">' + champ.champ_name + '</span>');
+			champ_div.append(champ_img);
 		});
 		$.each(res, function (i, winrate) {
-			let winrate_text = $('<strong>' + winrate.winrate + '%</strong>');
+			let winrate_text = $('<strong class = "champ-winrate">' + winrate.winrate + '%</strong>');
 			winrate_div.append(winrate_text);
 		});
 		$.each(res, function (i, games) {
-			let games_text = $('<p>' + games.games + '</p>');
+			let games_text = $('<p class = "champ-games">' + games.games + '</p>');
 			games_div.append(games_text);
 		});
 		$.each(res, function (i, wins) {
-			let win_text = $('<span>' + wins.wins + '</span>');
+			let win_text = $('<span class = "champ-wins">' + wins.wins + '</span>');
 			wins_div.append(win_text);
 		});
 		$.each(res.losses, function (i, losses) {
-			let losses_text = $('<span>' + losses + '</span>');
+			let losses_text = $('<span class = "champ-losses">' + losses + '</span>');
 			losses_div.append(losses_text);
 		});
 		$.each(res, function (i, kda) {
-			let kda_text = $('<strong>' + kda.kda + '</strong>');
+			let kda_text = $('<strong class = "champ-kda">' + kda.kda + '</strong>');
 			kda_div.append(kda_text);
 		});
 		$.each(res, function (i, kills) {
-			let kills_text = $('<span>' + kills.kills + '</span>');
+			let kills_text = $('<span class = "champ-kills">' + kills.kills + '</span>');
 			kills_div.append(kills_text);
 		});
 		$.each(res, function (i, deaths) {
-			let deaths_text = $('<span>' + deaths.deaths + '</span>');
+			let deaths_text = $('<span class = "champ-deaths">' + deaths.deaths + '</span>');
 			deaths_div.append(deaths_text);
 		});
 		$.each(res, function (i, assists) {
-			let assists_text = $('<span>' + assists.assists + '</span>');
+			let assists_text = $('<span class = "champ-assists">' + assists.assists + '</span>');
 			assists_div.append(assists_text);
 		});
 		$.each(res, function (i, cs) {
-			let cs_text = $('<strong>' + cs.cs + '</strong>');
+			let cs_text = $('<strong class = "champ-cs">' + cs.cs + '</strong>');
 			cs_div.append(cs_text);
 		});
 		$.each(res, function (i, cs_pm) {
-			let cs_pm_text = $('<span>' + cs_pm.cs_pm + '<span>');
+			let cs_pm_text = $('<span class = "champ-cs-pm">' + cs_pm.cs_pm + '<span>');
 			cs_pm_div.append(cs_pm_text);
 		});
-		let champRecordDiv = $('<div></div>');
+		let champRecordDiv = $('<div class = "flex-champ-table"></div>');
 		champRecordDiv.append(champ_div, winrate_div, games_div, wins_div, losses_div, kda_div, kills_div, deaths_div, assists_div, cs_div, cs_pm_div);
 		$('.flex-champ-record').html(champRecordDiv);
 	}).fail(err => {

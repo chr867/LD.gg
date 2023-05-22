@@ -1,0 +1,282 @@
+body{
+  align-items: center;
+  justify-content: center;
+}
+
+#flex_div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: fit-content;
+  max-width : 1180px;
+  flex-wrap : wrap;
+}
+
+#background-profile{
+	width : 95%;
+	height : fit-content;
+	
+}
+
+#solo-rank{
+	width : 95%;
+	height : fit-content;
+}
+
+#champ-stat{
+	width : 95%;
+	hegiht : fit-content;
+}
+
+.flex-header{
+	width : 100%;
+	hegiht : fit-content;
+}
+
+.flex-category{
+	display : flex;
+	flex-wrap : nowrap;
+}
+
+.champion_category{
+	width : 25%;
+  	align-items: center;
+  	justify-content: center;
+  	height : fit-content;	
+}
+
+.champ_data{
+	width : 70%;
+	text-align : center;
+	height : fit-content;	
+}
+
+.winrate_category{
+	width : 13%;
+	align-items : center;
+	justify-content : center;
+	height : fit-content;	
+}
+
+.winrate_data{
+	width : 70%;
+	text-align : center;
+	height : fit-content;	
+}
+
+.games_category{
+	width : 13%;
+	height : fit-content;
+}
+
+.games_data{
+	width : 70%;
+	text-align : center;
+	height : fit-content;
+}
+
+.wins_category{
+	width : 13%;
+	height : fit-content;
+}
+
+.wins_data{
+	width : 70%;
+	text-align : center;
+	height : fit-content;
+}
+
+.losses_category{
+	width : 13%;
+	height : fit-content;
+}
+
+.losses_data{
+	width : 70%;
+	text-align : center;
+	height : fit-content;
+}
+
+.kda_category{
+	width : 15%;
+	height : fit-content;
+}
+
+.kda_data{
+	width : 70%;
+	text-align : center;
+	height : fit-content;
+}
+
+.kills_category{
+	width : 13%;
+	height : fit-content;
+}
+
+.kills_data{
+	width : 70%;
+	height : fit-content;
+	text-align : center;
+}
+
+.deaths_category{
+	width : 13%;
+	height : fit-content;
+}
+
+.deaths_data{
+	width : 70%;
+	height : fit-content;
+	text-align : center;
+}
+
+.assists_category{
+	width : 20%;
+	height : fit-content;
+}
+
+.assists_data{
+	width : 70%;
+	height : fit-content;
+	text-align : center;
+}
+
+.cs_category{
+	width : 13%;
+	height : fit-content;
+}
+
+.cs_data{
+	width : 70%;
+	height : fit-content;
+	text-align : center;	
+}
+
+.cs_pm_category{
+	width : 20%;
+	height : fit-content;
+}
+
+.cs_pm_data{
+	width : 70%;
+	height : fit-content;
+	text-align : center;
+}
+
+.flex-champ-table{
+	width : 100%;
+	height : fit-content;
+	display : flex;
+	flex-direction : row;
+}
+
+.flex-champ {
+  width: 10%;
+  height: fit-content;
+  display : flex;
+  flex-direction : column;
+}
+
+.flex-champ-img {
+  width: 30%;
+  height: auto;
+}
+
+.flex-champ-name {
+	width: 70%;
+	font-size: 15px;
+	text-align: center;
+	display: flex;
+	flex-direction: row;	
+}
+
+.flex-champ-winrate{
+	width : 40%;
+	height : fit-content;
+	display : flex;
+	flex-direction : column;
+}
+
+.champ-winrate{
+	font-size : 15px;
+	text-align : center;
+}
+
+.flex-champ-games{
+	width : 35%;
+	height : fit-content;
+	display : flex;
+	flex-direction : column;
+}
+
+.flex-champ-wins{
+	width : 25%;
+	height : fit-content;
+	display : flex;
+	flex-direction : column;
+}
+
+.flex-champ-losses{
+	width : 25%;
+	height : fit-content;
+	display : flex;
+	flex-direction : column;
+}
+
+.flex-champ-kda{
+	width : 20%;
+	height : fit-content;
+	display : flex;
+	flex-direction : column;
+}
+
+.flex-champ-kills{
+	width : 25%;
+	height : fit-content;
+	display : flex;
+	flex-direction : column;
+}
+
+.flex-champ-deaths{
+	width : 25%;
+	height : fit-content;
+	display : flex;
+	flex-direction : column;
+}
+
+.flex-champ-assists{
+	width : 25%;
+	height : fit-content;
+	display : flex;
+	flex-direction : column;
+}
+
+.flex-champ-cs{
+	width : 20%;
+	height : fit-content;
+	display : flex;
+	flex-direction : column;
+}
+
+.flex-champ-cs-pm{
+	width : 20%;
+	height : fit-content;
+	display : flex;
+	flex-direction : column;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
