@@ -22,10 +22,10 @@ public class ChampionRestController {
 	Champion_service cs;
 	
 	@PostMapping("/search.json")
-	public Integer champ_search(String champion_kr_name) throws Exception{
+	public String champ_search(String champion_kr_name) throws Exception{
 
-		Integer champion_id = cs.champ_search(champion_kr_name);
-		return champion_id;
+		String champion_en_name = cs.champ_search(champion_kr_name);
+		return champion_en_name;
 	}
 
 	@PostMapping("/champ-recom.json")

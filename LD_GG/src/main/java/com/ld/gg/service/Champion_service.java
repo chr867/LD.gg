@@ -45,11 +45,11 @@ public class Champion_service {
 		return cm_list;
 	}
 
-	public Integer champ_search(String champion_kr_name) {
-		Integer champion_id = cd.champ_search(champion_kr_name);
-		log.info("champion_id = {}", champion_id);
+	public String champ_search(String champion_kr_name) {
+		String champion_en_name = cd.champ_search(champion_kr_name);
+		log.info("champion_id = {}", champion_en_name);
 		
-		return champion_id;
+		return champion_en_name;
 	}
 
 	public List<Champ_match_up_default> champ_recom(String lane, String tag, String right_champion) {

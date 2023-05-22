@@ -20,8 +20,8 @@
 		match_up_win_rate desc;
 	</select>
 
-	<select id="champ_search" resultType="Integer">
-		select champion_id from
+	<select id="champ_search" resultType="String">
+		select champion_en_name from
 		champion_info
 		where champion_kr_name = #{champion_kr_name}
 	</select>

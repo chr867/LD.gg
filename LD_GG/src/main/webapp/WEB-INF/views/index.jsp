@@ -61,6 +61,26 @@ body {
 	text-align: center;
 }
 
+#my_champion{
+	position: absolute;
+	top: 20%;
+	left: 15%;
+}
+
+#my_champion_img{
+	width: 300px;
+	height: 300px;
+	padding-top: 20px;
+	border-radius: 70%;
+}
+
+#counter_champion{
+	position: absolute;
+	top: 25%;
+	left: 55%;
+
+}
+
 </style>
 <body>
 	<div id="session-summoner-name" style="display: none">${sessionScope.lol_account}</div>
@@ -398,10 +418,26 @@ body {
 	<!----------------------------------------------------------------------------------------------------------------->
 	<!-- 메인 컨테이너 -->
 	<div class="main-container">
-		<h1>index.jsp</h1>
-		<br> <br> <br> <br> <br> <a
-			href="/member/testMain">테스트메인</a> <br> <br> <br>
+		<br> <br> <br> <br> <br> <a href="/member/testMain">테스트메인</a> <br> <br> <br>
 		
+		<div id="my_champion">
+			<div>
+				<form id=champ_search>
+			 	<input id='champion_name_input' type="text" name="champion_kr_name" placeholder="챔피언 이름을 입력하세요">
+				</form>
+				<img id="my_champion_img" alt="my_champion" src="/resources/img/img/champion_img/tiles/0.png">
+				
+			</div>
+			
+		<span>LD.gg의 통계를 이용, 맞춤 빌드 추천</span>
+		<form id=build_recom>
+			<input type="text" name="left_champion" placeholder="내 챔피언">
+			<input type="text" name="right_champion" placeholder="상대 챔피언">
+			<button>빌드</button>
+		</form>
+		</div>
+		
+		<div id="counter_champion">
 		<span>LD.gg의 통계를 이용, 카운터 챔피언 추천</span>
 		<form id=champ_recom>
 			<select name="lane">
@@ -424,16 +460,10 @@ body {
 			<input type="text" name="right_champion" placeholder="상대 챔피언">
 			<button>추천 챔피언</button>
 		</form>
-
-		<span>LD.gg의 통계를 이용, 맞춤 빌드 추천</span>
-		<form id=build_recom>
-			<input type="text" name="left_champion" placeholder="내 챔피언">
-			<input type="text" name="right_champion" placeholder="상대 챔피언">
-			<button>빌드</button>
-		</form>
+		</div>
 		
-		<!-- 추천 챔피언, 맞춤 빌드 div -->
 		<div></div> 
+		<!-- 추천 챔피언, 맞춤 빌드 div -->
 		
 	</div>
 	
@@ -455,6 +485,7 @@ body {
 		}).fail(err=>{
 			console.log(err)
 		})
+		
 	})
 
 	$('#build_recom').submit(function(event){
@@ -470,8 +501,28 @@ body {
 		}).fail(err=>{
 			console.log(err)
 		})
+		
 	})
 
+	$('#champ_search').submit(function(event){		
+		event.preventDefault();
+		let formData = $(this).serialize();
+		$('#champion_name_input').val('');
+		
+		$.ajax({
+			url: "/champion/search.json",
+			type: 'POST',
+			data: formData,
+		}).done(res=>{
+			$('#my_champion_img').attr('src', `/resources/img/img/champion_img/tiles/\${res}_0.jpg`);
+			console.log($('#my_champion_img').attr('src'));
+			
+		}).fail(err=>{
+			console.log(err)
+		})
+		
+	})
+	
 </script>	
 </body>
 
