@@ -67,6 +67,12 @@ public class MentorProfileService {
 		String champ_name_json = objectMapper.writeValueAsString(champ_name);
 		return champ_name_json;
 	}
+	//챔피언 키워드로 챔피언 이름 가져오기
+		public String select_by_keyword_champ(String keyword) throws JsonProcessingException {
+			List<Champ_default> champ_name = mentidao.select_by_keyword_champ(keyword);
+			String champ_name_json = objectMapper.writeValueAsString(champ_name);
+			return champ_name_json;
+		}
 	
 	//리뷰어 이메일로 내가 쓴 리뷰 가져오기
 	public String select_by_reviewer_email_mentor_review(Map<String,String> reviewer_email) throws JsonProcessingException {
