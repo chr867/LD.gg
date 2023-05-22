@@ -53,6 +53,20 @@ public class TipRestController {
 		
 		return json;
 	}
+	
+	@GetMapping("/searchId.json")
+	public String tipSearchId(int keyword) throws Exception {
+
+        List<TipDto> searchList = ts.getSearchIdList(keyword);
+        
+        ObjectMapper mapper = new ObjectMapper();
+		String json = null;
+		json = mapper.writeValueAsString(searchList);
+		
+		return json;
+	}
+	
+	
 	// 1 = 삭제성공 , 2 = 삭제실패, 3 = 이메일매칭 x, 4 = 오류
 	@PostMapping("/delete")
 	public int tipDelete(HttpSession session, int t_b_num) throws Exception{

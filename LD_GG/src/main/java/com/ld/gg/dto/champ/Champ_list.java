@@ -13,6 +13,6 @@ public class Champ_list{
 	private String team_position;
 	private String champion_kr_name;
 	private String champion_img;
-
+	private String champion_en_name;
 	
 }

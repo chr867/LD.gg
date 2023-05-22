@@ -49,6 +49,8 @@ public interface TipDao {
 
 	List<Champ_list> getChampionLane(String team_position);
 
+	List<TipDto> getSearchIdList(int keyword);
+
 
 	
 }

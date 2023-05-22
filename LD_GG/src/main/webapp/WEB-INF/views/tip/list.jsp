@@ -58,6 +58,21 @@
 	display: flex;
 	justify-content: center;
 } 
+
+.title-box{
+	text-align: center;
+	background-color: #202B46;
+	color: #fff;
+	margin: auto;
+	width: 300px;
+	height: 70px;
+	display: flex;
+	margin-bottom: 30px;
+	border-radius: 3rem;
+	justify-content: center;
+	align-items: center;
+}
+
 .champion-container{
 	margin-top: 90px;
 	width: 25%;
@@ -74,10 +89,6 @@
 	background-color: #fff;
 	box-sizing: border-box;
 	padding: 50px 30px 0 30px;
-}
-.tip-list-container h3{
-	text-align: center;
-	margin-bottom: 30px;
 }
 .jqGrid_wrapper {
     display: flex;
@@ -603,7 +614,9 @@ a[href="/tip/write"] {
 			</div>
 		</div>
 		<div class="tip-list-container">
-			<h3>공략 게시판</h3>
+						<div class="title-box">
+				<h3 class="text-center">공략 게시판</h3>
+			</div>
 				<div class="row search-container">
 					<div class="col-md-6">
 						<div class="input-group">
@@ -628,10 +641,11 @@ a[href="/tip/write"] {
  $("#grid").jqGrid({
 	url : "/tip/list.json",
 	datatype : "json",
-	colNames : ['번호', '제목', '조회수', '추천 수', '날짜'],
+	colNames : ['번호', '챔피언','제목', '조회수', '추천 수', '날짜'],
     colModel:[
         {name:'t_b_num', index:'t_b_num', width: 50, align: "center", key:true},
-        {name:'t_b_title', index:'t_b_num', width:700, align: "center", sortable : false},
+        {name:'champion_kr_name', index:'t_b_num', width: 100, align: "center"},
+        {name:'t_b_title', index:'t_b_num', width:600, align: "center", sortable : false},
         {name:'t_b_views', index:'t_b_num', width:50, align: "center"},
         {name:'t_b_recom', index:'t_b_num', width:50, align: "center"},
         {name:'t_b_date', index:'t_b_num', width:150, align: "center"}
@@ -666,10 +680,11 @@ let keyword = document.getElementById('keyword').value;
 		url : "/tip/search.json",
 		datatype : "json",
 		postData: {keyword: keyword},
-		colNames : ['번호', '제목', '조회수', '추천 수', '날짜'],
+		colNames : ['번호', '챔피언','제목', '조회수', '추천 수', '날짜'],
 	    colModel:[
 	        {name:'t_b_num', index:'t_b_num', width: 50, align: "center", key:true},
-	        {name:'t_b_title', index:'t_b_num', width:700, align: "center", sortable : false},
+	        {name:'champion_kr_name', index:'t_b_num', width: 100, align: "center"},
+	        {name:'t_b_title', index:'t_b_num', width:600, align: "center", sortable : false},
 	        {name:'t_b_views', index:'t_b_num', width:50, align: "center"},
 	        {name:'t_b_recom', index:'t_b_num', width:50, align: "center"},
 	        {name:'t_b_date', index:'t_b_num', width:150, align: "center"}
@@ -698,16 +713,15 @@ let keyword = document.getElementById('keyword').value;
 
 function selectChampion(champion) {
 	
-	console.log(keyword);
-	
 	$("#grid").jqGrid('setGridParam',{
-		url : "/tip/search.json",
+		url : "/tip/searchId.json",
 		datatype : "json",
 		postData: {keyword: champion},
-		colNames : ['번호', '제목', '조회수', '추천 수', '날짜'],
+		colNames : ['번호', '챔피언','제목', '조회수', '추천 수', '날짜'],
 	    colModel:[
 	        {name:'t_b_num', index:'t_b_num', width: 50, align: "center", key:true},
-	        {name:'t_b_title', index:'t_b_num', width:700, align: "center", sortable : false},
+	        {name:'champion_kr_name', index:'t_b_num', width: 100, align: "center"},
+	        {name:'t_b_title', index:'t_b_num', width:600, align: "center", sortable : false},
 	        {name:'t_b_views', index:'t_b_num', width:50, align: "center"},
 	        {name:'t_b_recom', index:'t_b_num', width:50, align: "center"},
 	        {name:'t_b_date', index:'t_b_num', width:150, align: "center"}
@@ -743,7 +757,7 @@ function championList() {
         res.forEach(function(champion) {
         	championHTML += '<div class="champion">';
         	championHTML += '<img alt="' + champion.champion_kr_name + '" class="bg-image champion-img" src="/resources/img/champion_img/square/'
-            + champion.champion_img + '"/ onclick="selectChampion(\'' + champion.champion_kr_name + '\')">'; 
+        	+ champion.champion_img + '"/ onclick="selectChampion(' + champion.champion_id + ')">';
         	championHTML += '</div>';
         });
 
