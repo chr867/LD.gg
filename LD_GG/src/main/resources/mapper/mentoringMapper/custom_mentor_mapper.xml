@@ -17,6 +17,12 @@
 	WHERE champion_id = #{champion_id};
 </select>
 
+<select id="select_by_keyword_champ" resultType="com.ld.gg.dto.champ.Champ_default">
+	SELECT champion_id, champion_en_name, champion_kr_name
+	from champion_info
+	WHERE champion_kr_name LIKE CONCAT('%', #{keyword}, '%');
+</select>
+
 <select id="recom_mentor" resultType="mentorProfile" parameterType="String">
 	SELECT mp.mentor_email, mp.about_mentor, mp.specialized_position, 
 	mp.top_specialized_champion, mp.jg_specialized_champion, 

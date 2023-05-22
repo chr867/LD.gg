@@ -37,4 +37,5 @@ public interface MentiDAO {
 	//챔피언
 	List<Champ_default> select_all_champ();
 	Champ_default select_by_id_champ(int id);
+	List<Champ_default> select_by_keyword_champ(String keyword);
 }
