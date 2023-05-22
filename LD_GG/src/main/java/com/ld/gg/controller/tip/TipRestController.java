@@ -125,8 +125,9 @@ public class TipRestController {
 	public int replyDelete(HttpSession session, int t_r_num) throws Exception{
 		log.info(t_r_num+"번 댓글 삭제 시작");
 		String email = (String)session.getAttribute("email");
+		int userType = (int)session.getAttribute("user_type");
 		TipDto repylInfo = ts.getReplyinfo(t_r_num);
-		if(email.equals(repylInfo.getEmail())) {
+		if(email.equals(repylInfo.getEmail()) || userType == 3) {
 			int deleteResult = ts.replyDelete(t_r_num);
 			return deleteResult;
 		}else{
@@ -136,6 +137,10 @@ public class TipRestController {
 	
 	@GetMapping("/reply/match")
 	public boolean replyMatch(HttpSession session, int t_r_num) throws Exception{
+		int userType = (int)session.getAttribute("user_type");
+		if(userType == 3) {
+			return true;
+		}
 		log.info(t_r_num+"번 댓글 데이터 가져오기 시작");
 		String email = (String)session.getAttribute("email");
 		TipDto repylInfo = ts.getReplyinfo(t_r_num);

@@ -21,7 +21,7 @@ public class TipDto {
 	private String t_b_date;
 	private int champion_id;
 	private String email;
-	
+	private String lol_account;
 	private String champion_kr_name;
 	private int t_r_num;
 	private String t_r_content;

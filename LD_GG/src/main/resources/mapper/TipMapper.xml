@@ -61,17 +61,20 @@
 	</select>
 
 	<select id="getTipDetails" resultType="tip">
-		SELECT tb.*, 
-		    ci.champion_kr_name,
-		    IFNULL(tr.t_b_recom, 0) AS t_b_recom
+		SELECT tb.*,
+		ci.champion_kr_name,
+		IFNULL(tr.t_b_recom, 0) AS t_b_recom,
+		m.lol_account
 		FROM tip_board tb
 		LEFT JOIN (
-		    SELECT COUNT(*) AS t_b_recom, t_b_num
-		    FROM tip_recom
-		    GROUP BY t_b_num
+		SELECT COUNT(*) AS t_b_recom, t_b_num
+		FROM tip_recom
+		GROUP BY t_b_num
 		) tr ON tb.t_b_num = tr.t_b_num
 		LEFT JOIN champion_info ci ON tb.champion_id = ci.champion_id
-		WHERE tb.t_b_num = #{t_b_num} 
+		LEFT JOIN member m ON tb.email = m.email
+		WHERE tb.t_b_num = #{t_b_num}
+
 	</select>
 
 	<update id="updateView" parameterType="tip">
@@ -119,10 +122,11 @@
 	</insert>
 
 	<select id="getReplyList" resultType="tip">
-		SELECT * FROM tip_reply
-		WHERE t_b_num = #{t_b_num} AND t_r_parents_num IS NULL
-		ORDER BY t_r_num
-		DESC
+		SELECT tr.*, m.lol_account
+		FROM tip_reply tr
+		LEFT JOIN member m ON tr.email = m.email
+		WHERE tr.t_b_num = #{t_b_num} AND tr.t_r_parents_num IS NULL
+		ORDER BY tr.t_r_num DESC
 	</select>
 
 	<select id="getsubReplyList" resultType="tip">
