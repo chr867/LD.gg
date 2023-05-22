@@ -26,10 +26,10 @@ public class ChampionController {
 	Champion_service cs;
 	
 	@GetMapping("/rank")
-	public String go_champion_rank(Model model, @RequestParam(defaultValue = "top")String lane,
-			@RequestParam(defaultValue = "platinum")String tier) throws Exception{
-		Champ_analytics champ_rank = cs.champ_rank(lane, tier);
-		model.addAttribute("champ_rank", champ_rank);
+	public String go_champion_rank(/* Model model, @RequestParam(defaultValue = "top")String lane,
+			@RequestParam(defaultValue = "platinum")String tier */) throws Exception{
+//		Champ_analytics champ_rank = cs.champ_rank(lane, tier);
+//		model.addAttribute("champ_rank", champ_rank);
 		
 		return "/champion/championRank";
 	}

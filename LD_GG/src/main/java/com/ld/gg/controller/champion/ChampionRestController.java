@@ -1,5 +1,7 @@
 package com.ld.gg.controller.champion;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ld.gg.dto.champ.Champ_analytics;
 import com.ld.gg.dto.champ.Champ_match_up_default;
 import com.ld.gg.service.Champion_service;
 
@@ -21,18 +24,41 @@ public class ChampionRestController {
 	@Autowired
 	Champion_service cs;
 	
-	@GetMapping("/search.json")
-	public List<Integer> champ_search(String champion_kr_name) throws Exception{
+	@PostMapping("/rank.json")
+	public List<Champ_analytics> get_champion_rank(String lane, String tier) throws Exception{
+		List<Champ_analytics> champ_rank = cs.champ_rank(lane, tier);
+		return champ_rank;
+	}
+	
+	@PostMapping("/search.json")
+	public String champ_search(String champion_kr_name) throws Exception{
 
-		List<Integer> c_list = cs.champ_search(champion_kr_name);
-		return c_list;
+		String champion_en_name = cs.champ_search(champion_kr_name);
+		return champion_en_name;
+	}
+
+	@PostMapping(value="/search-eng.json", produces="text/plain;charset=UTF-8")
+	public String champ_search_eng(String champion_en_name) throws Exception{
+
+		String champion_kr_name = cs.champ_search_eng(champion_en_name);
+		return champion_kr_name;
 	}
 
 	@PostMapping("/champ-recom.json")
-	public List<Champ_match_up_default> champ_recom(String lane, String tag, String right_champion) throws Exception{
-
+	public List<Map<String, Object>> champ_recom(String lane, String tag, String right_champion) throws Exception{
+		List<Map<String, Object>> cm_result = new ArrayList<>();
 		List<Champ_match_up_default> cm_list = cs.champ_recom(lane, tag, right_champion);
-		return cm_list;
+
+		for(int i=0;i<cm_list.size();i++){
+			Map<String, Object> tmp = new HashMap<>();
+			String champion_kr_name = cs.champ_search_eng(cm_list.get(i).getChampion_name());
+			tmp.put("cm", cm_list.get(i));
+			tmp.put("name", champion_kr_name);
+			cm_result.add(tmp);
+		}
+		log.info("cm_result = {}", cm_result);
+		
+		return cm_result;
 	}
 
 	@PostMapping("/build-recom.json")

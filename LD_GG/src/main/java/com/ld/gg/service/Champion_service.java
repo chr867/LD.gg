@@ -24,8 +24,8 @@ public class Champion_service {
 	@Autowired
 	ChampDao cd;
 	
-	public Champ_analytics champ_rank(String lane, String tier){
-		Champ_analytics champ_list = cd.champ_rank(lane, tier);
+	public List<Champ_analytics> champ_rank(String lane, String tier){
+		List<Champ_analytics> champ_list = cd.champ_rank(lane, tier);
 		log.info("champ_list = {}", champ_list);
 		
 		return champ_list;
@@ -45,14 +45,24 @@ public class Champion_service {
 		return cm_list;
 	}
 
-	public List<Integer> champ_search(String champion_kr_name) {
-		List<Integer> c_list = cd.champ_search(champion_kr_name);
-		log.info("c_list = {}", c_list);
+	public String champ_search(String champion_kr_name) {
+		String champion_en_name = cd.champ_search(champion_kr_name);
+		log.info("champion_id = {}", champion_en_name);
 		
-		return c_list;
+		return champion_en_name;
 	}
 
+	public String champ_search_eng(String champion_en_name) {
+		String champion_kr_name = cd.champ_search_eng(champion_en_name);
+		log.info("champion_kr_name = {}", champion_kr_name);
+		
+		return champion_kr_name;
+	}
+	
 	public List<Champ_match_up_default> champ_recom(String lane, String tag, String right_champion) {
+		if(tag.equals("all")){
+			tag="";
+		}
 		List<Champ_match_up_default> cm_list = cd.champ_recom(lane, tag, right_champion);
 		log.info("cm_list = {}", cm_list);
 		

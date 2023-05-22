@@ -7,23 +7,28 @@
 	<select id="champ_rank" resultType="champ_analytics">
 		select * from
 		champion_analytics
-		where teamPosition = #{lane} and summonerTier =
-		#{tier}
+		where teamPosition = #{lane} 
+		and summonerTier = #{tier}
 		order by win desc;
 	</select>
 
 	<select id="champ_match_up" resultType="champ_match_up">
 		select * from
 		champion_match_up
-		where left_champion = #{left_champion}
-		order by
-		match_up_win_rate desc;
+		where champion_id= #{left_champion}
+		order by match_up_win_rate desc;
 	</select>
 
-	<select id="champ_search" resultType="Integer">
-		select champion_id from
+	<select id="champ_search" resultType="String">
+		select champion_en_name from
 		champion_info
 		where champion_kr_name = #{champion_kr_name}
+	</select>
+	
+	<select id="champ_search_eng" resultType="String">
+		SELECT CHAMPION_KR_NAME FROM
+		CHAMPION_INFO
+		WHERE CHAMPION_EN_NAME = #{champion_en_name}
 	</select>
 	
 	<select id="champ_recom" resultType="champ_match_up">  
@@ -31,7 +36,7 @@
 		FROM champion_info ci
 		JOIN champion_match_up cmu ON ci.champion_id = cmu.champion_id
 		JOIN champion_info enemy_ci ON enemy_ci.champion_id = cmu.enemy_champ_id
-		WHERE enemy_ci.champion_kr_name = #{right_champion}
+		WHERE enemy_ci.champion_en_name = #{right_champion}
 			AND cmu.team_position = #{lane}
 			AND ci.champion_tag LIKE '%${tag}%'
 		ORDER BY cmu.match_up_win_rate DESC
@@ -43,8 +48,8 @@
 		FROM champion_match_up_spell cms
 		JOIN champion_info left_champion ON cms.champion_id = left_champion.champion_id
 		JOIN champion_info right_champion ON cms.enemy_champ_id = right_champion.champion_id
-		WHERE left_champion.champion_kr_name = #{left_champion}
-		AND right_champion.champion_kr_name = #{right_champion}
+		WHERE left_champion.champion_en_name = #{left_champion}
+		AND right_champion.champion_en_name = #{right_champion}
 	</select>
 	
 	<select id="build_recom_item" resultType="champ_match_up_item">
@@ -52,8 +57,8 @@
 		FROM champion_match_up_item cmi
 		JOIN champion_info left_champion ON cmi.champion_id = left_champion.champion_id
 		JOIN champion_info right_champion ON cmi.enemy_champ_id = right_champion.champion_id
-		WHERE left_champion.champion_kr_name = #{left_champion}
-		AND right_champion.champion_kr_name = #{right_champion}
+		WHERE left_champion.champion_en_name = #{left_champion}
+		AND right_champion.champion_en_name = #{right_champion}
 	</select>
 	
 	<select id="build_recom_rune" resultType="champ_match_up_rune">
@@ -61,8 +66,8 @@
 		FROM champion_match_up_rune cmr
 		JOIN champion_info left_champion ON cmr.champion_id = left_champion.champion_id
 		JOIN champion_info right_champion ON cmr.enemy_champ_id = right_champion.champion_id
-		WHERE left_champion.champion_kr_name = #{left_champion}
-		AND right_champion.champion_kr_name = #{right_champion}
+		WHERE left_champion.champion_en_name = #{left_champion}
+		AND right_champion.champion_en_name = #{right_champion}
 	</select>
 	
 	<select id="build_recom_skill" resultType="champ_match_up_skill">
@@ -70,7 +75,7 @@
 		FROM champion_match_up_skill cms
 		JOIN champion_info left_champion ON cms.champion_id = left_champion.champion_id
 		JOIN champion_info right_champion ON cms.enemy_champ_id = right_champion.champion_id
-		WHERE left_champion.champion_kr_name = #{left_champion}
-		AND right_champion.champion_kr_name = #{right_champion}
+		WHERE left_champion.champion_en_name = #{left_champion}
+		AND right_champion.champion_en_name = #{right_champion}
 	</select>
 </mapper>
