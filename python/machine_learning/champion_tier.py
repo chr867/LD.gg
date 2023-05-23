@@ -371,6 +371,8 @@ result_df.columns
 machine_learning_score = machine_learning_score(df)
 sort_machine_learning_score = machine_learning_score.sort_values(by=['tier'])
 
+
+# tier_int 컬럼 추가해주셈 summoner.py 파일에 함수 있음
 def insert_tier_data(x, conn):
     query = (
         f"INSERT INTO champion_tier (champion_id, team_position , win_rate ,"
