@@ -5,11 +5,13 @@
 
 <mapper namespace="com.ld.gg.dao.ChampDao">
 	<select id="champ_rank" resultType="champ_analytics">
-		select * from
-		champion_analytics
-		where teamPosition = #{lane} 
-		and summonerTier = #{tier}
-		order by win desc;
+		<![CDATA[
+		select ci.champion_kr_name, ci.champion_en_name, ct.* from champion_tier ct 
+		join champion_info ci on ci.champion_id = ct.champion_id
+		where ct.team_position = #{lane}
+		and ct.pick_rate > 0.5
+		order by ct.tier asc
+		]]>
 	</select>
 
 	<select id="champ_match_up" resultType="champ_match_up">

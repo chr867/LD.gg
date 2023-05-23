@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -43,76 +44,391 @@
 	href="/resources/css/main/footer.css">
 </head>
 <style>
-.container_box{
-	width: 80%;
+.container_box {
+	width: 60%;
 	position: absolute;
 	left: 40%;
 	top: 10%;
 }
+
+.lane_button b, .sort_button b {
+	cursor: pointer;
+}
+
+.table td:not(:first-child){
+	cursor: pointer
+}
+
+.table img{
+	width: 140px;
+	height: 140px;
+}
+
+.champion-container{
+   margin-top: 90px;
+   width: 25%;
+   height: 80vh;
+   background-color: #fff;
+   margin-right: 20px;
+   margin-left: 60px;
+   box-sizing: border-box;
+}.search-container{
+   text-align: center;
+   justify-content: space-between;
+}
+
+ .lane-select-box {
+    display: flex;
+    height: 50px;
+    justify-content: space-between;
+    width: 90%;
+    margin: auto;
+    margin-top: 10px;
+    background-color: #E4E6EF;
+    box-sizing: border-box;
+    padding: 0 50px 0 50px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.lane-img img {
+    width: 40px;
+    height: 40px;
+}
+
+.lane-img {
+    border-radius: 0.5rem;
+    transition: 0.5s;
+}
+
+.lane-img:hover,
+.lane-img:active {
+    background-color: #fff;
+}
+
+.champion-img-container {
+    width: 90%;
+    background-color: #E4E6EF;
+    height: 600px;
+    margin: auto;
+    box-sizing: border-box;
+    overflow-y: auto;
+    max-height: 600px;
+}
+
+.champions {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: center;
+    box-sizing: border-box;
+    flex-wrap: wrap;
+    padding: 5px;
+}
+
+.champions img {
+    width: 60px;
+    height: 60px;
+    border-radius: 1rem;
+    border: 5px solid #fff;
+    transition : 0.5s;
+}
+.champions img:hover{
+    transform: scale(1.3);
+    z-index: 1;
+}
+
+.champion {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin: 5px;
+    flex-grow: 1;
+}
+::-webkit-scrollbar {
+  width: 5px; /* 스크롤바의 너비 */
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* 스크롤바의 트랙(배경) 색상 */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #888; /* 스크롤바의 썸(막대) 색상 */
+}
+
 </style>
 <body>
+		<div class="champion-container">
+			<div class="lane-select-box">
+				<div class="lane-img lane-top" onclick="selectLane('TOP')"><img src="/resources/img/ranked-positions/Position_Silver-Top.png" alt="로그인 이미지"></div>
+				<div class="lane-img lane-jungle" onclick="selectLane('JUNGLE')"><img src="/resources/img/ranked-positions/Position_Silver-Jungle.png" alt="로그인 이미지"></div>
+				<div class="lane-img lane-middle" onclick="selectLane('MIDDLE')"><img src="/resources/img/ranked-positions/Position_Silver-Mid.png" alt="로그인 이미지"></div>
+				<div class="lane-img lane-bottom" onclick="selectLane('BOTTOM')"><img src="/resources/img/ranked-positions/Position_Silver-Bot.png" alt="로그인 이미지"></div>
+				<div class="lane-img lane-support" onclick="selectLane('UTILITY')"><img src="/resources/img/ranked-positions/Position_Silver-Support.png" alt="로그인 이미지"></div>
+			</div>
+			<div class="champion-img-container">
+				<div class="champions">
 
-<div class="container_box">
-    <div class="container">
-	    <div class="col">
-	    	<select>
-	    		<option>Challenger</option>
-	    		<option>Grandmaster</option>
-	    		<option>Master +</option>
-	    		<option>Diamond +</option>
-	    		<option>Platinum +</option>
-	    		<option>Gold +</option>
-	    	</select>
-	    	<b>탑</b>
-	    	<b>정글</b>
-	    	<b>미드</b>
-	    	<b>바텀</b>
-	    	<b>서포터</b>
-	    </div>
-			
-			<div>
-				<b>순위</b>
-				<b>챔피언</b>
-				<b>티어</b>
-				<b>승률</b>
-				<b>픽률</b>
-				<b>밴률</b>
-				<b>상대하기 어려운 챔피언</b>
+				</div>
+			</div>
+	</div>
+
+	<div class="container_box">
+		<div class="container">
+			<div class="col">
+				<select>
+					<option>Challenger</option>
+					<option>Grandmaster</option>
+					<option>Master +</option>
+					<option>Diamond +</option>
+					<option>Platinum +</option>
+					<option>Gold +</option>
+				</select>
+				<div class='lane_button'>
+					<b class='TOP'>탑</b> <b class='JUNGLE'>정글</b> <b class='MIDDLE'>미드</b> <b class='BOTTOM'>바텀</b> <b class='UTILITY'>서포터</b>
+				</div>
 			</div>
 
-	    <table class="table table-striped">
-	    </table>
-	
-    </div>
-</div>
+			<div>
+				<b class='rank'>순위</b> <b class='champ'>챔피언</b> 
+			</div>
+				
+			<div class='sort_button'>
+				<b class='tier'>티어</b>
+				<b class='win_rate'>승률</b>
+				<b class='pick_rate'>픽률</b>
+				<b class='ban_rate'>밴률</b>
+			</div>
+			
+			<table class="table table-striped">
+			</table>
+
+		</div>
+	</div>
 
 </body>
 <script>
-  $.ajax({
-    url: '/champion/rank.json',
+let response;
+let lane = 'TOP';
+let tier = 'PLATINUM';
+// 페이지 로드 후
+$.ajax({
+	url: '/champion/rank.json',
     type: 'POST',
-    data:{lane: 'top', tier: 'platinum'}
+    data:{lane: lane, tier: 'platinum'}
   }).done(res=>{
-    console.log(res)
-	let cList='<tbody>';
-	let i = 1;
-		for(champion of res){
-			cList += '<tr id="'+champion.champion_id+'" class="'+champion.teamposition+'" height="20" align="center" onclick="detail(this)">'
-			cList += '<td align="center">'+i+'</td>'
-			cList += '<td><img src="/resources/img/img/champion_img/tiles/'+champion.champion_en_name+'.jpg" alt="#"></td>'
-			cList += '<td align="center">'+champion.champion_kr_name+'</td>'
-			cList += '<td align="center">'+champion.champion_tier+'</td>'
-			cList += '<td align="center">'+champion.win_rate+'%</td>'
-			cList += '<td align="center">'+champion.pick_rate+'%</td>'
-			cList += '<td align="center">'+champion.ban_rate+'%</td>'
-			cList += '</tr>'
-			i++
+	  response = res
+	  console.log(res)
+	  let cList='<tbody>';
+	  let i = 1;
+	  for(champion of res){
+		  cList += '<tr id="'+champion.champion_id+'" class="'+champion.teamposition+'" height="20" align="center">'
+		  cList += '<td align="center">'+i+'</td>'
+		  cList += '<td><img src="/resources/img/img/champion_img/tiles/'+champion.champion_en_name+'_0.jpg" alt="#"></td>'
+		  cList += '<td align="center">'+champion.champion_kr_name+'</td>'
+		  cList += '<td align="center">'+champion.champion_tier+'</td>'
+		  cList += '<td align="center">'+champion.win_rate+'%</td>'
+		  cList += '<td align="center">'+champion.pick_rate+'%</td>'
+		  cList += '<td align="center">'+champion.ban_rate+'%</td>'
+		  cList += '</tr>'
+		  i++
 		}
 		cList+='</tbody>';
 		$('.table').html(cList);
-  }).fail(err=>{
+	}).fail(err=>{
     console.log(err)
-  })
+  	})
+ //
+	
+// 라인 변경
+	const lane_buttons = document.querySelectorAll(".lane_button b")
+	lane_buttons.forEach(lane_button => {
+		lane_button.addEventListener('click', function(evt) {
+			lane = lane_button.className
+			console.log(lane)
+			$.ajax({
+			url: '/champion/rank.json',
+		    type: 'POST',
+		    data:{lane: lane, tier: tier}
+		  }).done(res=>{
+			  response = res
+			  console.log(res)
+			  let cList='<tbody>';
+			  let i = 1;
+			  for(champion of res){
+				  cList += '<tr id="'+champion.champion_id+'" class="'+champion.teamposition+'" height="20" align="center">'
+				  cList += '<td align="center">'+i+'</td>'
+				  cList += '<td><img src="/resources/img/img/champion_img/tiles/'+champion.champion_en_name+'_0.jpg" alt="#"></td>'
+				  cList += '<td align="center">'+champion.champion_kr_name+'</td>'
+				  cList += '<td align="center">'+champion.champion_tier+'</td>'
+				  cList += '<td align="center">'+champion.win_rate+'%</td>'
+				  cList += '<td align="center">'+champion.pick_rate+'%</td>'
+				  cList += '<td align="center">'+champion.ban_rate+'%</td>'
+				  cList += '</tr>'
+				  i++
+				}
+				cList+='</tbody>';
+				$('.table').html(cList);
+			}).fail(err=>{
+		    console.log(err)
+		  	})
+			})
+	})
+// 라인 변경 끝
+
+// 정렬 버튼
+const sort_buttons = document.querySelectorAll(".sort_button b")
+let win_rate_reverse = false
+let pick_rate_reverse = false
+let ban_rate_reverse = false
+let tier_reverse = true
+
+sort_buttons.forEach((sort_button) => {
+	sort_button.addEventListener('click', () => {
+	console.log('win', win_rate_reverse);
+	console.log('pick', pick_rate_reverse)
+	console.log('ban', ban_rate_reverse)
+	console.log('tier', tier_reverse)
+	key = sort_button.className;
+	console.log(key);
+	
+    if (key == 'win_rate') {
+      win_rate_reverse = !win_rate_reverse;
+      pick_rate_reverse = false
+      ban_rate_reverse = false
+      tier_reverse = false
+      console.log(win_rate_reverse);
+    } else if (key == 'pick_rate') {
+      pick_rate_reverse = !pick_rate_reverse;
+      win_rate_reverse = false
+      ban_rate_reverse = false
+      tier_reverse = false
+      console.log(pick_rate_reverse);
+    } else if (key == 'ban_rate') {
+      ban_rate_reverse = !ban_rate_reverse;
+      pick_rate_reverse = false
+      win_rate_reverse = false
+      tier_reverse = false
+      console.log(ban_rate_reverse);
+    } else if (key == 'tier') {
+        pick_rate_reverse = false
+        win_rate_reverse = false
+        ban_rate_reverse = false
+    	tier_reverse = !tier_reverse;
+      console.log(tier_reverse);
+    }
+    
+	if (win_rate_reverse || pick_rate_reverse || ban_rate_reverse || tier_reverse) {
+    	console.log('역방향')
+		response.sort((a, b) => {
+		      if (key == 'tier') {
+		        if (a[key] > b[key]) {
+		          return 1;
+		        } else if (a[key] < b[key]) {
+		          return -1;
+		        } else {
+		          return 0;
+		        }
+		      }else {
+		          let numA = parseFloat(a[key]);
+		          let numB = parseFloat(b[key]);
+		          if (numA > numB) {
+		            return -1;
+		          } else if (numA < numB) {
+		            return 1;
+		          } else {
+		            return 0;
+		          }
+		        }
+		    })
+	}else{
+		console.log('정방향')
+	    response.sort((b, a) => {
+		      if (key == 'tier') {
+		    	  if (a[key] > b[key]) {
+		    		  return 1;
+		      	  } else if (a[key] < b[key]) {
+		      		  return -1;
+			      } else {
+			    	  return 0;
+		    	  }
+		      }else {
+		          let numA = parseFloat(a[key]);
+		          let numB = parseFloat(b[key]);
+		          if (numA > numB) {
+		            return -1;
+		          } else if (numA < numB) {
+		            return 1;
+		          } else {
+		            return 0;
+		          }
+		        }
+		    })
+	}
+    
+	let cList='<tbody>';
+	let i = 1;
+	for(champion of response){
+		cList += '<tr id="'+champion.champion_id+'" class="'+champion.teamposition+'" height="20" align="center">'
+		cList += '<td align="center">'+i+'</td>'
+		cList += '<td><img src="/resources/img/img/champion_img/tiles/'+champion.champion_en_name+'_0.jpg" alt="#"></td>'
+		cList += '<td align="center">'+champion.champion_kr_name+'</td>'
+		cList += '<td align="center">'+champion.champion_tier+'</td>'
+		cList += '<td align="center">'+champion.win_rate+'%</td>'
+		cList += '<td align="center">'+champion.pick_rate+'%</td>'
+		cList += '<td align="center">'+champion.ban_rate+'%</td>'
+		cList += '</tr>'
+		i++
+	}
+	cList+='</tbody>';
+	$('.table').html(cList);
+	});
+});
+// 정렬 버튼 끝
+
+function championList() {
+    $.ajax({
+        method: 'get',
+        url: '/tip/champion/list'
+    }).done(res => {
+        var championHTML = '';
+        res.forEach(function(champion) {
+           championHTML += '<div class="champion">';
+           championHTML += '<img alt="' + champion.champion_kr_name + '" class="bg-image champion-img" src="/resources/img/champion_img/square/'
+           + champion.champion_img + '"/ onclick="selectChampion(' + champion.champion_id + ')">';
+           championHTML += '</div>';
+        });
+
+        $('.champions').html(championHTML);
+    }).fail(err => {
+        console.log(err);
+    });
+}
+
+championList();
+
+
+function selectLane(team_position) {
+   $('.champions').empty();
+   $.ajax({
+      method: 'get',
+      url: '/tip/champion/lane',
+      data: {team_position:team_position},
+   }).done(res=>{
+        var championHTML = '';
+        res.forEach(function(champion) {
+           championHTML += '<div class="champion">';
+           championHTML += '<img alt="' + champion.champion_kr_name + '" class="bg-image champion-img" src="/resources/img/champion_img/square/'
+            + champion.champion_img + '"/ onclick="selectChampion(\'' + champion.champion_kr_name + '\')">'; 
+           championHTML += '</div>';
+        });
+
+        $('.champions').html(championHTML);
+   }).fail(err=>{
+      console.log(err);
+   })
+} 
 
 </script>
 </html>
