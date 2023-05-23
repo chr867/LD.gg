@@ -34,6 +34,7 @@ end_time = time.time()
 print("변환 시간: {:.2f}초".format(end_time - start_time))
 print("JSON 변환 종료")
 # ----------------------------------------------------------------------------------------------------------------------
+# 모델 학습용 데이터 연산 코드
 print("시작!")
 conn = mu.connect_mysql()
 matchId_count = pd.DataFrame(mu.mysql_execute_dict(f"SELECT match_id_substr FROM match_raw_patch", conn))
@@ -180,7 +181,7 @@ joblib.dump(model, 'championTierPredictionModel.pkl')
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-
+# 데이터 프레임 연산 코드
 def machine_learning_score(df):
     def win_rate_pick_rate_data(raw_data):
         result = []
@@ -291,8 +292,10 @@ def machine_learning_score(df):
 machine_learning_score = machine_learning_score(df)
 sort_machine_learning_score = machine_learning_score.sort_values(by=['tier'])
 
-# -----------------------------------------------------------------------------------------------------------------------
-def machine_learning_score(win_pick_lst,ban_lst,meta_lst):
+
+# ----------------------------------------------------------------------------------------------------------------------
+# 리스트 연산 코드
+def machine_learning_score(win_pick_lst, ban_lst, meta_lst):
     def win_rate_pick_rate_data(result):
         columns = ['championId', 'win', 'teamPosition']  # 열 추가
         win_pick_df = pd.DataFrame(result, columns=columns)
@@ -362,12 +365,9 @@ def machine_learning_score(win_pick_lst,ban_lst,meta_lst):
     final_df = final_df[['championId', 'teamPosition', 'winRate', 'pickRate', 'banRate', 'tier']]
     return final_df
 
-machine_learning_score = machine_learning_score(win_pick_lst_result,ban_rate_lst_result,meta_score_lst_result)
 
+machine_learning_score = machine_learning_score(win_pick_lst_result, ban_rate_lst_result, meta_score_lst_result)
 
-
-
-result_df.columns
 machine_learning_score = machine_learning_score(df)
 sort_machine_learning_score = machine_learning_score.sort_values(by=['tier'])
 
@@ -375,9 +375,9 @@ sort_machine_learning_score = machine_learning_score.sort_values(by=['tier'])
 # tier_int 컬럼 추가해주셈 summoner.py 파일에 함수 있음
 def insert_tier_data(x, conn):
     query = (
-        f"INSERT INTO champion_tier (champion_id, team_position , win_rate ,"
+        f"INSERT INTO champion_tier (champion_id, team_position , summoner_tier, win_rate ,"
         f" pick_rate,ban_rate ,tier) "
-        f"VALUES ({x.championId}, {repr(x.teamPosition)}, {x.winRate}, {x.pickRate},{x.banRate},{x.tier})"
+        f"VALUES ({x.championId}, {repr(x.teamPosition)}, {x.summonerTier},{x.winRate},{x.pickRate},{x.banRate},{x.tier})"
     )
     try:
         mu.mysql_execute(query, conn)
@@ -385,6 +385,89 @@ def insert_tier_data(x, conn):
         print(e)
     return
 
+
 conn = mu.connect_mysql()
 machine_learning_score.progress_apply(lambda x: insert_tier_data(x, conn), axis=1)
 conn.commit()
+
+# ----------------------------------------------------------------------------------------------------------------------
+conn = mu.connect_mysql()
+query = f"SELECT * FROM match_solr_rank where summonerTier = 'MASTER'"
+row = pd.DataFrame(mu.mysql_execute_dict(query, conn))
+conn.close()
+def tier_int(tier):
+    if tier == 'IRON':
+        return 1
+    elif tier == 'BRONZE':
+        return 2
+    elif tier == 'SILVER':
+        return 3
+    elif tier == 'GOLD':
+        return 4
+    elif tier == 'PLATINUM':
+        return 5
+    elif tier == 'DIAMOND':
+        return 6
+    elif tier == 'MASTER':
+        return 7
+    elif tier == 'GRANDMASTER':
+        return 8
+    elif tier == 'CHALLENGER':
+        return 9
+
+
+
+print("시작!")
+tier_list = ['IRON', 'BRONZE', 'SILVER', 'GOLD', 'PLATINUM', 'DIAMOND', 'MASTER', 'GRANDMASTER', 'CHALLENGER']
+
+for tier in tier_list:
+    try:
+        conn = mu.connect_mysql()
+        query = f"SELECT * FROM match_solr_rank WHERE summonerTier = '{tier}'"
+        row = pd.DataFrame(mu.mysql_execute_dict(query, conn))
+        conn.close()
+    except Exception as e:
+        print(f"Error occurred for tier {tier}: {str(e)}")
+        conn.close()
+        continue
+
+    print(f'{tier} 데이터 연산 시작')
+    win_pick_lst_result = []
+    ban_rate_lst_result = []
+    meta_score_lst_result = []
+
+    for _, player in row.iterrows():
+        lst = []
+        lst.append(player['championId'])
+        lst.append(player['win'])
+        lst.append(player['teamPosition'])
+        win_pick_lst_result.append(lst)
+
+    for _, player in row.iterrows():
+        lst = []
+        if player['ban_champion_id'] != 0 and player['ban_champion_id'] != -1:
+            lst.append(player['teamPosition'])
+            lst.append(player['ban_champion_id'])
+            ban_rate_lst_result.append(lst)
+
+    for _, player in row.iterrows():
+        lst = []
+        lst.append(player['championId'])
+        lst.append(player['teamPosition'])
+        lst.append(player['kda'])
+        lst.append(player['totalDamageDealtToChampions'])
+        lst.append(player['totalDamageTaken'])
+        lst.append(player['timeCCingOthers'])
+        lst.append(player['total_gold'])
+        meta_score_lst_result.append(lst)
+
+    machine_learning_df = machine_learning_score(win_pick_lst_result, ban_rate_lst_result, meta_score_lst_result)
+    machine_learning_df['summonerTier'] = tier_int(tier)
+
+    conn = mu.connect_mysql()
+    machine_learning_df.apply(lambda x: insert_tier_data(x, conn), axis=1)
+    conn.commit()
+
+print("끝!")
+
+row.iloc[0]['total_gold']

@@ -27,39 +27,16 @@ end_time = time.time()
 print("변환 시간: {:.2f}초".format(end_time - start_time))
 print("JSON 변환 종료")
 
-
 # ----------------------------------------------------------------------------------------------------------------------
-# 룬 데이터 정제
-def rune_data(raw_data):
-    result = []
-    print("룬데이터 추출 시작")
-    for i in tqdm(range(len(raw_data))):
-        df = raw_data.iloc[i]['matches']['participants']
-        for summoner in range(len(df)):
-            lst = []
-            lst.append(df[summoner]['championId'])
-            lst.append(df[summoner]['teamPosition'])  # teamPosition 추가
-            lst.append(df[summoner]['defense'])
-            lst.append(df[summoner]['flex'])
-            lst.append(df[summoner]['offense'])
-            lst.append(df[summoner]['style0'])
-            for primaryRune in df[summoner]['perks0']:
-                lst.append(primaryRune)
-            lst.append(df[summoner]['style1'])
-            for subStyleRune in df[summoner]['perks1']:
-                lst.append(subStyleRune)
-            lst.append(df[summoner]['win'])
-            result.append(lst)
-    print("룬데이터 추출완료")
-    print("룬데이터 데이터프레임 제작 시작")
+def rune_data(rune_list):
+
     columns = ['championId', 'teamPosition', 'FRAGMENT1_ID', 'FRAGMENT2_ID', 'FRAGMENT3_ID', 'MAIN_KEYSTONE_ID',
                'MAIN_SUB1_ID',
                'MAIN_SUB2_ID', 'MAIN_SUB3_ID', 'MAIN_SUB4_ID', 'SUB_KEYSTONE_ID', 'SUB_SUB1_ID', 'SUB_SUB2_ID', 'WIN']
 
-    rune_df = pd.DataFrame(result, columns=columns)
+    rune_df = pd.DataFrame(rune_list, columns=columns)
     rune_df['WIN'] = rune_df['WIN'].astype(int)
-    print("룬데이터 데이터프레임 제작완료")
-    print("룬데이터 정제 시작")
+
     new_df = rune_df[['championId', 'teamPosition', 'WIN']].join(
         rune_df.iloc[:, 2:13].apply(tuple, axis=1).rename('rune_combination'))
 
@@ -91,42 +68,16 @@ def rune_data(raw_data):
     merged_df = pd.merge(top_runes, total_game_df, on=['championId', 'teamPosition'])
     merged_df['pickRate'] = round((merged_df['pickCount'] / merged_df['total_game']) * 100, 2)
     final_df = merged_df.drop(columns=['total_game'])
-    print("룬데이터 정제완료")
+
     return final_df
-
-
 # ----------------------------------------------------------------------------------------------------------------------
-# 아이템 데이터 정제
-def item_df(raw_data):
-    result = []
-    print("아이템 데이터 정제 시작 ")
-    for i in tqdm(range(len(raw_data))):
-        df = raw_data.iloc[i]['matches']['participants']
-        for summoner in range(len(df)):
-            lst = []
-            lst.append(df[summoner]['championId'])
-            lst.append(df[summoner]['teamPosition'])
-            try:
-                lst.append(df[summoner]['mythicItemUsed'])
-            except:
-                lst.append(0)
-            lst.append(df[summoner]['item0'])
-            lst.append(df[summoner]['item1'])
-            lst.append(df[summoner]['item2'])
-            lst.append(df[summoner]['item3'])
-            lst.append(df[summoner]['item4'])
-            lst.append(df[summoner]['item5'])
-            lst.append(df[summoner]['item6'])
-            lst.append(df[summoner]['win'])
-            result.append(lst)
+def item_df(item_list):
     columns = ['championId', 'teamPosition', 'mythicItem', 'item0', 'item1', 'item2', 'item3', 'item4', 'item5',
                'item6', 'win']
-    item_df = pd.DataFrame(result, columns=columns)
+    item_df = pd.DataFrame(item_list, columns=columns)
     item_df['win'] = item_df['win'].astype(int)
     print("아이템 데이터 정제 완료 ")
     return item_df
-
-
 # ----------------------------------------------------------------------------------------------------------------------
 # 챔피언 신발 데이터
 def shoes_data(item_df_data):
@@ -185,20 +136,8 @@ def shoes_data(item_df_data):
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-# 신화 아이템 정제
-def mythic_item_data(raw_data):
-    result = []
-    print("신화 아이템 데이터 정제 시작")
-    for i in tqdm(range(len(raw_data))):
-        df = raw_data.iloc[i]['matches']['participants']
-        for summoner in range(len(df)):
-            championId = df[summoner]['championId']
-            teamPosition = df[summoner]['teamPosition']  # 팀 포지션 추가
-            mythic_item_used = df[summoner].get('mythicItemUsed', 0)
-            win = df[summoner]['win']
-            result.append([championId, teamPosition, mythic_item_used, win])
-
-    mythic_item_df = pd.DataFrame(result, columns=['championId', 'teamPosition', 'mythicItem', 'win'])
+def mythic_item_data(mythic_item_lst):
+    mythic_item_df = pd.DataFrame(mythic_item_lst, columns=['championId', 'teamPosition', 'mythicItem', 'win'])
     mythic_item_df['mythicItem'] = mythic_item_df['mythicItem'].astype(int)
     mythic_item_df['win'] = mythic_item_df['win'].astype(int)
 
@@ -229,24 +168,9 @@ def mythic_item_data(raw_data):
     final_df = merged_df.drop(columns=['total_game'])
     print("신화 아이템 데이터 정제 완료 ")
     return final_df[['championId', 'teamPosition', 'mythicItem', 'pickCount', 'winCount', 'winRate', 'pickRate']]
-
-
 # ----------------------------------------------------------------------------------------------------------------------
-# 아이템 정제 (신화, 신발 제외)
-def common_item_data(raw_data):
-    print("일반 아이템 데이터 정제 시작 ")
-    result = []
-    for i in tqdm(range(len(raw_data))):
-        df = raw_data.iloc[i]['matches']['participants']
-        for summoner in range(len(df)):
-            championId = df[summoner]['championId']
-            teamPosition = df[summoner]['teamPosition']  # 팀 포지션 추가
-            items = [df[summoner].get('item' + str(i), 0) for i in range(6)]
-            win = df[summoner]['win']
-            for item in items:
-                result.append([championId, teamPosition, item, win])
-
-    item_df = pd.DataFrame(result, columns=['championId', 'teamPosition', 'itemId', 'win'])
+def common_item_data(common_itmem_list):
+    item_df = pd.DataFrame(common_itmem_list, columns=['championId', 'teamPosition', 'itemId', 'win'])
     item_df = item_df[item_df['itemId'] != 0]
 
     top_items = []
@@ -274,39 +198,10 @@ def common_item_data(raw_data):
     final_df = merged_df.drop(columns=['total_game'])
     print("일반 아이템 데이터 정제 완료 ")
     return final_df[['championId', 'teamPosition', 'itemId', 'pickCount', 'winCount', 'winRate', 'pickRate']]
-
-
 # ----------------------------------------------------------------------------------------------------------------------
-# 시작 아이템 데이터 정제
-def start_item_data(raw_data):
-    result = []
-    accessories_lst = [3364, 3340, 3363, 3330, 3513]
-    print("시작 아이템 데이터 정제 시작 ")
-    for x in tqdm(range(len(raw_data))):
-        timeline_df = raw_data.iloc[x]['timeline']
-        if len(timeline_df) < 2:
-            continue
-        item_dict_by_participant = {i: [] for i in
-                                    range(1, len(raw_data.iloc[x]['matches']['participants']) + 1)}
-        for event in timeline_df['1']['events']:
-            if event['type'] == 'ITEM_PURCHASED':
-                item_dict_by_participant[event['participantId']].append(event['itemId'])
-        for event in timeline_df['2']['events']:
-            if event['type'] == 'ITEM_PURCHASED':
-                item_dict_by_participant[event['participantId']].append(event['itemId'])
-        row_result = []
-        for i in range(len(raw_data.iloc[x]['matches']['participants'])):
-            championId = raw_data.iloc[x]['matches']['participants'][i]['championId']
-            teamPosition = raw_data.iloc[x]['matches']['participants'][i]['teamPosition']  # 팀 포지션 추가
-            win = raw_data.iloc[x]['matches']['participants'][i]['win']
-            items = [item for item in item_dict_by_participant[i + 1] if item not in accessories_lst]
-            items_str = ",".join(map(str, items))
-            row_result.append([championId, teamPosition, items_str, win])
-
-        result.extend(row_result)
-
+def start_item_data(start_item_list):
     columns = ['championId', 'teamPosition', 'itemId', 'win']
-    start_item_df = pd.DataFrame(result, columns=columns)
+    start_item_df = pd.DataFrame(start_item_list, columns=columns)
     start_item_df['win'] = start_item_df['win'].astype(int)
 
     start_item_counts = start_item_df.groupby(['championId', 'teamPosition', 'itemId']).agg({'win': ['count', 'sum']})
@@ -330,40 +225,10 @@ def start_item_data(raw_data):
     final_df = merged_df.drop(columns=['total_game'])
     print("시작 아이템 데이터 정제 완료 ")
     return final_df[['championId', 'teamPosition', 'itemId', 'pickCount', 'winCount', 'winRate', 'pickRate']]
-
-
 # ----------------------------------------------------------------------------------------------------------------------
-# 장신구 아이템 정제
-def accessories_data(raw_data):
-    result = []
-    accessories_lst = [3364, 3340, 3363, 3330, 3513]
-    print("장신구 아이템 데이터 정제 시작 ")
-    for x in tqdm(range(len(raw_data))):
-        timeline_df = raw_data.iloc[x]['timeline']
-        if len(timeline_df) < 2:
-            continue
-        item_dict_by_participant = {i: [] for i in
-                                    range(1, len(raw_data.iloc[x]['matches']['participants']) + 1)}
-        for event in timeline_df['1']['events']:
-            if event['type'] == 'ITEM_PURCHASED' and event['itemId'] in accessories_lst:
-                item_dict_by_participant[event['participantId']].append(event)
-
-        row_result = []
-        for i in range(len(raw_data.iloc[x]['matches']['participants'])):
-            championId = raw_data.iloc[x]['matches']['participants'][i]['championId']
-            teamPosition = raw_data.iloc[x]['matches']['participants'][i]['teamPosition']
-            acc_last = raw_data.iloc[x]['matches']['participants'][i]['item6']
-
-            win = raw_data.iloc[x]['matches']['participants'][i]['win']
-            items = [item['itemId'] for item in item_dict_by_participant[i + 1]]
-            items.append(acc_last)
-            items_str = ",".join(map(str, items))
-            row_result.append([championId, teamPosition, items_str, win])
-
-        result.extend(row_result)
-
+def accessories_data(accessories_list):
     columns = ['championId', 'teamPosition', 'itemId', 'win']
-    accessories_df = pd.DataFrame(result, columns=columns)
+    accessories_df = pd.DataFrame(accessories_list, columns=columns)
     accessories_df['win'] = accessories_df['win'].astype(int)
 
     accessories_counts = accessories_df.groupby(['championId', 'teamPosition', 'itemId']).agg({'win': ['count', 'sum']})
@@ -385,25 +250,10 @@ def accessories_data(raw_data):
     final_df = merged_df.drop(columns=['total_game'])
     print("장신구 아이템 데이터 정제 완료 ")
     return final_df[['championId', 'teamPosition', 'itemId', 'pickCount', 'winCount', 'winRate', 'pickRate']]
-
-
 # ----------------------------------------------------------------------------------------------------------------------
-# 스펠 데이터
-def spell_data(raw_data):
-    result = []
-    print("스펠 데이터 정제 시작 ")
-    for i in tqdm(range(len(raw_data))):
-        df = raw_data.iloc[i]['matches']['participants']
-        for summoner in range(len(df)):
-            lst = []
-            lst.append(df[summoner]['championId'])
-            lst.append(df[summoner]['teamPosition'])
-            lst.append(df[summoner]['summoner1Id'])
-            lst.append(df[summoner]['summoner2Id'])
-            lst.append(df[summoner]['win'])
-            result.append(lst)
+def spell_data(spell_list):
     columns = ['championId', 'teamPosition', 'spell_1', 'spell_2', 'win']
-    spell_df = pd.DataFrame(result, columns=columns)
+    spell_df = pd.DataFrame(spell_list, columns=columns)
     spell_df['win'] = spell_df['win'].astype(int)
 
     def combine_spells(df):
@@ -429,33 +279,10 @@ def spell_data(raw_data):
     final_df = merged_df.drop(columns=['total_game'])
     print("스펠 데이터 정제 완료 ")
     return final_df[['championId', 'teamPosition', 'spells', 'pickCount', 'winCount', 'winRate', 'pickRate']]
-
-
 # ----------------------------------------------------------------------------------------------------------------------
-# 스킬 빌드 추천
-def skill_build_data(raw_data):
-    result = []
-    for x in tqdm(range(len(raw_data))):
-        if len(raw_data.iloc[x]['timeline']) < 15:  # 15분이하 게임 컷뚜
-            continue
-        match = raw_data.iloc[x]['matches']
-        participants = match['participants']
-        timeline = raw_data.iloc[x]['timeline']
+def skill_build_data(skill_build_list):
 
-        skill_build_lst = [[player['championId'], player['teamPosition'], player['win']] for player in participants]
-
-        for minute in timeline:
-            events = timeline[minute]['events']
-            for event in events:
-                if event['type'] == 'SKILL_LEVEL_UP':  # and event['skillSlot'] != 4 추가시 정확도는 높아지지만 표본수 대량으로 필요 약 100만개
-                    participant_id = event['participantId']
-                    skill_slot = event['skillSlot']
-                    skill_build_lst[participant_id - 1].append(skill_slot)
-
-        result.extend(
-            [[lst[0], lst[1], lst[2], ', '.join(map(str, lst[3:18]))] for lst in skill_build_lst if len(lst) > 18])
-
-    df = pd.DataFrame(result, columns=['championId', 'teamPosition', 'win', 'skillBuild'])
+    df = pd.DataFrame(skill_build_list, columns=['championId', 'teamPosition', 'win', 'skillBuild'])
     df['win'] = df['win'].astype(int)
 
     top_skill_builds = df.groupby(['championId', 'teamPosition', 'skillBuild']).size().reset_index(name='pickCount')
@@ -493,19 +320,231 @@ def skill_build_data(raw_data):
     top_5_skill_builds['masterySequence'] = top_5_skill_builds['skillBuild'].apply(get_mastery_sequence)
 
     return top_5_skill_builds
-
-
 # ----------------------------------------------------------------------------------------------------------------------
-# 아이템 빌드 추천
-def item_build_data(raw_data):
+def item_build_data(item_build_list):
+    columns = ['championId', 'teamPosition', 'win', 'itemBuild']
+
+    item_build_df = pd.DataFrame(item_build_list, columns=columns)
+    item_build_df['win'] = item_build_df['win'].astype(int)
+
+    top_item_builds = item_build_df.groupby(['championId', 'teamPosition', 'itemBuild']).size().reset_index(
+        name='pickCount')
+    top_item_builds = top_item_builds.sort_values(['championId', 'teamPosition', 'pickCount'],
+                                                  ascending=[True, True, False])
+    top_5_item_builds = top_item_builds.groupby(['championId', 'teamPosition']).head(5)  # 추천 수 설정
+    wins_with_skill_build = item_build_df[item_build_df['win'] == 1].groupby(
+        ['championId', 'teamPosition', 'itemBuild']).size().reset_index(name='winCount')
+    top_5_item_builds = pd.merge(top_5_item_builds, wins_with_skill_build,
+                                 on=['championId', 'teamPosition', 'itemBuild'], how='left')
+    top_5_item_builds['winCount'] = top_5_item_builds['winCount'].fillna(0)
+
+    total_games_per_champion = item_build_df.groupby(['championId', 'teamPosition']).size().reset_index(
+        name='totalGames')
+    top_5_item_builds = pd.merge(top_5_item_builds, total_games_per_champion, on=['championId', 'teamPosition'])
+
+    top_5_item_builds['pickRate'] = round((top_5_item_builds['pickCount'] / top_5_item_builds['totalGames']) * 100, 2)
+    top_5_item_builds['winRate'] = round((top_5_item_builds['winCount'] / top_5_item_builds['pickCount']) * 100, 2)
+    top_5_item_builds['winCount'] = top_5_item_builds['winCount'].astype(int)
+
+    return top_5_item_builds
+# ----------------------------------------------------------------------------------------------------------------------
+def lane_data(lane_list):
+    columns = ['championId', 'teamPosition', 'win']
+    df = pd.DataFrame(lane_list, columns=columns)
+    df['win'] = df['win'].astype(int)
+
+    champion_pick_counts = df.groupby('championId').size().reset_index(name='championPickCount')
+    lane_groupBy = df.groupby(['championId', 'teamPosition']).agg({'win': ['sum', 'size']}).reset_index()
+    lane_groupBy.columns = ['championId', 'teamPosition', 'winCount', 'pickCount']
+    lane_groupBy = lane_groupBy.merge(champion_pick_counts, on='championId')
+    lane_groupBy['pickRate'] = round((lane_groupBy['pickCount'] / lane_groupBy['championPickCount']) * 100, 2)
+    lane_groupBy['winRate'] = round((lane_groupBy['winCount'] / lane_groupBy['pickCount']) * 100, 2)
+    lane_groupBy = lane_groupBy[lane_groupBy['pickRate'] > 5]
+    lane_groupBy.dropna(inplace=True)
+    lane_groupBy.reset_index(drop=True, inplace=True)
+    result_df = lane_groupBy[['championId', 'teamPosition', 'pickCount', 'winCount', 'pickRate', 'winRate']]
+    return result_df
+# ----------------------------------------------------------------------------------------------------------------------
+# 데이터 정제 코드
+print("시작!")
+conn = mu.connect_mysql()
+matchId_count = pd.DataFrame(mu.mysql_execute_dict(f"SELECT match_id_substr FROM match_raw_patch", conn))
+conn.close()
+print(f'매치아이디 갯수 : {len(matchId_count.match_id_substr.unique())}개')
+
+batch_size = 30000
+rune_list = []
+item_list = []
+mythic_item_lst = []
+common_itmem_list = []
+start_item_list = []
+accessories_list = []
+spell_list = []
+skill_build_list = []
+item_build_list = []
+lane_list = []
+
+for limit in tqdm(range(0, len(matchId_count.match_id_substr.unique()), batch_size)):
+    conn = mu.connect_mysql()
+    query = f"SELECT matches, timeline FROM match_raw_patch LIMIT {limit}, {batch_size}"
+    df = pd.DataFrame(mu.mysql_execute_dict(query, conn))
+    conn.close()
+
+    df['matches'] = df['matches'].apply(json.loads)
+    df['timeline'] = df['timeline'].apply(json.loads)
+    # ------------------------------------------------------------------------------------------------------------------
+    # 룬 데이터 정제
+    for i in tqdm(range(len(df))):
+        participants = df.iloc[i]['matches']['participants']
+        for summoner in range(len(participants)):
+            lst = []
+            lst.append(participants[summoner]['championId'])
+            lst.append(participants[summoner]['teamPosition'])  # teamPosition 추가
+            lst.append(participants[summoner]['defense'])
+            lst.append(participants[summoner]['flex'])
+            lst.append(participants[summoner]['offense'])
+            lst.append(participants[summoner]['style0'])
+            for primaryRune in participants[summoner]['perks0']:
+                lst.append(primaryRune)
+            lst.append(participants[summoner]['style1'])
+            for subStyleRune in participants[summoner]['perks1']:
+                lst.append(subStyleRune)
+
+            lst.append(participants[summoner]['win'])
+            rune_list.append(lst)
+    # ------------------------------------------------------------------------------------------------------------------
+    # 아이템 데이터 정제
+    for i in tqdm(range(len(df))):
+        participants = df.iloc[i]['matches']['participants']
+        for summoner in range(len(participants)):
+            lst = []
+            lst.append(participants[summoner]['championId'])
+            lst.append(participants[summoner]['teamPosition'])
+            try:
+                lst.append(participants[summoner]['mythicItemUsed'])
+            except:
+                lst.append(0)
+            lst.append(participants[summoner]['item0'])
+            lst.append(participants[summoner]['item1'])
+            lst.append(participants[summoner]['item2'])
+            lst.append(participants[summoner]['item3'])
+            lst.append(participants[summoner]['item4'])
+            lst.append(participants[summoner]['item5'])
+            lst.append(participants[summoner]['item6'])
+            lst.append(participants[summoner]['win'])
+            item_list.append(lst)
+    # ------------------------------------------------------------------------------------------------------------------
+    # 신화 아이템 정제
+    for i in tqdm(range(len(df))):
+        participants = df.iloc[i]['matches']['participants']
+        for summoner in range(len(participants)):
+            championId = participants[summoner]['championId']
+            teamPosition = participants[summoner]['teamPosition']  # 팀 포지션 추가
+            mythic_item_used = participants[summoner].get('mythicItemUsed', 0)
+            win = participants[summoner]['win']
+            mythic_item_lst.append([championId, teamPosition, mythic_item_used, win])
+    # ------------------------------------------------------------------------------------------------------------------
+    # 아이템 정제 (신화, 신발 제외)
+    for i in tqdm(range(len(df))):
+        participants = df.iloc[i]['matches']['participants']
+        for summoner in range(len(participants)):
+            championId = participants[summoner]['championId']
+            teamPosition = participants[summoner]['teamPosition']  # 팀 포지션 추가
+            items = [participants[summoner].get('item' + str(i), 0) for i in range(6)]
+            win = participants[summoner]['win']
+            for item in items:
+                common_itmem_list.append([championId, teamPosition, item, win])
+    # ------------------------------------------------------------------------------------------------------------------
+    # 시작 아이템 데이터 정제
+    accessories_lst = [3364, 3340, 3363, 3330, 3513]
+    for x in tqdm(range(len(df))):
+        timeline_df = df.iloc[x]['timeline']
+        if len(timeline_df) < 2:
+            continue
+        item_dict_by_participant = {i: [] for i in
+                                    range(1, len(df.iloc[x]['matches']['participants']) + 1)}
+        for event in timeline_df['1']['events']:
+            if event['type'] == 'ITEM_PURCHASED':
+                item_dict_by_participant[event['participantId']].append(event['itemId'])
+        for event in timeline_df['2']['events']:
+            if event['type'] == 'ITEM_PURCHASED':
+                item_dict_by_participant[event['participantId']].append(event['itemId'])
+        row_result = []
+        for i in range(len(df.iloc[x]['matches']['participants'])):
+            championId = df.iloc[x]['matches']['participants'][i]['championId']
+            teamPosition = df.iloc[x]['matches']['participants'][i]['teamPosition']  # 팀 포지션 추가
+            win = df.iloc[x]['matches']['participants'][i]['win']
+            items = [item for item in item_dict_by_participant[i + 1] if item not in accessories_lst]
+            items_str = ",".join(map(str, items))
+            row_result.append([championId, teamPosition, items_str, win])
+
+        start_item_list.extend(row_result)
+    # ------------------------------------------------------------------------------------------------------------------
+    # 장신구 아이템 정제
+    accessories_lst = [3364, 3340, 3363, 3330, 3513]
+    for x in tqdm(range(len(df))):
+        timeline_df = df.iloc[x]['timeline']
+        if len(timeline_df) < 2:
+            continue
+        item_dict_by_participant = {i: [] for i in
+                                    range(1, len(df.iloc[x]['matches']['participants']) + 1)}
+        for event in timeline_df['1']['events']:
+            if event['type'] == 'ITEM_PURCHASED' and event['itemId'] in accessories_lst:
+                item_dict_by_participant[event['participantId']].append(event)
+
+        row_result = []
+        for i in range(len(df.iloc[x]['matches']['participants'])):
+            championId = df.iloc[x]['matches']['participants'][i]['championId']
+            teamPosition = df.iloc[x]['matches']['participants'][i]['teamPosition']
+            acc_last = df.iloc[x]['matches']['participants'][i]['item6']
+
+            win = df.iloc[x]['matches']['participants'][i]['win']
+            items = [item['itemId'] for item in item_dict_by_participant[i + 1]]
+            items.append(acc_last)
+            items_str = ",".join(map(str, items))
+            row_result.append([championId, teamPosition, items_str, win])
+
+        accessories_list.extend(row_result)
+    # ------------------------------------------------------------------------------------------------------------------
+    # 스펠 데이터
+    for i in tqdm(range(len(df))):
+        participants = df.iloc[i]['matches']['participants']
+        for summoner in range(len(participants)):
+            lst = []
+            lst.append(participants[summoner]['championId'])
+            lst.append(participants[summoner]['teamPosition'])
+            lst.append(participants[summoner]['summoner1Id'])
+            lst.append(participants[summoner]['summoner2Id'])
+            lst.append(participants[summoner]['win'])
+            spell_list.append(lst)
+    # ------------------------------------------------------------------------------------------------------------------
+    # 스킬 빌드 추천
+    for x in tqdm(range(len(df))):
+        if len(df.iloc[x]['timeline']) < 15:  # 15분이하 게임 컷뚜
+            continue
+        match = df.iloc[x]['matches']
+        participants = match['participants']
+        timeline = df.iloc[x]['timeline']
+
+        skill_build_lst = [[player['championId'], player['teamPosition'], player['win']] for player in participants]
+
+        for minute in timeline:
+            events = timeline[minute]['events']
+            for event in events:
+                if event['type'] == 'SKILL_LEVEL_UP':  # and event['skillSlot'] != 4 추가시 정확도는 높아지지만 표본수 대량으로 필요 약 100만개
+                    participant_id = event['participantId']
+                    skill_slot = event['skillSlot']
+                    skill_build_lst[participant_id - 1].append(skill_slot)
+        skill_build_list.extend(
+            [[lst[0], lst[1], lst[2], ', '.join(map(str, lst[3:18]))] for lst in skill_build_lst if len(lst) > 18])
+    # ------------------------------------------------------------------------------------------------------------------
+    # 아이템 빌드 추천
     shoe_items = [3111, 3117, 3009, 3047, 3006, 3158, 3020]
     accessories_lst = [3364, 3340, 3363, 3330, 3513]
-    result = []
-    ex_data_count = 0
-    for x in tqdm(range(len(raw_data))):
-        if len(raw_data.iloc[x]['timeline']) < 30:
+    for x in tqdm(range(len(df))):
+        if len(df.iloc[x]['timeline']) < 30:
             continue
-        participants = raw_data.iloc[x]['matches']['participants']
+        participants = df.iloc[x]['matches']['participants']
         item_end_lst = [[] for _ in range(len(participants))]
 
         for player in range(len(participants)):
@@ -522,7 +561,7 @@ def item_build_data(raw_data):
 
         item_build_lst = [[] for _ in range(len(participants))]
 
-        timeline = raw_data.iloc[x]['timeline']
+        timeline = df.iloc[x]['timeline']
         for minute in timeline:
             events = timeline[minute]['events']
             for event in events:
@@ -548,80 +587,31 @@ def item_build_data(raw_data):
                 modified_lst.append(modified_sublist)
 
         for lst in modified_lst:
-            result.append(lst)
-            ex_data_count += 1
-
-    print(f'표본수 : {ex_data_count}개')
-    columns = ['championId', 'teamPosition', 'win', 'itemBuild']
-
-    item_build_df = pd.DataFrame(result, columns=columns)
-    item_build_df['win'] = item_build_df['win'].astype(int)
-
-    top_item_builds = item_build_df.groupby(['championId', 'teamPosition', 'itemBuild']).size().reset_index(
-        name='pickCount')
-    top_item_builds = top_item_builds.sort_values(['championId', 'teamPosition', 'pickCount'],
-                                                  ascending=[True, True, False])
-    top_5_item_builds = top_item_builds.groupby(['championId', 'teamPosition']).head(5)  # 추천 수 설정
-    wins_with_skill_build = item_build_df[item_build_df['win'] == 1].groupby(
-        ['championId', 'teamPosition', 'itemBuild']).size().reset_index(name='winCount')
-    top_5_item_builds = pd.merge(top_5_item_builds, wins_with_skill_build,
-                                 on=['championId', 'teamPosition', 'itemBuild'], how='left')
-    top_5_item_builds['winCount'] = top_5_item_builds['winCount'].fillna(0)
-
-    total_games_per_champion = item_build_df.groupby(['championId', 'teamPosition']).size().reset_index(
-        name='totalGames')
-    top_5_item_builds = pd.merge(top_5_item_builds, total_games_per_champion, on=['championId', 'teamPosition'])
-
-    top_5_item_builds['pickRate'] = round((top_5_item_builds['pickCount'] / top_5_item_builds['totalGames']) * 100, 2)
-    top_5_item_builds['winRate'] = round((top_5_item_builds['winCount'] / top_5_item_builds['pickCount']) * 100, 2)
-    top_5_item_builds['winCount'] = top_5_item_builds['winCount'].astype(int)
-
-    return top_5_item_builds
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-# 라인 데이터
-def lane_data(df):
-    result = []
+            item_build_list.append(lst)
+    # ------------------------------------------------------------------------------------------------------------------
+    # 라인 데이터
     for x in tqdm(range(len(df))):
         summoner = df.iloc[x]['matches']['participants']
         for player in range(len(summoner)):
             championId = summoner[player]['championId']
             teamPosition = summoner[player]['teamPosition']
             win = summoner[player]['win']
-            result.append([championId, teamPosition, win])
-
-    columns = ['championId', 'teamPosition', 'win']
-    df = pd.DataFrame(result, columns=columns)
-    df['win'] = df['win'].astype(int)
-
-    champion_pick_counts = df.groupby('championId').size().reset_index(name='championPickCount')
-    lane_groupBy = df.groupby(['championId', 'teamPosition']).agg({'win': ['sum', 'size']}).reset_index()
-    lane_groupBy.columns = ['championId', 'teamPosition', 'winCount', 'pickCount']
-    lane_groupBy = lane_groupBy.merge(champion_pick_counts, on='championId')
-    lane_groupBy['pickRate'] = round((lane_groupBy['pickCount'] / lane_groupBy['championPickCount']) * 100, 2)
-    lane_groupBy['winRate'] = round((lane_groupBy['winCount'] / lane_groupBy['pickCount']) * 100, 2)
-    lane_groupBy = lane_groupBy[lane_groupBy['pickRate'] > 5]
-    lane_groupBy.dropna(inplace=True)
-    lane_groupBy.reset_index(drop=True, inplace=True)
-    result_df = lane_groupBy[['championId', 'teamPosition', 'pickCount', 'winCount', 'pickRate', 'winRate']]
-    return result_df
-
-
+            lane_list.append([championId, teamPosition, win])
+print("데이터 정제 완료")
 # ----------------------------------------------------------------------------------------------------------------------
-rune_data = rune_data(df)
-item_df = item_df(df)
+rune_data = rune_data(rune_list)
+item_df = item_df(item_list)
 shoes_data = shoes_data(item_df)
-mythic_item_data = mythic_item_data(df)
-common_item_data = common_item_data(df)
-start_item_data = start_item_data(df)
-accessories_data = accessories_data(df)
-spell_data = spell_data(df)
-skill_build_data = skill_build_data(df)
-item_build_data = item_build_data(df)
-lane_data = lane_data(df)
+mythic_item_data = mythic_item_data(mythic_item_lst)
+common_item_data = common_item_data(common_itmem_list)
+start_item_data = start_item_data(start_item_list)
+accessories_data = accessories_data(accessories_list);
+spell_data = spell_data(spell_list)
+skill_build_data = skill_build_data(skill_build_list)
+item_build_data = item_build_data(item_build_list)
+lane_data = lane_data(lane_list)
 
-
+print("데이터프레임 제작 완료")
 # ----------------------------------------------------------------------------------------------------------------------
 def insert_rune_data(x, conn):
     query = (
@@ -783,134 +773,114 @@ def truncate_table(table_name, conn):
     return
 # ----------------------------------------------------------------------------------------------------------------------
 
+print("테이블 TRUNCATING 시작")
 conn = mu.connect_mysql()
-while True:
-    # ----------------------------------------------------------------------------------------------------
-    start_time = time.time()
-    df = dl.match_raw_patch(50000)
-    print("JSON 변환 시작")
-    df['matches'] = df['matches'].apply(json.loads)
-    df['timeline'] = df['timeline'].apply(json.loads)
-    end_time = time.time()
-    print("변환 시간: {:.2f}초".format(end_time - start_time))
-    print("JSON 변환 종료")
-    # ----------------------------------------------------------------------------------------------------
-    rune_data = rune_data(df)
-    item_df = item_df(df)
-    shoes_data = shoes_data(item_df)
-    mythic_item_data = mythic_item_data(df)
-    common_item_data = common_item_data(df)
-    start_item_data = start_item_data(df)
-    accessories_data = accessories_data(df)
-    spell_data = spell_data(df)
-    skill_build_data = skill_build_data(df)
-    item_build_data = item_build_data(df)
-    lane_data = lane_data(df)
-    # ----------------------------------------------------------------------------------------------------
-    print("테이블 TRUNCATING 시작")
-    conn = mu.connect_mysql()
-    try:
-        truncate_table('champion_rune', conn)
-    except Exception as e:
-        print(f"Error occurred during truncating champion_rune table: {e}")
-    try:
-        truncate_table('champion_shoes', conn)
-    except Exception as e:
-        print(f"Error occurred during truncating champion_shoes table: {e}")
-    try:
-        truncate_table('champion_mythic_item', conn)
-    except Exception as e:
-        print(f"Error occurred during truncating champion_mythic_item table: {e}")
-    try:
-        truncate_table('champion_recom_item', conn)
-    except Exception as e:
-        print(f"Error occurred during truncating champion_recom_item table: {e}")
-    try:
-        truncate_table('champion_start_item', conn)
-    except Exception as e:
-        print(f"Error occurred during truncating champion_start_item table: {e}")
-    try:
-        truncate_table('champion_accessories', conn)
-    except Exception as e:
-        print(f"Error occurred during truncating champion_accessories table: {e}")
-    try:
-        truncate_table('champion_spell', conn)
-    except Exception as e:
-        print(f"Error occurred during truncating champion_spell table: {e}")
-    try:
-        truncate_table('champion_skill_build', conn)
-    except Exception as e:
-        print(f"Error occurred during truncating champion_skill_build table: {e}")
-    try:
-        truncate_table('champion_item_build', conn)
-    except Exception as e:
-        print(f"Error occurred during truncating champion_item_build table: {e}")
-    try:
-        truncate_table('champion_lane', conn)
-    except Exception as e:
-        print(f"Error occurred during truncating champion_lane table: {e}")
-    conn.close()
-    print("테이블 TRUNCATING 종료")
-    # ----------------------------------------------------------------------------------------------------
-    try:
-        rune_data.progress_apply(lambda x: insert_rune_data(x, conn), axis=1)
-        conn.commit()
-    except Exception as e:
-        print(f"Error occurred during inserting rune data: {e}")
+try:
+    truncate_table('champion_rune', conn)
+except Exception as e:
+    print(f"Error occurred during truncating champion_rune table: {e}")
+try:
+    truncate_table('champion_shoes', conn)
+except Exception as e:
+    print(f"Error occurred during truncating champion_shoes table: {e}")
+try:
+    truncate_table('champion_mythic_item', conn)
+except Exception as e:
+    print(f"Error occurred during truncating champion_mythic_item table: {e}")
+try:
+    truncate_table('champion_recom_item', conn)
+except Exception as e:
+    print(f"Error occurred during truncating champion_recom_item table: {e}")
+try:
+    truncate_table('champion_start_item', conn)
+except Exception as e:
+    print(f"Error occurred during truncating champion_start_item table: {e}")
+try:
+    truncate_table('champion_accessories', conn)
+except Exception as e:
+    print(f"Error occurred during truncating champion_accessories table: {e}")
+try:
+    truncate_table('champion_spell', conn)
+except Exception as e:
+    print(f"Error occurred during truncating champion_spell table: {e}")
+try:
+    truncate_table('champion_skill_build', conn)
+except Exception as e:
+    print(f"Error occurred during truncating champion_skill_build table: {e}")
+try:
+    truncate_table('champion_item_build', conn)
+except Exception as e:
+    print(f"Error occurred during truncating champion_item_build table: {e}")
+try:
+    truncate_table('champion_lane', conn)
+except Exception as e:
+    print(f"Error occurred during truncating champion_lane table: {e}")
+conn.close()
+print("테이블 TRUNCATING 종료")
+# ----------------------------------------------------------------------------------------------------
+print("테이블 INSERT 시작")
+conn = mu.connect_mysql()
+try:
+    rune_data.progress_apply(lambda x: insert_rune_data(x, conn), axis=1)
+    conn.commit()
+except Exception as e:
+    print(f"Error occurred during inserting rune data: {e}")
 
-    try:
-        shoes_data.progress_apply(lambda x: insert_shoes_data(x, conn), axis=1)
-        conn.commit()
-    except Exception as e:
-        print(f"Error occurred during inserting shoes data: {e}")
+try:
+    shoes_data.progress_apply(lambda x: insert_shoes_data(x, conn), axis=1)
+    conn.commit()
+except Exception as e:
+    print(f"Error occurred during inserting shoes data: {e}")
 
-    try:
-        mythic_item_data.progress_apply(lambda x: insert_mythic_item_data(x, conn), axis=1)
-        conn.commit()
-    except Exception as e:
-        print(f"Error occurred during inserting mythic item data: {e}")
+try:
+    mythic_item_data.progress_apply(lambda x: insert_mythic_item_data(x, conn), axis=1)
+    conn.commit()
+except Exception as e:
+    print(f"Error occurred during inserting mythic item data: {e}")
 
-    try:
-        common_item_data.progress_apply(lambda x: insert_common_item_data(x, conn), axis=1)
-        conn.commit()
-    except Exception as e:
-        print(f"Error occurred during inserting common item data: {e}")
+try:
+    common_item_data.progress_apply(lambda x: insert_common_item_data(x, conn), axis=1)
+    conn.commit()
+except Exception as e:
+    print(f"Error occurred during inserting common item data: {e}")
 
-    try:
-        start_item_data.progress_apply(lambda x: insert_start_item_data(x, conn), axis=1)
-        conn.commit()
-    except Exception as e:
-        print(f"Error occurred during inserting start item data: {e}")
+try:
+    start_item_data.progress_apply(lambda x: insert_start_item_data(x, conn), axis=1)
+    conn.commit()
+except Exception as e:
+    print(f"Error occurred during inserting start item data: {e}")
 
-    try:
-        accessories_data.progress_apply(lambda x: insert_accessories_data(x, conn), axis=1)
-        conn.commit()
-    except Exception as e:
-        print(f"Error occurred during inserting accessories data: {e}")
+try:
+    accessories_data.progress_apply(lambda x: insert_accessories_data(x, conn), axis=1)
+    conn.commit()
+except Exception as e:
+    print(f"Error occurred during inserting accessories data: {e}")
 
-    try:
-        spell_data.progress_apply(lambda x: insert_spell_data(x, conn), axis=1)
-        conn.commit()
-    except Exception as e:
-        print(f"Error occurred during inserting spell data: {e}")
+try:
+    spell_data.progress_apply(lambda x: insert_spell_data(x, conn), axis=1)
+    conn.commit()
+except Exception as e:
+    print(f"Error occurred during inserting spell data: {e}")
 
-    try:
-        skill_build_data.progress_apply(lambda x: insert_skill_build_data(x, conn), axis=1)
-        conn.commit()
-    except Exception as e:
-        print(f"Error occurred during inserting skill build data: {e}")
+try:
+    skill_build_data.progress_apply(lambda x: insert_skill_build_data(x, conn), axis=1)
+    conn.commit()
+except Exception as e:
+    print(f"Error occurred during inserting skill build data: {e}")
 
-    try:
-        item_build_data.progress_apply(lambda x: insert_item_build_data(x, conn), axis=1)
-        conn.commit()
-    except Exception as e:
-        print(f"Error occurred during inserting item build data: {e}")
+try:
+    item_build_data.progress_apply(lambda x: insert_item_build_data(x, conn), axis=1)
+    conn.commit()
+except Exception as e:
+    print(f"Error occurred during inserting item build data: {e}")
 
-    try:
-        lane_data.progress_apply(lambda x: insert_lane_data(x, conn), axis=1)
-        conn.commit()
-    except Exception as e:
-        print(f"Error occurred during inserting lane data: {e}")
-    conn.close()
-    # ----------------------------------------------------------------------------------------------------
-    time.sleep(3600)
+try:
+    lane_data.progress_apply(lambda x: insert_lane_data(x, conn), axis=1)
+    conn.commit()
+except Exception as e:
+    print(f"Error occurred during inserting lane data: {e}")
+
+conn.close()
+print("테이블 INSERT 종료")
+# ----------------------------------------------------------------------------------------------------
+
