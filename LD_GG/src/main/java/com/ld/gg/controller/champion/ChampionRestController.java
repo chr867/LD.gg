@@ -9,10 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ld.gg.dto.champ.Champ_analytics;
+import com.ld.gg.dto.champ.Champ_default;
 import com.ld.gg.dto.champ.Champ_match_up_default;
+import com.ld.gg.dto.champ.Champ_recomm_info;
 import com.ld.gg.service.Champion_service;
 
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +27,12 @@ public class ChampionRestController {
 	@Autowired
 	Champion_service cs;
 	
+	@GetMapping("/list.json")
+	public List<Champ_default> get_champion_list() throws Exception{
+		List<Champ_default> champ_list = cs.get_champ_list();
+		return champ_list;
+	}
+
 	@PostMapping("/rank.json")
 	public List<Champ_analytics> get_champion_rank(String lane, String tier) throws Exception{
 		List<Champ_analytics> champ_rank = cs.champ_rank(lane, tier);
@@ -63,9 +72,21 @@ public class ChampionRestController {
 
 	@PostMapping("/build-recom.json")
 	public Map<String, Object> build_recom(String left_champion, String right_champion) throws Exception{
-
 		Map<String, Object>build_map = cs.build_recom(left_champion, right_champion);
 		return build_map;
 	}
 	
+	
+	@GetMapping("/info/lane")
+	public List<Champ_recomm_info> championLaneData(int champion_id){
+		List<Champ_recomm_info> champLaneData = cs.getChampionLaneData(champion_id);
+		return champLaneData;
+	}
+	
+	@GetMapping("/info/build")
+	public Map<String, Object> championBuildInfo(@RequestParam("champion_id") int champion_id,@RequestParam("team_position") String team_position) throws Exception{
+		Map<String, Object>championBuildInfo = cs.getChampionBuildInfo(champion_id, team_position);
+		return championBuildInfo;
+	}
+
 }

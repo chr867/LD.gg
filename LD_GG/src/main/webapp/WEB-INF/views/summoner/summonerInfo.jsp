@@ -35,51 +35,34 @@
 
 		<div id="champ-stat">
 
-			<div id="champ_rank_filter">
-				<input type="radio" value="랭크 전체" class="rank_filter" id="champ_all">
-				<input type="radio" value="솔로 랭크" class="rank_filter" id="champ_solo">
-				<input type="radio" value="자유 랭크" class="rank_filter" id="champ_flex">
-				<input type="radio"	value="일반" class="rank_filter" id="champ_classic">
-			</div>
+			<div id="champ_rank_filter"></div>
 
 			<div id="champ_position_filter"></div>
 
 			<div class = "flex-champ-div">
 				<header class = "flex-header">챔피언 통계</header>
 				<div class = "flex-category">
-						<div class = "champion_category">
-							<div class = "champ_data">챔피언</div>
-						</div>
-						<div class = "winrate_category">
-							<div class = "winrate_data">승률</div>
-						</div>
-						<div class = "games_category">
-							<div class = "games_data">게임 수</div>
-						</div>
-						<div class = "wins_category">
-							<div class = "wins_data">승리</div>
-						</div>
-						<div class = "losses_category">
-							<div class = "losses_data">패배</div>
-						</div>
-						<div class = "kda_category">
-							<div class = "kda_data">KDA</div>
-						</div>
-						<div class = "kills_category">
-							<div class = "kills_data">킬</div>
-						</div>
-						<div class = "deaths_category">
-							<div class = "deaths_data">데스</div>
-						</div>
-						<div class = "assists_category">
-							<div class = "assists_data">어시스트</div>
-						</div>
-						<div class = "cs_category">
-							<div class = "cs_data">CS</div>
-						</div>
-						<div class = "cs_pm_category">
-							<div class = "cs_pm_data">분당 CS</div>
-						</div>
+						<div class = "champion_category">챔피언</div>
+						
+						<div class = "winrate_category">승률</div>
+						
+						<div class = "games_category">게임 수</div>
+						
+						<div class = "wins_category">승리	</div>
+						
+						<div class = "losses_category">패배</div>
+						
+						<div class = "kda_category">KDA</div>
+						
+						<div class = "kills_category">킬	</div>
+						
+						<div class = "deaths_category">데스</div>
+						
+						<div class = "assists_category">어시스트</div>
+						
+						<div class = "cs_category">CS</div>
+						
+						<div class = "cs_pm_category">분당 CS	</div>
 				</div>
 			</div>
 			
@@ -87,103 +70,140 @@
 
 		</div>
 
-		<div>
 			<div id="match_history">
 				<span id="history">매치 히스토리</span>
 			</div>
 			<!-- 전적 정보 필터 -->
 
 			<div id="record_filter">
-				<button type="button" id="all_game_filter">전체</button>
-				<button type="button" id="solo_filter">솔로 랭크</button>
-				<button type="button" id="flex_filter">자유 랭크</button>
-				<button type="button" id="classic_filter">일반</button>
+				<button type="button" class = "record-filter-btn" value = "all">전체</button>
+				<button type="button" class = "record-filter-btn" value = "solo">솔로 랭크</button>
+				<button type="button" class = "record-filter-btn" value = "flex">자유 랭크</button>
+				<button type="button" class = "record-filter-btn" value = "classic">일반</button>
 			</div>
 
-			<div>
-				<header>
+			<div class = "flex-summary-table">
+				<header class = "flex-summary-header">
 					<span>최근 20게임 전적 요약</span>
 				</header>
-				
-				<div>
-					<div>
-						<div class = "header_category">승률</div>
-						<div class = "winrate_div"></div>
-					</div>
-					<div>
-						<div class = "header_category">평점</div>
-						<div class = "grade_div"></div>
-					</div>
-					<div>
-						<div class = "header_category">최고평점</div>
-						<div class = "best_grade_div"></div>
-					</div>
-					<div>
-						<div class = "header_category">포지션별 픽률</div>
-						<div class = "position_pickrate_div"></div>
-					</div>
-					<div>
-						<div class = "header_category">자주 플레이한 챔피언</div>
-						<div class = "most_play_champ_div"></div>
-					</div>
-					
-					<div id = "recent_20games">
-					
-					</div>
-					
-				</div>
-				
 			</div>
-
-			<div id="record">
-
+			
+			<div class = "flex-summary-category">
+				
+				<div class = "header-winrate-category">승률</div>
+				
+				<div class = "header-kda-category">평점</div>
+				
+				<div class = "header-KDA-category">최고평점</div>
+				
+				<div class = "header-lane-category">포지션별 픽률</div>
+				
+				<div class = "header-mostChamp-category">자주 플레이한 챔피언</div>
+					
 			</div>
-			<!-- 전적 정보 테이블 -->
+			
+			<div id = "recent_20games"></div>
+
+			<div id="record"></div><!-- 소환사 전적 -->
 
 		</div>
-		<!-- 소환사 전적 -->
-	</div>
 	<!-- 전체 -->
 
  	<script type="text/javascript">
-	/* $('#renewal').click(function(){
-		$.ajax({//전적 정보 전체 갱신
-			method : 'post',
-			url : '/summoner/renewal',
-			data : {summoner_name : '${summoner.summoner_name}'}
-		}).done(res=>{
-			console.log(res)
-		}).fail(err=>{
-			console.log(err)
-		})
-	}) */
+ 	let Sessiontier = '${summoner.tier}';
+ 	let tier = "";
+	if(Sessiontier === 'challenger'){
+		tier = "Challenger";
+	}else if('${summonmer.tier}' === 'grandmaster'){
+		tier = "Grandmaster"
+	}else if('${summonmer.tier}' === 'master'){
+		tier = "Master"
+	}else if('${summonmer.tier}' === 'platinum'){
+		tier = "Plat"
+	}else if('${summonmer.tier}' === 'gold'){
+		tier = "Gold"
+	}else if('${summonmer.tier}' === 'silver'){
+		tier = "Silver"
+	}else if('${summonmer.tier}' === 'bronze'){
+		tier = "Bronze"
+	}
 	
-/* 	$.ajax({//소환사의 챔피언 통계 필터 버튼 생성(포지션별 픽률 높은 순으로 생성)
+	$('#renewal').click(function(){
+		location.reload();
+	})
+	
+ 	$.ajax({//소환사의 챔피언 통계 필터 버튼 생성(포지션별 픽률 높은 순으로 생성)
 		method : 'get',
 		url : '/summoner/get_champ_position_filter',
 		data : {summoner_name : '${summoner.summoner_name}'}
 	}).done(res=>{
-		console.log(res)
-		let filter_div = $('<div class = "filter_div"></div>');
-		let all = $('<div><strong class = "all">전체</strong></div>');
-		filter_div.append(all);
-		$.each(res, function(i, position){
-			let position_img = $('<div class = "position_div"><img class = "position_img" src = "https://ditoday.com/wp-content/uploads/2022/02/'+position+'.png"></div>');
-			filter_div.append(position_img);
+		console.log(res);
+		let lane1 = "";
+		let lane2 = "";
+		let lane3 = "";
+		let filterBtnDiv = $('<div class = "filterBtnDiv"></div>');
+		let filterBtnAll = $('<button class = "champRecrodFilterBtn" type = "button" value = "all-btn">전체</button>');
+		filterBtnDiv.append(filterBtnAll);
+		$.each(res, function(i, res){
+			if(res.lane1 != null){
+				if(res.lane1 === 'top'){
+					lane1 = "Top";
+				}else if(res.lane1 === 'middle'){
+					lane1 = "Mid";
+				}else if(res.lane1 === 'jungle'){
+					lane1 = "Jungle";
+				}else if(res.lane1 === 'bottom'){
+					lane1 = "Bot";
+				}else if(res.lane1 === 'utility'){
+					lane1 = 'Support';
+				}
+				let filterBtn1 = $('<button class = "champRecordFilterBtn" type = "button" value = "'+res.lane1+'"><img class = "flex-'+res.lane1+'" src = "/resources/img/ranked-positions/Position_'+tier+'-'+lane1+'.png"></button>');
+				filterBtnDiv.append(filterBtn1);
+			}
+			if(res.lane2 != null){
+				if(res.lane2 === 'top'){
+					lane2 = "Top";
+				}else if(res.lane2 === 'middle'){
+					lane2 = "Mid";
+				}else if(res.lane2 === 'jungle'){
+					lane2 = "Jungle";
+				}else if(res.lane2 === 'bottom'){
+					lane2 = "Bot";
+				}else if(res.lane2 === 'utility'){
+					lane2 = 'Support';
+				}
+				let filterBtn2 = $('<button class = "champRecordFilterBtn" type = "button" value = "'+res.lane2+'"><img class = "flex-'+res.lane2+'" src = "/resources/img/ranked-positions/Position_'+tier+'-'+lane2+'.png"></button>');
+				filterBtnDiv.append(filterBtn2);
+			}
+			if(res.lane3 != null){
+				if(res.lane3 === 'top'){
+					lane3 = "Top";
+				}else if(res.lane3 === 'middle'){
+					lane3 = "Mid";
+				}else if(res.lane3 === 'jungle'){
+					lane3 = "Jungle";
+				}else if(res.lane3 === 'bottom'){
+					lane3 = "Bot";
+				}else if(res.lane3 === 'utility'){
+					lane3 = 'Support';
+				}
+				let filterBtn3 = $('<button class = "champRecordFilterBtn" type = "button" value = "'+res.lane3+'"><img class = "flex-'+res.lane3+'" src = "/resources/img/ranked-positions/Position_'+tier+'-'+lane3+'.png"></button>');
+				filterBtnDiv.append(filterBtn3);
+			}
 		})
+	$('#champ_position_filter').html(filterBtnDiv);
 	}).fail(err=>{
-		console.log(err)
-	}) */
+		console.log(err);
+	})
 	
 	$.ajax({//소환사의 챔피언 통계
 		method: 'get',
 		url: '/summoner/get_champ_record',
 		data: { summoner_name: '${summoner.summoner_name}' }
 	}).done(res => {
-		console.log(res);
 		let champ_div = $('<div class = "flex-champ"></div>');
 		let winrate_div = $('<div class = "flex-champ-winrate"></div>');
-		let games_div = $('<div class = "flex-chamnp-games"></div>');
+		let games_div = $('<div class = "flex-champ-games"></div>');
 		let wins_div = $('<div class = "flex-champ-wins"></div>');
 		let losses_div = $('<div class = "flex-champ-losses"></div>');
 		let kda_div = $('<div class = "flex-champ-kda"></div>');
@@ -193,25 +213,25 @@
 		let cs_div = $('<div class = "flex-champ-cs"></div>');
 		let cs_pm_div = $('<div class = "flex-champ-cs-pm"></div>');
 		$.each(res, function (i, champ) {
-			console.log(i, champ.champ_name);
-			let champ_img = $('<img class = "flex-champ-img" alt="#" src="https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+champ.champ_name+'.png"><span class = "flex-champ-name">' + champ.champ_name + '</span>');
-			//let champ_name_text = $('<span class = "flex-champ-name">' + champ.champ_name + '</span>');
-			champ_div.append(champ_img);
+			let champ_box = $('<div class = "champ-div"></div>')
+			let champ_img = $('<img class = "champ-img" alt="#" src="/resources/img/champion_img/square/'+champ.champ_name+'.png"><span class = "champ-name">' + champ.champ_name + '</span>');
+			champ_box.append(champ_img);
+			champ_div.append(champ_box);
 		});
 		$.each(res, function (i, winrate) {
 			let winrate_text = $('<strong class = "champ-winrate">' + winrate.winrate + '%</strong>');
 			winrate_div.append(winrate_text);
 		});
 		$.each(res, function (i, games) {
-			let games_text = $('<p class = "champ-games">' + games.games + '</p>');
+			let games_text = $('<span class = "champ-games">' + games.games + '</span>');
 			games_div.append(games_text);
 		});
 		$.each(res, function (i, wins) {
 			let win_text = $('<span class = "champ-wins">' + wins.wins + '</span>');
 			wins_div.append(win_text);
 		});
-		$.each(res.losses, function (i, losses) {
-			let losses_text = $('<span class = "champ-losses">' + losses + '</span>');
+		$.each(res, function (i, losses) {
+			let losses_text = $('<span class = "champ-losses">' + losses.losses + '</span>');
 			losses_div.append(losses_text);
 		});
 		$.each(res, function (i, kda) {
@@ -235,7 +255,7 @@
 			cs_div.append(cs_text);
 		});
 		$.each(res, function (i, cs_pm) {
-			let cs_pm_text = $('<span class = "champ-cs-pm">' + cs_pm.cs_pm + '<span>');
+			let cs_pm_text = $('<span class = "champ-cs-pm">' + cs_pm.cs_per_minute + '<span>');
 			cs_pm_div.append(cs_pm_text);
 		});
 		let champRecordDiv = $('<div class = "flex-champ-table"></div>');
@@ -246,62 +266,149 @@
 	});
 
 	
- 	/* $.ajax({//최근 20전적 요약본
+ 	 $.ajax({//최근 20전적 요약본
 		method : 'get',
 		url : '/summoner/get_20games_summary',
 		data : {summoner_name : '${summoner.summoner_name}'}
 	}).done(res=>{
-		console.log(res)
-		$.each(res, function (i,record){
-			let winrate_strong = $('<strong>'+record.winrate+'%</strong>');//승률
-			let win_data_span = $('<span>'+record.wins+'승 '+record.losses+'패</span>');//승리,패뱃 수 데이터
-			$('.winrate_div').html(winrate_strong,win_data_span);
+		console.log(res);
+		let champDataDiv = $('<div class = "champDataDiv"></div>');
+		let kdaAvgDiv = $('<div class = "kdaAvgDiv"></div>');
+		let bestKdaDiv = $('<div class = "bestKdaDiv"></div>');
+		let positionDIV = $('<div class = "positionDiv"></div>');
+		let champ1 = $('<div class = "mostChamp"></div>');
+		let champ2 = $('<div class = "mostChamp"></div>');
+		let champ3 = $('<div class = "mostChamp"></div>');
+		let champ = $('<div class = "mostChampDiv"></div>')
+		
+		$.each(res, function(i, res){
+			let winrate_strong = $('<strong class = "strong-winrate">'+res.winrate+'%</strong><br>');//승률
+			let win_data_span = $('<span class = "span-winrate">' + res.wins+ '승 ' + res.losses + '패</span>');//승리,패뱃 수 데이터
+			champDataDiv.append(winrate_strong, win_data_span);
 			
-			let grade_strong = $('<strong>'+record.kda_grade+'</strong>');//평점(kda의 평균) 데이터
-			let grade_p = $('<p>'+record.wrost_kda+'<span>'+record.medium_kda+'</span>'+record.best_kda+'</p>');//평점(kda > 아마 제일 못한 판 / 중간 치 / 제일 잘한 판의 kda인듯)
-			$('.grade_div').html(grade_strong,grade_p);
+			let kdaAvg = $('<strong class = "strong-kda-avg">'+res.kda_avg+'</strong><br>');//평점(kda의 평균) 데이터
+			let k_d_a_Avg = $('<span class = "span-kda-avg">'+res.kill_avg+'/<span>'+res.deaths_avg+'/</span>'+res.assists_avg+'</span>');//평점(kda > 아마 제일 못한 판 / 중간 치 / 제일 잘한 판의 kda인듯)
+			kdaAvgDiv.append(kdaAvg, k_d_a_Avg);
 			
-			let best_grade_strong = $('<strong>'+record.best_kda+'</strong>');//최고 평점(kda) 데이터
-			let best_grade_p = $('<p>'+record.best_kills+'/<span>'+record.best_deaths+'/</span>'+record.best_assits+'</p>');//최고 평점(kda)
-			$('.best_grade_div').html(best_grade_strong, best_grade_p);
+			let bestKda = $('<strong class = "strong-max-kda">'+res.max_kda+'</strong><br>');//최고 평점(kda) 데이터
+			let bestK_D_A = $('<span class = "span-max-kda">'+res.max_kills+'/<span>'+res.max_deaths+'/</span>'+res.max_assists+'</span>');//최고 평점(kda)
+			bestKdaDiv.append(bestKda, bestK_D_A);
 			
-			let position_pickrate_div = $('<div></div>');
-			$.each(record.position, function(j,position){
-				let position_pickrate_img = $('<img src = "https://ditoday.com/wp-content/uploads/2022/02/'+position+'.png" alt = "#">');
+			
+			if(res.most_lane1 != null){
+				if(res.most_lane1 === 'top'){
+					let position_div = $('<div class = "position_div"></div>');
+					let positionImg1 = $('<img src = "/resources/img/ranked-positions/Position_'+tier+'-Top.png" alt = "#">');
+					let positionPick1 = $('<p>'+res.most_lane_pickrate1+'%</p>');
+					position_div.append(positionImg1, positionPick1);
+					positionDIV.append(position_div);
+				}
+				if(res.most_lane1 === 'jungle'){
+					let position_div = $('<div class = "position_div"></div>');
+					let positionImg1 = $('<img src = "/resources/img/ranked-positions/Position_'+tier+'-Jungle.png" alt = "#">');
+					let positionPick1 = $('<p>'+res.most_lane_pickrate1+'%</p>');
+					position_div.append(positionImg1, positionPick1);
+					positionDIV.append(position_div);
+				}
+				if(res.most_lane1 === 'middle'){
+					let position_div = $('<div class = "position_div"></div>');
+					let positionImg1 = $('<img src = "/resources/img/ranked-positions/Position_'+tier+'-Mid.png" alt = "#">');
+					let positionPick1 = $('<p>'+res.most_lane_pickrate1+'%</p>');
+					position_div.append(positionImg1, positionPick1);
+					positionDIV.append(position_div);
+				}
+				if(res.most_lane1 === 'bottom'){
+					let position_div = $('<div class = "position_div"></div>');
+					let positionImg1 = $('<img src = "/resources/img/ranked-positions/Position_'+tier+'-Bot.png" alt = "#">');
+					let positionPick1 = $('<p>'+res.most_lane_pickrate1+'%</p>');
+					position_div.append(positionImg1, positionPick1);
+					positionDIV.append(position_div);
+				}
+				if(res.most_lane1 === 'utility'){
+					let position_div = $('<div class = "position_div"></div>');
+					let positionImg1 = $('<img src = "/resources/img/ranked-positions/Position_'+tier+'-Support.png" alt = "#">');
+					let positionPick1 = $('<p>'+res.most_lane_pickrate1+'%</p>');
+					position_div.append(positionImg1, positionPick1);
+					positionDIV.append(position_div);
+				}
+			}
 				
-				$.each(record.position_pickrate, function(k,pickrate){
-					let position_pickrate = $('<p>'+pickrate+'%</p>');
-					position_pickrate_div.append(position_pickrate_img, position_pickrate);
-				})
-				
-			})
-			$('.position_pickrate_div').html(position_pickrate_div);
+			if(res.most_lane2 != null){
+				if(res.most_lane2 === 'top'){
+					let position_div = $('<div class = "position_div"></div>');
+					let positionImg2 = $('<img src = "/resources/img/ranked-positions/Position_'+tier+'-Top.png" alt = "#">');
+					let positionPick2 = $('<p>'+res.most_lane_pickrate2+'%</p>');
+					position_div.append(positionImg2, positionPick2);
+					positionDIV.append(position_div);
+				}
+				if(res.most_lane2 === 'jungle'){
+					let position_div = $('<div class = "position_div"></div>');
+					let positionImg2 = $('<img src = "/resources/img/ranked-positions/Position_'+tier+'-Jungle.png" alt = "#">');
+					let positionPick2 = $('<p>'+res.most_lane_pickrate2+'%</p>');
+					position_div.append(positionImg2, positionPick2);
+					positionDIV.append(position_div);
+				}
+				if(res.most_lane2 === 'middle'){
+					let position_div = $('<div class = "position_div"></div>');
+					let positionImg2 = $('<img src = "/resources/img/ranked-positions/Position_'+tier+'-Mid.png" alt = "#">');
+					let positionPick2 = $('<p>'+res.most_lane_pickrate2+'%</p>');
+					position_div.append(positionImg2, positionPick2);
+					positionDIV.append(position_div);
+				}
+				if(res.most_lane2 === 'bottom'){
+					let position_div = $('<div class = "position_div"></div>');
+					let positionImg2 = $('<img src = "/resources/img/ranked-positions/Position_'+tier+'-Bot.png" alt = "#">');
+					let positionPick2 = $('<p>'+res.most_lane_pickrate2+'%</p>');
+					position_div.append(positionImg2, positionPick2);
+					positionDIV.append(position_div);
+				}
+				if(res.most_lane2 === 'utility'){
+					let position_div = $('<div class = "position_div"></div>');
+					let positionImg2 = $('<img src = "/resources/img/ranked-positions/Position_'+tier+'-Support.png" alt = "#">');
+					let positionPick2 = $('<p>'+res.most_lane_pickrate2+'%</p>');
+					position_div.append(positionImg2, positionPick2);
+					positionDIV.append(position_div);
+				}
+			}
 			
-			let div = $('<div></div>');
-			$.each(record.champ, function (k, champ){
-				let champ_div = $('<div></div>');
-				let champ_img = $('<div role = "img" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+champ.champ_name+'.png")"></div>');
-				$.each(record.champ_winrate, function(p, winrate){
-					let champ_winrate = $('<p>'+winrate+'%</p>');
-					$.each(record.champ_win, function(w, win){
-						let champ_win = $('<span>'+win+'승</span>');
-						$.each(record.champ_lose, function(l, lose){
-							let champ_lose = $('<span>'+lose+'패</span>');
-							champ_winrate.append(champ_win,champ_lose);
-							champ_div.append(champ_img,champ_winrate);
-						})
-					})
-				})
-				div.append(champ_div);
-			})
-			$('.most_champ_play_div').html(div);
-			
+			if(res.top_champ1 != null){
+				let champ_img1 = $('<img class = "flex-top-champ-img" src = "/resources/img/champion_img/square/'+res.top_champ1+'.png"/>');
+				let champ_winrate1 = $('<p>'+res.top_champ1_winrate+'%</p>');
+				let champ_win1 = $('<span>'+res.top_champ1_wins+'승</span>');
+				let champ_lose1 = $('<span>'+res.top_champ1_losses+'패</span>');
+				champ_winrate1.append(champ_win1,champ_lose1);
+				champ1.append(champ_img1,champ_winrate1);
+				champ.append(champ1);
+			}
+
+			if(res.top_champ2 != null){
+				let champ_img2 = $('<img class = "flex-top-champ-img" src = "/resources/img/champion_img/square/'+res.top_champ2+'.png"/>');
+				let champ_winrate2 = $('<p>'+res.top_champ2_winrate+'%</p>');
+				let champ_win2 = $('<span>'+res.top_champ2_wins+'승</span>');
+				let champ_lose2 = $('<span>'+res.top_champ2_losses+'패</span>');
+				champ_winrate2.append(champ_win2,champ_lose2);
+				champ2.append(champ_img2,champ_winrate2);	
+				champ.append(champ2);
+			}
+		
+			if(res.top_champ3 != null){
+				let champ_img3 = $('<img class = "flex-top-champ-img" src = "/resources/img/champion_img/square/'+res.top_champ3+'.png"/>');
+				let champ_winrate3 = $('<p>'+res.top_champ3_winrate+'%</p>');
+				let champ_win3 = $('<span>'+res.top_champ3_wins+'승</span>');
+				let champ_lose3 = $('<span>'+res.top_champ3_losses+'패</span>');
+				champ_winrate3.append(champ_win3,champ_lose3);
+				champ3.append(champ_img3,champ_winrate3);	
+				champ.append(champ3);
+			}
 		})
+		let div = $('<div class = "flex-summary-div0"></div>');
+		div.append(champDataDiv, kdaAvgDiv, bestKdaDiv, positionDIV, champ);
+		$('#recent_20games').html(div);
 	}).fail(err=>{
 		console.log(err)
-	}); */
+	});
 	
-	/* $.ajax({//전적 정보 가져오기
+	$.ajax({//전적 정보 가져오기
 		method : 'get',
 		url : '/summoner/get_summoner_record',
 		data : {summoner_name : '${summoner.summoner_name}'}
@@ -444,7 +551,7 @@
 		$('#record').html(div);
 	}).fail(err=>{
 		console.log(err)
-	}); */
+	});
 	
 	/* function info(match_id){
 		getRecordDetail(match_id);

@@ -465,7 +465,7 @@ body {
 				<form id=champ_search>
 			 	<input id='champion_name_input' type="text" name="champion_kr_name" placeholder="내 챔피언 검색">
 				</form>
-				<img id="my_champion_img" src="/resources/img/img/champion_img/tiles/0.png">
+				<img id="my_champion_img" alt="#" src="/resources/img/img/champion_img/tiles/0.png">
 			</div>
 			<div id="build_recom_box">
 				<span></span>
@@ -506,7 +506,7 @@ body {
 				<form id=right_champ_search>
 				 	<input id='right_champ_name_input' type="text" name="champion_kr_name" placeholder="상대 챔피언 검색">
 				</form>
-				<img id="right_champion_img" src="/resources/img/img/champion_img/tiles/0.png">
+				<img id="right_champion_img" alt="#" src="/resources/img/img/champion_img/tiles/0.png">
 				<span></span>
 			</div>
 		</div>
