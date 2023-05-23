@@ -413,7 +413,18 @@
 		url : '/summoner/get_summoner_record',
 		data : {summoner_name : '${summoner.summoner_name}'}
 	}).done(res=>{
-		console.log(res)
+		console.log(res);
+		
+		$.ajax({
+			method : 'get',
+			url : '/summoner/getMachUpPlayer',
+			data : {summoner_name : '${summoner.summoner_name}' , match_id : 'res.match_id'}
+		}).done(result=>{
+			console.log(result);
+		}).fail(error=>{
+			console.log(error);
+		})
+		
 		let div = $('<div></div>');
 		$.each(res, function (i, record){
 			let record_div = $('<div class = "record_div"></div>');	//전적 정보가 담길 div
