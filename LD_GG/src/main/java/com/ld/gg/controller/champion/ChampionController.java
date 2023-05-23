@@ -12,8 +12,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ld.gg.dto.TipDto;
 import com.ld.gg.dto.champ.Champ_analytics;
+import com.ld.gg.dto.champ.Champ_info;
 import com.ld.gg.dto.champ.Champ_match_up_default;
+import com.ld.gg.dto.champ.Champ_recomm_info;
 import com.ld.gg.service.Champion_service;
 
 import lombok.extern.slf4j.Slf4j;
@@ -32,16 +35,12 @@ public class ChampionController {
 	}
 	
 	@GetMapping("/info")
-	public String go_champion_info(Model model, Integer left_champion) throws Exception{
-		List<Champ_match_up_default> cm_list = cs.champ_match_up(left_champion);
-
-		ObjectMapper mapper = new ObjectMapper();
-		String json = null;
-		json = mapper.writeValueAsString(cm_list);
-		
-		model.addAttribute("cm_list", json);
-		
-		return "/champion/championInfo";
+	public ModelAndView go_champion_info(@RequestParam("champion") int champion_id) throws Exception{
+		Champ_info chamInfo = cs.getChampionInfo(champion_id);
+		ModelAndView mav = new ModelAndView("champion/championInfo");
+		mav.addObject("chamInfo",chamInfo);
+		return mav;
 	}
+	
 	
 }

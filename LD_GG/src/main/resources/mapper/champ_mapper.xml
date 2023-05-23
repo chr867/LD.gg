@@ -85,4 +85,49 @@
 		select * from champion_info
 	</select>
 
+	<select id="getChampionInfo" resultType="champ_info">
+		SELECT * FROM champion_info where champion_id = #{champion_id}
+	</select>
+	
+	<select id="getChampionLaneData" resultType="champ_recomm_info">
+		SELECT * FROM champion_lane WHERE champion_id = #{champion_id}
+		ORDER BY pick_rate DESC;
+	</select>
+	
+	<select id="getChampionRuneData" resultType="champ_recomm_info">
+		SELECT * FROM champion_rune WHERE champion_id = #{champion_id} AND team_position = #{team_position};
+	</select>
+	
+	<select id="getChampionItemData" resultType="champ_recomm_info">
+		SELECT * FROM champion_recom_item WHERE champion_id = #{champion_id} AND team_position = #{team_position};
+	</select>
+	
+	<select id="getChampionMythicItemData" resultType="champ_recomm_info">
+		SELECT * FROM champion_mythic_item WHERE champion_id = #{champion_id} AND team_position = #{team_position};
+	</select>
+	
+	<select id="getChampionItemBuildData" resultType="champ_recomm_info">
+		SELECT * FROM champion_item_build WHERE champion_id = #{champion_id} AND team_position = #{team_position};
+	</select>
+	
+	<select id="getChampionShoesData" resultType="champ_recomm_info">
+		SELECT * FROM champion_shoes WHERE champion_id = #{champion_id} AND team_position = #{team_position};
+	</select>
+
+	<select id="getChampionSpellData" resultType="champ_recomm_info">
+		SELECT * FROM champion_spell WHERE champion_id = #{champion_id} AND team_position = #{team_position};
+	</select>
+	
+	<select id="getChampionSkillBuildData" resultType="champ_recomm_info">
+		SELECT * FROM champion_skill_build WHERE champion_id = #{champion_id} AND team_position = #{team_position};
+	</select>
+	
+	<select id="getChampionAccessoriesData" resultType="champ_recomm_info">
+		SELECT * FROM champion_accessories WHERE champion_id = #{champion_id} AND team_position = #{team_position};
+	</select>
+	
+	<select id="getChampionTierData" resultType="champ_recomm_info">
+		SELECT * FROM champion_tier WHERE champion_id = #{champion_id} AND team_position = #{team_position};
+	</select>
+
 </mapper>

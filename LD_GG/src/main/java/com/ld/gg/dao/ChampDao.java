@@ -6,11 +6,13 @@ import org.apache.ibatis.annotations.Param;
 
 import com.ld.gg.dto.champ.Champ_analytics;
 import com.ld.gg.dto.champ.Champ_default;
+import com.ld.gg.dto.champ.Champ_info;
 import com.ld.gg.dto.champ.Champ_match_up_default;
 import com.ld.gg.dto.champ.Champ_match_up_item;
 import com.ld.gg.dto.champ.Champ_match_up_rune;
 import com.ld.gg.dto.champ.Champ_match_up_skill;
 import com.ld.gg.dto.champ.Champ_match_up_spell;
+import com.ld.gg.dto.champ.Champ_recomm_info;
 
 public interface ChampDao {
 
@@ -36,6 +38,30 @@ public interface ChampDao {
 
 	List<Champ_match_up_skill> build_recom_skill(@Param("left_champion")String left_champion, @Param("right_champion")String right_champion);
 
+
   List<Champ_default> get_champ_list();
+
+	Champ_info getChampionInfo(int champion_id);
+
+	List<Champ_recomm_info> getChampionLaneData(int champion_id);
+
+	List<Champ_recomm_info> getChampionRuneData(@Param("champion_id")int champion_id, @Param("team_position")String team_position);
+
+	List<Champ_recomm_info> getChampionItemData(@Param("champion_id")int champion_id, @Param("team_position")String team_position);
+
+	List<Champ_recomm_info> getChampionMythicItemData(@Param("champion_id")int champion_id, @Param("team_position")String team_position);
+
+	List<Champ_recomm_info> getChampionItemBuildData(@Param("champion_id")int champion_id, @Param("team_position")String team_position);
+
+	List<Champ_recomm_info> getChampionShoesData(@Param("champion_id")int champion_id, @Param("team_position")String team_position);
+
+	List<Champ_recomm_info> getChampionSpellData(@Param("champion_id")int champion_id, @Param("team_position")String team_position);
+
+	List<Champ_recomm_info> getChampionSkillBuildData(@Param("champion_id")int champion_id, @Param("team_position")String team_position);
+
+	List<Champ_recomm_info> getChampionAccessoriesData(@Param("champion_id")int champion_id, @Param("team_position")String team_position);
+	
+	List<Champ_recomm_info> getChampionTierData(@Param("champion_id")int champion_id, @Param("team_position")String team_position);
+
 
 }

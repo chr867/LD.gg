@@ -5,11 +5,15 @@
 <html>
 
 <head>
-	<meta charset="UTF-8">
-	<title>맞춤 멘토</title>
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<style>
-.container {
+<meta charset="UTF-8">
+<title>맞춤 멘토</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<style>
+#container{
+width:800px;
+border-radius: 10px;
+box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+padding-top: 90px;
 }
 		.tag-button.selected {
 			background-color: #2196F3;
@@ -49,33 +53,36 @@
 </head>
 
 <body>
-<div class="container">
-	<h2>맞춤 멘토 페이지 입니다~</h2>
+<div id="container" class="container">
+
 	<form id="customMentorForm" onsubmit="return submitForm()">
-
-		<h4>나에게 딱 맞는 멘토님을 찾기위해</h4>
-		<h4><img src=""><em>목표를 설정해 볼까요?</em></h4>
-		
-		<div class="progress">
-		<progress value="20" max="100"></progress>
-		<em>1</em>/6
-		</div>
-
-		<div class="summoner-wrap">
-			<!---->
-			<h4 class="profile-text1">${member.lol_account} 회원님의 현재 티어는</h4>
-			<div class="lol-tier-info" summonername="${member.lol_account}">
-				<div class="left-side"><img src="https://online.gamecoach.pro/img/lol/emblem-UNRANKED.svg">
-					<!-- 여기에 티어 이미지 -->
-				</div>
-				<div class="right-side">
-					<div class="top">
-						<h4 class="tier-text">UNRANKED</h4><span>0LP</span>
-					</div>
-					<div class="bottom"><span>승률 0%&nbsp;</span><span>(0승 0패)</span></div>
-				</div>
+		<div id="custom-header" class="text-center">
+			<div id="custom-title">
+				<h4>나에게 딱 맞는 멘토님을 찾기위해</h4>
+				<h4><img src=""><em>목표를 설정해 볼까요?</em></h4>
 			</div>
-			<h4 class="profile-text2">입니다.</h4>
+			<div class="progress">
+			  <div class="progress-bar" role="progressbar" aria-label="Basic example" 
+			  style="width:17%" aria-valuenow="17" aria-valuemin="0" aria-valuemax="100">
+			  </div><div><em>1</em>/6</div>
+			</div>
+	
+			<div id="summoner-wrap" class="d-flex align-item-center justify-content-center">
+				<!---->
+				<h4>${member.lol_account} 회원님의 현재 티어는</h4>
+				<div class="d-flex align-item-center justify-content-center" summonername="${member.lol_account}">
+					<div class="col"><img src="https://online.gamecoach.pro/img/lol/emblem-UNRANKED.svg">
+						<!-- 여기에 티어 이미지 -->
+					</div>
+					<div class="col">
+						<div class="d-flex">
+							<h4>UNRANKED</h4><span>0LP</span>
+						</div>
+						<div><span>승률 0%&nbsp;</span><span>(0승 0패)</span></div>
+					</div>
+				</div>
+				<h4 class="profile-text2">입니다.</h4>
+			</div>
 		</div>
 
 		<label for="position_to_learn">배우고 싶은 포지션:</label>
@@ -98,7 +105,7 @@
 			<button type="button" id="support-button" class="btn"><img
 					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_sup_grey.svg"
 					class="position-img">서포터</button>
-		</div><br><br>
+		</div>
 
 		<label for="champion_to_learn">배우고 싶은 챔피언:</label>
 		<input type="text" id="champion_to_learn" name="champion_to_learn"
@@ -128,14 +135,14 @@
 		<label for="target_tier">목표 티어:</label>
 		<input type="text" id="target_tier" name="target_tier" value="${mentor_profile.specialized_champion}"><br><br>
 
-		<div class="goal-tier">
+		<div id="goal-tier">
 			<p>목표 티어는</p>
 			<div class="tier-holder"><img src="https://online.gamecoach.pro/img/lol/emblem-UNRANKED.svg">
 				<p>UNRANKED</p>
 			</div>
 			<p>이상입니다.</p>
 		</div>
-		<div goal-tier-selector="" style="display: none">
+		<div id="goal-tier-selector" class="d-flex align-item-center justify-content-center text-center" style="display: none">
 			<div class="tier">
 				<div class="tier-box">
 					<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-BRONZE.svg"
@@ -249,9 +256,9 @@
 				}
 			});
 
-			$(".goal-tier").click(function () {
-				if ($('div[goal-tier-selector]').css('display') === 'none') {
-					$('div[goal-tier-selector]').css('display', 'block');
+			$("#goal-tier").click(function () {
+				if ($('#goal-tier-selector').css('display') === 'none') {
+					$('#goal-tier-selector').css('display', 'block');
 				}
 			});
 
@@ -261,7 +268,7 @@
 				$(".tier-holder p").text(tier);
 				$(".tier-holder img").attr("src", imgURL);
 				$("#target_tier").val(tier);
-				$('div[goal-tier-selector]').css('display', 'none');
+				$('#goal-tier-selector').css('display', 'none');
 			});
 
 			// 선택한 포지션 값을 저장할 배열

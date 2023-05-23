@@ -380,7 +380,7 @@ padding:24px;
 		});
 		
 		//탑 특화 챔피언
-		if (${mentor_profile.top_specialized_champion} !== null){
+		if ([${mentor_profile.top_specialized_champion}] !== []){
 			let laneChampBox = $("<div>");
 			$("<hr>").prependTo($("#specializedChampion"));
 			laneChampBox.appendTo($("#specializedChampion"));
@@ -392,7 +392,7 @@ padding:24px;
 			let champBox = $("<div>").addClass("row d-flex align-items-start justify-content-start");
 			champBox.appendTo(laneChampBox);
 			let top_specialized_champion = [${mentor_profile.top_specialized_champion}];
-			top_specialized_champion.forEach(function (id) {
+			top_specialized_champion[0].forEach(function (id) {
 			    $.ajax({ //챔피언 id로 이름 가져오기
 			        type: "GET",
 			        url: "/mentor/get-champ-name-by-id?id=" + id,
@@ -413,6 +413,7 @@ padding:24px;
 			            // 오류 처리
 			        }
 			    });
+			    
 			});
 		}
 		
@@ -626,8 +627,8 @@ padding:24px;
 				    		  reviewGrade.append(
 				    				  $("<span>").text(review.grade+"점")
 				    		  )
-				    		  $section.append(reviewBox)
-		    		  $section.appendTo(reviewForMeList)
+				    		  $section.append(reviewBox);
+		    		  $section.appendTo(reviewForMeList);
 			  	        	    },
 			  	        	    error: function(xhr, status, error) {
 			  	        	        console.error(error);
