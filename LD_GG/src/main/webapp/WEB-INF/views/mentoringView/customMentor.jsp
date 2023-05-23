@@ -9,11 +9,15 @@
 <title>맞춤 멘토</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
-#container{
-width:800px;
+#content{
+width: 900px;
 border-radius: 10px;
 box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 padding-top: 90px;
+margin-top:40px;
+}
+#qustions{
+padding: 0 90px;
 }
 		.tag-button.selected {
 			background-color: #2196F3;
@@ -53,181 +57,183 @@ padding-top: 90px;
 </head>
 
 <body>
-<div id="container" class="container">
-
-	<form id="customMentorForm" onsubmit="return submitForm()">
-		<div id="custom-header" class="text-center">
-			<div id="custom-title">
-				<h4>나에게 딱 맞는 멘토님을 찾기위해</h4>
-				<h4><img src=""><em>목표를 설정해 볼까요?</em></h4>
-			</div>
-			<div class="progress">
-			  <div class="progress-bar" role="progressbar" aria-label="Basic example" 
-			  style="width:17%" aria-valuenow="17" aria-valuemin="0" aria-valuemax="100">
-			  </div><div><em>1</em>/6</div>
-			</div>
-	
-			<div id="summoner-wrap" class="d-flex align-item-center justify-content-center">
-				<!---->
-				<h4>${member.lol_account} 회원님의 현재 티어는</h4>
-				<div class="d-flex align-item-center justify-content-center" summonername="${member.lol_account}">
-					<div class="col"><img src="https://online.gamecoach.pro/img/lol/emblem-UNRANKED.svg">
-						<!-- 여기에 티어 이미지 -->
-					</div>
-					<div class="col">
-						<div class="d-flex">
-							<h4>UNRANKED</h4><span>0LP</span>
+<div class="container d-flex align-item-center justify-content-center">
+	<div id="content">
+	 <div id="qustions">
+		<form id="customMentorForm" onsubmit="return submitForm()">
+			<div id="custom-header" class="text-center">
+				<div id="custom-title">
+					<h4>나에게 딱 맞는 멘토님을 찾기위해</h4>
+					<h4><img src="https://online.gamecoach.pro/img/coaching/emoji-star.svg"><strong>목표를 설정해 볼까요?</strong></h4>
+				</div>
+				<div class="progress">
+				  <div class="progress-bar" role="progressbar" aria-label="Basic example" 
+				  style="width:17%" aria-valuenow="17" aria-valuemin="0" aria-valuemax="100">
+				  </div><div><em>1</em>/6</div>
+				</div>
+		
+				<div id="summoner-wrap" class="d-flex align-item-center justify-content-center">
+					<!---->
+					<h4>${member.lol_account} 회원님의 현재 티어는</h4>
+					<div class="d-flex align-item-center justify-content-center" summonername="${member.lol_account}">
+						<div class="col"><img src="https://online.gamecoach.pro/img/lol/emblem-UNRANKED.svg">
+							<!-- 여기에 티어 이미지 -->
 						</div>
-						<div><span>승률 0%&nbsp;</span><span>(0승 0패)</span></div>
+						<div class="col">
+							<div class="d-flex">
+								<h4>UNRANKED</h4><span>0LP</span>
+							</div>
+							<div><span>승률 0%&nbsp;</span><span>(0승 0패)</span></div>
+						</div>
+					</div>
+					<h4 class="profile-text2">입니다.</h4>
+				</div>
+			</div>
+	
+			<label for="position_to_learn">배우고 싶은 포지션:</label>
+			<input type="text" id="position_to_learn" name="position_to_learn"
+				value="${mentor_profile.about_mentor}"><br><br>
+	
+			<div id="position-buttons" class="btn-group" role="group" aria-label="Basic example">
+				<button type="button" id="top-button" class="btn"><img
+						src="https://online.gamecoach.pro/img/icon/lol/ico_lol_top_grey.svg" 
+						class="position-img">탑</button>
+				<button type="button" id="jungle-button" class="btn"><img
+						src="https://online.gamecoach.pro/img/icon/lol/ico_lol_jg_grey.svg" 
+						class="position-img">정글</button>
+				<button type="button" id="mid-button" class="btn"><img
+						src="https://online.gamecoach.pro/img/icon/lol/ico_lol_mid_grey.svg"
+						class="position-img">미드</button>
+				<button type="button" id="bot-button" class="btn"><img
+						src="https://online.gamecoach.pro/img/icon/lol/ico_lol_ad_grey.svg" 
+						class="position-img">바텀</button>
+				<button type="button" id="support-button" class="btn"><img
+						src="https://online.gamecoach.pro/img/icon/lol/ico_lol_sup_grey.svg"
+						class="position-img">서포터</button>
+			</div>
+	
+			<label for="champion_to_learn">배우고 싶은 챔피언:</label>
+			<input type="text" id="champion_to_learn" name="champion_to_learn"
+				value="">
+	
+			<div class="champ-selector-inner">
+				<div class="champ-info"><span><img retry-img="" src="" cdn-img="" class="champ-img">
+						<p class="champ-name">배우고 싶은 챔피언을 선택 해주세요</p>
+					</span></div><img src="https://online.gamecoach.pro/img/icon/icon-arrow-down-grey.svg"
+					class="arrow-icon">
+			</div>
+			<div class="filter-champ-wrap" style="display: none">
+				<div class="filter-title-wrap">
+					<div>
+						<h4 class="filter-text">챔피언</h4>
 					</div>
 				</div>
-				<h4 class="profile-text2">입니다.</h4>
-			</div>
-		</div>
-
-		<label for="position_to_learn">배우고 싶은 포지션:</label>
-		<input type="text" id="position_to_learn" name="position_to_learn"
-			value="${mentor_profile.about_mentor}"><br><br>
-
-		<div id="position-buttons" class="btn-group" role="group" aria-label="Basic example">
-			<button type="button" id="top-button" class="btn"><img
-					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_top_grey.svg" 
-					class="position-img">탑</button>
-			<button type="button" id="jungle-button" class="btn"><img
-					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_jg_grey.svg" 
-					class="position-img">정글</button>
-			<button type="button" id="mid-button" class="btn"><img
-					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_mid_grey.svg"
-					class="position-img">미드</button>
-			<button type="button" id="bot-button" class="btn"><img
-					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_ad_grey.svg" 
-					class="position-img">바텀</button>
-			<button type="button" id="support-button" class="btn"><img
-					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_sup_grey.svg"
-					class="position-img">서포터</button>
-		</div>
-
-		<label for="champion_to_learn">배우고 싶은 챔피언:</label>
-		<input type="text" id="champion_to_learn" name="champion_to_learn"
-			value="${mentor_profile.specialized_position}">
-
-		<div class="champ-selector-inner">
-			<div class="champ-info"><span><img retry-img="" src="" cdn-img="" class="champ-img">
-					<p class="champ-name">배우고 싶은 챔피언을 선택 해주세요</p>
-				</span></div><img src="https://online.gamecoach.pro/img/icon/icon-arrow-down-grey.svg"
-				class="arrow-icon">
-		</div>
-		<div class="filter-champ-wrap" style="display: none">
-			<div class="filter-title-wrap">
-				<div>
-					<h4 class="filter-text">챔피언</h4>
+				<div win-rate-filter-champ="">
+					<span text-input="" class="input-champ-keyword white">
+						<input placeholder="챔피언을 검색하세요" tabindex="0" type="text" class="champ-search">
+					</span>
+					<div class="champ-list">
+					</div>
 				</div>
-			</div>
-			<div win-rate-filter-champ="">
-				<span text-input="" class="input-champ-keyword white">
-					<input placeholder="챔피언을 검색하세요" tabindex="0" type="text" class="champ-search">
-				</span>
-				<div class="champ-list">
-				</div>
-			</div>
-		</div><br><br>
-
-		<label for="target_tier">목표 티어:</label>
-		<input type="text" id="target_tier" name="target_tier" value="${mentor_profile.specialized_champion}"><br><br>
-
-		<div id="goal-tier">
-			<p>목표 티어는</p>
-			<div class="tier-holder"><img src="https://online.gamecoach.pro/img/lol/emblem-UNRANKED.svg">
-				<p>UNRANKED</p>
-			</div>
-			<p>이상입니다.</p>
-		</div>
-		<div id="goal-tier-selector" class="d-flex align-item-center justify-content-center text-center" style="display: none">
-			<div class="tier">
-				<div class="tier-box">
-					<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-BRONZE.svg"
-						style="bottom: -0.5px;">
-				</div>
-				<div class="tier-label">
-					<p id="BRONZE">브론즈</p>
-				</div>
-			</div>
-			<div class="tier">
-				<div class="tier-box">
-					<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-SILVER.svg"
-						style="bottom: 4.5px;">
-				</div>
-				<div class="tier-label">
-					<p id="SILVER">실버</p>
-				</div>
-			</div>
-			<div class="tier">
-				<div class="tier-box">
-					<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-GOLD.svg"
-						style="bottom: 9.5px;">
-				</div>
-				<div class="tier-label">
-					<p id="GOLD">골드</p>
-				</div>
-			</div>
-			<div class="tier">
-				<div class="tier-box">
-					<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-PLATINUM.svg"
-						style="bottom: 14.5px;">
-				</div>
-				<div class="tier-label">
-					<p id="PLATINUM">플래티넘</p>
-				</div>
-			</div>
-			<div class="tier">
-				<div class="tier-box">
-					<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-DIAMOND.svg"
-						style="bottom: 19.5px;">
-				</div>
-				<div class="tier-label">
-					<p id="DIAMOND">다이아몬드</p>
-				</div>
-			</div>
-			<div class="tier">
-				<div class="tier-box">
-					<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-MASTER.svg"
-						style="bottom: 24.5px;">
-				</div>
-				<div class="tier-label">
-					<p id="MASTER">마스터</p>
-				</div>
-			</div>
-			<div class="tier">
-				<div class="tier-box">
-					<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-GRANDMASTER.svg"
-						style="bottom: 29.5px;">
-				</div>
-				<div class="tier-label">
-					<p id="GRANDMASTER">그랜드 마스터</p>
-				</div>
-			</div>
-			<div class="tier">
-				<div class="tier-box">
-					<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-CHALLENGER.svg"
-						style="bottom: 34.5px;">
-				</div>
-				<div class="tier-label">
-					<p id="CHALLENGER">챌린저</p>
-				</div>
-			</div>
-		</div><br><br>
-		<button type="submit">작성</button>
-	</form>
-
-	<div class="tag-table">
+			</div><br><br>
 	
-	</div>
-	<button class="save_tag" onclick="saveMentiTag()">태그 저장</button><br><br>
-
-	<button id="recom-mentor-btn">추천 멘토 찾기</button>
-	<div id="recom_mentor_list">
-	</div>
+			<label for="target_tier">목표 티어:</label>
+			<input type="text" id="target_tier" name="target_tier" value="${mentor_profile.specialized_champion}"><br><br>
 	
+			<div id="goal-tier">
+				<p>목표 티어는</p>
+				<div class="tier-holder"><img src="https://online.gamecoach.pro/img/lol/emblem-UNRANKED.svg">
+					<p>UNRANKED</p>
+				</div>
+				<p>이상입니다.</p>
+			</div>
+			<div id="goal-tier-selector" class="d-flex align-item-center justify-content-center text-center" style="display: none">
+				<div class="tier">
+					<div class="tier-box">
+						<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-BRONZE.svg"
+							style="bottom: -0.5px;">
+					</div>
+					<div class="tier-label">
+						<p id="BRONZE">브론즈</p>
+					</div>
+				</div>
+				<div class="tier">
+					<div class="tier-box">
+						<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-SILVER.svg"
+							style="bottom: 4.5px;">
+					</div>
+					<div class="tier-label">
+						<p id="SILVER">실버</p>
+					</div>
+				</div>
+				<div class="tier">
+					<div class="tier-box">
+						<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-GOLD.svg"
+							style="bottom: 9.5px;">
+					</div>
+					<div class="tier-label">
+						<p id="GOLD">골드</p>
+					</div>
+				</div>
+				<div class="tier">
+					<div class="tier-box">
+						<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-PLATINUM.svg"
+							style="bottom: 14.5px;">
+					</div>
+					<div class="tier-label">
+						<p id="PLATINUM">플래티넘</p>
+					</div>
+				</div>
+				<div class="tier">
+					<div class="tier-box">
+						<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-DIAMOND.svg"
+							style="bottom: 19.5px;">
+					</div>
+					<div class="tier-label">
+						<p id="DIAMOND">다이아몬드</p>
+					</div>
+				</div>
+				<div class="tier">
+					<div class="tier-box">
+						<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-MASTER.svg"
+							style="bottom: 24.5px;">
+					</div>
+					<div class="tier-label">
+						<p id="MASTER">마스터</p>
+					</div>
+				</div>
+				<div class="tier">
+					<div class="tier-box">
+						<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-GRANDMASTER.svg"
+							style="bottom: 29.5px;">
+					</div>
+					<div class="tier-label">
+						<p id="GRANDMASTER">그랜드 마스터</p>
+					</div>
+				</div>
+				<div class="tier">
+					<div class="tier-box">
+						<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-CHALLENGER.svg"
+							style="bottom: 34.5px;">
+					</div>
+					<div class="tier-label">
+						<p id="CHALLENGER">챌린저</p>
+					</div>
+				</div>
+			</div><br><br>
+			<button type="submit">작성</button>
+		</form>
+	
+		<div class="tag-table">
+		
+		</div>
+		<button class="save_tag" onclick="saveMentiTag()">태그 저장</button><br><br>
+	
+		<button id="recom-mentor-btn">추천 멘토 찾기</button>
+		<div id="recom_mentor_list">
+		</div>
+		</div>
+	</div>
 </div><!-- container -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 	<script>

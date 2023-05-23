@@ -19,7 +19,9 @@ import com.ld.gg.dto.mentoringdto.LikeMentorDTO;
 import com.ld.gg.dto.mentoringdto.MentorClassDTO;
 import com.ld.gg.dto.mentoringdto.MentorProfileDTO;
 import com.ld.gg.dto.mentoringdto.TagListDTO;
+import com.ld.gg.dto.summoner.SummonerDto;
 import com.ld.gg.service.MemberService;
+import com.ld.gg.service.SummonerService;
 import com.ld.gg.service.mentoringService.MentorProfileService;
 
 @Controller
@@ -36,6 +38,8 @@ public class MentoringController {
 	private MyMentoringDAO myMtDao;
 	@Autowired
 	private MentorProfileDAO mtpdao;
+	@Autowired
+	private SummonerService summonerService;
 	
 	
 	
@@ -68,9 +72,15 @@ public class MentoringController {
 		HttpSession session = request.getSession();
 		String email = (String) session.getAttribute("email");
 		MemberDto mbdto = mbdao.getMemberInfo(email);
+		String summoner_name = mbdto.getLol_account();
+		SummonerDto sd = summonerService.get_summoner_info(summoner_name);
+		String lowerTier = sd.getTier();
+		String upperTier = lowerTier.toUpperCase();
+		sd.setTier(upperTier);
 		List<TagListDTO> tagdto = mtpService.select_all_tag();
 		return new ModelAndView("mentoringView/customMentor") 
 				.addObject("tag_list", tagdto)
+				.addObject("summoner", sd)
 				.addObject("member", mbdto);
 	}
 	
