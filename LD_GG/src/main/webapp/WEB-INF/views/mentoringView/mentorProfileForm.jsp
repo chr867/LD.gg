@@ -11,12 +11,15 @@
 width:800px;
 }
 .position-buttons button.selected {
-  background-color: yellow;
+  background-color: #ced4da;
   color: black;
+  border: 3px solid #6c757d;
+  font-weight: bold;
 }
 .position-buttons button{
 	width:100px;
 	height:70px;
+	border-radius: 10px;
 }
 .position-buttons{
 margin: 16px 0;
@@ -24,6 +27,7 @@ margin: 16px 0;
 #profile-box{
 padding: 16px;
 margin-top: 30px;
+border-radius: 10px;
 }
 section{
   padding:24px;
@@ -76,7 +80,7 @@ padding: 8px;
 height: 370px;
 margin: 10px 0;
 border: 1px solid #dee2e6;
-border-radius: 5px;
+border-radius: 20px;
 overflow: auto; /* 스크롤바를 추가하기 위해 overflow 속성 설정 */
 }
 #filter-champ-wrap {
@@ -87,10 +91,24 @@ overflow: auto; /* 스크롤바를 추가하기 위해 overflow 속성 설정 */
   background-color: #f8f9fa;
   padding: 24px;
   border-radius: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 }
 #champ-selector-inner{
 margin:18px 0;
+}
+#champ-selected-box{
+padding: 16px;
+border: 3px solid #dee2e6;
+border-radius: 20px;
+}
+
+#champ-selected-box:hover{
+border: 5px solid #adb5bd;
+background-color: #f8f9fa;
+cursor: pointer;
+}
+#champ-search{
+margin-top: 8px;
 }
 
 </style>
@@ -99,7 +117,7 @@ margin:18px 0;
 <body>
 	<div id="container" class="container">
 	
-		<section id="profile-box" class="row border rounded">
+		<section id="profile-box" class="row border">
 			<div class="col-2" id="mentor-img">
 				<img style="width: 128px" class="rounded" src="http://ddragon.leagueoflegends.com/cdn/13.10.1/img/profileicon/${mentor_profile.profile_icon_id}.png">
 			</div>
@@ -195,14 +213,16 @@ margin:18px 0;
 					<h5><strong>&nbspTOP&nbsp</strong></h5>
 					<h5><strong>특화 챔피언</strong></h5>
 				</div>
-			<input type="text" class="form-control" id="top_specializedChampion" name="top_specialized_champion"
-				value="${mentor_profile.top_specialized_champion}">
-			<div id="champ-selector-inner" class="d-flex align-items-center text-center">
+			<%-- <input type="text" class="form-control" id="top_specializedChampion" name="top_specialized_champion"
+				value="${mentor_profile.top_specialized_champion}"> --%>
+			<div id="champ-selector-inner" class="d-flex align-items-center text-center justify-content-start">
+				<div id="champ-selected-box" class="d-flex align-items-center">
 					<div id="champ-info">
 						<img src="" id="champ-icon" class="rounded">
 						<span class="champ-name">특화 챔피언(탑)을 선택 해주세요</span>
 					</div>
-				<img src="https://online.gamecoach.pro/img/icon/icon-arrow-down-grey.svg" class="arrow-icon">
+					<img style="width: 43px" src="/resources/img/icon/arrow-icon-down.png" class="arrow-icon">
+				</div>
 			</div>
 			<div id="filter-champ-wrap" style="display: none">
 				<div id="filter-title-wrap">
@@ -227,14 +247,16 @@ margin:18px 0;
 					<h5><strong>&nbspJUNGLE&nbsp</strong></h5>
 					<h5><strong>특화 챔피언</strong></h5>
 				</div>
-			<input type="text" class="form-control" id="jg_specializedChampion" name="jg_specialized_champion"
-				value="${mentor_profile.jg_specialized_champion}">
-			<div id="champ-selector-inner" class="d-flex align-items-center text-center">
+			<%-- <input type="text" class="form-control" id="jg_specializedChampion" name="jg_specialized_champion"
+				value="${mentor_profile.jg_specialized_champion}"> --%>
+			<div id="champ-selector-inner" class="d-flex align-items-center text-center justify-content-start">
+				<div id="champ-selected-box" class="d-flex align-items-center">
 					<div id="champ-info">
 						<img src="" id="champ-icon" class="rounded">
 						<span class="champ-name">특화 챔피언(정글)을 선택 해주세요</span>
 					</div>
-				<img src="https://online.gamecoach.pro/img/icon/icon-arrow-down-grey.svg" class="arrow-icon">
+					<img style="width: 43px" src="/resources/img/icon/arrow-icon-down.png" class="arrow-icon">
+				</div>
 			</div>
 			<div id="filter-champ-wrap" style="display: none">
 				<div id="filter-title-wrap">
@@ -259,14 +281,16 @@ margin:18px 0;
 					<h5><strong>&nbspMID&nbsp</strong></h5>
 					<h5><strong>특화 챔피언</strong></h5>
 				</div>
-			<input type="text" class="form-control" id="mid_specializedChampion" name="mid_specialized_champion"
-				value="${mentor_profile.mid_specialized_champion}">
-			<div id="champ-selector-inner" class="d-flex align-items-center text-center">
+			<%-- <input type="text" class="form-control" id="mid_specializedChampion" name="mid_specialized_champion"
+				value="${mentor_profile.mid_specialized_champion}"> --%>
+			<div id="champ-selector-inner" class="d-flex align-items-center text-center justify-content-start">
+				<div id="champ-selected-box" class="d-flex align-items-center">
 					<div id="champ-info">
 						<img src="" id="champ-icon" class="rounded">
 						<span class="champ-name">특화 챔피언(미드)을 선택 해주세요</span>
 					</div>
-				<img src="https://online.gamecoach.pro/img/icon/icon-arrow-down-grey.svg" class="arrow-icon">
+					<img style="width: 43px" src="/resources/img/icon/arrow-icon-down.png" class="arrow-icon">
+				</div>
 			</div>
 			<div id="filter-champ-wrap" style="display: none">
 				<div id="filter-title-wrap">
@@ -291,14 +315,16 @@ margin:18px 0;
 					<h5><strong>&nbspBOTTOM&nbsp</strong></h5>
 					<h5><strong>특화 챔피언</strong></h5>
 				</div>
-			<input type="text" class="form-control" id="ad_specializedChampion" name="ad_specialized_champion"
-				value="${mentor_profile.ad_specialized_champion}">
-			<div id="champ-selector-inner" class="d-flex align-items-center text-center">
+			<%-- <input type="text" class="form-control" id="ad_specializedChampion" name="ad_specialized_champion"
+				value="${mentor_profile.ad_specialized_champion}"> --%>
+			<div id="champ-selector-inner" class="d-flex align-items-center text-center justify-content-start">
+				<div id="champ-selected-box" class="d-flex align-items-center">
 					<div id="champ-info">
 						<img src="" id="champ-icon" class="rounded">
-						<span class="champ-name">특화 챔피언(바텀)을 선택 해주세요</span>
+						<span class="champ-name">특화 챔피언(원딜)을 선택 해주세요</span>
 					</div>
-				<img src="https://online.gamecoach.pro/img/icon/icon-arrow-down-grey.svg" class="arrow-icon">
+					<img style="width: 43px" src="/resources/img/icon/arrow-icon-down.png" class="arrow-icon">
+				</div>
 			</div>
 			<div id="filter-champ-wrap" style="display: none">
 				<div id="filter-title-wrap">
@@ -323,14 +349,16 @@ margin:18px 0;
 					<h5><strong>&nbspSUPPORT&nbsp</strong></h5>
 					<h5><strong>특화 챔피언</strong></h5>
 				</div>
-			<input type="text" class="form-control" id="sup_specializedChampion" name="sup_specialized_champion"
-				value="${mentor_profile.sup_specialized_champion}">
-			<div id="champ-selector-inner" class="d-flex align-items-center text-center">
+			<%-- <input type="text" class="form-control" id="sup_specializedChampion" name="sup_specialized_champion"
+				value="${mentor_profile.sup_specialized_champion}"> --%>
+			<div id="champ-selector-inner" class="d-flex align-items-center text-center justify-content-start">
+				<div id="champ-selected-box" class="d-flex align-items-center">
 					<div id="champ-info">
 						<img src="" id="champ-icon" class="rounded">
 						<span class="champ-name">특화 챔피언(서포터)을 선택 해주세요</span>
 					</div>
-				<img src="https://online.gamecoach.pro/img/icon/icon-arrow-down-grey.svg" class="arrow-icon">
+					<img style="width: 43px" src="/resources/img/icon/arrow-icon-down.png" class="arrow-icon">
+				</div>
 			</div>
 			<div id="filter-champ-wrap" style="display: none">
 				<div id="filter-title-wrap">
@@ -458,9 +486,13 @@ margin:18px 0;
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 <script>
 	get_mentor_tags(); //멘토 태그 가져오기
+	laneImgChange();
 	//평균 평점 계산
 	let avg_grade = ${mentor_profile.total_grade/mentor_profile.num_of_reviews};
 	let roundedGrade = avg_grade.toFixed(1);
+	if(roundedGrade == "NaN"){
+		roundedGrade=0;
+	}
 	$('#avg_grade').html('평점: '+roundedGrade);
 	
 	// 선택한 포지션 값을 저장할 배열
@@ -533,8 +565,10 @@ margin:18px 0;
 		    }
 		  });
 		
+		//////////////////////챔피언 검색/////////////////////////////////
 		
-		$("#champ-search").on("input", function() { // 검색창 입력할 때마다 불러오기
+		// 탑 챔피언 검색창 입력할 때마다 불러오기
+		$("#top #champ-search").on("input", function() { 
 			var searchText = $(this).val();
 		      $.ajax({
 		        url: "/mentor/get-champ-name-by-keyword",//키워드로 챔피언 찾기
@@ -543,34 +577,60 @@ margin:18px 0;
 		        	keyword: searchText
 		        },
 		        success: function(data) {
-		          console.log(data);
-		          $("#champ-list").text("");
+		          $("#top #champ-list").text("");
 		          let championList = JSON.parse(data);
 			        championList.forEach(function (champion) {
 			            let imageUrl =
 			                "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +
 			                champion.champion_en_name + ".png?&amp;retry=0";
-			            let champItem = $("<div>").addClass("d-flex align-items-center justify-content-between hover-div").attr("id","champ-item").click(function () {
-			            	if (top_selectedChampions.length >= 3){ //세명 골랐을때 
+			            let champItem = $("<div>").addClass("d-flex align-items-center justify-content-between hover-div")
+			            .attr("id","champ-item").click(function () {
+			            	if(top_selectedChampions == null || top_selectedChampions == ""){
+				                // 새로운 챔피언을 추가
+					                top_selectedChampions.push(champion.champion_id);
+					                
+					                if ($("#top #champ-icon").attr("src")==""){
+					                	$('#top #champ-info').remove();  
+					                	
+					                	let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+							            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+							            let champName = $("<span>").text(champion.champion_kr_name);
+							            championDiv.append(champImg);
+							            championDiv.append(champName);
+							            $("#top .arrow-icon").before(championDiv);
+						                
+						                $("#top_specializedChampion").val(top_selectedChampions);
+						                console.log("탑 챔피언: "+top_selectedChampions);
+					                }else{
+					                	let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+							            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+							            let champName = $("<span>").text(champion.champion_kr_name);
+							            championDiv.append(champImg);
+							            championDiv.append(champName);
+							            $("#top .arrow-icon").before(championDiv);
+							            $("#top_specializedChampion").val(top_selectedChampions);
+							            console.log("탑 챔피언: "+top_selectedChampions);
+					                }
+				                }else if (top_selectedChampions.length >= 3){ //세명 골랐을때 
 			            		// 이미 추가된 챔피언인지 검사
 				                if (top_selectedChampions.includes(champion.champion_id)) {
 				                	let index = top_selectedChampions.indexOf(champion.champion_id);
 				                	top_selectedChampions.splice(index, 1); //클릭한 챔피언 삭제
 				                	console.log("탑 챔피언: "+top_selectedChampions);
 				                	$("#top_specializedChampion").val(top_selectedChampions);
-				                	$('div#champ-info[data="' + champion.champion_id + '"]').remove();
+				                	$('#top #champ-info[data="' + champion.champion_id + '"]').remove();
 				                    return;
 				                }else{
 			            		let delChampId = top_selectedChampions[0];
 			            		top_selectedChampions.shift(); //가장 앞에 있는 챔피언 삭제
-			            		$("#champ-info[data='" + delChampId + "']").remove();
+			            		$("#top #champ-info[data='" + delChampId + "']").remove();
 			            		top_selectedChampions.push(champion.champion_id); //클릭한 챔피언 추가
 			            		let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
 					            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
 					            let champName = $("<span>").text(champion.champion_kr_name);
 					            championDiv.append(champImg);
 					            championDiv.append(champName);
-					            $(".arrow-icon").before(championDiv);
+					            $("#top .arrow-icon").before(championDiv);
 				                $("#top_specializedChampion").val(top_selectedChampions);
 			            		console.log("탑 챔피언: "+top_selectedChampions);
 			            		return;
@@ -583,36 +643,36 @@ margin:18px 0;
 			                		top_selectedChampions.splice(index, 1);
 				                	console.log("탑 챔피언: "+top_selectedChampions);
 				                	$("#top_specializedChampion").val(top_selectedChampions);
-				                	$('div#champ-info[data="' + champion.champion_id + '"]').remove(); 
+				                	$('#top #champ-info[data="' + champion.champion_id + '"]').remove(); 
 			                		console.log('이미지가 비었습니다.');
 			                		let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
 						            let champImg = $("<img>").addClass("rounded").attr("id","champ-icon").attr("src", "");
 						            let champName = $("<span>").text("특화 챔피언(탑)을 선택해주세요");
 						            championDiv.append(champImg);
 						            championDiv.append(champName);
-						            $(".arrow-icon").before(championDiv);
+						            $("#top .arrow-icon").before(championDiv);
 			                		  return;
 			                		}else{
 			                			let index = top_selectedChampions.indexOf(champion.champion_id);
 			                			top_selectedChampions.splice(index, 1);
 					                	console.log("탑 챔피언: "+top_selectedChampions);
 					                	$("#top_specializedChampion").val(top_selectedChampions);
-					                	$('div#champ-info[data="' + champion.champion_id + '"]').remove();
+					                	$('#top #champ-info[data="' + champion.champion_id + '"]').remove();
 					                    return;
 			                		}
 			                }else{
 			                // 새로운 챔피언을 추가
 			                top_selectedChampions.push(champion.champion_id);
 			                
-			                if ($("#champ-icon").attr("src")==""){
-			                	$('#champ-info').remove();  
+			                if ($("#top #champ-icon").attr("src")==""){
+			                	$('#top #champ-info').remove();  
 			                	
 			                	let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
 					            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
 					            let champName = $("<span>").text(champion.champion_kr_name);
 					            championDiv.append(champImg);
 					            championDiv.append(champName);
-					            $(".arrow-icon").before(championDiv);
+					            $("#top .arrow-icon").before(championDiv);
 				                
 				                $("#top_specializedChampion").val(top_selectedChampions);
 				                console.log("탑 챔피언: "+top_selectedChampions);
@@ -622,7 +682,7 @@ margin:18px 0;
 					            let champName = $("<span>").text(champion.champion_kr_name);
 					            championDiv.append(champImg);
 					            championDiv.append(champName);
-					            $(".arrow-icon").before(championDiv);
+					            $("#top .arrow-icon").before(championDiv);
 					            $("#top_specializedChampion").val(top_selectedChampions);
 					            console.log("탑 챔피언: "+top_selectedChampions);
 			                }
@@ -645,7 +705,7 @@ margin:18px 0;
 			            rateWrap.append(pickMeter);
 			            rateWrap.append(pickRate);
 			            champItem.append(rateWrap);
-			            $("#champ-list").append(champItem);
+			            $("#top #champ-list").append(champItem);
 			        });
 			    },
 			    error: function () {
@@ -655,41 +715,637 @@ margin:18px 0;
 		      });
 		  });
 		
+		// 정글 챔피언 검색창 입력할 때마다 불러오기
+		$("#jg #champ-search").on("input", function() { 
+			var searchText = $(this).val();
+		      $.ajax({
+		        url: "/mentor/get-champ-name-by-keyword",//키워드로 챔피언 찾기
+		        type: "GET",
+		        data: {
+		        	keyword: searchText
+		        },
+		        success: function(data) {
+		          $("#jg #champ-list").text("");
+		          let championList = JSON.parse(data);
+			        championList.forEach(function (champion) {
+			            let imageUrl =
+			                "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +
+			                champion.champion_en_name + ".png?&amp;retry=0";
+			            let champItem = $("<div>").addClass("d-flex align-items-center justify-content-between hover-div")
+			            .attr("id","champ-item").click(function () {
+			            	if(jg_selectedChampions == null || jg_selectedChampions == ""){
+				                // 새로운 챔피언을 추가
+					                jg_selectedChampions.push(champion.champion_id);
+					                
+					                if ($("#jg #champ-icon").attr("src")==""){
+					                	$('#jg #champ-info').remove();  
+					                	
+					                	let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+							            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+							            let champName = $("<span>").text(champion.champion_kr_name);
+							            championDiv.append(champImg);
+							            championDiv.append(champName);
+							            $("#jg .arrow-icon").before(championDiv);
+						                
+						                $("#jg_specializedChampion").val(jg_selectedChampions);
+						                console.log("정글 챔피언: "+jg_selectedChampions);
+					                }else{
+					                	let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+							            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+							            let champName = $("<span>").text(champion.champion_kr_name);
+							            championDiv.append(champImg);
+							            championDiv.append(champName);
+							            $("#jg .arrow-icon").before(championDiv);
+							            $("#jg_specializedChampion").val(jg_selectedChampions);
+							            console.log("정글 챔피언: "+jg_selectedChampions);
+					                }
+				                }else if (jg_selectedChampions.length >= 3){ //세명 골랐을때 
+			            		// 이미 추가된 챔피언인지 검사
+				                if (jg_selectedChampions.includes(champion.champion_id)) {
+				                	let index = jg_selectedChampions.indexOf(champion.champion_id);
+				                	jg_selectedChampions.splice(index, 1); //클릭한 챔피언 삭제
+				                	console.log("정글 챔피언: "+jg_selectedChampions);
+				                	$("#jg_specializedChampion").val(jg_selectedChampions);
+				                	$('#jg #champ-info[data="' + champion.champion_id + '"]').remove();
+				                    return;
+				                }else{
+			            		let delChampId = jg_selectedChampions[0];
+			            		jg_selectedChampions.shift(); //가장 앞에 있는 챔피언 삭제
+			            		$("#jg #champ-info[data='" + delChampId + "']").remove();
+			            		jg_selectedChampions.push(champion.champion_id); //클릭한 챔피언 추가
+			            		let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+					            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+					            let champName = $("<span>").text(champion.champion_kr_name);
+					            championDiv.append(champImg);
+					            championDiv.append(champName);
+					            $("#jg .arrow-icon").before(championDiv);
+				                $("#jg_specializedChampion").val(jg_selectedChampions);
+			            		console.log("정글 챔피언: "+jg_selectedChampions);
+			            		return;
+				                }
+			            	}
+			                // 이미 추가된 챔피언인지 검사
+			                else if (jg_selectedChampions.includes(champion.champion_id)) {
+			                	if (jg_selectedChampions.length === 1) { //champ-selector-inner 안에 champ-info가 하나 남았을때 삭제했을시
+			                		let index = jg_selectedChampions.indexOf(champion.champion_id);
+			                		jg_selectedChampions.splice(index, 1);
+				                	console.log("정글 챔피언: "+jg_selectedChampions);
+				                	$("#jg_specializedChampion").val(jg_selectedChampions);
+				                	$('#jg #champ-info[data="' + champion.champion_id + '"]').remove(); 
+			                		console.log('이미지가 비었습니다.');
+			                		let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+						            let champImg = $("<img>").addClass("rounded").attr("id","champ-icon").attr("src", "");
+						            let champName = $("<span>").text("특화 챔피언(정글)을 선택해주세요");
+						            championDiv.append(champImg);
+						            championDiv.append(champName);
+						            $("#jg .arrow-icon").before(championDiv);
+			                		  return;
+			                		}else{
+			                			let index = jg_selectedChampions.indexOf(champion.champion_id);
+			                			jg_selectedChampions.splice(index, 1);
+					                	console.log("정글 챔피언: "+jg_selectedChampions);
+					                	$("#jg_specializedChampion").val(jg_selectedChampions);
+					                	$('#jg #champ-info[data="' + champion.champion_id + '"]').remove();
+					                    return;
+			                		}
+			                }else{
+			                // 새로운 챔피언을 추가
+			                jg_selectedChampions.push(champion.champion_id);
+			                
+			                if ($("#jg #champ-icon").attr("src")==""){
+			                	$('#jg #champ-info').remove();  
+			                	
+			                	let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+					            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+					            let champName = $("<span>").text(champion.champion_kr_name);
+					            championDiv.append(champImg);
+					            championDiv.append(champName);
+					            $("#jg .arrow-icon").before(championDiv);
+				                
+				                $("#jg_specializedChampion").val(jg_selectedChampions);
+				                console.log("정글 챔피언: "+jg_selectedChampions);
+			                }else{
+			                	let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+					            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+					            let champName = $("<span>").text(champion.champion_kr_name);
+					            championDiv.append(champImg);
+					            championDiv.append(champName);
+					            $("#jg .arrow-icon").before(championDiv);
+					            $("#jg_specializedChampion").val(jg_selectedChampions);
+					            console.log("정글 챔피언: "+jg_selectedChampions);
+			                }
+			                }
+			            });
+			            let championDiv = $("<div>").attr("id", "champion");
+			            let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+			            let champName = $("<span>").text(champion.champion_kr_name);
+			            championDiv.append(champImg);
+			            championDiv.append(champName);
+			            champItem.append(championDiv);
+			            let rateWrap = $("<div>").addClass("rate-wrap");
+			            let rateBarWrap = $("<div>").addClass("rate-bar-wrap");
+			            let rateBarBg = $("<div>").addClass("rate-bar-bg");
+			            rateBarWrap.append(rateBarBg);
+			            rateWrap.append(rateBarWrap);
+			            let pickRate = $("<span>").addClass("pick-rate").text("픽률 " + 0 + "%");
+			            let pickMeter = $("<meter>").addClass("pick-meter").attr("min", 0).attr("max", 100)
+			            			.attr("low", 30).attr("high", 65).attr("optimum", 90).val(11);
+			            rateWrap.append(pickMeter);
+			            rateWrap.append(pickRate);
+			            champItem.append(rateWrap);
+			            $("#jg #champ-list").append(champItem);
+			        });
+			    },
+			    error: function () {
+			        console.error("챔피언 정보를 불러오는데 실패했습니다.");
+		          
+		        }
+		      });
+		  });
+		
+		// 미드 챔피언 검색창 입력할 때마다 불러오기
+		$("#mid #champ-search").on("input", function() { 
+			var searchText = $(this).val();
+		      $.ajax({
+		        url: "/mentor/get-champ-name-by-keyword",//키워드로 챔피언 찾기
+		        type: "GET",
+		        data: {
+		        	keyword: searchText
+		        },
+		        success: function(data) {
+		          $("#mid #champ-list").text("");
+		          let championList = JSON.parse(data);
+			        championList.forEach(function (champion) {
+			            let imageUrl =
+			                "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +
+			                champion.champion_en_name + ".png?&amp;retry=0";
+			            let champItem = $("<div>").addClass("d-flex align-items-center justify-content-between hover-div")
+			            .attr("id","champ-item").click(function () {
+			            	if(mid_selectedChampions == null || mid_selectedChampions == ""){
+				                // 새로운 챔피언을 추가
+					                mid_selectedChampions.push(champion.champion_id);
+					                
+					                if ($("#mid #champ-icon").attr("src")==""){
+					                	$('#mid #champ-info').remove();  
+					                	
+					                	let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+							            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+							            let champName = $("<span>").text(champion.champion_kr_name);
+							            championDiv.append(champImg);
+							            championDiv.append(champName);
+							            $("#mid .arrow-icon").before(championDiv);
+						                
+						                $("#mid_specializedChampion").val(mid_selectedChampions);
+						                console.log("미드 챔피언: "+mid_selectedChampions);
+					                }else{
+					                	let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+							            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+							            let champName = $("<span>").text(champion.champion_kr_name);
+							            championDiv.append(champImg);
+							            championDiv.append(champName);
+							            $("#mid .arrow-icon").before(championDiv);
+							            $("#mid_specializedChampion").val(mid_selectedChampions);
+							            console.log("미드 챔피언: "+mid_selectedChampions);
+					                }
+				                }else if (mid_selectedChampions.length >= 3){ //세명 골랐을때 
+			            		// 이미 추가된 챔피언인지 검사
+				                if (mid_selectedChampions.includes(champion.champion_id)) {
+				                	let index = mid_selectedChampions.indexOf(champion.champion_id);
+				                	mid_selectedChampions.splice(index, 1); //클릭한 챔피언 삭제
+				                	console.log("미드 챔피언: "+mid_selectedChampions);
+				                	$("#mid_specializedChampion").val(mid_selectedChampions);
+				                	$('#mid #champ-info[data="' + champion.champion_id + '"]').remove();
+				                    return;
+				                }else{
+			            		let delChampId = mid_selectedChampions[0];
+			            		mid_selectedChampions.shift(); //가장 앞에 있는 챔피언 삭제
+			            		$("#mid #champ-info[data='" + delChampId + "']").remove();
+			            		mid_selectedChampions.push(champion.champion_id); //클릭한 챔피언 추가
+			            		let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+					            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+					            let champName = $("<span>").text(champion.champion_kr_name);
+					            championDiv.append(champImg);
+					            championDiv.append(champName);
+					            $("#mid .arrow-icon").before(championDiv);
+				                $("#mid_specializedChampion").val(mid_selectedChampions);
+			            		console.log("미드 챔피언: "+mid_selectedChampions);
+			            		return;
+				                }
+			            	}
+			                // 이미 추가된 챔피언인지 검사
+			                else if (mid_selectedChampions.includes(champion.champion_id)) {
+			                	if (mid_selectedChampions.length === 1) { //champ-selector-inner 안에 champ-info가 하나 남았을때 삭제했을시
+			                		let index = mid_selectedChampions.indexOf(champion.champion_id);
+			                		mid_selectedChampions.splice(index, 1);
+				                	console.log("미드 챔피언: "+mid_selectedChampions);
+				                	$("#mid_specializedChampion").val(mid_selectedChampions);
+				                	$('#mid #champ-info[data="' + champion.champion_id + '"]').remove(); 
+			                		console.log('이미지가 비었습니다.');
+			                		let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+						            let champImg = $("<img>").addClass("rounded").attr("id","champ-icon").attr("src", "");
+						            let champName = $("<span>").text("특화 챔피언(미드)을 선택해주세요");
+						            championDiv.append(champImg);
+						            championDiv.append(champName);
+						            $("#mid .arrow-icon").before(championDiv);
+			                		  return;
+			                		}else{
+			                			let index = mid_selectedChampions.indexOf(champion.champion_id);
+			                			mid_selectedChampions.splice(index, 1);
+					                	console.log("미드 챔피언: "+mid_selectedChampions);
+					                	$("#mid_specializedChampion").val(mid_selectedChampions);
+					                	$('#mid #champ-info[data="' + champion.champion_id + '"]').remove();
+					                    return;
+			                		}
+			                }else{
+			                // 새로운 챔피언을 추가
+			                mid_selectedChampions.push(champion.champion_id);
+			                
+			                if ($("#mid #champ-icon").attr("src")==""){
+			                	$('#mid #champ-info').remove();  
+			                	
+			                	let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+					            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+					            let champName = $("<span>").text(champion.champion_kr_name);
+					            championDiv.append(champImg);
+					            championDiv.append(champName);
+					            $("#mid .arrow-icon").before(championDiv);
+				                
+				                $("#mid_specializedChampion").val(mid_selectedChampions);
+				                console.log("미드 챔피언: "+mid_selectedChampions);
+			                }else{
+			                	let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+					            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+					            let champName = $("<span>").text(champion.champion_kr_name);
+					            championDiv.append(champImg);
+					            championDiv.append(champName);
+					            $("#mid .arrow-icon").before(championDiv);
+					            $("#mid_specializedChampion").val(mid_selectedChampions);
+					            console.log("미드 챔피언: "+mid_selectedChampions);
+			                }
+			                }
+			            });
+			            let championDiv = $("<div>").attr("id", "champion");
+			            let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+			            let champName = $("<span>").text(champion.champion_kr_name);
+			            championDiv.append(champImg);
+			            championDiv.append(champName);
+			            champItem.append(championDiv);
+			            let rateWrap = $("<div>").addClass("rate-wrap");
+			            let rateBarWrap = $("<div>").addClass("rate-bar-wrap");
+			            let rateBarBg = $("<div>").addClass("rate-bar-bg");
+			            rateBarWrap.append(rateBarBg);
+			            rateWrap.append(rateBarWrap);
+			            let pickRate = $("<span>").addClass("pick-rate").text("픽률 " + 0 + "%");
+			            let pickMeter = $("<meter>").addClass("pick-meter").attr("min", 0).attr("max", 100)
+			            			.attr("low", 30).attr("high", 65).attr("optimum", 90).val(11);
+			            rateWrap.append(pickMeter);
+			            rateWrap.append(pickRate);
+			            champItem.append(rateWrap);
+			            $("#mid #champ-list").append(champItem);
+			        });
+			    },
+			    error: function () {
+			        console.error("챔피언 정보를 불러오는데 실패했습니다.");
+		          
+		        }
+		      });
+		  });
+		
+		// 원딜 챔피언 검색창 입력할 때마다 불러오기
+		$("#ad #champ-search").on("input", function() { 
+			var searchText = $(this).val();
+		      $.ajax({
+		        url: "/mentor/get-champ-name-by-keyword",//키워드로 챔피언 찾기
+		        type: "GET",
+		        data: {
+		        	keyword: searchText
+		        },
+		        success: function(data) {
+		          $("#ad #champ-list").text("");
+		          let championList = JSON.parse(data);
+			        championList.forEach(function (champion) {
+			            let imageUrl =
+			                "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +
+			                champion.champion_en_name + ".png?&amp;retry=0";
+			            let champItem = $("<div>").addClass("d-flex align-items-center justify-content-between hover-div")
+			            .attr("id","champ-item").click(function () {
+			            	if(ad_selectedChampions == null || ad_selectedChampions == ""){
+				                // 새로운 챔피언을 추가
+					                ad_selectedChampions.push(champion.champion_id);
+					                
+					                if ($("#ad #champ-icon").attr("src")==""){
+					                	$('#ad #champ-info').remove();  
+					                	
+					                	let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+							            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+							            let champName = $("<span>").text(champion.champion_kr_name);
+							            championDiv.append(champImg);
+							            championDiv.append(champName);
+							            $("#ad .arrow-icon").before(championDiv);
+						                
+						                $("#ad_specializedChampion").val(ad_selectedChampions);
+						                console.log("원딜 챔피언: "+ad_selectedChampions);
+					                }else{
+					                	let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+							            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+							            let champName = $("<span>").text(champion.champion_kr_name);
+							            championDiv.append(champImg);
+							            championDiv.append(champName);
+							            $("#ad .arrow-icon").before(championDiv);
+							            $("#ad_specializedChampion").val(ad_selectedChampions);
+							            console.log("원딜 챔피언: "+ad_selectedChampions);
+					                }
+				                }else if (ad_selectedChampions.length >= 3){ //세명 골랐을때 
+			            		// 이미 추가된 챔피언인지 검사
+				                if (ad_selectedChampions.includes(champion.champion_id)) {
+				                	let index = ad_selectedChampions.indexOf(champion.champion_id);
+				                	ad_selectedChampions.splice(index, 1); //클릭한 챔피언 삭제
+				                	console.log("원딜 챔피언: "+ad_selectedChampions);
+				                	$("#ad_specializedChampion").val(ad_selectedChampions);
+				                	$('#ad #champ-info[data="' + champion.champion_id + '"]').remove();
+				                    return;
+				                }else{
+			            		let delChampId = ad_selectedChampions[0];
+			            		ad_selectedChampions.shift(); //가장 앞에 있는 챔피언 삭제
+			            		$("#ad #champ-info[data='" + delChampId + "']").remove();
+			            		ad_selectedChampions.push(champion.champion_id); //클릭한 챔피언 추가
+			            		let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+					            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+					            let champName = $("<span>").text(champion.champion_kr_name);
+					            championDiv.append(champImg);
+					            championDiv.append(champName);
+					            $("#ad .arrow-icon").before(championDiv);
+				                $("#ad_specializedChampion").val(ad_selectedChampions);
+			            		console.log("원딜 챔피언: "+ad_selectedChampions);
+			            		return;
+				                }
+			            	}
+			                // 이미 추가된 챔피언인지 검사
+			                else if (ad_selectedChampions.includes(champion.champion_id)) {
+			                	if (ad_selectedChampions.length === 1) { //champ-selector-inner 안에 champ-info가 하나 남았을때 삭제했을시
+			                		let index = ad_selectedChampions.indexOf(champion.champion_id);
+			                		ad_selectedChampions.splice(index, 1);
+				                	console.log("원딜 챔피언: "+ad_selectedChampions);
+				                	$("#ad_specializedChampion").val(ad_selectedChampions);
+				                	$('#ad #champ-info[data="' + champion.champion_id + '"]').remove(); 
+			                		console.log('이미지가 비었습니다.');
+			                		let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+						            let champImg = $("<img>").addClass("rounded").attr("id","champ-icon").attr("src", "");
+						            let champName = $("<span>").text("특화 챔피언(원딜)을 선택해주세요");
+						            championDiv.append(champImg);
+						            championDiv.append(champName);
+						            $("#ad .arrow-icon").before(championDiv);
+			                		  return;
+			                		}else{
+			                			let index = ad_selectedChampions.indexOf(champion.champion_id);
+			                			ad_selectedChampions.splice(index, 1);
+					                	console.log("원딜 챔피언: "+ad_selectedChampions);
+					                	$("#ad_specializedChampion").val(ad_selectedChampions);
+					                	$('#ad #champ-info[data="' + champion.champion_id + '"]').remove();
+					                    return;
+			                		}
+			                }else{
+			                // 새로운 챔피언을 추가
+			                ad_selectedChampions.push(champion.champion_id);
+			                
+			                if ($("#ad #champ-icon").attr("src")==""){
+			                	$('#ad #champ-info').remove();  
+			                	
+			                	let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+					            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+					            let champName = $("<span>").text(champion.champion_kr_name);
+					            championDiv.append(champImg);
+					            championDiv.append(champName);
+					            $("#ad .arrow-icon").before(championDiv);
+				                
+				                $("#ad_specializedChampion").val(ad_selectedChampions);
+				                console.log("원딜 챔피언: "+ad_selectedChampions);
+			                }else{
+			                	let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+					            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+					            let champName = $("<span>").text(champion.champion_kr_name);
+					            championDiv.append(champImg);
+					            championDiv.append(champName);
+					            $("#ad .arrow-icon").before(championDiv);
+					            $("#ad_specializedChampion").val(ad_selectedChampions);
+					            console.log("원딜 챔피언: "+ad_selectedChampions);
+			                }
+			                }
+			            });
+			            let championDiv = $("<div>").attr("id", "champion");
+			            let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+			            let champName = $("<span>").text(champion.champion_kr_name);
+			            championDiv.append(champImg);
+			            championDiv.append(champName);
+			            champItem.append(championDiv);
+			            let rateWrap = $("<div>").addClass("rate-wrap");
+			            let rateBarWrap = $("<div>").addClass("rate-bar-wrap");
+			            let rateBarBg = $("<div>").addClass("rate-bar-bg");
+			            rateBarWrap.append(rateBarBg);
+			            rateWrap.append(rateBarWrap);
+			            let pickRate = $("<span>").addClass("pick-rate").text("픽률 " + 0 + "%");
+			            let pickMeter = $("<meter>").addClass("pick-meter").attr("min", 0).attr("max", 100)
+			            			.attr("low", 30).attr("high", 65).attr("optimum", 90).val(11);
+			            rateWrap.append(pickMeter);
+			            rateWrap.append(pickRate);
+			            champItem.append(rateWrap);
+			            $("#ad #champ-list").append(champItem);
+			        });
+			    },
+			    error: function () {
+			        console.error("챔피언 정보를 불러오는데 실패했습니다.");
+		          
+		        }
+		      });
+		  });
+		
+		// 서포터 챔피언 검색창 입력할 때마다 불러오기
+		$("#sup #champ-search").on("input", function() { 
+			var searchText = $(this).val();
+		      $.ajax({
+		        url: "/mentor/get-champ-name-by-keyword",//키워드로 챔피언 찾기
+		        type: "GET",
+		        data: {
+		        	keyword: searchText
+		        },
+		        success: function(data) {
+		          $("#sup #champ-list").text("");
+		          let championList = JSON.parse(data);
+			        championList.forEach(function (champion) {
+			            let imageUrl =
+			                "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +
+			                champion.champion_en_name + ".png?&amp;retry=0";
+			            let champItem = $("<div>").addClass("d-flex align-items-center justify-content-between hover-div")
+			            .attr("id","champ-item").click(function () {
+			            	if(sup_selectedChampions == null || sup_selectedChampions == ""){
+				                // 새로운 챔피언을 추가
+					                sup_selectedChampions.push(champion.champion_id);
+					                
+					                if ($("#sup #champ-icon").attr("src")==""){
+					                	$('#sup #champ-info').remove();  
+					                	
+					                	let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+							            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+							            let champName = $("<span>").text(champion.champion_kr_name);
+							            championDiv.append(champImg);
+							            championDiv.append(champName);
+							            $("#sup .arrow-icon").before(championDiv);
+						                
+						                $("#sup_specializedChampion").val(sup_selectedChampions);
+						                console.log("서포터 챔피언: "+sup_selectedChampions);
+					                }else{
+					                	let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+							            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+							            let champName = $("<span>").text(champion.champion_kr_name);
+							            championDiv.append(champImg);
+							            championDiv.append(champName);
+							            $("#sup .arrow-icon").before(championDiv);
+							            $("#sup_specializedChampion").val(sup_selectedChampions);
+							            console.log("서포터 챔피언: "+sup_selectedChampions);
+					                }
+				                }else if (sup_selectedChampions.length >= 3){ //세명 골랐을때 
+			            		// 이미 추가된 챔피언인지 검사
+				                if (sup_selectedChampions.includes(champion.champion_id)) {
+				                	let index = sup_selectedChampions.indexOf(champion.champion_id);
+				                	sup_selectedChampions.splice(index, 1); //클릭한 챔피언 삭제
+				                	console.log("서포터 챔피언: "+sup_selectedChampions);
+				                	$("#sup_specializedChampion").val(sup_selectedChampions);
+				                	$('#sup #champ-info[data="' + champion.champion_id + '"]').remove();
+				                    return;
+				                }else{
+			            		let delChampId = sup_selectedChampions[0];
+			            		sup_selectedChampions.shift(); //가장 앞에 있는 챔피언 삭제
+			            		$("#sup #champ-info[data='" + delChampId + "']").remove();
+			            		sup_selectedChampions.push(champion.champion_id); //클릭한 챔피언 추가
+			            		let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+					            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+					            let champName = $("<span>").text(champion.champion_kr_name);
+					            championDiv.append(champImg);
+					            championDiv.append(champName);
+					            $("#sup .arrow-icon").before(championDiv);
+				                $("#sup_specializedChampion").val(sup_selectedChampions);
+			            		console.log("서포터 챔피언: "+sup_selectedChampions);
+			            		return;
+				                }
+			            	}
+			                // 이미 추가된 챔피언인지 검사
+			                else if (sup_selectedChampions.includes(champion.champion_id)) {
+			                	if (sup_selectedChampions.length === 1) { //champ-selector-inner 안에 champ-info가 하나 남았을때 삭제했을시
+			                		let index = sup_selectedChampions.indexOf(champion.champion_id);
+			                		sup_selectedChampions.splice(index, 1);
+				                	console.log("서포터 챔피언: "+sup_selectedChampions);
+				                	$("#sup_specializedChampion").val(sup_selectedChampions);
+				                	$('#sup #champ-info[data="' + champion.champion_id + '"]').remove(); 
+			                		console.log('이미지가 비었습니다.');
+			                		let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+						            let champImg = $("<img>").addClass("rounded").attr("id","champ-icon").attr("src", "");
+						            let champName = $("<span>").text("특화 챔피언(서포터)을 선택해주세요");
+						            championDiv.append(champImg);
+						            championDiv.append(champName);
+						            $("#sup .arrow-icon").before(championDiv);
+			                		  return;
+			                		}else{
+			                			let index = sup_selectedChampions.indexOf(champion.champion_id);
+			                			sup_selectedChampions.splice(index, 1);
+					                	console.log("서포터 챔피언: "+sup_selectedChampions);
+					                	$("#sup_specializedChampion").val(sup_selectedChampions);
+					                	$('#sup #champ-info[data="' + champion.champion_id + '"]').remove();
+					                    return;
+			                		}
+			                }else{
+			                // 새로운 챔피언을 추가
+			                sup_selectedChampions.push(champion.champion_id);
+			                
+			                if ($("#sup #champ-icon").attr("src")==""){
+			                	$('#sup #champ-info').remove();  
+			                	
+			                	let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+					            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+					            let champName = $("<span>").text(champion.champion_kr_name);
+					            championDiv.append(champImg);
+					            championDiv.append(champName);
+					            $("#sup .arrow-icon").before(championDiv);
+				                
+				                $("#sup_specializedChampion").val(sup_selectedChampions);
+				                console.log("서포터 챔피언: "+sup_selectedChampions);
+			                }else{
+			                	let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+					            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+					            let champName = $("<span>").text(champion.champion_kr_name);
+					            championDiv.append(champImg);
+					            championDiv.append(champName);
+					            $("#sup .arrow-icon").before(championDiv);
+					            $("#sup_specializedChampion").val(sup_selectedChampions);
+					            console.log("서포터 챔피언: "+sup_selectedChampions);
+			                }
+			                }
+			            });
+			            let championDiv = $("<div>").attr("id", "champion");
+			            let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+			            let champName = $("<span>").text(champion.champion_kr_name);
+			            championDiv.append(champImg);
+			            championDiv.append(champName);
+			            champItem.append(championDiv);
+			            let rateWrap = $("<div>").addClass("rate-wrap");
+			            let rateBarWrap = $("<div>").addClass("rate-bar-wrap");
+			            let rateBarBg = $("<div>").addClass("rate-bar-bg");
+			            rateBarWrap.append(rateBarBg);
+			            rateWrap.append(rateBarWrap);
+			            let pickRate = $("<span>").addClass("pick-rate").text("픽률 " + 0 + "%");
+			            let pickMeter = $("<meter>").addClass("pick-meter").attr("min", 0).attr("max", 100)
+			            			.attr("low", 30).attr("high", 65).attr("optimum", 90).val(11);
+			            rateWrap.append(pickMeter);
+			            rateWrap.append(pickRate);
+			            champItem.append(rateWrap);
+			            $("#sup #champ-list").append(champItem);
+			        });
+			    },
+			    error: function () {
+			        console.error("챔피언 정보를 불러오는데 실패했습니다.");
+		          
+		        }
+		      });
+		  });
+		
+		//////////////////////챔피언 검색/////////////////////////////////
+		
 		//저장된 특화 포지션 가져오기
-		let spec_pos = ${mentor_profile.specialized_position};
+		let spec_pos = [${mentor_profile.specialized_position}];
 		$.each(spec_pos, function(i,pos){ 
-			console.log(pos);
-			if (pos=="탑"){
+			$.each(pos, function(j,lane){
+			console.log(lane);
+			if (lane=="탑"){
 				let posImg = $("<img>").attr("id","pos-img").attr("src","https://online.gamecoach.pro/img/coaching/lol-line-black/TOP.png")
-				let posName = $("<strong>").text(pos);
+				let posName = $("<strong>").text(lane);
 				let posBox = $("<div>").attr("id","pos-box").addClass("border rounded");
 				posBox.append(posImg,posName);
 				$("#specializedPosition").append(posBox);
-			}else if (pos=="바텀"){
+			}else if (lane=="바텀"){
 				let posImg = $("<img>").attr("id","pos-img").attr("src","https://online.gamecoach.pro/img/coaching/lol-line-black/AD_CARRY.png")
-				let posName = $("<strong>").text(pos);
+				let posName = $("<strong>").text(lane);
 				let posBox = $("<div>").attr("id","pos-box").addClass("border rounded");
 				posBox.append(posImg,posName);
 				$("#specializedPosition").append(posBox);
-			}else if (pos=="서포터"){
+			}else if (lane=="서포터"){
 				let posImg = $("<img>").attr("id","pos-img").attr("src","https://online.gamecoach.pro/img/coaching/lol-line-black/SUPPORT.png")
-				let posName = $("<strong>").text(pos);
+				let posName = $("<strong>").text(lane);
 				let posBox = $("<div>").attr("id","pos-box").addClass("border rounded");
 				posBox.append(posImg,posName);
 				$("#specializedPosition").append(posBox);
-			}else if (pos=="정글"){
+			}else if (lane=="정글"){
 				let posImg = $("<img>").attr("id","pos-img").attr("src","https://online.gamecoach.pro/img/coaching/lol-line-black/JUNGLE.png")
-				let posName = $("<strong>").text(pos);
+				let posName = $("<strong>").text(lane);
 				let posBox = $("<div>").attr("id","pos-box").addClass("border rounded");
 				posBox.append(posImg,posName);
 				$("#specializedPosition").append(posBox);
-			}else if (pos=="미드"){
+			}else if (lane=="미드"){
 				let posImg = $("<img>").attr("id","pos-img").attr("src","https://online.gamecoach.pro/img/coaching/lol-line-black/MID.png")
-				let posName = $("<strong>").text(pos);
+				let posName = $("<strong>").text(lane);
 				let posBox = $("<div>").attr("id","pos-box").addClass("border rounded");
 				posBox.append(posImg,posName);
 				$("#specializedPosition").append(posBox);
 			}
+			})
 		})
 		
 		displaySpecializedPosition(); //멘토 특화 포지션과 특화 챔피언을 인풋창에 출력
@@ -1095,7 +1751,7 @@ margin:18px 0;
 		                	if (mid_selectedChampions.length === 1) { //champ-selector-inner 안에 champ-info가 하나 남았을때 삭제했을시
 		                		let index = mid_selectedChampions.indexOf(champion.champion_id);
 		                		mid_selectedChampions.splice(index, 1);
-			                	console.log("정글 챔피언: "+mid_selectedChampions);
+			                	console.log("미드 챔피언: "+mid_selectedChampions);
 			                	$("#mid_specializedChampion").val(mid_selectedChampions);
 			                	$('#mid #champ-info[data="' + champion.champion_id + '"]').remove(); 
 		                		console.log('이미지가 비었습니다.');
@@ -1306,8 +1962,144 @@ margin:18px 0;
 		    }
 		});
 		
-		
-		
+		$.ajax({ //서포터 챔피언 목록 가져오기
+		    url: "/mentor/get-all-champ",
+		    type: "GET",
+		    success: function (data) {
+		        let championList = JSON.parse(data);
+		        championList.forEach(function (champion) {
+		            let imageUrl =
+		                "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +
+		                champion.champion_en_name + ".png?&amp;retry=0";
+		            let champItem = $("<div>").addClass("d-flex align-items-center justify-content-between hover-div")
+		            	.attr("id","champ-item").click(function () {
+		            	if(sup_selectedChampions == null || sup_selectedChampions == ""){ //챔피언을 고른적이 없을때
+		            		
+				                sup_selectedChampions.push(champion.champion_id);
+				                
+				                if ($("#sup #champ-icon").attr("src")==""){
+				                	$('#sup #champ-info').remove();  
+				                	
+				                	let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+						            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+						            let champName = $("<span>").text(champion.champion_kr_name);
+						            championDiv.append(champImg);
+						            championDiv.append(champName);
+						            $("#sup .arrow-icon").before(championDiv);
+					                
+					                $("#sup_specializedChampion").val(sup_selectedChampions);
+					                console.log("서포터 챔피언: "+sup_selectedChampions);
+				                }else{
+				                	let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+						            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+						            let champName = $("<span>").text(champion.champion_kr_name);
+						            championDiv.append(champImg);
+						            championDiv.append(champName);
+						            $("#sup .arrow-icon").before(championDiv);
+						            $("#sup_specializedChampion").val(sup_selectedChampions);
+						            console.log("서포터 챔피언: "+sup_selectedChampions);
+				                }
+			                }else if (sup_selectedChampions.length >= 3){ //세명 골랐을때 
+		            		// 이미 추가된 챔피언인지 검사
+			                if (sup_selectedChampions.includes(champion.champion_id)) {
+			                	let index = sup_selectedChampions.indexOf(champion.champion_id);
+			                	sup_selectedChampions.splice(index, 1); //클릭한 챔피언 삭제
+			                	console.log("서포터 챔피언: "+sup_selectedChampions);
+			                	$("#sup_specializedChampion").val(sup_selectedChampions);
+			                	$('#sup #champ-info[data="' + champion.champion_id + '"]').remove();
+			                    return;
+			                }else{
+		            		let delChampId = sup_selectedChampions[0];
+		            		sup_selectedChampions.shift(); //가장 앞에 있는 챔피언 삭제
+		            		$("#sup #champ-info[data='" + delChampId + "']").remove();
+		            		sup_selectedChampions.push(champion.champion_id); //클릭한 챔피언 추가
+		            		let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+				            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+				            let champName = $("<span>").text(champion.champion_kr_name);
+				            championDiv.append(champImg);
+				            championDiv.append(champName);
+				            $("#sup .arrow-icon").before(championDiv);
+			                $("#sup_specializedChampion").val(sup_selectedChampions);
+		            		console.log("서포터 챔피언: "+sup_selectedChampions);
+		            		return;
+			                }
+		            	}
+		                // 이미 추가된 챔피언인지 검사
+		                else if (sup_selectedChampions.includes(champion.champion_id)) {
+		                	if (sup_selectedChampions.length === 1) { //champ-selector-inner 안에 champ-info가 하나 남았을때 삭제했을시
+		                		let index = sup_selectedChampions.indexOf(champion.champion_id);
+		                		sup_selectedChampions.splice(index, 1);
+			                	console.log("서포터 챔피언: "+sup_selectedChampions);
+			                	$("#sup_specializedChampion").val(sup_selectedChampions);
+			                	$('#sup #champ-info[data="' + champion.champion_id + '"]').remove(); 
+		                		console.log('이미지가 비었습니다.');
+		                		let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+					            let champImg = $("<img>").addClass("rounded").attr("id","champ-icon").attr("src", "");
+					            let champName = $("<span>").text("특화 챔피언(서포터)을 선택해주세요");
+					            championDiv.append(champImg);
+					            championDiv.append(champName);
+					            $("#sup .arrow-icon").before(championDiv);
+		                		  return;
+		                		}else{
+		                			let index = sup_selectedChampions.indexOf(champion.champion_id);
+		                			sup_selectedChampions.splice(index, 1);
+				                	console.log("서포터 챔피언: "+sup_selectedChampions);
+				                	$("#sup_specializedChampion").val(sup_selectedChampions);
+				                	$('#sup #champ-info[data="' + champion.champion_id + '"]').remove();
+				                    return;
+		                		}
+		                }else{
+		                // 새로운 챔피언을 추가
+			                sup_selectedChampions.push(champion.champion_id);
+			                
+			                if ($("#sup #champ-icon").attr("src")==""){
+			                	$('#sup #champ-info').remove();  
+			                	
+			                	let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+					            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+					            let champName = $("<span>").text(champion.champion_kr_name);
+					            championDiv.append(champImg);
+					            championDiv.append(champName);
+					            $("#sup .arrow-icon").before(championDiv);
+				                
+				                $("#sup_specializedChampion").val(sup_selectedChampions);
+				                console.log("서포터 챔피언: "+sup_selectedChampions);
+			                }else{
+			                	let championDiv = $("<div>").addClass("d-flex flex-column").attr("id","champ-info").attr("data",champion.champion_id);
+					            let champImg = $("<img>").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+					            let champName = $("<span>").text(champion.champion_kr_name);
+					            championDiv.append(champImg);
+					            championDiv.append(champName);
+					            $("#sup .arrow-icon").before(championDiv);
+					            $("#sup_specializedChampion").val(sup_selectedChampions);
+					            console.log("서포터 챔피언: "+sup_selectedChampions);
+			                }
+		                }
+		            });
+		            let championDiv = $("<div>").attr("id", "champion");
+		            let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+		            let champName = $("<span>").text(champion.champion_kr_name);
+		            championDiv.append(champImg);
+		            championDiv.append(champName);
+		            champItem.append(championDiv);
+		            let rateWrap = $("<div>").addClass("rate-wrap");
+		            let rateBarWrap = $("<div>").addClass("rate-bar-wrap");
+		            let rateBarBg = $("<div>").addClass("rate-bar-bg");
+		            rateBarWrap.append(rateBarBg);
+		            rateWrap.append(rateBarWrap);
+		            let pickRate = $("<span>").addClass("pick-rate").text("픽률 " + 0 + "%");
+		            let pickMeter = $("<meter>").addClass("pick-meter").attr("min", 0).attr("max", 100)
+		            			.attr("low", 30).attr("high", 65).attr("optimum", 90).val(11);
+		            rateWrap.append(pickMeter);
+		            rateWrap.append(pickRate);
+		            champItem.append(rateWrap);
+		            $("#sup #champ-list").append(champItem);
+		        });
+		    },
+		    error: function () {
+		        console.error("챔피언 정보를 불러오는데 실패했습니다.");
+		    }
+		});
 		//챔피언 목록 불러오기
 		////////////////////////////////////////////////////////
 
@@ -1328,7 +2120,12 @@ margin:18px 0;
 			  } else {
 			    $(".position-buttons button:not(.selected)").prop("disabled", false);
 			  }
+			  
+			  laneImgChange();
+			
 			});
+		
+		
 
 		//포지션 버튼 마우스오버 시
 		$(".position-buttons button").hover(function () {
@@ -1348,6 +2145,24 @@ margin:18px 0;
 			  let time0 = $('#dropdown-input').val();
 			  let time1 = $('#contactTimeFrom1').val();
 			  let time2 = $('#contactTimeFrom2').val();
+			  let top_champ = JSON.stringify(top_selectedChampions);
+			  let jg_champ = JSON.stringify(jg_selectedChampions);
+			  let mid_champ = JSON.stringify(mid_selectedChampions);
+			  let ad_champ = JSON.stringify(ad_selectedChampions);
+			  let sup_champ = JSON.stringify(sup_selectedChampions);
+			  
+			  if(top_champ == "[]"){
+				  top_champ = null;
+			  }if(jg_champ == "[]"){
+				  jg_champ = null;
+			  }if(mid_champ == "[]"){
+				  mid_champ = null;
+			  }if(ad_champ == "[]"){
+				  ad_champ = null;
+			  }if(sup_champ == "[]"){
+				  sup_champ = null;
+			  }
+			  
 			  $.ajax({
 			    url: '/mentor/edit-profile/',
 			    type: 'PUT',
@@ -1356,11 +2171,11 @@ margin:18px 0;
 			      mentor_email: '${email}',
 			      about_mentor: $('#about_mentor').val(),
 			      specialized_position: JSON.stringify(positions),
-			      top_specialized_champion: JSON.stringify(top_selectedChampions),
-			      jg_specialized_champion: JSON.stringify(jg_selectedChampions),
-			      mid_specialized_champion: JSON.stringify(mid_selectedChampions),
-			      ad_specialized_champion: JSON.stringify(ad_selectedChampions),
-			      sup_specialized_champion: JSON.stringify(sup_selectedChampions),
+			      top_specialized_champion: top_champ,
+			      jg_specialized_champion: jg_champ,
+			      mid_specialized_champion: mid_champ,
+			      ad_specialized_champion: ad_champ,
+			      sup_specialized_champion: sup_champ,
 			      contact_time: time0 + " " + time1 + " ~ " + time2,
 			      careers: $('#careers').val(),
 			      recom_ment: $('#recom_ment').val()
@@ -1399,7 +2214,69 @@ margin:18px 0;
 		    deleteClass(class_id);
 		});
 
-	});
+	});//ready
+	
+	// 이미지 경로 업데이트 및 선택 해제 시 원래 이미지로 복원
+	function laneImgChange(){
+	  $(".position-buttons button").each(function() {
+	    const position = $(this).text();
+	    if (position === "탑") {
+	      const imageUrl = "https://online.gamecoach.pro/img/icon/lol/ico_lol_top.svg" ;
+	      if ($(this).hasClass("selected")) {
+	        // 이미지 경로 업데이트
+	        $(this).find("img").attr("src", imageUrl);
+	      } else {
+	        // 선택 해제 시 원래 이미지로 복원
+	        const originalImageUrl = "https://online.gamecoach.pro/img/icon/lol/ico_lol_top_grey.svg" ;
+	        $(this).find("img").attr("src", originalImageUrl);
+	      }
+	    }
+	    if (position === "정글") {
+		      const imageUrl = "https://online.gamecoach.pro/img/icon/lol/ico_lol_jg.svg" ;
+		      if ($(this).hasClass("selected")) {
+		        // 이미지 경로 업데이트
+		        $(this).find("img").attr("src", imageUrl);
+		      } else {
+		        // 선택 해제 시 원래 이미지로 복원
+		        const originalImageUrl = "https://online.gamecoach.pro/img/icon/lol/ico_lol_jg_grey.svg" ;
+		        $(this).find("img").attr("src", originalImageUrl);
+		      }
+	    }
+	    if (position === "미드") {
+		      const imageUrl = "https://online.gamecoach.pro/img/icon/lol/ico_lol_mid.svg" ;
+		      if ($(this).hasClass("selected")) {
+		        // 이미지 경로 업데이트
+		        $(this).find("img").attr("src", imageUrl);
+		      } else {
+		        // 선택 해제 시 원래 이미지로 복원
+		        const originalImageUrl = "https://online.gamecoach.pro/img/icon/lol/ico_lol_mid_grey.svg" ;
+		        $(this).find("img").attr("src", originalImageUrl);
+		      }
+	    }
+	    if (position === "바텀") {
+		      const imageUrl = "https://online.gamecoach.pro/img/icon/lol/ico_lol_ad.svg" ;
+		      if ($(this).hasClass("selected")) {
+		        // 이미지 경로 업데이트
+		        $(this).find("img").attr("src", imageUrl);
+		      } else {
+		        // 선택 해제 시 원래 이미지로 복원
+		        const originalImageUrl = "https://online.gamecoach.pro/img/icon/lol/ico_lol_ad_grey.svg" ;
+		        $(this).find("img").attr("src", originalImageUrl);
+		      }
+	    }
+	    if (position === "서포터") {
+		      const imageUrl = "https://online.gamecoach.pro/img/icon/lol/ico_lol_sup.svg" ;
+		      if ($(this).hasClass("selected")) {
+		        // 이미지 경로 업데이트
+		        $(this).find("img").attr("src", imageUrl);
+		      } else {
+		        // 선택 해제 시 원래 이미지로 복원
+		        const originalImageUrl = "https://online.gamecoach.pro/img/icon/lol/ico_lol_sup_grey.svg" ;
+		        $(this).find("img").attr("src", originalImageUrl);
+		      }
+	    }
+	  })
+	}
 	
 
 	//멘토 프로필 가져오기
@@ -1419,9 +2296,11 @@ margin:18px 0;
 		          $("button[name='" + mpsp[0] + "']").toggleClass("selected");
 		          $("button[name='" + mpsp[1] + "']").toggleClass("selected");
 		          $(".position-buttons button:not(.selected)").prop("disabled", true);
+		          laneImgChange();
 		        } else {
 		          $('#specializedPosition').val(mpsp[0]);
 		          $("button[name='" + mpsp[0] + "']").toggleClass("selected");
+		          laneImgChange();
 		        }
 		      }
 		      if (sp.top_specialized_champion != null && sp.top_specialized_champion != '') {

@@ -9,8 +9,6 @@
 	<title>맞춤 멘토</title>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<style>
-.container {
-}
 		.tag-button.selected {
 			background-color: #2196F3;
 			color: white;
