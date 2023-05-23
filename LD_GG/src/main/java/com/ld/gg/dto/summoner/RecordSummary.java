@@ -35,4 +35,8 @@ public class RecordSummary {
 	private double top_champ1_kda_avg;
 	private double top_champ2_kda_avg;
 	private double top_champ3_kda_avg;
+	private double most_lane_pickrate1;
+	private double most_lane_pickrate2;
+	private String most_lane1;
+	private String most_lane2;
 }
