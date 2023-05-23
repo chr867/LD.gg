@@ -136,5 +136,10 @@ public class SummonerRestController {
 		DashBoardDto dbd = ss.getDashBoardKDA(summoner_name);
 		return dbd;
 	}
+	
+	/*
+	 * @GetMapping("getMachUpPlayer") public List<>
+	 */
+	
 
 }
