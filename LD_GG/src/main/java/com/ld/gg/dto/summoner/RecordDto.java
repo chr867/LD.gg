@@ -24,17 +24,8 @@ public class RecordDto {
 	private String tier;
 	private int game_duration;
 	private String game_date;
-	private String main_rune;
 	private String main_rune1;
-	private String main_rune2;
-	private String main_rune3;
-	private String main_rune4;
 	private String sub_rune;
-	private String sub_rune1;
-	private String sub_rune2;
-	private String rune_stat1;
-	private String rune_stat2;
-	private String rune_stat3;
 	private String item1;
 	private String item2;
 	private String item3;
@@ -44,9 +35,8 @@ public class RecordDto {
 	private String item7;
 	private int red_ward_placed;
 	private int dealt_to_champ;
-	private int damage_taken;
-	private String lane;
 	private String spell1;
 	private String spell2;
 	private int sight_point;
+	private String player_champ_name;
 }
