@@ -465,7 +465,7 @@ body {
 				<form id=champ_search>
 			 	<input id='champion_name_input' type="text" name="champion_kr_name" placeholder="내 챔피언 검색">
 				</form>
-				<img id="my_champion_img" alt="#" src="/resources/img/img/champion_img/tiles/0.png">
+				<img id="my_champion_img" alt="#" src="/resources/img/img/profileicon/29.png">
 			</div>
 			<div id="build_recom_box">
 				<span></span>
@@ -506,18 +506,18 @@ body {
 				<form id=right_champ_search>
 				 	<input id='right_champ_name_input' type="text" name="champion_kr_name" placeholder="상대 챔피언 검색">
 				</form>
-				<img id="right_champion_img" alt="#" src="/resources/img/img/champion_img/tiles/0.png">
+				<img id="right_champion_img" alt="#" src="/resources/img/img/profileicon/29.png">
 				<span></span>
 			</div>
 		</div>
 		
 		<div id="recom_champ">
 			<div>
-				<img src="/resources/img/img/champion_img/tiles/0.png" class="champ1" alt="" id="recom_champ_0" onclick="recom_click(this)">
-				<img src="/resources/img/img/champion_img/tiles/0.png" class="champ2" alt="" id="recom_champ_1" onclick="recom_click(this)">
-				<img src="/resources/img/img/champion_img/tiles/0.png" class="champ3" alt="" id="recom_champ_2" onclick="recom_click(this)">
-				<img src="/resources/img/img/champion_img/tiles/0.png" class="champ4" alt="" id="recom_champ_3" onclick="recom_click(this)">
-				<img src="/resources/img/img/champion_img/tiles/0.png" class="champ5" alt="" id="recom_champ_4" onclick="recom_click(this)">
+				<img src="/resources/img/img/profileicon/29.png" class="champ1" alt="" id="recom_champ_0" onclick="recom_click(this)">
+				<img src="/resources/img/img/profileicon/29.png" class="champ2" alt="" id="recom_champ_1" onclick="recom_click(this)">
+				<img src="/resources/img/img/profileicon/29.png" class="champ3" alt="" id="recom_champ_2" onclick="recom_click(this)">
+				<img src="/resources/img/img/profileicon/29.png" class="champ4" alt="" id="recom_champ_3" onclick="recom_click(this)">
+				<img src="/resources/img/img/profileicon/29.png" class="champ5" alt="" id="recom_champ_4" onclick="recom_click(this)">
 			</div>
 				<div id="span_container">
 					<div id="recom_champ_name">
