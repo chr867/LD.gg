@@ -69,22 +69,20 @@
 	    	<b>바텀</b>
 	    	<b>서포터</b>
 	    </div>
+			
+			<div>
+				<b>순위</b>
+				<b>챔피언</b>
+				<b>티어</b>
+				<b>승률</b>
+				<b>픽률</b>
+				<b>밴률</b>
+				<b>상대하기 어려운 챔피언</b>
+			</div>
 
 	    <table class="table table-striped">
-	        <thead>
-	            <tr>
-	                <th>순위</th>
-	                <th>챔피언</th>
-	                <th>티어</th>
-	                <th>승률</th>
-	                <th>픽률</th>
-	                <th>밴률</th>
-	                <th>상대하기 어려운 챔피언</th>
-	            </tr>
-	        </thead>
-	        <tbody id="championTableBody">
-	        </tbody>
 	    </table>
+	
     </div>
 </div>
 
