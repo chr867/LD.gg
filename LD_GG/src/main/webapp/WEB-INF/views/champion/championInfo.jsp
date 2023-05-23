@@ -124,6 +124,32 @@
 .champion-tier{
 	font-weight: 700;	
 }
+
+ .lane-select-box {
+    display: flex;
+    height: 50px;
+    width: 350px;
+    box-sizing: border-box;
+    margin-bottom: 5px;
+    align-items: center;
+}
+
+.lane-img img {
+    width: 40px;
+    height: 40px;
+}
+
+.lane-img {
+    border-radius: 0.1rem;
+    transition: 0.3s;
+    background-color: #fff;
+    margin-right: 10px;
+}
+
+.lane-img:hover,
+.lane-img:active {
+    background-color: #E4E6EF;
+}
 </style>
 
 </head>
@@ -478,6 +504,9 @@
 	<!----------------------------------------------------------------------------------------------------------------->
 	<!----------------------------------------------------------------------------------------------------------------->
 	<div class="main-container">
+		<div class="lane-select-box">
+			
+		</div>
 		<div class="champion-info-box">
 			<table class="champion-table">
 				<tr>
@@ -547,19 +576,6 @@
 			</table>
 		</div>
 
-		<h1>championInfo.jsp</h1>
-		<div>
-			<form action="/champion/search.json" accept-charset="utf-8"
-				method="post">
-				<input type="text" name="champion_kr_name">
-			</form>
-			<h3>${chamInfo.champion_id}</h3>
-			<h3>${chamInfo.champion_en_name}</h3>
-			<h3>${chamInfo.champion_kr_name}</h3>
-			<h3>${chamInfo.champion_title}</h3>
-			<h3>${chamInfo.champion_img}</h3>
-			<h3>${chamInfo.champion_p_name}</h3>
-		</div>
 
 	</div>
 
@@ -571,15 +587,40 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 function championLaneInfo(champion_id) {
-	$.ajax({
-		  method: 'get',
-		  url: '/champion/info/lane',
-		  data: { champion_id: champion_id},
-		}).done(res => {
-			championBuildInfo(res[0].champion_id,res[0].team_position);
-		}).fail(err => {
-		  console.log(err);
-		});	
+	  $.ajax({
+	    method: 'get',
+	    url: '/champion/info/lane',
+	    data: { champion_id: champion_id },
+	  }).done(res => {
+	    let laneSelectBox = document.querySelector('.lane-select-box');
+	    laneSelectBox.innerHTML = ''; // 기존 내용 초기화
+
+	    for (let i = 0; i < res.length; i++) {
+	      let team_position = res[i].team_position;
+	      let html = '';
+
+	      if (team_position === 'TOP') {
+	        html = '<div class="lane-img lane-top" onclick="selectLane(\'TOP\')"><img src="/resources/img/ranked-positions/Position_Silver-Top.png" alt="로그인 이미지"></div>';
+	      } else if (team_position === 'JUNGLE') {
+	        html = '<div class="lane-img lane-jungle" onclick="selectLane(\'JUNGLE\')"><img src="/resources/img/ranked-positions/Position_Silver-Jungle.png" alt="로그인 이미지"></div>';
+	      } else if (team_position === 'MIDDLE') {
+	        html = '<div class="lane-img lane-middle" onclick="selectLane(\'MIDDLE\')"><img src="/resources/img/ranked-positions/Position_Silver-Mid.png" alt="로그인 이미지"></div>';
+	      } else if (team_position === 'BOTTOM') {
+	        html = '<div class="lane-img lane-bottom" onclick="selectLane(\'BOTTOM\')"><img src="/resources/img/ranked-positions/Position_Silver-Bot.png" alt="로그인 이미지"></div>';
+	      } else if (team_position === 'UTILITY') {
+	        html = '<div class="lane-img lane-support" onclick="selectLane(\'UTILITY\')"><img src="/resources/img/ranked-positions/Position_Silver-Support.png" alt="로그인 이미지"></div>';
+	      }
+
+	      laneSelectBox.innerHTML += html;
+	      championBuildInfo(res[i].champion_id, team_position);
+	    }
+	  }).fail(err => {
+	    console.log(err);
+	  });
+	}
+
+function selectLane(team_position) {
+	championBuildInfo(${chamInfo.champion_id}, team_position);
 }
 
 function championBuildInfo(champion_id, team_position) {
@@ -630,7 +671,11 @@ function championBuildInfo(champion_id, team_position) {
 		});	
 }
 
-
+/* <div class="lane-img lane-top" onclick="selectLane('TOP')"><img src="/resources/img/ranked-positions/Position_Silver-Top.png" alt="로그인 이미지"></div>
+<div class="lane-img lane-jungle" onclick="selectLane('JUNGLE')"><img src="/resources/img/ranked-positions/Position_Silver-Jungle.png" alt="로그인 이미지"></div>
+<div class="lane-img lane-middle" onclick="selectLane('MIDDLE')"><img src="/resources/img/ranked-positions/Position_Silver-Mid.png" alt="로그인 이미지"></div>
+<div class="lane-img lane-bottom" onclick="selectLane('BOTTOM')"><img src="/resources/img/ranked-positions/Position_Silver-Bot.png" alt="로그인 이미지"></div>
+<div class="lane-img lane-support" onclick="selectLane('UTILITY')"><img src="/resources/img/ranked-positions/Position_Silver-Support.png" alt="로그인 이미지"></div> */
 
 </script>
 
