@@ -80,4 +80,9 @@
 		WHERE left_champion.champion_en_name = #{left_champion}
 		AND right_champion.champion_en_name = #{right_champion}
 	</select>
+
+	<select id="get_champ_list" resultType="champ">
+		select * from champion_info
+	</select>
+
 </mapper>

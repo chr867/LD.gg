@@ -36,4 +36,6 @@ public interface ChampDao {
 
 	List<Champ_match_up_skill> build_recom_skill(@Param("left_champion")String left_champion, @Param("right_champion")String right_champion);
 
+  List<Champ_default> get_champ_list();
+
 }

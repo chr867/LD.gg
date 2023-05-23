@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ld.gg.dto.champ.Champ_analytics;
+import com.ld.gg.dto.champ.Champ_default;
 import com.ld.gg.dto.champ.Champ_match_up_default;
 import com.ld.gg.service.Champion_service;
 
@@ -25,6 +26,12 @@ public class ChampionRestController {
 	@Autowired
 	Champion_service cs;
 	
+	@GetMapping("/list.json")
+	public List<Champ_default> get_champion_list() throws Exception{
+		List<Champ_default> champ_list = cs.get_champ_list();
+		return champ_list;
+	}
+
 	@PostMapping("/rank.json")
 	public List<Champ_analytics> get_champion_rank(String lane, String tier) throws Exception{
 		List<Champ_analytics> champ_rank = cs.champ_rank(lane, tier);

@@ -1,11 +1,13 @@
 package com.ld.gg.dto.champ;
 
+import org.apache.ibatis.type.Alias;
+
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain=true)
-//@Alias("champ")
+@Alias("champ")
 public class Champ_default {
 	private int champion_id;
 

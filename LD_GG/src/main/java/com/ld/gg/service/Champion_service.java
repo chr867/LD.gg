@@ -86,4 +86,11 @@ public class Champion_service {
 		return build_recom_map;
 	}
 
+  public List<Champ_default> get_champ_list() {
+		List<Champ_default> champ_list = cd.get_champ_list();
+		log.info("champ_list = {}", champ_list);
+
+    return champ_list;
+  }
+
 }
