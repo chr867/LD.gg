@@ -155,6 +155,7 @@
 </head>
 
 <body>
+
 	<div id="session-summoner-name" style="display: none">${sessionScope.lol_account}</div>
 	<div id="session-user-type" style="display: none">${sessionScope.user_type}</div>
 	<div id="session-summoner-name" style="display: none">${sessionScope.summoner_name}</div>

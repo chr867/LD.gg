@@ -5,11 +5,13 @@
 
 <mapper namespace="com.ld.gg.dao.ChampDao">
 	<select id="champ_rank" resultType="champ_analytics">
-		select * from
-		champion_analytics
-		where teamPosition = #{lane} 
-		and summonerTier = #{tier}
-		order by win desc;
+		<![CDATA[
+		select ci.champion_kr_name, ci.champion_en_name, ct.* from champion_tier ct 
+		join champion_info ci on ci.champion_id = ct.champion_id
+		where ct.team_position = #{lane}
+		and ct.pick_rate > 0.5
+		order by ct.tier asc
+		]]>
 	</select>
 
 	<select id="champ_match_up" resultType="champ_match_up">
@@ -78,11 +80,14 @@
 		WHERE left_champion.champion_en_name = #{left_champion}
 		AND right_champion.champion_en_name = #{right_champion}
 	</select>
-	
+
+	<select id="get_champ_list" resultType="champ">
+		select * from champion_info
+	</select>
+
 	<select id="getChampionInfo" resultType="champ_info">
 		SELECT * FROM champion_info where champion_id = #{champion_id}
 	</select>
-	
 	
 	<select id="getChampionLaneData" resultType="champ_recomm_info">
 		SELECT * FROM champion_lane WHERE champion_id = #{champion_id}
@@ -125,5 +130,4 @@
 		SELECT * FROM champion_tier WHERE champion_id = #{champion_id} AND team_position = #{team_position};
 	</select>
 
-	
 </mapper>

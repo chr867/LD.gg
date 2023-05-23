@@ -38,6 +38,9 @@ public interface ChampDao {
 
 	List<Champ_match_up_skill> build_recom_skill(@Param("left_champion")String left_champion, @Param("right_champion")String right_champion);
 
+
+  List<Champ_default> get_champ_list();
+
 	Champ_info getChampionInfo(int champion_id);
 
 	List<Champ_recomm_info> getChampionLaneData(int champion_id);
@@ -59,5 +62,6 @@ public interface ChampDao {
 	List<Champ_recomm_info> getChampionAccessoriesData(@Param("champion_id")int champion_id, @Param("team_position")String team_position);
 	
 	List<Champ_recomm_info> getChampionTierData(@Param("champion_id")int champion_id, @Param("team_position")String team_position);
+
 
 }

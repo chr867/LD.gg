@@ -28,8 +28,7 @@ public class Champion_service {
 
 	public List<Champ_analytics> champ_rank(String lane, String tier) {
 		List<Champ_analytics> champ_list = cd.champ_rank(lane, tier);
-		log.info("champ_list = {}", champ_list);
-
+		// log.info("champ_list = {}", champ_list);
 		return champ_list;
 	}
 
@@ -88,6 +87,14 @@ public class Champion_service {
 		return build_recom_map;
 	}
 
+
+  public List<Champ_default> get_champ_list() {
+		List<Champ_default> champ_list = cd.get_champ_list();
+		log.info("champ_list = {}", champ_list);
+
+    return champ_list;
+  }
+
 	public Champ_info getChampionInfo(int champion_id) {
 
 		return cd.getChampionInfo(champion_id);
@@ -123,5 +130,6 @@ public class Champion_service {
 
 		return championBuildInfo;
 	}
+
 
 }
