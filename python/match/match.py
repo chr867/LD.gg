@@ -17,7 +17,7 @@ def summoner_tier(x):
         res = res[0]['tier']
     except Exception as e:
         if 'status' in res:
-            print(res)
+            print(res, x.api_key, x.summonerName)
             time.sleep(20)
             res = summoner_tier(x)
         print(f'Error: {e}, {res} {x.summonerName}')
@@ -44,14 +44,14 @@ def insert(t, conn):
     mu.mysql_execute(sql, conn)
 
 
-def insert_worker(chunks):
+def insert_worker(chunk):
+    chunk['summonerTier'] = chunk.progress_apply(lambda x: summoner_tier(x), axis=1)
     sql_conn = mu.connect_mysql()
-    insert(chunks, sql_conn)
+    chunk.progress_apply(lambda x: insert(x, sql_conn), axis=1)
     sql_conn.commit()
     sql_conn.close()
 
 if __name__ == '__main__':
-    pool = multiprocessing.Pool(processes=8)  # 프로세스 수 설정
     print("시작!")
     conn = mu.connect_mysql()
     matchId_count = pd.DataFrame(mu.mysql_execute_dict(f"SELECT match_id_substr FROM match_raw_patch", conn))
@@ -167,12 +167,12 @@ if __name__ == '__main__':
                 p_idx += 1
                 bans += 1
         sum_df = pd.DataFrame(df_creater, columns=columns)
-        sum_df['summonerTier'] = sum_df.progress_apply(lambda x: summoner_tier(x), axis=1)
-
-    # sum_df를 8개로 분할하여 작은 DataFrame 리스트를 생성
-    chunks = np.array_split(sum_df, 8)
-    # 작은 DataFrame을 병렬로 처리
-    pool.map(insert_worker, chunks)
-
-    pool.close()
-    pool.join()
+        # shuffled_df = sum_df.sample(frac=1, random_state=42)
+        shuffled_df = sum_df.sample(frac=1, random_state=42).reset_index(drop=True)
+        # sum_df를 8개로 분할하여 작은 DataFrame 리스트를 생성
+        chunks = np.array_split(shuffled_df, 8)
+        # 작은 DataFrame을 병렬로 처리
+        pool = multiprocessing.Pool(processes=8)  # 프로세스 수 설정
+        pool.map(insert_worker, chunks)
+        pool.close()
+        pool.join()
