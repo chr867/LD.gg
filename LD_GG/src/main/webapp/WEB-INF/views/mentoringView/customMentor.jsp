@@ -39,10 +39,10 @@ margin:24px;
 width: 500px;
 }
 .inner-contents{
-min-height: 500px;
+min-height: 400px;
 }
 #tag-box{
-padding-top: 100px;
+padding-top: 70px;
 padding-left: 40px;
 padding-right: 40px;
 }
@@ -57,10 +57,42 @@ padding: 8px 30px;
 }
 #btn-box{
 padding: 16px 8px;
-margin-bottom: 24px;
+margin: 24px 0;
+}
+#btn-box button{
+min-width: 80px;
+border-radius: 10px;
+}
+#position-buttons{
+margin: 32px 0;
+}
+#position-buttons button{
+width:130px;
 }
 #champ-info{
 padding: 8px;
+}
+#tier-holder{
+padding:16px;
+margin:8px 16px;
+border-radius: 20px;
+}
+#tier-holder img{
+margin-bottom: 8px;
+}
+#goal-tier-selector{
+margin-top:8px;
+}
+.gradient {
+height: 120px;
+background: linear-gradient(to top, #cccccc, #ffffff);
+}
+.tier-label{
+font-size: 12px;
+width: 85px;
+margin-top:5px;
+color: #777;
+background-color:#eaeaea;
 }
 
 	</style>
@@ -88,41 +120,64 @@ padding: 8px;
 		
 				<div id="summoner-wrap" class="d-flex align-item-center justify-content-center">
 					<!---->
-					<h4>${member.lol_account} 회원님의 현재 티어는</h4>
+					<div class="my-auto">
+						<h4>
+							<strong>${member.lol_account}</strong>
+						</h4>
+						<span>&nbsp 회원님의 현재 티어는</span>
+					</div>
 					<div class="d-flex align-item-center justify-content-center" summonername="${member.lol_account}">
-						<div class="col"><img src="https://online.gamecoach.pro/img/lol/emblem-UNRANKED.svg">
-							<!-- 여기에 티어 이미지 -->
+						<div class="my-auto">
+							<img style="width: 72px" src="https://online.gamecoach.pro/img/lol/emblem-UNRANKED.svg">
 						</div>
-						<div class="col">
-							<div class="d-flex">
-								<h4>UNRANKED</h4><span>0LP</span>
+						<div class="my-auto">
+							<div>
+								<h4>
+									<strong>UNRANKED</strong>
+								</h4>
+								<div>
+									<span>승률 0%</span>
+									<span>(0승 0패)</span>
+								</div>
 							</div>
-							<div><span>승률 0%&nbsp;</span><span>(0승 0패)</span></div>
+						</div>
+						<div class="my-auto">
+							<span>0LP</span>
 						</div>
 					</div>
-					<h4 class="profile-text2">입니다.</h4>
+					<span class="my-auto">입니다.</span>
 				</div>
 			</div>
 			
 			<div id="form-box">
-				<h5><strong>배우고 싶은 포지션</strong></h5>
-				
-				<div id="position-buttons" class="btn-group" role="group" aria-label="Basic example">
-					<button type="button" id="top-button" class="btn"><img
-							src="https://online.gamecoach.pro/img/icon/lol/ico_lol_top_grey.svg" 
-							class="position-img">탑</button>
-					<button type="button" id="jungle-button" class="btn"><img
-							src="https://online.gamecoach.pro/img/icon/lol/ico_lol_jg_grey.svg" 
-							class="position-img">정글</button>
-					<button type="button" id="mid-button" class="btn"><img
-							src="https://online.gamecoach.pro/img/icon/lol/ico_lol_mid_grey.svg"
-							class="position-img">미드</button>
-					<button type="button" id="bot-button" class="btn"><img
-							src="https://online.gamecoach.pro/img/icon/lol/ico_lol_ad_grey.svg" 
-							class="position-img">바텀</button>
-					<button type="button" id="support-button" class="btn"><img
-							src="https://online.gamecoach.pro/img/icon/lol/ico_lol_sup_grey.svg"
-							class="position-img">서포터</button>
+				<div id="pos-box">
+					<h5><strong>배우고 싶은 포지션</strong></h5>
+					<div id="position-buttons" class="d-flex align-item-center justify-content-evenly">
+						<button type="button" id="top-button" class="btn border">
+							<img src="https://online.gamecoach.pro/img/icon/lol/ico_lol_top_grey.svg" class="position-img">
+							<span>탑</span>
+						</button>
+						<button type="button" id="jungle-button" class="btn border"><img
+								src="https://online.gamecoach.pro/img/icon/lol/ico_lol_jg_grey.svg" 
+								class="position-img">
+							<span>정글</span>
+						</button>
+						<button type="button" id="mid-button" class="btn border"><img
+								src="https://online.gamecoach.pro/img/icon/lol/ico_lol_mid_grey.svg"
+								class="position-img">
+							<span>미드</span>
+						</button>
+						<button type="button" id="bot-button" class="btn border"><img
+								src="https://online.gamecoach.pro/img/icon/lol/ico_lol_ad_grey.svg" 
+								class="position-img">
+							<span>바텀</span>
+						</button>
+						<button type="button" id="support-button" class="btn border"><img
+								src="https://online.gamecoach.pro/img/icon/lol/ico_lol_sup_grey.svg"
+								class="position-img">
+							<span>바텀</span>
+						</button>
+					</div>
 				</div>
 		
 				<h5><strong>배우고 싶은 챔피언</strong></h5>
@@ -143,30 +198,33 @@ padding: 8px;
 							<h4 class="filter-text">챔피언</h4>
 						</div>
 					</div>
-					<div win-rate-filter-champ="">
-						<span text-input="" class="input-champ-keyword white">
+					<div>
+						<span class="input-champ-keyword white">
 							<input placeholder="챔피언을 검색하세요" tabindex="0" type="text" class="champ-search">
 						</span>
 						<div class="champ-list">
+						<!-- 챔피언 리스트 -->
 						</div>
 					</div>
-				</div><br><br>
+				</div>
 		
-				<h5><strong>목표 티어</strong></h5>
-				<div id="goal-tier">
-					<p>목표 티어는</p>
-					<div id="tier-holder"><img src="https://online.gamecoach.pro/img/lol/emblem-UNRANKED.svg">
-						<p>UNRANKED</p>
+				<div id="goal-tier" class="d-flex">
+					<h3 class="my-auto"><strong>목표 티어는</strong></h3>
+					<div id="tier-holder" class="text-center shadow">
+						<img style="width:72px" src="https://online.gamecoach.pro/img/lol/emblem-UNRANKED.svg">
+						<div><strong>UNRANKED</strong></div>
 					</div>
-					<p>이상입니다.</p>
+					<h3 class="my-auto"><strong>이상입니다.</strong></h3>
 				</div>
 			</div><!-- form-box -->
 			
-			<div id="goal-tier-selector" class="d-flex align-item-center justify-content-center text-center" style="display: none">
+			<div id="goal-tier-selector" class="d-none d-flex align-item-center justify-content-evenly text-center">
 				<div class="tier">
 					<div class="tier-box">
-						<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-BRONZE.svg"
-							style="bottom: -0.5px;">
+						<div class="gradient">
+							<img src="https://online.gamecoach.pro/img/lol/emblem-BRONZE.svg"
+							style="margin-top: 35px">
+						</div>
 					</div>
 					<div class="tier-label">
 						<p id="BRONZE">브론즈</p>
@@ -174,8 +232,10 @@ padding: 8px;
 				</div>
 				<div class="tier">
 					<div class="tier-box">
-						<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-SILVER.svg"
-							style="bottom: 4.5px;">
+						<div class="gradient">
+							<img src="https://online.gamecoach.pro/img/lol/emblem-SILVER.svg"
+							style="margin-top: 30px">
+						</div>
 					</div>
 					<div class="tier-label">
 						<p id="SILVER">실버</p>
@@ -183,8 +243,10 @@ padding: 8px;
 				</div>
 				<div class="tier">
 					<div class="tier-box">
-						<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-GOLD.svg"
-							style="bottom: 9.5px;">
+						<div class="gradient">
+							<img src="https://online.gamecoach.pro/img/lol/emblem-GOLD.svg"
+							style="margin-top: 25px">
+						</div>
 					</div>
 					<div class="tier-label">
 						<p id="GOLD">골드</p>
@@ -192,8 +254,10 @@ padding: 8px;
 				</div>
 				<div class="tier">
 					<div class="tier-box">
-						<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-PLATINUM.svg"
-							style="bottom: 14.5px;">
+						<div class="gradient">
+							<img src="https://online.gamecoach.pro/img/lol/emblem-PLATINUM.svg"
+							style="margin-top: 20px">
+						</div>
 					</div>
 					<div class="tier-label">
 						<p id="PLATINUM">플래티넘</p>
@@ -201,8 +265,10 @@ padding: 8px;
 				</div>
 				<div class="tier">
 					<div class="tier-box">
-						<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-DIAMOND.svg"
-							style="bottom: 19.5px;">
+						<div class="gradient">
+						<img src="https://online.gamecoach.pro/img/lol/emblem-DIAMOND.svg"
+							style="margin-top: 15px">
+						</div>
 					</div>
 					<div class="tier-label">
 						<p id="DIAMOND">다이아몬드</p>
@@ -210,8 +276,10 @@ padding: 8px;
 				</div>
 				<div class="tier">
 					<div class="tier-box">
-						<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-MASTER.svg"
-							style="bottom: 24.5px;">
+						<div class="gradient">
+						<img src="https://online.gamecoach.pro/img/lol/emblem-MASTER.svg"
+							style="margin-top: 10px">
+						</div>
 					</div>
 					<div class="tier-label">
 						<p id="MASTER">마스터</p>
@@ -219,8 +287,10 @@ padding: 8px;
 				</div>
 				<div class="tier">
 					<div class="tier-box">
-						<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-GRANDMASTER.svg"
-							style="bottom: 29.5px;">
+						<div class="gradient">
+						<img src="https://online.gamecoach.pro/img/lol/emblem-GRANDMASTER.svg"
+							style="margin-top: 5px">
+						</div>
 					</div>
 					<div class="tier-label">
 						<p id="GRANDMASTER">그랜드 마스터</p>
@@ -228,8 +298,9 @@ padding: 8px;
 				</div>
 				<div class="tier">
 					<div class="tier-box">
-						<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-CHALLENGER.svg"
-							style="bottom: 34.5px;">
+						<div class="gradient">
+						<img src="https://online.gamecoach.pro/img/lol/emblem-CHALLENGER.svg">
+						</div>
 					</div>
 					<div class="tier-label">
 						<p id="CHALLENGER">챌린저</p>
@@ -486,18 +557,18 @@ padding: 8px;
 			});
 
 			$("#goal-tier").click(function () {
-				if ($('#goal-tier-selector').css('display') === 'none') {
-					$('#goal-tier-selector').css('display', 'block');
+				if ($('#goal-tier-selector').attr("class") === "d-none d-flex align-item-center justify-content-evenly text-center") {
+					$('#goal-tier-selector').attr("class","d-flex align-item-center justify-content-evenly text-center");
 				}
 			});
 
 			$(".tier").click(function () {
 				let tier = $(this).find("p").attr("id");
 				let imgURL = $(this).find("img").attr("src");
-				$("#tier-holder p").text(tier);
+				$("#tier-holder strong").text(tier);
 				$("#tier-holder img").attr("src", imgURL);
 				$("#target_tier").val(tier);
-				$('#goal-tier-selector').css('display', 'none');
+				$('#goal-tier-selector').attr("class","d-none d-flex align-item-center justify-content-evenly text-center");
 			});
 
 			$("#top-button").on("click", function () {
@@ -568,7 +639,7 @@ padding: 8px;
 				menti_email: "${member.email}",
 				position_to_learn: position,
 				champion_to_learn: $("#champ-info").attr("data"),
-				target_tier: $("#tier-holder p").text()
+				target_tier: $("#tier-holder strong").text()
 			};
 			console.log(customMentorDTO);
 			$.ajax({
