@@ -20,14 +20,16 @@ def summoner_tier(x):
         ress = res[0]['tier']
         return ress
     else:
-        if res.get('status') is not None:
+        if isinstance(res, list):
+            print(f'Invalid response: {res} {x.summonerName}')
+        elif res.get('status') is not None:
             print('status:', res['status'], x.api_key, x.summonerName)
             time.sleep(20)
             return summoner_tier(x)
         else:
             print('KeyError:', res)
-        print(f'Invalid response: {res} {x.summonerName}')
         return 0
+
 
 def insert(t, conn):
     sql = (
@@ -55,10 +57,7 @@ def insert_worker(args):
     if len(chunk) == 0:
         return
     chunk['summonerTier'] = chunk.progress_apply(lambda x: summoner_tier(x), axis=1)
-    sql_conn = mu.connect_mysql()
-    chunk.progress_apply(lambda x: insert(x, sql_conn), axis=1)
-    sql_conn.commit()
-    sql_conn.close()
+    return chunk
 
 if __name__ == '__main__':
     print("시작!")
@@ -74,7 +73,7 @@ if __name__ == '__main__':
     # len(matchId_count.match_id_substr.unique())
     for limit in tqdm(range(0, len(matchId_count.match_id_substr.unique()), batch_size)):
         conn = mu.connect_mysql()
-        query = f"SELECT * FROM match_raw_patch LIMIT {2000}, {2000}"
+        query = f"SELECT * FROM match_raw_patch LIMIT {limit}, {batch_size}"
         df = pd.DataFrame(mu.mysql_execute_dict(query, conn))
         conn.close()
 
@@ -179,6 +178,14 @@ if __name__ == '__main__':
         df_list = np.array_split(sum_df, 8)
         # 작은 DataFrame을 병렬로 처리
         pool = multiprocessing.Pool(processes=8)  # 프로세스 수 설정
-        pool.map(insert_worker, zip(df_list, range(8)))
-        pool.close()
-        pool.join()
+        summoner_tier_output = []
+        for res in (pool.map(insert_worker, zip(df_list, range(8)))):
+            summoner_tier_output.append(res)
+
+        merged_df = pd.concat(summoner_tier_output)
+        print(f'merged_df = {len(merged_df)}')
+
+        sql_conn = mu.connect_mysql()
+        merged_df.progress_apply(lambda x: insert(x, sql_conn), axis=1)
+        sql_conn.commit()
+        sql_conn.close()
