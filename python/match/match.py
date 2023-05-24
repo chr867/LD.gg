@@ -8,22 +8,26 @@ import multiprocessing
 import numpy as np
 import data_load
 tqdm.pandas()
+import private
 
+riot_api_keys = private.riot_api_key_array
 
 def summoner_tier(x):
     url = f'https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/{x.summonerId}?api_key={x.api_key}'
     res = requests.get(url).json()
-    try:
-        res = res[0]['tier']
-    except Exception as e:
-        if 'status' in res:
-            print(res, x.api_key, x.summonerName)
-            time.sleep(20)
-            res = summoner_tier(x)
-        print(f'Error: {e}, {res} {x.summonerName}')
-        res = 0
 
-    return res
+    if isinstance(res, list) and len(res) > 0:
+        ress = res[0]['tier']
+        return ress
+    else:
+        if res.get('status') is not None:
+            print('status:', res['status'], x.api_key, x.summonerName)
+            time.sleep(20)
+            return summoner_tier(x)
+        else:
+            print('KeyError:', res)
+        print(f'Invalid response: {res} {x.summonerName}')
+        return 0
 
 def insert(t, conn):
     sql = (
@@ -44,7 +48,12 @@ def insert(t, conn):
     mu.mysql_execute(sql, conn)
 
 
-def insert_worker(chunk):
+def insert_worker(args):
+    chunks, i = args
+    chunk = chunks[chunks['api_key'] == riot_api_keys[i]]
+    print(len(chunk))
+    if len(chunk) == 0:
+        return
     chunk['summonerTier'] = chunk.progress_apply(lambda x: summoner_tier(x), axis=1)
     sql_conn = mu.connect_mysql()
     chunk.progress_apply(lambda x: insert(x, sql_conn), axis=1)
@@ -65,7 +74,7 @@ if __name__ == '__main__':
     # len(matchId_count.match_id_substr.unique())
     for limit in tqdm(range(0, len(matchId_count.match_id_substr.unique()), batch_size)):
         conn = mu.connect_mysql()
-        query = f"SELECT * FROM match_raw_patch LIMIT {limit}, {batch_size}"
+        query = f"SELECT * FROM match_raw_patch LIMIT {2000}, {2000}"
         df = pd.DataFrame(mu.mysql_execute_dict(query, conn))
         conn.close()
 
@@ -167,12 +176,9 @@ if __name__ == '__main__':
                 p_idx += 1
                 bans += 1
         sum_df = pd.DataFrame(df_creater, columns=columns)
-        # shuffled_df = sum_df.sample(frac=1, random_state=42)
-        shuffled_df = sum_df.sample(frac=1, random_state=42).reset_index(drop=True)
-        # sum_df를 8개로 분할하여 작은 DataFrame 리스트를 생성
-        chunks = np.array_split(shuffled_df, 8)
+        df_list = np.array_split(sum_df, 8)
         # 작은 DataFrame을 병렬로 처리
         pool = multiprocessing.Pool(processes=8)  # 프로세스 수 설정
-        pool.map(insert_worker, chunks)
+        pool.map(insert_worker, zip(df_list, range(8)))
         pool.close()
         pool.join()
