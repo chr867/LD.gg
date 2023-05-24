@@ -89,7 +89,51 @@
    </select>
 
 <select id="get_summoner_record" resultType="record">
-	
+SELECT
+    match_id,
+    win,
+    champ_name,
+    champ_level,
+    team_id,
+    ri1.rune_img as main_rune1,
+    ri2.rune_img as sub_rune,
+    si1.spell_en_name as spell1,
+    si2.spell_en_name as spell2,
+    ROUND((kills+assists) / team_champion_kills, 2) as kill_involve,
+    kda,
+    kills,
+    deaths,
+    assists,
+    cs,
+    sight_point,
+    red_ward_placed,
+    item1,
+    item2,
+    item3,
+    item4,
+    item5,
+    item6,
+    item7,
+    team_id,
+    game_duration
+FROM
+    record
+INNER JOIN
+    spell_info as si1 ON spell1 = si1.spell_id
+INNER JOIN
+    spell_info as si2 ON spell2 = si2.spell_id
+inner join 
+	rune_info as ri1 on main_rune1 = ri1.rune_id
+inner join
+	rune_info as ri2 on sub_rune = ri2.rune_id
+WHERE
+    summoner_name = #{summoner_name};
+</select>
+
+<select id="getMatchUpPlayer" resultType = "matchUpPlayer">
+	select summoner_name as player, champ_name, team_id
+	from record
+	where match_id = #{match_id};
 </select>
 
 <select id="get_champ_record" resultType="champ_record">
@@ -233,76 +277,43 @@
   GROUP BY lane;
    </select>
 
- <select id="get_record_detail" resultType="record">
-	SELECT
-  r.summoner_name AS summoner_name,
-  r.win as win,
-  r.team_tower_kills AS team_tower_kills,
-  r.team_dragon_kills AS team_dragon_kills,
-  r.team_baron_kills AS team_baron_kills,
-  r.team_id AS team_id,
-  r.team_champion_kills AS team_champion_kills,
-  r.team_champion_deaths AS team_champion_deaths,
-  (SELECT SUM(assists) FROM record WHERE match_id = #{match_id} AND team_id = r.team_id) AS team_champion_assists,
-  r.champ_name AS champ_name,
-  r.champ_level AS champ_level,
-  r.spell1 AS spell1,
-  r.spell2 AS spell2,
-  r.main_rune AS main_rune,
-  r.main_rune1 AS main_rune1,
-  r.sub_rune AS sub_rune,
-  r.kills AS kills,
-  r.deaths AS deaths,
-  r.assists AS assists,
-  r.kda AS kda,
-  r.cs AS cs,
-  r.red_ward_placed AS red_ward_placed,
-  r.dealt_to_champ AS dealt_to_champ,
-  r.item1 AS item1,
-  r.item2 AS item2,
-  r.item3 AS item3,
-  r.item4 AS item4,
-  r.item5 AS item5,
-  r.item6 AS item6,
-  r.item7 AS item7,
-  LOWER(si.tier) AS tier
-FROM
-  record r
-  JOIN summoner_info si ON r.summoner_name = si.summoner_name
-  JOIN record s ON r.team_id = s.team_id
-WHERE
-  r.match_id = '#{match_id}
-GROUP BY
-  r.summoner_name,
-  r.win,
-  r.team_tower_kills,
-  r.team_dragon_kills,
-  r.team_baron_kills,
-  r.team_id,
-  r.team_champion_kills,
-  r.team_champion_deaths,
-  r.champ_name,
-  r.champ_level,
-  r.spell1,
-  r.spell2,
-  r.main_rune,
-  r.main_rune1,
-  r.sub_rune,
-  r.kills,
-  r.deaths,
-  r.assists,
-  r.kda,
-  r.cs,
-  r.red_ward_placed,
-  r.dealt_to_champ,
-  r.item1,
-  r.item2,
-  r.item3,
-  r.item4,
-  r.item5,
-  r.item6,
-  r.item7,
-  si.tier;
+ <select id="get_record_detail" resultType="record_info">
+	select
+	r.summoner_name as summoner_name,
+	champ_name,
+	champ_level,
+	win,
+	ri1.rune_img as main_rune1,
+	ri2.rune_img as sub_rune,
+	si1.spell_en_name as spell1,
+	si2.spell_en_name as spell2,
+	LOWER(sr.tier) as tier,
+	kills,
+	deaths,
+	assists,
+	kda,
+	team_id,
+	cs,
+	dealt_to_champ,
+	item1,
+	item2,
+	item3,
+	item4,
+	item5,
+	item6,
+	item7
+	from record r
+	INNER JOIN
+	spell_info as si1 ON spell1 = si1.spell_id
+	INNER JOIN
+	spell_info as si2 ON spell2 = si2.spell_id
+	inner join 
+	rune_info as ri1 on main_rune1 = ri1.rune_id
+	inner join
+	rune_info as ri2 on sub_rune = ri2.rune_id
+	inner join
+	summoner_rank as sr on r.summoner_name = sr.summoner_name
+	where match_id = #{match_id};
 </select>
 
 <select id="getBuild" resultType="build">

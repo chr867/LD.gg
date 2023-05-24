@@ -21,9 +21,7 @@ public class RecordDto {
 	private int assists;
 	private int KDA;
 	private int cs;
-	private String tier;
 	private int game_duration;
-	private String game_date;
 	private String main_rune1;
 	private String sub_rune;
 	private String item1;
@@ -34,9 +32,8 @@ public class RecordDto {
 	private String item6;
 	private String item7;
 	private int red_ward_placed;
-	private int dealt_to_champ;
 	private String spell1;
 	private String spell2;
 	private int sight_point;
-	private String player_champ_name;
+	private double kill_involve;
 }
