@@ -116,6 +116,7 @@ background-color:#eaeaea;
 						</div>
 						<span>1/6</span>
 					</div>
+					<h4 class="profile-text2">입니다.</h4>
 				</div>
 		
 				<div id="summoner-wrap" class="d-flex align-item-center justify-content-center">
