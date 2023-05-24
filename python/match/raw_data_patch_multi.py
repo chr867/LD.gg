@@ -316,7 +316,7 @@ def main():
     print('done')
 
 if __name__ == '__main__':
-    for _ in tqdm(range(24)):
+    for _ in tqdm(range(13)):
         try:
             main()
         except Exception as e:
