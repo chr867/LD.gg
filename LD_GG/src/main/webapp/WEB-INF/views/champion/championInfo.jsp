@@ -147,6 +147,8 @@
 	display: flex;
 	height: 50px;
 	width: 350px;
+	background-color: #fff;
+	border-radius: 0.5;
 	box-sizing: border-box;
 	margin-bottom: 5px;
 	align-items: center;
@@ -268,6 +270,22 @@
   .sub-ability{
     padding: 120px 0 0 0;
   }
+.rune-desc{
+    position: absolute;
+    z-index: 10;
+    width: 200px;
+    background-color: black;
+    color: #fff;
+    border-radius: 0.5rem;
+    padding: 10px;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.3s linear;
+  }
+.rune:hover .rune-desc{
+	visibility: visible;
+	opacity: 1;
+}
 </style>
 </head>
 
@@ -737,184 +755,25 @@
 		</div>
 		<div class="middle-container">
 			<div class="rune-container">
-				<div class="rune-box">
-					<div class="first-rune" style="margin: 0 auto">
-						<img
-							src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/7200_Domination.png"
-							alt="">
-					</div>
-					<div class="runes">
-						<div class="rune">
-							<img
-								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/Electrocute/Electrocute.png"
-								alt="">
-						</div>
-						<div class="rune">
-							<img
-								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/Predator/Predator.png"
-								alt="">
-						</div>
-						<div class="rune">
-							<img
-								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/DarkHarvest/DarkHarvest.png"
-								alt="">
-						</div>
-						<div class="rune">
-							<img
-								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/HailOfBlades/HailOfBlades.png"
-								alt="">
-						</div>
-					</div>
-					<div class="runes">
-						<div class="rune">
-							<img
-								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/CheapShot/CheapShot.png"
-								alt="">
-						</div>
-						<div class="rune">
-							<img
-								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/TasteOfBlood/GreenTerror_TasteOfBlood.png"
-								alt="">
-						</div>
-						<div class="rune">
-							<img
-								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/SuddenImpact/SuddenImpact.png"
-								alt="">
-						</div>
-					</div>
-					<div class="runes">
-						<div class="rune">
-							<img
-								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/ZombieWard/ZombieWard.png"
-								alt="" style="filter: grayscale(100%);">
-						</div>
-						<div class="rune">
-							<img
-								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/GhostPoro/GhostPoro.png"
-								alt="">
-						</div>
-						<div class="rune">
-							<img
-								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/EyeballCollection/EyeballCollection.png"
-								alt="">
-						</div>
-					</div>
-					<div class="runes">
-						<div class="rune">
-							<img
-								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/TreasureHunter/TreasureHunter.png"
-								alt="">
-						</div>
-						<div class="rune">
-							<img
-								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/IngeniousHunter/IngeniousHunter.png"
-								alt="">
-						</div>
-						<div class="rune">
-							<img
-								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/RelentlessHunter/RelentlessHunter.png"
-								alt="">
-						</div>
-						<div class="rune">
-							<img
-								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/UltimateHunter/UltimateHunter.png"
-								alt="">
-						</div>
-					</div>
+			
+				<div class="rune-box main-runes">
+					<div class="first-rune main-rune-top" style="margin: 0 auto"></div>
+					<div class="runes main-rune-first"></div>
+					<div class="runes main-rune-second"></div>
+					<div class="runes main-rune-third"></div>
+					<div class="runes main-rune-fourth"></div>
 				</div>
-
 				<div class="rune-box sub-runes">
-					<div class="first-rune" style="margin: 10px auto">
-						<img
-							src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/7202_Sorcery.png"
-							alt="">
-					</div>
-					<div class="runes">
-						<div class="rune">
-							<img
-								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Sorcery/NullifyingOrb/Pokeshield.png"
-								alt="">
-						</div>
-						<div class="rune">
-							<img
-								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Sorcery/ManaflowBand/ManaflowBand.png"
-								alt="">
-						</div>
-						<div class="rune">
-							<img
-								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Sorcery/NimbusCloak/6361.png"
-								alt="">
-						</div>
-					</div>
-					<div class="runes">
-						<div class="rune">
-							<img
-								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Sorcery/Transcendence/Transcendence.png"
-								alt="">
-						</div>
-						<div class="rune">
-							<img
-								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Sorcery/Celerity/CelerityTemp.png"
-								alt="">
-						</div>
-						<div class="rune">
-							<img
-								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Sorcery/AbsoluteFocus/AbsoluteFocus.png"
-								alt="">
-						</div>
-					</div>
-					<div class="runes">
-						<div class="rune">
-							<img
-								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Sorcery/Scorch/Scorch.png"
-								alt="">
-						</div>
-						<div class="rune">
-							<img
-								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Sorcery/Waterwalking/Waterwalking.png"
-								alt="">
-						</div>
-						<div class="rune">
-							<img
-								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Sorcery/GatheringStorm/GatheringStorm.png"
-								alt="">
-						</div>
-					</div>
+					<div class="first-rune sub-rune-top" style="margin: 10px auto"></div>
+					<div class="runes sub-rune-first"></div>
+					<div class="runes sub-rune-second"></div>
+					<div class="runes sub-rune-third"></div>
 				</div>
 				<div class="rune-box sub-ability">
-					<div class="runes">
-						<div class="rune">
-							<img src="" alt="">
-						</div>
-						<div class="rune">
-							<img src="" alt="">
-						</div>
-						<div class="rune">
-							<img src="" alt="">
-						</div>
-					</div>
-					<div class="runes">
-						<div class="rune">
-							<img src="" alt="">
-						</div>
-						<div class="rune">
-							<img src="" alt="">
-						</div>
-						<div class="rune">
-							<img src="" alt="">
-						</div>
-					</div>
-					<div class="runes">
-						<div class="rune">
-							<img src="" alt="">
-						</div>
-						<div class="rune">
-							<img src="" alt="">
-						</div>
-						<div class="rune">
-							<img src="" alt="">
-						</div>
-					</div>
+					<div class="runes sub-ability-first"></div>
+					<div class="runes sub-ability-second"></div>
+					<div class="runes sub-ability-third"></div>
+					
 				</div>
 			</div>
 		</div>
@@ -1000,6 +859,8 @@ function championBuildInfo(champion_id, team_position) {
 			  console.log(champTierData[0].ban_rate);
 			  console.log(champEasyChampData);
 			  console.log(champHardChampData);
+			  //-----------------------------------------------------------------------------------
+			  //챔피언 티어 승률 픽률 밴률 
 			  if(champTierData[0].tier == 0){
 				  document.getElementById('tier').textContent = 'OP';
 			  }else{
@@ -1008,7 +869,8 @@ function championBuildInfo(champion_id, team_position) {
 			  document.getElementById('win-rate').textContent = champTierData[0].win_rate+'%';
 			  document.getElementById('pick-rate').textContent = champTierData[0].pick_rate+'%';
 			  document.getElementById('ban-rate').textContent = champTierData[0].ban_rate+'%';
-			  
+			  //-----------------------------------------------------------------------------------
+			  // 상대하기 쉬운 챔피언 
 			  let easyTableHeaders = document.getElementsByClassName('easy-champ-img');
 			  for (var i = 0; i < easyTableHeaders.length; i++) {
 				  easyTableHeaders[i].innerHTML = '';
@@ -1020,7 +882,8 @@ function championBuildInfo(champion_id, team_position) {
 				  hardEasyTableData[i].innerHTML = '';
 				  hardEasyTableData[i].innerHTML = champEasyChampData[i].match_up_win_rate+'%';
 			  }
-			  
+			  //-----------------------------------------------------------------------------------
+			  // 상대하기 어려운 챔피언 
 			  let hardTableHeaders = document.getElementsByClassName('hard-champ-img');
 			  for (var i = 0; i < hardTableHeaders.length; i++) {
 				  hardTableHeaders[i].innerHTML = '';
@@ -1032,16 +895,177 @@ function championBuildInfo(champion_id, team_position) {
 				  hardTableData[i].innerHTML = '';
 				  hardTableData[i].innerHTML = champHardChampData[i].match_up_win_rate+'%';
 			  }
+			  //-----------------------------------------------------------------------------------
+			  rune_full_data(champRuneData[0].main_KEYSTONE_ID,champRuneData[0].sub_KEYSTONE_ID)
 		}).fail(err => {
 		  console.log(err);
 		});	
 }
 
-/* <div class="lane-img lane-top" onclick="selectLane('TOP')"><img src="/resources/img/ranked-positions/Position_Silver-Top.png" alt="로그인 이미지"></div>
-<div class="lane-img lane-jungle" onclick="selectLane('JUNGLE')"><img src="/resources/img/ranked-positions/Position_Silver-Jungle.png" alt="로그인 이미지"></div>
-<div class="lane-img lane-middle" onclick="selectLane('MIDDLE')"><img src="/resources/img/ranked-positions/Position_Silver-Mid.png" alt="로그인 이미지"></div>
-<div class="lane-img lane-bottom" onclick="selectLane('BOTTOM')"><img src="/resources/img/ranked-positions/Position_Silver-Bot.png" alt="로그인 이미지"></div>
-<div class="lane-img lane-support" onclick="selectLane('UTILITY')"><img src="/resources/img/ranked-positions/Position_Silver-Support.png" alt="로그인 이미지"></div> */
+function rune_full_data(main,sub) {
+	let main_key = '';
+	switch (main) {
+	  case '8200':
+		  main_key = 'Sorcery';
+	    break;
+	  case '8400':
+		  main_key = 'Resolve';
+	    break;
+	  case '8000':
+		  main_key = 'Precision';
+	    break;
+	  case '8300':
+		  main_key = 'Inspiration';
+	    break;
+	  case '8100':
+		  main_key = 'Domination';
+	    break;
+	  default:
+	    break;
+	} 
+	let sub_key = '';
+	switch (sub) {
+	  case '8200':
+		  sub_key = 'Sorcery';
+	    break;
+	  case '8400':
+		  sub_key = 'Resolve';
+	    break;
+	  case '8000':
+		  sub_key = 'Precision';
+	    break;
+	  case '8300':
+		  sub_key = 'Inspiration';
+	    break;
+	  case '8100':
+		  sub_key = 'Domination';
+	    break;
+	  default:
+	    break;
+	}
+	
+	$.ajax({
+	  method: 'get',
+	  url: '/champion/info/rune/main',
+	  data: { main_key: main_key },
+	}).done(res => {
+		console.log(res)
+		let main_rune_top = document.getElementsByClassName('main-rune-top')[0];
+		let main_rune_first = document.getElementsByClassName('main-rune-first')[0];
+		let main_rune_second = document.getElementsByClassName('main-rune-second')[0];
+		let main_rune_third = document.getElementsByClassName('main-rune-third')[0];
+		let main_rune_fourth = document.getElementsByClassName('main-rune-fourth')[0];
+		for (let i = 0; i < res.length; i++) {
+			rune_num = res[i].rune_num % res[0].rune_num
+			console.log(rune_num)
+			if(rune_num == 0){
+				console.log("메인룬")
+				main_rune_top.innerHTML += '<img src="/resources/img/'+res[i].rune_img+'" alt="">'
+			}else if(rune_num > 0 && rune_num < 100){
+				html = ''
+				html += '<div class="rune">'
+				html += '<img src="/resources/img/'+res[i].rune_img+'" alt="" id="'+res[i].rune_id+'">'
+				html += '<div class="rune-desc">'
+				html += '<div>'+res[i].rune_kr_name+'</div>'
+				html += '<br>'
+				html += '<div>'+res[i].rune_desc+'</div>'
+				html += '</div>'
+				html += '</div>'
+				main_rune_first.innerHTML += html
+			}else if(rune_num > 100 && rune_num < 200){
+				html = ''
+				html += '<div class="rune">'
+				html += '<img src="/resources/img/'+res[i].rune_img+'" alt="" id="'+res[i].rune_id+'">'
+				html += '<div class="rune-desc">'
+				html += '<div>'+res[i].rune_kr_name+'</div>'
+				html += '<br>'
+				html += '<div>'+res[i].rune_desc+'</div>'
+				html += '</div>'
+				html += '</div>'
+				main_rune_second.innerHTML += html
+			}else if(rune_num > 200 && rune_num < 300){
+				html = ''
+				html += '<div class="rune">'
+				html += '<img src="/resources/img/'+res[i].rune_img+'" alt="" id="'+res[i].rune_id+'">'
+				html += '<div class="rune-desc">'
+				html += '<div>'+res[i].rune_kr_name+'</div>'
+				html += '<br>'
+				html += '<div>'+res[i].rune_desc+'</div>'
+				html += '</div>'
+				html += '</div>'
+				main_rune_third.innerHTML += html
+			}else if(rune_num > 300){
+				html = ''
+				html += '<div class="rune">'
+				html += '<img src="/resources/img/'+res[i].rune_img+'" alt="" id="'+res[i].rune_id+'">'
+				html += '<div class="rune-desc">'
+				html += '<div>'+res[i].rune_kr_name+'</div>'
+				html += '<br>'
+				html += '<div>'+res[i].rune_desc+'</div>'
+				html += '</div>'
+				html += '</div>'
+				main_rune_fourth.innerHTML += html
+			}
+		}
+	}).fail(err => {
+	  console.log(err);
+	});
+	
+	 $.ajax({
+		  method: 'get',
+		  url: '/champion/info/rune/sub',
+		  data: { sub_key : sub_key },
+		}).done(res => {
+			console.log(res)
+			let sub_rune_top = document.getElementsByClassName('sub-rune-top')[0];
+			let sub_rune_first = document.getElementsByClassName('sub-rune-first')[0];
+			let sub_rune_second = document.getElementsByClassName('sub-rune-second')[0];
+			let sub_rune_third = document.getElementsByClassName('sub-rune-third')[0];
+			for (let i = 0; i < res.length; i++) {
+				rune_num = res[i].rune_num % res[0].rune_num
+				console.log(rune_num)
+				if(rune_num == 0){
+					console.log("메인룬")
+					sub_rune_top.innerHTML += '<img src="/resources/img/'+res[i].rune_img+'" alt="">'
+				}else if(rune_num > 100 && rune_num < 200){
+					html = ''
+					html += '<div class="rune">'
+					html += '<img src="/resources/img/'+res[i].rune_img+'" alt="" id="'+res[i].rune_id+'">'
+					html += '<div class="rune-desc">'
+					html += '<div>'+res[i].rune_kr_name+'</div>'
+					html += '<br>'
+					html += '<div>'+res[i].rune_desc+'</div>'
+					html += '</div>'
+					html += '</div>'
+					sub_rune_first.innerHTML += html
+				}else if(rune_num > 200 && rune_num < 300){
+					html = ''
+					html += '<div class="rune">'
+					html += '<img src="/resources/img/'+res[i].rune_img+'" alt="" id="'+res[i].rune_id+'">'
+					html += '<div class="rune-desc">'
+					html += '<div>'+res[i].rune_kr_name+'</div>'
+					html += '<br>'
+					html += '<div>'+res[i].rune_desc+'</div>'
+					html += '</div>'
+					html += '</div>'
+					sub_rune_second.innerHTML += html
+				}else if(rune_num > 300){
+					html = ''
+					html += '<div class="rune">'
+					html += '<img src="/resources/img/'+res[i].rune_img+'" alt="" id="'+res[i].rune_id+'">'
+					html += '<div class="rune-desc">'
+					html += '<div>'+res[i].rune_kr_name+'</div>'
+					html += '<br>'
+					html += '<div>'+res[i].rune_desc+'</div>'
+					html += '</div>'
+					html += '</div>'
+					sub_rune_third.innerHTML += html
+				}
+			}
+		}).fail(err => {
+		  console.log(err);
+		}); 
+}
 
 </script>
 
