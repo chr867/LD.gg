@@ -9,230 +9,459 @@
 <title>맞춤 멘토</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
-#container{
-width:800px;
+#content{
+width: 900px;
 border-radius: 10px;
 box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 padding-top: 90px;
+margin-top:40px;
 }
-		.tag-button.selected {
-			background-color: #2196F3;
-			color: white;
-		}
+section{
+padding: 0 40px;
+border: solid 1px;
+}
+#qustions{
+padding: 0 90px;
+}
+#summoner-wrap{
+background-color:#f2f2f2;
+padding: 24px;
+margin:24px;
+}
+.champ-list {
+	height: 336px;
+	border-radius: 12px;
+	overflow-y: scroll;
+	box-sizing: border-box;
+	border: 1px solid #d5d5de;
+}
+.progress{
+width: 500px;
+}
+.inner-contents{
+min-height: 500px;
+}
+#tag-box{
+padding-top: 100px;
+padding-left: 40px;
+padding-right: 40px;
+}
+#form-box{
+padding-top: 40px;
+padding-left: 40px;
+padding-right: 40px;
+}
+#btn-check{
+margin: 5px;
+padding: 8px 30px;
+}
+#btn-box{
+padding: 16px 8px;
+margin-bottom: 24px;
+}
+#champ-info{
+padding: 8px;
+}
 
-		.tag-button.mouse-over {
-			background-color: #ddd;
-		}
-
-		.champ-list {
-			height: 336px;
-			border-radius: 12px;
-			overflow-y: scroll;
-			box-sizing: border-box;
-			border: 1px solid #d5d5de;
-		}
-
-		#position-buttons {
-			display: flex;
-		}
-
-		#position-buttons button {
-			background-color: #f2f2f2;
-			border: none;
-			color: black;
-			padding: 10px;
-			margin: 5px;
-			cursor: pointer;
-		}
-
-		#position-buttons button:hover {
-			background-color: #ddd;
-		}
 	</style>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 </head>
 
 <body>
-<div id="container" class="container">
-
-	<form id="customMentorForm" onsubmit="return submitForm()">
-		<div id="custom-header" class="text-center">
-			<div id="custom-title">
-				<h4>나에게 딱 맞는 멘토님을 찾기위해</h4>
-				<h4><img src=""><em>목표를 설정해 볼까요?</em></h4>
-			</div>
-			<div class="progress">
-			  <div class="progress-bar" role="progressbar" aria-label="Basic example" 
-			  style="width:17%" aria-valuenow="17" aria-valuemin="0" aria-valuemax="100">
-			  </div><div><em>1</em>/6</div>
-			</div>
-	
-			<div id="summoner-wrap" class="d-flex align-item-center justify-content-center">
-				<!---->
-				<h4>${member.lol_account} 회원님의 현재 티어는</h4>
-				<div class="d-flex align-item-center justify-content-center" summonername="${member.lol_account}">
-					<div class="col"><img src="https://online.gamecoach.pro/img/lol/emblem-UNRANKED.svg">
-						<!-- 여기에 티어 이미지 -->
-					</div>
-					<div class="col">
-						<div class="d-flex">
-							<h4>UNRANKED</h4><span>0LP</span>
-						</div>
-						<div><span>승률 0%&nbsp;</span><span>(0승 0패)</span></div>
-					</div>
-				</div>
-				<h4 class="profile-text2">입니다.</h4>
-			</div>
-		</div>
-
-		<label for="position_to_learn">배우고 싶은 포지션:</label>
-		<input type="text" id="position_to_learn" name="position_to_learn"
-			value="${mentor_profile.about_mentor}"><br><br>
-
-		<div id="position-buttons" class="btn-group" role="group" aria-label="Basic example">
-			<button type="button" id="top-button" class="btn"><img
-					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_top_grey.svg" 
-					class="position-img">탑</button>
-			<button type="button" id="jungle-button" class="btn"><img
-					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_jg_grey.svg" 
-					class="position-img">정글</button>
-			<button type="button" id="mid-button" class="btn"><img
-					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_mid_grey.svg"
-					class="position-img">미드</button>
-			<button type="button" id="bot-button" class="btn"><img
-					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_ad_grey.svg" 
-					class="position-img">바텀</button>
-			<button type="button" id="support-button" class="btn"><img
-					src="https://online.gamecoach.pro/img/icon/lol/ico_lol_sup_grey.svg"
-					class="position-img">서포터</button>
-		</div>
-
-		<label for="champion_to_learn">배우고 싶은 챔피언:</label>
-		<input type="text" id="champion_to_learn" name="champion_to_learn"
-			value="${mentor_profile.specialized_position}">
-
-		<div class="champ-selector-inner">
-			<div class="champ-info"><span><img retry-img="" src="" cdn-img="" class="champ-img">
-					<p class="champ-name">배우고 싶은 챔피언을 선택 해주세요</p>
-				</span></div><img src="https://online.gamecoach.pro/img/icon/icon-arrow-down-grey.svg"
-				class="arrow-icon">
-		</div>
-		<div class="filter-champ-wrap" style="display: none">
-			<div class="filter-title-wrap">
+<div class="container d-flex align-item-center justify-content-center">
+	<div id="content">
+	 <div id="question">
+	 	<section id="first">
+			<div id="custom-header" class="text-center">
 				<div>
-					<h4 class="filter-text">챔피언</h4>
+					<div>
+						<h4>나에게 딱 맞는 멘토님을 찾기위해</h4>
+						<h4><img src="https://online.gamecoach.pro/img/coaching/emoji-star.svg"><strong>목표를 설정해 볼까요?</strong></h4>
+					</div>
+					<div class="d-flex justify-content-center">
+						<div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="17" aria-valuemin="0" aria-valuemax="100">
+						  <div class="progress-bar" style="width: 17%">17%</div>
+						</div>
+						<span>1/6</span>
+					</div>
+				</div>
+		
+				<div id="summoner-wrap" class="d-flex align-item-center justify-content-center">
+					<!---->
+					<h4>${member.lol_account} 회원님의 현재 티어는</h4>
+					<div class="d-flex align-item-center justify-content-center" summonername="${member.lol_account}">
+						<div class="col"><img src="https://online.gamecoach.pro/img/lol/emblem-UNRANKED.svg">
+							<!-- 여기에 티어 이미지 -->
+						</div>
+						<div class="col">
+							<div class="d-flex">
+								<h4>UNRANKED</h4><span>0LP</span>
+							</div>
+							<div><span>승률 0%&nbsp;</span><span>(0승 0패)</span></div>
+						</div>
+					</div>
+					<h4 class="profile-text2">입니다.</h4>
 				</div>
 			</div>
-			<div win-rate-filter-champ="">
-				<span text-input="" class="input-champ-keyword white">
-					<input placeholder="챔피언을 검색하세요" tabindex="0" type="text" class="champ-search">
-				</span>
-				<div class="champ-list">
+			
+			<div id="form-box">
+				<h5><strong>배우고 싶은 포지션</strong></h5>
+				
+				<div id="position-buttons" class="btn-group" role="group" aria-label="Basic example">
+					<button type="button" id="top-button" class="btn"><img
+							src="https://online.gamecoach.pro/img/icon/lol/ico_lol_top_grey.svg" 
+							class="position-img">탑</button>
+					<button type="button" id="jungle-button" class="btn"><img
+							src="https://online.gamecoach.pro/img/icon/lol/ico_lol_jg_grey.svg" 
+							class="position-img">정글</button>
+					<button type="button" id="mid-button" class="btn"><img
+							src="https://online.gamecoach.pro/img/icon/lol/ico_lol_mid_grey.svg"
+							class="position-img">미드</button>
+					<button type="button" id="bot-button" class="btn"><img
+							src="https://online.gamecoach.pro/img/icon/lol/ico_lol_ad_grey.svg" 
+							class="position-img">바텀</button>
+					<button type="button" id="support-button" class="btn"><img
+							src="https://online.gamecoach.pro/img/icon/lol/ico_lol_sup_grey.svg"
+							class="position-img">서포터</button>
+				</div>
+		
+				<h5><strong>배우고 싶은 챔피언</strong></h5>
+				<input type="text" id="champion_to_learn" value="">
+		
+				<div class="champ-selector-inner">
+					<div id="champ-info">
+						<span>
+							<img src="" class="champ-img">
+							<p class="champ-name">배우고 싶은 챔피언을 선택 해주세요</p>
+						</span>
+					</div>
+					<img class="arrow-icon" src="https://online.gamecoach.pro/img/icon/icon-arrow-down-grey.svg">
+				</div>
+				<div class="filter-champ-wrap" style="display: none">
+					<div class="filter-title-wrap">
+						<div>
+							<h4 class="filter-text">챔피언</h4>
+						</div>
+					</div>
+					<div win-rate-filter-champ="">
+						<span text-input="" class="input-champ-keyword white">
+							<input placeholder="챔피언을 검색하세요" tabindex="0" type="text" class="champ-search">
+						</span>
+						<div class="champ-list">
+						</div>
+					</div>
+				</div><br><br>
+		
+				<h5><strong>목표 티어</strong></h5>
+				<div id="goal-tier">
+					<p>목표 티어는</p>
+					<div id="tier-holder"><img src="https://online.gamecoach.pro/img/lol/emblem-UNRANKED.svg">
+						<p>UNRANKED</p>
+					</div>
+					<p>이상입니다.</p>
+				</div>
+			</div><!-- form-box -->
+			
+			<div id="goal-tier-selector" class="d-flex align-item-center justify-content-center text-center" style="display: none">
+				<div class="tier">
+					<div class="tier-box">
+						<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-BRONZE.svg"
+							style="bottom: -0.5px;">
+					</div>
+					<div class="tier-label">
+						<p id="BRONZE">브론즈</p>
+					</div>
+				</div>
+				<div class="tier">
+					<div class="tier-box">
+						<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-SILVER.svg"
+							style="bottom: 4.5px;">
+					</div>
+					<div class="tier-label">
+						<p id="SILVER">실버</p>
+					</div>
+				</div>
+				<div class="tier">
+					<div class="tier-box">
+						<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-GOLD.svg"
+							style="bottom: 9.5px;">
+					</div>
+					<div class="tier-label">
+						<p id="GOLD">골드</p>
+					</div>
+				</div>
+				<div class="tier">
+					<div class="tier-box">
+						<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-PLATINUM.svg"
+							style="bottom: 14.5px;">
+					</div>
+					<div class="tier-label">
+						<p id="PLATINUM">플래티넘</p>
+					</div>
+				</div>
+				<div class="tier">
+					<div class="tier-box">
+						<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-DIAMOND.svg"
+							style="bottom: 19.5px;">
+					</div>
+					<div class="tier-label">
+						<p id="DIAMOND">다이아몬드</p>
+					</div>
+				</div>
+				<div class="tier">
+					<div class="tier-box">
+						<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-MASTER.svg"
+							style="bottom: 24.5px;">
+					</div>
+					<div class="tier-label">
+						<p id="MASTER">마스터</p>
+					</div>
+				</div>
+				<div class="tier">
+					<div class="tier-box">
+						<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-GRANDMASTER.svg"
+							style="bottom: 29.5px;">
+					</div>
+					<div class="tier-label">
+						<p id="GRANDMASTER">그랜드 마스터</p>
+					</div>
+				</div>
+				<div class="tier">
+					<div class="tier-box">
+						<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-CHALLENGER.svg"
+							style="bottom: 34.5px;">
+					</div>
+					<div class="tier-label">
+						<p id="CHALLENGER">챌린저</p>
+					</div>
 				</div>
 			</div>
-		</div><br><br>
-
-		<label for="target_tier">목표 티어:</label>
-		<input type="text" id="target_tier" name="target_tier" value="${mentor_profile.specialized_champion}"><br><br>
-
-		<div id="goal-tier">
-			<p>목표 티어는</p>
-			<div class="tier-holder"><img src="https://online.gamecoach.pro/img/lol/emblem-UNRANKED.svg">
-				<p>UNRANKED</p>
+			<div id="btn-box" class="d-flex justify-content-end">
+				<button type="button" class="btn btn-dark" id="first-next">다음</button>
 			</div>
-			<p>이상입니다.</p>
-		</div>
-		<div id="goal-tier-selector" class="d-flex align-item-center justify-content-center text-center" style="display: none">
-			<div class="tier">
-				<div class="tier-box">
-					<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-BRONZE.svg"
-						style="bottom: -0.5px;">
-				</div>
-				<div class="tier-label">
-					<p id="BRONZE">브론즈</p>
-				</div>
-			</div>
-			<div class="tier">
-				<div class="tier-box">
-					<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-SILVER.svg"
-						style="bottom: 4.5px;">
-				</div>
-				<div class="tier-label">
-					<p id="SILVER">실버</p>
-				</div>
-			</div>
-			<div class="tier">
-				<div class="tier-box">
-					<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-GOLD.svg"
-						style="bottom: 9.5px;">
-				</div>
-				<div class="tier-label">
-					<p id="GOLD">골드</p>
-				</div>
-			</div>
-			<div class="tier">
-				<div class="tier-box">
-					<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-PLATINUM.svg"
-						style="bottom: 14.5px;">
-				</div>
-				<div class="tier-label">
-					<p id="PLATINUM">플래티넘</p>
-				</div>
-			</div>
-			<div class="tier">
-				<div class="tier-box">
-					<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-DIAMOND.svg"
-						style="bottom: 19.5px;">
-				</div>
-				<div class="tier-label">
-					<p id="DIAMOND">다이아몬드</p>
-				</div>
-			</div>
-			<div class="tier">
-				<div class="tier-box">
-					<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-MASTER.svg"
-						style="bottom: 24.5px;">
-				</div>
-				<div class="tier-label">
-					<p id="MASTER">마스터</p>
-				</div>
-			</div>
-			<div class="tier">
-				<div class="tier-box">
-					<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-GRANDMASTER.svg"
-						style="bottom: 29.5px;">
-				</div>
-				<div class="tier-label">
-					<p id="GRANDMASTER">그랜드 마스터</p>
-				</div>
-			</div>
-			<div class="tier">
-				<div class="tier-box">
-					<div class="gradient"></div><img src="https://online.gamecoach.pro/img/lol/emblem-CHALLENGER.svg"
-						style="bottom: 34.5px;">
-				</div>
-				<div class="tier-label">
-					<p id="CHALLENGER">챌린저</p>
-				</div>
-			</div>
-		</div><br><br>
-		<button type="submit">작성</button>
-	</form>
-
-	<div class="tag-table">
+		</section><!-- first -->
 	
-	</div>
-	<button class="save_tag" onclick="saveMentiTag()">태그 저장</button><br><br>
-
-	<button id="recom-mentor-btn">추천 멘토 찾기</button>
-	<div id="recom_mentor_list">
-	</div>
-	
+		<section id="second">
+			<div class="inner-contents">
+				<div class="row">
+					<div class="text-center">
+						<h4><img src="https://online.gamecoach.pro/img/coaching/emoji-star.svg">
+						어떤 목표를 가지고 있나요?</h4>
+					</div>
+					<div class="d-flex justify-content-center">
+						<div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="34" aria-valuemin="0" aria-valuemax="100">
+						  <div class="progress-bar" style="width: 34%">34%</div>
+						</div>
+						<span>2/6</span>
+					</div>
+				</div>
+				  <div id="tag-box" class="row">
+				    <c:forEach items="${target_tag}" var="target_tag">
+				      <c:if test="${not empty target_tag.tag_info}">
+				        <div class="d-flex align-items-center">
+				         <div>
+				          <input type="checkbox" class="btn-check" id="${target_tag.tag_id}" name="selected_tags" value="${target_tag.tag_id}">
+				          <label class="btn btn-outline-primary btn-sm" id="btn-check" for="${target_tag.tag_id}">${target_tag.tag_info}</label>
+				         </div>
+				        <c:if test="${target_tag.tag_id eq 5}">
+				          <div class="d-flex justify-content-center">
+				        	<input type="text" class="form-control" id="target-summoner">
+				        	<button type="button" id="target-check-btn" class="btn btn-dark" onclick="특정함수()">확인</button>
+				          </div>
+				        </c:if>
+				        <c:if test="${target_tag.tag_id eq 26}">
+				        	 <textarea class="form-control" id="own-goal" rows="3"></textarea>
+				        </c:if>
+				        </div>
+				      </c:if>
+				    </c:forEach>
+				  </div>
+			  </div>
+		    <div id="btn-box" class="d-flex justify-content-between">
+				<button type="button" class="btn btn-dark" id="second-prev">이전</button>
+				<button type="button" class="btn btn-dark" id="second-next">다음</button>
+			</div>
+		</section><!-- second -->
+		
+		<section id="third">
+			<div class="inner-contents">
+			  <div class="row">
+				<div class="text-center">
+					<h4><img src="https://online.gamecoach.pro/img/coaching/emoji-star.svg">
+					어떤 방식으로 수업을 받고 싶나요?</h4>
+				</div>
+				<div class="d-flex justify-content-center">
+					<div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+					  <div class="progress-bar" style="width: 50%">50%</div>
+					</div>
+					<span>3/6</span>
+				</div>
+				</div>
+				  <div id="tag-box" class="row">
+				    <c:forEach items="${class_method_tag}" var="class_method_tag">
+				      <c:if test="${not empty class_method_tag.tag_info}">
+				        <div class="d-flex align-items-center">
+				          <input type="checkbox" class="btn-check" id="${class_method_tag.tag_id}" name="selected_tags" value="${class_method_tag.tag_id}">
+				          <label class="btn btn-outline-primary btn-sm" id="btn-check" for="${class_method_tag.tag_id}">${class_method_tag.tag_info}</label>
+				        </div>
+				      </c:if>
+				    </c:forEach>
+				  </div>
+			  </div>
+		  <div id="btn-box" class="d-flex justify-content-between">
+				<button type="button" class="btn btn-dark" id="third-prev">이전</button>
+				<button type="button" class="btn btn-dark" id="third-next">다음</button>
+			</div>
+		</section><!-- third -->
+		
+		<section id="fourth">
+		<div class="inner-contents">
+			  <div class="row">
+				<div class="text-center">
+					<h4><img src="https://online.gamecoach.pro/img/coaching/emoji-star.svg">
+					어떤 스타일의 멘토님을 선호하세요?</h4>
+				</div>
+				<div class="d-flex justify-content-center">
+					<div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100">
+					  <div class="progress-bar" style="width: 66%">66%</div>
+					</div>
+					<span>4/6</span>
+				</div>
+			</div>
+		  <div id="tag-box" class="row">
+			  <div class="d-flex align-item-center justify-content-center">
+			    <c:forEach items="${style_tag}" var="style_tag" varStatus="loop">
+				  <c:choose>
+				    <c:when test="${not empty style_tag.tag_info && (style_tag.tag_id == 10 || style_tag.tag_id == 13)}">
+				      <input type="radio" class="btn-check" id="${style_tag.tag_id}" name="selected_tags" value="${style_tag.tag_id}">
+				      <label class="col btn btn-outline-primary btn-sm" id="btn-check" for="${style_tag.tag_id}">${style_tag.tag_info}</label>
+				      <c:if test="${loop.index == 0}">
+				        <h2 class="vs-label">&nbspvs&nbsp</h2>
+				      </c:if>
+				    </c:when>
+				  </c:choose>
+				</c:forEach>
+			  </div>	  
+			 <div class="d-flex align-item-center justify-content-center">
+			    <c:forEach items="${style_tag}" var="style_tag" varStatus="loop">
+				  <c:choose>
+				    <c:when test="${not empty style_tag.tag_info && (style_tag.tag_id == 11 || style_tag.tag_id == 14)}">
+				      <input type="radio" class="btn-check" id="${style_tag.tag_id}" name="selected_tags2" value="${style_tag.tag_id}">
+				      <label class="col btn btn-outline-primary btn-sm" id="btn-check" for="${style_tag.tag_id}">${style_tag.tag_info}</label>
+				      <c:if test="${loop.index == 1}">
+				        <h2 class="vs-label">&nbspvs&nbsp</h2>
+				      </c:if>
+				    </c:when>
+				  </c:choose>
+				</c:forEach>
+			  </div>	  
+			  <div class="d-flex align-item-center justify-content-center">
+			    <c:forEach items="${style_tag}" var="style_tag" varStatus="loop">
+				  <c:choose>
+				    <c:when test="${not empty style_tag.tag_info && (style_tag.tag_id == 12 || style_tag.tag_id == 15)}">
+				      <input type="radio" class="btn-check" id="${style_tag.tag_id}" name="selected_tags3" value="${style_tag.tag_id}">
+				      <label class="col btn btn-outline-primary btn-sm" id="btn-check" for="${style_tag.tag_id}">${style_tag.tag_info}</label>
+				      <c:if test="${loop.index == 2}">
+				        <h2 class="vs-label">&nbspvs&nbsp</h2>
+				      </c:if>
+				    </c:when>
+				  </c:choose>
+				</c:forEach>
+			  </div>
+		  </div>	  
+	  </div>	  
+		  <div id="btn-box" class="d-flex justify-content-between">
+				<button type="button" class="btn btn-dark" id="fourth-prev">이전</button>
+				<button type="button" class="btn btn-dark" id="fourth-next">다음</button>
+			</div>
+		</section><!-- fourth -->
+		
+		<section id="fifth">
+			<div class="inner-contents">
+			  <div class="row">
+				<div class="text-center">
+					<h4><img src="https://online.gamecoach.pro/img/coaching/emoji-star.svg">
+					어떤 스타일의 멘토님을 선호하세요?</h4>
+				</div>
+				<div class="d-flex justify-content-center">
+					<div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="83" aria-valuemin="0" aria-valuemax="100">
+					  <div class="progress-bar" style="width: 83%">83%</div>
+					</div>
+					<span>5/6</span>
+				</div>
+			</div>
+			  <div id="tag-box" class="col d-flex flex-wrap">
+			    <c:forEach items="${style2_tag}" var="style2_tag">
+			      <c:if test="${not empty style2_tag.tag_info}">
+			        <div class="d-flex align-items-center">
+			          <input type="checkbox" class="btn-check" id="${style2_tag.tag_id}" name="selected_tags" value="${style2_tag.tag_id}">
+			          <label class="btn btn-outline-primary btn-sm" id="btn-check" for="${style2_tag.tag_id}">${style2_tag.tag_info}</label>
+			        </div>
+			      </c:if>
+			    </c:forEach>
+			  </div>
+		  	</div>
+		  	<div id="btn-box" class="d-flex justify-content-between">
+				<button type="button" class="btn btn-dark" id="fifth-prev">이전</button>
+				<button type="button" class="btn btn-dark" id="fifth-next">다음</button>
+			</div>
+		</section><!-- fifth -->
+		
+		<section id="sixth">
+			<div class="inner-contents">
+			   <div class="row">
+				<div class="text-center">
+					<h4><img src="https://online.gamecoach.pro/img/coaching/emoji-star.svg">
+					어떤 경력의 멘토님을 선호하세요?</h4>
+				</div>
+				<div class="d-flex justify-content-center">
+					<div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+					  <div class="progress-bar" style="width: 100%">100%</div>
+					</div>
+					<span>6/6</span>
+				</div>
+			</div>
+			  <div id="tag-box" class="col d-flex flex-wrap justify-content-center">
+			    <c:forEach items="${careers_tag}" var="careers_tag">
+			      <c:if test="${not empty careers_tag.tag_info}">
+			        <div class="d-flex justify-content-center">
+			          <input type="checkbox" class="btn-check" id="${careers_tag.tag_id}" name="selected_tags" value="${careers_tag.tag_id}">
+			          <label class="btn btn-outline-primary btn-sm" id="btn-check" for="${careers_tag.tag_id}">${careers_tag.tag_info}</label>
+			        </div>
+			      </c:if>
+			    </c:forEach>
+			  </div>
+		  </div>
+			  
+		  <div id="btn-box" class="d-flex justify-content-between">
+		    <button type="button" class="btn btn-dark" id="sixth-prev">이전</button>
+			<button type="button" class="btn btn-outline-dark" id="done-btn">내게 딱맞는 멘토님 확인하기</button>
+		  </div>
+		</section><!-- sixth -->
+		
+		<section>
+			<div id="recom_mentor_list">
+			<!-- 추천멘토 정보 -->
+			</div>
+		</section>
+		
+		</div><!-- question -->
+	</div><!-- content -->
 </div><!-- container -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 	<script>
+	// 선택한 포지션 값을 저장
+	let position = "";
+	
 		$(document).ready(function () {
-
+			$("#done-btn").click(function(){
+			    submitForm(function() {
+			        saveMentiTag(function() {
+			            recom_mentor();
+			        });
+			    });
+			});
+			
 			$("form").on("keydown", function (event) {
 				if (event.keyCode === 13) {
 					event.preventDefault();
@@ -265,72 +494,32 @@ padding-top: 90px;
 			$(".tier").click(function () {
 				let tier = $(this).find("p").attr("id");
 				let imgURL = $(this).find("img").attr("src");
-				$(".tier-holder p").text(tier);
-				$(".tier-holder img").attr("src", imgURL);
+				$("#tier-holder p").text(tier);
+				$("#tier-holder img").attr("src", imgURL);
 				$("#target_tier").val(tier);
 				$('#goal-tier-selector').css('display', 'none');
 			});
 
-			// 선택한 포지션 값을 저장할 배열
-			let positions = [];
-
-			$("#position-buttons button").click(function () {
-				$(this).toggleClass("selected");
-			});
-			$("#position-buttons button").hover(function () {
-				$(this).addClass("mouse-over");
-			}, function () {
-				$(this).removeClass("mouse-over");
-			});
-
-
-			// 버튼 클릭 이벤트 추가
 			$("#top-button").on("click", function () {
-				if (positions.includes("top")) {
-					// 선택한 포지션 배열에서 삭제
-					positions.splice(positions.indexOf("top"), 1);
-				} else {
-					// 선택한 포지션 배열에 추가
-					positions.push("top");
-				}
-				$("#position_to_learn").val("탑");
+				// 선택한 포지션 배열에 추가
+				position = "탑";
+				console.log(position);
 			});
-
-			// 나머지 버튼들도 동일하게 추가
 			$("#jungle-button").on("click", function () {
-				if (positions.includes("jungle")) {
-					positions.splice(positions.indexOf("jungle"), 1);
-				} else {
-					positions.push("jungle");
-				}
-				$("#position_to_learn").val("정글");
+				position = "정글";
+				console.log(position);
 			});
-
 			$("#mid-button").on("click", function () {
-				if (positions.includes("mid")) {
-					positions.splice(positions.indexOf("mid"), 1);
-				} else {
-					positions.push("mid");
-				}
-				$("#position_to_learn").val("미드");
+				position = "미드";
+				console.log(position);
 			});
-
 			$("#bot-button").on("click", function () {
-				if (positions.includes("bot")) {
-					positions.splice(positions.indexOf("bot"), 1);
-				} else {
-					positions.push("bot");
-				}
-				$("#position_to_learn").val("바텀");
+				position = "바텀";
+				console.log(position);
 			});
-
 			$("#support-button").on("click", function () {
-				if (positions.includes("support")) {
-					positions.splice(positions.indexOf("support"), 1);
-				} else {
-					positions.push("support");
-				}
-				$("#position_to_learn").val("서포터");
+				position = "서포터";
+				console.log(position);
 			});
 
 			$.ajax({ //챔피언 목록 가져오기
@@ -343,6 +532,7 @@ padding-top: 90px;
 							"https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +
 							champion.champion_en_name + ".png?&amp;retry=0";
 						let champItem = $("<div>").addClass("champ-item").click(function () {
+							$("#champ-info").attr("data", champion.champion_id)
 							$(".champ-name").text(champion.champion_kr_name);
 							$(".champ-img").attr("src", imageUrl);
 							$(".filter-champ-wrap").css('display', 'none');
@@ -370,342 +560,41 @@ padding-top: 90px;
 				}
 			});
 			
-			$.ajax({ //목표 태그 가져오기
-				  url: "/mentor/get-target-tag/",
-				  type: "GET",
-				  success: function (result) {
-				    let tagList = JSON.parse(result);
-				    let tagDiv = $("<div>").addClass("target");
-				    let tagTable = $("<table>").append(
-				      $("<thead>").append(
-				        $("<tr>").append(
-				          $("<th>").text("그리고 (중복선택 가능)")
-				        )
-				      )
-				    );
-				    let tagBody = $("<tbody>");
-				    let isFriendsSummonerWrapShown = false;
-				    let isOwnGoalShown = false;
-				    tagList.forEach(function (tag) {
-				      let tagRow = $("<tr>");
-				      let tagCell = $("<td>");
-				      let tagButton = $("<button>")
-				        .addClass("tag-button")
-				        .attr("data-tag-id", tag.tag_id)
-				        .text(tag.tag_info);
-				      if (tag.tag_id == 5) {
-				        tagButton.click(function () {
-				          let friendsSummonerWrap = $(".friends-summoner-wrap");
-				          if (isFriendsSummonerWrapShown) {
-				            friendsSummonerWrap.remove();
-				            isFriendsSummonerWrapShown = false;
-				          } else {
-				            friendsSummonerWrap = $("<div>").addClass("friends-summoner-wrap");
-				            let friendsSummoner = $("<div>")
-				              .addClass("friends-summoner")
-				              .attr("underline-text-input", "");
-				            let friendsSummonerInput = $("<input>").attr("placeholder", "친구의 소환사명을 입력해주세요.").attr("id",'friendsSummonerInput');
-				            let clearBtn = $("<button>").addClass("clear-btn").css("display", "none");
-				            friendsSummoner.append(friendsSummonerInput, clearBtn);
-				            let confirmBtn = $("<button>").addClass("basic-button").attr("data-size", "m").attr("to", "").addClass("dark").text("확인");
-				            friendsSummonerWrap.append(friendsSummoner, confirmBtn);
-				            $(".friends-summoner-wrap").remove();
-				            $(this).after(friendsSummonerWrap);
-				            isFriendsSummonerWrapShown = true;
-				          }
-				          tagButton.toggleClass("selected");
-				        }).mouseenter(function () {
-				          $(this).addClass("mouse-over");
-				        }).mouseleave(function () {
-				          $(this).removeClass("mouse-over");
-				        });
-				      } 
-				      else if (tag.tag_id == 26) {
-				    	  tagButton.click(function () {
-				    	    let ownGoalWrap = $(".own-goal-wrap");
-				    	    if (isOwnGoalShown) {
-				    	      ownGoalWrap.remove();
-				    	      isOwnGoalShown = false;
-				    	    } else {
-				    	      ownGoalWrap = $("<div>").addClass("own-goal-wrap");
-				    	      let ownGoal = $("<div>")
-				    	        .addClass("own-goal")
-				    	        .attr("memo-text-area", "");
-				    	      let input_info = $("<p>").addClass("input-info");
-				    	      let textArea = $("<textarea>").attr("id", "ownGoalText");
-				    	      ownGoal.append(input_info, textArea);
-				    	      ownGoalWrap.append(ownGoal);
-				    	      $(".own-goal-wrap").remove();
-				    	      $(this).after(ownGoalWrap);
-				    	      isOwnGoalShown = true;
-				    	    }
-				    	    tagButton.toggleClass("selected");
-				    	  }).mouseenter(function () {
-				    	    $(this).addClass("mouse-over");
-				    	  }).mouseleave(function () {
-				    	    $(this).removeClass("mouse-over");
-				    	  });
-				    	}
-				      else {
-				        tagButton.click(function () {
-				          $(this).toggleClass("selected");
-				        }).mouseenter(function () {
-				          $(this).addClass("mouse-over");
-				        }).mouseleave(function () {
-				          $(this).removeClass("mouse-over");
-				        });
-				      }
-				      tagCell.append(tagButton);
-				      tagRow.append(tagCell);
-				      tagBody.append(tagRow);
-				    });
-				    tagTable.append(tagBody);
-				    tagDiv.append(tagTable);
-				    $(".tag-table").append(tagDiv);
-				  },
-				  error: function () {
-				    console.error("목표 태그 가져오기 실패");
-				  }
-				});
+		});//ready
 
 
-
-
-			$.ajax({ //수업 방식 태그 가져오기
-				url: "/mentor/get-class-method-tag/",
-				type: "GET",
-				success: function (result) {
-					let tagList = JSON.parse(result);
-					let tagDiv = $("<div>").addClass("class-method")
-					let tagTable = $("<table>").append(
-						$("<thead>").append(
-							$("<tr>").append(
-								$("<th>").text("그리고 (중복선택 가능)")
-							)
-						)
-					);
-					let tagBody = $("<tbody>");
-					tagList.forEach(function (tag) {
-						let tagRow = $("<tr>");
-						let tagCell = $("<td>");
-						let tagButton = $("<button>")
-							.addClass("tag-button")
-							.attr("data-tag-id", tag.tag_id)
-							.text(tag.tag_info)
-							.click(function () {
-								$(this).toggleClass("selected");
-							})
-							.mouseenter(function () {
-								$(this).addClass("mouse-over");
-							})
-							.mouseleave(function () {
-								$(this).removeClass("mouse-over");
-							});
-						tagCell.append(tagButton);
-						tagRow.append(tagCell);
-						tagBody.append(tagRow);
-					});
-					tagTable.append(tagBody);
-					tagDiv.append(tagTable);
-					$(".tag-table").append(tagDiv);
-				},
-				error: function () {
-					console.error("수업방식 태그 가져오기 실패");
-				}
-			});
-			$.ajax({ //스타일 태그 가져오기
-				url: "/mentor/get-style-tag/",
-				type: "GET",
-				success: function (result) {
-					let tagList = JSON.parse(result);
-					let tagDiv = $("<div>").addClass("style")
-					let tagTable = $("<table>").append(
-						$("<thead>").append(
-							$("<tr>").append(
-								$("<th>").text("(중복선택 가능)")
-							)
-						)
-					);
-					let tagBody = $("<tbody>");
-					tagList.forEach(function (tag) {
-						let tagRow = $("<tr>");
-						let tagCell = $("<td>");
-						let tagButton = $("<button>")
-							.addClass("tag-button")
-							.attr("data-tag-id", tag.tag_id)
-							.text(tag.tag_info)
-							.click(function () {
-								$(this).toggleClass("selected");
-							})
-							.mouseenter(function () {
-								$(this).addClass("mouse-over");
-							})
-							.mouseleave(function () {
-								$(this).removeClass("mouse-over");
-							});
-						tagCell.append(tagButton);
-						tagRow.append(tagCell);
-						tagBody.append(tagRow);
-					});
-					tagTable.append(tagBody);
-					tagDiv.append(tagTable);
-					$(".tag-table").append(tagDiv);
-				},
-				error: function () {
-					console.error("스타일 태그 가져오기 실패");
-				}
-			});
-			$.ajax({ //스타일2 태그 가져오기
-				url: "/mentor/get-style2-tag/",
-				type: "GET",
-				success: function (result) {
-					let tagList = JSON.parse(result);
-					let tagDiv = $("<div>").addClass("style2")
-					let tagTable = $("<table>").append(
-						$("<thead>").append(
-							$("<tr>").append(
-								$("<th>").text("어떤 스타일의 멘토를 선호하세요")
-							)
-						)
-					);
-					let tagBody = $("<tbody>");
-					tagList.forEach(function (tag) {
-						let tagRow = $("<tr>");
-						let tagCell = $("<td>");
-						let tagButton = $("<button>")
-							.addClass("tag-button")
-							.attr("data-tag-id", tag.tag_id)
-							.text(tag.tag_info)
-							.click(function () {
-								$(this).toggleClass("selected");
-							})
-							.mouseenter(function () {
-								$(this).addClass("mouse-over");
-							})
-							.mouseleave(function () {
-								$(this).removeClass("mouse-over");
-							});
-						tagCell.append(tagButton);
-						tagRow.append(tagCell);
-						tagBody.append(tagRow);
-					});
-					tagTable.append(tagBody);
-					tagDiv.append(tagTable);
-					$(".tag-table").append(tagDiv);
-				},
-				error: function () {
-					console.error("스타일2 태그 가져오기 실패");
-				}
-			});
-			$.ajax({ //경력 태그 가져오기
-				url: "/mentor/get-careers-tag/",
-				type: "GET",
-				success: function (result) {
-					let tagList = JSON.parse(result);
-					let tagDiv = $("<div>").addClass("careers")
-					let tagTable = $("<table>").append(
-						$("<thead>").append(
-							$("<tr>").append(
-								$("<th>").text("(중복선택 가능)")
-							)
-						)
-					);
-					let tagBody = $("<tbody>");
-					tagList.forEach(function (tag) {
-						let tagRow = $("<tr>");
-						let tagCell = $("<td>");
-						let tagButton = $("<button>")
-							.addClass("tag-button")
-							.attr("data-tag-id", tag.tag_id)
-							.text(tag.tag_info)
-							.click(function () {
-								$(this).toggleClass("selected");
-							})
-							.mouseenter(function () {
-								$(this).addClass("mouse-over");
-							})
-							.mouseleave(function () {
-								$(this).removeClass("mouse-over");
-							});
-						tagCell.append(tagButton);
-						tagRow.append(tagCell);
-						tagBody.append(tagRow);
-					});
-					tagTable.append(tagBody);
-					tagDiv.append(tagTable);
-					$(".tag-table").append(tagDiv);
-				},
-				error: function () {
-					console.error("경력 태그 가져오기 실패");
-				}
-			});
-
-			$("#recom-mentor-btn").click(function () { //추천 멘토 가져오기
-				$.ajax({
-					type: "GET",
-					url: "/mentor/recom-mentor",
-					contentType: "application/json; charset=utf-8",
-					dataType: "json",
-					success: function (data) {
-						let mentorList = $("#recom_mentor_list");
-						let table = $("<table>").addClass("mentor-table");
-						let header = $("<tr>").append(
-							$("<th>").text("멘토명"),
-							$("<th>").text("멘토 소개")
-						);
-						table.append(header);
-						for (let i = 0; i < data.length; i++) {
-							let mentor = data[i];
-							let row = $("<tr>").append(
-								$("<td>").text(mentor.mentor_email),
-								$("<td>").text(mentor.about_mentor)
-							);
-							table.append(row);
-						}
-						mentorList.empty().append(table);
-					},
-					error: function (xhr, status, error) {
-						console.error(xhr.responseText);
-						console.error(status);
-						console.error(error);
-					}
-				});
-			});
-		});
-
-
-		function submitForm() {
-			let formData = new FormData($("#customMentorForm")[0]);
+		function submitForm(callback) {
 			let customMentorDTO = {
 				menti_email: "${member.email}",
-				position_to_learn: formData.get("position_to_learn"),
-				champion_to_learn: formData.get("champion_to_learn"),
-				target_tier: formData.get("target_tier")
+				position_to_learn: position,
+				champion_to_learn: $("#champ-info").attr("data"),
+				target_tier: $("#tier-holder p").text()
 			};
+			console.log(customMentorDTO);
 			$.ajax({
 				url: "/mentor/save-custom-mentor/",
 				type: "POST",
 				contentType: "application/json;charset=UTF-8",
 				data: JSON.stringify(customMentorDTO),
 				success: function (data) {
-					alert("성공");
+					callback();
 				},
 				error: function (error) {
-					alert("실패");
+					alert("커스텀 멘토 작성 실패");
 				}
 			});
 			return false;
 		}
 
 
-		function saveMentiTag() {
-			let tagButtons = $(".tag-button");
+		function saveMentiTag(callback) {
+			let tagButtons = $(".btn-check");
 			let tagList = [];
 			tagButtons.each(function () {
-				if ($(this).hasClass("selected")) {
-					let tag = $(this).data("tag-id");
-					let tag_note5 = $("#friendsSummonerInput").val();
-					let tag_note26 = $("#ownGoalText").val();
+				if ($(this).prop("checked")) {
+					let tag = $(this).attr("id");
+					let tag_note5 = $("#target-summoner").val();
+					let tag_note26 = $("#own-goal").val();
 					if (tag == 5){
 						let data = {
 								menti_email: "${member.email}",
@@ -730,13 +619,14 @@ padding-top: 90px;
 				}
 			});
 			let jsonData = JSON.stringify(tagList);
+			console.log(tagList);
 			$.ajax({
 				url: "/mentor/save-menti-tag/",
 				type: "POST",
 				contentType: "application/json;charset=UTF-8",
 				data: jsonData,
 				success: function () {
-					alert("멘티 태그가 저장되었습니다.");
+					callback();
 				},
 				error: function () {
 					alert("멘티 태그 저장에 실패했습니다.");
@@ -744,15 +634,40 @@ padding-top: 90px;
 			});
 			return false;
 		}
-
-		$(".tag-button").click(function () {
-			$(this).toggleClass("selected");
-		});
-		$(".tag-button").hover(function () {
-			$(this).addClass("mouse-over");
-		}, function () {
-			$(this).removeClass("mouse-over");
-		});
+		
+		function recom_mentor() { //추천 멘토 가져오기
+			$.ajax({
+				type: "GET",
+				url: "/mentor/recom-mentor",
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+				success: function (data) {
+					let mentorList = $("#recom_mentor_list");
+					let table = $("<table>").addClass("mentor-table");
+					let header = $("<tr>").append(
+						$("<th>").text("멘토명"),
+						$("<th>").text("멘토 소개")
+					);
+					table.append(header);
+					for (let i = 0; i < data.length; i++) {
+						let mentor = data[i];
+						let row = $("<tr>").append(
+							$("<td>").text(mentor.mentor_email),
+							$("<td>").text(mentor.about_mentor)
+						);
+						table.append(row);
+					}
+					mentorList.empty().append(table);
+					alert("멘토 추천 성공")
+				},
+				error: function (xhr, status, error) {
+					alert("멘토 추천 실패")
+					console.error(xhr.responseText);
+					console.error(status);
+					console.error(error);
+				}
+			})
+		};
 	</script>
 </body>
 
