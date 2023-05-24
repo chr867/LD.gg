@@ -34,7 +34,7 @@ public class ChampionRestController {
 	}
 
 	@PostMapping("/rank.json")
-	public List<Champ_analytics> get_champion_rank(String lane, String tier) throws Exception{
+	public List<Champ_analytics> get_champion_rank(String lane, Integer tier) throws Exception{
 		List<Champ_analytics> champ_rank = cs.champ_rank(lane, tier);
 		return champ_rank;
 	}

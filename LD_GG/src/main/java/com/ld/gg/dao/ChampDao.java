@@ -16,7 +16,7 @@ import com.ld.gg.dto.champ.Champ_recomm_info;
 
 public interface ChampDao {
 
-	List<Champ_analytics> champ_rank(@Param("lane")String lane, @Param("tier")String tier);
+	List<Champ_analytics> champ_rank(@Param("lane")String lane, @Param("tier")Integer tier);
 
 	List<Champ_match_up_default> champ_match_up(Integer left_champion);
 

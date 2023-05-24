@@ -26,7 +26,7 @@ public class Champion_service {
 	@Autowired
 	ChampDao cd;
 
-	public List<Champ_analytics> champ_rank(String lane, String tier) {
+	public List<Champ_analytics> champ_rank(String lane, Integer tier) {
 		List<Champ_analytics> champ_list = cd.champ_rank(lane, tier);
 		// log.info("champ_list = {}", champ_list);
 		return champ_list;

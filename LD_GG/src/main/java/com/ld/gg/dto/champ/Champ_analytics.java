@@ -14,4 +14,5 @@ public class Champ_analytics extends Champ_default {
 	private double pick_rate;
 	private double ban_rate;
 	private int tier;
+	private int summoner_tier;
 }
