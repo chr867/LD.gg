@@ -55,21 +55,22 @@
 }
 
 .container {
+	height: 100px;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
 }
 
-.container>div {
+.col {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 }
 
 .tier_container_box {
-	position: absolute;
-	top: 10%;
-	left: 32%;
+	position: relative;
+	top: 22%;
+	left: 0%;
 	z-index: 90;
 }
 
@@ -92,6 +93,7 @@ button{
 	position: relative;
 	left: 150px;
 }
+
 
 #option_container button,
 #tier_select{
@@ -125,6 +127,9 @@ th{
 	margin-right: 20px;
 	margin-left: 60px;
 	box-sizing: border-box;
+	position: absolute;
+	left: 2%;
+	top: 2%;
 }
 
 .search-container {
@@ -525,14 +530,13 @@ th{
 		</div>
 	</div>
 
-	<div class="tier_container_box">
-		<button id="tier_select">티어 선택</button>
-		<div id="option_container"></div>
-	</div>
-
 	<div class="container_box">
 		<div>
 			<div class="container">
+				<div class="tier_container_box">
+					<button id="tier_select">티어 선택</button>
+				<div id="option_container"></div>
+		</div>
 				<div class="col">
 					<div class='lane_button'>
 						<button class="TOP">탑</button>
