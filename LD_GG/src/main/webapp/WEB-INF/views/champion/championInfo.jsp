@@ -65,7 +65,6 @@
 	box-sizing: border-box;
 	width: 700px;
 	height: 100%;
-	background-color: black;
 }
 
 .champion-info-box {
@@ -219,6 +218,7 @@
 }
 </style>
 
+
 <style>
   .rune-container {
     display: flex;
@@ -230,7 +230,8 @@
   .rune-box {
     width: 100%;
     height: 300px;
-    background-color: rgb(88, 88, 88);
+    background-color: #fff;
+	border-radius: 0.5rem;
     margin-right: 5px;
     justify-content: space-between;
     text-align: center;
