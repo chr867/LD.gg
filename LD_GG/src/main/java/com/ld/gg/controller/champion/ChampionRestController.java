@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ld.gg.dto.champ.Champ_analytics;
 import com.ld.gg.dto.champ.Champ_default;
 import com.ld.gg.dto.champ.Champ_match_up_default;
+import com.ld.gg.dto.champ.Champ_match_up_rune;
 import com.ld.gg.dto.champ.Champ_recomm_info;
 import com.ld.gg.service.Champion_service;
 
@@ -87,6 +88,17 @@ public class ChampionRestController {
 	public Map<String, Object> championBuildInfo(@RequestParam("champion_id") int champion_id,@RequestParam("team_position") String team_position) throws Exception{
 		Map<String, Object>championBuildInfo = cs.getChampionBuildInfo(champion_id, team_position);
 		return championBuildInfo;
+	}
+	
+	@GetMapping("/info/rune/main")
+	public List<Champ_match_up_rune> mainRuneInfo(String main_key){
+		List<Champ_match_up_rune> runeInfo = cs.getRuneInfo(main_key);
+		return runeInfo;
+	}
+	@GetMapping("/info/rune/sub")
+	public List<Champ_match_up_rune> subRuneInfo(String sub_key){
+		List<Champ_match_up_rune> subRuneInfo = cs.getSubRuneInfo(sub_key);
+		return subRuneInfo;
 	}
 
 	@PostMapping("/match-up.json")

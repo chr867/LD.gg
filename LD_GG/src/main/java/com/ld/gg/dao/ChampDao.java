@@ -69,4 +69,8 @@ public interface ChampDao {
 
 	List<Champ_match_up_default> get_champion_match_up(Integer champion_id);
 
+	List<Champ_match_up_rune> getRuneInfo(String main_key);
+
+	List<Champ_match_up_rune> getSubRuneInfo(String sub_key);
+  
 }

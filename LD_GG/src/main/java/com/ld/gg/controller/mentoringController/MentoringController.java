@@ -14,12 +14,15 @@ import com.ld.gg.dao.MemberDao;
 import com.ld.gg.dao.mentoringdao.MentiDAO;
 import com.ld.gg.dao.mentoringdao.MentorProfileDAO;
 import com.ld.gg.dao.mentoringdao.MyMentoringDAO;
+import com.ld.gg.dao.mentoringdao.TagListDAO;
 import com.ld.gg.dto.MemberDto;
 import com.ld.gg.dto.mentoringdto.LikeMentorDTO;
 import com.ld.gg.dto.mentoringdto.MentorClassDTO;
 import com.ld.gg.dto.mentoringdto.MentorProfileDTO;
 import com.ld.gg.dto.mentoringdto.TagListDTO;
+import com.ld.gg.dto.summoner.SummonerDto;
 import com.ld.gg.service.MemberService;
+import com.ld.gg.service.SummonerService;
 import com.ld.gg.service.mentoringService.MentorProfileService;
 
 @Controller
@@ -36,7 +39,10 @@ public class MentoringController {
 	private MyMentoringDAO myMtDao;
 	@Autowired
 	private MentorProfileDAO mtpdao;
-	
+	@Autowired
+	private SummonerService summonerService;
+	@Autowired
+	private TagListDAO tagdao;
 	
 	
 	//마이멘토링 페이지로 이동
@@ -68,9 +74,23 @@ public class MentoringController {
 		HttpSession session = request.getSession();
 		String email = (String) session.getAttribute("email");
 		MemberDto mbdto = mbdao.getMemberInfo(email);
-		List<TagListDTO> tagdto = mtpService.select_all_tag();
+		String summoner_name = mbdto.getLol_account();
+		SummonerDto sd = summonerService.get_summoner_info(summoner_name);
+		String lowerTier = sd.getTier();
+		String upperTier = lowerTier.toUpperCase();
+		sd.setTier(upperTier);
+		List<TagListDTO> target_tag = tagdao.select_by_tag_type("target");
+		List<TagListDTO> class_method_tag = tagdao.select_by_tag_type("class_method");
+		List<TagListDTO> style_tag = tagdao.select_by_tag_type("style");
+		List<TagListDTO> style2_tag = tagdao.select_by_tag_type("style2");
+		List<TagListDTO> careers_tag = tagdao.select_by_tag_type("careers");
 		return new ModelAndView("mentoringView/customMentor") 
-				.addObject("tag_list", tagdto)
+				.addObject("target_tag", target_tag)
+				.addObject("class_method_tag", class_method_tag)
+				.addObject("style_tag", style_tag)
+				.addObject("style2_tag", style2_tag)
+				.addObject("careers_tag", careers_tag)
+				.addObject("summoner", sd)
 				.addObject("member", mbdto);
 	}
 	
