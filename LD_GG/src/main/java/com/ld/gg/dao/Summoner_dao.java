@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Select;
 import com.ld.gg.dto.summoner.BuildDto;
 import com.ld.gg.dto.summoner.ChampRecordDto;
 import com.ld.gg.dto.summoner.DashBoardDto;
+import com.ld.gg.dto.summoner.MatchUpPlayerDto;
 import com.ld.gg.dto.summoner.RecordDto;
 import com.ld.gg.dto.summoner.RecordInfoDto;
 import com.ld.gg.dto.summoner.RecordRankingDto;
@@ -36,7 +37,7 @@ public interface Summoner_dao {
 
 	List<ChampRecordDto> get_20games_summary(@Param("summoner_name") String summoner_name);
 
-	List<RecordDto> get_record_detail(@Param("match_id") String match_id);
+	List<RecordInfoDto> get_record_detail(@Param("match_id") String match_id);
 
 	List<ChampRecordDto> getChampSolo(String summoner_name);
 
@@ -51,5 +52,7 @@ public interface Summoner_dao {
 	SummonerDto getSummoner(String lol_account);
 
 	DashBoardDto getDashBoardKDA(String summoner_name);
+
+	List<MatchUpPlayerDto> getMatchUpPlayer(String match_id);
 
 }

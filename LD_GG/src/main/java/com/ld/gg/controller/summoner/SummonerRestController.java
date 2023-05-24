@@ -12,6 +12,7 @@ import com.ld.gg.dto.admin.AdDto;
 import com.ld.gg.dto.summoner.BuildDto;
 import com.ld.gg.dto.summoner.ChampRecordDto;
 import com.ld.gg.dto.summoner.DashBoardDto;
+import com.ld.gg.dto.summoner.MatchUpPlayerDto;
 import com.ld.gg.dto.summoner.RecordDto;
 import com.ld.gg.dto.summoner.RecordInfoDto;
 import com.ld.gg.dto.summoner.RecordRankingDto;
@@ -114,8 +115,8 @@ public class SummonerRestController {
 	}
 
 	@GetMapping("/get_record_detail")
-	public List<RecordDto> get_record_detail(String match_id) {
-		List<RecordDto> rd = ss.get_record_detail(match_id);
+	public List<RecordInfoDto> get_record_detail(String match_id) {
+		List<RecordInfoDto> rd = ss.get_record_detail(match_id);
 		return rd;
 	}
 	
@@ -137,9 +138,13 @@ public class SummonerRestController {
 		return dbd;
 	}
 	
-	/*
-	 * @GetMapping("getMachUpPlayer") public List<>
-	 */
+	
+	@GetMapping("/getMatchUpPlayer")
+	public List<MatchUpPlayerDto> getMachUpPlayer(String match_id){
+		List<MatchUpPlayerDto> mpd = ss.getMatchUpPlayer(match_id);
+		return mpd;
+	}
+	 
 	
 
 }

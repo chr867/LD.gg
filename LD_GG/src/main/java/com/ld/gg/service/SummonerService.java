@@ -9,6 +9,7 @@ import com.ld.gg.dao.Summoner_dao;
 import com.ld.gg.dto.summoner.BuildDto;
 import com.ld.gg.dto.summoner.ChampRecordDto;
 import com.ld.gg.dto.summoner.DashBoardDto;
+import com.ld.gg.dto.summoner.MatchUpPlayerDto;
 import com.ld.gg.dto.summoner.RecordDto;
 import com.ld.gg.dto.summoner.RecordInfoDto;
 import com.ld.gg.dto.summoner.RecordRankingDto;
@@ -66,8 +67,8 @@ public class SummonerService {
 		return crd;
 	}
 
-	public List<RecordDto> get_record_detail(String match_id) {
-		List<RecordDto> rd = SD.get_record_detail(match_id);
+	public List<RecordInfoDto> get_record_detail(String match_id) {
+		List<RecordInfoDto> rd = SD.get_record_detail(match_id);
 		return rd;
 	}
 
@@ -109,6 +110,11 @@ public class SummonerService {
 	public DashBoardDto getDashBoardKDA(String summoner_name) {
 		DashBoardDto dbd = SD.getDashBoardKDA(summoner_name);
 		return dbd;
+	}
+
+	public List<MatchUpPlayerDto> getMatchUpPlayer(String match_id) {
+		List<MatchUpPlayerDto> mpd = SD.getMatchUpPlayer(match_id);
+		return mpd;
 	}
 
 }
