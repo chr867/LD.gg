@@ -64,7 +64,7 @@
 
 .middle-container {
 	box-sizing: border-box;
-	width: 700px;
+	width: 630px;
 	height: 100%;
 }
 
@@ -84,6 +84,7 @@
 	justify-content: center;
 	align-items: center;
 	position: relative;
+	margin-top: 20px;
 }
 
 .champion-info {
@@ -157,7 +158,7 @@
 	background-color: #fff;
 	border-radius: 0.5;
 	box-sizing: border-box;
-	margin-bottom: 5px;
+	padding: 0 10px 0 10px;
 	align-items: center;
 }
 
@@ -169,13 +170,13 @@
 .lane-img {
 	border-radius: 0.1rem;
 	transition: 0.3s;
-	background-color: #fff;
-	border-radius: 1rem;
+	background-color: #f4f4f4;
+	border-radius: 0.5rem;
 	margin-right: 10px;
 }
 
 .lane-img:hover, .lane-img:active {
-	background-color: #E4E6EF;
+	background-color: #E5E5E5;
 }
 
 .champion-easy-box {
@@ -228,75 +229,94 @@
 </style>
 
 <style>
-  .rune-container {
-    display: flex;
-    box-sizing: border-box;
-    background-color: #fff;
+.rune-container {
+	display: flex;
+	box-sizing: border-box;
+	background-color: #fff;
 	border-radius: 0.5rem;
-  }
+}
 
-  .rune-box {
-    width: 100%;
-    height: 300px;
-    background-color: #fff;
+.rune-box {
+	width: 100%;
+	height: 300px;
+	background-color: #fff;
 	border-radius: 0.5rem;
-    margin-right: 5px;
-    justify-content: space-between;
-    text-align: center;
-    padding: 20px 0 0 0;
-    box-sizing: border-box;
-  }
+	margin-right: 5px;
+	justify-content: space-between;
+	text-align: center;
+	padding: 20px 0 0 0;
+	box-sizing: border-box;
+}
 
-  .first-rune {
-    background-color: rgb(255, 255, 255);
-    width: 40px;
-    height: 40px;
-    border-radius: 10rem;
-  }
+.first-rune {
+	background-color: rgb(255, 255, 255);
+	width: 40px;
+	height: 40px;
+	border-radius: 10rem;
+}
 
-  .runes {
-    display: flex;
-    justify-content: space-between;
-  }
+.runes {
+	display: flex;
+	justify-content: space-between;
+}
 
-  .rune {
-    background-color: rgb(88, 88, 88);
-    width: 40px;
-    height: 40px;
-    margin: 10px;
-    border-radius: 4rem;
-  }
-  .rune img{
-    width: 40px;
-    height: 40px;
-  }
-  .sub-runes{
-    padding: 60px 0 0 0;
-  }
-  .sub-ability{
-    padding: 120px 0 0 0;
-  }
-.rune-desc{
-    position: absolute;
-    z-index: 10;
-    width: 200px;
-    background-color: black;
-    color: #fff;
-    border-radius: 0.5rem;
-    padding: 10px;
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0s, opacity 0.3s linear;
-  }
-.rune:hover .rune-desc{
+.rune {
+	background-color: rgb(88, 88, 88);
+	width: 40px;
+	height: 40px;
+	margin: 10px;
+	border-radius: 4rem;
+}
+
+.rune img {
+	width: 40px;
+	height: 40px;
+	filter: grayscale(100%);
+}
+
+.sub-runes {
+	padding: 60px 0 0 0;
+}
+
+.sub-ability {
+	padding: 125px 0 0 0;
+}
+
+.rune-desc {
+	position: absolute;
+	z-index: 10;
+	width: 200px;
+	background-color: black;
+	color: #fff;
+	border-radius: 0.5rem;
+	padding: 10px;
+	visibility: hidden;
+	opacity: 0;
+	transition: visibility 0s, opacity 0.3s linear;
+	font-size: 14px;
+}
+
+.rune:hover .rune-desc {
 	visibility: visible;
 	opacity: 1;
+}
+.rune .fragment-img{
+	width: 30px;
+	height: 30px;
+}
+.fragment{
+	width: 30px;
+	height: 30px;
+	
+}
+.sub-ability .runes{
+	margin-bottom: 10px;
 }
 </style>
 
 <!-- right_container -->
-<style> 
-#chartdiv{
+<style>
+#chartdiv {
 	
 }
 </style>
@@ -724,51 +744,47 @@
 				</table>
 			</div>
 			<div class="champion-easy-box">
-				<caption>
-					상대하기 쉬운 챔피언</
-					<caption>
-						<table>
-							<tr>
-								<th class="easy-champ-img"></th>
-								<th class="easy-champ-img"></th>
-								<th class="easy-champ-img"></th>
-								<th class="easy-champ-img"></th>
-								<th class="easy-champ-img"></th>
-							</tr>
-							<tr>
-								<td class="easy-champ-win-rate"></td>
-								<td class="easy-champ-win-rate"></td>
-								<td class="easy-champ-win-rate"></td>
-								<td class="easy-champ-win-rate"></td>
-								<td class="easy-champ-win-rate"></td>
-							</tr>
-						</table>
+				<caption>상대하기 쉬운 챔피언</caption>
+				<table>
+					<tr>
+						<th class="easy-champ-img"></th>
+						<th class="easy-champ-img"></th>
+						<th class="easy-champ-img"></th>
+						<th class="easy-champ-img"></th>
+						<th class="easy-champ-img"></th>
+					</tr>
+					<tr>
+						<td class="easy-champ-win-rate"></td>
+						<td class="easy-champ-win-rate"></td>
+						<td class="easy-champ-win-rate"></td>
+						<td class="easy-champ-win-rate"></td>
+						<td class="easy-champ-win-rate"></td>
+					</tr>
+				</table>
 			</div>
 			<div class="champion-hard-box">
-				<caption>
-					상대하기 힘든 챔피언</
-					<caption>
-						<table>
-							<tr>
-								<th class="hard-champ-img"></th>
-								<th class="hard-champ-img"></th>
-								<th class="hard-champ-img"></th>
-								<th class="hard-champ-img"></th>
-								<th class="hard-champ-img"></th>
-							</tr>
-							<tr>
-								<td class="hard-champ-win-rate"></td>
-								<td class="hard-champ-win-rate"></td>
-								<td class="hard-champ-win-rate"></td>
-								<td class="hard-champ-win-rate"></td>
-								<td class="hard-champ-win-rate"></td>
-							</tr>
-						</table>
+				<caption>상대하기 힘든 챔피언</caption>
+				<table>
+					<tr>
+						<th class="hard-champ-img"></th>
+						<th class="hard-champ-img"></th>
+						<th class="hard-champ-img"></th>
+						<th class="hard-champ-img"></th>
+						<th class="hard-champ-img"></th>
+					</tr>
+					<tr>
+						<td class="hard-champ-win-rate"></td>
+						<td class="hard-champ-win-rate"></td>
+						<td class="hard-champ-win-rate"></td>
+						<td class="hard-champ-win-rate"></td>
+						<td class="hard-champ-win-rate"></td>
+					</tr>
+				</table>
 			</div>
 		</div>
 		<div class="middle-container">
 			<div class="rune-container">
-			
+
 				<div class="rune-box main-runes">
 					<div class="first-rune main-rune-top" style="margin: 0 auto"></div>
 					<div class="runes main-rune-first"></div>
@@ -783,10 +799,85 @@
 					<div class="runes sub-rune-third"></div>
 				</div>
 				<div class="rune-box sub-ability">
-					<div class="runes sub-ability-first"></div>
-					<div class="runes sub-ability-second"></div>
-					<div class="runes sub-ability-third"></div>
-					
+					<div class="runes sub-ability-first">
+						<div class="rune fragment">
+							<img src="/resources/img/perk-images/StatMods/StatModsAdaptiveForceIcon.png" alt="" id="5008" class="fragment-img">
+							<div class="rune-desc">
+								<div>OFFENSE</div>
+								<br>
+								<div>적응형 능력치 +9</div>
+							</div>
+						</div>
+						<div class="rune fragment">
+							<img src="/resources/img/perk-images/StatMods/StatModsAttackSpeedIcon.png" alt="" id="5005" class="fragment-img">
+							<div class="rune-desc">
+								<div>OFFENSE</div>
+								<br>
+								<div>공격속도 10%</div>
+							</div>
+						</div>
+						<div class="rune fragment">
+							<img src="/resources/img/perk-images/StatMods/StatModsCDRScalingIcon.png" alt="" id="5007" class="fragment-img">
+							<div class="rune-desc">
+								<div>OFFENSE</div>
+								<br>
+								<div>스킬 가속 +8</div>
+							</div>
+						</div>
+					</div>
+					<div class="runes sub-ability-second">
+						<div class="rune fragment">
+							<img src="/resources/img/perk-images/StatMods/StatModsAdaptiveForceIcon.png" alt="" id="5008" class="fragment-img">
+							<div class="rune-desc">
+								<div>OFFENSE</div>
+								<br>
+								<div>적응형 능력치 +9</div>
+							</div>
+						</div>
+						<div class="rune  fragment">
+							<img src="/resources/img/perk-images/StatMods/StatModsArmorIcon.png" alt="" id="5002" class="fragment-img">
+							<div class="rune-desc">
+								<div>FLEX</div>
+								<br>
+								<div>방어력 +6</div>
+							</div>
+						</div>
+						<div class="rune fragment">
+							<img src="/resources/img/perk-images/StatMods/StatModsMagicResIcon.png" alt="" id="5003" class="fragment-img">
+							<div class="rune-desc">
+								<div>FLEX</div>
+								<br>
+								<div>마법저항력 +8</div>
+							</div>
+						</div>
+					</div>
+					<div class="runes sub-ability-third">
+						<div class="rune fragment">
+							<img src="/resources/img/perk-images/StatMods/StatModsHealthScalingIcon.png" alt="" id="5001" class="fragment-img">
+							<div class="rune-desc">
+								<div>DEFFENSE</div>
+								<br>
+								<div>체력 +15 ~ 140</div>
+							</div>
+						</div>
+						<div class="rune fragment">
+							<img src="/resources/img/perk-images/StatMods/StatModsArmorIcon.png" alt="" id="5002" class="fragment-img">
+							<div class="rune-desc">
+								<div>FLEX</div>
+								<br>
+								<div>방어력 +6</div>
+							</div>
+						</div>
+						<div class="rune fragment">
+							<img src="/resources/img/perk-images/StatMods/StatModsMagicResIcon.png" alt="" id="5003" class="fragment-img">
+							<div class="rune-desc">
+								<div>FLEX</div>
+								<br>
+								<div>마법저항력 +8</div>
+							</div>
+						</div>
+					</div>
+
 				</div>
 			</div>
 		</div>
@@ -795,30 +886,35 @@
 				<div class="match_up_chart">
 					<div id="chartdiv">
 						<div class="progress header">
-							<div class="progress-bar" role="progressbar" style="width: 54%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">크샨테</div>
-							<div class="progress-bar bg-danger" role="progressbar" style="width: 46%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">사일러스</div>
+							<div class="progress-bar" role="progressbar" style="width: 54%;"
+								aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">크샨테</div>
+							<div class="progress-bar bg-danger" role="progressbar"
+								style="width: 46%;" aria-valuenow="50" aria-valuemin="0"
+								aria-valuemax="100">사일러스</div>
 						</div>
 						<div class="progress">
-							<div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+							<div class="progress-bar" role="progressbar" style="width: 25%"
+								aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
 						</div>
-						
+
 						<div class="progress">
-							<div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+							<div class="progress-bar" role="progressbar" style="width: 50%"
+								aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
 						</div>
-						
+
 						<div class="progress">
-							<div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+							<div class="progress-bar" role="progressbar" style="width: 75%"
+								aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
 						</div>
-						
+
 						<div class="progress">
-							<div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+							<div class="progress-bar" role="progressbar" style="width: 100%"
+								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
 						</div>
 					</div>
 				</div>
 
-				<div class="match_up_table">
-					
-				</div>
+				<div class="match_up_table"></div>
 
 			</div>
 		</div>
@@ -1000,6 +1096,11 @@ function rune_full_data(main,sub) {
 		let main_rune_second = document.getElementsByClassName('main-rune-second')[0];
 		let main_rune_third = document.getElementsByClassName('main-rune-third')[0];
 		let main_rune_fourth = document.getElementsByClassName('main-rune-fourth')[0];
+		main_rune_top.innerHTML = ''
+		main_rune_first.innerHTML = ''
+		main_rune_second.innerHTML = ''
+		main_rune_third.innerHTML = ''
+		main_rune_fourth.innerHTML = ''
 		for (let i = 0; i < res.length; i++) {
 			rune_num = res[i].rune_num % res[0].rune_num
 			console.log(rune_num)
@@ -1066,6 +1167,10 @@ function rune_full_data(main,sub) {
 			let sub_rune_first = document.getElementsByClassName('sub-rune-first')[0];
 			let sub_rune_second = document.getElementsByClassName('sub-rune-second')[0];
 			let sub_rune_third = document.getElementsByClassName('sub-rune-third')[0];
+			sub_rune_top.innerHTML = ''
+			sub_rune_first.innerHTML = ''
+			sub_rune_second.innerHTML = ''
+			sub_rune_third.innerHTML = ''
 			for (let i = 0; i < res.length; i++) {
 				rune_num = res[i].rune_num % res[0].rune_num
 				console.log(rune_num)

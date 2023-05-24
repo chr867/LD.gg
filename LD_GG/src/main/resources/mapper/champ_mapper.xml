@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ld.gg.dao.ChampDao">
 	<select id="champ_rank" resultType="champ_analytics">
@@ -182,7 +180,8 @@
 			)
 			ORDER BY m.match_up_cnt DESC;
 		]]>
-
+	</select>
+	
 	<select id="getRuneInfo" resultType="champ_match_up_rune">
 		SELECT rune_id, rune_kr_name, rune_desc, rune_img,rune_num,rune_type
 		FROM rune_info WHERE rune_type = #{main_key} order by rune_num asc
