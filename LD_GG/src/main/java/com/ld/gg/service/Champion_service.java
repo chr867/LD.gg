@@ -135,5 +135,10 @@ public class Champion_service {
 		return championBuildInfo;
 	}
 
+	public List<Champ_match_up_default> get_champ_match_up(Integer champion_id) {
+		List<Champ_match_up_default> cm_list = cd.get_champion_match_up(champion_id);
+		
+		return cm_list;
+	}
 
 }

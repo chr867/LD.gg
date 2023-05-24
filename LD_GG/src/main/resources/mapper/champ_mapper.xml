@@ -6,20 +6,23 @@
 <mapper namespace="com.ld.gg.dao.ChampDao">
 	<select id="champ_rank" resultType="champ_analytics">
 		<![CDATA[
-		select ci.champion_kr_name, ci.champion_en_name, ci.champion_img, ct.* from champion_tier ct 
-		join champion_info ci on ci.champion_id = ct.champion_id
-		where ct.team_position = #{lane}
-		and ct.summoner_tier = #{tier}
-		and ct.pick_rate > 0.5
-		order by ct.tier asc
+			select ci.champion_kr_name, ci.champion_en_name, ci.champion_img, ct.* from champion_tier ct 
+			join champion_info ci on ci.champion_id = ct.champion_id
+			where ct.team_position = #{lane}
+			and ct.summoner_tier = #{tier}
+			and ct.pick_rate > 0.5
+			order by ct.tier asc
 		]]>
 	</select>
 
 	<select id="champ_match_up" resultType="champ_match_up">
-		select * from
-		champion_match_up
-		where champion_id= #{left_champion}
-		order by match_up_win_rate desc;
+		<![CDATA[
+			select * from
+			champion_match_up
+			where champion_id= #{left_champion}
+			and match_up_cnt > 50
+			order by match_up_win_rate desc;
+		]]>
 	</select>
 
 	<select id="champ_search" resultType="String">
@@ -154,6 +157,30 @@
 		  AND cmu.match_up_cnt >= 10
 		ORDER BY cmu.match_up_win_rate ASC
 		LIMIT 5
+		]]>
+	</select>
+	
+	<select id="get_champion_match_up" resultType="champ_match_up">
+		<![CDATA[
+			SELECT c.champion_id, i.champion_kr_name AS champion_name, i.champion_img, 
+			i2.champion_id AS enemy_champ_id, i2.champion_kr_name AS enemy_champ, i2.champion_img AS enemy_champion_img,
+			m.lane_kill_rate, m.kda, m.kill_participation, m.deal_to_champ, m.avg_g_15, m.tower_kill_time, m.avg_cs,
+			m.match_up_win_rate, m.match_up_win_cnt, m.match_up_cnt, c.team_position
+			FROM champion_lane AS c
+			JOIN champion_info AS i ON c.champion_id = i.champion_id
+			JOIN champion_match_up AS m ON c.champion_id = m.champion_id AND c.team_position = m.team_position
+			JOIN champion_info AS i2 ON m.enemy_champ_id = i2.champion_id
+			WHERE c.champion_id = #{champion_id}
+			AND m.match_up_cnt > 50
+			AND c.team_position = (
+			    SELECT team_position
+			    FROM champion_lane
+			    WHERE champion_id = #{champion_id}
+			    GROUP BY team_position
+			    ORDER BY MAX(pick_count) DESC
+			    LIMIT 1
+			)
+			ORDER BY m.match_up_cnt DESC;
 		]]>
 	</select>
 </mapper>

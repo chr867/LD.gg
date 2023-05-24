@@ -560,6 +560,8 @@ th{
 	</div>
 
 </body>
+
+<!-- 비동기 -->
 <script>
 	let response;
 	let lane = 'TOP';
@@ -608,113 +610,89 @@ th{
 	}).fail(err => {
 		console.log(err)
 	})
-	//
+	// 페이지 로드 끝
 
 	// 티어 선택
-	
-function tier_select(tier_){
-	document.getElementById("tier_select").innerHTML = tier_;
-	document.getElementById("option_container").innerHTML = '';
-	button_toggle = !button_toggle;
+	function tier_select(tier_){
+		document.getElementById("tier_select").innerHTML = tier_;
+		document.getElementById("option_container").innerHTML = '';
+		button_toggle = !button_toggle;
 
-	if(tier_ == 'Challenger'){
-		tier = 1
-	}
-	else if(tier_ == 'Grandmaster'){
-		tier = 2
-	}
-	else if(tier_ == 'Master'){
-		tier = 3
-	}
-	else if(tier_ == 'Diamond'){
-		tier = 4
-	}
-	else if(tier_ == 'Platinum'){
-		tier = 5
-	}
-	else if(tier_ == 'Gold'){
-		tier = 6
-	}
-	else if(tier_ == 'Silver'){
-		tier = 7
-	}
-	else if(tier_ == 'Bronze'){
-		tier = 8
-	}
-	else if(tier_ == 'Iron'){
-		tier = 9
-	}
-	
-	$.ajax({
-		url: '/champion/rank.json',
-		type: 'POST',
-		data: {
-			lane: lane,
-			tier: tier
+		if(tier_ == 'Challenger'){
+			tier = 1
 		}
-	}).done(res => {
-		response = res
-		let cList = '<tbody>';
-		let i = 1;
-		for (champion of res) {
-			let src;
-			if(champion.tier == 0){
-				src = 'https://s-lol-web.op.gg/images/icon/icon-tier-op.svg'
-			}else if(champion.tier == 1){
-				src = 'https://s-lol-web.op.gg/images/icon/icon-tier-1.svg'
-			}else if(champion.tier == 2){
-				src = 'https://s-lol-web.op.gg/images/icon/icon-tier-2.svg'
-			}else if(champion.tier == 3){
-				src = 'https://s-lol-web.op.gg/images/icon/icon-tier-3.svg'
-			}else if(champion.tier == 4){
-				src = 'https://s-lol-web.op.gg/images/icon/icon-tier-4.svg'
-			}else if(champion.tier == 5){
-				src = 'https://s-lol-web.op.gg/images/icon/icon-tier-5.svg'
+		else if(tier_ == 'Grandmaster'){
+			tier = 2
+		}
+		else if(tier_ == 'Master'){
+			tier = 3
+		}
+		else if(tier_ == 'Diamond'){
+			tier = 4
+		}
+		else if(tier_ == 'Platinum'){
+			tier = 5
+		}
+		else if(tier_ == 'Gold'){
+			tier = 6
+		}
+		else if(tier_ == 'Silver'){
+			tier = 7
+		}
+		else if(tier_ == 'Bronze'){
+			tier = 8
+		}
+		else if(tier_ == 'Iron'){
+			tier = 9
+		}
+		
+		$.ajax({
+			url: '/champion/rank.json',
+			type: 'POST',
+			data: {
+				lane: lane,
+				tier: tier
 			}
-			cList += '<tr>'
-			cList += '<td align="center">' + i + '</td>'
-			cList += '<td onclick="selectChampion('+ champion.champion_id +')"><img src="/resources/img/champion_img/square/' +
-			champion.champion_img + '" alt="#"></td>'
-			cList += '<td onclick="selectChampion('+ champion.champion_id +')" align="center">' + champion.champion_kr_name + '</td>'
-			cList += '<td align="center"><img src="'+ src +'"></td>'
-			cList += '<td align="center">' + champion.win_rate + '%</td>'
-			cList += '<td align="center">' + champion.pick_rate + '%</td>'
-			cList += '<td align="center">' + champion.ban_rate + '%</td>'
-			cList += '</tr>'
-			i++
-		}
-		cList += '</tbody>';
-		$('td').remove();
-		$('.table').append(cList);
-	}).fail(err => {
-		console.log(err)
-	})
-}
-	
-let button_toggle = false; // 초기에는 옵션 숨김 상태로 시작
-document.getElementById("tier_select").onclick = function() {
-  let option_container = document.getElementById("option_container");
-  if (button_toggle) {
-    // 옵션을 숨김
-    option_container.innerHTML = "";
-  } else {
-    // 옵션을 보여줌
-    const tier_list = ['Challenger', 'Grandmaster', 'Master', 'Diamond', 'Platinum', 'Gold', 'Silver', 'Bronze', 'Iron'];
-    for (const tier_ of tier_list) {
-      let tier_button = document.createElement("button");
-      tier_button.style.display = 'block';
-      tier_button.onclick = () => {
-    	  tier_select(tier_);
-    	};
-      tier_button.innerHTML = tier_;
-      option_container.appendChild(tier_button);
-    }
-  }
-
-  button_toggle = !button_toggle;
-};
+		}).done(res => {
+			response = res
+			let cList = '<tbody>';
+			let i = 1;
+			for (champion of res) {
+				let src;
+				if(champion.tier == 0){
+					src = 'https://s-lol-web.op.gg/images/icon/icon-tier-op.svg'
+				}else if(champion.tier == 1){
+					src = 'https://s-lol-web.op.gg/images/icon/icon-tier-1.svg'
+				}else if(champion.tier == 2){
+					src = 'https://s-lol-web.op.gg/images/icon/icon-tier-2.svg'
+				}else if(champion.tier == 3){
+					src = 'https://s-lol-web.op.gg/images/icon/icon-tier-3.svg'
+				}else if(champion.tier == 4){
+					src = 'https://s-lol-web.op.gg/images/icon/icon-tier-4.svg'
+				}else if(champion.tier == 5){
+					src = 'https://s-lol-web.op.gg/images/icon/icon-tier-5.svg'
+				}
+				cList += '<tr>'
+				cList += '<td align="center">' + i + '</td>'
+				cList += '<td onclick="selectChampion('+ champion.champion_id +')"><img src="/resources/img/champion_img/square/' +
+				champion.champion_img + '" alt="#"></td>'
+				cList += '<td onclick="selectChampion('+ champion.champion_id +')" align="center">' + champion.champion_kr_name + '</td>'
+				cList += '<td align="center"><img src="'+ src +'"></td>'
+				cList += '<td align="center">' + champion.win_rate + '%</td>'
+				cList += '<td align="center">' + champion.pick_rate + '%</td>'
+				cList += '<td align="center">' + champion.ban_rate + '%</td>'
+				cList += '</tr>'
+				i++
+			}
+			cList += '</tbody>';
+			$('td').remove();
+			$('.table').append(cList);
+		}).fail(err => {
+			console.log(err)
+		})
+	}
 	// 티어 선택 끝
-	
+
 	// 라인 변경
 	const lane_buttons = document.querySelectorAll(".lane_button button")
 	lane_buttons.forEach(lane_button =>{
@@ -779,6 +757,86 @@ document.getElementById("tier_select").onclick = function() {
 		})
 	})
 	// 라인 변경 끝
+</script>
+
+<!-- champion-container -->
+<script>
+	// 챔피언 리스트
+function championList() {
+	$.ajax({
+		method: 'get',
+		url: '/champion/list.json'
+	}).done(res => {
+		let championHTML = '';
+		res.forEach(function (champion) {
+			championHTML += '<div class="champion">';
+			championHTML += '<img alt="' + champion.champion_kr_name +
+				'" class="bg-image champion-img" src="/resources/img/champion_img/square/' +
+				champion.champion_img + '" onclick="selectChampion(' + champion.champion_id + ')">';
+			championHTML += '</div>';
+		});
+
+		$('.champions').html(championHTML);
+	}).fail(err => {
+		console.log(err);
+	});
+}
+championList();
+// 챔피언 리스트 끝
+
+// 라인 선택
+function selectLane(team_position) {
+	$('.champions').empty();
+	$.ajax({
+		method: 'get',
+		url: '/tip/champion/lane',
+		data: {
+			team_position: team_position
+		},
+	}).done(res => {
+		let championHTML = '';
+		res.forEach(function (champion) {
+			championHTML += '<div class="champion">';
+			championHTML += '<img alt="' + champion.champion_kr_name +
+				'" class="bg-image champion-img" src="/resources/img/champion_img/square/' +
+				champion.champion_img + '" onclick="selectChampion(' + champion.champion_id + ')">';
+			championHTML += '</div>';
+		});
+
+		$('.champions').html(championHTML);
+	}).fail(err => {
+		console.log(err);
+	})
+}
+// 라인 선택 끝
+</script>
+
+<!-- container_box -->
+<script>
+	// 티어 버튼
+	let button_toggle = false; // 초기에는 옵션 숨김 상태로 시작
+	document.getElementById("tier_select").onclick = function() {
+		let option_container = document.getElementById("option_container");
+		if (button_toggle) {
+			// 옵션을 숨김
+			option_container.innerHTML = "";
+		} else {
+			// 옵션을 보여줌
+			const tier_list = ['Challenger', 'Grandmaster', 'Master', 'Diamond', 'Platinum', 'Gold', 'Silver', 'Bronze', 'Iron'];
+			for (const tier_ of tier_list) {
+				let tier_button = document.createElement("button");
+				tier_button.style.display = 'block';
+				tier_button.onclick = () => {
+					tier_select(tier_);
+				};
+				tier_button.innerHTML = tier_;
+				option_container.appendChild(tier_button);
+			}
+		}
+
+		button_toggle = !button_toggle;
+	};
+	// 티어 버튼 끝
 
 	// 정렬 버튼
 	let win_rate_reverse = false
@@ -898,60 +956,10 @@ document.getElementById("tier_select").onclick = function() {
 	})
 	// 정렬 버튼 끝
 
-	// 챔피언 리스트
-	function championList() {
-		$.ajax({
-			method: 'get',
-			url: '/champion/list.json'
-		}).done(res => {
-			let championHTML = '';
-			res.forEach(function (champion) {
-				championHTML += '<div class="champion">';
-				championHTML += '<img alt="' + champion.champion_kr_name +
-					'" class="bg-image champion-img" src="/resources/img/champion_img/square/' +
-					champion.champion_img + '" onclick="selectChampion(' + champion.champion_id + ')">';
-				championHTML += '</div>';
-			});
-
-			$('.champions').html(championHTML);
-		}).fail(err => {
-			console.log(err);
-		});
-	}
-	championList();
-	// 챔피언 리스트 끝
-
-	// 라인 선택
-	function selectLane(team_position) {
-		$('.champions').empty();
-		$.ajax({
-			method: 'get',
-			url: '/tip/champion/lane',
-			data: {
-				team_position: team_position
-			},
-		}).done(res => {
-			let championHTML = '';
-			res.forEach(function (champion) {
-				championHTML += '<div class="champion">';
-				championHTML += '<img alt="' + champion.champion_kr_name +
-					'" class="bg-image champion-img" src="/resources/img/champion_img/square/' +
-					champion.champion_img + '" onclick="selectChampion(' + champion.champion_id + ')">';
-				championHTML += '</div>';
-			});
-
-			$('.champions').html(championHTML);
-		}).fail(err => {
-			console.log(err);
-		})
-	}
-	// 라인 선택 끝
-
 	function selectChampion(champion_id) {
 		location.href = `/champion/info?champion=\${champion_id}`
 	}
-
-	
 </script>
+
 
 </html>

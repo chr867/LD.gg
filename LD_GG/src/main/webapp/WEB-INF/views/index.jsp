@@ -463,7 +463,7 @@
 				<form id=champ_search>
 			 	<input id='champion_name_input' type="text" name="champion_kr_name" placeholder="내 챔피언 검색">
 				</form>
-				<img id="my_champion_img" alt="#" src="/resources/img/img/profileicon/29.png">
+				<img id="my_champion_img" alt="#" src="/resources/img/profileicon/29.png">
 			</div>
 			<div id="build_recom_box">
 				<span></span>
@@ -504,18 +504,18 @@
 				<form id=right_champ_search>
 				 	<input id='right_champ_name_input' type="text" name="champion_kr_name" placeholder="상대 챔피언 검색">
 				</form>
-				<img id="right_champion_img" alt="#" src="/resources/img/img/profileicon/29.png">
+				<img id="right_champion_img" alt="#" src="/resources/img/profileicon/29.png">
 				<span></span>
 			</div>
 		</div>
 		
 		<div id="recom_champ">
 			<div>
-				<img src="/resources/img/img/profileicon/29.png" class="champ1" alt="" id="recom_champ_0" onclick="recom_click(this)">
-				<img src="/resources/img/img/profileicon/29.png" class="champ2" alt="" id="recom_champ_1" onclick="recom_click(this)">
-				<img src="/resources/img/img/profileicon/29.png" class="champ3" alt="" id="recom_champ_2" onclick="recom_click(this)">
-				<img src="/resources/img/img/profileicon/29.png" class="champ4" alt="" id="recom_champ_3" onclick="recom_click(this)">
-				<img src="/resources/img/img/profileicon/29.png" class="champ5" alt="" id="recom_champ_4" onclick="recom_click(this)">
+				<img src="/resources/img/profileicon/29.png" class="champ1" alt="" id="recom_champ_0" onclick="recom_click(this)">
+				<img src="/resources/img/profileicon/29.png" class="champ2" alt="" id="recom_champ_1" onclick="recom_click(this)">
+				<img src="/resources/img/profileicon/29.png" class="champ3" alt="" id="recom_champ_2" onclick="recom_click(this)">
+				<img src="/resources/img/profileicon/29.png" class="champ4" alt="" id="recom_champ_3" onclick="recom_click(this)">
+				<img src="/resources/img/profileicon/29.png" class="champ5" alt="" id="recom_champ_4" onclick="recom_click(this)">
 			</div>
 				<div id="span_container">
 					<div id="recom_champ_name">
@@ -577,7 +577,7 @@
 			res.forEach(champ=>{
 				let idx = res.indexOf(champ)
 				let champ_name = champ.cm.champion_name
-				let path = `/resources/img/img/champion_img/tiles/\${champ_name}_0.jpg`
+				let path = `/resources/img/champion_img/tiles/\${champ_name}_0.jpg`
 				$(`#recom_champ_\${idx}`).attr('src', path);
 				$(`#recom_champ_\${idx}`).attr('class', champ_name);
 				$('#recom_champ_name span').eq(idx).text(champ.name)
@@ -621,7 +621,7 @@
 			data: formData,
 		}).done(res=>{
 			if(res){
-				$('#my_champion_img').attr('src', `/resources/img/img/champion_img/tiles/\${res}_0.jpg`);
+				$('#my_champion_img').attr('src', `/resources/img/champion_img/tiles/\${res}_0.jpg`);
 				$('#build_recom_left_val').attr('value', res);
 			}else{
 				$('#build_recom_box span').text('챔피언 이름을 확인해주세요');
@@ -648,7 +648,7 @@
 			data: formData,
 		}).done(res=>{
 			if(res){
-				$('#right_champion_img').attr('src', `/resources/img/img/champion_img/tiles/\${res}_0.jpg`);
+				$('#right_champion_img').attr('src', `/resources/img/champion_img/tiles/\${res}_0.jpg`);
 				$('#champ_recom_right_val').attr('value', res);
 				$('#build_recom_right_val').attr('value', res);
 			}else{
