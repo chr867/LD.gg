@@ -135,6 +135,12 @@ public class Champion_service {
 		return championBuildInfo;
 	}
 
+	public List<Champ_match_up_default> get_champ_match_up(Integer champion_id) {
+		List<Champ_match_up_default> cm_list = cd.get_champion_match_up(champion_id);
+		
+		return cm_list;
+	}
+
 	public List<Champ_match_up_rune> getRuneInfo(String main_key) {
 		return cd.getRuneInfo(main_key);
 	}
@@ -142,6 +148,5 @@ public class Champion_service {
 	public List<Champ_match_up_rune> getSubRuneInfo(String sub_key) {
 		return cd.getSubRuneInfo(sub_key);
 	}
-
 
 }

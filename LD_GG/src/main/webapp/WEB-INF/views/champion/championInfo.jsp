@@ -47,6 +47,7 @@
 	href="/resources/css/main/loginModal.css">
 <!--로그인 및 세션관련 JS-->
 <script src="/resources/js/main/loginSession.js" defer></script>
+
 <style type="text/css">
 .main-container {
 	display: flex;
@@ -62,6 +63,12 @@
 }
 
 .middle-container {
+	box-sizing: border-box;
+	width: 700px;
+	height: 100%;
+}
+
+.right-container {
 	box-sizing: border-box;
 	width: 700px;
 	height: 100%;
@@ -220,7 +227,6 @@
 }
 </style>
 
-
 <style>
   .rune-container {
     display: flex;
@@ -285,6 +291,13 @@
 .rune:hover .rune-desc{
 	visibility: visible;
 	opacity: 1;
+}
+</style>
+
+<!-- right_container -->
+<style> 
+#chartdiv{
+	
 }
 </style>
 </head>
@@ -777,6 +790,38 @@
 				</div>
 			</div>
 		</div>
+		<div class="right-container">
+			<div class="match_up_container">
+				<div class="match_up_chart">
+					<div id="chartdiv">
+						<div class="progress header">
+							<div class="progress-bar" role="progressbar" style="width: 54%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">크샨테</div>
+							<div class="progress-bar bg-danger" role="progressbar" style="width: 46%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">사일러스</div>
+						</div>
+						<div class="progress">
+							<div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+						</div>
+						
+						<div class="progress">
+							<div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+						</div>
+						
+						<div class="progress">
+							<div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+						</div>
+						
+						<div class="progress">
+							<div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+						</div>
+					</div>
+				</div>
+
+				<div class="match_up_table">
+					
+				</div>
+
+			</div>
+		</div>
 	</div>
 
 </body>
@@ -1069,4 +1114,37 @@ function rune_full_data(main,sub) {
 
 </script>
 
+<!-- right_container -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+	get_match_up(${chamInfo.champion_id});
+});
+
+let response;
+	// get_match_up
+	function get_match_up(champion_id){
+		$.ajax({
+			url: '/champion/match-up.json',
+			type: 'POST',
+			data: {champion_id: champion_id}
+		}).done(res=>{
+			console.log(res)
+			response = res
+			make_chart(res[0])
+			make_table(res)
+		}).fail(err=>{
+			console.log(err)
+		})
+	}
+	// get_match_up 끝
+	
+function make_chart(match_up){
+	console.log(match_up)
+}
+	
+function make_table(champions){
+	console.log('table')
+}
+
+</script>
 </html>
