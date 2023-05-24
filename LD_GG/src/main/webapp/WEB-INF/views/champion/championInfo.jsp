@@ -49,8 +49,23 @@
 <script src="/resources/js/main/loginSession.js" defer></script>
 <style type="text/css">
 .main-container {
+	display: flex;
 	box-sizing: border-box;
 	padding: 100px 50px 100px 100px;
+}
+
+.left-container {
+	box-sizing: border-box;
+	width: 350px;
+	height: 100%;
+	margin-right: 20px;
+}
+
+.middle-container {
+	box-sizing: border-box;
+	width: 700px;
+	height: 100%;
+	background-color: black;
 }
 
 .champion-info-box {
@@ -58,6 +73,7 @@
 	height: 100px;
 	box-sizing: border-box;
 	background-color: #fff;
+	border-radius: 0.5rem;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -111,6 +127,7 @@
 	height: 50px;
 	box-sizing: border-box;
 	background-color: #fff;
+	border-radius: 0.5rem;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -145,6 +162,7 @@
 	border-radius: 0.1rem;
 	transition: 0.3s;
 	background-color: #fff;
+	border-radius: 1rem;
 	margin-right: 10px;
 }
 
@@ -156,7 +174,8 @@
 	width: 350px;
 	height: 120px;
 	padding: 10px 10px 0 10px;
-	background-color: #FFF;
+	background-color: #fff;
+	border-radius: 0.5rem;
 	box-sizing: border-box;
 	justify-content: center;
 	align-items: center;
@@ -164,10 +183,12 @@
 	text-align: center;
 	font-weight: 700;
 }
-.easy-champ-img{
+
+.easy-champ-img {
 	width: 80px;
 	text-align: center;
 }
+
 .easy-champ-img img {
 	width: 50px;
 	height: 50px;
@@ -177,7 +198,8 @@
 	width: 350px;
 	height: 120px;
 	padding: 10px 10px 0 10px;
-	background-color: #FFF;
+	background-color: #fff;
+	border-radius: 0.5rem;
 	box-sizing: border-box;
 	justify-content: center;
 	align-items: center;
@@ -185,16 +207,67 @@
 	text-align: center;
 	font-weight: 700;
 }
-.hard-champ-img{
+
+.hard-champ-img {
 	width: 80px;
 	text-align: center;
 }
+
 .hard-champ-img img {
 	width: 50px;
 	height: 50px;
 }
 </style>
 
+<style>
+  .rune-container {
+    display: flex;
+    box-sizing: border-box;
+    background-color: #fff;
+	border-radius: 0.5rem;
+  }
+
+  .rune-box {
+    width: 100%;
+    height: 300px;
+    background-color: rgb(88, 88, 88);
+    margin-right: 5px;
+    justify-content: space-between;
+    text-align: center;
+    padding: 20px 0 0 0;
+    box-sizing: border-box;
+  }
+
+  .first-rune {
+    background-color: rgb(255, 255, 255);
+    width: 40px;
+    height: 40px;
+    border-radius: 10rem;
+  }
+
+  .runes {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .rune {
+    background-color: rgb(88, 88, 88);
+    width: 40px;
+    height: 40px;
+    margin: 10px;
+    border-radius: 4rem;
+  }
+  .rune img{
+    width: 40px;
+    height: 40px;
+  }
+  .sub-runes{
+    padding: 60px 0 0 0;
+  }
+  .sub-ability{
+    padding: 120px 0 0 0;
+  }
+</style>
 </head>
 
 <body>
@@ -548,116 +621,302 @@
 	<!----------------------------------------------------------------------------------------------------------------->
 	<!----------------------------------------------------------------------------------------------------------------->
 	<div class="main-container">
-		<div class="lane-select-box"></div>
-		<div class="champion-info-box">
-			<table class="champion-table">
-				<tr>
-					<td rowspan="2"><img alt=""
-						src="/resources/img/champion_img/square/${chamInfo.champion_img}"
-						class="champion-img"></td>
-					<td colspan="5"><h3 class="champion_name">${chamInfo.champion_kr_name}</h3></td>
-				</tr>
-				<tr>
-					<td><img alt=""
-						src="/resources/img/passive/${chamInfo.champion_p_img}"
-						class="ability-img">
-						<div class="tooltip">
-							<div>${chamInfo.champion_p_name}</div>
-							<br>
-							<div>${chamInfo.champion_p_desc}</div>
-						</div></td>
-					<td><img alt=""
-						src="/resources/img/spell/${chamInfo.champion_q_img}"
-						class="ability-img">
-						<div class="tooltip">
-							<div>${chamInfo.champion_q_name}</div>
-							<br>
-							<div>${chamInfo.champion_q_desc}</div>
-						</div></td>
-					<td><img alt=""
-						src="/resources/img/spell/${chamInfo.champion_w_img}"
-						class="ability-img">
-						<div class="tooltip">
-							<div>${chamInfo.champion_w_name}</div>
-							<br>
-							<div>${chamInfo.champion_w_desc}</div>
-						</div></td>
-					<td><img alt=""
-						src="/resources/img/spell/${chamInfo.champion_e_img}"
-						class="ability-img">
-						<div class="tooltip">
-							<div>${chamInfo.champion_e_name}</div>
-							<br>
-							<div>${chamInfo.champion_e_desc}</div>
-						</div></td>
-					<td><img alt=""
-						src="/resources/img/spell/${chamInfo.champion_r_img}"
-						class="ability-img">
-						<div class="tooltip">
-							<div>${chamInfo.champion_r_name}</div>
-							<br>
-							<div>${chamInfo.champion_r_desc}</div>
-						</div></td>
-				</tr>
-			</table>
+		<div class="left-container">
+			<div class="lane-select-box"></div>
+			<div class="champion-info-box">
+				<table class="champion-table">
+					<tr>
+						<td rowspan="2"><img alt=""
+							src="/resources/img/champion_img/square/${chamInfo.champion_img}"
+							class="champion-img"></td>
+						<td colspan="5"><h3 class="champion_name">${chamInfo.champion_kr_name}</h3></td>
+					</tr>
+					<tr>
+						<td><img alt=""
+							src="/resources/img/passive/${chamInfo.champion_p_img}"
+							class="ability-img">
+							<div class="tooltip">
+								<div>${chamInfo.champion_p_name}</div>
+								<br>
+								<div>${chamInfo.champion_p_desc}</div>
+							</div></td>
+						<td><img alt=""
+							src="/resources/img/spell/${chamInfo.champion_q_img}"
+							class="ability-img">
+							<div class="tooltip">
+								<div>${chamInfo.champion_q_name}</div>
+								<br>
+								<div>${chamInfo.champion_q_desc}</div>
+							</div></td>
+						<td><img alt=""
+							src="/resources/img/spell/${chamInfo.champion_w_img}"
+							class="ability-img">
+							<div class="tooltip">
+								<div>${chamInfo.champion_w_name}</div>
+								<br>
+								<div>${chamInfo.champion_w_desc}</div>
+							</div></td>
+						<td><img alt=""
+							src="/resources/img/spell/${chamInfo.champion_e_img}"
+							class="ability-img">
+							<div class="tooltip">
+								<div>${chamInfo.champion_e_name}</div>
+								<br>
+								<div>${chamInfo.champion_e_desc}</div>
+							</div></td>
+						<td><img alt=""
+							src="/resources/img/spell/${chamInfo.champion_r_img}"
+							class="ability-img">
+							<div class="tooltip">
+								<div>${chamInfo.champion_r_name}</div>
+								<br>
+								<div>${chamInfo.champion_r_desc}</div>
+							</div></td>
+					</tr>
+				</table>
+			</div>
+			<div class="champion-twpb-box">
+				<table>
+					<tr>
+						<th class="champion-twpb">티어</th>
+						<th class="champion-twpb">승률</th>
+						<th class="champion-twpb">픽률</th>
+						<th class="champion-twpb">밴률</th>
+					</tr>
+					<tr>
+						<td class="champion-tier" id="tier"></td>
+						<td class="champion-tier" id="win-rate"></td>
+						<td class="champion-tier" id="pick-rate"></td>
+						<td class="champion-tier" id="ban-rate"></td>
+					</tr>
+				</table>
+			</div>
+			<div class="champion-easy-box">
+				<caption>
+					상대하기 쉬운 챔피언</
+					<caption>
+						<table>
+							<tr>
+								<th class="easy-champ-img"></th>
+								<th class="easy-champ-img"></th>
+								<th class="easy-champ-img"></th>
+								<th class="easy-champ-img"></th>
+								<th class="easy-champ-img"></th>
+							</tr>
+							<tr>
+								<td class="easy-champ-win-rate"></td>
+								<td class="easy-champ-win-rate"></td>
+								<td class="easy-champ-win-rate"></td>
+								<td class="easy-champ-win-rate"></td>
+								<td class="easy-champ-win-rate"></td>
+							</tr>
+						</table>
+			</div>
+			<div class="champion-hard-box">
+				<caption>
+					상대하기 힘든 챔피언</
+					<caption>
+						<table>
+							<tr>
+								<th class="hard-champ-img"></th>
+								<th class="hard-champ-img"></th>
+								<th class="hard-champ-img"></th>
+								<th class="hard-champ-img"></th>
+								<th class="hard-champ-img"></th>
+							</tr>
+							<tr>
+								<td class="hard-champ-win-rate"></td>
+								<td class="hard-champ-win-rate"></td>
+								<td class="hard-champ-win-rate"></td>
+								<td class="hard-champ-win-rate"></td>
+								<td class="hard-champ-win-rate"></td>
+							</tr>
+						</table>
+			</div>
 		</div>
-		<div class="champion-twpb-box">
-			<table>
-				<tr>
-					<th class="champion-twpb">티어</th>
-					<th class="champion-twpb">승률</th>
-					<th class="champion-twpb">픽률</th>
-					<th class="champion-twpb">밴률</th>
-				</tr>
-				<tr>
-					<td class="champion-tier" id="tier"></td>
-					<td class="champion-tier" id="win-rate"></td>
-					<td class="champion-tier" id="pick-rate"></td>
-					<td class="champion-tier" id="ban-rate"></td>
-				</tr>
-			</table>
-		</div>
-		<div class="champion-easy-box">
-			<caption>상대하기 쉬운 챔피언</<caption>
-			<table>
-				<tr>
-					<th class="easy-champ-img"></th>
-					<th class="easy-champ-img"></th>
-					<th class="easy-champ-img"></th>
-					<th class="easy-champ-img"></th>
-					<th class="easy-champ-img"></th>
-				</tr>
-				<tr>
-					<td class="easy-champ-win-rate"></td>
-					<td class="easy-champ-win-rate"></td>
-					<td class="easy-champ-win-rate"></td>
-					<td class="easy-champ-win-rate"></td>
-					<td class="easy-champ-win-rate"></td>
-				</tr>
-			</table>
+		<div class="middle-container">
+			<div class="rune-container">
+				<div class="rune-box">
+					<div class="first-rune" style="margin: 0 auto">
+						<img
+							src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/7200_Domination.png"
+							alt="">
+					</div>
+					<div class="runes">
+						<div class="rune">
+							<img
+								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/Electrocute/Electrocute.png"
+								alt="">
+						</div>
+						<div class="rune">
+							<img
+								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/Predator/Predator.png"
+								alt="">
+						</div>
+						<div class="rune">
+							<img
+								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/DarkHarvest/DarkHarvest.png"
+								alt="">
+						</div>
+						<div class="rune">
+							<img
+								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/HailOfBlades/HailOfBlades.png"
+								alt="">
+						</div>
+					</div>
+					<div class="runes">
+						<div class="rune">
+							<img
+								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/CheapShot/CheapShot.png"
+								alt="">
+						</div>
+						<div class="rune">
+							<img
+								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/TasteOfBlood/GreenTerror_TasteOfBlood.png"
+								alt="">
+						</div>
+						<div class="rune">
+							<img
+								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/SuddenImpact/SuddenImpact.png"
+								alt="">
+						</div>
+					</div>
+					<div class="runes">
+						<div class="rune">
+							<img
+								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/ZombieWard/ZombieWard.png"
+								alt="" style="filter: grayscale(100%);">
+						</div>
+						<div class="rune">
+							<img
+								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/GhostPoro/GhostPoro.png"
+								alt="">
+						</div>
+						<div class="rune">
+							<img
+								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/EyeballCollection/EyeballCollection.png"
+								alt="">
+						</div>
+					</div>
+					<div class="runes">
+						<div class="rune">
+							<img
+								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/TreasureHunter/TreasureHunter.png"
+								alt="">
+						</div>
+						<div class="rune">
+							<img
+								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/IngeniousHunter/IngeniousHunter.png"
+								alt="">
+						</div>
+						<div class="rune">
+							<img
+								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/RelentlessHunter/RelentlessHunter.png"
+								alt="">
+						</div>
+						<div class="rune">
+							<img
+								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Domination/UltimateHunter/UltimateHunter.png"
+								alt="">
+						</div>
+					</div>
+				</div>
 
+				<div class="rune-box sub-runes">
+					<div class="first-rune" style="margin: 10px auto">
+						<img
+							src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/7202_Sorcery.png"
+							alt="">
+					</div>
+					<div class="runes">
+						<div class="rune">
+							<img
+								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Sorcery/NullifyingOrb/Pokeshield.png"
+								alt="">
+						</div>
+						<div class="rune">
+							<img
+								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Sorcery/ManaflowBand/ManaflowBand.png"
+								alt="">
+						</div>
+						<div class="rune">
+							<img
+								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Sorcery/NimbusCloak/6361.png"
+								alt="">
+						</div>
+					</div>
+					<div class="runes">
+						<div class="rune">
+							<img
+								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Sorcery/Transcendence/Transcendence.png"
+								alt="">
+						</div>
+						<div class="rune">
+							<img
+								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Sorcery/Celerity/CelerityTemp.png"
+								alt="">
+						</div>
+						<div class="rune">
+							<img
+								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Sorcery/AbsoluteFocus/AbsoluteFocus.png"
+								alt="">
+						</div>
+					</div>
+					<div class="runes">
+						<div class="rune">
+							<img
+								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Sorcery/Scorch/Scorch.png"
+								alt="">
+						</div>
+						<div class="rune">
+							<img
+								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Sorcery/Waterwalking/Waterwalking.png"
+								alt="">
+						</div>
+						<div class="rune">
+							<img
+								src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/Sorcery/GatheringStorm/GatheringStorm.png"
+								alt="">
+						</div>
+					</div>
+				</div>
+				<div class="rune-box sub-ability">
+					<div class="runes">
+						<div class="rune">
+							<img src="" alt="">
+						</div>
+						<div class="rune">
+							<img src="" alt="">
+						</div>
+						<div class="rune">
+							<img src="" alt="">
+						</div>
+					</div>
+					<div class="runes">
+						<div class="rune">
+							<img src="" alt="">
+						</div>
+						<div class="rune">
+							<img src="" alt="">
+						</div>
+						<div class="rune">
+							<img src="" alt="">
+						</div>
+					</div>
+					<div class="runes">
+						<div class="rune">
+							<img src="" alt="">
+						</div>
+						<div class="rune">
+							<img src="" alt="">
+						</div>
+						<div class="rune">
+							<img src="" alt="">
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
-		<div class="champion-hard-box">
-			<caption>상대하기 힘든 챔피언</<caption>
-			<table>
-				<tr>
-					<th class="hard-champ-img"></th>
-					<th class="hard-champ-img"></th>
-					<th class="hard-champ-img"></th>
-					<th class="hard-champ-img"></th>
-					<th class="hard-champ-img"></th>
-				</tr>
-				<tr>
-					<td class="hard-champ-win-rate"></td>
-					<td class="hard-champ-win-rate"></td>
-					<td class="hard-champ-win-rate"></td>
-					<td class="hard-champ-win-rate"></td>
-					<td class="hard-champ-win-rate"></td>
-				</tr>
-			</table>
-		</div>
-
-
 	</div>
 
 </body>
