@@ -156,4 +156,14 @@
 		LIMIT 5
 		]]>
 	</select>
+	
+	<select id="getRuneInfo" resultType="champ_match_up_rune">
+		SELECT rune_id, rune_kr_name, rune_desc, rune_img,rune_num,rune_type
+		FROM rune_info WHERE rune_type = #{main_key} order by rune_num asc
+	</select>
+	
+	<select id="getSubRuneInfo" resultType="champ_match_up_rune">
+		SELECT rune_id, rune_kr_name, rune_desc, rune_img,rune_num,rune_type
+		FROM rune_info WHERE rune_type = #{sub_key} order by rune_num asc
+	</select>
 </mapper>

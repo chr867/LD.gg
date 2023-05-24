@@ -135,5 +135,13 @@ public class Champion_service {
 		return championBuildInfo;
 	}
 
+	public List<Champ_match_up_rune> getRuneInfo(String main_key) {
+		return cd.getRuneInfo(main_key);
+	}
+
+	public List<Champ_match_up_rune> getSubRuneInfo(String sub_key) {
+		return cd.getSubRuneInfo(sub_key);
+	}
+
 
 }
