@@ -71,6 +71,9 @@ public class RestMentoringController {
 	@GetMapping("/get-summoner-info")
 	public String get_summoner_info(@RequestParam String summoner_name) throws JsonProcessingException {
 	SummonerDto sd = summonerService.get_summoner_info(summoner_name);
+	String lowerTier = sd.getTier();
+	String upperTier = lowerTier.toUpperCase();
+	sd.setTier(upperTier);
 	ObjectMapper objectMapper = new ObjectMapper();
 	String summoner_json = objectMapper.writeValueAsString(sd);
 	return summoner_json;

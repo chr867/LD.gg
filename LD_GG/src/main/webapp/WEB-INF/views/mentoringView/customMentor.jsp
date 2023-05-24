@@ -25,6 +25,7 @@ padding: 0 90px;
 }
 #summoner-wrap{
 background-color:#f2f2f2;
+border-radius: 12px;
 padding: 24px;
 margin:24px;
 }
@@ -67,10 +68,22 @@ border-radius: 10px;
 margin: 32px 0;
 }
 #position-buttons button{
+background-color:#fff;
+border:solid 1px #dee2e6;
+border-radius: 15px;
+padding:8px;
 width:130px;
 }
-#champ-info{
-padding: 8px;
+#position-buttons button.selected{
+font-weight: bold;
+border:solid 2px black;
+}
+#position-buttons button.mouse-over{
+font-weight: bold;
+border:solid 2px black;
+}
+#position-buttons button img{
+width:40px;
 }
 #tier-holder{
 padding:16px;
@@ -83,9 +96,66 @@ margin-bottom: 8px;
 #goal-tier-selector{
 margin-top:8px;
 }
+#goal-tier{
+margin-top:60px;
+}
+#volume{
+margin-left:10px;
+}
+#champ-info{
+margin-top:32px;
+}
+#champ-selector{
+margin-top:60px;
+}
+#champ-selector-inner{
+margin:32px 0;
+}
+#champ-name{
+font-size:24px;
+font-weight:bold;
+}
+#champ-img{
+width:72px;
+}
+#champ-item{
+padding: 10px 0;
+}
+#champ-item:hover{
+background-color: white;
+cursor: pointer;
+}
+#champ-list{
+padding: 8px;
+height: 370px;
+margin: 10px 0;
+border: 1px solid #dee2e6;
+border-radius: 20px;
+overflow: auto; /* 스크롤바를 추가하기 위해 overflow 속성 설정 */
+}
+#filter-champ-wrap {
+  width: 430px;
+  height: 500px; /* 원하는 높이로 설정 */
+  top: 20px;
+  right: 20px;
+  background-color: #f8f9fa;
+  padding: 24px;
+  border-radius: 20px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+#select-box{
+min-width:300px;
+padding:8px 24px;
+border:solid 1px #dee2e6;
+border-radius:10px;
+cursor: pointer;
+}
+#select-box:hover{
+border:solid 2px black;
+}
 .gradient {
 height: 120px;
-background: linear-gradient(to top, #cccccc, #ffffff);
+background: linear-gradient(to top, #cccccc, #dee2e6 20%, #f8f9fa 50%, #ffffff 70%);
 }
 .tier-label{
 font-size: 12px;
@@ -95,8 +165,8 @@ color: #777;
 background-color:#eaeaea;
 }
 
-	</style>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+</style>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 </head>
 
 <body>
@@ -111,12 +181,11 @@ background-color:#eaeaea;
 						<h4><img src="https://online.gamecoach.pro/img/coaching/emoji-star.svg"><strong>목표를 설정해 볼까요?</strong></h4>
 					</div>
 					<div class="d-flex justify-content-center">
-						<div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="17" aria-valuemin="0" aria-valuemax="100">
+						<div class="progress my-auto" role="progressbar" aria-label="Example with label" aria-valuenow="17" aria-valuemin="0" aria-valuemax="100">
 						  <div class="progress-bar" style="width: 17%">17%</div>
 						</div>
-						<span>1/6</span>
+						<span id="volume">1/6</span>
 					</div>
-					<h4 class="profile-text2">입니다.</h4>
 				</div>
 		
 				<div id="summoner-wrap" class="d-flex align-item-center justify-content-center">
@@ -129,21 +198,21 @@ background-color:#eaeaea;
 					</div>
 					<div class="d-flex align-item-center justify-content-center" summonername="${member.lol_account}">
 						<div class="my-auto">
-							<img style="width: 72px" src="https://online.gamecoach.pro/img/lol/emblem-UNRANKED.svg">
+							<img id="member-tier-img" class="mx-2" style="width: 72px" src="https://online.gamecoach.pro/img/lol/emblem-UNRANKED.svg">
 						</div>
 						<div class="my-auto">
 							<div>
 								<h4>
-									<strong>UNRANKED</strong>
+									<strong id="member-tier">UNRANKED</strong>
 								</h4>
-								<div>
-									<span>승률 0%</span>
+								<div id="member-stat">
+									<strong>승률 0%</strong>
 									<span>(0승 0패)</span>
 								</div>
 							</div>
 						</div>
 						<div class="my-auto">
-							<span>0LP</span>
+							<span id="member-lp" class="mx-2">0LP</span>
 						</div>
 					</div>
 					<span class="my-auto">입니다.</span>
@@ -152,57 +221,56 @@ background-color:#eaeaea;
 			
 			<div id="form-box">
 				<div id="pos-box">
-					<h5><strong>배우고 싶은 포지션</strong></h5>
+					<h3><strong>배우고 싶은 포지션</strong></h3>
 					<div id="position-buttons" class="d-flex align-item-center justify-content-evenly">
-						<button type="button" id="top-button" class="btn border">
+						<button type="button" id="top-button">
 							<img src="https://online.gamecoach.pro/img/icon/lol/ico_lol_top_grey.svg" class="position-img">
 							<span>탑</span>
 						</button>
-						<button type="button" id="jungle-button" class="btn border"><img
+						<button type="button" id="jungle-button"><img
 								src="https://online.gamecoach.pro/img/icon/lol/ico_lol_jg_grey.svg" 
 								class="position-img">
 							<span>정글</span>
 						</button>
-						<button type="button" id="mid-button" class="btn border"><img
+						<button type="button" id="mid-button"><img
 								src="https://online.gamecoach.pro/img/icon/lol/ico_lol_mid_grey.svg"
 								class="position-img">
 							<span>미드</span>
 						</button>
-						<button type="button" id="bot-button" class="btn border"><img
+						<button type="button" id="bot-button"><img
 								src="https://online.gamecoach.pro/img/icon/lol/ico_lol_ad_grey.svg" 
 								class="position-img">
 							<span>바텀</span>
 						</button>
-						<button type="button" id="support-button" class="btn border"><img
+						<button type="button" id="support-button"><img
 								src="https://online.gamecoach.pro/img/icon/lol/ico_lol_sup_grey.svg"
 								class="position-img">
-							<span>바텀</span>
+							<span>서포터</span>
 						</button>
 					</div>
 				</div>
 		
-				<h5><strong>배우고 싶은 챔피언</strong></h5>
-				<input type="text" id="champion_to_learn" value="">
-		
-				<div class="champ-selector-inner">
-					<div id="champ-info">
-						<span>
-							<img src="" class="champ-img">
-							<p class="champ-name">배우고 싶은 챔피언을 선택 해주세요</p>
-						</span>
-					</div>
-					<img class="arrow-icon" src="https://online.gamecoach.pro/img/icon/icon-arrow-down-grey.svg">
-				</div>
-				<div class="filter-champ-wrap" style="display: none">
-					<div class="filter-title-wrap">
-						<div>
-							<h4 class="filter-text">챔피언</h4>
+				<div id="champ-selector">
+					<h3><strong>배우고 싶은 챔피언</strong></h3>
+					<div id="champ-selector-inner" class="d-flex">
+						<div id="select-box" class="d-flex align-item-center justify-content-between">
+						<div id="champ-info" class="my-auto">
+							<span id="champ-name" class="mx-3">챔피언 선택</span>
+						</div>
+						<img id="arrow-icon" class="my-auto" style="width:40px" src="/resources/img/icon/arrow-icon-down.png">
 						</div>
 					</div>
+				</div>
+				
+				<div id="filter-champ-wrap" style="display: none">
+					<div class="d-flex justify-content-between">
+						<h5><strong>챔피언</strong></h5>
+						<button type="button" class="btn-close" id="champ-wrap-close" aria-label="Close"></button>
+					</div>
 					<div>
-						<span class="input-champ-keyword white">
-							<input placeholder="챔피언을 검색하세요" tabindex="0" type="text" class="champ-search">
-						</span>
+						<div>
+							<input placeholder="챔피언을 검색하세요" class="form-control" type="text" id="champ-search">
+						</div>
 						<div class="champ-list">
 						<!-- 챔피언 리스트 -->
 						</div>
@@ -321,10 +389,10 @@ background-color:#eaeaea;
 						어떤 목표를 가지고 있나요?</h4>
 					</div>
 					<div class="d-flex justify-content-center">
-						<div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="34" aria-valuemin="0" aria-valuemax="100">
+						<div class="progress my-auto" role="progressbar" aria-label="Example with label" aria-valuenow="34" aria-valuemin="0" aria-valuemax="100">
 						  <div class="progress-bar" style="width: 34%">34%</div>
 						</div>
-						<span>2/6</span>
+						<span id="volume">2/6</span>
 					</div>
 				</div>
 				  <div id="tag-box" class="row">
@@ -363,10 +431,10 @@ background-color:#eaeaea;
 					어떤 방식으로 수업을 받고 싶나요?</h4>
 				</div>
 				<div class="d-flex justify-content-center">
-					<div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+					<div class="progress my-auto" role="progressbar" aria-label="Example with label" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
 					  <div class="progress-bar" style="width: 50%">50%</div>
 					</div>
-					<span>3/6</span>
+					<span id="volume">3/6</span>
 				</div>
 				</div>
 				  <div id="tag-box" class="row">
@@ -394,10 +462,10 @@ background-color:#eaeaea;
 					어떤 스타일의 멘토님을 선호하세요?</h4>
 				</div>
 				<div class="d-flex justify-content-center">
-					<div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100">
+					<div class="progress my-auto" role="progressbar" aria-label="Example with label" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100">
 					  <div class="progress-bar" style="width: 66%">66%</div>
 					</div>
-					<span>4/6</span>
+					<span id="volume">4/6</span>
 				</div>
 			</div>
 		  <div id="tag-box" class="row">
@@ -456,10 +524,10 @@ background-color:#eaeaea;
 					어떤 스타일의 멘토님을 선호하세요?</h4>
 				</div>
 				<div class="d-flex justify-content-center">
-					<div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="83" aria-valuemin="0" aria-valuemax="100">
+					<div class="progress my-auto" role="progressbar" aria-label="Example with label" aria-valuenow="83" aria-valuemin="0" aria-valuemax="100">
 					  <div class="progress-bar" style="width: 83%">83%</div>
 					</div>
-					<span>5/6</span>
+					<span id="volume">5/6</span>
 				</div>
 			</div>
 			  <div id="tag-box" class="col d-flex flex-wrap">
@@ -487,10 +555,10 @@ background-color:#eaeaea;
 					어떤 경력의 멘토님을 선호하세요?</h4>
 				</div>
 				<div class="d-flex justify-content-center">
-					<div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+					<div class="progress my-auto" role="progressbar" aria-label="Example with label" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
 					  <div class="progress-bar" style="width: 100%">100%</div>
 					</div>
-					<span>6/6</span>
+					<span id="volume">6/6</span>
 				</div>
 			</div>
 			  <div id="tag-box" class="col d-flex flex-wrap justify-content-center">
@@ -524,8 +592,12 @@ background-color:#eaeaea;
 	<script>
 	// 선택한 포지션 값을 저장
 	let position = "";
+	let learnChamp = "";
+	let targetTier = "";
 	
 		$(document).ready(function () {
+			
+			//완료버튼
 			$("#done-btn").click(function(){
 			    submitForm(function() {
 			        saveMentiTag(function() {
@@ -534,12 +606,38 @@ background-color:#eaeaea;
 			    });
 			});
 			
-			$("form").on("keydown", function (event) {
-				if (event.keyCode === 13) {
-					event.preventDefault();
-					// 엔터 이벤트 처리 로직
-				}
-			});
+			//접속한 회원의 소환사 정보 확인
+			$.ajax({
+				   url: "/mentor/get-summoner-info",
+				   type: "GET",
+				   data: {
+				      summoner_name: "${member.lol_account}"
+				   },
+				   success: function(response) {
+				      let summoner = JSON.parse(response);
+				      console.log(summoner);
+				      $("#member-tier-img").attr("src","https://online.gamecoach.pro/img/lol/emblem-"+summoner.tier+".svg");
+				      
+				      if(summoner.tier == "MASTER" || summoner.tier == "GRANDMASTER" || summoner.tier == "CHALLENGER"){
+				    	 $("#member-tier").text(summoner.tier);
+				      }else{
+				    	 $("#member-tier").text(summoner.tier+" "+summoner.ranking);
+				      }
+				      
+				      let winRate = (summoner.wins/summoner.games)*100
+				      winRate = winRate.toFixed(1);
+						if (winRate == "NaN"){
+							winRate=0;
+						}
+						
+				      $("#member-stat strong").text("승률 "+winRate+"%")
+				      $("#member-lp").text(summoner.lp+"LP")
+				      $("#member-stat span").text("("+summoner.wins+"승 "+summoner.losses+"패)")
+				   },
+				   error: function(xhr, status, error) {
+				      console.log(error);
+				   }
+				});
 
 			$(".champ-search").on("keydown", function (event) {
 				if (event.keyCode === 13) {
@@ -549,11 +647,11 @@ background-color:#eaeaea;
 				}
 			});
 
-			$(".champ-selector-inner").click(function () {
-				if ($(".filter-champ-wrap").css('display') === 'none') {
-					$(".filter-champ-wrap").css('display', 'block');
+			$("#champ-selector-inner").click(function () {
+				if ($("#filter-champ-wrap").css('display') === 'none') {
+					$("#filter-champ-wrap").css('display', 'block');
 				} else {
-					$(".filter-champ-wrap").css('display', 'none');
+					$("#filter-champ-wrap").css('display', 'none');
 				}
 			});
 
@@ -568,31 +666,28 @@ background-color:#eaeaea;
 				let imgURL = $(this).find("img").attr("src");
 				$("#tier-holder strong").text(tier);
 				$("#tier-holder img").attr("src", imgURL);
-				$("#target_tier").val(tier);
 				$('#goal-tier-selector').attr("class","d-none d-flex align-item-center justify-content-evenly text-center");
+				targetTier = tier;
+				console.log(targetTier);
+			});
+			
+			 // 클릭된 버튼에 "selected" 클래스 추가
+			$("#position-buttons button").click(function () {
+			  $("#position-buttons button").removeClass("selected");
+			  $(this).addClass("selected");
+			  position = $(this).find("span").text();
+			  console.log(position);
+			  laneImgChange();
+			});
+			//포지션 버튼 마우스오버 시
+			$("#position-buttons button").hover(function () {
+				$(this).addClass("mouse-over");
+				laneImgChange();
+			}, function () {
+				$(this).removeClass("mouse-over");
+				laneImgChange();
 			});
 
-			$("#top-button").on("click", function () {
-				// 선택한 포지션 배열에 추가
-				position = "탑";
-				console.log(position);
-			});
-			$("#jungle-button").on("click", function () {
-				position = "정글";
-				console.log(position);
-			});
-			$("#mid-button").on("click", function () {
-				position = "미드";
-				console.log(position);
-			});
-			$("#bot-button").on("click", function () {
-				position = "바텀";
-				console.log(position);
-			});
-			$("#support-button").on("click", function () {
-				position = "서포터";
-				console.log(position);
-			});
 
 			$.ajax({ //챔피언 목록 가져오기
 				url: "/mentor/get-all-champ",
@@ -605,10 +700,15 @@ background-color:#eaeaea;
 							champion.champion_en_name + ".png?&amp;retry=0";
 						let champItem = $("<div>").addClass("champ-item").click(function () {
 							$("#champ-info").attr("data", champion.champion_id)
-							$(".champ-name").text(champion.champion_kr_name);
-							$(".champ-img").attr("src", imageUrl);
-							$(".filter-champ-wrap").css('display', 'none');
-							$("#champion_to_learn").val(champion.champion_id);
+							$("#champ-name").text(champion.champion_kr_name);
+							if ($("#champ-info").find("img").length === 0) {
+							    $("#champ-info").prepend($("<img>").attr("id", "champ-img").attr("src", imageUrl));
+							  }else{
+								  $("#champ-img").attr("src", imageUrl);
+							  }
+							$("#filter-champ-wrap").css('display', 'none');
+							learnChamp = champion.champion_id
+							console.log(learnChamp);
 						});
 						let championDiv = $("<div>").attr("id", "champion");
 						let champImg = $("<img>").addClass("champ-icon").attr("src", imageUrl);
@@ -633,14 +733,76 @@ background-color:#eaeaea;
 			});
 			
 		});//ready
+		
+		// 이미지 경로 업데이트 및 선택 해제 시 원래 이미지로 복원
+		function laneImgChange(){
+		  $("#position-buttons button").each(function() {
+		    const position = $(this).find("span").text();
+		    if (position === "탑") {
+		      const imageUrl = "https://online.gamecoach.pro/img/icon/lol/ico_lol_top.svg" ;
+		      if ($(this).hasClass("selected") || $(this).hasClass("mouse-over")) {
+		        // 이미지 경로 업데이트
+		        $(this).find("img").attr("src", imageUrl);
+		      } else {
+		        // 선택 해제 시 원래 이미지로 복원
+		        const originalImageUrl = "https://online.gamecoach.pro/img/icon/lol/ico_lol_top_grey.svg" ;
+		        $(this).find("img").attr("src", originalImageUrl);
+		      }
+		    }
+		    if (position === "정글") {
+			      const imageUrl = "https://online.gamecoach.pro/img/icon/lol/ico_lol_jg.svg" ;
+			      if ($(this).hasClass("selected") || $(this).hasClass("mouse-over")) {
+			        // 이미지 경로 업데이트
+			        $(this).find("img").attr("src", imageUrl);
+			      } else {
+			        // 선택 해제 시 원래 이미지로 복원
+			        const originalImageUrl = "https://online.gamecoach.pro/img/icon/lol/ico_lol_jg_grey.svg" ;
+			        $(this).find("img").attr("src", originalImageUrl);
+			      }
+		    }
+		    if (position === "미드") {
+			      const imageUrl = "https://online.gamecoach.pro/img/icon/lol/ico_lol_mid.svg" ;
+			      if ($(this).hasClass("selected") || $(this).hasClass("mouse-over")) {
+			        // 이미지 경로 업데이트
+			        $(this).find("img").attr("src", imageUrl);
+			      } else {
+			        // 선택 해제 시 원래 이미지로 복원
+			        const originalImageUrl = "https://online.gamecoach.pro/img/icon/lol/ico_lol_mid_grey.svg" ;
+			        $(this).find("img").attr("src", originalImageUrl);
+			      }
+		    }
+		    if (position === "바텀") {
+			      const imageUrl = "https://online.gamecoach.pro/img/icon/lol/ico_lol_ad.svg" ;
+			      if ($(this).hasClass("selected") || $(this).hasClass("mouse-over")) {
+			        // 이미지 경로 업데이트
+			        $(this).find("img").attr("src", imageUrl);
+			      } else {
+			        // 선택 해제 시 원래 이미지로 복원
+			        const originalImageUrl = "https://online.gamecoach.pro/img/icon/lol/ico_lol_ad_grey.svg" ;
+			        $(this).find("img").attr("src", originalImageUrl);
+			      }
+		    }
+		    if (position === "서포터") {
+			      const imageUrl = "https://online.gamecoach.pro/img/icon/lol/ico_lol_sup.svg" ;
+			      if ($(this).hasClass("selected") || $(this).hasClass("mouse-over")) {
+			        // 이미지 경로 업데이트
+			        $(this).find("img").attr("src", imageUrl);
+			      } else {
+			        // 선택 해제 시 원래 이미지로 복원
+			        const originalImageUrl = "https://online.gamecoach.pro/img/icon/lol/ico_lol_sup_grey.svg" ;
+			        $(this).find("img").attr("src", originalImageUrl);
+			      }
+		    }
+		  })
+		}
 
 
 		function submitForm(callback) {
 			let customMentorDTO = {
 				menti_email: "${member.email}",
 				position_to_learn: position,
-				champion_to_learn: $("#champ-info").attr("data"),
-				target_tier: $("#tier-holder strong").text()
+				champion_to_learn: learnChamp,
+				target_tier: targetTier
 			};
 			console.log(customMentorDTO);
 			$.ajax({
