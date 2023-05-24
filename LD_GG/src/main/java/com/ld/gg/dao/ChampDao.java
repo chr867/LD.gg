@@ -63,5 +63,9 @@ public interface ChampDao {
 	
 	List<Champ_recomm_info> getChampionTierData(@Param("champion_id")int champion_id, @Param("team_position")String team_position);
 
+	List<Champ_recomm_info> getEasyChampData(@Param("champion_id")int champion_id, @Param("team_position")String team_position);
+
+	List<Champ_recomm_info> getHardChampData(@Param("champion_id")int champion_id, @Param("team_position")String team_position);
+
 
 }

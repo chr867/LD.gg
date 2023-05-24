@@ -48,13 +48,10 @@
 	href="/resources/css/main/loginModal.css">
 <!--로그인 및 세션관련 JS-->
 <script src="/resources/js/main/loginSession.js" defer></script>
-	<!-- 채팅 관련 JS-->
-	<script src="/resources/js/main/chat.js" defer></script>
+<!-- 채팅 관련 JS-->
+<script src="/resources/js/main/chat.js" defer></script>
 </head>
 <style>
-body {
-	background-color: #E4E6EF;
-}
 
 .main-container {
 	justify-content: center;
@@ -126,6 +123,7 @@ body {
 	<div id="session-user-type" style="display: none">${sessionScope.user_type}</div>
 	<div id="session-summoner-name" style="display: none">${sessionScope.summoner_name}</div>
 	<div id="session-summoner-icon" style="display: none">${sessionScope.summoner_icon}</div>
+	<div id="error-check" style="display: none">${check}</div>
 	<!----------------------------------------------------------------------------------------------------------------->
 	<!-- 사이드바 -->
 	<div class="sidebar">
@@ -548,6 +546,7 @@ body {
 		<!-- 추천 빌드 모달 -->
 
 <script type="text/javascript">
+
 	function go_mypage(){
 		location.href="/member/mypage"
 	}
