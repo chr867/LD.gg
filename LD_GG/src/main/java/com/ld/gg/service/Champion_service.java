@@ -117,6 +117,8 @@ public class Champion_service {
 		List<Champ_recomm_info> champSkillBuildData = cd.getChampionSkillBuildData(champion_id, team_position);
 		List<Champ_recomm_info> champAccessoriesData = cd.getChampionAccessoriesData(champion_id, team_position);
 		List<Champ_recomm_info> champTierData = cd.getChampionTierData(champion_id, team_position);
+		List<Champ_recomm_info> champEasyChampData = cd.getEasyChampData(champion_id, team_position);
+		List<Champ_recomm_info> champHardChampData = cd.getHardChampData(champion_id, team_position);
 		
 		championBuildInfo.put("champRuneData", champRuneData);
 		championBuildInfo.put("champItemData", champItemData);
@@ -127,6 +129,8 @@ public class Champion_service {
 		championBuildInfo.put("champSkillBuildData", champSkillBuildData);
 		championBuildInfo.put("champAccessoriesData", champAccessoriesData);
 		championBuildInfo.put("champTierData", champTierData);
+		championBuildInfo.put("champEasyChampData", champEasyChampData);
+		championBuildInfo.put("champHardChampData", champHardChampData);
 
 		return championBuildInfo;
 	}

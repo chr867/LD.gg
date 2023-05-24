@@ -50,7 +50,7 @@
 <style type="text/css">
 .main-container {
 	box-sizing: border-box;
-	padding: 100px 0 0 100px;
+	padding: 100px 50px 100px 100px;
 }
 
 .champion-info-box {
@@ -117,38 +117,81 @@
 	margin-top: 20px;
 	text-align: center;
 }
-.champion-twpb{
+
+.champion-twpb {
 	width: 80px;
 	text-align: center;
 }
-.champion-tier{
-	font-weight: 700;	
+
+.champion-tier {
+	font-weight: 700;
 }
 
- .lane-select-box {
-    display: flex;
-    height: 50px;
-    width: 350px;
-    box-sizing: border-box;
-    margin-bottom: 5px;
-    align-items: center;
+.lane-select-box {
+	display: flex;
+	height: 50px;
+	width: 350px;
+	box-sizing: border-box;
+	margin-bottom: 5px;
+	align-items: center;
 }
 
 .lane-img img {
-    width: 40px;
-    height: 40px;
+	width: 40px;
+	height: 40px;
 }
 
 .lane-img {
-    border-radius: 0.1rem;
-    transition: 0.3s;
-    background-color: #fff;
-    margin-right: 10px;
+	border-radius: 0.1rem;
+	transition: 0.3s;
+	background-color: #fff;
+	margin-right: 10px;
 }
 
-.lane-img:hover,
-.lane-img:active {
-    background-color: #E4E6EF;
+.lane-img:hover, .lane-img:active {
+	background-color: #E4E6EF;
+}
+
+.champion-easy-box {
+	width: 350px;
+	height: 120px;
+	padding: 10px 10px 0 10px;
+	background-color: #FFF;
+	box-sizing: border-box;
+	justify-content: center;
+	align-items: center;
+	margin-top: 20px;
+	text-align: center;
+	font-weight: 700;
+}
+.easy-champ-img{
+	width: 80px;
+	text-align: center;
+}
+.easy-champ-img img {
+	width: 50px;
+	height: 50px;
+}
+
+.champion-hard-box {
+	width: 350px;
+	height: 120px;
+	padding: 10px 10px 0 10px;
+	background-color: #FFF;
+	box-sizing: border-box;
+	justify-content: center;
+	align-items: center;
+	margin-top: 20px;
+	text-align: center;
+	font-weight: 700;
+}
+.hard-champ-img{
+	width: 80px;
+	text-align: center;
+}
+.hard-champ-img img {
+	width: 50px;
+	height: 50px;
 }
 </style>
 
@@ -505,9 +548,7 @@
 	<!----------------------------------------------------------------------------------------------------------------->
 	<!----------------------------------------------------------------------------------------------------------------->
 	<div class="main-container">
-		<div class="lane-select-box">
-			
-		</div>
+		<div class="lane-select-box"></div>
 		<div class="champion-info-box">
 			<table class="champion-table">
 				<tr>
@@ -576,6 +617,45 @@
 				</tr>
 			</table>
 		</div>
+		<div class="champion-easy-box">
+			<caption>상대하기 쉬운 챔피언</<caption>
+			<table>
+				<tr>
+					<th class="easy-champ-img"></th>
+					<th class="easy-champ-img"></th>
+					<th class="easy-champ-img"></th>
+					<th class="easy-champ-img"></th>
+					<th class="easy-champ-img"></th>
+				</tr>
+				<tr>
+					<td class="easy-champ-win-rate"></td>
+					<td class="easy-champ-win-rate"></td>
+					<td class="easy-champ-win-rate"></td>
+					<td class="easy-champ-win-rate"></td>
+					<td class="easy-champ-win-rate"></td>
+				</tr>
+			</table>
+
+		</div>
+		<div class="champion-hard-box">
+			<caption>상대하기 힘든 챔피언</<caption>
+			<table>
+				<tr>
+					<th class="hard-champ-img"></th>
+					<th class="hard-champ-img"></th>
+					<th class="hard-champ-img"></th>
+					<th class="hard-champ-img"></th>
+					<th class="hard-champ-img"></th>
+				</tr>
+				<tr>
+					<td class="hard-champ-win-rate"></td>
+					<td class="hard-champ-win-rate"></td>
+					<td class="hard-champ-win-rate"></td>
+					<td class="hard-champ-win-rate"></td>
+					<td class="hard-champ-win-rate"></td>
+				</tr>
+			</table>
+		</div>
 
 
 	</div>
@@ -585,7 +665,6 @@
 document.addEventListener("DOMContentLoaded", function() {
 	championLaneInfo(${chamInfo.champion_id});
 });
-
 
 function championLaneInfo(champion_id) {
 	  $.ajax({
@@ -613,8 +692,8 @@ function championLaneInfo(champion_id) {
 	      }
 
 	      laneSelectBox.innerHTML += html;
-	      championBuildInfo(res[i].champion_id, team_position);
 	    }
+	    championBuildInfo(res[0].champion_id, res[0].team_position);
 	  }).fail(err => {
 	    console.log(err);
 	  });
@@ -640,6 +719,9 @@ function championBuildInfo(champion_id, team_position) {
 			let champSkillBuildData = championBuildInfo.champSkillBuildData;
 			let champAccessoriesData = championBuildInfo.champAccessoriesData;
 			let champTierData = championBuildInfo.champTierData;
+			let champEasyChampData = championBuildInfo.champEasyChampData;
+			let champHardChampData = championBuildInfo.champHardChampData;
+			
 			  console.log(champRuneData);
 			  console.log(champItemData);
 			  console.log(champMythicItemData);
@@ -656,6 +738,8 @@ function championBuildInfo(champion_id, team_position) {
 			  console.log(champTierData[0].win_rate);
 			  console.log(champTierData[0].pick_rate);
 			  console.log(champTierData[0].ban_rate);
+			  console.log(champEasyChampData);
+			  console.log(champHardChampData);
 			  if(champTierData[0].tier == 0){
 				  document.getElementById('tier').textContent = 'OP';
 			  }else{
@@ -664,9 +748,30 @@ function championBuildInfo(champion_id, team_position) {
 			  document.getElementById('win-rate').textContent = champTierData[0].win_rate+'%';
 			  document.getElementById('pick-rate').textContent = champTierData[0].pick_rate+'%';
 			  document.getElementById('ban-rate').textContent = champTierData[0].ban_rate+'%';
+			  
+			  let easyTableHeaders = document.getElementsByClassName('easy-champ-img');
+			  for (var i = 0; i < easyTableHeaders.length; i++) {
+				  easyTableHeaders[i].innerHTML = '';
+				  easyTableHeaders[i].innerHTML = '<img alt="" src="/resources/img/champion_img/square/'+champEasyChampData[i].champion_img+'" class="champion-img">';
+			  }
+			  let hardEasyTableData = document.getElementsByClassName('easy-champ-win-rate');
 
-			
-		  console.log(res);
+			  for (var i = 0; i < hardEasyTableData.length; i++) {
+				  hardEasyTableData[i].innerHTML = '';
+				  hardEasyTableData[i].innerHTML = champEasyChampData[i].match_up_win_rate+'%';
+			  }
+			  
+			  let hardTableHeaders = document.getElementsByClassName('hard-champ-img');
+			  for (var i = 0; i < hardTableHeaders.length; i++) {
+				  hardTableHeaders[i].innerHTML = '';
+				  hardTableHeaders[i].innerHTML = '<img alt="" src="/resources/img/champion_img/square/'+champHardChampData[i].champion_img+'" class="champion-img">';
+			  }
+			  var hardTableData = document.getElementsByClassName('hard-champ-win-rate');
+
+			  for (var i = 0; i < hardTableData.length; i++) {
+				  hardTableData[i].innerHTML = '';
+				  hardTableData[i].innerHTML = champHardChampData[i].match_up_win_rate+'%';
+			  }
 		}).fail(err => {
 		  console.log(err);
 		});	

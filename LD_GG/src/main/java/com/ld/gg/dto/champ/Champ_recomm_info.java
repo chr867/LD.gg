@@ -37,4 +37,9 @@ public class Champ_recomm_info {
     
     private double ban_rate;
     private int tier;
+    
+    private int enemy_champ_id;
+    private double match_up_win_rate;
+    
+    private String champion_img;
 }

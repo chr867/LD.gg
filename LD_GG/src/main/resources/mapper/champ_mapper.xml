@@ -129,5 +129,30 @@
 	<select id="getChampionTierData" resultType="champ_recomm_info">
 		SELECT * FROM champion_tier WHERE champion_id = #{champion_id} AND team_position = #{team_position};
 	</select>
+	
+	<select id="getEasyChampData" resultType="champ_recomm_info">
+		<![CDATA[
+		SELECT cmu.enemy_champ_id, cmu.match_up_win_rate, ci.champion_img
+		FROM champion_match_up cmu
+		JOIN champion_info ci ON cmu.enemy_champ_id = ci.champion_id
+		WHERE cmu.champion_id = #{champion_id}
+		  AND cmu.team_position = #{team_position}
+		  AND cmu.match_up_cnt >= 10
+		ORDER BY cmu.match_up_win_rate DESC
+		LIMIT 5
+		]]>
+	</select>
 
+	<select id="getHardChampData" resultType="champ_recomm_info">
+		<![CDATA[
+		SELECT cmu.enemy_champ_id, cmu.match_up_win_rate, ci.champion_img
+		FROM champion_match_up cmu
+		JOIN champion_info ci ON cmu.enemy_champ_id = ci.champion_id
+		WHERE cmu.champion_id = #{champion_id}
+		  AND cmu.team_position = #{team_position}
+		  AND cmu.match_up_cnt >= 10
+		ORDER BY cmu.match_up_win_rate ASC
+		LIMIT 5
+		]]>
+	</select>
 </mapper>

@@ -1,6 +1,10 @@
 $(document).ready(function() {
 	var summonerName = document.getElementById('session-summoner-name').innerText;
 	var userType = document.getElementById('session-user-type').innerText;
+	var check = document.getElementById('error-check').innerText;
+	if(check !=''){
+		loginReturnNumber(check);
+	}
 
   sessionCheck(summonerName, userType);
 });

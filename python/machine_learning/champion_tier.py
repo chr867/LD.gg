@@ -377,7 +377,7 @@ def insert_tier_data(x, conn):
     query = (
         f"INSERT INTO champion_tier (champion_id, team_position , summoner_tier, win_rate ,"
         f" pick_rate,ban_rate ,tier) "
-        f"VALUES ({x.championId}, {repr(x.teamPosition)}, {x.summonerTier},{x.winRate},{x.pickRate},{x.banRate},{x.tier})"
+        f"VALUES ({x.championId}, {repr(x.teamPosition)}, 1,{x.winRate},{x.pickRate},{x.banRate},{x.tier})"
     )
     try:
         mu.mysql_execute(query, conn)
