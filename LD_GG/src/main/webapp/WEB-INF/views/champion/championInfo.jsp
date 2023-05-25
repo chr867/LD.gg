@@ -70,8 +70,9 @@
 
 .right-container {
 	box-sizing: border-box;
-	width: 700px;
+	width: 770px;
 	height: 100%;
+	margin-left : 20px;
 }
 
 .champion-info-box {
@@ -414,9 +415,49 @@
 
 <!-- right_container -->
 <style>
-#chartdiv {
-	
+.match_up_chart{
+	display: flex;
 }
+
+#match_up_left,
+#match_up_right{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+#match_up_left span,
+#match_up_right span{
+	text-align: center;
+}
+
+#chartdiv{
+	margin-left: 50px;
+	margin-right: 50px;
+	width: 540px;
+}
+
+.bar_title{
+	display: grid;
+	position: relative;
+	text-align: center;
+}
+
+.bar_title_left{
+	grid-row: 1;
+	justify-self: left;
+}
+
+.bar_title_content{
+	grid-row: 1;
+	justify-self: center;
+}
+
+.bar_title_right{
+	grid-row: 1;
+	justify-self: right;
+}
+
 </style>
 
 <style type="text/css">
@@ -1032,46 +1073,130 @@
 			</div>
 		</div>
 		<div class="right-container">
+			<!-- match_up_conatiner start -->
 			<div class="match_up_container">
+				<!-- match_up_chart start -->
 				<div class="match_up_chart">
-					<div id="chartdiv">
-						<div class="progress header">
-							<div class="progress-bar" role="progressbar" style="width: 54%;"
-								aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">크샨테</div>
-							<div class="progress-bar bg-danger" role="progressbar"
-								style="width: 46%;" aria-valuenow="50" aria-valuemin="0"
-								aria-valuemax="100">사일러스</div>
-						</div>
-						<div class="progress">
-							<div class="progress-bar" role="progressbar" style="width: 25%"
-								aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-						</div>
-
-						<div class="progress">
-							<div class="progress-bar" role="progressbar" style="width: 50%"
-								aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-						</div>
-
-						<div class="progress">
-							<div class="progress-bar" role="progressbar" style="width: 75%"
-								aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-						</div>
-
-						<div class="progress">
-							<div class="progress-bar" role="progressbar" style="width: 100%"
-								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-						</div>
+					<div id="match_up_left">
 					</div>
+					<!-- chartdiv start -->
+					<div id="chartdiv">
+						<div class="bar_block">
+								<div class="bar_title lane_kill_rate">
+									<div class="bar_title_left lane_kill_rate"></div>
+									<div class="bar_title_content">라인킬 확률</div>
+									<div class="bar_title_right enemy_lane_kill_rate"></div>
+								</div>
+
+								<div class="progress">
+									<div class="progress-bar" role="progressbar"
+										style="width: 46%;" aria-valuenow="50" aria-valuemin="0"
+										aria-valuemax="100"></div>
+									<div class="progress-bar bg-danger" role="progressbar" style="width: 100%"
+								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+								</div>
+						</div>
+						
+						<div class="bar_block">
+							<div class="bar_title kill_participation">
+								<div class="bar_title_left kill_participation"></div>
+								<div class="bar_title_content">킬 관여율</div>
+								<div class="bar_title_right enemy_kill_participation"></div>
+							</div>
+							<div class="progress">
+								<div class="progress-bar" role="progressbar" style="width: 25%"
+									aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+								<div class="progress-bar bg-danger" role="progressbar" style="width: 100%"
+								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+							</div>
+						</div>
+						
+						<div class="bar_block">
+							<div class="bar_title kda">
+								<div class="bar_title_left kda"></div>
+								<div class="bar_title_content">평점</div>
+								<div class="bar_title_right enemy_kda"></div>
+							</div>
+							<div class="progress">
+								<div class="progress-bar" role="progressbar" style="width: 50%"
+									aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+								<div class="progress-bar bg-danger" role="progressbar" style="width: 100%"
+								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+							</div>
+						</div>
+
+						<div class="bar_block">
+							<div class="bar_title tower_kill_time">
+								<div class="bar_title_left tower_kill_time"></div>
+								<div class="bar_title_content">라인 첫 타워 파괴 시간</div>
+								<div class="bar_title_right enemy_tower_kill_time"></div>
+							</div>
+							<div class="progress">
+								<div class="progress-bar" role="progressbar" style="width: 75%"
+									aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+								<div class="progress-bar bg-danger" role="progressbar" style="width: 100%"
+								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>	
+							</div>
+						</div>
+
+						<div class="bar_block">	
+							<div class="bar_title win_rate">
+								<div class="bar_title_left win_rate"></div>
+								<div class="bar_title_content">포지션 승률</div>
+								<div class="bar_title_right enemy_win_rate"></div>
+							</div>
+							<div class="progress">
+								<div class="progress-bar" role="progressbar" style="width: 100%"
+								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+								<div class="progress-bar bg-danger" role="progressbar" style="width: 100%"
+								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+							</div>
+						</div>
+						
+						<div class="bar_block">
+							<div class="bar_title pick_rate">
+								<div class="bar_title_left pick_rate"></div>
+								<div class="bar_title_content">포지션 픽률</div>
+								<div class="bar_title_right enemy_pick_rate"></div>
+							</div>
+							<div class="progress">
+								<div class="progress-bar" role="progressbar" style="width: 100%"
+								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+								<div class="progress-bar bg-danger" role="progressbar" style="width: 100%"
+								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+							</div>
+						</div>
+
+						<div class="bar_block">
+							<div class="bar_title ban_rate">
+								<div class="bar_title_left ban_rate"></div>
+								<div class="bar_title_content">밴률</div>
+								<div class="bar_title_right enemy_ban_rate"></div>
+							</div>
+							<div class="progress">
+								<div class="progress-bar" role="progressbar" style="width: 100%"
+								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+								<div class="progress-bar bg-danger" role="progressbar" style="width: 100%"
+								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+							</div>
+						</div>
+
+					</div>
+					<!-- chartdiv end -->
+					<div id="match_up_right"></div>
+				</div> 
+				<!-- match_up_chart end -->
+				<div class="match_up_table">
+					
 				</div>
-
-				<div class="match_up_table"></div>
-
+			<!-- match_up_conatiner end -->
 			</div>
 		</div>
 	</div>
 
 </body>
 <script type="text/javascript">
+
 document.addEventListener("DOMContentLoaded", function() {
 	championLaneInfo(${chamInfo.champion_id});
 });
@@ -1103,6 +1228,7 @@ function championLaneInfo(champion_id) {
 
 	      laneSelectBox.innerHTML += html;
 	    }
+	    champion_position = res[0].team_position
 	    championBuildInfo(res[0].champion_id, res[0].team_position);
 	  }).fail(err => {
 	    console.log(err);
@@ -1433,6 +1559,8 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 let response;
+let cid;
+
 	// get_match_up
 	function get_match_up(champion_id){
 		$.ajax({
@@ -1440,22 +1568,78 @@ let response;
 			type: 'POST',
 			data: {champion_id: champion_id}
 		}).done(res=>{
+			response = res;
+			cid = champion_id;
 			console.log(res)
-			response = res
-			make_chart(res[0])
-			make_table(res)
+			let left = res['champion']
+			let right = res['enemy']
+			make_chart(left[0], right[0])
+			make_table(res['enemy'])
 		}).fail(err=>{
 			console.log(err)
 		})
 	}
 	// get_match_up 끝
 	
-function make_chart(match_up){
-	console.log(match_up)
+function make_chart(left, right){
+	let titles = document.querySelectorAll('.bar_title')
+	let keys = Object.keys(left)
+	
+	titles.forEach(title=>{
+		keys.forEach(key=>{
+			let class_name = title.className.split('bar_title')[1].trim();
+			if(key == class_name){
+				if(key == 'tower_kill_time'){
+					let left_time = new Date(left[key] * 1000);
+					let left_minutes = left_time.getMinutes();
+					let left_seconds = left_time.getSeconds();
+					let left_time_string = `\${left_minutes}'\${left_seconds}"`
+					console.log(left_time_string)
+					title.querySelector('.bar_title_left').textContent = left_time_string;
+
+					let right_time = new Date(right[key] * 1000);
+					let right_minutes = right_time.getMinutes();
+					let right_seconds = right_time.getSeconds();
+					let right_time_string = `\${right_minutes}'\${right_seconds}"`
+					title.querySelector('.bar_title_right').textContent = right_time_string;
+					
+				}else{
+					title.querySelector('.bar_title_left').textContent = left[key];
+					title.querySelector('.bar_title_right').textContent = right[key];
+
+				}
+
+				let key_sum = left[key] + right[key];
+				let high_key_percent = (Math.max(left[key], right[key]) / key_sum) * 100;
+				let low_key_percent = (Math.min(left[key], right[key]) / key_sum) * 100;
+				let bar_block = title.nextElementSibling;
+				
+				if (left[key] > right[key]) {
+				  bar_block.querySelector('.progress-bar').style.width = high_key_percent + '%';
+				  bar_block.querySelector('.bg-danger').style.width = low_key_percent + '%';
+				} else {
+				  bar_block.querySelector('.progress-bar').style.width = low_key_percent + '%';
+				  bar_block.querySelector('.bg-danger').style.width = high_key_percent + '%';
+				}
+
+			}
+		})
+	})
+	let left_html_list = '<img src="/resources/img/champion_img/square/'+ left.champion_img +'" alt="'+ left.champion_name +'" class="champion_img">'
+	left_html_list += '<span>' + left.champion_name + '</span>'
+	left_html_list += '<span>' + left.match_up_win_rate + '</span>'
+
+	let right_html_list = '<img src="/resources/img/champion_img/square/'+ right.champion_img +'" alt="'+ left.champion_name +'" class="champion_img">'
+	right_html_list += '<span>' + right.champion_name + '</span>'
+	right_html_list += '<span>' + right.match_up_win_rate + '</span>'
+
+	document.getElementById('match_up_left').innerHTML = left_html_list
+	document.getElementById('match_up_right').innerHTML = right_html_list
+
 }
 	
-function make_table(champions){
-	console.log('table')
+function make_table(enemys){
+	console.log(enemys)
 }
 
 </script>

@@ -33,13 +33,18 @@ def get_summoner_info(k_):
     result = []
     for k in tqdm(k_):
         while True:
-            tmp = []
-            res = None
             try:
                 url = f'https://kr.api.riotgames.com/lol/summoner/v4/summoners/{k["summonerId"]}?api_key={k["api_key"]}'
                 res = requests.get(url).json()
-                tmp.append(res['accountId'])
-                result.append(res)
+                if res.get('status') is None:
+                    result.append(res)
+                else:
+                    if 'message' in res['status']['message']:
+                        time.sleep(20)
+                        continue
+                    else:
+                        print(res)
+                        break
             except Exception as e:
                 print(f'suummoner names {e} 예외 발생 {res}, {k["summonerId"]}, {k["api_key"]}')
                 time.sleep(20)
@@ -60,6 +65,7 @@ def info_insert(s, conn):
 api_keys = private.riot_api_key_array_summoner
 # 그마챌 만
 info_list = []
+summoner_list = []
 rank_list = []
 api_it = iter(api_keys)
 tiers = ['C', 'GM', 'M']
@@ -80,7 +86,7 @@ for i in tqdm(tiers):
             try:
                 res_p = requests.get(url).json()
                 for summoner in res_p['entries']:
-                    info_list.append({
+                    summoner_list.append({
                         'summonerId': summoner['summonerId'],
                         'api_key': api_key
                     })
@@ -101,7 +107,35 @@ for i in tqdm(tiers):
                 time.sleep(20)
                 continue
             break
-        break
+        for info in tqdm(summoner_list):
+            while True:
+                try:
+                    api_key = next(api_it)
+                except StopIteration:
+                    api_it = iter(api_keys)
+                    api_key = next(api_it)
+                if i == 'C':
+                    url = f'https://kr.api.riotgames.com/lol/league/v4/challengerleagues/by-queue/RANKED_SOLO_5x5?api_key={api_key}'
+                elif i == 'GM':
+                    url = f'https://kr.api.riotgames.com/lol/league/v4/grandmasterleagues/by-queue/RANKED_SOLO_5x5?api_key={api_key}'
+                else:  # M
+                    url = f'https://kr.api.riotgames.com/lol/league/v4/masterleagues/by-queue/RANKED_SOLO_5x5?api_key={api_key}'
+                res_p = requests.get(url).json()
+
+                if res_p.get('status') is not None:
+                    print('status:', res_p['status'], api_key)
+                    time.sleep(20)
+                    continue
+                else:
+                    print('KeyError:', res_p)
+                    break
+
+                for summoner in res_p['entries']:
+                    info_list.append({
+                        'summonerId': summoner['summonerId'],
+                        'api_key': api_key
+                    })
+                break
 
 rank_result_df = pd.DataFrame(rank_list)
 rank_result_df['match_count'] = rank_result_df['wins'] + rank_result_df['losses']
@@ -110,7 +144,7 @@ rank_result_df.columns = [
     ['tier', 'league_id', 'queue', 'summoner_name', 'lp', 'wins', 'losses', 'division', 'match_count', 'tier_int']]
 
 
-summoner_info = get_summoner_info(info_list)
+summoner_info = get_summoner_info(summoner_list)
 
 info_df = pd.DataFrame(summoner_info)
 info_result_df = info_df[['name', 'summonerLevel', 'profileIconId', 'revisionDate']]

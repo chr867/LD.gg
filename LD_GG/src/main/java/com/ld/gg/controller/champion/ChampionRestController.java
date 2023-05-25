@@ -102,8 +102,9 @@ public class ChampionRestController {
 	}
 
 	@PostMapping("/match-up.json")
-	public List<Champ_match_up_default> champion_match_up(Integer champion_id) throws Exception{
-		List<Champ_match_up_default> cm_list = cs.get_champ_match_up(champion_id);
-		return cm_list;
+	public Map<String, List<Champ_match_up_default>> champion_match_up(Integer champion_id) throws Exception{
+		Map<String, List<Champ_match_up_default>> cm_map = cs.get_champ_match_up(champion_id);
+		
+		return cm_map;
 	}
 }
