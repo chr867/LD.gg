@@ -28,19 +28,12 @@ public class Champ_match_up_default {
 	private String team_position;
 	
 	private double lane_kill_rate;
-	private double enemy_lane_kill_rate;
 	private double kill_participation;
-	private double enemy_kill_participation;
 	private double kda;
-	private double enemy_kda;
 	private int tower_kill_time;
-	private int enemy_tower_kill_time;
 
 	private double win_rate;
-	private double enemy_win_rate;
 	private double pick_rate;
-	private double enemy_pick_rate;
 	private double ban_rate;
-	private double enemy_ban_rate;
 }
 

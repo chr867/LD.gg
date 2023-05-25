@@ -139,7 +139,10 @@ public class Champion_service {
 		Map<String, List<Champ_match_up_default>> cm_map = new HashMap<>();
 		
 		List<Champ_match_up_default> cm_champion = cd.get_champion_match_up(champion_id);
-		List<Champ_match_up_default> cm_enemy = cd.get_champion_match_up(champion_id);
+		String team_position = cm_champion.get(0).getTeam_position();
+		log.info("team_position = {}", team_position);
+		
+		List<Champ_match_up_default> cm_enemy = cd.get_enemy_champion_match_up(champion_id, team_position);
 		
 		cm_map.put("champion", cm_champion);
 		cm_map.put("enemy", cm_enemy);
