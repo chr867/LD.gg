@@ -1379,14 +1379,31 @@ function make_chart(left, right){
 		keys.forEach(key=>{
 			let class_name = title.className.split('bar_title')[1].trim();
 			if(key == class_name){
-				title.querySelector('.bar_title_left').textContent = left[key];
-				title.querySelector('.bar_title_right').textContent = right[key];
-				
+				if(key == 'tower_kill_time'){
+					let left_time = new Date(left[key] * 1000);
+					let left_minutes = left_time.getMinutes();
+					let left_seconds = left_time.getSeconds();
+					let left_time_string = `\${left_minutes}'\${left_seconds}"`
+					console.log(left_time_string)
+					title.querySelector('.bar_title_left').textContent = left_time_string;
+
+					let right_time = new Date(right[key] * 1000);
+					let right_minutes = right_time.getMinutes();
+					let right_seconds = right_time.getSeconds();
+					let right_time_string = `\${right_minutes}'\${right_seconds}"`
+					title.querySelector('.bar_title_right').textContent = right_time_string;
+					
+				}else{
+					title.querySelector('.bar_title_left').textContent = left[key];
+					title.querySelector('.bar_title_right').textContent = right[key];
+
+				}
+
 				let key_sum = left[key] + right[key];
 				let high_key_percent = (Math.max(left[key], right[key]) / key_sum) * 100;
 				let low_key_percent = (Math.min(left[key], right[key]) / key_sum) * 100;
 				let bar_block = title.nextElementSibling;
-
+				
 				if (left[key] > right[key]) {
 				  bar_block.querySelector('.progress-bar').style.width = high_key_percent + '%';
 				  bar_block.querySelector('.bg-danger').style.width = low_key_percent + '%';
