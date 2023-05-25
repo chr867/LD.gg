@@ -158,4 +158,8 @@ public class Champion_service {
 		return cd.getSubRuneInfo(sub_key);
 	}
 
+	public List<Champ_match_up_spell> getSpellInfo(int first_spell, int second_spell) {
+		return cd.getSpellInfo(first_spell,second_spell);
+	}
+
 }

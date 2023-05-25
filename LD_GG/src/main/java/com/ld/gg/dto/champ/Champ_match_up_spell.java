@@ -16,4 +16,10 @@ public class Champ_match_up_spell extends Champ_match_up_default{
 	private int game_cnt;
 	private double win_rate;
 	private double pick_rate;
+	
+	private int spell_id;
+	private String spell_kr_name;
+	private String spell_desc; 
+	private String spell_cooldown;
+	private String spell_img;
 }

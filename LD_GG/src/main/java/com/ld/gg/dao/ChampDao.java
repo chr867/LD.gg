@@ -75,5 +75,7 @@ public interface ChampDao {
 
 	List<Champ_match_up_rune> getSubRuneInfo(String sub_key);
 
+	List<Champ_match_up_spell> getSpellInfo(@Param("first_spell")int first_spell, @Param("second_spell")int second_spell);
+
   
 }
