@@ -4,7 +4,7 @@ import requests
 from tqdm import tqdm
 import my_utils as mu
 import json
-import multiprocessing
+import multiprocessing as mp
 import numpy as np
 import data_load
 tqdm.pandas()
@@ -50,14 +50,12 @@ def insert(t, conn):
     mu.mysql_execute(sql, conn)
 
 
-def insert_worker(args):
-    chunks, i = args
-    chunk = chunks[chunks['api_key'] == riot_api_keys[i]]
-    print(len(chunk))
-    if len(chunk) == 0:
+def insert_worker(chunks):
+    print(f'chunk : {len(chunks)}')
+    if len(chunks) == 0:
         return
-    chunk['summonerTier'] = chunk.progress_apply(lambda x: summoner_tier(x), axis=1)
-    return chunk
+    chunks['summonerTier'] = chunks.progress_apply(lambda x: summoner_tier(x), axis=1)
+    return chunks
 
 if __name__ == '__main__':
     print("시작!")
@@ -175,12 +173,14 @@ if __name__ == '__main__':
                 p_idx += 1
                 bans += 1
         sum_df = pd.DataFrame(df_creater, columns=columns)
-        df_list = np.array_split(sum_df, 8)
+        grouped_df = sum_df.groupby('api_key')
+        df_list = [group for _, group in grouped_df]
+
         # 작은 DataFrame을 병렬로 처리
-        pool = multiprocessing.Pool(processes=8)  # 프로세스 수 설정
         summoner_tier_output = []
-        for res in (pool.map(insert_worker, zip(df_list, range(8)))):
-            summoner_tier_output.append(res)
+        with mp.Pool(processes=8) as pool:
+            for res in (pool.map(insert_worker, df_list)):
+                summoner_tier_output.append(res)
 
         merged_df = pd.concat(summoner_tier_output)
         print(f'merged_df = {len(merged_df)}')
