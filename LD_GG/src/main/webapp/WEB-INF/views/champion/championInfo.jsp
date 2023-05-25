@@ -923,10 +923,13 @@
 			</div>
 		</div>
 		<div class="right-container">
+			<!-- match_up_conatiner start -->
 			<div class="match_up_container">
+				<!-- match_up_chart start -->
 				<div class="match_up_chart">
 					<div id="match_up_left">
 					</div>
+					<!-- chartdiv start -->
 					<div id="chartdiv">
 						<div class="bar_block">
 								<div class="bar_title lane_kill_rate">
@@ -939,6 +942,8 @@
 									<div class="progress-bar" role="progressbar"
 										style="width: 46%;" aria-valuenow="50" aria-valuemin="0"
 										aria-valuemax="100"></div>
+									<div class="progress-bar bg-danger" role="progressbar" style="width: 100%"
+								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
 								</div>
 						</div>
 						
@@ -951,6 +956,8 @@
 							<div class="progress">
 								<div class="progress-bar" role="progressbar" style="width: 25%"
 									aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+								<div class="progress-bar bg-danger" role="progressbar" style="width: 100%"
+								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
 							</div>
 						</div>
 						
@@ -963,6 +970,8 @@
 							<div class="progress">
 								<div class="progress-bar" role="progressbar" style="width: 50%"
 									aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+								<div class="progress-bar bg-danger" role="progressbar" style="width: 100%"
+								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
 							</div>
 						</div>
 
@@ -975,6 +984,8 @@
 							<div class="progress">
 								<div class="progress-bar" role="progressbar" style="width: 75%"
 									aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+								<div class="progress-bar bg-danger" role="progressbar" style="width: 100%"
+								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>	
 							</div>
 						</div>
 
@@ -986,6 +997,8 @@
 							</div>
 							<div class="progress">
 								<div class="progress-bar" role="progressbar" style="width: 100%"
+								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+								<div class="progress-bar bg-danger" role="progressbar" style="width: 100%"
 								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
 							</div>
 						</div>
@@ -999,6 +1012,8 @@
 							<div class="progress">
 								<div class="progress-bar" role="progressbar" style="width: 100%"
 								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+								<div class="progress-bar bg-danger" role="progressbar" style="width: 100%"
+								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
 							</div>
 						</div>
 
@@ -1011,16 +1026,20 @@
 							<div class="progress">
 								<div class="progress-bar" role="progressbar" style="width: 100%"
 								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+								<div class="progress-bar bg-danger" role="progressbar" style="width: 100%"
+								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
 							</div>
 						</div>
 
 					</div>
-
+					<!-- chartdiv end -->
 					<div id="match_up_right"></div>
+				</div> 
+				<!-- match_up_chart end -->
+				<div class="match_up_table">
+					
 				</div>
-
-				<div class="match_up_table"></div>
-
+			<!-- match_up_conatiner end -->
 			</div>
 		</div>
 	</div>
@@ -1364,10 +1383,18 @@ function make_chart(left, right){
 				title.querySelector('.bar_title_right').textContent = right[key];
 				
 				let key_sum = left[key] + right[key];
-				let key_percent = Math.max(left[key], right[key]) / key_sum * 100;
-				
+				let high_key_percent = (Math.max(left[key], right[key]) / key_sum) * 100;
+				let low_key_percent = (Math.min(left[key], right[key]) / key_sum) * 100;
 				let bar_block = title.nextElementSibling;
-				bar_block.querySelector('.progress-bar').style.width = key_percent+'%';
+
+				if (left[key] > right[key]) {
+				  bar_block.querySelector('.progress-bar').style.width = high_key_percent + '%';
+				  bar_block.querySelector('.bg-danger').style.width = low_key_percent + '%';
+				} else {
+				  bar_block.querySelector('.progress-bar').style.width = low_key_percent + '%';
+				  bar_block.querySelector('.bg-danger').style.width = high_key_percent + '%';
+				}
+
 			}
 		})
 	})
