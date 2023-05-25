@@ -9,35 +9,88 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+<style>
+.card{
+margin-bottom:1.5rem;
+max-width: 1200px;
+}
+</style>
 </head>
 <body>
-	<div class='container'>
-	<h2>${member.lol_account} 회원님의 마이멘토링(멘토 전용) 페이지입니다~~</h2>
-	<br>
-	<h4>받은 견적서</h4>
-	<div id="received_estimate"></div>
-	<br>
-	<h4>보낸 견적서</h4>
-	<div id="sent_estimate"></div>
-	<br>
-	<h4>내가 신청한 수업 목록</h4>
-	<div id="apply_class_history"></div>
-	<br>
-	<h4>수강 신청한 멘티 목록</h4>
-	<div id="request_class_history"></div>
-	<br>
-	<h4>도움이 필요한 멘티목록</h4>
-	<div id="menti_list"></div>
-	<br>
-	<h4>내가 찜한 멘토 목록</h4>
-	<div id="like_mentor_list"></div>
-	<br>
-	<h4>내가 작성한 멘토 리뷰</h4>
-	<div id="written_review"></div>
-	<br>
-	<h4>나에게 달린 리뷰</h4>
-	<div id="review_for_me"></div>
-	<br>
+
+<div class='container'>
+	
+	<div class="card">
+		<div class="card-header">
+			<h4>받은 견적서</h4>
+		</div>
+		<div id="received_estimate" class="card-body">
+		<!-- 받은 견적서 내용 -->
+		</div>
+	</div>
+	
+	<div class="card">
+		<div class="card-header">
+			<h4>보낸 견적서</h4>
+		</div>
+		<div id="sent_estimate" class="card-body">
+		<!-- 보낸 견적서 내용 -->
+		</div>
+	</div>
+	
+	<div class="card">
+		<div class="card-header">
+			<h4>도움이 필요한 멘티목록</h4>
+		</div>
+		<div id="menti_list" class="card-body">
+		<!-- 도움이 필요한 멘티목록 -->
+		</div>
+	</div>
+	
+	<div class="card">
+		<div class="card-header">
+			<h4>내가 신청한 수업 목록</h4>
+		</div>
+		<div id="apply_class_history" class="card-body">
+		<!-- 내가 신청한 수업 목록 -->
+		</div>
+	</div>
+	
+	<div class="card">
+		<div class="card-header">
+			<h4>수강 신청한 멘티 목록</h4>
+		</div>
+		<div id="request_class_history" class="card-body">
+		<!-- 수강 신청한 멘티 목록 -->
+		</div>
+	</div>
+	
+	<div class="card">
+		<div class="card-header">
+			<h4>내가 찜한 멘토 목록</h4>
+		</div>
+		<div id="like_mentor_list" class="card-body">
+		<!-- 내가 찜한 멘토 목록 -->
+		</div>
+	</div>
+	
+	<div class="card">
+		<div class="card-header">
+			<h4>내가 작성한 멘토 리뷰</h4>
+		</div>
+		<div id="written_review" class="card-body">
+		<!-- 내가 작성한 멘토 리뷰 -->
+		</div>
+	</div>
+	
+	<div class="card">
+		<div class="card-header">
+			<h4></h4>
+		</div>
+		<div id="review_for_me" class="card-body">
+		<!-- 나에게 달린 리뷰 -->
+		</div>
+	</div>
 	
 	<!-- 견적서 쓰기 모달 -->
 	<div class="modal fade" id="estimateModal" tabindex="-1" aria-labelledby="estimateModalLabel" aria-hidden="true" style="display: none;">
@@ -45,15 +98,15 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="estimateModalLabel"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form id="estimateForm">
           <div class="mb-3">
             <label for="estimateContent" class="form-label">견적 내용</label>
-            <textarea class="form-control" id="estimateContent" rows="5"></textarea>
+            <textarea class="form-control" id="estimateContent" rows="10"></textarea>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">닫기</button>
             <button type="submit" class="btn btn-primary">전송</button>
           </div>
         </form>
@@ -68,6 +121,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="reviewModalLabel"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form id="reviewForm">
@@ -93,7 +147,6 @@
             <textarea class="form-control" id="reviewContent" rows="5"></textarea>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">닫기</button>
             <button type="submit" class="btn btn-primary">전송</button>
           </div>
         </form>
@@ -123,11 +176,11 @@ $(document).ready(function() {
     		  let table = $("<table>").addClass("table");
     		  let header = $("<thead>");
     		  let tr = $("<tr>").append(
-    				  $("<th>").attr("scope","col").text(""),
     		    $("<th>").attr("scope","col").text("멘티 아이디"),
     		    $("<th>").attr("scope","col").text("배우고 싶은 포지션"),
     		    $("<th>").attr("scope","col").text("배우고 싶은 챔피언"),
-    		    $("<th>").attr("scope","col").text("목표 티어")
+    		    $("<th>").attr("scope","col").text("목표 티어"),
+    		    $("<th>").attr("scope","col")
     		  );
     		  header.append(tr);
     		  table.append(header);
@@ -143,20 +196,22 @@ $(document).ready(function() {
     		        	if (menti.lol_account !== "${member.lol_account}"){ //현재 조회중인 사람이 아닌 멘티 정보
     	    		    	let tbody = $("<tbody>");
     	    		    let row = $("<tr>").append(
-    	    		    $("<th>").attr("scope","row").text(i+1),
     	    		      $("<td>").text(menti.lol_account),
     	    		      $("<td>").text(menti.position_to_learn),
     	    		      $("<td>").text(champion_to_learn),
     	    		      $("<td>").text(menti.target_tier),
-    	    		      $("<button>").attr("type","button")
-    	                		.addClass("btn btn-outline-primary")
-    	   		    		  .attr("id", menti.lol_account).text("견적서 작성")
-    	   		    		  .on('click', function() {
-    	   		    			  let menti_summoner_name = $(this).attr('id');
-    	   		    			    $("#estimateModal").modal("show");
-    	   		    			    $(".modal-title").attr("id",menti_summoner_name);
-    	   		    			    $(".modal-title").text(menti_summoner_name+"님에게 견적서 보내기");
-    	   		              })
+    	    		      $("<td>").append(
+    	    		    		  $("<button>").attr("type","button")
+      	                		.addClass("btn btn-outline-primary")
+      	   		    		  .attr("id", menti.lol_account).text("견적서 작성")
+      	   		    		  .on('click', function() {
+      	   		    			  let menti_summoner_name = $(this).attr('id');
+      	   		    			    $("#estimateModal").modal("show");
+      	   		    			    $(".modal-title").attr("id",menti_summoner_name);
+      	   		    			    $(".modal-title").text(menti_summoner_name+"님에게 견적서 보내기");
+      	   		              })	  
+    	    		      ),
+    	    		      
     	    		    );
     	    		    tbody.append(row);
     	    		    table.append(tbody);
@@ -807,10 +862,10 @@ $(document).ready(function() {
 	    		  let table = $("<table>").addClass("table");
 	    		  let header = $("<thead>");
 	    		  let tr = $("<tr>").append(
-	    		    $("<th>").attr("scope","col"),
 	    		    $("<th>").attr("scope","col").text("내 견적서를 받은 멘티"),
 	    		    $("<th>").attr("scope","col").text("견적 내용"),
-	    		    $("<th>").attr("scope","col").text("보낸 날짜")
+	    		    $("<th>").attr("scope","col").text("보낸 날짜"),
+	    		    $("<th>").attr("scope","col")
 	    		  );
 	    		  header.append(tr);
 	    		  table.append(header);
@@ -818,30 +873,30 @@ $(document).ready(function() {
 	    		    let est = data[i];
 	    		    let tbody = $("<tbody>");
 	    		    let row = $("<tr>").append(
-	    		    		$("<th>").attr("scope","row").text(i+1),
 	    		      $("<td>").text(est.menti_lol_account),
 	    		      $("<td>").text(est.estimate_info),
 	    		      $("<td>").text(est.estimate_date),
-	    		      $("<button>").attr("type","button").addClass("btn btn-outline-danger")
-	    		      .attr("id",est.estimate_id).text("견적서 삭제").on("click", function() {
-	    		          $(this).closest('tr').remove(); // 클릭한 버튼이 속한 행 삭제
-	    		          let estid = this.id;
-	    		          let data ={
-	    		        	estimate_id: estid
-	    		          }
-	    		          $.ajax({
-			                    url: "/mentor/delete-estimate",
-			                    type: "DELETE",
-			                    data: JSON.stringify(data),
-			                    contentType: "application/json; charset=utf-8",
-			                    success: function() {
-			                        alert("견적서가 삭제 되었습니다.");
-			                    },
-			                    error: function() {
-			                        alert("삭제 실패.");
-			                    }
-			                });
-	    		      })
+	    		      $("<td>").append( $("<button>").attr("type","button").addClass("btn btn-outline-danger")
+			    		      .attr("id",est.estimate_id).text("견적서 삭제").on("click", function() {
+			    		          $(this).closest('tr').remove(); // 클릭한 버튼이 속한 행 삭제
+			    		          let estid = this.id;
+			    		          let data ={
+			    		        	estimate_id: estid
+			    		          }
+			    		          $.ajax({
+					                    url: "/mentor/delete-estimate",
+					                    type: "DELETE",
+					                    data: JSON.stringify(data),
+					                    contentType: "application/json; charset=utf-8",
+					                    success: function() {
+					                        alert("견적서가 삭제 되었습니다.");
+					                    },
+					                    error: function() {
+					                        alert("삭제 실패.");
+					                    }
+					                });
+			    		      })
+	    		      ),
 	    		    );
 	    		    tbody.append(row)
 	    		    table.append(tbody);

@@ -75,6 +75,7 @@ width:130px;
 #position-buttons button.selected{
 font-weight: bold;
 border:solid 2px black;
+background-color: #dee2e6;
 }
 #position-buttons button.mouse-over{
 font-weight: bold;
@@ -87,6 +88,10 @@ width:40px;
 padding:16px;
 margin:8px 16px;
 border-radius: 20px;
+cursor:pointer;
+}
+#tier-holder:hover{
+background-color: #f2f2f2;
 }
 #tier-holder img{
 margin-bottom: 8px;
@@ -251,6 +256,15 @@ padding-bottom:20px;
 #mentor-name{
 font-size:28px;
 font-weight:bold;
+}
+::-webkit-scrollbar {
+    width: 3px;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #888;
+}
+::-webkit-scrollbar-track {
+    background: none;
 }
 </style>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
@@ -946,7 +960,62 @@ font-weight:bold;
 			}, function () {
 				$(".tier").removeClass("hover");
 			});
-
+			
+			// 챔피언 검색창 입력할 때마다 불러오기
+			$("#champ-search").on("input", function() { 
+				var searchText = $(this).val();
+			      $.ajax({
+			        url: "/mentor/get-champ-name-by-keyword",//키워드로 챔피언 찾기
+			        type: "GET",
+			        data: {
+			        	keyword: searchText
+			        },
+			        success: function(data) {
+			          $("#champ-list").text("");
+			          let championList = JSON.parse(data);
+			          championList.forEach(function (champion) {
+			        	  let imageUrl =
+								"https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +
+								champion.champion_en_name + ".png?&amp;retry=0";
+							let champItem = $("<div>").addClass("d-flex align-items-center justify-content-between").attr("id","champ-item").click(function () {
+								$("#0").next("label").text(champion.champion_kr_name +"의 상황별 룬, 아이템을 배우고 싶어요");
+								$("#champ-info").attr("data", champion.champion_id)
+								$("#champ-name").text(champion.champion_kr_name);
+								if ($("#champ-info").find("img").length === 0) {
+								    $("#champ-info").prepend($("<img>").attr("id", "champ-img").attr("src", imageUrl).css("border-radius","15px"));
+								  }else{
+									  $("#champ-img").attr("src", imageUrl);
+								  }
+								$("#filter-champ-wrap").css('display', 'none');
+								learnChamp = champion.champion_id
+								console.log(learnChamp);
+							});
+							let championDiv = $("<div>").addClass("d-flex my-auto").attr("id", "champion");
+							let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+							let champName = $("<div>").addClass("my-auto mx-3")
+											.append($("<span>").text(champion.champion_kr_name));
+							championDiv.append(champImg);
+							championDiv.append(champName);
+							champItem.append(championDiv);
+							let rateWrap = $("<div>").addClass("rate-wrap");
+							let rateBarWrap = $("<div>").addClass("rate-bar-wrap");
+							let rateBarBg = $("<div>").addClass("rate-bar-bg");
+							rateBarWrap.append(rateBarBg);
+							rateWrap.append(rateBarWrap);
+							let pickRate = $("<span>").addClass("pick-rate").text("픽률 " + 0 + "%");
+							let pickMeter = $("<meter>").addClass("pick-meter").attr("min", 0).attr("max", 100)
+	            								.attr("low", 30).attr("high", 65).attr("optimum", 90).val(11);
+							rateWrap.append(pickMeter);
+							rateWrap.append(pickRate);
+							champItem.append(rateWrap);
+							$("#champ-list").append(champItem);
+						});
+					},
+					error: function () {
+						console.error("챔피언 정보를 불러오는데 실패했습니다.");
+					}
+				});
+			});
 
 			$.ajax({ //챔피언 목록 가져오기
 				url: "/mentor/get-all-champ",
