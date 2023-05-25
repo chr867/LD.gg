@@ -24,17 +24,26 @@
 </select>
 
 <select id="recom_mentor" resultType="mentorProfile" parameterType="String">
-	SELECT mp.mentor_email, mp.about_mentor, mp.specialized_position, 
-	mp.top_specialized_champion, mp.jg_specialized_champion, 
-	mp.mid_specialized_champion, mp.ad_specialized_champion, mp.sup_specialized_champion, 
-	mp.contact_time, mp.careers, mp.recom_ment
-	FROM mentor_profile AS mp
-	JOIN mentor_tag AS mt ON mp.mentor_email = mt.mentor_email
-	WHERE mt.tag_id IN (SELECT tag_id FROM menti_tag WHERE menti_email = #{menti_email})
-	GROUP BY mp.mentor_email
-	HAVING COUNT(DISTINCT mt.tag_id) >= 2
-	ORDER BY COUNT(DISTINCT mt.tag_id) desc
-	LIMIT 5;
+SELECT mp.*, m.*, si.*
+FROM mentor_profile AS mp
+
+JOIN mentor_tag AS mt ON mp.mentor_email = mt.mentor_email
+JOIN member AS m ON mp.mentor_email = m.email
+JOIN (
+	SELECT si1.*
+	FROM summoner_info si1
+JOIN (
+    SELECT summoner_name, MAX(revision_date) AS MaxRevision
+    FROM summoner_info
+    GROUP BY summoner_name
+) si2 ON si1.summoner_name = si2.summoner_name AND si1.revision_date = si2.MaxRevision
+) si ON m.lol_account = si.summoner_name
+
+WHERE mt.tag_id IN (SELECT tag_id FROM menti_tag WHERE menti_email = #{menti_email})
+GROUP BY mp.mentor_email
+HAVING COUNT(DISTINCT mt.tag_id) >= 2
+ORDER BY COUNT(DISTINCT mt.tag_id) desc
+LIMIT 5;
 </select>
 
 <select id="recom_menti" resultType="customMentor" parameterType="String">

@@ -69,19 +69,33 @@ margin-bottom:12px;
 padding:30px;
 }
 #champ-item{
-padding: 10px 0;
+padding: 18px 10px;
 }
 #champ-item:hover{
 background-color: white;
 cursor: pointer;
 }
+#champ-info span{
+font-weight:bold;
+}
 #champ-list{
-padding: 8px;
+margin-top:10px;
 height: 370px;
-margin: 10px 0;
 border: 1px solid #dee2e6;
 border-radius: 20px;
 overflow: auto; /* 스크롤바를 추가하기 위해 overflow 속성 설정 */
+}
+#champ-icon{
+margin:auto;
+}
+::-webkit-scrollbar {
+    width: 3px;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #888;
+}
+::-webkit-scrollbar-track {
+    background: none;
 }
 #filter-champ-wrap {
   width: 430px;
@@ -583,7 +597,7 @@ margin-top: 8px;
 			            let imageUrl =
 			                "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +
 			                champion.champion_en_name + ".png?&amp;retry=0";
-			            let champItem = $("<div>").addClass("d-flex align-items-center justify-content-between hover-div")
+			            let champItem = $("<div>").addClass("d-flex align-items-center justify-content-between")
 			            .attr("id","champ-item").click(function () {
 			            	if(top_selectedChampions == null || top_selectedChampions == ""){
 				                // 새로운 챔피언을 추가
@@ -688,9 +702,10 @@ margin-top: 8px;
 			                }
 			                }
 			            });
-			            let championDiv = $("<div>").attr("id", "champion");
-			            let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
-			            let champName = $("<span>").text(champion.champion_kr_name);
+			            let championDiv = $("<div>").addClass("d-flex my-auto").attr("id", "champion");
+						let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+						let champName = $("<div>").addClass("my-auto mx-2")
+										.append($("<span>").text(champion.champion_kr_name));
 			            championDiv.append(champImg);
 			            championDiv.append(champName);
 			            champItem.append(championDiv);
@@ -731,7 +746,7 @@ margin-top: 8px;
 			            let imageUrl =
 			                "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +
 			                champion.champion_en_name + ".png?&amp;retry=0";
-			            let champItem = $("<div>").addClass("d-flex align-items-center justify-content-between hover-div")
+			            let champItem = $("<div>").addClass("d-flex align-items-center justify-content-between")
 			            .attr("id","champ-item").click(function () {
 			            	if(jg_selectedChampions == null || jg_selectedChampions == ""){
 				                // 새로운 챔피언을 추가
@@ -836,9 +851,10 @@ margin-top: 8px;
 			                }
 			                }
 			            });
-			            let championDiv = $("<div>").attr("id", "champion");
-			            let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
-			            let champName = $("<span>").text(champion.champion_kr_name);
+			            let championDiv = $("<div>").addClass("d-flex my-auto").attr("id", "champion");
+						let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+						let champName = $("<div>").addClass("my-auto mx-2")
+										.append($("<span>").text(champion.champion_kr_name));
 			            championDiv.append(champImg);
 			            championDiv.append(champName);
 			            champItem.append(championDiv);
@@ -879,7 +895,7 @@ margin-top: 8px;
 			            let imageUrl =
 			                "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +
 			                champion.champion_en_name + ".png?&amp;retry=0";
-			            let champItem = $("<div>").addClass("d-flex align-items-center justify-content-between hover-div")
+			            let champItem = $("<div>").addClass("d-flex align-items-center justify-content-between")
 			            .attr("id","champ-item").click(function () {
 			            	if(mid_selectedChampions == null || mid_selectedChampions == ""){
 				                // 새로운 챔피언을 추가
@@ -984,9 +1000,10 @@ margin-top: 8px;
 			                }
 			                }
 			            });
-			            let championDiv = $("<div>").attr("id", "champion");
-			            let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
-			            let champName = $("<span>").text(champion.champion_kr_name);
+			            let championDiv = $("<div>").addClass("d-flex my-auto").attr("id", "champion");
+						let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+						let champName = $("<div>").addClass("my-auto mx-2")
+										.append($("<span>").text(champion.champion_kr_name));
 			            championDiv.append(champImg);
 			            championDiv.append(champName);
 			            champItem.append(championDiv);
@@ -1027,7 +1044,7 @@ margin-top: 8px;
 			            let imageUrl =
 			                "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +
 			                champion.champion_en_name + ".png?&amp;retry=0";
-			            let champItem = $("<div>").addClass("d-flex align-items-center justify-content-between hover-div")
+			            let champItem = $("<div>").addClass("d-flex align-items-center justify-content-between")
 			            .attr("id","champ-item").click(function () {
 			            	if(ad_selectedChampions == null || ad_selectedChampions == ""){
 				                // 새로운 챔피언을 추가
@@ -1132,9 +1149,10 @@ margin-top: 8px;
 			                }
 			                }
 			            });
-			            let championDiv = $("<div>").attr("id", "champion");
-			            let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
-			            let champName = $("<span>").text(champion.champion_kr_name);
+			            let championDiv = $("<div>").addClass("d-flex my-auto").attr("id", "champion");
+						let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+						let champName = $("<div>").addClass("my-auto mx-2")
+										.append($("<span>").text(champion.champion_kr_name));
 			            championDiv.append(champImg);
 			            championDiv.append(champName);
 			            champItem.append(championDiv);
@@ -1175,7 +1193,7 @@ margin-top: 8px;
 			            let imageUrl =
 			                "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +
 			                champion.champion_en_name + ".png?&amp;retry=0";
-			            let champItem = $("<div>").addClass("d-flex align-items-center justify-content-between hover-div")
+			            let champItem = $("<div>").addClass("d-flex align-items-center justify-content-between")
 			            .attr("id","champ-item").click(function () {
 			            	if(sup_selectedChampions == null || sup_selectedChampions == ""){
 				                // 새로운 챔피언을 추가
@@ -1280,9 +1298,10 @@ margin-top: 8px;
 			                }
 			                }
 			            });
-			            let championDiv = $("<div>").attr("id", "champion");
-			            let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
-			            let champName = $("<span>").text(champion.champion_kr_name);
+			            let championDiv = $("<div>").addClass("d-flex my-auto").attr("id", "champion");
+						let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+						let champName = $("<div>").addClass("my-auto mx-2")
+										.append($("<span>").text(champion.champion_kr_name));
 			            championDiv.append(champImg);
 			            championDiv.append(champName);
 			            champItem.append(championDiv);
@@ -1417,7 +1436,7 @@ margin-top: 8px;
 		            let imageUrl =
 		                "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +
 		                champion.champion_en_name + ".png?&amp;retry=0";
-		            let champItem = $("<div>").addClass("d-flex align-items-center justify-content-between hover-div").attr("id","champ-item").click(function () {
+		            let champItem = $("<div>").addClass("d-flex align-items-center justify-content-between").attr("id","champ-item").click(function () {
 		            	if(top_selectedChampions == null || top_selectedChampions == ""){
 			                // 새로운 챔피언을 추가
 				                top_selectedChampions.push(champion.champion_id);
@@ -1521,9 +1540,10 @@ margin-top: 8px;
 		                }
 		                }
 		            });
-		            let championDiv = $("<div>").attr("id", "champion");
-		            let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
-		            let champName = $("<span>").text(champion.champion_kr_name);
+		            let championDiv = $("<div>").addClass("d-flex my-auto").attr("id", "champion");
+					let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+					let champName = $("<div>").addClass("my-auto mx-2")
+									.append($("<span>").text(champion.champion_kr_name));
 		            championDiv.append(champImg);
 		            championDiv.append(champName);
 		            champItem.append(championDiv);
@@ -1555,7 +1575,7 @@ margin-top: 8px;
 		            let imageUrl =
 		                "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +
 		                champion.champion_en_name + ".png?&amp;retry=0";
-		            let champItem = $("<div>").addClass("d-flex align-items-center justify-content-between hover-div").attr("id","champ-item").click(function () {
+		            let champItem = $("<div>").addClass("d-flex align-items-center justify-content-between").attr("id","champ-item").click(function () {
 		            	if(jg_selectedChampions == null || jg_selectedChampions == ""){ //챔피언을 고른적이 없을때
 		            		
 			                jg_selectedChampions.push(champion.champion_id);
@@ -1659,9 +1679,10 @@ margin-top: 8px;
 			                }
 		                }
 		            });
-		            let championDiv = $("<div>").attr("id", "champion");
-		            let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
-		            let champName = $("<span>").text(champion.champion_kr_name);
+		            let championDiv = $("<div>").addClass("d-flex my-auto").attr("id", "champion");
+					let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+					let champName = $("<div>").addClass("my-auto mx-2")
+									.append($("<span>").text(champion.champion_kr_name));
 		            championDiv.append(champImg);
 		            championDiv.append(champName);
 		            champItem.append(championDiv);
@@ -1693,7 +1714,7 @@ margin-top: 8px;
 		            let imageUrl =
 		                "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +
 		                champion.champion_en_name + ".png?&amp;retry=0";
-		            let champItem = $("<div>").addClass("d-flex align-items-center justify-content-between hover-div")
+		            let champItem = $("<div>").addClass("d-flex align-items-center justify-content-between")
 		            	.attr("id","champ-item").click(function () {
 		            	if(mid_selectedChampions == null || mid_selectedChampions == ""){ //챔피언을 고른적이 없을때
 		            		
@@ -1798,9 +1819,10 @@ margin-top: 8px;
 			                }
 		                }
 		            });
-		            let championDiv = $("<div>").attr("id", "champion");
-		            let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
-		            let champName = $("<span>").text(champion.champion_kr_name);
+		            let championDiv = $("<div>").addClass("d-flex my-auto").attr("id", "champion");
+					let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+					let champName = $("<div>").addClass("my-auto mx-2")
+									.append($("<span>").text(champion.champion_kr_name));
 		            championDiv.append(champImg);
 		            championDiv.append(champName);
 		            champItem.append(championDiv);
@@ -1832,7 +1854,7 @@ margin-top: 8px;
 		            let imageUrl =
 		                "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +
 		                champion.champion_en_name + ".png?&amp;retry=0";
-		            let champItem = $("<div>").addClass("d-flex align-items-center justify-content-between hover-div")
+		            let champItem = $("<div>").addClass("d-flex align-items-center justify-content-between")
 		            	.attr("id","champ-item").click(function () {
 		            	if(ad_selectedChampions == null || ad_selectedChampions == ""){ //챔피언을 고른적이 없을때
 		            		
@@ -1937,9 +1959,10 @@ margin-top: 8px;
 			                }
 		                }
 		            });
-		            let championDiv = $("<div>").attr("id", "champion");
-		            let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
-		            let champName = $("<span>").text(champion.champion_kr_name);
+		            let championDiv = $("<div>").addClass("d-flex my-auto").attr("id", "champion");
+					let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+					let champName = $("<div>").addClass("my-auto mx-2")
+									.append($("<span>").text(champion.champion_kr_name));
 		            championDiv.append(champImg);
 		            championDiv.append(champName);
 		            champItem.append(championDiv);
@@ -1971,7 +1994,7 @@ margin-top: 8px;
 		            let imageUrl =
 		                "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +
 		                champion.champion_en_name + ".png?&amp;retry=0";
-		            let champItem = $("<div>").addClass("d-flex align-items-center justify-content-between hover-div")
+		            let champItem = $("<div>").addClass("d-flex align-items-center justify-content-between")
 		            	.attr("id","champ-item").click(function () {
 		            	if(sup_selectedChampions == null || sup_selectedChampions == ""){ //챔피언을 고른적이 없을때
 		            		
@@ -2076,9 +2099,10 @@ margin-top: 8px;
 			                }
 		                }
 		            });
-		            let championDiv = $("<div>").attr("id", "champion");
-		            let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
-		            let champName = $("<span>").text(champion.champion_kr_name);
+		            let championDiv = $("<div>").addClass("d-flex my-auto").attr("id", "champion");
+					let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
+					let champName = $("<div>").addClass("my-auto mx-2")
+									.append($("<span>").text(champion.champion_kr_name));
 		            championDiv.append(champImg);
 		            championDiv.append(champName);
 		            champItem.append(championDiv);
