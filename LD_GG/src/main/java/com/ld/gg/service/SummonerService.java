@@ -15,6 +15,7 @@ import com.ld.gg.dto.summoner.RecordInfoDto;
 import com.ld.gg.dto.summoner.RecordRankingDto;
 import com.ld.gg.dto.summoner.SummonerDto;
 import com.ld.gg.dto.summoner.SummonerRankDto;
+import com.ld.gg.dto.summoner.TeamRankingDataDto;
 
 @Service
 public class SummonerService {
@@ -97,8 +98,8 @@ public class SummonerService {
 		return bd;
 	}
 
-	public List<RecordRankingDto> getRanking(String match_id, String summoner_name) {
-		List<RecordRankingDto> rrd = SD.getRanking(match_id, summoner_name);
+	public RecordRankingDto getRanking(String match_id, String summoner_name) {
+		RecordRankingDto rrd = SD.getRanking(match_id, summoner_name);
 		return rrd;
 	}
 
@@ -115,6 +116,11 @@ public class SummonerService {
 	public List<MatchUpPlayerDto> getMatchUpPlayer(String match_id) {
 		List<MatchUpPlayerDto> mpd = SD.getMatchUpPlayer(match_id);
 		return mpd;
+	}
+
+	public List<TeamRankingDataDto> getTeamData(String match_id, String summoner_name) {
+		List<TeamRankingDataDto> TRDD = SD.getTeamData(match_id, summoner_name);
+		return TRDD;
 	}
 
 }

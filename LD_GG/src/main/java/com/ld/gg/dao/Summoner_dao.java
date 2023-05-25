@@ -14,6 +14,7 @@ import com.ld.gg.dto.summoner.RecordInfoDto;
 import com.ld.gg.dto.summoner.RecordRankingDto;
 import com.ld.gg.dto.summoner.SummonerDto;
 import com.ld.gg.dto.summoner.SummonerRankDto;
+import com.ld.gg.dto.summoner.TeamRankingDataDto;
 
 public interface Summoner_dao {
 	
@@ -47,12 +48,14 @@ public interface Summoner_dao {
 
 	List<BuildDto> getBuild(String match_id, String summoner_name);
 
-	List<RecordRankingDto> getRanking(String match_id, String summoner_name);
+	RecordRankingDto getRanking(@Param("match_id") String match_id, @Param("summoner_name") String summoner_name);
 
 	SummonerDto getSummoner(String lol_account);
 
 	DashBoardDto getDashBoardKDA(String summoner_name);
 
 	List<MatchUpPlayerDto> getMatchUpPlayer(String match_id);
+
+	List<TeamRankingDataDto> getTeamData(@Param("match_id") String match_id, @Param("summoner_name") String summoner_name);
 
 }
