@@ -163,11 +163,17 @@
 			SELECT c.champion_id, i.champion_kr_name AS champion_name, i.champion_img, 
 			i2.champion_id AS enemy_champ_id, i2.champion_kr_name AS enemy_champ, i2.champion_img AS enemy_champion_img,
 			m.lane_kill_rate, m.kda, m.kill_participation, m.deal_to_champ, m.avg_g_15, m.tower_kill_time, m.avg_cs,
-			m.match_up_win_rate, m.match_up_win_cnt, m.match_up_cnt, c.team_position
+			m.match_up_win_rate, m.match_up_win_cnt, m.match_up_cnt, c.team_position, ct1.win_rate as win_rate, ct2.win_rate as enemy_win_rate,
+			ct1.pick_rate, ct2.pick_rate enemy_pick_rate, ct1.ban_rate, ct2.ban_rate enemy_ban_rate,
+			m2.lane_kill_rate as enemy_lane_kill_rate, m2.kill_participation as enemy_kill_participation, m2.kda as enemy_kda,
+			m2. tower_kill_time as enemy_tower_kill_time, m2.match_up_win_rate as enemy_win_rate
 			FROM champion_lane AS c
 			JOIN champion_info AS i ON c.champion_id = i.champion_id
 			JOIN champion_match_up AS m ON c.champion_id = m.champion_id AND c.team_position = m.team_position
+			JOIN champion_match_up AS m2 ON m.enemy_champ_id = m2.champion_id AND c.team_position = m2.team_position AND m.enemy_champ_id = m2.champion_id
 			JOIN champion_info AS i2 ON m.enemy_champ_id = i2.champion_id
+			JOIN champion_tier AS ct1 on ct1.champion_id = i.champion_id AND c.team_position = ct1.team_position
+			JOIN champion_tier AS ct2 on ct2.champion_id = i2.champion_id AND c.team_position = ct2.team_position
 			WHERE c.champion_id = #{champion_id}
 			AND m.match_up_cnt > 50
 			AND c.team_position = (

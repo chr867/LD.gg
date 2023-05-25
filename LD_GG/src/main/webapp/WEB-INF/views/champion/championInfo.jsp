@@ -70,8 +70,9 @@
 
 .right-container {
 	box-sizing: border-box;
-	width: 700px;
+	width: 770px;
 	height: 100%;
+	margin-left : 20px;
 }
 
 .champion-info-box {
@@ -316,9 +317,37 @@
 
 <!-- right_container -->
 <style>
-#chartdiv {
-	
+.match_up_chart{
+	display: flex;
 }
+
+#chartdiv{
+	margin-left: 50px;
+	margin-right: 50px;
+	width: 540px;
+}
+
+.bar_title{
+	display: grid;
+	position: relative;
+	text-align: center;
+}
+
+.bar_title_left{
+	grid-row: 1;
+	justify-self: left;
+}
+
+.bar_title_content{
+	grid-row: 1;
+	justify-self: center;
+}
+
+.bar_title_right{
+	grid-row: 1;
+	justify-self: right;
+}
+
 </style>
 </head>
 
@@ -884,34 +913,84 @@
 		<div class="right-container">
 			<div class="match_up_container">
 				<div class="match_up_chart">
+					<div id="match_up_left"></div>
 					<div id="chartdiv">
-						<div class="progress header">
-							<div class="progress-bar" role="progressbar" style="width: 54%;"
-								aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">크샨테</div>
-							<div class="progress-bar bg-danger" role="progressbar"
+
+						<div class="bar_title lane_kill_rate">
+							<div class="bar_title_left lane_kill_rate">as</div>
+							<div class="bar_title_content">라인킬 확률</div>
+							<div class="bar_title_right enemy_lane_kill_rate">df</div>
+						</div>
+
+						<div class="progress">
+							<div class="progress-bar" role="progressbar"
 								style="width: 46%;" aria-valuenow="50" aria-valuemin="0"
-								aria-valuemax="100">사일러스</div>
+								aria-valuemax="100"></div>
+						</div>
+
+						<div class="bar_title kill_participation">
+							<div class="bar_title_left kill_participation">as</div>
+							<div class="bar_title_content">킬 관여율</div>
+							<div class="bar_title_right enemy_kill_participation">df</div>
 						</div>
 						<div class="progress">
 							<div class="progress-bar" role="progressbar" style="width: 25%"
 								aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
 						</div>
 
+						<div class="bar_title kda">
+							<div class="bar_title_left kda">as</div>
+							<div class="bar_title_content">평점</div>
+							<div class="bar_title_right enemy_kda">df</div>
+						</div>
 						<div class="progress">
 							<div class="progress-bar" role="progressbar" style="width: 50%"
 								aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
 						</div>
 
+						<div class="bar_title tower_kill_time">
+							<div class="bar_title_left tower_kill_time">as</div>
+							<div class="bar_title_content">라인 첫 타워 파괴 시간</div>
+							<div class="bar_title_right enemy_tower_kill_time">df</div>
+						</div>
 						<div class="progress">
 							<div class="progress-bar" role="progressbar" style="width: 75%"
 								aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
 						</div>
 
+						<div class="bar_title match_up_win_rate">
+							<div class="bar_title_left win_rate">as</div>
+							<div class="bar_title_content">포지션 승률</div>
+							<div class="bar_title_right enemy_win_rate">df</div>
+						</div>
 						<div class="progress">
 							<div class="progress-bar" role="progressbar" style="width: 100%"
 								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
 						</div>
+
+						<div class="bar_title pick_rate">
+							<div class="bar_title_left pick_rate">as</div>
+							<div class="bar_title_content">포지션 픽률</div>
+							<div class="bar_title_right enemy_pick_rate">df</div>
+						</div>
+						<div class="progress">
+							<div class="progress-bar" role="progressbar" style="width: 100%"
+								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+						</div>
+
+						<div class="bar_title ban_rate">
+							<div class="bar_title_left ban_rate">as</div>
+							<div class="bar_title_content">밴률</div>
+							<div class="bar_title_right enemy_ban_rate">df</div>
+						</div>
+						<div class="progress">
+							<div class="progress-bar" role="progressbar" style="width: 100%"
+								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+						</div>
+
 					</div>
+		
+					<div id="match_up_right"></div>
 				</div>
 
 				<div class="match_up_table"></div>
@@ -922,6 +1001,8 @@
 
 </body>
 <script type="text/javascript">
+let champion_position;
+
 document.addEventListener("DOMContentLoaded", function() {
 	championLaneInfo(${chamInfo.champion_id});
 });
@@ -953,6 +1034,7 @@ function championLaneInfo(champion_id) {
 
 	      laneSelectBox.innerHTML += html;
 	    }
+	    champion_position = res[0].team_position
 	    championBuildInfo(res[0].champion_id, res[0].team_position);
 	  }).fail(err => {
 	    console.log(err);
@@ -1245,9 +1327,19 @@ let response;
 	
 function make_chart(match_up){
 	console.log(match_up)
+	console.log(Object.keys(match_up))
+	let keys = Object.keys(match_up)
+	let titles = document.querySelectorAll('.bartitle')
+
+	titles.forEach(title=>{
+		console.log(title, title.className)
+	})
+
+	document.getElementById('match_up_left').textContent = match_up.champion_name
+	document.getElementById('match_up_right').textContent = match_up.enemy_champ
 }
 	
-function make_table(champions){
+function make_table(match_ups){
 	console.log('table')
 }
 

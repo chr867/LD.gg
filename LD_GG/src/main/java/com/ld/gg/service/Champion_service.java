@@ -135,10 +135,16 @@ public class Champion_service {
 		return championBuildInfo;
 	}
 
-	public List<Champ_match_up_default> get_champ_match_up(Integer champion_id) {
-		List<Champ_match_up_default> cm_list = cd.get_champion_match_up(champion_id);
+	public Map<String, List<Champ_match_up_default>> get_champ_match_up(Integer champion_id) {
+		Map<String, List<Champ_match_up_default>> cm_map = new HashMap<>();
 		
-		return cm_list;
+		List<Champ_match_up_default> cm_champion = cd.get_champion_match_up(champion_id);
+		List<Champ_match_up_default> cm_enemy = cd.get_champion_match_up(champion_id);
+		
+		cm_map.put("champion", cm_champion);
+		cm_map.put("enemy", cm_enemy);
+		
+		return cm_map;
 	}
 
 	public List<Champ_match_up_rune> getRuneInfo(String main_key) {
