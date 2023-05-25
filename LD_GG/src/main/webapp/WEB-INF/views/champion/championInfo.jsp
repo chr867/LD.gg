@@ -176,7 +176,7 @@
 }
 
 .lane-img:hover, .lane-img:active {
-	background-color: #E5E5E5;
+	background-color: #606060;
 }
 
 .champion-easy-box {
@@ -235,7 +235,17 @@
 	background-color: #fff;
 	border-radius: 0.5rem;
 }
-
+.rune-title{
+	margin-top: 20px;
+	background-color: #fff;
+	border-radius: 0.5rem;
+}
+.rune-title h4{
+	margin: 0;
+	font-size: 18px;
+	font-weight: 700;
+	text-align: center;
+}
 .rune-box {
 	width: 100%;
 	height: 300px;
@@ -244,15 +254,22 @@
 	margin-right: 5px;
 	justify-content: space-between;
 	text-align: center;
-	padding: 20px 0 0 0;
+	padding: 10px 0 0 0;
 	box-sizing: border-box;
 }
 
 .first-rune {
 	background-color: rgb(255, 255, 255);
-	width: 40px;
-	height: 40px;
+	width: 50px;
+	height: 50px;
 	border-radius: 10rem;
+	background-color: #202020;
+	box-sizing: border-box;
+	padding-top: 10px;
+
+}
+.first-rune img{
+	
 }
 
 .runes {
@@ -261,7 +278,7 @@
 }
 
 .rune {
-	background-color: rgb(88, 88, 88);
+	background-color: #202020;
 	width: 40px;
 	height: 40px;
 	margin: 10px;
@@ -275,7 +292,7 @@
 }
 
 .sub-runes {
-	padding: 60px 0 0 0;
+	padding: 50px 0 0 0;
 }
 
 .sub-ability {
@@ -312,6 +329,87 @@
 .sub-ability .runes{
 	margin-bottom: 10px;
 }
+.rune-select-box{
+	width: 100%;
+	height: 50px;
+	background-color: #fff;
+	box-sizing: border-box;
+	padding: 5px;
+	display: flex;
+	border-radius: 0.5rem;
+}
+.rune-select-button{
+	height: 100%;
+	width: 100px;
+	background-color: #f4f4f4;
+	border-radius:1rem;
+	display: flex;
+	align-items: center;
+	transition : 0.5s;
+	margin-right: 10px;
+}
+.rune-select-button:hover{
+	background-color: #606060;
+}
+.rune-select-main{
+	width: 30px;
+	height: 40px;
+	border-radius: 0.5rem;
+/* 	background-color: #000; */
+	align-items: center;
+	justify-content: center;
+	display: flex;
+}
+.rune-select-main img{
+	width: 20px;
+	height: 20px;
+}
+.rune-select-sub{
+	width: 30px;
+	height: 40px;
+	border-radius: 0.5rem;
+	/* background-color: #000; */
+	align-items: center;
+	justify-content: center;
+	display: flex;
+}
+.rune-select-sub img{
+	width: 20px;
+	height: 20px;
+}
+.rune-select-mainStyle{
+	width: 40px;
+	height: 40px;
+	border-radius: 0.5rem;
+	/* background-color: #000; */
+	align-items: center;
+	justify-content: center;
+	display: flex;
+}
+.rune-select-mainStyle img{
+	width: 40px;
+	height: 40px;
+}
+
+.rune-combination-desc {
+	position: absolute;
+	top: 35px;
+	z-index: 10;
+	width: 150px;
+	background-color: black;
+	color: #fff;
+	border-radius: 0.5rem;
+	padding: 10px;
+	visibility: hidden;
+	opacity: 0;
+	transition: visibility 0s, opacity 0.3s linear;
+	font-size: 14px;
+}
+
+.rune-select-button:hover .rune-combination-desc {
+	visibility: visible;
+	opacity: 1;
+}
 </style>
 
 <!-- right_container -->
@@ -319,6 +417,41 @@
 #chartdiv {
 	
 }
+</style>
+
+<style type="text/css">
+.spell-container{
+	background-color: #fff;
+	height: 200px;
+	border-radius: 0.5rem;
+	margin-top: 20px;
+	box-sizing: border-box;
+}
+.spell-title h4{
+	margin: 0;
+	font-size: 18px;
+	font-weight: 700;
+	text-align: center;
+}
+.spells{
+	height: 60px;
+	background-color: #000;
+	margin: 10px;
+	display: flex;
+	align-items: center;
+	padding: 0 10px 0 10px;
+}
+.spell{
+	border: 2px solid white;
+	border-radius: 0.5rem;
+	margin-right: 10px; 
+}
+.spells .spell img{
+	width: 40px;
+	height: 40px;
+	border-radius: 0.5rem;
+}
+
 </style>
 </head>
 
@@ -781,10 +914,27 @@
 					</tr>
 				</table>
 			</div>
+			<div class="spell-container">
+				<div class="spell-title">
+					<h4>추천 스펠</h4>
+					<div class="spells">
+						<div class="spell">
+							<img alt="" src="/resources/img/spell/SummonerFlash.png">
+						</div>
+						<div class="spell">
+							<img alt="" src="/resources/img/spell/SummonerDot.png">
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="middle-container">
+			<div class="rune-select-box">
+			</div>
+			<div class="rune-title">
+				<h4>추천 룬</h4>
+			</div>
 			<div class="rune-container">
-
 				<div class="rune-box main-runes">
 					<div class="first-rune main-rune-top" style="margin: 0 auto"></div>
 					<div class="runes main-rune-first"></div>
@@ -801,7 +951,7 @@
 				<div class="rune-box sub-ability">
 					<div class="runes sub-ability-first">
 						<div class="rune fragment">
-							<img src="/resources/img/perk-images/StatMods/StatModsAdaptiveForceIcon.png" alt="" id="5008" class="fragment-img">
+							<img src="/resources/img/perk-images/StatMods/StatModsAdaptiveForceIcon.png" alt="" id="first-fragment-5008" class="fragment-img">
 							<div class="rune-desc">
 								<div>OFFENSE</div>
 								<br>
@@ -809,7 +959,7 @@
 							</div>
 						</div>
 						<div class="rune fragment">
-							<img src="/resources/img/perk-images/StatMods/StatModsAttackSpeedIcon.png" alt="" id="5005" class="fragment-img">
+							<img src="/resources/img/perk-images/StatMods/StatModsAttackSpeedIcon.png" alt="" id="first-fragment-5005" class="fragment-img">
 							<div class="rune-desc">
 								<div>OFFENSE</div>
 								<br>
@@ -817,7 +967,7 @@
 							</div>
 						</div>
 						<div class="rune fragment">
-							<img src="/resources/img/perk-images/StatMods/StatModsCDRScalingIcon.png" alt="" id="5007" class="fragment-img">
+							<img src="/resources/img/perk-images/StatMods/StatModsCDRScalingIcon.png" alt="" id="first-fragment-5007" class="fragment-img">
 							<div class="rune-desc">
 								<div>OFFENSE</div>
 								<br>
@@ -827,7 +977,7 @@
 					</div>
 					<div class="runes sub-ability-second">
 						<div class="rune fragment">
-							<img src="/resources/img/perk-images/StatMods/StatModsAdaptiveForceIcon.png" alt="" id="5008" class="fragment-img">
+							<img src="/resources/img/perk-images/StatMods/StatModsAdaptiveForceIcon.png" alt="" id="second-fragment-5008" class="fragment-img">
 							<div class="rune-desc">
 								<div>OFFENSE</div>
 								<br>
@@ -835,7 +985,7 @@
 							</div>
 						</div>
 						<div class="rune  fragment">
-							<img src="/resources/img/perk-images/StatMods/StatModsArmorIcon.png" alt="" id="5002" class="fragment-img">
+							<img src="/resources/img/perk-images/StatMods/StatModsArmorIcon.png" alt="" id="second-fragment-5002" class="fragment-img">
 							<div class="rune-desc">
 								<div>FLEX</div>
 								<br>
@@ -843,7 +993,7 @@
 							</div>
 						</div>
 						<div class="rune fragment">
-							<img src="/resources/img/perk-images/StatMods/StatModsMagicResIcon.png" alt="" id="5003" class="fragment-img">
+							<img src="/resources/img/perk-images/StatMods/StatModsMagicResIcon.png" alt="" id="second-fragment-5003" class="fragment-img">
 							<div class="rune-desc">
 								<div>FLEX</div>
 								<br>
@@ -853,7 +1003,7 @@
 					</div>
 					<div class="runes sub-ability-third">
 						<div class="rune fragment">
-							<img src="/resources/img/perk-images/StatMods/StatModsHealthScalingIcon.png" alt="" id="5001" class="fragment-img">
+							<img src="/resources/img/perk-images/StatMods/StatModsHealthScalingIcon.png" alt="" id="third-fragment-5001" class="fragment-img">
 							<div class="rune-desc">
 								<div>DEFFENSE</div>
 								<br>
@@ -861,7 +1011,7 @@
 							</div>
 						</div>
 						<div class="rune fragment">
-							<img src="/resources/img/perk-images/StatMods/StatModsArmorIcon.png" alt="" id="5002" class="fragment-img">
+							<img src="/resources/img/perk-images/StatMods/StatModsArmorIcon.png" alt="" id="third-fragment-5002" class="fragment-img">
 							<div class="rune-desc">
 								<div>FLEX</div>
 								<br>
@@ -869,7 +1019,7 @@
 							</div>
 						</div>
 						<div class="rune fragment">
-							<img src="/resources/img/perk-images/StatMods/StatModsMagicResIcon.png" alt="" id="5003" class="fragment-img">
+							<img src="/resources/img/perk-images/StatMods/StatModsMagicResIcon.png" alt="" id="third-fragment-5003" class="fragment-img">
 							<div class="rune-desc">
 								<div>FLEX</div>
 								<br>
@@ -1037,13 +1187,43 @@ function championBuildInfo(champion_id, team_position) {
 				  hardTableData[i].innerHTML = champHardChampData[i].match_up_win_rate+'%';
 			  }
 			  //-----------------------------------------------------------------------------------
-			  rune_full_data(champRuneData[0].main_KEYSTONE_ID,champRuneData[0].sub_KEYSTONE_ID)
+			  rune_full_data(champRuneData[0].main_KEYSTONE_ID,champRuneData[0].sub_KEYSTONE_ID,0,champRuneData);
+			  
+			  let rune_select_box = document.getElementsByClassName('rune-select-box')[0]; 
+			  rune_select_box.innerHTML = ''
+			  for (var i = 0; i < champRuneData.length; i++) {
+				html = ''
+				html += '<div class="rune-select-button">'
+				html += '<div class="rune-select-main">'
+				html += '<img src="/resources/img/'+champRuneData[i].main_KEYSTONE_ID_img+'" alt="">'
+				html += '</div>'
+				html += '<div class="rune-select-mainStyle rune-combination">'
+				html += '<img src="/resources/img/'+champRuneData[i].main_SUB1_ID_img+'" alt="">'
+				html += '</div>'
+				html += '<div class="rune-select-sub rune-combination">'
+				html += '<img src="/resources/img/'+champRuneData[i].sub_KEYSTONE_ID_img+'" alt="">'
+				html += '</div>'
+				html += '<div class="rune-combination-desc">'
+				html += '<div>승률 : '+champRuneData[i].win_rate+'%</div>'
+				html += '<div>픽률 : '+champRuneData[i].pick_rate+'%</div>'
+				html += '</div>'
+				html += '</div>'
+				rune_select_box.innerHTML += html
+				}
+			  
+			  let rune_select_buttons = document.getElementsByClassName('rune-select-button');
+				for (let i = 0; i < rune_select_buttons.length; i++) {
+					rune_select_buttons[i].addEventListener('click', function() {
+						console.log("이거이거 "+i)
+						rune_full_data(champRuneData[i].main_KEYSTONE_ID,champRuneData[i].sub_KEYSTONE_ID,i,champRuneData);
+					});
+				}
 		}).fail(err => {
 		  console.log(err);
 		});	
 }
 
-function rune_full_data(main,sub) {
+function rune_full_data(main,sub,i,champRuneData) {
 	let main_key = '';
 	switch (main) {
 	  case '8200':
@@ -1103,9 +1283,7 @@ function rune_full_data(main,sub) {
 		main_rune_fourth.innerHTML = ''
 		for (let i = 0; i < res.length; i++) {
 			rune_num = res[i].rune_num % res[0].rune_num
-			console.log(rune_num)
 			if(rune_num == 0){
-				console.log("메인룬")
 				main_rune_top.innerHTML += '<img src="/resources/img/'+res[i].rune_img+'" alt="">'
 			}else if(rune_num > 0 && rune_num < 100){
 				html = ''
@@ -1173,9 +1351,7 @@ function rune_full_data(main,sub) {
 			sub_rune_third.innerHTML = ''
 			for (let i = 0; i < res.length; i++) {
 				rune_num = res[i].rune_num % res[0].rune_num
-				console.log(rune_num)
 				if(rune_num == 0){
-					console.log("메인룬")
 					sub_rune_top.innerHTML += '<img src="/resources/img/'+res[i].rune_img+'" alt="">'
 				}else if(rune_num > 100 && rune_num < 200){
 					html = ''
@@ -1212,17 +1388,48 @@ function rune_full_data(main,sub) {
 					sub_rune_third.innerHTML += html
 				}
 			}
+			setTimeout(() => {
+			    main_SUB1_ID = champRuneData[i].main_SUB1_ID;
+			    main_SUB2_ID = champRuneData[i].main_SUB2_ID;
+			    main_SUB3_ID = champRuneData[i].main_SUB3_ID;
+			    main_SUB4_ID = champRuneData[i].main_SUB4_ID;
+			    sub_SUB1_ID = champRuneData[i].sub_SUB1_ID;
+			    sub_SUB2_ID = champRuneData[i].sub_SUB2_ID;
+				 fragment1_ID = champRuneData[i].fragment1_ID;
+				 fragment2_ID = champRuneData[i].fragment2_ID;
+				 fragment3_ID = champRuneData[i].fragment3_ID;
+			    
+			    console.log("gjldsfdfsdfsdfsdsffsdfsdsdf")
+			    console.log(main_SUB1_ID);
+
+			    document.getElementById(main_SUB1_ID).style.filter = 'none';
+			    document.getElementById(main_SUB2_ID).style.filter = 'none';
+			    document.getElementById(main_SUB3_ID).style.filter = 'none';
+			    document.getElementById(main_SUB4_ID).style.filter = 'none';
+			    document.getElementById(sub_SUB1_ID).style.filter = 'none';
+			    document.getElementById(sub_SUB2_ID).style.filter = 'none';
+			    let elements = document.getElementsByClassName('fragment-img');
+
+				 for (let i = 0; i < elements.length; i++) {
+				     elements[i].style.filter = "grayscale(100%)";
+				 }
+				 document.getElementById('first-fragment-'+fragment3_ID).style.filter = 'none'; 
+				 document.getElementById('second-fragment-'+fragment2_ID).style.filter = 'none'; 
+				 document.getElementById('third-fragment-'+fragment1_ID).style.filter = 'none'; 
+			    
+			  }, 300);  // 1초 후에 코드를 실행합니다.
 		}).fail(err => {
 		  console.log(err);
 		}); 
 }
-
+ 
 </script>
 
 <!-- right_container -->
 <script>
 document.addEventListener("DOMContentLoaded", function() {
 	get_match_up(${chamInfo.champion_id});
+	
 });
 
 let response;

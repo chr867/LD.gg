@@ -97,7 +97,15 @@
 	</select>
 	
 	<select id="getChampionRuneData" resultType="champ_recomm_info">
-		SELECT * FROM champion_rune WHERE champion_id = #{champion_id} AND team_position = #{team_position};
+		SELECT 
+		    cr.*, 
+		    (SELECT ri.rune_img FROM rune_info ri WHERE ri.rune_id = cr.MAIN_KEYSTONE_ID) AS MAIN_KEYSTONE_ID_img,
+		    (SELECT ri.rune_img FROM rune_info ri WHERE ri.rune_id = cr.MAIN_SUB1_ID) AS MAIN_SUB1_ID_img,
+		    (SELECT ri.rune_img FROM rune_info ri WHERE ri.rune_id = cr.SUB_KEYSTONE_ID) AS SUB_KEYSTONE_ID_img
+		FROM 
+		    champion_rune cr
+		WHERE 
+		    cr.champion_id = #{champion_id} AND cr.team_position = #{team_position} order by pick_rate desc
 	</select>
 	
 	<select id="getChampionItemData" resultType="champ_recomm_info">

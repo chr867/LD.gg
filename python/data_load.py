@@ -1,8 +1,11 @@
 import time
 import pandas as pd
+import requests
 from tqdm import tqdm
 import my_utils as mu
 
+url = 'https://asia.api.riotgames.com/lol/match/v5/matches/KR_6403551797?api_key=RGAPI-51c1deec-4b56-4c7a-948e-2932f639315f'
+res = requests.get(url).json()
 def matches_timeline_data_select(count):
     start_time = time.time()
     conn = mu.connect_mysql()
