@@ -331,3 +331,67 @@
 	visibility: visible;
 	opacity: 1;
 }
+
+.spell-container{
+	background-color: #fff;
+	height: 150px;
+	border-radius: 0.5rem;
+	margin-top: 20px;
+	box-sizing: border-box;
+}
+.spell-title h4{
+	margin: 0;
+	font-size: 18px;
+	font-weight: 700;
+	text-align: center;
+}
+.spell-title{
+	margin-top: 10px;
+}
+.spells{
+	height: 60px;
+	background-color: #fff;
+	display: flex;
+	align-items: center;
+	padding: 0 0 0 10px;
+}
+.spells h4{
+	margin: 0 10px 0 0;
+	font-weight: 700;
+	font-size: 16px;
+}
+.spells h6{
+	margin: 0 10px 0 0;
+	font-weight: 900;
+	font-size: 16px;
+}
+.spell{
+	border: 2px solid #f4f4f4;
+	border-radius: 0.5rem;
+}
+.spells .spell img{
+	width: 40px;
+	height: 40px;
+	border-radius: 0.5rem;
+}
+.spell-desc {
+	position: absolute;
+	z-index: 10;
+	width: 200px;
+	background-color: black;
+	color: #fff;
+	border-radius: 0.5rem;
+	padding: 10px;
+	visibility: hidden;
+	opacity: 0;
+	transition: visibility 0s, opacity 0.3s linear;
+	font-size: 14px;
+}
+
+.spell:hover .spell-desc {
+	visibility: visible;
+	opacity: 1;
+}
+.spell-text{
+text-align: center;
+}

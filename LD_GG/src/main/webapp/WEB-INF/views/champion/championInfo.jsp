@@ -55,7 +55,7 @@
 .main-container {
 	display: flex;
 	box-sizing: border-box;
-	padding: 100px 50px 100px 130px;
+	padding: 100px 50px 100px 100px;
 }
 
 .left-container {
@@ -75,121 +75,93 @@
 	box-sizing: border-box;
 	width: 770px;
 	height: 100%;
-	margin-left : 20px;
+	margin-left: 20px;
 }
 </style>
 
 
 
 <style>
-.match_up_chart{
+.match_up_chart {
 	display: flex;
 }
 
-#match_up_left,
-#match_up_right{
+#match_up_left, #match_up_right {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 }
 
-#match_up_left span,
-#match_up_right span{
+#match_up_left span, #match_up_right span {
 	text-align: center;
 }
 
-#chartdiv{
+#chartdiv {
 	margin-left: 50px;
 	margin-right: 50px;
 	width: 540px;
 }
 
-.bar_title{
+.bar_title {
 	display: grid;
 	position: relative;
 	text-align: center;
 }
 
-.bar_title_left{
+.bar_title_left {
 	grid-row: 1;
 	justify-self: left;
 }
 
-.bar_title_content{
+.bar_title_content {
 	grid-row: 1;
 	justify-self: center;
 }
 
-.bar_title_right{
+.bar_title_right {
 	grid-row: 1;
 	justify-self: right;
 }
-
 </style>
 
 <style type="text/css">
-.spell-container{
+.skill-build-container {
+	width: 100%;
+	height: 300px;
 	background-color: #fff;
-	height: 150px;
-	border-radius: 0.5rem;
 	margin-top: 20px;
-	box-sizing: border-box;
+	border-radius: 0.5rem;
 }
-.spell-title h4{
-	margin: 0;
-	font-size: 18px;
-	font-weight: 700;
+.skill-build-title{
 	text-align: center;
 }
-.spell-title{
-	margin-top: 10px;
-}
-.spells{
-	height: 60px;
-	background-color: #fff;
-	display: flex;
-	align-items: center;
-	padding: 0 0 0 10px;
-}
-.spells h4{
-	margin: 0 10px 0 0;
+.skill-build-title h4{
+	font-size: 18px;
 	font-weight: 700;
-	font-size: 16px;
 }
-.spells h6{
-	margin: 0 10px 0 0;
-	font-weight: 900;
-	font-size: 16px;
-}
-.spell{
-	border: 2px solid #f4f4f4;
-	border-radius: 0.5rem;
-}
-.spells .spell img{
+.arrow-img img{
 	width: 40px;
 	height: 40px;
-	border-radius: 0.5rem;
 }
-.spell-desc {
-	position: absolute;
-	z-index: 10;
-	width: 200px;
+.skill-build-sequence-box{
+	display: flex;
+}
+.skill-build-sequence{
+box-sizing: border-box;
+}
+.skill-key-icon{
+	position: relative;
+	width: 15px;
+	height: 15px;
 	background-color: black;
-	color: #fff;
-	border-radius: 0.5rem;
-	padding: 10px;
-	visibility: hidden;
-	opacity: 0;
-	transition: visibility 0s, opacity 0.3s linear;
-	font-size: 14px;
+	border-radius: 3px;
+	bottom: 15px;
+	text-align: center;
 }
-
-.spell:hover .spell-desc {
-	visibility: visible;
-	opacity: 1;
-}
-.spell-text{
-text-align: center;
+.skill-key-icon h6{
+	color: white;
+	font-size: 10px;
+	font-weight: 700;
 }
 </style>
 </head>
@@ -559,6 +531,9 @@ text-align: center;
 						<td><img alt=""
 							src="/resources/img/passive/${chamInfo.champion_p_img}"
 							class="ability-img">
+							<div class="skill-key-icon">
+								<h6>P</h6>
+							</div>
 							<div class="tooltip">
 								<div>${chamInfo.champion_p_name}</div>
 								<br>
@@ -567,6 +542,9 @@ text-align: center;
 						<td><img alt=""
 							src="/resources/img/spell/${chamInfo.champion_q_img}"
 							class="ability-img">
+							<div class="skill-key-icon">
+								<h6>Q</h6>
+							</div>
 							<div class="tooltip">
 								<div>${chamInfo.champion_q_name}</div>
 								<br>
@@ -575,6 +553,9 @@ text-align: center;
 						<td><img alt=""
 							src="/resources/img/spell/${chamInfo.champion_w_img}"
 							class="ability-img">
+							<div class="skill-key-icon">
+								<h6>W</h6>
+							</div>
 							<div class="tooltip">
 								<div>${chamInfo.champion_w_name}</div>
 								<br>
@@ -583,6 +564,9 @@ text-align: center;
 						<td><img alt=""
 							src="/resources/img/spell/${chamInfo.champion_e_img}"
 							class="ability-img">
+							<div class="skill-key-icon">
+								<h6>E</h6>
+							</div>
 							<div class="tooltip">
 								<div>${chamInfo.champion_e_name}</div>
 								<br>
@@ -591,6 +575,9 @@ text-align: center;
 						<td><img alt=""
 							src="/resources/img/spell/${chamInfo.champion_r_img}"
 							class="ability-img">
+							<div class="skill-key-icon">
+								<h6>R</h6>
+							</div>
 							<div class="tooltip">
 								<div>${chamInfo.champion_r_name}</div>
 								<br>
@@ -661,8 +648,7 @@ text-align: center;
 			</div>
 		</div>
 		<div class="middle-container">
-			<div class="rune-select-box">
-			</div>
+			<div class="rune-select-box"></div>
 			<div class="rune-title">
 				<h4>추천 룬</h4>
 			</div>
@@ -683,7 +669,9 @@ text-align: center;
 				<div class="rune-box sub-ability">
 					<div class="runes sub-ability-first">
 						<div class="rune fragment">
-							<img src="/resources/img/perk-images/StatMods/StatModsAdaptiveForceIcon.png" alt="" id="first-fragment-5008" class="fragment-img">
+							<img
+								src="/resources/img/perk-images/StatMods/StatModsAdaptiveForceIcon.png"
+								alt="" id="first-fragment-5008" class="fragment-img">
 							<div class="rune-desc">
 								<div>OFFENSE</div>
 								<br>
@@ -691,7 +679,9 @@ text-align: center;
 							</div>
 						</div>
 						<div class="rune fragment">
-							<img src="/resources/img/perk-images/StatMods/StatModsAttackSpeedIcon.png" alt="" id="first-fragment-5005" class="fragment-img">
+							<img
+								src="/resources/img/perk-images/StatMods/StatModsAttackSpeedIcon.png"
+								alt="" id="first-fragment-5005" class="fragment-img">
 							<div class="rune-desc">
 								<div>OFFENSE</div>
 								<br>
@@ -699,7 +689,9 @@ text-align: center;
 							</div>
 						</div>
 						<div class="rune fragment">
-							<img src="/resources/img/perk-images/StatMods/StatModsCDRScalingIcon.png" alt="" id="first-fragment-5007" class="fragment-img">
+							<img
+								src="/resources/img/perk-images/StatMods/StatModsCDRScalingIcon.png"
+								alt="" id="first-fragment-5007" class="fragment-img">
 							<div class="rune-desc">
 								<div>OFFENSE</div>
 								<br>
@@ -709,7 +701,9 @@ text-align: center;
 					</div>
 					<div class="runes sub-ability-second">
 						<div class="rune fragment">
-							<img src="/resources/img/perk-images/StatMods/StatModsAdaptiveForceIcon.png" alt="" id="second-fragment-5008" class="fragment-img">
+							<img
+								src="/resources/img/perk-images/StatMods/StatModsAdaptiveForceIcon.png"
+								alt="" id="second-fragment-5008" class="fragment-img">
 							<div class="rune-desc">
 								<div>OFFENSE</div>
 								<br>
@@ -717,7 +711,9 @@ text-align: center;
 							</div>
 						</div>
 						<div class="rune  fragment">
-							<img src="/resources/img/perk-images/StatMods/StatModsArmorIcon.png" alt="" id="second-fragment-5002" class="fragment-img">
+							<img
+								src="/resources/img/perk-images/StatMods/StatModsArmorIcon.png"
+								alt="" id="second-fragment-5002" class="fragment-img">
 							<div class="rune-desc">
 								<div>FLEX</div>
 								<br>
@@ -725,7 +721,9 @@ text-align: center;
 							</div>
 						</div>
 						<div class="rune fragment">
-							<img src="/resources/img/perk-images/StatMods/StatModsMagicResIcon.png" alt="" id="second-fragment-5003" class="fragment-img">
+							<img
+								src="/resources/img/perk-images/StatMods/StatModsMagicResIcon.png"
+								alt="" id="second-fragment-5003" class="fragment-img">
 							<div class="rune-desc">
 								<div>FLEX</div>
 								<br>
@@ -735,7 +733,9 @@ text-align: center;
 					</div>
 					<div class="runes sub-ability-third">
 						<div class="rune fragment">
-							<img src="/resources/img/perk-images/StatMods/StatModsHealthScalingIcon.png" alt="" id="third-fragment-5001" class="fragment-img">
+							<img
+								src="/resources/img/perk-images/StatMods/StatModsHealthScalingIcon.png"
+								alt="" id="third-fragment-5001" class="fragment-img">
 							<div class="rune-desc">
 								<div>DEFFENSE</div>
 								<br>
@@ -743,7 +743,9 @@ text-align: center;
 							</div>
 						</div>
 						<div class="rune fragment">
-							<img src="/resources/img/perk-images/StatMods/StatModsArmorIcon.png" alt="" id="third-fragment-5002" class="fragment-img">
+							<img
+								src="/resources/img/perk-images/StatMods/StatModsArmorIcon.png"
+								alt="" id="third-fragment-5002" class="fragment-img">
 							<div class="rune-desc">
 								<div>FLEX</div>
 								<br>
@@ -751,7 +753,9 @@ text-align: center;
 							</div>
 						</div>
 						<div class="rune fragment">
-							<img src="/resources/img/perk-images/StatMods/StatModsMagicResIcon.png" alt="" id="third-fragment-5003" class="fragment-img">
+							<img
+								src="/resources/img/perk-images/StatMods/StatModsMagicResIcon.png"
+								alt="" id="third-fragment-5003" class="fragment-img">
 							<div class="rune-desc">
 								<div>FLEX</div>
 								<br>
@@ -762,32 +766,75 @@ text-align: center;
 
 				</div>
 			</div>
+			<div class="skill-build-container">
+				<div class="skill-build-title"><h4>추천 스킬 빌드</h4></div>
+				<div class="skill-build-sequence-box">
+					<div class="skill-build-sequence">
+					<img alt="" src="/resources/img/passive/${chamInfo.champion_p_img}" class="ability-img">
+					<div class="skill-key-icon">
+						<h6>Q</h6>
+					</div>
+					<div class="tooltip">
+					<div>${chamInfo.champion_p_name}</div>
+					<br>
+					<div>${chamInfo.champion_p_desc}</div>
+					</div>
+					</div>
+					<div class="arrow-img">
+						<img alt="" src="/resources/img/icon/arrow-icon-right.png">
+					</div>
+					<div class="skill-build-sequence">
+					<img alt="" src="/resources/img/passive/${chamInfo.champion_p_img}" class="ability-img">
+					<div class="skill-key-icon">
+						<h6>W</h6>
+					</div>
+					<div class="tooltip">
+					<div>${chamInfo.champion_p_name}</div>
+					<br>
+					<div>${chamInfo.champion_p_desc}</div>
+					</div>
+					</div>
+					<div class="arrow-img">
+						<img alt="" src="/resources/img/icon/arrow-icon-right.png">
+					</div>
+					<div class="skill-build-sequence">
+					<img alt="" src="/resources/img/passive/${chamInfo.champion_p_img}" class="ability-img">
+					<div class="skill-key-icon">
+						<h6>E</h6>
+					</div>
+					<div class="tooltip">
+					<div>${chamInfo.champion_p_name}</div>
+					<br>
+					<div>${chamInfo.champion_p_desc}</div>
+					</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="right-container">
 			<!-- match_up_conatiner start -->
 			<div class="match_up_container">
 				<!-- match_up_chart start -->
 				<div class="match_up_chart">
-					<div id="match_up_left">
-					</div>
+					<div id="match_up_left"></div>
 					<!-- chartdiv start -->
 					<div id="chartdiv">
 						<div class="bar_block">
-								<div class="bar_title lane_kill_rate">
-									<div class="bar_title_left lane_kill_rate"></div>
-									<div class="bar_title_content">라인킬 확률</div>
-									<div class="bar_title_right enemy_lane_kill_rate"></div>
-								</div>
+							<div class="bar_title lane_kill_rate">
+								<div class="bar_title_left lane_kill_rate"></div>
+								<div class="bar_title_content">라인킬 확률</div>
+								<div class="bar_title_right enemy_lane_kill_rate"></div>
+							</div>
 
-								<div class="progress">
-									<div class="progress-bar" role="progressbar"
-										style="width: 46%;" aria-valuenow="50" aria-valuemin="0"
-										aria-valuemax="100"></div>
-									<div class="progress-bar bg-danger" role="progressbar" style="width: 100%"
-								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-								</div>
+							<div class="progress">
+								<div class="progress-bar" role="progressbar" style="width: 46%;"
+									aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+								<div class="progress-bar bg-danger" role="progressbar"
+									style="width: 100%" aria-valuenow="100" aria-valuemin="0"
+									aria-valuemax="100"></div>
+							</div>
 						</div>
-						
+
 						<div class="bar_block">
 							<div class="bar_title kill_participation">
 								<div class="bar_title_left kill_participation"></div>
@@ -797,11 +844,12 @@ text-align: center;
 							<div class="progress">
 								<div class="progress-bar" role="progressbar" style="width: 25%"
 									aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-								<div class="progress-bar bg-danger" role="progressbar" style="width: 100%"
-								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+								<div class="progress-bar bg-danger" role="progressbar"
+									style="width: 100%" aria-valuenow="100" aria-valuemin="0"
+									aria-valuemax="100"></div>
 							</div>
 						</div>
-						
+
 						<div class="bar_block">
 							<div class="bar_title kda">
 								<div class="bar_title_left kda"></div>
@@ -811,8 +859,9 @@ text-align: center;
 							<div class="progress">
 								<div class="progress-bar" role="progressbar" style="width: 50%"
 									aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-								<div class="progress-bar bg-danger" role="progressbar" style="width: 100%"
-								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+								<div class="progress-bar bg-danger" role="progressbar"
+									style="width: 100%" aria-valuenow="100" aria-valuemin="0"
+									aria-valuemax="100"></div>
 							</div>
 						</div>
 
@@ -825,12 +874,13 @@ text-align: center;
 							<div class="progress">
 								<div class="progress-bar" role="progressbar" style="width: 75%"
 									aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-								<div class="progress-bar bg-danger" role="progressbar" style="width: 100%"
-								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>	
+								<div class="progress-bar bg-danger" role="progressbar"
+									style="width: 100%" aria-valuenow="100" aria-valuemin="0"
+									aria-valuemax="100"></div>
 							</div>
 						</div>
 
-						<div class="bar_block">	
+						<div class="bar_block">
 							<div class="bar_title win_rate">
 								<div class="bar_title_left win_rate"></div>
 								<div class="bar_title_content">포지션 승률</div>
@@ -838,12 +888,13 @@ text-align: center;
 							</div>
 							<div class="progress">
 								<div class="progress-bar" role="progressbar" style="width: 100%"
-								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-								<div class="progress-bar bg-danger" role="progressbar" style="width: 100%"
-								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+									aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+								<div class="progress-bar bg-danger" role="progressbar"
+									style="width: 100%" aria-valuenow="100" aria-valuemin="0"
+									aria-valuemax="100"></div>
 							</div>
 						</div>
-						
+
 						<div class="bar_block">
 							<div class="bar_title pick_rate">
 								<div class="bar_title_left pick_rate"></div>
@@ -852,9 +903,10 @@ text-align: center;
 							</div>
 							<div class="progress">
 								<div class="progress-bar" role="progressbar" style="width: 100%"
-								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-								<div class="progress-bar bg-danger" role="progressbar" style="width: 100%"
-								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+									aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+								<div class="progress-bar bg-danger" role="progressbar"
+									style="width: 100%" aria-valuenow="100" aria-valuemin="0"
+									aria-valuemax="100"></div>
 							</div>
 						</div>
 
@@ -866,21 +918,20 @@ text-align: center;
 							</div>
 							<div class="progress">
 								<div class="progress-bar" role="progressbar" style="width: 100%"
-								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-								<div class="progress-bar bg-danger" role="progressbar" style="width: 100%"
-								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+									aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+								<div class="progress-bar bg-danger" role="progressbar"
+									style="width: 100%" aria-valuenow="100" aria-valuemin="0"
+									aria-valuemax="100"></div>
 							</div>
 						</div>
 
 					</div>
 					<!-- chartdiv end -->
 					<div id="match_up_right"></div>
-				</div> 
-				<!-- match_up_chart end -->
-				<div class="match_up_table">
-					
 				</div>
-			<!-- match_up_conatiner end -->
+				<!-- match_up_chart end -->
+				<div class="match_up_table"></div>
+				<!-- match_up_conatiner end -->
 			</div>
 		</div>
 	</div>
@@ -1296,7 +1347,7 @@ function rune_full_data(main,sub,i,champRuneData) {
 				 document.getElementById('second-fragment-'+fragment2_ID).style.opacity = "1"; 
 				 document.getElementById('third-fragment-'+fragment1_ID).style.opacity = "1"; 
 			    
-			  }, 300);  // 1초 후에 코드를 실행합니다.
+			  }, 100);  // 0.1초 후에 코드 실행
 		}).fail(err => {
 		  console.log(err);
 		}); 
@@ -1378,6 +1429,7 @@ function make_chart(left, right){
 			}
 		})
 	})
+	
 	let left_html_list = '<img src="/resources/img/champion_img/square/'+ left.champion_img +'" alt="'+ left.champion_name +'" class="champion_img">'
 	left_html_list += '<span>' + left.champion_name + '</span>'
 	left_html_list += '<span>' + left.match_up_win_rate + '</span>'
