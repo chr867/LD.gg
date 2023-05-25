@@ -1,0 +1,333 @@
+.champion-info-box {
+	width: 350px;
+	height: 100px;
+	box-sizing: border-box;
+	background-color: #fff;
+	border-radius: 0.5rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	margin-top: 20px;
+}
+
+.champion-info {
+	margin-left: 10px;
+}
+
+.champion-img {
+	width: 75px;
+	height: 75px;
+	border-radius: 0.5rem;
+	margin-right: 5px;
+}
+
+.ability-img {
+	width: 40px;
+	height: 40px;
+	border-radius: 0.5rem;
+	margin-right: 7px;
+}
+
+.champion_name {
+	font-size: 20px;
+	font-weight: 700;
+	align-items: center;
+}
+
+.tooltip {
+	position: absolute;
+	z-index: 10;
+	width: 300px;
+	background-color: black;
+	color: #fff;
+	border-radius: 1rem;
+	padding: 10px;
+	visibility: hidden;
+	opacity: 0;
+	transition: visibility 0s, opacity 0.3s linear;
+}
+
+.champion-table td:hover .tooltip {
+	visibility: visible;
+	opacity: 1;
+}
+
+.champion-twpb-box {
+	width: 350px;
+	height: 50px;
+	box-sizing: border-box;
+	background-color: #fff;
+	border-radius: 0.5rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 20px;
+	text-align: center;
+}
+
+.champion-twpb {
+	width: 80px;
+	text-align: center;
+}
+
+.champion-tier {
+	font-weight: 700;
+}
+
+.lane-select-box {
+	display: flex;
+	height: 50px;
+	width: 350px;
+	background-color: #fff;
+	border-radius: 0.5;
+	box-sizing: border-box;
+	padding: 0 10px 0 10px;
+	align-items: center;
+}
+
+.lane-img img {
+	width: 40px;
+	height: 40px;
+}
+
+.lane-img {
+	border-radius: 0.1rem;
+	transition: 0.3s;
+	background-color: #f4f4f4;
+	border-radius: 0.5rem;
+	margin-right: 10px;
+}
+
+.lane-img:hover, .lane-img:active {
+	background-color: #606060;
+}
+
+.champion-easy-box {
+	width: 350px;
+	height: 120px;
+	padding: 10px 10px 0 10px;
+	background-color: #fff;
+	border-radius: 0.5rem;
+	box-sizing: border-box;
+	justify-content: center;
+	align-items: center;
+	margin-top: 20px;
+	text-align: center;
+	font-weight: 700;
+}
+
+.easy-champ-img {
+	width: 80px;
+	text-align: center;
+}
+
+.easy-champ-img img {
+	width: 50px;
+	height: 50px;
+}
+
+.champion-hard-box {
+	width: 350px;
+	height: 120px;
+	padding: 10px 10px 0 10px;
+	background-color: #fff;
+	border-radius: 0.5rem;
+	box-sizing: border-box;
+	justify-content: center;
+	align-items: center;
+	margin-top: 20px;
+	text-align: center;
+	font-weight: 700;
+}
+
+.hard-champ-img {
+	width: 80px;
+	text-align: center;
+}
+
+.hard-champ-img img {
+	width: 50px;
+	height: 50px;
+}
+
+.rune-container {
+	display: flex;
+	box-sizing: border-box;
+	background-color: #fff;
+	border-radius: 0 0 0.5rem 0.5rem;
+}
+.rune-title{
+	margin-top: 20px;
+	background-color: #fff;
+	border-radius: 0.5rem 0.5rem 0 0;
+}
+.rune-title h4{
+	margin: 0;
+	font-size: 18px;
+	font-weight: 700;
+	text-align: center;
+}
+.rune-box {
+	width: 250px;
+	height: 300px;
+	background-color: #fff;
+	margin-right: 5px;
+	justify-content: space-between;
+	text-align: center;
+	padding: 10px 0 0 0;
+	box-sizing: border-box;
+}
+
+.first-rune {
+	background-color: rgb(255, 255, 255);
+	width: 50px;
+	height: 50px;
+	border-radius: 10rem;
+	background-color: #202020;
+	box-sizing: border-box;
+	padding-top: 10px;
+
+}
+.first-rune img{
+	
+}
+
+.runes {
+	display: flex;
+	justify-content: space-between;
+}
+
+.rune {
+	background-color: #202020;
+	width: 40px;
+	height: 40px;
+	margin: 10px;
+	border-radius: 4rem;
+}
+
+.rune img {
+	width: 40px;
+	height: 40px;
+	filter: grayscale(100%);
+	opacity: 0.5;
+}
+
+.sub-runes {
+	padding: 50px 0 0 0;
+	border-left: 5px solid #f4f4f4;
+	border-right: 5px solid #f4f4f4;
+}
+
+.sub-ability {
+	padding: 125px 0 0 0;
+}
+
+.rune-desc {
+	position: absolute;
+	z-index: 10;
+	width: 200px;
+	background-color: black;
+	color: #fff;
+	border-radius: 0.5rem;
+	padding: 10px;
+	visibility: hidden;
+	opacity: 0;
+	transition: visibility 0s, opacity 0.3s linear;
+	font-size: 14px;
+}
+
+.rune:hover .rune-desc {
+	visibility: visible;
+	opacity: 1;
+}
+.rune .fragment-img{
+	width: 30px;
+	height: 30px;
+}
+.fragment{
+	width: 30px;
+	height: 30px;
+	
+}
+.sub-ability .runes{
+	margin-bottom: 10px;
+}
+.rune-select-box{
+	width: 100%;
+	height: 50px;
+	background-color: #fff;
+	box-sizing: border-box;
+	padding: 5px;
+	display: flex;
+	border-radius: 0.5rem;
+}
+.rune-select-button{
+	height: 100%;
+	width: 100px;
+	background-color: #f4f4f4;
+	border-radius:1rem;
+	display: flex;
+	align-items: center;
+	transition : 0.5s;
+	margin-right: 10px;
+}
+.rune-select-button:hover{
+	background-color: #606060;
+}
+.rune-select-main{
+	width: 30px;
+	height: 40px;
+	border-radius: 0.5rem;
+	align-items: center;
+	justify-content: center;
+	display: flex;
+}
+.rune-select-main img{
+	width: 20px;
+	height: 20px;
+}
+.rune-select-sub{
+	width: 30px;
+	height: 40px;
+	border-radius: 0.5rem;
+	align-items: center;
+	justify-content: center;
+	display: flex;
+}
+.rune-select-sub img{
+	width: 20px;
+	height: 20px;
+}
+.rune-select-mainStyle{
+	width: 40px;
+	height: 40px;
+	border-radius: 0.5rem;
+	align-items: center;
+	justify-content: center;
+	display: flex;
+}
+.rune-select-mainStyle img{
+	width: 40px;
+	height: 40px;
+}
+
+.rune-combination-desc {
+	position: absolute;
+	top: 35px;
+	z-index: 10;
+	width: 150px;
+	background-color: black;
+	color: #fff;
+	border-radius: 0.5rem;
+	padding: 10px;
+	visibility: hidden;
+	opacity: 0;
+	transition: visibility 0s, opacity 0.3s linear;
+	font-size: 14px;
+}
+
+.rune-select-button:hover .rune-combination-desc {
+	visibility: visible;
+	opacity: 1;
+}

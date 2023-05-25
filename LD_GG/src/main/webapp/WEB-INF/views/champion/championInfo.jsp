@@ -47,12 +47,15 @@
 	href="/resources/css/main/loginModal.css">
 <!--로그인 및 세션관련 JS-->
 <script src="/resources/js/main/loginSession.js" defer></script>
-
+<!--CHAMPION INFO CSS-->
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/champion/info.css">
+<!-- right_container -->
 <style type="text/css">
 .main-container {
 	display: flex;
 	box-sizing: border-box;
-	padding: 100px 50px 100px 100px;
+	padding: 100px 50px 100px 130px;
 }
 
 .left-container {
@@ -74,346 +77,10 @@
 	height: 100%;
 	margin-left : 20px;
 }
-
-.champion-info-box {
-	width: 350px;
-	height: 100px;
-	box-sizing: border-box;
-	background-color: #fff;
-	border-radius: 0.5rem;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	position: relative;
-	margin-top: 20px;
-}
-
-.champion-info {
-	margin-left: 10px;
-}
-
-.champion-img {
-	width: 75px;
-	height: 75px;
-	border-radius: 0.5rem;
-	margin-right: 5px;
-}
-
-.ability-img {
-	width: 40px;
-	height: 40px;
-	border-radius: 0.5rem;
-	margin-right: 7px;
-}
-
-.champion_name {
-	font-size: 20px;
-	font-weight: 700;
-	align-items: center;
-}
-
-.tooltip {
-	position: absolute;
-	z-index: 10;
-	width: 300px;
-	background-color: black;
-	color: #fff;
-	border-radius: 1rem;
-	padding: 10px;
-	visibility: hidden;
-	opacity: 0;
-	transition: visibility 0s, opacity 0.3s linear;
-}
-
-.champion-table td:hover .tooltip {
-	visibility: visible;
-	opacity: 1;
-}
-
-.champion-twpb-box {
-	width: 350px;
-	height: 50px;
-	box-sizing: border-box;
-	background-color: #fff;
-	border-radius: 0.5rem;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	margin-top: 20px;
-	text-align: center;
-}
-
-.champion-twpb {
-	width: 80px;
-	text-align: center;
-}
-
-.champion-tier {
-	font-weight: 700;
-}
-
-.lane-select-box {
-	display: flex;
-	height: 50px;
-	width: 350px;
-	background-color: #fff;
-	border-radius: 0.5;
-	box-sizing: border-box;
-	padding: 0 10px 0 10px;
-	align-items: center;
-}
-
-.lane-img img {
-	width: 40px;
-	height: 40px;
-}
-
-.lane-img {
-	border-radius: 0.1rem;
-	transition: 0.3s;
-	background-color: #f4f4f4;
-	border-radius: 0.5rem;
-	margin-right: 10px;
-}
-
-.lane-img:hover, .lane-img:active {
-	background-color: #606060;
-}
-
-.champion-easy-box {
-	width: 350px;
-	height: 120px;
-	padding: 10px 10px 0 10px;
-	background-color: #fff;
-	border-radius: 0.5rem;
-	box-sizing: border-box;
-	justify-content: center;
-	align-items: center;
-	margin-top: 20px;
-	text-align: center;
-	font-weight: 700;
-}
-
-.easy-champ-img {
-	width: 80px;
-	text-align: center;
-}
-
-.easy-champ-img img {
-	width: 50px;
-	height: 50px;
-}
-
-.champion-hard-box {
-	width: 350px;
-	height: 120px;
-	padding: 10px 10px 0 10px;
-	background-color: #fff;
-	border-radius: 0.5rem;
-	box-sizing: border-box;
-	justify-content: center;
-	align-items: center;
-	margin-top: 20px;
-	text-align: center;
-	font-weight: 700;
-}
-
-.hard-champ-img {
-	width: 80px;
-	text-align: center;
-}
-
-.hard-champ-img img {
-	width: 50px;
-	height: 50px;
-}
 </style>
 
-<style>
-.rune-container {
-	display: flex;
-	box-sizing: border-box;
-	background-color: #fff;
-	border-radius: 0.5rem;
-}
-.rune-title{
-	margin-top: 20px;
-	background-color: #fff;
-	border-radius: 0.5rem;
-}
-.rune-title h4{
-	margin: 0;
-	font-size: 18px;
-	font-weight: 700;
-	text-align: center;
-}
-.rune-box {
-	width: 100%;
-	height: 300px;
-	background-color: #fff;
-	border-radius: 0.5rem;
-	margin-right: 5px;
-	justify-content: space-between;
-	text-align: center;
-	padding: 10px 0 0 0;
-	box-sizing: border-box;
-}
 
-.first-rune {
-	background-color: rgb(255, 255, 255);
-	width: 50px;
-	height: 50px;
-	border-radius: 10rem;
-	background-color: #202020;
-	box-sizing: border-box;
-	padding-top: 10px;
 
-}
-.first-rune img{
-	
-}
-
-.runes {
-	display: flex;
-	justify-content: space-between;
-}
-
-.rune {
-	background-color: #202020;
-	width: 40px;
-	height: 40px;
-	margin: 10px;
-	border-radius: 4rem;
-}
-
-.rune img {
-	width: 40px;
-	height: 40px;
-	filter: grayscale(100%);
-}
-
-.sub-runes {
-	padding: 50px 0 0 0;
-}
-
-.sub-ability {
-	padding: 125px 0 0 0;
-}
-
-.rune-desc {
-	position: absolute;
-	z-index: 10;
-	width: 200px;
-	background-color: black;
-	color: #fff;
-	border-radius: 0.5rem;
-	padding: 10px;
-	visibility: hidden;
-	opacity: 0;
-	transition: visibility 0s, opacity 0.3s linear;
-	font-size: 14px;
-}
-
-.rune:hover .rune-desc {
-	visibility: visible;
-	opacity: 1;
-}
-.rune .fragment-img{
-	width: 30px;
-	height: 30px;
-}
-.fragment{
-	width: 30px;
-	height: 30px;
-	
-}
-.sub-ability .runes{
-	margin-bottom: 10px;
-}
-.rune-select-box{
-	width: 100%;
-	height: 50px;
-	background-color: #fff;
-	box-sizing: border-box;
-	padding: 5px;
-	display: flex;
-	border-radius: 0.5rem;
-}
-.rune-select-button{
-	height: 100%;
-	width: 100px;
-	background-color: #f4f4f4;
-	border-radius:1rem;
-	display: flex;
-	align-items: center;
-	transition : 0.5s;
-	margin-right: 10px;
-}
-.rune-select-button:hover{
-	background-color: #606060;
-}
-.rune-select-main{
-	width: 30px;
-	height: 40px;
-	border-radius: 0.5rem;
-/* 	background-color: #000; */
-	align-items: center;
-	justify-content: center;
-	display: flex;
-}
-.rune-select-main img{
-	width: 20px;
-	height: 20px;
-}
-.rune-select-sub{
-	width: 30px;
-	height: 40px;
-	border-radius: 0.5rem;
-	/* background-color: #000; */
-	align-items: center;
-	justify-content: center;
-	display: flex;
-}
-.rune-select-sub img{
-	width: 20px;
-	height: 20px;
-}
-.rune-select-mainStyle{
-	width: 40px;
-	height: 40px;
-	border-radius: 0.5rem;
-	/* background-color: #000; */
-	align-items: center;
-	justify-content: center;
-	display: flex;
-}
-.rune-select-mainStyle img{
-	width: 40px;
-	height: 40px;
-}
-
-.rune-combination-desc {
-	position: absolute;
-	top: 35px;
-	z-index: 10;
-	width: 150px;
-	background-color: black;
-	color: #fff;
-	border-radius: 0.5rem;
-	padding: 10px;
-	visibility: hidden;
-	opacity: 0;
-	transition: visibility 0s, opacity 0.3s linear;
-	font-size: 14px;
-}
-
-.rune-select-button:hover .rune-combination-desc {
-	visibility: visible;
-	opacity: 1;
-}
-</style>
-
-<!-- right_container -->
 <style>
 .match_up_chart{
 	display: flex;
@@ -463,7 +130,7 @@
 <style type="text/css">
 .spell-container{
 	background-color: #fff;
-	height: 200px;
+	height: 150px;
 	border-radius: 0.5rem;
 	margin-top: 20px;
 	box-sizing: border-box;
@@ -474,25 +141,56 @@
 	font-weight: 700;
 	text-align: center;
 }
+.spell-title{
+	margin-top: 10px;
+}
 .spells{
 	height: 60px;
-	background-color: #000;
-	margin: 10px;
+	background-color: #fff;
 	display: flex;
 	align-items: center;
-	padding: 0 10px 0 10px;
+	padding: 0 0 0 10px;
+}
+.spells h4{
+	margin: 0 10px 0 0;
+	font-weight: 700;
+	font-size: 16px;
+}
+.spells h6{
+	margin: 0 10px 0 0;
+	font-weight: 900;
+	font-size: 16px;
 }
 .spell{
-	border: 2px solid white;
+	border: 2px solid #f4f4f4;
 	border-radius: 0.5rem;
-	margin-right: 10px; 
 }
 .spells .spell img{
 	width: 40px;
 	height: 40px;
 	border-radius: 0.5rem;
 }
+.spell-desc {
+	position: absolute;
+	z-index: 10;
+	width: 200px;
+	background-color: black;
+	color: #fff;
+	border-radius: 0.5rem;
+	padding: 10px;
+	visibility: hidden;
+	opacity: 0;
+	transition: visibility 0s, opacity 0.3s linear;
+	font-size: 14px;
+}
 
+.spell:hover .spell-desc {
+	visibility: visible;
+	opacity: 1;
+}
+.spell-text{
+text-align: center;
+}
 </style>
 </head>
 
@@ -958,14 +656,7 @@
 			<div class="spell-container">
 				<div class="spell-title">
 					<h4>추천 스펠</h4>
-					<div class="spells">
-						<div class="spell">
-							<img alt="" src="/resources/img/spell/SummonerFlash.png">
-						</div>
-						<div class="spell">
-							<img alt="" src="/resources/img/spell/SummonerDot.png">
-						</div>
-					</div>
+					<div class="spell-box"></div>
 				</div>
 			</div>
 		</div>
@@ -1340,14 +1031,69 @@ function championBuildInfo(champion_id, team_position) {
 			  let rune_select_buttons = document.getElementsByClassName('rune-select-button');
 				for (let i = 0; i < rune_select_buttons.length; i++) {
 					rune_select_buttons[i].addEventListener('click', function() {
-						console.log("이거이거 "+i)
 						rune_full_data(champRuneData[i].main_KEYSTONE_ID,champRuneData[i].sub_KEYSTONE_ID,i,champRuneData);
 					});
 				}
+				
+				spellSplit(champSpellData);
 		}).fail(err => {
 		  console.log(err);
 		});	
 }
+function spellSplit(champSpellData) {
+	let spell_box = document.getElementsByClassName('spell-box')[0]; 
+	spell_box.innerHTML = ''
+	for (let i = 0; i < champSpellData.length; i++) {
+		let spells = champSpellData[i].spells
+		let win_rate = champSpellData[i].win_rate
+		let pick_rate = champSpellData[i].pick_rate
+		let parts = spells.split(','); 
+		let first_spell = parseInt(parts[0]);
+		let second_spell = parseInt(parts[1]);
+		spellHtml(first_spell,second_spell,win_rate,pick_rate);
+	}
+}
+
+function spellHtml(first_spell,second_spell,win_rate,pick_rate) {
+	$.ajax({
+	    method: 'get',
+	    url: '/champion/info/spell',
+	    data: { first_spell : first_spell, second_spell : second_spell },
+	  }).done(res => {
+		let spell_box = document.getElementsByClassName('spell-box')[0]; 
+		html = ''
+		html += '<div class="spells">'
+		html += '<div class="spell">'
+		html += '<img alt="" src="/resources/img/spell/'+res[0].spell_img+'">'
+		html += '<div class="spell-desc">'
+		html += '<div>'+res[0].spell_kr_name+'</div>'
+		html += '<br>'
+		html += '<div>'+res[0].spell_desc+'</div>'
+		html += '<br>'
+		html += '<div>쿹타임 '+res[0].spell_cooldown+'</div>'
+		html += '</div>'
+		html += '</div>'
+		html += '<div class="spell" style="margin-right: 30px;">'
+		html += '<img alt="" src="/resources/img/spell/'+res[1].spell_img+'">'
+		html += '<div class="spell-desc">'
+		html += '<div>'+res[1].spell_kr_name+'</div>'
+		html += '<br>'
+		html += '<div>'+res[1].spell_desc+'</div>'
+		html += '<br>'
+		html += '<div>쿹타임 '+res[1].spell_cooldown+'</div>'
+		html += '</div>'
+		html += '</div>'
+		html += '<div class="spell-text"><h6>승률</h6></div>'
+		html += '<div><h4>'+win_rate+'%</h4></div>'
+		html += '<div class="spell-text"><h6>픽률</h6></div>'
+		html += '<div><h4>'+pick_rate+'%</h4></div>'
+		html += '</div>'
+		spell_box.innerHTML += html
+	  }).fail(err => {
+	    console.log(err);
+	  });
+}
+
 
 function rune_full_data(main,sub,i,champRuneData) {
 	let main_key = '';
@@ -1524,9 +1270,6 @@ function rune_full_data(main,sub,i,champRuneData) {
 				 fragment1_ID = champRuneData[i].fragment1_ID;
 				 fragment2_ID = champRuneData[i].fragment2_ID;
 				 fragment3_ID = champRuneData[i].fragment3_ID;
-			    
-			    console.log("gjldsfdfsdfsdfsdsffsdfsdsdf")
-			    console.log(main_SUB1_ID);
 
 			    document.getElementById(main_SUB1_ID).style.filter = 'none';
 			    document.getElementById(main_SUB2_ID).style.filter = 'none';
@@ -1534,14 +1277,24 @@ function rune_full_data(main,sub,i,champRuneData) {
 			    document.getElementById(main_SUB4_ID).style.filter = 'none';
 			    document.getElementById(sub_SUB1_ID).style.filter = 'none';
 			    document.getElementById(sub_SUB2_ID).style.filter = 'none';
+			    document.getElementById(main_SUB1_ID).style.opacity = '1';
+			    document.getElementById(main_SUB2_ID).style.opacity = '1';
+			    document.getElementById(main_SUB3_ID).style.opacity = '1';
+			    document.getElementById(main_SUB4_ID).style.opacity = '1';
+			    document.getElementById(sub_SUB1_ID).style.opacity = '1';
+			    document.getElementById(sub_SUB2_ID).style.opacity = '1';
 			    let elements = document.getElementsByClassName('fragment-img');
 
 				 for (let i = 0; i < elements.length; i++) {
 				     elements[i].style.filter = "grayscale(100%)";
+				     elements[i].style.filter = "0.5";
 				 }
 				 document.getElementById('first-fragment-'+fragment3_ID).style.filter = 'none'; 
 				 document.getElementById('second-fragment-'+fragment2_ID).style.filter = 'none'; 
 				 document.getElementById('third-fragment-'+fragment1_ID).style.filter = 'none'; 
+				 document.getElementById('first-fragment-'+fragment3_ID).style.opacity = "1";
+				 document.getElementById('second-fragment-'+fragment2_ID).style.opacity = "1"; 
+				 document.getElementById('third-fragment-'+fragment1_ID).style.opacity = "1"; 
 			    
 			  }, 300);  // 1초 후에 코드를 실행합니다.
 		}).fail(err => {

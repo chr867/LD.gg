@@ -16,6 +16,7 @@ import com.ld.gg.dto.champ.Champ_analytics;
 import com.ld.gg.dto.champ.Champ_default;
 import com.ld.gg.dto.champ.Champ_match_up_default;
 import com.ld.gg.dto.champ.Champ_match_up_rune;
+import com.ld.gg.dto.champ.Champ_match_up_spell;
 import com.ld.gg.dto.champ.Champ_recomm_info;
 import com.ld.gg.service.Champion_service;
 
@@ -106,5 +107,11 @@ public class ChampionRestController {
 		Map<String, List<Champ_match_up_default>> cm_map = cs.get_champ_match_up(champion_id);
 		
 		return cm_map;
+	}
+	
+	@GetMapping("/info/spell")
+	public List<Champ_match_up_spell> spellInfo(int first_spell, int second_spell){
+		List<Champ_match_up_spell> spellInfo = cs.getSpellInfo(first_spell,second_spell);
+		return spellInfo;
 	}
 }
