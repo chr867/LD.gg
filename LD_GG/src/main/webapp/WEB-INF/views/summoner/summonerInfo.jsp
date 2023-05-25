@@ -10,7 +10,7 @@
 	integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
 	crossorigin="anonymous"></script>
 
-<link  href = "/resources/css/summoner/summonerInfo.css" rel = "stylesheet">
+<link  href = "/resources/css/summoner/summonerInfo.css?after" rel = "stylesheet">
 
 </head>
 <body>
@@ -127,6 +127,8 @@
 	}else if('${summonmer.tier}' === 'bronze'){
 		tier = "Bronze"
 	}
+	let champOffset = 0;
+	let recordOffset = 0;
 	
 	$('#renewal').click(function(){
 		location.reload();
@@ -549,442 +551,474 @@
 			let button_div = $('<button>').addClass('button_div').attr({
 				  type: 'button',
 				  value: record.match_id,
-				  onclick: "getRecordDetail('" + record.match_id + "')"
+				  onclick: "getRecordDetail('" + record.match_id + "',$(this))"
 				});
-			let hiddenDiv = $('<div id = "'+record.match_id+'" style = "display : none"></div>');
+			let hiddenDiv = $('<div id = "'+record.match_id+'" class = "hidden_div" style = "display : none"></div>');
 			
 			record_div.append(record_win_lose_div,record_champ_div,record_champ_div,record_kda_div,record_cs_sight_div,record_item_div,record_player_div,button_div);
 			div.append(record_div,hiddenDiv);
+			
+			$.ajax({
+		        method: 'get',
+		        url: '/summoner/get_record_detail',
+		        data: { match_id: record.match_id }
+		    }).done(response => {
+		    	let summoner_name = '${summoner.summoner_name}'
+		    	
+		        // 1. div 태그 생성. class 속성에 "whole" 부여
+		        let whole = $('<div class="whole"></div>');
+
+		        // 2. header와 div 태그 생성
+		        let header = $('<header class="data_header"></header>');
+		        let data = $('<div class="data"></div>');
+		        whole.append(header, data); // 2. 생성된 태그들을 whole 태그 내부에 추가
+		        // 3. 'data_header' 내부에 div 태그 3개 생성
+		        let synthesis = $('<div class = "synthesis" onclick = "synthesis('+record.match_id+', this)">종합</div>');
+		        let build = $('<div class="build" onclick="build(' + record.match_id + ')">빌드</div>');
+		        let ranking = $('<div class="ranking" onclick="ranking(\'' + record.match_id + '\', \'' + summoner_name + '\', this)">랭킹</div>');
+		        header.append(synthesis, build, ranking);
+
+		        // 4. 'data' 내부에 새로운 div 태그 두 개를 생성
+		        let win = $('<div class="win"><header class="win_header"></header></div>');
+		        let lose = $('<div class="lose"><header class="lose_header"></header></div>');
+		        data.append(win, lose);
+
+		        $.each(response, function (i, syn) {
+		            if (syn.win === 1) {
+		                // 5. 'win' 내부에 res의 win 값이 true 인 데이터 수 만큼 div 태그 생성
+		                let winTeam = $('<div class="win_team"></div>');
+		                // 7. 각 'win_team' 내부에 작업할 내용
+		                // 7-1. div 태그 4개 생성. 각 div 태그의 class 속성에 'champ_info','kda_info','cs_ward_info','item_info' 부여.
+		                let champInfo = $('<div class="champ_info"></div>');
+		                let kdaInfo = $('<div class="kda_info"></div>');
+		                let csInfo = $('<div class="cs_info"></div>');
+		                let itemInfo = $('<div class="item_info"></div>');
+		                winTeam.append(champInfo,kdaInfo,csInfo,itemInfo);
+
+		                let champion = $('<div class="champion"><img class="flex-champion" src="/resources/img/champion_img/square/'+syn.champ_name+'.png"></div>');
+		                let champLevel = $('<span class="champ_level">'+syn.champ_level+'</span>');
+		                champion.append(champLevel);
+		                let spell = $('<div class="spell"><img class="flex-spell1" src="/resources/img/spell/'+syn.spell1+'.png"><img class="flex-spell2" src="/resources/img/spell/'+syn.spell2+'.png"></div>');
+		                let rune = $('<div class="rune"><img class="flex-rune1" src="/resources/img/'+syn.main_rune1+'"><img class="flex-rune2" src="/resources/img/'+syn.sub_rune+'"></div>');
+		                let kda = $('<div class="kda"><span class = "syn-kda-text">'+syn.kills+'/</span><span class = "syn-kda-text">'+syn.deaths+'/</span><span class = "syn-kda-text">'+syn.assists+'</span></div>');
+		                let cs = $('<div class="cs"><span class = "syn-cs-text">CS '+syn.cs+'</span><span class = "syn-cs-text">킬 관여율 '+syn.kills_participation+'%</span></div>');
+
+		                let summonerInfo = $('<div class = "syn-summoner-info"></div>');
+		                let summonerSpan = $('<span class = "syn-summoner-span"></span>');
+		                if(syn.tier === "challenger"){
+		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">C</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+		                	summonerSpan.append(summonerTierName);
+		                	summonerInfo.append(summonerSpan);
+		                }
+		                if(syn.tier === "grandmaster"){
+		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">GM</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+		                	summonerSpan.append(summonerTierName);
+		                	summonerInfo.append(summonerSpan);
+		                }
+		                if(syn.tier === "master"){
+		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">M</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+		                	summonerSpan.append(summonerTierName);
+		                	summonerInfo.append(summonerSpan);
+		                }
+		                if(syn.tier === "diamond"){
+		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">D</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+		                	summonerSpan.append(summonerTierName);
+		                	summonerInfo.append(summonerSpan);
+		                }
+		                if(syn.tier === "platinum"){
+		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">P</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+		                	summonerSpan.append(summonerTierName);
+		                	summonerInfo.append(summonerSpan);
+		                }
+		                if(syn.tier === "gold"){
+		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">G</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+		                	summonerSpan.append(summonerTierName);
+		                	summonerInfo.append(summonerSpan);
+		                }
+		                if(syn.tier === "silver"){
+		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">S</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+		                	summonerSpan.append(summonerTierName);
+		                	summonerInfo.append(summonerSpan);
+		                }
+		                if(syn.tier === "bronze"){
+		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">B</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+		                	summonerSpan.append(summonerTierName);
+		                	summonerInfo.append(summonerSpan);
+		                }
+		                
+		                
+		                // 6. 'champ_info', 'kda_info', 'cs_ward_info', 'item_info' 내부에 작업할 내용 추가
+		                // 6-1. champion, spell, rune, kda, csWard를 각 div 태그 내부에 추가
+		                champInfo.append(champion,spell,rune,summonerInfo);
+		                kdaInfo.append(kda);
+		                csInfo.append(cs);
+
+		                // 8. item_info 내부에 작업할 내용
+		                let itemImgDiv = $('<div class = "itemImgDiv"></div>');
+		                if(syn.item1 != 0){
+		                	let itemImg1 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item1+'.png">');
+		                	itemImgDiv.append(itemImg1);
+		                }
+		                if(syn.item2 != 0){
+		                	let itemImg2 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item2+'.png">');
+		                	itemImgDiv.append(itemImg2);
+		                }
+		                if(syn.item3 != 0){
+		                	let itemImg3 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item3+'.png">');
+		                	itemImgDiv.append(itemImg3);
+		                }
+		                if(syn.item4 != 0){
+		                	let itemImg4 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item4+'.png">');
+		                	itemImgDiv.append(itemImg4);
+		                }
+		                if(syn.item5 != 0){
+		                	let itemImg5 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item5+'.png">');
+		                	itemImgDiv.append(itemImg5);
+		                }
+		                if(syn.item6 != 0){
+		                	let itemImg6 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item6+'.png">');
+		                	itemImgDiv.append(itemImg6);
+		                }
+		                if(syn.item7 != 0){
+		                	let itemImg7 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item7+'.png">');
+		                	itemImgDiv.append(itemImg7);
+		                }
+		                itemInfo.append(itemImgDiv);
+		                win.append(winTeam);
+		            } else {
+		                // 9. 'lose' 내부에 res의 win 값이 false 인 데이터 수 만큼 div 태그 생성 (위와 동일한 작업)
+		                let loseTeam = $('<div class="lose_team"></div>');
+		                let champion = $('<div class="champion"><img class="flex-champion" src="/resources/img/champion_img/square/'+syn.champ_name+'.png"></div>');
+		                let champLevel = $('<span class="champ_level">'+syn.champ_level+'</span>');
+		                champion.append(champLevel);
+		                let spell = $('<div class="spell"><img class="flex-spell1" src="/resources/img/spell/'+syn.spell1+'.png"><img class="flex-spell2" src="/resources/img/spell/'+syn.spell2+'.png"></div>');
+		                let rune = $('<div class="rune"><img class="flex-rune1" src="/resources/img/'+syn.main_rune1+'"><img class="flex-rune2" src="/resources/img/'+syn.sub_rune+'"></div>');
+		                let kda = $('<div class="kda"><span class = "syn-kda-text">'+syn.kills+'/</span><span class = "syn-kda-text">'+syn.deaths+'/</span><span class = "syn-kda-text">'+syn.assists+'</span></div>');
+		                let cs = $('<div class="cs"><span class = "syn-cs-text">CS '+syn.cs+'</span><span class = "syn-cs-text">킬 관여율 '+syn.kills_participation+'%</span></div>');
+
+		                let champInfo = $('<div class="champ_info"></div>');
+		                let kdaInfo = $('<div class="kda_info"></div>');
+		                let csInfo = $('<div class="cs_info"></div>');
+		                let itemInfo = $('<div class="item_info"></div>');
+		                loseTeam.append(champInfo,kdaInfo,csInfo,itemInfo);
+		                
+		                let summonerInfo = $('<div class = "syn-summoner-info"></div>');
+		                let summonerSpan = $('<span class = "syn-summoner-span"></span>');
+		                if(syn.tier === "challenger"){
+		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">C</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+		                	summonerSpan.append(summonerTierName);
+		                	summonerInfo.append(summonerSpan);
+		                }
+		                if(syn.tier === "grandmaster"){
+		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">GM</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+		                	summonerSpan.append(summonerTierName);
+		                	summonerInfo.append(summonerSpan);
+		                }
+		                if(syn.tier === "master"){
+		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">M</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+		                	summonerSpan.append(summonerTierName);
+		                	summonerInfo.append(summonerSpan);
+		                }
+		                if(syn.tier === "diamond"){
+		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">D</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+		                	summonerSpan.append(summonerTierName);
+		                	summonerInfo.append(summonerSpan);
+		                }
+		                if(syn.tier === "platinum"){
+		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">P</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+		                	summonerSpan.append(summonerTierName);
+		                	summonerInfo.append(summonerSpan);
+		                }
+		                if(syn.tier === "gold"){
+		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">G</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+		                	summonerSpan.append(summonerTierName);
+		                	summonerInfo.append(summonerSpan);
+		                }
+		                if(syn.tier === "silver"){
+		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">S</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+		                	summonerSpan.append(summonerTierName);
+		                	summonerInfo.append(summonerSpan);
+		                }
+		                if(syn.tier === "bronze"){
+		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">B</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+		                	summonerSpan.append(summonerTierName);
+		                	summonerInfo.append(summonerSpan);
+		                }
+
+		                champInfo.append(champion,spell,rune,summonerInfo);
+		                kdaInfo.append(kda);
+		                csInfo.append(cs);
+
+		                let itemImgDiv = $('<div class = "itemImgDiv"></div>');
+		                if(syn.item1 != 0){
+		                	let itemImg1 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item1+'.png">');
+		                	itemImgDiv.append(itemImg1);
+		                }
+		                if(syn.item2 != 0){
+		                	let itemImg2 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item2+'.png">');
+		                	itemImgDiv.append(itemImg2);
+		                }
+		                if(syn.item3 != 0){
+		                	let itemImg3 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item3+'.png">');
+		                	itemImgDiv.append(itemImg3);
+		                }
+		                if(syn.item4 != 0){
+		                	let itemImg4 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item4+'.png">');
+		                	itemImgDiv.append(itemImg4);
+		                }
+		                if(syn.item5 != 0){
+		                	let itemImg5 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item5+'.png">');
+		                	itemImgDiv.append(itemImg5);
+		                }
+		                if(syn.item6 != 0){
+		                	let itemImg6 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item6+'.png">');
+		                	itemImgDiv.append(itemImg6);
+		                }
+		                if(syn.item7 != 0){
+		                	let itemImg7 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item7+'.png">');
+		                	itemImgDiv.append(itemImg7);
+		                }
+						itemInfo.append(itemImgDiv);
+		                lose.append(loseTeam);
+		            }
+		        });
+		        $('#'+record.match_id).html(whole);
+		    });
+			
 		})
 		$('#record').html(div);
+		
 	}).fail(err=>{
 		console.log(err);
 	});
 	
+	function getRecordDetail(match_id, thisBtn) {
+	    let value = thisBtn.val();
+	    if (!thisBtn.hasClass('clicked')) {
+	        $('#' + value).show();
+	        thisBtn.addClass('clicked');
+	    } else {
+	        $('#' + value).hide();
+	        thisBtn.removeClass('clicked');
+	    }
+	}
 	
-	 /* function info(param){
-		getRecordDetail(match_id);
-	} */
-	
-	function getRecordDetail(match_id){
-	    $('#' + match_id).removeAttr('style');
-	    //console.log(match_id);
-	    $.ajax({
+	//종합 버튼 클릭 시
+	function synthesis(matchId,thisDiv){
+		let divId = $(matchId).attr('id');
+		$.ajax({
 	        method: 'get',
 	        url: '/summoner/get_record_detail',
-	        data: { match_id: match_id }
-	    }).done(res => {
-	        console.log(res);
-	        // 1. div 태그 생성. class 속성에 "whole" 부여
-	        let whole = $('<div class="whole"></div>');
-
-	        // 2. header와 div 태그 생성
-	        let header = $('<header class="data_header"></header>');
-	        let data = $('<div class="data"></div>');
-	        whole.append(header, data); // 2. 생성된 태그들을 whole 태그 내부에 추가
-
-	        // 3. 'data_header' 내부에 div 태그 3개 생성
-	        let synthesis = $('<div class="synthesis" onclick="synthesis(\'' + match_id + '\')"><p>종합</p></div>');
-	        let build = $('<div class="build" onclick="build(\''+match_id+'\', \'\')"><p>빌드</p></div>');
-	        let ranking = $('<div class="ranking" onclick="ranking(\''+match_id+'\', summoner_name)"><p>랭킹</p></div>');
-	        header.append(synthesis, build, ranking);
-
+	        data: { 'match_id' : divId }
+	    }).done(response => {
+			let data = $('<div class = "dataDiv"></div>');
 	        // 4. 'data' 내부에 새로운 div 태그 두 개를 생성
 	        let win = $('<div class="win"><header class="win_header"></header></div>');
 	        let lose = $('<div class="lose"><header class="lose_header"></header></div>');
 	        data.append(win, lose);
 
-	        $.each(res, function (i, record) {
-	            if (record.win) {
+	        $.each(response, function (i, syn) {
+	            if (syn.win === 1) {
 	                // 5. 'win' 내부에 res의 win 값이 true 인 데이터 수 만큼 div 태그 생성
 	                let winTeam = $('<div class="win_team"></div>');
 	                // 7. 각 'win_team' 내부에 작업할 내용
 	                // 7-1. div 태그 4개 생성. 각 div 태그의 class 속성에 'champ_info','kda_info','cs_ward_info','item_info' 부여.
 	                let champInfo = $('<div class="champ_info"></div>');
 	                let kdaInfo = $('<div class="kda_info"></div>');
-	                let csWardInfo = $('<div class="cs_ward_info"></div>');
+	                let csInfo = $('<div class="cs_info"></div>');
 	                let itemInfo = $('<div class="item_info"></div>');
-	                winTeam.append(champInfo,kdaInfo,csWardInfo,itemInfo);
+	                winTeam.append(champInfo,kdaInfo,csInfo,itemInfo);
 
-	                let champion = $('<div class="champion"><img class="flex-champion" src="/resources/img/champion_img/square/'+record.champ_name+'.png"></div>');
-	                let champLevel = $('<span class="champ_level">'+record.champ_level+'</span>');
+	                let champion = $('<div class="champion"><img class="flex-champion" src="/resources/img/champion_img/square/'+syn.champ_name+'.png"></div>');
+	                let champLevel = $('<span class="champ_level">'+syn.champ_level+'</span>');
 	                champion.append(champLevel);
-	                let spell = $('<div class="spell"><img class="flex-spell1" src="/resources/img/spell/'+record.spell1+'.png"><img class="flex-spell2" src="/resources/img/spell/'+record.spell2+'.png"></div>');
-	                let rune = $('<div class="rune"><img class="flex-rune1" src="/resources/img/runes/'+record.rune1+'.png"><img class="flex-rune2" src="/resources/img/runes/'+record.rune2+'.png"></div>');
-	                let kda = $('<div class="kda">'+record.kills+'/'+record.deaths+'/'+record.assists+'</div>');
-	                let csWard = $('<div class="cs_ward">'+record.cs+'/'+record.wards+'/'+record.kill_participation+'%</div>');
+	                let spell = $('<div class="spell"><img class="flex-spell1" src="/resources/img/spell/'+syn.spell1+'.png"><img class="flex-spell2" src="/resources/img/spell/'+syn.spell2+'.png"></div>');
+	                let rune = $('<div class="rune"><img class="flex-rune1" src="/resources/img/'+syn.main_rune1+'"><img class="flex-rune2" src="/resources/img/'+syn.sub_rune+'"></div>');
+	                let kda = $('<div class="kda"><span class = "syn-kda-text">'+syn.kills+'/</span><span class = "syn-kda-text">'+syn.deaths+'/</span><span class = "syn-kda-text">'+syn.assists+'</span></div>');
+	                let cs = $('<div class="cs"><span class = "syn-cs-text">CS '+syn.cs+'</span><span class = "syn-cs-text">킬 관여율 '+syn.kills_participation+'%</span></div>');
 
+	                let summonerInfo = $('<div class = "syn-summoner-info"></div>');
+	                let summonerSpan = $('<span class = "syn-summoner-span"></span>');
+	                if(syn.tier === "challenger"){
+	                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">C</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+	                	summonerSpan.append(summonerTierName);
+	                	summonerInfo.append(summonerSpan);
+	                }
+	                if(syn.tier === "grandmaster"){
+	                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">GM</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+	                	summonerSpan.append(summonerTierName);
+	                	summonerInfo.append(summonerSpan);
+	                }
+	                if(syn.tier === "master"){
+	                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">M</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+	                	summonerSpan.append(summonerTierName);
+	                	summonerInfo.append(summonerSpan);
+	                }
+	                if(syn.tier === "diamond"){
+	                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">D</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+	                	summonerSpan.append(summonerTierName);
+	                	summonerInfo.append(summonerSpan);
+	                }
+	                if(syn.tier === "platinum"){
+	                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">P</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+	                	summonerSpan.append(summonerTierName);
+	                	summonerInfo.append(summonerSpan);
+	                }
+	                if(syn.tier === "gold"){
+	                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">G</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+	                	summonerSpan.append(summonerTierName);
+	                	summonerInfo.append(summonerSpan);
+	                }
+	                if(syn.tier === "silver"){
+	                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">S</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+	                	summonerSpan.append(summonerTierName);
+	                	summonerInfo.append(summonerSpan);
+	                }
+	                if(syn.tier === "bronze"){
+	                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">B</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+	                	summonerSpan.append(summonerTierName);
+	                	summonerInfo.append(summonerSpan);
+	                }
+	                
+	                
 	                // 6. 'champ_info', 'kda_info', 'cs_ward_info', 'item_info' 내부에 작업할 내용 추가
 	                // 6-1. champion, spell, rune, kda, csWard를 각 div 태그 내부에 추가
-	                champInfo.append(champion,spell,rune);
+	                champInfo.append(champion,spell,rune,summonerInfo);
 	                kdaInfo.append(kda);
-	                csWardInfo.append(csWard);
+	                csInfo.append(cs);
 
 	                // 8. item_info 내부에 작업할 내용
-	                let itemList = record.item;
-	                $.each(itemList, function(i, item){
-	                    let itemImg = $('<img class="flex-item" src="/resources/img/item/'+item+'.png">');
-	                    itemInfo.append(itemImg);
-	                });
-
+	                let itemImgDiv = $('<div class = "itemImgDiv"></div>');
+	                if(syn.item1 != 0){
+	                	let itemImg1 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item1+'.png">');
+	                	itemImgDiv.append(itemImg1);
+	                }
+	                if(syn.item2 != 0){
+	                	let itemImg2 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item2+'.png">');
+	                	itemImgDiv.append(itemImg2);
+	                }
+	                if(syn.item3 != 0){
+	                	let itemImg3 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item3+'.png">');
+	                	itemImgDiv.append(itemImg3);
+	                }
+	                if(syn.item4 != 0){
+	                	let itemImg4 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item4+'.png">');
+	                	itemImgDiv.append(itemImg4);
+	                }
+	                if(syn.item5 != 0){
+	                	let itemImg5 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item5+'.png">');
+	                	itemImgDiv.append(itemImg5);
+	                }
+	                if(syn.item6 != 0){
+	                	let itemImg6 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item6+'.png">');
+	                	itemImgDiv.append(itemImg6);
+	                }
+	                if(syn.item7 != 0){
+	                	let itemImg7 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item7+'.png">');
+	                	itemImgDiv.append(itemImg7);
+	                }
+	                itemInfo.append(itemImgDiv);
 	                win.append(winTeam);
 	            } else {
 	                // 9. 'lose' 내부에 res의 win 값이 false 인 데이터 수 만큼 div 태그 생성 (위와 동일한 작업)
 	                let loseTeam = $('<div class="lose_team"></div>');
-	                let champion = $('<div class="champion"><img class="flex-champion" src="/resources/img/champion_img/square/'+record.champ_name+'.png"></div>');
-	                let champLevel = $('<span class="champ_level">'+record.champ_level+'</span>');
+	                let champion = $('<div class="champion"><img class="flex-champion" src="/resources/img/champion_img/square/'+syn.champ_name+'.png"></div>');
+	                let champLevel = $('<span class="champ_level">'+syn.champ_level+'</span>');
 	                champion.append(champLevel);
-	                let spell = $('<div class="spell"><img class="flex-spell1" src="/resources/img/spell/'+record.spell1+'.png"><img class="flex-spell2" src="/resources/img/spell/'+record.spell2+'.png"></div>');
-	                let rune = $('<div class="rune"><img class="flex-rune1" src="/resources/img/runes/'+record.rune1+'.png"><img class="flex-rune2" src="/resources/img/runes/'+record.rune2+'.png"></div>');
-	                let kda = $('<div class="kda">'+record.kills+'/'+record.deaths+'/'+record.assists+'</div>');
-	                let csWard = $('<div class="cs_ward">'+record.cs+'/'+record.wards+'/'+record.kill_participation+'%</div>');
+	                let spell = $('<div class="spell"><img class="flex-spell1" src="/resources/img/spell/'+syn.spell1+'.png"><img class="flex-spell2" src="/resources/img/spell/'+syn.spell2+'.png"></div>');
+	                let rune = $('<div class="rune"><img class="flex-rune1" src="/resources/img/'+syn.main_rune1+'"><img class="flex-rune2" src="/resources/img/'+syn.sub_rune+'"></div>');
+	                let kda = $('<div class="kda"><span class = "syn-kda-text">'+syn.kills+'/</span><span class = "syn-kda-text">'+syn.deaths+'/</span><span class = "syn-kda-text">'+syn.assists+'</span></div>');
+	                let cs = $('<div class="cs"><span class = "syn-cs-text">CS '+syn.cs+'</span><span class = "syn-cs-text">킬 관여율 '+syn.kills_participation+'%</span></div>');
 
 	                let champInfo = $('<div class="champ_info"></div>');
 	                let kdaInfo = $('<div class="kda_info"></div>');
-	                let csWardInfo = $('<div class="cs_ward_info"></div>');
+	                let csInfo = $('<div class="cs_info"></div>');
 	                let itemInfo = $('<div class="item_info"></div>');
-	                loseTeam.append(champInfo,kdaInfo,csWardInfo,itemInfo);
+	                loseTeam.append(champInfo,kdaInfo,csInfo,itemInfo);
+	                
+	                let summonerInfo = $('<div class = "syn-summoner-info"></div>');
+	                let summonerSpan = $('<span class = "syn-summoner-span"></span>');
+	                if(syn.tier === "challenger"){
+	                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">C</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+	                	summonerSpan.append(summonerTierName);
+	                	summonerInfo.append(summonerSpan);
+	                }
+	                if(syn.tier === "grandmaster"){
+	                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">GM</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+	                	summonerSpan.append(summonerTierName);
+	                	summonerInfo.append(summonerSpan);
+	                }
+	                if(syn.tier === "master"){
+	                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">M</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+	                	summonerSpan.append(summonerTierName);
+	                	summonerInfo.append(summonerSpan);
+	                }
+	                if(syn.tier === "diamond"){
+	                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">D</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+	                	summonerSpan.append(summonerTierName);
+	                	summonerInfo.append(summonerSpan);
+	                }
+	                if(syn.tier === "platinum"){
+	                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">P</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+	                	summonerSpan.append(summonerTierName);
+	                	summonerInfo.append(summonerSpan);
+	                }
+	                if(syn.tier === "gold"){
+	                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">G</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+	                	summonerSpan.append(summonerTierName);
+	                	summonerInfo.append(summonerSpan);
+	                }
+	                if(syn.tier === "silver"){
+	                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">S</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+	                	summonerSpan.append(summonerTierName);
+	                	summonerInfo.append(summonerSpan);
+	                }
+	                if(syn.tier === "bronze"){
+	                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">B</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
+	                	summonerSpan.append(summonerTierName);
+	                	summonerInfo.append(summonerSpan);
+	                }
 
-	                champInfo.append(champion,spell,rune);
+	                champInfo.append(champion,spell,rune,summonerInfo);
 	                kdaInfo.append(kda);
-	                csWardInfo.append(csWard);
+	                csInfo.append(cs);
 
-	                let itemList = record.item.split('+');
-	                $.each(itemList, function(i, item){
-	                    let itemImg = $('<img class="flex-item" src="/resources/img/item/'+item+'.png">');
-	                    itemInfo.append(itemImg);
-	                });
-
+	                let itemImgDiv = $('<div class = "itemImgDiv"></div>');
+	                if(syn.item1 != 0){
+	                	let itemImg1 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item1+'.png">');
+	                	itemImgDiv.append(itemImg1);
+	                }
+	                if(syn.item2 != 0){
+	                	let itemImg2 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item2+'.png">');
+	                	itemImgDiv.append(itemImg2);
+	                }
+	                if(syn.item3 != 0){
+	                	let itemImg3 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item3+'.png">');
+	                	itemImgDiv.append(itemImg3);
+	                }
+	                if(syn.item4 != 0){
+	                	let itemImg4 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item4+'.png">');
+	                	itemImgDiv.append(itemImg4);
+	                }
+	                if(syn.item5 != 0){
+	                	let itemImg5 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item5+'.png">');
+	                	itemImgDiv.append(itemImg5);
+	                }
+	                if(syn.item6 != 0){
+	                	let itemImg6 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item6+'.png">');
+	                	itemImgDiv.append(itemImg6);
+	                }
+	                if(syn.item7 != 0){
+	                	let itemImg7 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item7+'.png">');
+	                	itemImgDiv.append(itemImg7);
+	                }
+					itemInfo.append(itemImgDiv);
 	                lose.append(loseTeam);
 	            }
 	        });
-	        $('#'+match_id).append(whole);
+	        $(thisDiv).parent().siblings('div').filter('.data').html(data);
 	    });
 	}
-
-		
-	/* getRecordDetail();
-	
-	$('#champ_all').click(function(){
-		$.ajax({//소환사의 챔피언 통계
-			method : 'get',
-			url : '/summoner/get_champ_record',
-			data : {summoner_name : '${summoner.summoner_name}'}
-		}).done(res=>{
-			console.log(res)
-			let champ_div = $('<div></div>');
-			let winrate_div = $('<div></div>');
-			let games_div = $('<div><div>');
-			let wins_div = $('<div></div>');
-			let losses_div = $('<div></div>');
-			let kda_div = $('<div></div>');
-			let kills_div = $('<div></div>');
-			let deaths_div = $('<div></div>');
-			let assists_div = $('<div><div>');
-			let cs_div = $('<div></div>');
-			let cs_pm_div = $('<div></div>');
-			$.each(res.champ_name, function (i, champ_name){
-				let champ_img = $('<div role = "img" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+champ_name+'.png")"></div>');
-				let champ_name_text = $('<span>'+champ_name+'</span>');
-				champ_div.append(champ_img,champ_name_text);
-			})
-			$.each(res.winrate, function(i, winrate){
-				let winrate_text = $('<strong>'+winrate+'%</strong>');
-				winrate_div.append(winrate_text);
-			})
-			$.each(res.games, function(i, games){
-				let games_text = $('<p>'+games+'</p>');
-				games_div.append(games_text);
-			})
-			$.each(res.wins, function(i, wins){
-				let win_text = $('<span>'+wins+'</span>');
-				wins_div.append(win_text);
-			})
-			$.each(res.losses, function(i, losses){
-				let losses_text = $('<span>'+losses+'</span>');
-				losses_div.append(losses_text);
-			})
-			$.each(res.kda, function(i, kda){
-				let kda_text = $('<strong>'+kda+'</strong>');
-				kda_div.append(kda_text);
-			})
-			$.each(res.kills, function(i, kills){
-				let kills_text = $('<span>'+kills+'</span>');
-				kills_div.append(kills_text);
-			})
-			$.each(res.deaths, function(i, deaths){
-				let deaths_text = $('<span>'+deaths+'</span>');
-				deaths_div.append(deaths_text);
-			})
-			$.each(res.assists, function(i, assists){
-				let assists_text = $('<span>'+assists+'</span>');
-				assists_div.append(assists_text);
-			})
-			$.each(res.cs, function(i, cs){
-				let cs_text = $('<strong>'+cs+'</strong>');
-				cs_div.append(cs_text);
-			})
-			$.each(res.cs_pm, function(i, cs_pm){
-				let cs_pm_text = $('<span>'+cs_pm+'<span>');
-				cs_pm_div.append(cs_pm_text);
-			})
-			$('.champ_data').html(champ_div);
-			$('.winrate_data').html(winrate_div);
-			$('.games_data').html(games_div);
-			$('.wins_data').html(wins_div);
-			$('.losses_data').html(losses_div);
-			$('.kda_data').html(kda_div);
-			$('.kills_data').html(kills_div);
-			$('.deaths_data').html(deaths_div);
-			$('.assists_data').html(assists_div);
-			$('.cs_data').html(cs_div);
-			$('.cs_pm_data').html(cs_pm_div);
-		}).fail(err=>{
-			console.log(err)
-		})
-	}) */
-	
-	/* $('#champ_solo').click(function(){
-		$.ajax({//소환사의 챔피언 통계
-			method : 'get',
-			url : '/summoner/get_champ_solo',
-			data : {summoner_name : '${summoner.summoner_name}'}
-		}).done(res=>{
-			console.log(res)
-			let champ_div = $('<div></div>');
-			let winrate_div = $('<div></div>');
-			let games_div = $('<div><div>');
-			let wins_div = $('<div></div>');
-			let losses_div = $('<div></div>');
-			let kda_div = $('<div></div>');
-			let kills_div = $('<div></div>');
-			let deaths_div = $('<div></div>');
-			let assists_div = $('<div><div>');
-			let cs_div = $('<div></div>');
-			let cs_pm_div = $('<div></div>');
-			$.each(res.champ_name, function (i, champ_name){
-				let champ_img = $('<div role = "img" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+champ_name+'.png")"></div>');
-				let champ_name_text = $('<span>'+champ_name+'</span>');
-				champ_div.append(champ_img,champ_name_text);
-			})
-			$.each(res.winrate, function(i, winrate){
-				let winrate_text = $('<strong>'+winrate+'%</strong>');
-				winrate_div.append(winrate_text);
-			})
-			$.each(res.games, function(i, games){
-				let games_text = $('<p>'+games+'</p>');
-				games_div.append(games_text);
-			})
-			$.each(res.wins, function(i, wins){
-				let win_text = $('<span>'+wins+'</span>');
-				wins_div.append(win_text);
-			})
-			$.each(res.losses, function(i, losses){
-				let losses_text = $('<span>'+losses+'</span>');
-				losses_div.append(losses_text);
-			})
-			$.each(res.kda, function(i, kda){
-				let kda_text = $('<strong>'+kda+'</strong>');
-				kda_div.append(kda_text);
-			})
-			$.each(res.kills, function(i, kills){
-				let kills_text = $('<span>'+kills+'</span>');
-				kills_div.append(kills_text);
-			})
-			$.each(res.deaths, function(i, deaths){
-				let deaths_text = $('<span>'+deaths+'</span>');
-				deaths_div.append(deaths_text);
-			})
-			$.each(res.assists, function(i, assists){
-				let assists_text = $('<span>'+assists+'</span>');
-				assists_div.append(assists_text);
-			})
-			$.each(res.cs, function(i, cs){
-				let cs_text = $('<strong>'+cs+'</strong>');
-				cs_div.append(cs_text);
-			})
-			$.each(res.cs_pm, function(i, cs_pm){
-				let cs_pm_text = $('<span>'+cs_pm+'<span>');
-				cs_pm_div.append(cs_pm_text);
-			})
-			$('.champ_data').html(champ_div);
-			$('.winrate_data').html(winrate_div);
-			$('.games_data').html(games_div);
-			$('.wins_data').html(wins_div);
-			$('.losses_data').html(losses_div);
-			$('.kda_data').html(kda_div);
-			$('.kills_data').html(kills_div);
-			$('.deaths_data').html(deaths_div);
-			$('.assists_data').html(assists_div);
-			$('.cs_data').html(cs_div);
-			$('.cs_pm_data').html(cs_pm_div);
-		}).fail(err=>{
-			console.log(err)
-		})
-	}) */
-	
-	/* $('#champ_flex').click(function(){
-		$.ajax({//소환사의 챔피언 통계
-			method : 'get',
-			url : '/summoner/get_champ_flex',
-			data : {summoner_name : '${summoner.summoner_name}'}
-		}).done(res=>{
-			console.log(res)
-			let champ_div = $('<div></div>');
-			let winrate_div = $('<div></div>');
-			let games_div = $('<div><div>');
-			let wins_div = $('<div></div>');
-			let losses_div = $('<div></div>');
-			let kda_div = $('<div></div>');
-			let kills_div = $('<div></div>');
-			let deaths_div = $('<div></div>');
-			let assists_div = $('<div><div>');
-			let cs_div = $('<div></div>');
-			let cs_pm_div = $('<div></div>');
-			$.each(res.champ_name, function (i, champ_name){
-				let champ_img = $('<div role = "img" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+champ_name+'.png")"></div>');
-				let champ_name_text = $('<span>'+champ_name+'</span>');
-				champ_div.append(champ_img,champ_name_text);
-			})
-			$.each(res.winrate, function(i, winrate){
-				let winrate_text = $('<strong>'+winrate+'%</strong>');
-				winrate_div.append(winrate_text);
-			})
-			$.each(res.games, function(i, games){
-				let games_text = $('<p>'+games+'</p>');
-				games_div.append(games_text);
-			})
-			$.each(res.wins, function(i, wins){
-				let win_text = $('<span>'+wins+'</span>');
-				wins_div.append(win_text);
-			})
-			$.each(res.losses, function(i, losses){
-				let losses_text = $('<span>'+losses+'</span>');
-				losses_div.append(losses_text);
-			})
-			$.each(res.kda, function(i, kda){
-				let kda_text = $('<strong>'+kda+'</strong>');
-				kda_div.append(kda_text);
-			})
-			$.each(res.kills, function(i, kills){
-				let kills_text = $('<span>'+kills+'</span>');
-				kills_div.append(kills_text);
-			})
-			$.each(res.deaths, function(i, deaths){
-				let deaths_text = $('<span>'+deaths+'</span>');
-				deaths_div.append(deaths_text);
-			})
-			$.each(res.assists, function(i, assists){
-				let assists_text = $('<span>'+assists+'</span>');
-				assists_div.append(assists_text);
-			})
-			$.each(res.cs, function(i, cs){
-				let cs_text = $('<strong>'+cs+'</strong>');
-				cs_div.append(cs_text);
-			})
-			$.each(res.cs_pm, function(i, cs_pm){
-				let cs_pm_text = $('<span>'+cs_pm+'<span>');
-				cs_pm_div.append(cs_pm_text);
-			})
-			$('.champ_data').html(champ_div);
-			$('.winrate_data').html(winrate_div);
-			$('.games_data').html(games_div);
-			$('.wins_data').html(wins_div);
-			$('.losses_data').html(losses_div);
-			$('.kda_data').html(kda_div);
-			$('.kills_data').html(kills_div);
-			$('.deaths_data').html(deaths_div);
-			$('.assists_data').html(assists_div);
-			$('.cs_data').html(cs_div);
-			$('.cs_pm_data').html(cs_pm_div);
-		}).fail(err=>{
-			console.log(err)
-		})
-	}) */
-	
-	/* $('#champ_classic').click(function(){
-		$.ajax({//소환사의 챔피언 통계
-			method : 'get',
-			url : '/summoner/get_champ_classic',
-			data : {summoner_name : '${summoner.summoner_name}'}
-		}).done(res=>{
-			console.log(res)
-			let champ_div = $('<div></div>');
-			let winrate_div = $('<div></div>');
-			let games_div = $('<div><div>');
-			let wins_div = $('<div></div>');
-			let losses_div = $('<div></div>');
-			let kda_div = $('<div></div>');
-			let kills_div = $('<div></div>');
-			let deaths_div = $('<div></div>');
-			let assists_div = $('<div><div>');
-			let cs_div = $('<div></div>');
-			let cs_pm_div = $('<div></div>');
-			$.each(res.champ_name, function (i, champ_name){
-				let champ_img = $('<div role = "img" style = "background-image : url("https://ddragon.leagueoflegends.com/cdn/13.4.1/img/champion/'+champ_name+'.png")"></div>');
-				let champ_name_text = $('<span>'+champ_name+'</span>');
-				champ_div.append(champ_img,champ_name_text);
-			})
-			$.each(res.winrate, function(i, winrate){
-				let winrate_text = $('<strong>'+winrate+'%</strong>');
-				winrate_div.append(winrate_text);
-			})
-			$.each(res.games, function(i, games){
-				let games_text = $('<p>'+games+'</p>');
-				games_div.append(games_text);
-			})
-			$.each(res.wins, function(i, wins){
-				let win_text = $('<span>'+wins+'</span>');
-				wins_div.append(win_text);
-			})
-			$.each(res.losses, function(i, losses){
-				let losses_text = $('<span>'+losses+'</span>');
-				losses_div.append(losses_text);
-			})
-			$.each(res.kda, function(i, kda){
-				let kda_text = $('<strong>'+kda+'</strong>');
-				kda_div.append(kda_text);
-			})
-			$.each(res.kills, function(i, kills){
-				let kills_text = $('<span>'+kills+'</span>');
-				kills_div.append(kills_text);
-			})
-			$.each(res.deaths, function(i, deaths){
-				let deaths_text = $('<span>'+deaths+'</span>');
-				deaths_div.append(deaths_text);
-			})
-			$.each(res.assists, function(i, assists){
-				let assists_text = $('<span>'+assists+'</span>');
-				assists_div.append(assists_text);
-			})
-			$.each(res.cs, function(i, cs){
-				let cs_text = $('<strong>'+cs+'</strong>');
-				cs_div.append(cs_text);
-			})
-			$.each(res.cs_pm, function(i, cs_pm){
-				let cs_pm_text = $('<span>'+cs_pm+'<span>');
-				cs_pm_div.append(cs_pm_text);
-			})
-			$('.champ_data').html(champ_div);
-			$('.winrate_data').html(winrate_div);
-			$('.games_data').html(games_div);
-			$('.wins_data').html(wins_div);
-			$('.losses_data').html(losses_div);
-			$('.kda_data').html(kda_div);
-			$('.kills_data').html(kills_div);
-			$('.deaths_data').html(deaths_div);
-			$('.assists_data').html(assists_div);
-			$('.cs_data').html(cs_div);
-			$('.cs_pm_data').html(cs_pm_div);
-		}).fail(err=>{
-			console.log(err)
-		})
-	}) */
-	
-	//종합 버튼 클릭 시
-	/* function synthesis(match_id){
-		getRecordDetail();
-	} */
 	
 	//빌드 버튼 클릭 시
 	/* function build(match_id){
@@ -1048,143 +1082,139 @@
 	} */
 	
 	//랭킹 버튼 클릭 시
-/* 	$('#ranking').click(function(match_id,summoner_name){
+ 	function ranking(matchId, summoner_name, thisDiv){
+		let data_div = $('<div class = "RankingDataDiv"></div>');
 		$.ajax({
 			method : 'get',
 			url : '/summoner/getRanking',
-			data : {match_id : match_id, summoner_name : summoner_name}
+			data : {match_id : matchId, summoner_name : summoner_name}
 		}).done(res=>{
-			console.log(res)
-			let plyaersDamage = [];
-			let playersTaken = [];
-			let playersKills = [];
-			let playersDeaths = [];
-			let playersAssists = [];
-			let playersGolds = [];
-			let playersRedWards = [];
-			let playersCS = [];
+			console.log(res);
 			
-			$.each(res.dealtDamage, function(i, dealt){
-				playersDamage.push({name : res.summoner_name, dealtDamage : dealt});
-			});
-			playersDamage.sort((a, b) => b.dealtDamage - a.dealtDamage);
-			let playersDamageRank = playersDamage.findIndex(player => player.name === summoner_name) + 1;
-			let thisSummonerDealt = playersDamage.findIndex(player => player.name === summoner_name);
-			
-			$.each(res.takenDamage, function(i, taken){
-				playersTaken.push({name : res.summoner_name, takenDamage : taken});
-			});
-			playersTaken.sort((a, b) => b.takenDamage - a.takenDamage);
-			let playersTakenRank = playersTaken.findIndex(player => player.name === summoner_name) + 1;
-			let thisSummonerTaken = playersTaken.findIndex(player => player.name === summoner_name);
-			
-			$.each(res.kills, function(i, kills){
-				playersKills.push({name : res.summoner_name, Kills : kills});
-			});
-			playersKills.sort((a, b) => b.Kills - a.Kills);
-			let playersKillsRank = playersKills.findIndex(player => player.name === summoner_name) + 1;
-			let thisSummonerKills = playersKills.findIndex(player => player.name === summoner_name);
-			
-			$.each(res.deaths, function(i, deaths){
-				playersDeaths.push({name : res.summoner_name, deaths : deaths});
-			});
-			playersDeaths.sort((a, b) => b.deaths - a.deaths);
-			let playersDeathsRank = playersDeaths.findIndex(player => player.name === summoner_name) + 1;
-			let thisSummonerDeaths = playersDeaths.findIndex(player => player.name === summoner_name);
-			
-			$.each(res.assists, function(i, assists){
-				playersAssists.push({name : res.summoner_name, assists : dealt});
-			});
-			playersAssists.sort((a, b) => b.assists - a.assists);
-			let playersAssistsRank = playersAssists.findIndex(player => player.name === summoner_name) + 1;
-			let thisSummonerAssists = playersAssists.findIndex(player => player.name === summoner_name);
-			
-			$.each(res.golds, function(i, golds){
-				playersGolds.push({name : res.summoner_name, golds : golds});
-			});
-			playersGolds.sort((a, b) => b.golds - a.golds);
-			let playersGoldsRank = playersGolds.findIndex(player => player.name === summoner_name) + 1;
-			let thisSummonerGolds = playersGolds.findIndex(player => player.name === summoner_name);
-			
-			$.each(res.redWards, function(i, redWards){
-				playersRedWards.push({name : res.summoner_name, redWards : redWards});
-			});
-			playersRedWards.sort((a, b) => b.redWards - a.redWards);
-			let playersRedWardsRank = playersRedWards.findIndex(player => player.name === summoner_name) + 1;
-			let thisSummonerRedWards = playersRedWards.findIndex(player => player.name === summoner_name);
-			
-			$.each(res.CS, function(i, CS){
-				playersCS.push({name : res.summoner_name, CS : CS});
-			});
-			playersDamage.sort((a, b) => b.dealtDamage - a.dealtDamage);
-			let playersCSRank = playersCS.findIndex(player => player.name === summoner_name) + 1;
-			let thisSummonerCS = playersCS.findIndex(player => player.name === summoner_name)
-			
-			let dealtDiv = $('<div></div>');
-			let takenDiv = $('<div></div>');
-			let killsDiv = $('<div></div>');
-			let deathsDiv = $('<div></div>');
-			let assistsDiv = $('<div></div>');
-			let goldsDiv = $('<div></div>');
-			let redWardsDiv = $('<div></div>');
-			let csDiv = $('<div></div>');
-			
-			let dealtTitle = $('<div><p>피해량</p></div>');
-			let dealtRank = $('<div>'+playersDamageRank+'위</div>');
-			let dealtGraph = $('<div></div>');
-			let dealtText = $('<div><span><strong>'+thisSummonerDealt+'</strong><span>/'+res.team_dealt+'</span></span></div>');
-			dealtDiv.append(dealtTitle,dealtRank,dealtGraph,dealtText);
-			
-			let takenTitle = $('<div><p>받은 피해량</p></div>');
-			let takenRank = $('<div>'+playersTakenRank+'위</div>');
-			let takenGraph = $('<div></div>');
-			let takenText = $('<div><span><strong>'+thisSummonerTanken+'</strong><span>/'+res.team_taken+'</span></span></div>');
-			takenDiv.append(takenTitle,takenRank,takenGraph,takenText);
-			
-			let killsTitle = $('<div><p>킬</p></div>');
-			let killsRank = $('<div>'+playersKillsRank+'위</div>');
-			let killsGraph = $('<div></div>');
-			let killsText = $('<div><span><strong>'+thisSummonerKills+'</strong><span>/'+res.team_kills+'</span></span></div>');
-			killsDiv.append(killsTitle,killsRank,killsGraph,killsText);
-			
-			let deathsTitle = $('<div><p>데스</p></div>');
-			let deathsRank = $('<div>'+playersDeathsRank+'위</div>');
-			let deathsGraph = $('<div></div>');
-			let deathsText = $('<div><span><strong>'+thisSummonerDeaths+'</strong><span>/'+res.team_deaths+'</span></span></div>');
-			deathsDiv.append(deathsTitle,deathsRank,deathsGraph,deathsText);
-			
-			let assistsTitle = $('<div><p>어시스트</p></div>');
-			let asssitsRank = $('<div>'+playersAssistsRank+'위</div>');
-			let assistsGraph = $('<div></div>');
-			let assistsText = $('<div><span><strong>'+thisSummonerAssists+'</strong><span>/'+res.team_assists+'</span></span></div>');
-			assistsDiv.append(assistsTitle,assistsRank,assistsGraph,assistsText);
-			
-			let goldsTitle = $('<div><p>골드 획득량</p></div>');
-			let goldsRank = $('<div>'+playersGoldsRank+'위</div>');
-			let goldsGraph = $('<div></div>');
-			let goldsText = $('<div><span><strong>'+thisSummonerGolds+'</strong><span>/'+res.team_golds+'</span></span></div>');
-			goldsDiv.append(goldsTitle,goldsRank,goldsGraph,goldsText);
-			
-			let redWardsTitle = $('<div><p>제어와드</p></div>');
-			let redWardsRank = $('<div>'+playersRedWardsRank+'위</div>');
-			let redWardsGraph = $('<div></div>');
-			let redWardsText = $('<div><span><strong>'+thisSummonerRedWards+'</strong><span>/'+res.team_redWards+'</span></span></div>');
-			redWardsDiv.append(redWardsTitle,redWardsRank,redWardsGraph,redWardsText);
-			
-			let CSTitle = $('<div><p>CS</p></div>');
-			let CSRank = $('<div>'+playersCSRank+'위</div>');
-			let CSGraph = $('<div></div>');
-			let CSText = $('<div><span><strong>'+thisSummonerCS+'</strong><span>/'+res.team_CS+'</span></span></div>');
-			CSDiv.append(CSTitle,CSRank,CSGraph,CSText);
-			
-			let data_div = $('<div></div>');
-			data_div.append(dealtDiv, takenDiv, killsDiv, deathsDiv, assistsDiv, goldsDiv, redWardsDiv, CSDiv);
-			
-			$('.build_info').html(data_div);
+			$.ajax({
+				method : 'get',
+				url : '/summoner/getTeamData',
+				data : {match_id : matchId, summoner_name : summoner_name}
+			}).done(response=>{
+				console.log(response);
+				
+				let playersDamage = [];
+				let playersTaken = [];
+				let playersKills = [];
+				let playersDeaths = [];
+				let playersAssists = [];
+				let playersRedWards = [];
+				let playersCS = [];
+				
+				playersDamage.push({dealtDamage : res.self_dealt});
+				$.each(response, function(i, team){
+					playersDamage.push({dealtDamage : team.team_dealt});
+				});
+				playersDamage.sort((a, b) => b.dealtDamage - a.dealtDamage);
+				let playersDamageRank = playersDamage.findIndex(player => player.dealtDamage === res.self_dealt) + 1;
+				
+				playersTaken.push({takenDamage : res.self_taken});
+				$.each(response, function(i, taken){
+					playersTaken.push({takenDamage : taken.team_taken})
+				});
+				playersTaken.sort((a, b) => a.takenDamage - b.takenDamage);
+				let playersTakenRank = playersTaken.findIndex(player => player.takenDamage === res.self_taken) + 1;
+				
+				playersKills.push({kills : res.self_kills});
+				$.each(response, function(i, kills){
+					playersKills.push({Kills : kills.team_kills});
+				});
+				playersKills.sort((a, b) => b.Kills - a.Kills);
+				let playersKillsRank = playersKills.findIndex(player => player.kills === res.self_kills) + 1;
+				
+				playersDeaths.push({deaths : res.self_deaths})
+				$.each(response, function(i, deaths){
+					playersDeaths.push({deaths : deaths.team_deaths});
+				});
+				playersDeaths.sort((a, b) => a.deaths - b.deaths);
+				let playersDeathsRank = playersDeaths.findIndex(player => player.deaths === res.self_deaths) + 1;
+				
+				
+				playersAssists.push({assists : res.self_assists});
+				$.each(response, function(i, assists){
+					playersAssists.push({assists : assists.team_assists});
+				});
+				playersAssists.sort((a, b) => b.assists - a.assists);
+				let playersAssistsRank = playersAssists.findIndex(player => player.assists === res.self_assists) + 1;
+				
+				playersRedWards.push({redWards : res.self_red_ward_placed});
+				$.each(response, function(i, redWards){
+					playersRedWards.push({redWards : redWards.team_red_ward_placed});
+				});
+				playersRedWards.sort((a, b) => b.redWards - a.redWards);
+				let playersRedWardsRank = playersRedWards.findIndex(player => player.redWards === res.self_red_ward_placed) + 1;
+				
+				playersCS.push({CS : res.self_cs});
+				$.each(response, function(i, CS){
+					playersCS.push({CS : CS.team_cs});
+				});
+				playersDamage.sort((a, b) => b.CS - a.CS);
+				let playersCSRank = playersCS.findIndex(player => player.CS === res.self_cs) + 1;
+				
+				let dealtDiv = $('<div class = "delatDiv"></div>');
+				let takenDiv = $('<div class = "takenDiv"></div>');
+				let killsDiv = $('<div class = "killsDiv"></div>');
+				let deathsDiv = $('<div class = "deathsDiv"></div>');
+				let assistsDiv = $('<div class = "assistsDiv"></div>');
+				let goldsDiv = $('<div class = "goldsDiv"></div>');
+				let redWardsDiv = $('<div class = "redWardsDiv"></div>');
+				let csDiv = $('<div class = "csDiv"></div>');
+				
+				let dealtTitle = $('<div class = "dealtTitleDiv"><span>피해량</span></div>');
+				let dealtRank = $('<div class = "dealtRankDiv">'+playersDamageRank+'위</div>');
+				let dealtGraph = $('<div class = "dealtGraphDiv"></div>');
+				let dealtText = $('<div class = "dealtTextDiv"><span><strong>'+res.self_dealt+'</strong><span>/'+res.total_dealt+'</span></span></div>');
+				dealtDiv.append(dealtTitle,dealtRank,dealtGraph,dealtText);
+				
+				let takenTitle = $('<div class = "takenTitleDiv"><span>받은 피해량</span></div>');
+				let takenRank = $('<div class = "takenRankDiv">'+playersTakenRank+'위</div>');
+				let takenGraph = $('<div class = "takenGraph"></div>');
+				let takenText = $('<div class = "takenTextDiv"><span><strong>'+res.self_taken+'</strong><span>/'+res.total_taken+'</span></span></div>');
+				takenDiv.append(takenTitle,takenRank,takenGraph,takenText);
+				
+				let killsTitle = $('<div class = "killsTitleDiv"><span>킬</span></div>');
+				let killsRank = $('<div class = "killsRankDiv">'+playersKillsRank+'위</div>');
+				let killsGraph = $('<div class = "killsGraphDiv"></div>');
+				let killsText = $('<div class = "killsTextDiv"><span><strong>'+res.self_kills+'</strong><span>/'+res.team_champion_kills+'</span></span></div>');
+				killsDiv.append(killsTitle,killsRank,killsGraph,killsText);
+				
+				let deathsTitle = $('<div class = "deathsTitleDiv"><span>데스</span></div>');
+				let deathsRank = $('<div class = "deathsRankDiv">'+playersDeathsRank+'위</div>');
+				let deathsGraph = $('<div class = "deathsGraphDiv"></div>');
+				let deathsText = $('<div deathsTextDiv><span><strong>'+res.self_deaths+'</strong><span>/'+res.team_champion_deaths+'</span></span></div>');
+				deathsDiv.append(deathsTitle,deathsRank,deathsGraph,deathsText);
+				
+				let assistsTitle = $('<div class = "assistsTitleDiv"><span>어시스트</span></div>');
+				let assistsRank = $('<div class = "assistsRankDiv">'+playersAssistsRank+'위</div>');
+				let assistsGraph = $('<div class = "assistsGraphDiv"></div>');
+				let assistsText = $('<div class = "assistsTextDiv"><span><strong>'+res.self_assists+'</strong><span>/'+res.team_champion_assists+'</span></span></div>');
+				assistsDiv.append(assistsTitle,assistsRank,assistsGraph,assistsText);
+				
+				let redWardsTitle = $('<div class = "redWardsTitleDiv"><span>제어와드</span></div>');
+				let redWardsRank = $('<div class = "redWardsRankDiv">'+playersRedWardsRank+'위</div>');
+				let redWardsGraph = $('<div class = "redWardsGraphDiv"></div>');
+				let redWardsText = $('<div class = "redWardsTextDiv"><span><strong>'+res.self_red_ward_placed+'</strong><span>/'+res.team_total_red_ward+'</span></span></div>');
+				redWardsDiv.append(redWardsTitle,redWardsRank,redWardsGraph,redWardsText);
+				
+				let CSTitle = $('<div class = "CSTitleDiv"><span>CS</span></div>');
+				let CSRank = $('<div class = "CSRankDiv">'+playersCSRank+'위</div>');
+				let CSGraph = $('<div class = "CSGraphDiv"></div>');
+				let CSText = $('<div class = "CSTextDiv"><span><strong>'+res.self_cs+'</strong><span>/ '+res.team_total_cs+'</span></span></div>');
+				csDiv.append(CSTitle,CSRank,CSGraph,CSText);
+				
+				data_div.append(dealtDiv, takenDiv, killsDiv, deathsDiv, assistsDiv, goldsDiv, redWardsDiv, csDiv);
+				
+			})
+			$(thisDiv).parent().siblings('div').filter('.data').html(data_div);
 		}).fail(err=>{
-			console.log(err)
+			console.log(err);
 		});
-	}); */
+	};
 	
 	
 	$('.rank_filter').click(function(){

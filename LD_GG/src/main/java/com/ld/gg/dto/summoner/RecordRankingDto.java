@@ -16,5 +16,11 @@ public class RecordRankingDto {
 	private int self_assists;
 	private int self_red_ward_placed;
 	private int self_cs;
-	
+	private int total_dealt;
+	private int total_taken;
+	private int team_champion_kills;
+	private int team_champion_deaths;
+	private int team_champion_assists;
+	private int team_total_red_ward;
+	private int team_total_cs;
 }

@@ -38,4 +38,5 @@ public class RecordInfoDto {
 	private int item6;
 	private int item7;
 	private String tier;
+	private int kills_participation;
 }

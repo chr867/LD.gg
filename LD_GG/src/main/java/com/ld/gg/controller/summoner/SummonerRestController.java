@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,6 +19,7 @@ import com.ld.gg.dto.summoner.RecordInfoDto;
 import com.ld.gg.dto.summoner.RecordRankingDto;
 import com.ld.gg.dto.summoner.SummonerDto;
 import com.ld.gg.dto.summoner.SummonerRankDto;
+import com.ld.gg.dto.summoner.TeamRankingDataDto;
 import com.ld.gg.service.SummonerService;
 
 @RestController
@@ -127,8 +129,8 @@ public class SummonerRestController {
 	}
 	
 	@GetMapping("/getRanking")
-	public List<RecordRankingDto> getRanking(String match_id, String summoner_name){
-		List<RecordRankingDto> rrd = ss.getRanking(match_id, summoner_name);
+	public RecordRankingDto getRanking(String match_id,String summoner_name){
+		RecordRankingDto rrd = ss.getRanking(match_id, summoner_name);
 		return rrd;
 	}
 	
@@ -145,6 +147,10 @@ public class SummonerRestController {
 		return mpd;
 	}
 	 
-	
+	@GetMapping("/getTeamData")
+	public List<TeamRankingDataDto> getTeamData(String match_id, String summoner_name){
+		List<TeamRankingDataDto> TRDD = ss.getTeamData(match_id, summoner_name);
+		return TRDD;
+	}
 
 }

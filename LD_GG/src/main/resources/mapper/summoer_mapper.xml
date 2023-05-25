@@ -283,6 +283,7 @@ WHERE
 	champ_name,
 	champ_level,
 	win,
+	ROUND((kills+assists) / team_champion_kills * 100,0) as kills_participation,
 	ri1.rune_img as main_rune1,
 	ri2.rune_img as sub_rune,
 	si1.spell_en_name as spell1,
@@ -344,44 +345,6 @@ WHERE
    #{summonerName}
 </select>
 
-<!--   <resultMap id="recordRanking" type="recordRanking">
-    <id property="self_dealt" column="self_dealt"/>
-    <id property="self_taken" column="self_taken"/>
-    <id property="self_kills" column="self_kills"/>
-    <id property="self_deaths" column="self_deaths"/>
-    <id property="self_assists" column="self_assists"/>
-    <id property="self_red_ward_placed" column="self_red_ward_placed"/>
-    <id property="self_cs" column="self_cs"/>
-    <id property="total_dealt" column="total_dealt"/>
-    <id property="total_taken" column="total_taken"/>
-    <id property="team_champion_kills" column="team_champion_kills"/>
-    <id property="team_champion_deaths" column="team_champion_deaths"/>
-    <id property="team_champion_assists" column="team_champion_assists"/>
-    <id property="team_total_red_ward" column="team_total_red_ward"/>
-    <id property="team_total_cs" column="team_total_cs"/>
-    <collection property="team_dealt" ofType="recordRanking" javaType = "java.util.ArrayList">
-        <id property="team_dealt" column="team_dealt"/>
-    </collection>
-    <collection property="team_taken" ofType="recordRanking" javaType = "java.util.ArrayList">
-        <id property="team_taken" column="team_taken"/>
-    </collection>
-    <collection property="team_kills" ofType="recordRanking" javaType = "java.util.ArrayList">
-        <id property="team_kills" column="team_kills"/>
-    </collection>
-    <collection property="team_deaths" ofType="recordRanking" javaType = "java.util.ArrayList">
-        <id property="team_deaths" column="team_deaths"/>
-    </collection>
-    <collection property="team_assists" ofType="recordRanking" javaType = "java.util.ArrayList">
-        <id property="team_assists" column="team_assists"/>
-    </collection>
-    <collection property="team_red_ward_placed" ofType="recordRanking">
-        <id property="team_red_ward_placed" column="team_red_ward_placed"/>
-    </collection>
-    <collection property="team_cs" ofType="recordRankingCSType">
-        <id property="team_cs" column="team_cs"/>
-    </collection>    
-</resultMap> -->
-
 <select id="getRanking" resultType="recordRanking">
    select
    (select dealt_to_champ from record where match_id = #{match_id} and summoner_name = #{summoner_name}) as self_dealt,
@@ -391,13 +354,6 @@ WHERE
    (select assists from record where match_id = #{match_id} and summoner_name = #{summoner_name}) as self_assists,
    (select red_ward_placed from record where match_id = #{match_id} and summoner_name = #{summoner_name}) as self_red_ward_placed,
    (select cs from record where match_id = #{match_id} and summoner_name = #{summoner_name}) as self_cs,
-   (SELECT dealt_to_champ FROM record WHERE match_id = #{match_id} AND summoner_name &lt;&gt; #{summoner_name} AND team_id = (SELECT team_id FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as team_dealt,
-   (SELECT damage_taken FROM record WHERE match_id = #{match_id} AND summoner_name &lt;&gt; #{summoner_name} AND team_id = (SELECT team_id FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as team_taken,
-   (SELECT kills FROM record WHERE match_id = #{match_id} AND summoner_name &lt;&gt; #{summoner_name} AND team_id = (SELECT team_id FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as team_kills,
-   (SELECT deaths FROM record WHERE match_id = #{match_id} AND summoner_name &lt;&gt; #{summoner_name} AND team_id = (SELECT team_id FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as team_deaths,
-   (SELECT assists FROM record WHERE match_id = #{match_id} AND summoner_name &lt;&gt; #{summoner_name} AND team_id = (SELECT team_id FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as team_assists,
-   (SELECT red_ward_placed FROM record WHERE match_id = #{match_id} AND summoner_name &lt;&gt; #{summoner_name} AND team_id = (SELECT team_id FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as team_red_ward_placed,
-   (SELECT cs FROM record WHERE match_id = #{match_id} AND summoner_name &lt;&gt; #{summoner_name} AND team_id = (SELECT team_id FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as team_cs,
    (select SUM(dealt_to_champ) from record where match_id = #{match_id} and team_id = (SELECT team_id FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as total_dealt,
    (select SUM(damage_taken) from record where match_id = #{match_id} and team_id = (SELECT team_id FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as total_taken,
    (select team_champion_kills from record where match_id = #{match_id} and summoner_name = #{summoner_name} and team_id = (SELECT team_id FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as team_champion_kills,
@@ -405,6 +361,26 @@ WHERE
    (select SUM(assists) from record where match_id = #{match_id} and team_id = (SELECT team_id FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as team_champion_assists,
    (select sum(red_ward_placed) from record where match_id = #{match_id} and team_id = (SELECT team_id FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as team_total_red_ward,
    (select sum(cs) from record where match_id = #{match_id} and team_id = (SELECT team_id FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as team_total_cs;
+</select>
+
+<select id="getTeamData" resultType = "teamData" parameterType = "Map">
+	SELECT
+    r.dealt_to_champ as team_dealt,
+    r.damage_taken as team_damage,
+    r.kills as team_kills,
+    r.deaths as team_deaths,
+    r.assists as team_assists,
+    r.red_ward_placed as team_red_ward_placed,
+    r.cs as team_cs
+		FROM
+    record AS r
+		JOIN
+    (SELECT team_id FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name}) AS t
+		ON
+    r.team_id = t.team_id
+		WHERE
+    r.match_id = #{match_id}
+    AND r.summoner_name &lt;&gt; #{summoner_name}
 </select>
 
 <select id="getSummoner" resultType="summoner">
