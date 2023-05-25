@@ -35,6 +35,7 @@ public class MentorProfileDTO {
     private int s_level;
     private int games;
     private int lp;
+    private int wins;
     private String profile_icon_id;
 }
 

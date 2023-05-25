@@ -86,7 +86,7 @@
 					<div id="ordered_box">
 					<p class='h4'>정렬순서</p>
 					  <button type="button" class='btn btn-outline-warning'>수업 횟수 많은</button>
-					  <button type="button" class='btn btn-outline-warning'>가격 낮은</button>
+					  <button type="button" class='btn btn-outline-warning'>평점 높은</button>
 					  <button type="button" class='btn btn-outline-warning'>후기 많은</button>
 					  <button type="button" class='btn btn-outline-warning'>티어 높은</button>
 					</div>
@@ -98,6 +98,7 @@
 			<h4>멘토 찾기</h4>
 			<div id="mentor-search-list">
 			<div id= "summary">
+				<span><em></em></span>
 				<span id="mentor-count"><em>0</em>명의 멘토님
 				</span>
 			</div>
@@ -258,8 +259,14 @@
     	            let member_list = JSON.parse(member_list_json);
     	            if (member_list == '' || member_list == null) {
     	              alert('검색 결과가 없습니다');
+    	              location.reload();
     	            }
+    	            
+	               $("#mentor-list").text('');
     	            let nul_count = 0
+    	            $('#summary')
+    	            .children($("<span>").text("(으)로 검색 된 ")
+    	              .children($("<em>").text(searchKeyword)));
     	            for (var i = 0; i < member_list.length; i++) {
     	              if(member_list[i].user_type == 2){
     	            let mentor_email = member_list[i].email;
@@ -272,13 +279,12 @@
     	                  mentor_email: mentor_email
     	                }),
     	                success: function(mentor) {
+    	                	
     	                	console.log(mentor);
     	                  if (mentor != null) {
    	                	  let dataLen = [];
    	                	  dataLen.push(mentor);
-   	                	  $('#summary').prepend($("<span>").text("(으)로 검색 된 ").prepend($("<em>").text(searchKeyword)));
    	                	  $('#mentor-count em').text(dataLen.length);
-   	                	  $("#mentor-list").text('');
     	                    const mentorList = $("#mentor-list");
     	                    const mentorDiv = $("<div></div>").appendTo(mentorList); //멘토 div
     	                    mentorDiv
@@ -363,6 +369,7 @@
     	                },
     	                error: function(error) {
     	                	alert('검색 결과가 없습니다');
+    	                	location.reload();
     	                  console.error('Error:', error);
     	                }
     	              })
@@ -370,6 +377,7 @@
     	            	  nul_count = nul_count + 1;
     	            	  if(nul_count == member_list.length){
     	            		  alert('검색 결과가 없습니다')
+    	            		  location.reload();
     	            	  }
     	              }
     	            }
