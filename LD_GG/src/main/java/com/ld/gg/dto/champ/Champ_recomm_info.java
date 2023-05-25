@@ -32,6 +32,9 @@ public class Champ_recomm_info {
     private String item_build;
     private String skill_build;
     private String mastery_sequence;
+    private String MAIN_KEYSTONE_ID_img;
+    private String MAIN_SUB1_ID_img;
+    private String SUB_KEYSTONE_ID_img;
     
     private String spells;
     
