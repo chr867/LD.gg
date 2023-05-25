@@ -21,49 +21,68 @@
 	crossorigin="anonymous"></script>
 <style type="text/css">
 /*  게시글 확인용으로 GPT로 작성된 CSS입니다 프론트페이지 작업시 삭제해주세요*/
-body {
-	font-family: Arial, sans-serif;
-	background-color: #F5F5F5;
+@font-face {
+    font-family: 'NanumSquareNeo-Variable';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
 }
+*{
+ font-family: 'NanumSquareNeo-Variable';
+}
+body {
+      image-rendering: -webkit-optimize-contrast; /* chrome */
+      background-image: url("/resources/img/mate/back.png");
+      background-size: 100%;
+      min-width: 1312px;
+      overflow-x: hidden;
+    }
 
-h1 {
+#title img{
+
+}
+h2 {
+	font-weight: bold;
 	font-size: 24px;
 	color: #333;
 	margin-top: 20px;
 	margin-bottom: 10px;
+	padding-left: 50px;
 }
 
 .container {
-	max-width: 800px;
+	display: flex;
+	flex-direction: column;
+	justify-content: start;
+ 	align-items: center;
+	width: 1192px;
+	min-width: 1192px;
+	height: 1500px;
+	background-image: url("/resources/img/mate/detailback.png");
+ 	background-position: top;
+    background-repeat: no-repeat; 
+    background-size: 100%;
 	margin: 0 auto;
 	padding: 20px;
-	background-color: #FFF;
-	box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+	
 }
 
-table {
-	width: 100%;
-	border-collapse: collapse;
-	margin-bottom: 20px;
-}
 
-th, td {
+
+td {
 	padding: 10px;
-	text-align: left;
-	border-bottom: 1px solid #CCC;
+	text-align: center;
+	font-size:20px;
 }
 
-th {
-	background-color: #EEE;
-}
 
 .label {
-	display: inline-block;
 	width: 120px;
+	text-align: center;
+	
 	font-weight: bold;
-	color: #666;
-	margin-right: 10px;
-	margin-bottom: 5px;
+	color: #6f8c9b;
+	font-size:20px;
 }
 
 .value {
@@ -71,11 +90,11 @@ th {
 }
 
 #comment-form {
+	min-width: 600px;
 	margin-top: 20px;
 	padding: 10px;
 	border-radius: 10px;
 	background-color: #f2f2f2;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
 #comment-textarea {
@@ -89,7 +108,6 @@ th {
 	background-color: #fff;
 	font-size: 16px;
 	color: #444;
-	font-family: 'Noto Sans KR', sans-serif;
 }
 
 #comment-form input[type="submit"] {
@@ -103,7 +121,6 @@ th {
 	border-radius: 5px;
 	cursor: pointer;
 	font-size: 16px;
-	font-family: 'Noto Sans KR', sans-serif;
 }
 
 #comment-form input[type="submit"]:hover {
@@ -111,76 +128,196 @@ th {
 }
 
 #comment-submit-btn {
-	display: inline-block;
-	background-color: #EAEAEA;
-	padding: 8px 12px;
-	border: none;
-	border-radius: 3px;
-	cursor: pointer;
-	width: 8%;
-	height: 70px;
+  height: 64px;
+  width:94px;
+  display: inline-block;
+  padding: 25px 15px;
+  margin: 28px 0px 25px 12px;
+  background-color: transparent;
+  background-size: 100%;
+  color: #333;
+  text-decoration: none;
 }
 
 #comment-submit-btn:hover {
-	background-color: #BDBDBD;
+  background-image: url("/resources/img/mate/writebt.png");
+  background-position: center;
+  background-repeat: no-repeat; 
 }
 
 .modifyBox {
 	width: 380px;
 	height: 70px;
 }
+#content-title {
+ line-height : 270px;
+}
+
+#info {
+	flex-direction: column; 
+}
+#comment-select {
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+#info tr,#comment-select{
+
+	font-weight: bold;
+	color: #333;
+	font-size:20px;
+}
+#info tr td{
+	text-align: center;
+
+}
+#select-title{
+	width: 140px;
+	height: 130px;
+	text-align: center;
+}
+#input-group{
+  display:flex;
+  justify-content: flex-start;
+  align-items: center;
+  background-image: url("/resources/img/mate/cc.png");
+  background-position: center;  
+  width: 546px; /* 버튼 이미지의 너비 */
+
+}
+input:focus {outline: 2px solid #d50000;} /* outline 테두리 속성 수정 */
+input:focus {outline: none;} /* outline 테두리 없애기 */
+#comment-textarea {
+	
+	width: 388px;
+	height: 70px;
+    text-align: start;
+    cursor: text;
+    background: none;
+    margin: 30px 0px 25px 30px;
+
+}
+#comment-textarea::placeholder {
+  color: #0099ff; /* 원하는 색상으로 변경 */
+  font-size: 25px;
+}
+.main-button-group {
+  display:flex;
+  align-items: center;
+}
+.main-button {
+  height: 40px;
+  width: 40px;
+  background-position: center;
+  padding: 25px 15px;
+  background-color: transparent;
+  color: #333;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 14px;
+  border:none;
+}
+#modifyButton {
+  background-image: url("/resources/img/mate/detailMainModify.png");
+  background-repeat: no-repeat; 
+}
+#deleteButton {
+  background-image: url("/resources/img/mate/detailMainDelete.png");
+  background-repeat: no-repeat; 
+}
+#modifyButton:hover {
+  background-image: url("/resources/img/mate/detailMainModify2.png");
+  background-repeat: no-repeat; 
+}
+#deleteButton:hover {
+  background-image: url("/resources/img/mate/detailMainDelete2.png");
+  background-repeat: no-repeat; 
+}
+.reply-button {
+  height: 25px;
+  width: 25px;
+  background-position: center;
+  background-color: transparent;
+  color: #333;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 14px;
+  border:none;
+}
+#select-btn {
+  background-image: url("/resources/img/mate/detailReplySelect.png");
+  background-repeat: no-repeat; 
+}
+#delete-btn {
+  background-image: url("/resources/img/mate/detailReplyDelete.png");
+  background-repeat: no-repeat; 
+}
+#select-btn:hover {
+  background-image: url("/resources/img/mate/detailReplySelect2.png");
+  background-repeat: no-repeat; 
+}
+#delete-btn:hover {
+  background-image: url("/resources/img/mate/detailReplyDelete2.png");
+  background-repeat: no-repeat; 
+}
+
+
+
 </style>
 </head>
 <body>
 	<div class="container">
-		<h1>메이트 게시판 상세페이지</h1>
+		<div id="title"><img src="/resources/img/logo/LDGG.png" width="160" height="160" alt="ldgg"></div>
 		<h3 style="text-align: center; color:red;">${errorMsg}</h3>
+		<table id="info">
+			<tr>
+				<td width="50"></td>
+				<td class="value" width="140">소환사명</td>
+				<td class="value" width="140">최근전적</td>
+				<td class="value" width="200">작성자</td>
+				<td class="value" width="200">작성일</td>
+			</tr>
+			<br>
+			<tr>
+				<td width="50"></td>
+				<td class="value" style="color: #336699; font-weight: bold;" width="140">${MateDetails.lol_account}</td>
+				<td class="value" style="color: #336699; font-weight: bold;" width="140">"최근승률 자리"</td>
+				<td class="value" width="200">${MateDetails.email}</td>
+				<td class="value" width="200">${MateDetails.mate_date}</td>
+			</tr>
+		</table>
+		<table id='detail-back'>
+			<tr>
+				<td class="label" height="50" >글 번호</td>
+				<td class="value" width="480" height="50">${MateDetails.mate_id}</td>
+			</tr>
+			<tr>
+				<td class="label" height="68">제목</td>
+				<td class="value" width="480" height="50">${MateDetails.mate_title}</td>
+			</tr>
+			
 		<table>
-			<tr>
-				<th class="label">글 번호</th>
-				<td class="value">${MateDetails.mate_id}</td>
-			</tr>
-			<tr>
-				<th class="label">제목</th>
-				<td class="value">${MateDetails.mate_title}</td>
-			</tr>
-			<tr>
-				<th class="label">내용</th>
-				<td class="value">${MateDetails.mate_content}</td>
-			</tr>
-
-			<tr>
-				<th class="label">소환사명</th>
-				<td class="value">${MateDetails.lol_account}</td>
-			</tr>
-			<tr>
-				<th class="label">최근전적</th>
-				<td class="value">"최근승률 자리"</td>
-			</tr>
-			<tr>
-				<th class="label">작성자</th>
-				<td class="value">${MateDetails.email}</td>
-			</tr>
-			<tr>
-				<th class="label">작성일</th>
-				<td class="value">${MateDetails.mate_date}</td>
+			<tr >
+				<td class="label" height="300" id="content-title">내용</td>
+				<td class="value" width="480" height="300" >${MateDetails.mate_content}</td>
 			</tr>
 		</table>
-		<button onclick=mateModify(${MateDetails.mate_id}) id="modifyButton">게시물
-			수정하기</button>
-		<button onclick=mateDelete(${MateDetails.mate_id}) id="deleteButton">게시물
-			삭제하기</button>
+		<div class="main-button-group">
+			<button onclick=mateModify(${MateDetails.mate_id}) id="modifyButton" class="main-button"></button>
+			<button onclick=mateDelete(${MateDetails.mate_id}) id="deleteButton" class="main-button"></button>
+		</div>
 		<br>
-		<table id="comment-select">
+		<div id="comment-select">
 
-		</table>
+		</div>
 		<br>
-		<h2>댓글</h2>
 		<div id="comment-section">
-			<div id="comment-form">
-				<input type="text" placeholder="댓글을 입력해주세요" id="comment-textarea">
-				<button id="comment-submit-btn" onclick="submitComment()">등록</button>
-			</div>
+			<div id="input-group">
+				<input type="text" placeholder="댓글을 입력해주세요" id="comment-textarea" style="border:0 solid black">
+					<button id="comment-submit-btn" onclick="submitComment()"
+						style="border: 0 solid black"></button>
+				</div>
 
 
 			<table id="comment-list">
@@ -257,15 +394,15 @@ function loadComments() {
         	let deleteButton = '';
         	let modifyButton = '';
         	if(myEmail===reply.email && myEmail !=reply.mate_apply &&reply.mate_select===0){
-        		selectButton = '<td><button id="comment-select-btn-'+reply.mate_r_id+'" onclick="selectCommentModify('+reply.mate_id+','+reply.mate_r_id+')">선택</button></td>'
+        		selectButton = '<td><button class="reply-button" id="select-btn" onclick="selectCommentModify('+reply.mate_id+','+reply.mate_r_id+')"></button></td>'
         	}else if(myEmail===reply.mate_apply){
-        		selectButton = '<td><button id="comment-delete-btn-'+reply.mate_r_id+'" onclick="deleteComment('+reply.mate_id+','+reply.mate_r_id+')">삭제</button></td>'
+        		selectButton = '<td><button class="reply-button" id="delete-btn" onclick="deleteComment('+reply.mate_id+','+reply.mate_r_id+')"></button></td>'
         	}
         	replyList += '<tr height="35" align="center" id="reply_box_'+reply.mate_r_id+'">'
-        	replyList += '<td width="100">'+reply.lol_account+'</td>'
+        	replyList += '<td width="200">'+reply.lol_account+'</td>'
         	replyList += '<td width="300" id="content_num_'+reply.mate_r_id+'">'+reply.mate_r_content+'</td>'
         	replyList += '<td width="100">최근승률 자리</td>'
-        	replyList += '<td width="100">'+reply.mate_r_date+'</td>'
+        	replyList += '<td width="200">'+reply.mate_r_date+'</td>'
         	replyList += selectButton
         	replyList += deleteButton
         	replyList += '</tr>'
@@ -309,18 +446,21 @@ function selectComment() {
     	console.log(res);
     	if(res){
     	let selectList="";
-    	
-        	selectList += '<h2>메이트 메칭</h2>'
+        	selectList += '<table>'
+        	selectList += '<div><tr><td id="select-title">감다뒤</td></tr></div>'
+        	selectList += '</table>'
+        	selectList += '<table id="select-group">'
         	selectList += '<tr>'
-        	selectList += '<td width="100">소환사명</td>'
-        	selectList += '<td width="300" id="content_num_'+res.mate_r_id+'">내용</td>'
-        	selectList += '<td width="100">최근승률</td>'
+        	selectList += '<td width="200">소환사명</td>'
+        	selectList += '<td width="200" id="content_num">내용</td>'
+        	selectList += '<td width="140">최근승률</td>'
         	selectList += '</tr>'
         	selectList += '<tr>'
-        	selectList += '<td width="100">'+res.lol_account+'</td>'
-        	selectList += '<td width="300" id="content_num_'+res.mate_r_id+'">'+res.mate_r_content+'</td>'
-        	selectList += '<td width="100">최근승률 자리(티어,라인등 기타정보)</td>'
+        	selectList += '<td width="200" style="color:#336699;">'+res.lol_account+'</td>'
+        	selectList += '<td width="200" height="80" id="content_num">'+res.mate_r_content+'</td>'
+        	selectList += '<td width="140">최근승률 자리</td>'
         	selectList += '</tr>'
+        	selectList += '</table>'
         	console.log(selectList);
         	loadComments();
         $('#comment-select').html(selectList)
@@ -349,42 +489,6 @@ function deleteComment(mate_id,mate_r_id) {
 	
 	
 }
-/*function selectComment() {
-    $.ajax({
-        method: 'get',
-        url: '/mate/reply/select',
-        data: {mate_id: ${MateReplyInfo.mate_id},
-        	   mate_r_id:${MateReplyInfo.mate_r_id}},
-        	   mate_r_date:${MateReplyInfo.mate_r_date}
-    }).done(res => {
-    	console.log(res);
-    	let replyList = "";
-        res.forEach(reply => {
-        	let selectButton = '';
-        	let deleteButton = '';
-        	let modifyButton = '';
-        	if(myEmail===reply.email && myEmail !=reply.mate_apply &&reply.mate_select===0){
-        		selectButton = '<td><button id="comment-select-btn onclick=selectComment()">선택</button></td>'
-        	}else if(myEmail===reply.mate_apply){
-        		deleteButton = '<td><button id="comment-delete-btn-'+reply.mate_r_id+'" onclick="deleteComment('+reply.t_r_num+')">삭제</button></td>'
-        		modifyButton = '<td><button id="comment-modify-btn-'+reply.mate_r_id+'" onclick="modifyReplyBtn('+reply.t_r_num+')">수정</button></td>'
-        	}
-        	replyList += '<tr height="35" align="center" id="reply_box_'+reply.mate_r_id+'">'
-        	replyList += '<td width="100">'+reply.lol_account+'</td>'
-        	replyList += '<td width="300" id="content_num_'+reply.mate_r_id+'">'+reply.mate_r_content+'</td>'
-        	replyList += '<td width="100">최근승률 자리</td>'
-        	replyList += '<td width="100">'+reply.mate_r_date+'</td>'
-        	replyList += selectButton
-        	replyList += deleteButton
-        	replyList += modifyButton
-        	replyList += '</tr>'
-        });
-        console.log(replyList);
-        $('#comment-list').html(replyList)
-    }).fail(err => {
-        console.log(err);
-    }); 
-}*/
 loadComments();
 selectComment();
 </script>

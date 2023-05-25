@@ -4,8 +4,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
+
 <title>mate/list.jsp</title>
+<link href="${pageContext.request.contextPath}/resources/css/mate/reset.css" rel="stylesheet">
 </head>
+
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
 	rel="stylesheet"
@@ -25,52 +28,137 @@
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/jquery.jqgrid.min.js"></script>
 <style type="text/css">
+@font-face {
+    font-family: 'NanumSquareNeo-Variable';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+*{
+ font-family: 'NanumSquareNeo-Variable';
+}
+
+body {
+      image-rendering: -webkit-optimize-contrast; /* chrome */
+      background-image: url("/resources/img/mate/back.png");
+      background-size: 100%;
+      min-width: 1312px;
+      overflow-x: hidden;
+    }
+
 #bookmarkicon {
-	width: 50px; /* 버튼 이미지의 너비 */
-	height: 50px; /* 버튼 이미지의 높이 */
+	width: 10px; /* 버튼 이미지의 너비 */
+	height: 10px; /* 버튼 이미지의 높이 */
+}
+
+#input-group{
+  background-image: url("/resources/img/mate/sc.png");
+  background-position: center;  
+  width: 546px; /* 버튼 이미지의 너비 */
+  display: flex;
+
+}
+/*그리드 제목 */
+.ui-jqgrid .ui-jqgrid-htable .ui-jqgrid-labels th div {
+    overflow: hidden;
+    position: relative;
+    height: auto;
+    margin: 2px 2px;
+	font-size: 30px;
+	font-weight: bold;
+	color: #6f8c9b;
 }
 
 /* 그리드 헤더 */
 .ui-jqgrid .ui-jqgrid-htable th div {
-	background-color: #f2f2f2;
-	background-image: linear-gradient(to bottom, #f2f2f2, #d9d9d9);
-	border: none;
-	padding: 10px;
-}
-/* 그리드 셀 */
-.ui-jqgrid tr.jqgrow td {
-	padding: 8px;
 }
 
 /* 그리드 셀 내용 */
-.ui-jqgrid tr.jqgrow td {
+.ui-jqgrid .ui-jqgrid-bdiv tr.ui-row-ltr>td{
+	border:none;
+	padding: 20px;
 	color: #333;
-	font-size: 14px;
-}
-/* 검색 버튼 */
-#search {
-	background-color: #f2f2f2;
-	background-image: linear-gradient(to bottom, #f2f2f2, #d9d9d9);
-	border: none;
-	color: #333;
-	padding: 8px;
-	font-size: 14px;
-	cursor: pointer;
+	font-size: 20px;
 }
 
+.sc-button {
+  height: 64px;
+  width:71px;
+  background-position: center;
+  display: inline-block;
+  padding: 25px 15px;
+  margin: 33px 0px 25px 8px;
+  background-color: transparent;
+  color: #333;
+  text-decoration: none;
+
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.sc-button:hover {
+  background-image: url("/resources/img/mate/scbt.png");
+}
+.wt-button {
+  height: 64px;
+  width:94px;
+  display: inline-block;
+  padding: 25px 15px;
+  margin: 33px 0px 25px 12px;
+  background-color: transparent;
+  color: #333;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.wt-button:hover {
+  background-image: url("/resources/img/mate/writebt.png");
+  
+}
+#keyword {
+	
+	width: 310px;
+	height: 70px;
+    text-align: start;
+    cursor: text;
+    background: none;
+    margin: 30px 0px 25px 30px;
+
+}
+input:focus {outline: 2px solid #d50000;} /* outline 테두리 속성 수정 */
+input:focus {outline: none;} /* outline 테두리 없애기 */
+#keyword::placeholder {
+  color: #0099ff; /* 원하는 색상으로 변경 */
+  font-size: 25px;
+}
+#grid-wrapper {
+  width: 1310px;
+  display: flex;
+  flex-direction: column;
+  background-image: url("/resources/img/mate/matetable.png");
+  background-repeat: no-repeat;
+  justify-content: center;
+  align-items: center;
+  height:1085px; 
+}
+#grid-wrapper img{
+margin-top:40px
+}
 /* 글 작성 버튼 */
-a[href="/mate/write"] {
-	background-color: #f2f2f2;
-	background-image: linear-gradient(to bottom, #f2f2f2, #d9d9d9);
-	border: none;
+/* #write {
+	background-color: none;
+	width: 70px;
+	height: 70px;
+	border:red solid 1px;
 	color: #333;
 	padding: 8px;
 	font-size: 14px;
 	text-decoration: none;
-}
+} */
 
 .ui-pg-table .ui-pg-button {
-	background-color: #4CAF50;
+	background-color: #6699ff;
 	border: none;
 	color: white;
 	padding: 8px 16px;
@@ -79,16 +167,28 @@ a[href="/mate/write"] {
 	border-radius: 5px;
 	margin-left: 10px;
 }
+#first_pager,#last_pager {
+	background-color: #99ccff;
+	border: none;
+	color: white;
+	padding: 8px 16px;
+	font-size: 16px;
+	cursor: pointer;
+	border-radius: 5px;
+}
 
 .ui-pg-table .ui-pg-button:hover {
-	background-color: #3e8e41;
+	background-color: #cccccc;
+}
+#last_pager:hover, #first_pager:hover{
+	background-color: #cccccc;
 }
 
-.ui-jqgrid .ui-pg-table .ui-pg-button {
-	width: 40px;
-	height: 40px;
+.ui-jqgrid .ui-pg-table .ui-pg-button,#last_pager:hover, #first_pager {
+	width: 20px;
+	height: 20px;
 	line-height: 40px;
-}
+} 
 </style>
 <body>
 	<div id="bookmark">
@@ -99,25 +199,26 @@ a[href="/mate/write"] {
 		</table>
 	</div>
 	<div class="container">
-		<h1>메이트 게시판</h1>
 		<div class="bookmark"></div>
-		<div class="row search-container">
-			<div class="col-md-6">
-				<div class="input-group">
-					<br> <input type="text" class="form-control"
-						placeholder="제목 검색" id="keyword"> <span
-						class="input-group-btn">
-						<button class="btn btn-default" type="button" id="search">검색</button>
-					</span>
+		<div id="row search-container">
+			<div id="col-md-6">
+				<div id="input-group">
+					<div>
+						<input type="text"placeholder="제목 검색" id="keyword" style="border:0 solid black"> 
+					</div>
+					<div>
+						<a class="sc-button" id="search"></a>
+					</div>
+					<div>
+						<a href="/mate/write" class="wt-button" id="write"></a>
+					</div>
 				</div>
-			</div>
-			<div class="col-md-6 text-right">
-				<a href="/mate/write" class="btn btn-primary">글 작성</a>
 			</div>
 		</div>
 		<div id="grid-wrapper">
 			<table id="grid"></table>
 			<div id="pager"></div>
+		<img id="logo" src="/resources/img/logo/LDGG.png" width="110" height="110" alt="ldgg">
 		</div>
 	</div>
 	<script
@@ -136,24 +237,25 @@ a[href="/mate/write"] {
 		colModel : [ {
 			name : 'mate_id',
 			index : 'mate_id',
-			width : 90,
+			width : 100,
 			align : "center",
 			key : true
+
 		}, {
 			name : 'mate_title',
 			index : 'mate_id',
-			width : 90,
+			width : 300,
 			align : "center",
 			sortable : false
 		}, {
 			name : 'lol_account',
 			index : 'mate_id',
-			width : 90,
+			width : 300,
 			align : "center"
 		}, {
 			name : 'mate_date',
 			index : 'mate_id',
-			width : 90,
+			width : 300,
 			align : "center"
 		}
 
@@ -166,10 +268,12 @@ a[href="/mate/write"] {
 		rowNum : 10,
 		sortname : 'date',
 		sortorder : 'desc',
-		width : 1000,
-		height : 500,
+		autowidth:true,    // jQgrid width 자동100% 채워지게
+		shrinkToFit:false,  // width를 자동설정 해주는 기능
+		width : 1300,
+		height : 735,
 		pgbuttons : true, // 이전/다음 버튼 표시 여부
-		pgtext : null, // 페이징 정보(1 - 10 / 100) 표시 여부
+		pgtext: "페이지 {1}", // 페이지 번호 텍스트 설정
 		viewrecords : false, // 레코드 수 표시 여부
 		recordpos : 'left', // 레코드 수 위치
 		pagerpos : 'center', // 페이징 버튼 위치
@@ -189,10 +293,10 @@ document.getElementById("search").addEventListener("click", function() {
 		postData: {keyword: keyword},
 		colNames : [ '번호', '제목', '소환사명', '날짜' ],
 		colModel:[
-			{name:'mate_id', index:'mate_id', width:90, align: "center", key:true},
-			{name:'mate_title', index:'mate_id', width:90, align: "center"},
-			{name:'lol_account', index:'mate_id', width:90, align: "center"},
-			{name:'mate_date', index:'mate_id', width:90, align: "center"},
+			{name:'mate_id', index:'mate_id', width:100, align: "center", key:true},
+			{name:'mate_title', index:'mate_id', width:300, align: "center"},
+			{name:'lol_account', index:'mate_id', width:300, align: "center"},
+			{name:'mate_date', index:'mate_id', width:300, align: "center"},
 			],
 			loadtext : '로딩중..',
 			sortable : true,
@@ -202,10 +306,10 @@ document.getElementById("search").addEventListener("click", function() {
 			rowNum: 10,
 			sortname: 'date',
 			sortorder: 'desc',
-			width: 1000,
-			height: 500,
+			width: 1300,
+			height: 735,
 		    pgbuttons: true,  // 이전/다음 버튼 표시 여부
-		    pgtext: null,      // 페이징 정보(1 - 10 / 100) 표시 여부
+		    pgtext: "페이지 {1}",    // 페이징 정보(1 - 10 / 100) 표시 여부
 		    viewrecords: false, // 레코드 수 표시 여부
 		    recordpos: 'left', // 레코드 수 위치
 		    pagerpos: 'center', // 페이징 버튼 위치
