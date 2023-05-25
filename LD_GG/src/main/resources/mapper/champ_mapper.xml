@@ -161,7 +161,8 @@
 	<select id="get_champion_match_up" resultType="champ_match_up">
 		<![CDATA[
 			SELECT c.champion_id, m.match_up_cnt, i.champion_kr_name as champion_name, i.champion_img, m.lane_kill_rate, m.kill_participation, m.kda,
-			m.tower_kill_time, t.win_rate, t.pick_rate, t.ban_rate, c.team_position as team_position, m.match_up_win_rate as match_up_win_rate
+			m.tower_kill_time, t.win_rate, t.pick_rate, t.ban_rate, c.team_position as team_position, m.match_up_win_rate as match_up_win_rate,
+			m.enemy_champ_id
 			FROM champion_lane AS c
 			JOIN champion_info AS i ON c.champion_id = i.champion_id
 			JOIN champion_match_up m ON c.champion_id = m.champion_id AND c.team_position = m.team_position
@@ -182,7 +183,7 @@
 	
 	<select id="get_enemy_champion_match_up" resultType="champ_match_up">
 		<![CDATA[
-			SELECT i.champion_id, i.champion_kr_name as champion_name, i.champion_img, m.lane_kill_rate, m.kill_participation, m.kda,
+			SELECT m.champion_id, i.champion_kr_name as champion_name, i.champion_img, m.lane_kill_rate, m.kill_participation, m.kda,
 			 m.tower_kill_time, t.win_rate, t.pick_rate, t.ban_rate, m.match_up_win_rate as match_up_win_rate
 			FROM champion_match_up m
 			JOIN champion_info AS i ON i.champion_id = m.champion_id 

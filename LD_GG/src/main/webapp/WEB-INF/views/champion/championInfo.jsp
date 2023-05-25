@@ -1352,6 +1352,8 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 let response;
+let cid;
+
 	// get_match_up
 	function get_match_up(champion_id){
 		$.ajax({
@@ -1359,7 +1361,8 @@ let response;
 			type: 'POST',
 			data: {champion_id: champion_id}
 		}).done(res=>{
-			response = res
+			response = res;
+			cid = champion_id;
 			console.log(res)
 			let left = res['champion']
 			let right = res['enemy']
@@ -1428,8 +1431,8 @@ function make_chart(left, right){
 
 }
 	
-function make_table(match_ups){
-	console.log('table')
+function make_table(enemys){
+	console.log(enemys)
 }
 
 </script>
