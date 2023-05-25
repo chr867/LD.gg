@@ -35,12 +35,10 @@ body {
       background-image: url("/resources/img/mate/back.png");
       background-size: 100%;
       min-width: 1312px;
+      min-height: 1500px;
       overflow-x: hidden;
     }
 
-#title img{
-
-}
 h2 {
 	font-weight: bold;
 	font-size: 24px;
@@ -53,11 +51,9 @@ h2 {
 .container {
 	display: flex;
 	flex-direction: column;
-	justify-content: start;
+	justify-content: flex-start;
  	align-items: center;
 	width: 1192px;
-	min-width: 1192px;
-	height: 1500px;
 	background-image: url("/resources/img/mate/detailback.png");
  	background-position: top;
     background-repeat: no-repeat; 
@@ -132,7 +128,7 @@ td {
   width:94px;
   display: inline-block;
   padding: 25px 15px;
-  margin: 28px 0px 25px 12px;
+  margin: 28px 0px 25px 2px;
   background-color: transparent;
   background-size: 100%;
   color: #333;
@@ -160,6 +156,7 @@ td {
   display:flex;
   flex-direction: row;
   align-items: center;
+  height: 130px;
 }
 
 #info tr,#comment-select{
@@ -261,7 +258,9 @@ input:focus {outline: none;} /* outline 테두리 없애기 */
   background-image: url("/resources/img/mate/detailReplyDelete2.png");
   background-repeat: no-repeat; 
 }
-
+#comment-list{
+min-height:400px;
+}
 
 
 </style>
@@ -297,7 +296,7 @@ input:focus {outline: none;} /* outline 테두리 없애기 */
 				<td class="value" width="480" height="50">${MateDetails.mate_title}</td>
 			</tr>
 			
-		<table>
+		
 			<tr >
 				<td class="label" height="300" id="content-title">내용</td>
 				<td class="value" width="480" height="300" >${MateDetails.mate_content}</td>
@@ -308,24 +307,31 @@ input:focus {outline: none;} /* outline 테두리 없애기 */
 			<button onclick=mateDelete(${MateDetails.mate_id}) id="deleteButton" class="main-button"></button>
 		</div>
 		<br>
-		<div id="comment-select">
+		<div id="comment-select" >
 
 		</div>
 		<br>
-		<div id="comment-section">
-			<div id="input-group">
+		<table id="comment-section">
+<!-- 		<div id="input-group">
 				<input type="text" placeholder="댓글을 입력해주세요" id="comment-textarea" style="border:0 solid black">
 					<button id="comment-submit-btn" onclick="submitComment()"
 						style="border: 0 solid black"></button>
-				</div>
+			</div> -->
+			 <tr>
+		        <td id="input-group">
+		            <input type="text" placeholder="댓글을 입력해주세요" id="comment-textarea" style="border:0 solid black">
+		            <button id="comment-submit-btn" onclick="submitComment()" style="border: 0 solid black"></button>
+		        </td>
+		     
+		    </tr>
 
+			<tr id="comment-list">
 
-			<table id="comment-list">
-
-			</table>
+			</tr>
+		</table>
 
 		</div>
-	</div>
+	
 
 </body>
 <script type="text/javascript">
@@ -398,9 +404,9 @@ function loadComments() {
         	}else if(myEmail===reply.mate_apply){
         		selectButton = '<td><button class="reply-button" id="delete-btn" onclick="deleteComment('+reply.mate_id+','+reply.mate_r_id+')"></button></td>'
         	}
-        	replyList += '<tr height="35" align="center" id="reply_box_'+reply.mate_r_id+'">'
+        	replyList += '<tr height="35" align="center" id="reply_box">'
         	replyList += '<td width="200">'+reply.lol_account+'</td>'
-        	replyList += '<td width="300" id="content_num_'+reply.mate_r_id+'">'+reply.mate_r_content+'</td>'
+        	replyList += '<td width="300" id="content_num">'+reply.mate_r_content+'</td>'
         	replyList += '<td width="100">최근승률 자리</td>'
         	replyList += '<td width="200">'+reply.mate_r_date+'</td>'
         	replyList += selectButton
