@@ -58,4 +58,6 @@ public interface Summoner_dao {
 
 	List<TeamRankingDataDto> getTeamData(@Param("match_id") String match_id, @Param("summoner_name") String summoner_name);
 
+	List<ChampRecordDto> getChampRecordLane(@Param("summoner_name") String summoner_name, @Param("paramLane") String paramLane);
+
 }
