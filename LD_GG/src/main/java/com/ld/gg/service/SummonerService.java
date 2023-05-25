@@ -123,4 +123,9 @@ public class SummonerService {
 		return TRDD;
 	}
 
+	public List<ChampRecordDto> getChampRecordLane(String summoner_name, String paramLane) {
+		List<ChampRecordDto> crd = SD.getChampRecordLane(summoner_name, paramLane);
+		return crd;
+	}
+
 }

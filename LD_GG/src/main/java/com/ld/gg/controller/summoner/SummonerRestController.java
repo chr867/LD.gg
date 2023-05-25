@@ -92,6 +92,12 @@ public class SummonerRestController {
 		return crd;
 	}
 	
+	@GetMapping("/getChampRecordLane")
+	public List<ChampRecordDto> getChampRecordLane(String summoner_name, String paramLane){
+		List<ChampRecordDto> crd = ss.getChampRecordLane(summoner_name, paramLane);
+		return crd;
+	}
+	
 	@GetMapping("/get_champ_solo")
 	public List<ChampRecordDto> getChampSolo(String summoner_name){
 		List<ChampRecordDto> crd = ss.getChampSolo(summoner_name);
