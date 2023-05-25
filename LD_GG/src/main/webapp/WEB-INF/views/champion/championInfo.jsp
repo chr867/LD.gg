@@ -176,7 +176,7 @@
 }
 
 .lane-img:hover, .lane-img:active {
-	background-color: #E5E5E5;
+	background-color: #606060;
 }
 
 .champion-easy-box {
@@ -234,9 +234,18 @@
 	box-sizing: border-box;
 	background-color: #fff;
 	border-radius: 0.5rem;
-	margin-top: 20px;
 }
-
+.rune-title{
+	margin-top: 20px;
+	background-color: #fff;
+	border-radius: 0.5rem;
+}
+.rune-title h4{
+	margin: 0;
+	font-size: 18px;
+	font-weight: 700;
+	text-align: center;
+}
 .rune-box {
 	width: 100%;
 	height: 300px;
@@ -327,6 +336,7 @@
 	box-sizing: border-box;
 	padding: 5px;
 	display: flex;
+	border-radius: 0.5rem;
 }
 .rune-select-button{
 	height: 100%;
@@ -407,6 +417,41 @@
 #chartdiv {
 	
 }
+</style>
+
+<style type="text/css">
+.spell-container{
+	background-color: #fff;
+	height: 200px;
+	border-radius: 0.5rem;
+	margin-top: 20px;
+	box-sizing: border-box;
+}
+.spell-title h4{
+	margin: 0;
+	font-size: 18px;
+	font-weight: 700;
+	text-align: center;
+}
+.spells{
+	height: 60px;
+	background-color: #000;
+	margin: 10px;
+	display: flex;
+	align-items: center;
+	padding: 0 10px 0 10px;
+}
+.spell{
+	border: 2px solid white;
+	border-radius: 0.5rem;
+	margin-right: 10px; 
+}
+.spells .spell img{
+	width: 40px;
+	height: 40px;
+	border-radius: 0.5rem;
+}
+
 </style>
 </head>
 
@@ -869,12 +914,27 @@
 					</tr>
 				</table>
 			</div>
+			<div class="spell-container">
+				<div class="spell-title">
+					<h4>추천 스펠</h4>
+					<div class="spells">
+						<div class="spell">
+							<img alt="" src="/resources/img/spell/SummonerFlash.png">
+						</div>
+						<div class="spell">
+							<img alt="" src="/resources/img/spell/SummonerDot.png">
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="middle-container">
 			<div class="rune-select-box">
 			</div>
+			<div class="rune-title">
+				<h4>추천 룬</h4>
+			</div>
 			<div class="rune-container">
-
 				<div class="rune-box main-runes">
 					<div class="first-rune main-rune-top" style="margin: 0 auto"></div>
 					<div class="runes main-rune-first"></div>
