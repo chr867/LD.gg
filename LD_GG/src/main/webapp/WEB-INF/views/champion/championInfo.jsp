@@ -50,7 +50,6 @@
 <!--CHAMPION INFO CSS-->
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/champion/info.css">
-<!-- right_container -->
 <style type="text/css">
 .main-container {
 	display: flex;
@@ -79,8 +78,7 @@
 }
 </style>
 
-
-
+<!-- right_container start -->
 <style>
 .match_up_chart {
 	display: flex;
@@ -123,6 +121,7 @@
 	justify-self: right;
 }
 </style>
+<!-- right_container end -->
 
 <style type="text/css">
 .skill-build-container {
@@ -927,6 +926,7 @@ box-sizing: border-box;
 
 					</div>
 					<!-- chartdiv end -->
+
 					<div id="match_up_right"></div>
 				</div>
 				<!-- match_up_chart end -->
@@ -1033,7 +1033,7 @@ function championBuildInfo(champion_id, team_position) {
 			  let easyTableHeaders = document.getElementsByClassName('easy-champ-img');
 			  for (var i = 0; i < easyTableHeaders.length; i++) {
 				  easyTableHeaders[i].innerHTML = '';
-				  easyTableHeaders[i].innerHTML = '<img alt="" src="/resources/img/champion_img/square/'+champEasyChampData[i].champion_img+'" class="champion-img">';
+				  easyTableHeaders[i].innerHTML = '<img alt="" src="/resources/img/champion_img/square/'+champEasyChampData[i].champion_img+'" class="champion-img" id="'+ champEasyChampData[i].enemy_champ_id +'">';
 			  }
 			  let hardEasyTableData = document.getElementsByClassName('easy-champ-win-rate');
 
@@ -1046,7 +1046,7 @@ function championBuildInfo(champion_id, team_position) {
 			  let hardTableHeaders = document.getElementsByClassName('hard-champ-img');
 			  for (var i = 0; i < hardTableHeaders.length; i++) {
 				  hardTableHeaders[i].innerHTML = '';
-				  hardTableHeaders[i].innerHTML = '<img alt="" src="/resources/img/champion_img/square/'+champHardChampData[i].champion_img+'" class="champion-img">';
+				  hardTableHeaders[i].innerHTML = '<img alt="" src="/resources/img/champion_img/square/'+champHardChampData[i].champion_img+'" class="champion-img" id="'+ champHardChampData[i].enemy_champ_id +'">';
 			  }
 			  var hardTableData = document.getElementsByClassName('hard-champ-win-rate');
 
@@ -1054,6 +1054,15 @@ function championBuildInfo(champion_id, team_position) {
 				  hardTableData[i].innerHTML = '';
 				  hardTableData[i].innerHTML = champHardChampData[i].match_up_win_rate+'%';
 			  }
+			  
+			  let champ_img = document.querySelectorAll('.champion-img')
+			  champ_img.forEach(champion=>{
+				champion.addEventListener('click', function(){
+					if(champion.id){
+						location.href = `info?champion=\${champion.id}`
+					}
+				})
+			  })
 			  //-----------------------------------------------------------------------------------
 			  rune_full_data(champRuneData[0].main_KEYSTONE_ID,champRuneData[0].sub_KEYSTONE_ID,0,champRuneData);
 			  
@@ -1430,17 +1439,24 @@ function make_chart(left, right){
 		})
 	})
 	
-	let left_html_list = '<img src="/resources/img/champion_img/square/'+ left.champion_img +'" alt="'+ left.champion_name +'" class="champion_img">'
+	let left_html_list = '<img src="/resources/img/champion_img/square/'+ left.champion_img +'" alt="'+ left.champion_name +'" class="champion_img" id="'+ left.champion_id +'"">'
 	left_html_list += '<span>' + left.champion_name + '</span>'
 	left_html_list += '<span>' + left.match_up_win_rate + '</span>'
 
-	let right_html_list = '<img src="/resources/img/champion_img/square/'+ right.champion_img +'" alt="'+ left.champion_name +'" class="champion_img">'
+	let right_html_list = '<img src="/resources/img/champion_img/square/'+ right.champion_img +'" alt="'+ right.champion_name +'" class="champion_img2" id="'+ right.champion_id +'">'
 	right_html_list += '<span>' + right.champion_name + '</span>'
 	right_html_list += '<span>' + right.match_up_win_rate + '</span>'
 
 	document.getElementById('match_up_left').innerHTML = left_html_list
 	document.getElementById('match_up_right').innerHTML = right_html_list
 
+	let right_champ = document.querySelector('.champion_img2')
+	
+	right_champ.addEventListener('click', function(){
+		location.href = `info?champion=\${this.id}`
+	})
+	
+	right_champ.style.cursor = 'pointer';
 }
 	
 function make_table(enemys){

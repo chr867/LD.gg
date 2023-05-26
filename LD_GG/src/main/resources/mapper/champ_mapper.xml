@@ -7,7 +7,6 @@
 			select ci.champion_kr_name, ci.champion_en_name, ci.champion_img, ct.* from champion_tier ct 
 			join champion_info ci on ci.champion_id = ct.champion_id
 			where ct.team_position = #{lane}
-			and ct.summoner_tier = #{tier}
 			and ct.pick_rate > 0.5
 			order by ct.tier asc
 		]]>
