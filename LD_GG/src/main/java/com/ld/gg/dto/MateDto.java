@@ -19,8 +19,9 @@ public class MateDto {
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")private String mate_date;//메이트 게시글 작성일자
 	private String mate_title;//메이트 게시글 제목
 	private String lol_account;//작성자 롤 닉네임
-	//private String last_win_rate;//최근 승률 더미값
-	//댓글
+	private int win;//최근 승률 더미값
+	private int loss;//최근 승률 더미값
+
 //	private int mate_id;//메이트 게시글 번호
 //	private String email;//메이트 게시글 작성자
 	private String mate_apply;//메이트 신청 유저
