@@ -52,7 +52,7 @@
 	href="/resources/css/champion/info.css">
 <!-- right_container -->
 <style type="text/css">
-.main-container {
+.top-container {
 	display: flex;
 	box-sizing: border-box;
 	padding: 100px 50px 100px 100px;
@@ -76,6 +76,10 @@
 	width: 770px;
 	height: 100%;
 	margin-left: 20px;
+}
+.bottom-container{
+	display: flex;
+	box-sizing: border-box;
 }
 </style>
 
@@ -125,44 +129,7 @@
 </style>
 
 <style type="text/css">
-.skill-build-container {
-	width: 100%;
-	height: 300px;
-	background-color: #fff;
-	margin-top: 20px;
-	border-radius: 0.5rem;
-}
-.skill-build-title{
-	text-align: center;
-}
-.skill-build-title h4{
-	font-size: 18px;
-	font-weight: 700;
-}
-.arrow-img img{
-	width: 40px;
-	height: 40px;
-}
-.skill-build-sequence-box{
-	display: flex;
-}
-.skill-build-sequence{
-box-sizing: border-box;
-}
-.skill-key-icon{
-	position: relative;
-	width: 15px;
-	height: 15px;
-	background-color: black;
-	border-radius: 3px;
-	bottom: 15px;
-	text-align: center;
-}
-.skill-key-icon h6{
-	color: white;
-	font-size: 10px;
-	font-weight: 700;
-}
+
 </style>
 </head>
 
@@ -516,7 +483,7 @@ box-sizing: border-box;
 	</div>
 	<!----------------------------------------------------------------------------------------------------------------->
 	<!----------------------------------------------------------------------------------------------------------------->
-	<div class="main-container">
+	<div class="top-container">
 		<div class="left-container">
 			<div class="lane-select-box"></div>
 			<div class="champion-info-box">
@@ -768,47 +735,10 @@ box-sizing: border-box;
 			</div>
 			<div class="skill-build-container">
 				<div class="skill-build-title"><h4>추천 스킬 빌드</h4></div>
-				<div class="skill-build-sequence-box">
-					<div class="skill-build-sequence">
-					<img alt="" src="/resources/img/passive/${chamInfo.champion_p_img}" class="ability-img">
-					<div class="skill-key-icon">
-						<h6>Q</h6>
-					</div>
-					<div class="tooltip">
-					<div>${chamInfo.champion_p_name}</div>
-					<br>
-					<div>${chamInfo.champion_p_desc}</div>
-					</div>
-					</div>
-					<div class="arrow-img">
-						<img alt="" src="/resources/img/icon/arrow-icon-right.png">
-					</div>
-					<div class="skill-build-sequence">
-					<img alt="" src="/resources/img/passive/${chamInfo.champion_p_img}" class="ability-img">
-					<div class="skill-key-icon">
-						<h6>W</h6>
-					</div>
-					<div class="tooltip">
-					<div>${chamInfo.champion_p_name}</div>
-					<br>
-					<div>${chamInfo.champion_p_desc}</div>
-					</div>
-					</div>
-					<div class="arrow-img">
-						<img alt="" src="/resources/img/icon/arrow-icon-right.png">
-					</div>
-					<div class="skill-build-sequence">
-					<img alt="" src="/resources/img/passive/${chamInfo.champion_p_img}" class="ability-img">
-					<div class="skill-key-icon">
-						<h6>E</h6>
-					</div>
-					<div class="tooltip">
-					<div>${chamInfo.champion_p_name}</div>
-					<br>
-					<div>${chamInfo.champion_p_desc}</div>
-					</div>
-					</div>
-				</div>
+				<div class="skill-build-sequence-box"></div>
+				<div class="skill-bulid-all-box"></div>
+				<div class="skill-build-sequence-box"></div>
+				<div class="skill-bulid-all-box"></div>
 			</div>
 		</div>
 		<div class="right-container">
@@ -935,7 +865,9 @@ box-sizing: border-box;
 			</div>
 		</div>
 	</div>
-
+	<div class="bottom-container">
+		
+	</div>
 </body>
 <script type="text/javascript">
 
@@ -1008,14 +940,6 @@ function championBuildInfo(champion_id, team_position) {
 			  console.log(champSpellData);
 			  console.log(champSkillBuildData);
 			  console.log(champAccessoriesData);
-			  console.log(champTierData[0].tier);
-			  console.log(champTierData[0].win_rate);
-			  console.log(champTierData[0].pick_rate);
-			  console.log(champTierData[0].ban_rate);
-			  console.log(champTierData[0].tier);
-			  console.log(champTierData[0].win_rate);
-			  console.log(champTierData[0].pick_rate);
-			  console.log(champTierData[0].ban_rate);
 			  console.log(champEasyChampData);
 			  console.log(champHardChampData);
 			  //-----------------------------------------------------------------------------------
@@ -1087,10 +1011,128 @@ function championBuildInfo(champion_id, team_position) {
 				}
 				
 				spellSplit(champSpellData);
+				skillSplit(champSkillBuildData);
 		}).fail(err => {
 		  console.log(err);
 		});	
 }
+function skillSplit(champSkillBuildData) {
+	for (var i = 0; i < champSkillBuildData.length; i++) {
+		
+	
+	let skillSequence = champSkillBuildData[i].mastery_sequence
+	let parts = skillSequence.split(','); 
+	
+	let skillAllSequnece = champSkillBuildData[0].skill_build
+	let skillParts = skillAllSequnece.split(','); 
+	
+	let skill_build_sequence_box = document.getElementsByClassName('skill-build-sequence-box')[i]; 
+	let skill_bulid_all_box = document.getElementsByClassName('skill-bulid-all-box')[i];
+	skill_build_sequence_box.innerHTML = '';
+	skill_bulid_all_box.innerHTML = '';
+	
+	arrowHtml = ''
+	arrowHtml += '<div class="arrow-img">'
+	arrowHtml += '<img alt="" src="/resources/img/icon/arrow-icon-right.png">'
+	arrowHtml += '</div>'
+			
+	qHtml = ''
+	qHtml += '<div class="skill-build-sequence">'
+	qHtml += '<img alt="" src="/resources/img/spell/${chamInfo.champion_q_img}" class="ability-img">'
+	qHtml += '<div class="skill-key-icon">'
+	qHtml += '<h6>Q</h6>'
+	qHtml += '</div>'
+	qHtml += '<div class="squence-tooltip">'
+	qHtml += '<div>${chamInfo.champion_q_name}</div>'
+	qHtml += '<br>'
+	qHtml += '<div>${chamInfo.champion_q_desc}</div>'
+	qHtml += '</div>'
+	qHtml += '<div class="skill-build-sequence">'
+	qHtml += '</div>'
+	
+ 	wHtml = ''
+ 	wHtml += '<div class="skill-build-sequence">'
+ 	wHtml += '<img alt="" src="/resources/img/spell/${chamInfo.champion_w_img}" class="ability-img">'
+ 	wHtml += '<div class="skill-key-icon">'
+ 	wHtml += '<h6>W</h6>'
+ 	wHtml += '</div>'
+ 	wHtml += '<div class="squence-tooltip">'
+ 	wHtml += '<div>${chamInfo.champion_w_name}</div>'
+ 	wHtml += '<br>'
+ 	wHtml += '<div>${chamInfo.champion_w_desc}</div>'
+ 	wHtml += '</div>'
+ 	wHtml += '<div class="skill-build-sequence">'
+ 	wHtml += '</div>'
+
+	eHtml = ''
+	eHtml += '<div class="skill-build-sequence">'
+	eHtml += '<img alt="" src="/resources/img/spell/${chamInfo.champion_e_img}" class="ability-img">'
+	eHtml += '<div class="skill-key-icon">'
+	eHtml += '<h6>E</h6>'
+	eHtml += '</div>'
+	eHtml += '<div class="squence-tooltip">'
+	eHtml += '<div>${chamInfo.champion_e_name}</div>'
+	eHtml += '<br>'
+	eHtml += '<div>${chamInfo.champion_e_desc}</div>'
+	eHtml += '</div>'
+	eHtml += '<div class="skill-build-sequence">'
+	eHtml += '</div>'													
+	
+	rateHtlm = ''
+	rateHtlm += '<div class="skill-build-rate">'
+	rateHtlm += '<div class="rate-text"><h4>승률</h4></div>'
+	rateHtlm += '<div class="rate-text"><h6>'+champSkillBuildData[i].win_rate+'%</h6></div>'
+	rateHtlm += '<div class="rate-text"><h4>픽률</h4></div>'
+	rateHtlm += '<div class="rate-text"><h6>'+champSkillBuildData[i].pick_rate+'%</h6></div>'
+	rateHtlm += '</div>'
+	
+	qBoxHtml = ''
+	qBoxHtml += '<div class="q-skill">'
+	qBoxHtml += '<h3>Q</h3>'
+	qBoxHtml += '</div>'
+	
+	wBoxHtml = ''
+	wBoxHtml += '<div class="w-skill">'
+	wBoxHtml += '<h3>W</h3>'
+	wBoxHtml += '</div>'
+	
+	eBoxHtml = ''
+	eBoxHtml += '<div class="e-skill">'
+	eBoxHtml += '<h3>E</h3>'
+	eBoxHtml += '</div>'
+	
+	let count = 0;
+	for (let skill of parts) {
+		console.log(parseInt(skill));
+		if (parseInt(skill) == 1) {
+			skill_build_sequence_box.innerHTML += qHtml;
+		} else if (parseInt(skill) == 2) {
+			skill_build_sequence_box.innerHTML += wHtml;
+		} else if (parseInt(skill) == 3) {
+			skill_build_sequence_box.innerHTML += eHtml;
+		}
+		count++;
+		if (count == 3) {
+			break;
+		}
+		skill_build_sequence_box.innerHTML += arrowHtml;
+	}
+	skill_build_sequence_box.innerHTML += rateHtlm;
+	
+	for (let skill of skillParts) {
+		console.log(parseInt(skill))
+		if(parseInt(skill) == 1){
+			skill_bulid_all_box.innerHTML += qBoxHtml;
+		}else if(parseInt(skill) == 2){
+			skill_bulid_all_box.innerHTML += wBoxHtml;
+		}else if(parseInt(skill) == 3){
+			skill_bulid_all_box.innerHTML += eBoxHtml;
+		}
+	}
+	}
+}
+
+
 function spellSplit(champSpellData) {
 	let spell_box = document.getElementsByClassName('spell-box')[0]; 
 	spell_box.innerHTML = ''
