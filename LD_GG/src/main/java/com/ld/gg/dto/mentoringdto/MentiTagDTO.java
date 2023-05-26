@@ -16,4 +16,6 @@ public class MentiTagDTO {
 	private String menti_email; //pk
 	private int tag_id; //pk
 	private String tag_note;
+	private String tag_type;
+	private String tag_info;
 }

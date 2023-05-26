@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import com.ld.gg.dto.champ.Champ_analytics;
 import com.ld.gg.dto.champ.Champ_default;
 import com.ld.gg.dto.champ.Champ_info;
+import com.ld.gg.dto.champ.Champ_item_info;
 import com.ld.gg.dto.champ.Champ_match_up_default;
 import com.ld.gg.dto.champ.Champ_match_up_item;
 import com.ld.gg.dto.champ.Champ_match_up_rune;
@@ -82,5 +83,9 @@ public interface ChampDao {
 	List<Champ_match_up_spell> getSpellInfo(@Param("first_spell")int first_spell, @Param("second_spell")int second_spell);
 
 	List<Champ_match_up_default> get_champion_match_up_chart(@Param("champion_id")Integer champion_id, @Param("team_position")String team_position);
+
+	List<Champ_recomm_info> getStartItemData(@Param("champion_id")int champion_id, @Param("team_position")String team_position);
+
+	List<Champ_item_info> getItemInfo(int item_id);
   
 }

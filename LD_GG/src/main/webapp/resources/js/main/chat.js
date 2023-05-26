@@ -7,7 +7,7 @@ $(document).ready(function() {
     sessionCheck(summonerName, userType);
 });
 
-function chatPopup(){
-    url = "/chat/list"
-    window.open(url, "_blank", "width=400,height=600,alwaysRaised=yes");
+function chatPopup() {
+    var url = "/chat/list";
+    window.open(url, "_blank", "width=530,height=670");
 }
