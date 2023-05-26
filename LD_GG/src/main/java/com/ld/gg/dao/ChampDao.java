@@ -31,13 +31,17 @@ public interface ChampDao {
 	List<Champ_match_up_default> champ_recom(@Param("lane")String lane,
 			@Param("tag")String tag, @Param("right_champion")String right_champion);
 
-	List<Champ_match_up_spell> build_recom_spell(@Param("left_champion")String left_champion, @Param("right_champion")String right_champion);
+	List<Champ_match_up_spell> build_recom_spell(@Param("left_champion")String left_champion, @Param("right_champion")String right_champion,
+			@Param("team_position")String team_position);
 
-	List<Champ_match_up_item> build_recom_item(@Param("left_champion")String left_champion, @Param("right_champion")String right_champion);
+	List<Champ_match_up_item> build_recom_item(@Param("left_champion")String left_champion, @Param("right_champion")String right_champion,
+			@Param("team_position")String team_position);
 
-	List<Champ_match_up_rune> build_recom_rune(@Param("left_champion")String left_champion, @Param("right_champion")String right_champion);
+	List<Champ_match_up_rune> build_recom_rune(@Param("left_champion")String left_champion, @Param("right_champion")String right_champion,
+			@Param("team_position")String team_position);
 
-	List<Champ_match_up_skill> build_recom_skill(@Param("left_champion")String left_champion, @Param("right_champion")String right_champion);
+	List<Champ_match_up_skill> build_recom_skill(@Param("left_champion")String left_champion, @Param("right_champion")String right_champion,
+			@Param("team_position")String team_position);
 
 
   List<Champ_default> get_champ_list();
