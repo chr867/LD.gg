@@ -50,7 +50,7 @@
 	</select>
 
 	<select id="select_chat_content" parameterType="int" resultType="chatlist">
-		select chat_content, chat_time from chat_list where chat_room_seq = #{chatRoomSeq}
+		select chat_content, chat_time, chat_user from chat_list where chat_room_seq = #{chatRoomSeq}
 	</select>
 
 	<insert id="insert_chat_content" parameterType="chatlist">
