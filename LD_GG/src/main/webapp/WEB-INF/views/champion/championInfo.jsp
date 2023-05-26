@@ -941,6 +941,8 @@ box-sizing: border-box;
 
 document.addEventListener("DOMContentLoaded", function() {
 	championLaneInfo(${chamInfo.champion_id});
+	get_match_up(${chamInfo.champion_id});	
+
 });
 
 function championLaneInfo(champion_id) {
@@ -979,6 +981,7 @@ function championLaneInfo(champion_id) {
 
 function selectLane(team_position) {
 	championBuildInfo(${chamInfo.champion_id}, team_position);
+	chart_lane(${chamInfo.champion_id}, team_position)
 }
 
 function championBuildInfo(champion_id, team_position) {
@@ -999,7 +1002,7 @@ function championBuildInfo(champion_id, team_position) {
 			let champTierData = championBuildInfo.champTierData;
 			let champEasyChampData = championBuildInfo.champEasyChampData;
 			let champHardChampData = championBuildInfo.champHardChampData;
-			
+
 			  console.log(champRuneData);
 			  console.log(champItemData);
 			  console.log(champMythicItemData);
@@ -1096,6 +1099,7 @@ function championBuildInfo(champion_id, team_position) {
 				}
 				
 				spellSplit(champSpellData);
+				
 		}).fail(err => {
 		  console.log(err);
 		});	
@@ -1362,13 +1366,8 @@ function rune_full_data(main,sub,i,champRuneData) {
 		}); 
 }
  
-</script>
-
-<!-- right_container -->
-<script>
+// right_container
 document.addEventListener("DOMContentLoaded", function() {
-	get_match_up(${chamInfo.champion_id});
-	
 });
 
 let response;
@@ -1463,5 +1462,27 @@ function make_table(enemys){
 	console.log(enemys)
 }
 
+let chart_lane_response;
+function chart_lane(champion_id, team_position){
+	console.log('chart_lane', champion_id, team_position)
+	$.ajax({
+		url: '/champion/chart-lane.json',
+		type: 'POST',
+		data: {champion_id: champion_id, team_position: team_position}
+	}).done(res=>{
+		console.log('chart', res)
+		chart_lane_response = res;
+		let left = res['champion']
+		let right = res['enemy']
+		make_chart(left[0], right[0])
+		make_table(right)
+	}).fail(err=>{
+		console.log(err)
+	})
+	
+}
+// right_container
+
 </script>
+
 </html>

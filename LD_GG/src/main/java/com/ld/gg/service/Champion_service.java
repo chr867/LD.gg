@@ -162,4 +162,16 @@ public class Champion_service {
 		return cd.getSpellInfo(first_spell,second_spell);
 	}
 
+	public Map<String, List<Champ_match_up_default>> get_champ_match_up_chart(Integer champion_id, String team_position) {
+		Map<String, List<Champ_match_up_default>> cm_map = new HashMap<>();
+		
+		List<Champ_match_up_default> cm_champion = cd.get_champion_match_up_chart(champion_id, team_position);
+		List<Champ_match_up_default> cm_enemy = cd.get_enemy_champion_match_up(champion_id, team_position);
+
+		cm_map.put("champion", cm_champion);
+		cm_map.put("enemy", cm_enemy);
+		
+		return cm_map;
+	}
+
 }
