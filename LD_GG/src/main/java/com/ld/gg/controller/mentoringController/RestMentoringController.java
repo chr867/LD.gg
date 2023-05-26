@@ -290,6 +290,13 @@ public class RestMentoringController {
 		return mentor_tag_json;
 	}
 	
+	//이메일로 멘티 태그 가져오기
+	@PostMapping("/get-menti-tag")
+	public String select_by_email_menti_tag(@RequestBody Map<String,String> menti_email_map) throws JsonProcessingException {
+		String menti_tag_json = mtpService.select_by_email_menti_tag(menti_email_map);
+		return menti_tag_json;
+	}
+	
 	//목표 태그 가져오기
 	@GetMapping("/get-target-tag")
 	public String select_taget_tag() throws JsonProcessingException {
