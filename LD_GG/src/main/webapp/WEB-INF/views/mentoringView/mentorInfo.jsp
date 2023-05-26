@@ -292,41 +292,41 @@ padding:24px;
 		const IMP = window.IMP; // 생략 가능
 		//IMP.init("imp26843336"); // 예: imp00000000a, 본인의 가맹점 식별코드
 		
-		let spec_pos = ${mentor_profile.specialized_position};
-		$.each(spec_pos, function(i,pos){
-			console.log(pos);
-			if (pos=="탑"){
-				let posImg = $("<img>").attr("id","pos-img").attr("src","https://online.gamecoach.pro/img/coaching/lol-line-black/TOP.png")
-				let posName = $("<strong>").text(pos);
-				let posBox = $("<div>").attr("id","pos-box").addClass("border rounded");
-				posBox.append(posImg,posName);
-				$("#specializedPosition").append(posBox);
-			}else if (pos=="바텀"){
-				let posImg = $("<img>").attr("id","pos-img").attr("src","https://online.gamecoach.pro/img/coaching/lol-line-black/AD_CARRY.png")
-				let posName = $("<strong>").text(pos);
-				let posBox = $("<div>").attr("id","pos-box").addClass("border rounded");
-				posBox.append(posImg,posName);
-				$("#specializedPosition").append(posBox);
-			}else if (pos=="서포터"){
-				let posImg = $("<img>").attr("id","pos-img").attr("src","https://online.gamecoach.pro/img/coaching/lol-line-black/SUPPORT.png")
-				let posName = $("<strong>").text(pos);
-				let posBox = $("<div>").attr("id","pos-box").addClass("border rounded");
-				posBox.append(posImg,posName);
-				$("#specializedPosition").append(posBox);
-			}else if (pos=="정글"){
-				let posImg = $("<img>").attr("id","pos-img").attr("src","https://online.gamecoach.pro/img/coaching/lol-line-black/JUNGLE.png")
-				let posName = $("<strong>").text(pos);
-				let posBox = $("<div>").attr("id","pos-box").addClass("border rounded");
-				posBox.append(posImg,posName);
-				$("#specializedPosition").append(posBox);
-			}else if (pos=="미드"){
-				let posImg = $("<img>").attr("id","pos-img").attr("src","https://online.gamecoach.pro/img/coaching/lol-line-black/MID.png")
-				let posName = $("<strong>").text(pos);
-				let posBox = $("<div>").attr("id","pos-box").addClass("border rounded");
-				posBox.append(posImg,posName);
-				$("#specializedPosition").append(posBox);
-			}
-		})
+		let spec_pos = [${mentor_profile.specialized_position}];
+			$.each(spec_pos[0], function(i,pos){
+				console.log(pos);
+				if (pos=="탑"){
+					let posImg = $("<img>").attr("id","pos-img").attr("src","https://online.gamecoach.pro/img/coaching/lol-line-black/TOP.png")
+					let posName = $("<strong>").text(pos);
+					let posBox = $("<div>").attr("id","pos-box").addClass("border rounded");
+					posBox.append(posImg,posName);
+					$("#specializedPosition").append(posBox);
+				}else if (pos=="바텀"){
+					let posImg = $("<img>").attr("id","pos-img").attr("src","https://online.gamecoach.pro/img/coaching/lol-line-black/AD_CARRY.png")
+					let posName = $("<strong>").text(pos);
+					let posBox = $("<div>").attr("id","pos-box").addClass("border rounded");
+					posBox.append(posImg,posName);
+					$("#specializedPosition").append(posBox);
+				}else if (pos=="서포터"){
+					let posImg = $("<img>").attr("id","pos-img").attr("src","https://online.gamecoach.pro/img/coaching/lol-line-black/SUPPORT.png")
+					let posName = $("<strong>").text(pos);
+					let posBox = $("<div>").attr("id","pos-box").addClass("border rounded");
+					posBox.append(posImg,posName);
+					$("#specializedPosition").append(posBox);
+				}else if (pos=="정글"){
+					let posImg = $("<img>").attr("id","pos-img").attr("src","https://online.gamecoach.pro/img/coaching/lol-line-black/JUNGLE.png")
+					let posName = $("<strong>").text(pos);
+					let posBox = $("<div>").attr("id","pos-box").addClass("border rounded");
+					posBox.append(posImg,posName);
+					$("#specializedPosition").append(posBox);
+				}else if (pos=="미드"){
+					let posImg = $("<img>").attr("id","pos-img").attr("src","https://online.gamecoach.pro/img/coaching/lol-line-black/MID.png")
+					let posName = $("<strong>").text(pos);
+					let posBox = $("<div>").attr("id","pos-box").addClass("border rounded");
+					posBox.append(posImg,posName);
+					$("#specializedPosition").append(posBox);
+				}
+			})
 		
 	    $.ajax({
 	    	method : 'post',
@@ -380,7 +380,7 @@ padding:24px;
 		});
 		
 		//탑 특화 챔피언
-		if ([${mentor_profile.top_specialized_champion}] !== []){
+		if ("${mentor_profile.top_specialized_champion}" !== ""){
 			let laneChampBox = $("<div>");
 			$("<hr>").prependTo($("#specializedChampion"));
 			laneChampBox.appendTo($("#specializedChampion"));
