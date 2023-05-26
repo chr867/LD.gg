@@ -76,7 +76,8 @@
 	height: 100%;
 	margin-left: 20px;
 }
-.bottom-container{
+
+.bottom-container {
 	display: flex;
 	box-sizing: border-box;
 }
@@ -125,7 +126,7 @@
 	justify-self: right;
 }
 
-#match_up_table_container{
+#match_up_table_container {
 	width: 540px;
 	height: 400px;
 	overflow: scroll;
@@ -136,15 +137,13 @@
 	width: 100%;
 }
 
-.match_up_table div{
+.match_up_table div {
 	display: flex;
 }
-
 </style>
 <!-- right_container end -->
 
 <style type="text/css">
-
 </style>
 </head>
 
@@ -749,7 +748,9 @@
 				</div>
 			</div>
 			<div class="skill-build-container">
-				<div class="skill-build-title"><h4>추천 스킬 빌드</h4></div>
+				<div class="skill-build-title">
+					<h4>추천 스킬 빌드</h4>
+				</div>
 				<div class="skill-build-sequence-box"></div>
 				<div class="skill-bulid-all-box"></div>
 				<div class="skill-build-sequence-box"></div>
@@ -757,6 +758,10 @@
 			</div>
 		</div>
 		<div class="right-container">
+			<div style="width: 500px;">ㅗㅗㅗㅗ</div>
+		</div>
+	</div>
+			<div class="bottom-container">
 			<!-- match_up_conatiner start -->
 			<div class="match_up_container">
 				<!-- match_up_chart start -->
@@ -877,17 +882,13 @@
 				</div>
 				<!-- match_up_chart end -->
 				<div id="match_up_table_container">
-					<div class="match_up_table">
-					</div>
+					<div class="match_up_table"></div>
 
 				</div>
 				<!-- match_up_conatiner end -->
 			</div>
 		</div>
-	</div>
-	<div class="bottom-container">
-		
-	</div>
+	
 </body>
 <script type="text/javascript">
 
