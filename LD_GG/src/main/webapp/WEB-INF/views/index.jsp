@@ -52,24 +52,49 @@
 <script src="/resources/js/main/chat.js" defer></script>
 </head>
 <style>
-
 .main-container {
-	justify-content: center;
+	display: flex;
+	justify-content: space-between;
 	text-align: center;
+	height: 70%;
+	margin-top: 80px;
 }
 
-#my_champion{
-	position: absolute;
-	top: 15%;
-	left: 15%;
+#left_container {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	box-sizing: border-box;
+	margin-left: 100px;
+	width: 30%;
+	height: 58vh;
 }
 
-#champ_search_box input{
+#right_container {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	box-sizing: border-box;
+	width: 20%;
+	margin-right: 400px;
+	height: 58vh;
+}
+
+#bottom_container {
+	display: flex;
+	box-sizing: border-box;
+	
+}
+
+#my_champion {
+}
+
+#champ_search_box input {
 	width: 220px;
 	border-radius: 5px;
 }
 
-#my_champion_img{
+#my_champion_img {
 	width: 370px;
 	height: 400px;
 	padding-top: 20px;
@@ -77,46 +102,35 @@
 	border-radius: 70%;
 }
 
-#build_recom_box button{
+#build_recom_box button {
 	margin-top: 20px;
 }
 
-#counter_champion{
-	position: absolute;
-	height: auto;
-	top: 25%;
-	left: 55%;
+#counter_champion {
 }
 
-#right_champion_img{
+#right_champion_img {
 	width: 140px;
 	height: 140px;
 	border-radius: 70%;
 }
 
-#right_champ_search_box{
-	position: relative;
-	left: -30%;
-	top: 30%;
+#right_champ_search_box {
 }
 
-#recom_champ{
-	position: absolute;
-	left: 36%;
-	top: 67%;
+#recom_champ {
 }
 
-#recom_champ img{
+#recom_champ img {
 	width: 140px;
 	height: 140px;
 	margin-right: 20px;
 	border-radius: 70%;
 }
 
-#span_container{
+#span_container {
 	display: grid;
 }
-
 </style>
 <body>
 	<div id="session-summoner-name" style="display: none">${sessionScope.lol_account}</div>
@@ -181,10 +195,12 @@
 						aria-labelledby="headingOne" data-bs-parent="#accordionExample">
 						<div class="accordion-body">
 							<div class="accordion-body-menu">
-								<a href="/champion/rank" class="accordion-body-link"><span>• 챔피언 티어</span></a>
+								<a href="/champion/rank" class="accordion-body-link"><span>•
+										챔피언 티어</span></a>
 							</div>
 							<div class="accordion-body-menu">
-								<a href="/summoner/rank" class="accordion-body-link"><span>• 소환사 랭킹</span></a>
+								<a href="/summoner/rank" class="accordion-body-link"><span>•
+										소환사 랭킹</span></a>
 							</div>
 						</div>
 					</div>
@@ -204,10 +220,12 @@
 						<div class="accordion-body">
 							<span class="bullet bullet-dot"></span>
 							<div class="accordion-body-menu">
-								<a href="/tip/" class="accordion-body-link"><span>• 챔피언 공략</span></a>
+								<a href="/tip/" class="accordion-body-link"><span>•
+										챔피언 공략</span></a>
 							</div>
 							<div class="accordion-body-menu">
-								<a href="/mate/" class="accordion-body-link"><span>• 롤 메이트</span></a>
+								<a href="/mate/" class="accordion-body-link"><span>•
+										롤 메이트</span></a>
 							</div>
 						</div>
 					</div>
@@ -226,10 +244,12 @@
 						aria-labelledby="headingThree" data-bs-parent="#accordionExample">
 						<div class="accordion-body">
 							<div class="accordion-body-menu">
-								<a href="/mentor/custom-mentor/" class="accordion-body-link"><span>• 맞춤 멘토</span></a>
+								<a href="/mentor/custom-mentor/" class="accordion-body-link"><span>•
+										맞춤 멘토</span></a>
 							</div>
 							<div class="accordion-body-menu">
-								<a href="/mentor/list/" class="accordion-body-link"><span>• 멘토 찾기</span></a>
+								<a href="/mentor/list/" class="accordion-body-link"><span>•
+										멘토 찾기</span></a>
 							</div>
 						</div>
 					</div>
@@ -267,17 +287,20 @@
 						aria-labelledby="headingFive" data-bs-parent="#accordionExample">
 						<div class="accordion-body">
 							<div class="accordion-body-menu">
-								<a href="/summoner/testDashBoard" class="accordion-body-link"><span>• 대시보드</span></a>
+								<a href="/summoner/testDashBoard" class="accordion-body-link"><span>•
+										대시보드</span></a>
 							</div>
 							<div class="accordion-body-menu">
-								<a href="/mentor/write-profile" class="accordion-body-link"><span>• 프로필</span></a>
+								<a href="/mentor/write-profile" class="accordion-body-link"><span>•
+										프로필</span></a>
 							</div>
 							<div class="accordion-body-menu">
 								<a href="" class="accordion-body-link"><span>• 개인정보
 										수정</span></a>
 							</div>
 							<div class="accordion-body-menu">
-								<a href="/mentor/my-mentoring/" class="accordion-body-link"><span>• 마이 멘토링</span></a>
+								<a href="/mentor/my-mentoring/" class="accordion-body-link"><span>•
+										마이 멘토링</span></a>
 							</div>
 							<div class="accordion-body-menu">
 								<a href="" class="accordion-body-link"><span>• 내 지갑</span></a>
@@ -299,13 +322,16 @@
 						aria-labelledby="headingSix" data-bs-parent="#accordionExample">
 						<div class="accordion-body">
 							<div class="accordion-body-menu">
-								<a href="/userinterface/notice" class="accordion-body-link"><span>• 공지사항</span></a>
+								<a href="/userinterface/notice" class="accordion-body-link"><span>•
+										공지사항</span></a>
 							</div>
 							<div class="accordion-body-menu">
-								<a href="/faq/" class="accordion-body-link"><span>• FAQ</span></a>
+								<a href="/faq/" class="accordion-body-link"><span>•
+										FAQ</span></a>
 							</div>
 							<div class="accordion-body-menu">
-								<a href="/faq/inquiries/" class="accordion-body-link"><span>• 문의사항</span></a>
+								<a href="/faq/inquiries/" class="accordion-body-link"><span>•
+										문의사항</span></a>
 							</div>
 						</div>
 					</div>
@@ -347,12 +373,15 @@
 				</div>
 			</div>
 
-			<div class="user-info-box" style="display: none;" onclick="go_mypage()">
+			<div class="user-info-box" style="display: none;"
+				onclick="go_mypage()">
 				<div class="summoner-profile-icon-box">
-					<img src="/resources/img/profileicon/${sessionScope.summoner_icon}.png" alt="">
+					<img
+						src="/resources/img/profileicon/${sessionScope.summoner_icon}.png"
+						alt="">
 				</div>
 				<div class="summoner-name-box">
-					<h5>${sessionScope.lol_account} 님</h5>
+					<h5>${sessionScope.lol_account}님</h5>
 				</div>
 				<div class="user-type-box">
 					<div class="user-type-common" style="display: none;">
@@ -455,97 +484,110 @@
 	<!----------------------------------------------------------------------------------------------------------------->
 	<!-- 메인 컨테이너 -->
 	<div class="main-container">
-		<br> <br> <br> <br> <br>
-		 <br> <br> <br>
-		
-		<div id="my_champion">
-			<div id="champ_search_box">
-				<form id=champ_search>
-			 	<input id='champion_name_input' type="text" name="champion_kr_name" placeholder="내 챔피언 검색">
-				</form>
-				<img id="my_champion_img" alt="#" src="/resources/img/profileicon/29.png">
-			</div>
-			<div id="build_recom_box">
-				<span></span>
-				<form id=build_recom>
-					<input id="build_recom_left_val" type="text" name="left_champion" style="display: none">
-					<input id="build_recom_right_val" type="text" name="right_champion" style="display: none">
-					<button>추천 빌드</button>
-				</form>
+		<br> <br> <br> <br> <br> <br> <br>
+		<br>
+
+		<div id="left_container">
+			<div id="my_champion">
+				<div id="champ_search_box">
+					<form id=champ_search>
+						<input id='champion_name_input' type="text"
+							name="champion_kr_name" placeholder="내 챔피언 검색">
+					</form>
+					<img id="my_champion_img" alt="#"
+						src="/resources/img/profileicon/29.png">
+				</div>
+				<div id="build_recom_box">
+					<span></span>
+					<form id=build_recom>
+						<input id="build_recom_left_val" type="text" name="left_champion"
+							style="display: none"> <input id="build_recom_right_val"
+							type="text" name="right_champion" style="display: none">
+						<button>추천 빌드</button>
+					</form>
+				</div>
 			</div>
 		</div>
 
-		
-		<div id="counter_champion">
-			<form id=champ_recom>
-				<select name="lane">
-					<option value="holder">라인 선택</option>
-					<option value="TOP">탑</option>
-					<option value="JUNGLE">정글</option>
-					<option value="MIDDLE">미드</option>
-					<option value="BOTTOM">원딜</option>
-					<option value="UTILITY">서포터</option>
-				</select>
-				<select name="tag">
-					<option value="holder">역할군 선택</option>
-					<option value="all">전체</option>
-					<option value="Assassin">암살자</option>
-					<option value="Fighter">전사</option>
-					<option value="Mage">마법사</option>
-					<option value="Marksman">원거리 딜러</option>
-					<option value="Controller">서포터</option>
-					<option value="Tank">탱커</option>
-				</select>
-				<input id="champ_recom_right_val" type="text" name="right_champion" style="display: none;">
-				<button>추천 챔피언</button>
-			</form>
-			
-			<div id="right_champ_search_box">
-				<form id=right_champ_search>
-				 	<input id='right_champ_name_input' type="text" name="champion_kr_name" placeholder="상대 챔피언 검색">
+		<div id="right_container">
+			<div id="counter_champion">
+				<form id=champ_recom>
+					<div>
+						<div><img src="" alt=""></div>
+						<div><img src="" alt=""></div>
+						<div><img src="" alt=""></div>
+						<div><img src="" alt=""></div>
+						<div><img src="" alt=""></div>
+					</div>
+					<select name="lane">
+						<option value="holder">라인 선택</option>
+						<option value="TOP">탑</option>
+						<option value="JUNGLE">정글</option>
+						<option value="MIDDLE">미드</option>
+						<option value="BOTTOM">원딜</option>
+						<option value="UTILITY">서포터</option>
+					</select> 
+					<select name="tag">
+						<option value="holder">역할군 선택</option>
+						<option value="all">전체</option>
+						<option value="Assassin">암살자</option>
+						<option value="Fighter">전사</option>
+						<option value="Mage">마법사</option>
+						<option value="Marksman">원거리 딜러</option>
+						<option value="Controller">서포터</option>
+						<option value="Tank">탱커</option>
+					</select> <input id="champ_recom_right_val" type="text"
+						name="right_champion" style="display: none;">
+					<button >추천 챔피언</button>
 				</form>
-				<img id="right_champion_img" alt="#" src="/resources/img/profileicon/29.png">
-				<span></span>
+
+				<div id="right_champ_search_box">
+					<form id=right_champ_search>
+						<input id='right_champ_name_input' type="text"
+							name="champion_kr_name" placeholder="상대 챔피언 검색">
+					</form>
+					<img id="right_champion_img" alt="#"
+						src="/resources/img/profileicon/29.png"> <span></span>
+				</div>
 			</div>
 		</div>
-		
+	</div>
+
+
+	<div id="bottom_container">
+
 		<div id="recom_champ">
 			<div>
-				<img src="/resources/img/profileicon/29.png" class="champ1" alt="" id="recom_champ_0" onclick="recom_click(this)">
-				<img src="/resources/img/profileicon/29.png" class="champ2" alt="" id="recom_champ_1" onclick="recom_click(this)">
-				<img src="/resources/img/profileicon/29.png" class="champ3" alt="" id="recom_champ_2" onclick="recom_click(this)">
-				<img src="/resources/img/profileicon/29.png" class="champ4" alt="" id="recom_champ_3" onclick="recom_click(this)">
-				<img src="/resources/img/profileicon/29.png" class="champ5" alt="" id="recom_champ_4" onclick="recom_click(this)">
+				<img src="/resources/img/profileicon/29.png" class="champ1" alt=""
+					id="recom_champ_0" onclick="recom_click(this)"> <img
+					src="/resources/img/profileicon/29.png" class="champ2" alt=""
+					id="recom_champ_1" onclick="recom_click(this)"> <img
+					src="/resources/img/profileicon/29.png" class="champ3" alt=""
+					id="recom_champ_2" onclick="recom_click(this)"> <img
+					src="/resources/img/profileicon/29.png" class="champ4" alt=""
+					id="recom_champ_3" onclick="recom_click(this)"> <img
+					src="/resources/img/profileicon/29.png" class="champ5" alt=""
+					id="recom_champ_4" onclick="recom_click(this)">
 			</div>
-				<div id="span_container">
-					<div id="recom_champ_name">
-						<span></span>
-						<span></span>
-						<span></span>
-						<span></span>
-						<span></span>
-					</div>
-					<div id="lane_kill_rate">
-						<span>만난 횟수</span>
-						<span></span>
-						<span></span>
-						<span></span>
-						<span></span>
-						<span></span>
-					</div>
-					<div id="match_up_win_rate">
-						<span>승률</span>
-						<span></span>
-						<span></span>
-						<span></span>
-						<span></span>
-						<span></span>
-					</div>
+			
+			<div id="span_container">
+				<div id="recom_champ_name">
+					<span></span> <span></span> <span></span> <span></span> <span></span>
+				</div>
+				<div id="lane_kill_rate">
+					<span>만난 횟수</span> <span></span> <span></span> <span></span> <span></span>
+					<span></span>
+				</div>
+				<div id="match_up_win_rate">
+					<span>승률</span> <span></span> <span></span> <span></span> <span></span>
+					<span></span>
+				</div>
 			</div>
 		</div>
-		<!-- 추천 빌드 모달 -->
+	</div>
+	<!-- 추천 빌드 모달 -->
 
-<script type="text/javascript">
+	<script type="text/javascript">
 
 	function go_mypage(){
 		location.href="/member/mypage"
@@ -661,7 +703,7 @@
 		
 	})
 // right 챔피언 끝
-</script>	
+</script>
 </body>
 
 </html>
