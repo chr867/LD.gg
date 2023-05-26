@@ -527,3 +527,20 @@ box-sizing: border-box;
 	font-weight: 700;
 	color: #80FF00;
 }
+
+.r-skill{
+	width: 30px;
+	height: 30px;
+	background-color: black;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 0.2rem;
+	margin-right: 5px;
+}
+.r-skill h3{
+	margin: 0;
+	font-size: 16px;
+	font-weight: 700;
+	color: #0000CC;
+}
