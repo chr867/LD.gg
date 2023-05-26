@@ -50,7 +50,7 @@ public interface Summoner_dao {
 
 	RecordRankingDto getRanking(@Param("match_id") String match_id, @Param("summoner_name") String summoner_name);
 
-	SummonerDto getSummoner(String lol_account);
+	SummonerDto getSummoner(@Param("lol_account") String lol_account);
 
 	DashBoardDto getDashBoardKDA(String summoner_name);
 
@@ -59,5 +59,13 @@ public interface Summoner_dao {
 	List<TeamRankingDataDto> getTeamData(@Param("match_id") String match_id, @Param("summoner_name") String summoner_name);
 
 	List<ChampRecordDto> getChampRecordLane(@Param("summoner_name") String summoner_name, @Param("paramLane") String paramLane);
+
+	List<DashBoardDto> getDashBoardMatchUp(String summoner_name);
+
+	List<DashBoardDto> getDashBoardRecent(String summoner_name);
+
+	List<DashBoardDto> getDashBoardPlayer(@Param("match_id") String match_id, @Param("summoner_name") String summoner_name);
+
+	DashBoardDto getDashBoardProfile(String summoner_name);
 
 }

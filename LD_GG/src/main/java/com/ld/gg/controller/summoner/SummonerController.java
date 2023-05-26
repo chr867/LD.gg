@@ -54,7 +54,8 @@ public class SummonerController {
 	@GetMapping(value = "/testDashBoard")
 	public String goDashBoard(HttpServletRequest request, Model model) {
 		HttpSession session = request.getSession();
-		String lol_account = (String) model.getAttribute("lol_account");
+		String lol_account = (String) session.getAttribute("lol_account");
+		System.out.println(lol_account);
 		SummonerDto sd = ss.getSummoner(lol_account);
 		model.addAttribute("summoner", sd);
 		System.out.println(sd);
