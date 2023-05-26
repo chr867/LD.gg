@@ -38,7 +38,7 @@ def rune_data(rune_list):
     rune_df['WIN'] = rune_df['WIN'].astype(int)
 
     new_df = rune_df[['championId', 'teamPosition', 'WIN']].join(
-        rune_df.iloc[:, 2:13].apply(tuple, axis=1).rename('rune_combination'))
+        rune_df.iloc[:, 2:13].apply(lambda x: tuple(sorted(x)), axis=1).rename('rune_combination'))
 
     rune_count = new_df.groupby(['championId', 'teamPosition', 'rune_combination']).agg(
         {'WIN': ['sum', 'size']}).reset_index()
@@ -223,6 +223,7 @@ def start_item_data(start_item_list):
     merged_df = pd.merge(top5_start_item, total_game_df, on=['championId', 'teamPosition'])
     merged_df['pickRate'] = round((merged_df['pickCount'] / merged_df['total_game']) * 100, 2)
     final_df = merged_df.drop(columns=['total_game'])
+    final_df = final_df[final_df['itemId'] != '']
     print("시작 아이템 데이터 정제 완료 ")
     return final_df[['championId', 'teamPosition', 'itemId', 'pickCount', 'winCount', 'winRate', 'pickRate']]
 # ----------------------------------------------------------------------------------------------------------------------
@@ -306,14 +307,18 @@ def skill_build_data(skill_build_list):
 
     def get_mastery_sequence(skill_build):
         skill_build_list = skill_build.split(', ')
+        skill_count = {'1': 0, '2': 0, '3': 0}
         mastery_sequence = []
-        skill_count = {str(i): 0 for i in range(1, 4)}
 
         for skill in skill_build_list:
             if skill in skill_count:
                 skill_count[skill] += 1
-                if skill not in mastery_sequence:
+                if skill_count[skill] == 5 and skill not in mastery_sequence:
                     mastery_sequence.append(skill)
+
+        for skill in skill_count:
+            if skill not in mastery_sequence:
+                mastery_sequence.append(skill)
 
         return ', '.join(mastery_sequence)
 
@@ -376,7 +381,7 @@ batch_size = 30000
 rune_list = []
 item_list = []
 mythic_item_lst = []
-common_itmem_list = []
+common_item_list = []
 start_item_list = []
 accessories_list = []
 spell_list = []
@@ -384,7 +389,8 @@ skill_build_list = []
 item_build_list = []
 lane_list = []
 
-for limit in tqdm(range(0, len(matchId_count.match_id_substr.unique()), batch_size)):
+# for limit in tqdm(range(0, len(matchId_count.match_id_substr.unique()), batch_size)):
+for limit in tqdm(range(0, 10000, batch_size)):
     conn = mu.connect_mysql()
     query = f"SELECT matches, timeline FROM match_raw_patch LIMIT {limit}, {batch_size}"
     df = pd.DataFrame(mu.mysql_execute_dict(query, conn))
@@ -453,28 +459,27 @@ for limit in tqdm(range(0, len(matchId_count.match_id_substr.unique()), batch_si
             items = [participants[summoner].get('item' + str(i), 0) for i in range(6)]
             win = participants[summoner]['win']
             for item in items:
-                common_itmem_list.append([championId, teamPosition, item, win])
+                common_item_list.append([championId, teamPosition, item, win])
     # ------------------------------------------------------------------------------------------------------------------
     # 시작 아이템 데이터 정제
     accessories_lst = [3364, 3340, 3363, 3330, 3513]
     for x in tqdm(range(len(df))):
         timeline_df = df.iloc[x]['timeline']
-        if len(timeline_df) < 2:
+        if len(timeline_df) < 1:
             continue
         item_dict_by_participant = {i: [] for i in
                                     range(1, len(df.iloc[x]['matches']['participants']) + 1)}
         for event in timeline_df['1']['events']:
             if event['type'] == 'ITEM_PURCHASED':
                 item_dict_by_participant[event['participantId']].append(event['itemId'])
-        for event in timeline_df['2']['events']:
-            if event['type'] == 'ITEM_PURCHASED':
-                item_dict_by_participant[event['participantId']].append(event['itemId'])
+
         row_result = []
         for i in range(len(df.iloc[x]['matches']['participants'])):
             championId = df.iloc[x]['matches']['participants'][i]['championId']
             teamPosition = df.iloc[x]['matches']['participants'][i]['teamPosition']  # 팀 포지션 추가
             win = df.iloc[x]['matches']['participants'][i]['win']
             items = [item for item in item_dict_by_participant[i + 1] if item not in accessories_lst]
+            items = sorted(items)
             items_str = ",".join(map(str, items))
             row_result.append([championId, teamPosition, items_str, win])
 
@@ -603,15 +608,17 @@ rune_data = rune_data(rune_list)
 item_df = item_df(item_list)
 shoes_data = shoes_data(item_df)
 mythic_item_data = mythic_item_data(mythic_item_lst)
-common_item_data = common_item_data(common_itmem_list)
+common_item_data = common_item_data(common_item_list)
 start_item_data = start_item_data(start_item_list)
-accessories_data = accessories_data(accessories_list);
+accessories_data = accessories_data(accessories_list)
 spell_data = spell_data(spell_list)
 skill_build_data = skill_build_data(skill_build_list)
 item_build_data = item_build_data(item_build_list)
 lane_data = lane_data(lane_list)
 
 print("데이터프레임 제작 완료")
+rune_data[:10]
+
 # ----------------------------------------------------------------------------------------------------------------------
 def insert_rune_data(x, conn):
     query = (
