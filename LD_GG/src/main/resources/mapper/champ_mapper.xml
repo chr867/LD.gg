@@ -139,6 +139,10 @@
 		SELECT * FROM champion_tier WHERE champion_id = #{champion_id} AND team_position = #{team_position};
 	</select>
 	
+	<select id="getStartItemData" resultType="champ_recomm_info">
+		SELECT * FROM champion_start_item WHERE champion_id = #{champion_id} AND team_position = #{team_position} order by pick_rate desc limit 3;
+	</select>
+	
 	<select id="getEasyChampData" resultType="champ_recomm_info">
 		<![CDATA[
 		SELECT cmu.enemy_champ_id, cmu.match_up_win_rate, ci.champion_img
@@ -217,12 +221,12 @@
 	</select>
 	
 	<select id="getRuneInfo" resultType="champ_match_up_rune">
-		SELECT rune_id, rune_kr_name, rune_desc, rune_img,rune_num,rune_type
+		SELECT rune_id, rune_kr_name, rune_desc, rune_long_desc,rune_img,rune_num,rune_type
 		FROM rune_info WHERE rune_type = #{main_key} order by rune_num asc
 	</select>
 	
 	<select id="getSubRuneInfo" resultType="champ_match_up_rune">
-		SELECT rune_id, rune_kr_name, rune_desc, rune_img,rune_num,rune_type
+		SELECT rune_id, rune_kr_name, rune_desc, rune_long_desc,rune_img,rune_num,rune_type
 		FROM rune_info WHERE rune_type = #{sub_key} order by rune_num asc
 
 	</select>
@@ -230,6 +234,9 @@
 	<select id="getSpellInfo" resultType="champ_match_up_spell">
 		SELECT * FROM spell_info
 		WHERE spell_id IN (#{first_spell}, #{second_spell});
-
+	</select>
+	
+	<select id="getItemInfo" resultType="champ_item_info">
+		SELECT * FROM item_info WHERE item_id = #{item_id}
 	</select>
 </mapper>
