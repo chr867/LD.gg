@@ -144,14 +144,14 @@
 <!-- right_container end -->
 
 <style type="text/css">
-.start-item-shoes-container{
+.start-item-shoes-container {
 	width: 100%;
-	height: 400px;
+	height: 300px;
 	display: flex;
 	align-items: center;
 }
 
-.start-item-box{
+.start-item-box {
 	width: 350px;
 	height: 100%;
 	margin-right: 20px;
@@ -159,49 +159,56 @@
 	border-radius: 0.5rem;
 }
 
-.shoes-box{
+.shoes-box {
 	width: 350px;
 	height: 100%;
 	background-color: #fff;
 	border-radius: 0.5rem;
 }
 
-.start-item-title{
+.start-item-title {
 	text-align: center;
 }
-.shoes-title{
+
+.shoes-title {
 	text-align: center;
 	margin-bottom: 20px;
 }
-.start-item-title h4{
-	font-size: 18px;
-	font-weight: 700;
-}
-.shoes-title h4{
+
+.start-item-title h4 {
 	font-size: 18px;
 	font-weight: 700;
 }
 
-.item-img{
+.shoes-title h4 {
+	font-size: 18px;
+	font-weight: 700;
+}
+
+.item-img {
 	margin-right: 5px;
 }
-.item-img img{
+
+.item-img img {
 	width: 40px;
 	height: 40px;
 	border-radius: 0.5rem;
 }
-.start-item{
+
+.start-item {
 	display: flex;
 	padding-left: 20px;
 	margin-top: 10px;
 }
-.start-item-build-box{
+
+.start-item-build-box {
 	margin-top: 20px;
 }
-.start-item-rate{
- margin-top: 5px;
- align-items: center;
- display: flex;
+
+.start-item-rate {
+	margin-top: 5px;
+	align-items: center;
+	display: flex;
 }
 
 .item-desc {
@@ -217,9 +224,20 @@
 	transition: visibility 0s, opacity 0.3s linear;
 }
 
-.start-item .item-img:hover .item-desc {
+.start-item .item-img:hover .item-desc{
 	visibility: visible;
 	opacity: 1;
+}
+
+.shoes-recom-box .item-img:hover .item-desc{
+	visibility: visible;
+	opacity: 1;
+}
+.shoes{
+	display: flex;
+	margin-bottom: 10px;
+	align-items: center;
+	padding-left: 20px;
 }
 </style>
 </head>
@@ -839,15 +857,16 @@
 				<div class="start-item-box">
 					<div class="start-item-title">
 						<h4>시작 아이템 추천</h4>
-						<div class="start-item-build-box">
-							
-						</div>
-					
+						<div class="start-item-build-box"></div>
+
 					</div>
 				</div>
 				<div class="shoes-box">
 					<div class="shoes-title">
 						<h4>신발 추천</h4>
+						<div class="shoes-recom-box">
+							
+						</div>
 					</div>
 				</div>
 			</div>
@@ -1147,11 +1166,54 @@ function championBuildInfo(champion_id, team_position) {
 				spellSplit(champSpellData);
 				skillSplit(champSkillBuildData);
 				startItemSplit(champStartItemData);
+				shoesSplit(champShoesData);
 		}).fail(err => {
 		  console.log(err);
 		});	
 }
+//--------------------------------------------------------------------------------------------------------------------------------
+// 신발 출력 
+function shoesSplit(champShoesData) {
+	let shoes_recom_box = document.getElementsByClassName('shoes-recom-box')[0];
+	shoes_recom_box.innerHTML = ''; // 기존 내용 초기화
+	
+	for (let i = 0; i < champShoesData.length; i++) {
+		let item_id = champShoesData[i].item_id;
 
+		$.ajax({
+			method: 'get',
+			url: '/champion/info/item',
+			data: { item_id: item_id },
+			async: false
+		}).done(res => {
+			for (let item of res) {
+				let html = '<div class="shoes">';
+				html += '<div class="item-img">'
+				html += '<img alt="" src="/resources/img/item/' + item.item_img + '">'
+				html += '<div class="item-desc">'
+				html += '<div>' + item.item_kr_name + '</div>'
+				html += '<br>'
+				html += '<div>' + item.item_ability + '</div>'
+				html += '<br>'
+				html += '<div>' + item.item_desc + '</div>'
+				html += '<br>'
+				html += '<div>가격: ' + item.item_pur_gold + '   판매가격: ' + item.item_sell_gold + '</div>'
+				html += '</div>'
+				html += '</div>'
+				html += '<div class="rate-text"><h4>승률</h4></div>'
+				html += '<div class="rate-text"><h6>' + champShoesData[i].win_rate + '%</h6></div>'
+				html += '<div class="rate-text"><h4>픽률</h4></div>'
+				html += '<div class="rate-text"><h6>' + champShoesData[i].pick_rate + '%</h6></div>'
+				shoes_recom_box.innerHTML += html;
+			}
+
+
+		}).fail(err => {
+			console.log(err);
+		});
+	}
+	
+}
 // --------------------------------------------------------------------------------------------------------------------------------
 // 시작 아이템 출력 
 function startItemSplit(champStartItemData) {
@@ -1161,6 +1223,7 @@ function startItemSplit(champStartItemData) {
 	for (let i = 0; i < champStartItemData.length; i++) {
 		let startItemBuild = champStartItemData[i].item_id;
 		let parts = startItemBuild.split(',');
+		console.log(parts);
 
 		let html = '<div class="start-item">';
 		let ajaxCounter = 0;
@@ -1170,6 +1233,7 @@ function startItemSplit(champStartItemData) {
 				method: 'get',
 				url: '/champion/info/item',
 				data: { item_id: item_id },
+				async: false
 			}).done(res => {
 				for (let item of res) {
 					html += '<div class="item-img">'

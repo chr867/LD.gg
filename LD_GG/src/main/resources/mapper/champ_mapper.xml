@@ -140,7 +140,7 @@
 	</select>
 	
 	<select id="getStartItemData" resultType="champ_recomm_info">
-		SELECT * FROM champion_start_item WHERE champion_id = #{champion_id} AND team_position = #{team_position} order by pick_rate desc limit 2;
+		SELECT * FROM champion_start_item WHERE champion_id = #{champion_id} AND team_position = #{team_position} order by pick_rate desc limit 3;
 	</select>
 	
 	<select id="getEasyChampData" resultType="champ_recomm_info">
