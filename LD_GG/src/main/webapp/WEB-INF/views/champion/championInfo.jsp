@@ -120,6 +120,22 @@
 	grid-row: 1;
 	justify-self: right;
 }
+
+#match_up_table_container{
+	width: 540px;
+	height: 400px;
+	overflow: scroll;
+}
+
+.match_up_table {
+	position: relative;
+	width: 100%;
+}
+
+.match_up_table div{
+	display: flex;
+}
+
 </style>
 <!-- right_container end -->
 
@@ -930,7 +946,11 @@ box-sizing: border-box;
 					<div id="match_up_right"></div>
 				</div>
 				<!-- match_up_chart end -->
-				<div class="match_up_table"></div>
+				<div id="match_up_table_container">
+					<div class="match_up_table">
+					</div>
+
+				</div>
 				<!-- match_up_conatiner end -->
 			</div>
 		</div>
@@ -1367,9 +1387,6 @@ function rune_full_data(main,sub,i,champRuneData) {
 }
  
 // right_container
-document.addEventListener("DOMContentLoaded", function() {
-});
-
 let response;
 let cid;
 
@@ -1386,7 +1403,7 @@ let cid;
 			let left = res['champion']
 			let right = res['enemy']
 			make_chart(left[0], right[0])
-			make_table(res['enemy'])
+			make_table(left, right)
 		}).fail(err=>{
 			console.log(err)
 		})
@@ -1458,13 +1475,36 @@ function make_chart(left, right){
 	right_champ.style.cursor = 'pointer';
 }
 	
-function make_table(enemys){
+function make_table(left, enemys){
 	console.log(enemys)
+	let match_up_table_html = '<div class="match_up_table_header" style="width:">';
+	match_up_table_html += '<div>#</div>'
+	match_up_table_html += '<div>챔피언</div>'
+	match_up_table_html += '<div>라인킬 확률</div>'
+	match_up_table_html += '</div>'
+	let table_index = 1;
+	enemys.forEach(enemy=>{
+		let lane_kill_rate
+		left.forEach(lef=>{
+			if(lef['enemy_champ_id'] == enemy.champion_id){
+				lane_kill_rate = lef['lane_kill_rate']
+			}
+		})
+		match_up_table_html += '<div class="champion">';
+		match_up_table_html += '<div class="table_index">'+ table_index +'</div>';
+		match_up_table_html += '<img alt="' + enemy.champion_name +
+				'" class="bg-image champion-img" src="/resources/img/champion_img/square/' +
+				enemy.champion_img + '">';
+		match_up_table_html += '<div>'+ enemy.champion_name +'</div>'
+		match_up_table_html += '<div>'+ lane_kill_rate + '</div>'
+		match_up_table_html += '</div>';
+		table_index ++;
+	})
+	document.querySelector('.match_up_table').innerHTML = match_up_table_html
 }
 
 let chart_lane_response;
 function chart_lane(champion_id, team_position){
-	console.log('chart_lane', champion_id, team_position)
 	$.ajax({
 		url: '/champion/chart-lane.json',
 		type: 'POST',
@@ -1475,7 +1515,7 @@ function chart_lane(champion_id, team_position){
 		let left = res['champion']
 		let right = res['enemy']
 		make_chart(left[0], right[0])
-		make_table(right)
+		make_table(left, right)
 	}).fail(err=>{
 		console.log(err)
 	})
