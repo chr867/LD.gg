@@ -146,7 +146,9 @@
 }
 
 #right_champ_search_box {
-	margin-top: 20px;	
+	display: flex;
+	width: 342px;
+	margin-top: 20px;
 }
 
 .search_box{
@@ -160,6 +162,8 @@
 }
 
 #right_champ_search{
+	position: relative;
+	right: -52%;
 	margin-bottom: 10px;
 }
 
@@ -178,6 +182,106 @@
 
 #span_container {
 	display: grid;
+}
+</style>
+
+<style>
+	.champion-container {
+	position: relative;
+	left: 35%;
+	top: -21%;
+	width: 65%;
+	height: 250px;
+	background-color: #fff;
+	box-sizing: border-box;
+}
+
+.search-container {
+	text-align: center;
+	justify-content: space-between;
+}
+
+.lane-select-box {
+	display: flex;
+	height: 50px;
+	justify-content: space-between;
+	width: 90%;
+	margin: auto;
+	margin-top: 10px;
+	background-color: #E4E6EF;
+	box-sizing: border-box;
+	padding: 0 50px 0 50px;
+	margin-bottom: 20px;
+	align-items: center;
+}
+
+.lane-img img {
+	width: 40px;
+	height: 40px;
+}
+
+.lane-img {
+	border-radius: 0.5rem;
+	transition: 0.5s;
+}
+
+.lane-img:hover, .lane-img:active {
+	background-color: #fff;
+}
+
+.champion-img-container {
+	width: 100%;
+	background-color: #E4E6EF;
+	height: 100%;
+	margin: auto;
+	box-sizing: border-box;
+	overflow-y: auto;
+}
+
+.champions {
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	text-align: center;
+	box-sizing: border-box;
+	flex-wrap: wrap;
+	padding: 5px;
+}
+
+.champions img {
+	width: 60px;
+	height: 60px;
+	border-radius: 1rem;
+	border: 5px solid #fff;
+	transition: 0.5s;
+}
+
+.champions img:hover {
+	transform: scale(1.3);
+	z-index: 1;
+}
+
+.champion {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	margin: 5px;
+	flex-grow: 1;
+}
+
+::-webkit-scrollbar {
+	width: 5px;
+	/* 스크롤바의 너비 */
+}
+
+::-webkit-scrollbar-track {
+	background-color: #f1f1f1;
+	/* 스크롤바의 트랙(배경) 색상 */
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: #888;
+	/* 스크롤바의 썸(막대) 색상 */
 }
 </style>
 <body>
@@ -554,12 +658,12 @@
 
 		<div id="right_container">
 			<div id="counter_champion">
-				<div class="select_lane">
-					<img src="/resources/img/ranked-positions/Position_Silver-Top.png" class="TOP" alt="">
-					<img src="/resources/img/ranked-positions/Position_Silver-Jungle.png" class="JUNGLE" alt="">
-					<img src="/resources/img/ranked-positions/Position_Silver-Mid.png" class="MIDDLE" alt="">
-					<img src="/resources/img/ranked-positions/Position_Silver-Bot.png" class="BOTTOM" alt="">
-					<img src="/resources/img/ranked-positions/Position_Silver-Support.png" class="UTILITY" alt="">
+				<div class="select_lane lane_button">
+					<img src="/resources/img/ranked-positions/Position_Silver-Top.png" onclick="selectLane('TOP')" class="TOP" alt="">
+					<img src="/resources/img/ranked-positions/Position_Silver-Jungle.png" onclick="selectLane('JUNGLE')" class="JUNGLE" alt="">
+					<img src="/resources/img/ranked-positions/Position_Silver-Mid.png" onclick="selectLane('MIDDLE')" class="MIDDLE" alt="">
+					<img src="/resources/img/ranked-positions/Position_Silver-Bot.png" onclick="selectLane('BOTTOM')" class="BOTTOM" alt="">
+					<img src="/resources/img/ranked-positions/Position_Silver-Support.png" onclick="selectLane('UTILITY')" class="UTILITY" alt="">
 				</div>
 
 				<div class="select_tag">
@@ -583,8 +687,14 @@
 								src="/resources/img/profileicon/29.png"> <div></div>
 						</div>
 					</div>
-
 				</div>
+				
+				<div class="champion-container">
+					<div class="champion-img-container">
+						<div class="champions"></div>
+					</div>
+				</div>
+				
 			</div>
 		</div>
 	</div>
@@ -789,7 +899,77 @@
 		
 	})
 // right 챔피언 검색 end
+
+
+// champion-container
+	// 챔피언 리스트
+function championList() {
+	$.ajax({
+		method: 'get',
+		url: '/champion/list.json'
+	}).done(res => {
+		let championHTML = '';
+		res.forEach(function (champion) {
+			console.log(champion)
+			championHTML += '<div class="champion">';
+			championHTML += '<img alt="' + champion.champion_kr_name +
+				'" class="bg-image champion-img" src="/resources/img/champion_img/square/' +
+				champion.champion_img + '" onclick="selectChampion(\'' + champion.champion_en_name + '\', \'' + champion.champion_img + '\', \'' +
+			    champion.champion_kr_name + '\')">';
+			championHTML += '</div>';
+		});
+
+		$('.champions').html(championHTML);
+	}).fail(err => {
+		console.log(err);
+	});
+}
+championList();
+// 챔피언 리스트 끝
+
+// 라인 선택
+function selectLane(team_position) {
+	$('.champions').empty();
+	$.ajax({
+		method: 'get',
+		url: '/tip/champion/lane',
+		data: {
+			team_position: team_position
+		},
+	}).done(res => {
+		let championHTML = '';
+		res.forEach(function (champion) {
+			championHTML += '<div class="champion">';
+			championHTML += '<img alt="' + champion.champion_kr_name +
+				'" class="bg-image champion-img" src="/resources/img/champion_img/square/' +
+				champion.champion_img + '" onclick="selectChampion(\'' + champion.champion_en_name + '\', \'' + champion.champion_img + '\', \'' +
+			    champion.champion_kr_name + '\')">';
+			championHTML += '</div>';
+		});
+
+		if(selected_lane && selected_tag && selected_right_champion){
+				recom_champ(selected_lane, selected_tag, selected_right_champion)
+			}
+
+		$('.champions').html(championHTML);
+	}).fail(err => {
+		console.log(err);
+	})
+}
+
+function selectChampion(champion_en_name, champion_img, champion_kr_name){
+	selected_right_champion = champion_en_name
+	$('#right_champion_img').attr('src', `/resources/img/champion_img/square/\${champion_img}`);
+	$('.search_box div').text(champion_kr_name);
+
+	if(selected_lane && selected_tag && selected_right_champion){
+				recom_champ(selected_lane, selected_tag, selected_right_champion)
+			}
+
+}
+// 라인 선택 끝
 </script>
+
 </body>
 
 </html>
