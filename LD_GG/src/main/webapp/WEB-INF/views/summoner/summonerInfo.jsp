@@ -716,7 +716,7 @@
 		        whole.append(header, data); // 2. 생성된 태그들을 whole 태그 내부에 추가
 		        // 3. 'data_header' 내부에 div 태그 3개 생성
 		        let synthesis = $('<div class = "synthesis" onclick = "synthesis('+record.match_id+', this)">종합</div>');
-		        let build = $('<div class="build" onclick="build(' + record.match_id + ')">빌드</div>');
+		        let build = $('<div class="build" onclick="build('+record.match_id+', this)">빌드</div>');
 		        let ranking = $('<div class="ranking" onclick="ranking(\'' + record.match_id + '\', \'' + summoner_name + '\', this)">랭킹</div>');
 		        header.append(synthesis, build, ranking);
 
@@ -1163,7 +1163,7 @@
 	}
 	
 	//빌드 버튼 클릭 시
-	/* function build(match_id){
+	/* function build(match_id, thisDiv){
 		$.ajax({
 			method : 'get',
 			url : '/summoner/info/getBuild',
@@ -1171,25 +1171,7 @@
 		}).done(res=>{
 			console.log(res)
 			let data_div = $('<div></div>');
-			let item_build_div = $('<div class = "item_build_div"></div>');
-			let skill_build_div = $('<div class = "skill_build_div"></div>');
 			let rune_build_div = $('<div class = "rune_build_div"></div>');
-			
-			let item_div = $('<div></div>');
-			$.each(res.timeline, function(i,timeline){
-				let item = $('<img src = "http://ddragon.leagueoflegends.com/cdn/13.9.1/img/item/'+timeline.item.png+'">');
-				item_div.append(item);
-			})
-			item_build_div.append(item_div);
-			
-			let skill_div = $('<div></div>');
-			$.each(res.timeline, function(i, timeline){
-				let skill1 = $('<img src = "http://ddragon.leagueoflegends.com/cdn/13.9.1/img/spell/'+timeline.skill1+'.png">');
-				let skill2 = $('<img src = "http://ddragon.leagueoflegends.com/cdn/13.9.1/img/spell/'+timeline.skill2+'.png">');
-				let skill3 = $('<img src = "http://ddragon.leagueoflegends.com/cdn/13.9.1/img/spell/'+timeline.skill3+'.png">');
-				skill_div.append(skill1,skill2,skill3);
-			})
-			skill_build_div.append(skill_div);
 			
 			let rune_div1 = $('<div></div>');
 			let rune_div2 = $('<div></div>');
@@ -1216,8 +1198,8 @@
 			
 			rune_build_div.append(rune_div1,rune_div2,rune_stat);	
 			
-			data_div.append(item_build_div,skill_build_div,rune_build_div);
-			$('.build_info').html(data_div);
+			data_div.append(rune_build_div);
+			$(thisDiv).parent().siblings('div').filter('.data').html(data_div);
 		}).fail(err=>{
 			console.log(err)
 		})
@@ -1231,14 +1213,12 @@
 			url : '/summoner/getRanking',
 			data : {match_id : matchId, summoner_name : summoner_name}
 		}).done(res=>{
-			console.log(res);
 			
 			$.ajax({
 				method : 'get',
 				url : '/summoner/getTeamData',
 				data : {match_id : matchId, summoner_name : summoner_name}
 			}).done(response=>{
-				console.log(response);
 				
 				let playersDamage = [];
 				let playersTaken = [];
@@ -1310,6 +1290,40 @@
 				let dealtTitle = $('<div class = "dealtTitleDiv"><span>피해량</span></div>');
 				let dealtRank = $('<div class = "dealtRankDiv">'+playersDamageRank+'위</div>');
 				let dealtGraph = $('<div class = "dealtGraphDiv"></div>');
+				$.each(res, function(k, res){
+					let canvas = $('<canvas></canvas>')[k];
+					let ctx = canvas.getContext('2d');
+					$(canvas).css({
+						'max-width' : '100px',
+						'max-height' : '20px'
+					});
+					let ratio = res.self_dealt / response.total_dealt;
+					
+					let myChart = new Chart(ctx,{
+						type : 'bar',
+						data : {
+							labels : ['피해량'],
+							datasets:[{
+								label : '피해량 비율',
+								data : [ratio],
+								backgroundColor: ['rgba(54, 162, 235, 0.5)'],
+							    borderColor: ['rgba(54, 162, 235, 0.5)'],
+							    borderWidth: 1
+							}]
+						},
+						options : {
+							indexAxis : 'y',
+							scales : {
+								x : {ticks : {display : false}, grid : {display : false},},
+								y : {display : false, grid : {display : false}}
+								},
+							plugins : {
+								legend : {display : false}
+							}
+						}
+					});
+					dealtGraph.append(canvas);
+				});
 				let dealtText = $('<div class = "dealtTextDiv"><span><strong>'+res.self_dealt+'</strong><span>/'+res.total_dealt+'</span></span></div>');
 				dealtDiv.append(dealtTitle,dealtRank,dealtGraph,dealtText);
 				
