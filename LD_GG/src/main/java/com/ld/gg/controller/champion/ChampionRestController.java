@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ld.gg.dto.champ.Champ_analytics;
 import com.ld.gg.dto.champ.Champ_default;
+import com.ld.gg.dto.champ.Champ_item_info;
 import com.ld.gg.dto.champ.Champ_match_up_default;
 import com.ld.gg.dto.champ.Champ_match_up_rune;
 import com.ld.gg.dto.champ.Champ_match_up_spell;
@@ -73,8 +74,8 @@ public class ChampionRestController {
 	}
 
 	@PostMapping("/build-recom.json")
-	public Map<String, Object> build_recom(String left_champion, String right_champion) throws Exception{
-		Map<String, Object>build_map = cs.build_recom(left_champion, right_champion);
+	public Map<String, Object> build_recom(String left_champion, String right_champion, String team_position) throws Exception{
+		Map<String, Object>build_map = cs.build_recom(left_champion, right_champion, team_position);
 		return build_map;
 	}
 	
@@ -120,5 +121,11 @@ public class ChampionRestController {
 		Map<String, List<Champ_match_up_default>> cm_map = cs.get_champ_match_up_chart(champion_id, team_position);
 
 		return cm_map;
+	}
+	
+	@GetMapping("/info/item")
+	public List<Champ_item_info> itemInfo(int item_id){
+		List<Champ_item_info> getItemInfo = cs.getItemInfo(item_id);
+		return getItemInfo;
 	}
 }

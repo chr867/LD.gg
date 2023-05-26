@@ -10,6 +10,7 @@ footer{
   align-items: center;
   border-top: 1px solid #c5c7ce;
   display: flex;
+  z-index: 99;
 }
 .team-name-box{
   display: flex;

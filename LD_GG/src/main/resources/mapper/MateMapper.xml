@@ -32,12 +32,22 @@
 	</insert>
 	<!-- 글 번호, 제목, 내용, 작성일,작성자, 소환사명, 최근전적(현제 더미값) -->
 		<select id="getMateDetails" resultType="mate">
-		SELECT mp.mate_id ,mp.email ,mp.mate_content ,mp.mate_date,mp.mate_title,m.lol_account
-		FROM MATE_POST as MP JOIN (
-			SELECT *
-			FROM member
-			) as M
-		ON MP.EMAIL = M.EMAIL
+	SELECT
+    mp.mate_id,
+    mp.email,
+    mp.mate_content,
+    mp.mate_date,
+    mp.mate_title,
+    m.lol_account,
+    r.win,
+    r.loss
+		FROM
+		    MATE_POST AS mp
+		    JOIN (
+		        SELECT *
+		        FROM member
+		    ) AS m ON mp.email = m.email
+		    JOIN member_last_rank_20_result AS r ON m.email = r.email
 		where mate_id =#{mate_id}
 	</select>
 	<insert id="mateReplyInsert" parameterType="mate">
@@ -61,23 +71,51 @@
 		ORDER BY mr.mate_r_id desc
 	</select>
 	<select id="getReplyList" resultType="mate">
-		SELECT lol_account,mate_r_content,mate_r_date,mate_apply,mate_id,mate_r_id,mr.email,mr.mate_select
-		FROM mate_request mr JOIN (
-			SELECT *
-			FROM member
-			) as M
-		ON mr.mate_apply = M.EMAIL
-		where mate_id =#{mate_id}
-		ORDER BY mr.mate_r_id desc
+   SELECT
+    m.lol_account,
+    mr.mate_r_content,
+    mr.mate_r_date,
+    mr.mate_apply,
+    mr.mate_id,
+    mr.mate_r_id,
+    mr.email,
+    mr.mate_select,
+    r.win,
+    r.loss
+		FROM
+		    mate_request AS mr
+		    JOIN (
+		        SELECT *
+		        FROM member
+		    ) AS m ON mr.mate_apply = m.email
+		    JOIN member_last_rank_20_result AS r ON m.email = r.email
+		WHERE
+		    mr.mate_id = #{mate_id}
+		ORDER BY
+   		mr.mate_r_id DESC
 	</select>
 	<select id="getReplySelect" resultType="mate">
-		SELECT lol_account,mate_r_content,mate_r_date,mate_apply,mate_id,mate_r_id,mr.email,mr.mate_select
-		FROM mate_request mr JOIN (
-			SELECT *
-			FROM member
-			) as M
-		ON mr.mate_apply = M.EMAIL
-		where mate_id =#{mate_id} and mate_select = 1
+   SELECT
+    m.lol_account,
+    mr.mate_r_content,
+    mr.mate_r_date,
+    mr.mate_apply,
+    mr.mate_id,
+    mr.mate_r_id,
+    mr.email,
+    mr.mate_select,
+    r.win,
+    r.loss
+		FROM
+		    mate_request AS mr
+		    JOIN (
+		        SELECT *
+		        FROM member
+		    ) AS m ON mr.mate_apply = m.email
+		    JOIN member_last_rank_20_result AS r ON m.email = r.email
+		WHERE
+    mr.mate_id = #{mate_id}
+    AND mr.mate_select = 1
 	</select>
 	<select id="getBookmark" resultType="mate">
 		select my_page ,mate_page ,tip_page 
