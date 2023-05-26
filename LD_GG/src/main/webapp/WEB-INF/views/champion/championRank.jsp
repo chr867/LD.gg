@@ -533,10 +533,11 @@ th{
 	<div class="container_box">
 		<div>
 			<div class="container">
-				<div class="tier_container_box">
+<!-- 				<div class="tier_container_box">
 					<button id="tier_select">티어 선택</button>
-				<div id="option_container"></div>
-		</div>
+					<div id="option_container"></div>
+				</div> -->
+				
 				<div class="col">
 					<div class='lane_button'>
 						<button class="TOP">탑</button>

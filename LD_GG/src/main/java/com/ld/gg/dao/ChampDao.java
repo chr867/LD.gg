@@ -77,5 +77,6 @@ public interface ChampDao {
 
 	List<Champ_match_up_spell> getSpellInfo(@Param("first_spell")int first_spell, @Param("second_spell")int second_spell);
 
+	List<Champ_match_up_default> get_champion_match_up_chart(@Param("champion_id")Integer champion_id, @Param("team_position")String team_position);
   
 }

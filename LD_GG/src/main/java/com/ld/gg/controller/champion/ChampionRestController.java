@@ -114,4 +114,11 @@ public class ChampionRestController {
 		List<Champ_match_up_spell> spellInfo = cs.getSpellInfo(first_spell,second_spell);
 		return spellInfo;
 	}
+	
+	@PostMapping("/chart-lane.json")
+	public Map<String, List<Champ_match_up_default>> chart_lane(Integer champion_id, String team_position) throws Exception{
+		Map<String, List<Champ_match_up_default>> cm_map = cs.get_champ_match_up_chart(champion_id, team_position);
+
+		return cm_map;
+	}
 }

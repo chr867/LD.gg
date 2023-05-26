@@ -50,7 +50,6 @@
 <!--CHAMPION INFO CSS-->
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/champion/info.css">
-<!-- right_container -->
 <style type="text/css">
 .top-container {
 	display: flex;
@@ -83,8 +82,7 @@
 }
 </style>
 
-
-
+<!-- right_container start -->
 <style>
 .match_up_chart {
 	display: flex;
@@ -126,7 +124,24 @@
 	grid-row: 1;
 	justify-self: right;
 }
+
+#match_up_table_container{
+	width: 540px;
+	height: 400px;
+	overflow: scroll;
+}
+
+.match_up_table {
+	position: relative;
+	width: 100%;
+}
+
+.match_up_table div{
+	display: flex;
+}
+
 </style>
+<!-- right_container end -->
 
 <style type="text/css">
 
@@ -857,10 +872,15 @@
 
 					</div>
 					<!-- chartdiv end -->
+
 					<div id="match_up_right"></div>
 				</div>
 				<!-- match_up_chart end -->
-				<div class="match_up_table"></div>
+				<div id="match_up_table_container">
+					<div class="match_up_table">
+					</div>
+
+				</div>
 				<!-- match_up_conatiner end -->
 			</div>
 		</div>
@@ -873,6 +893,8 @@
 
 document.addEventListener("DOMContentLoaded", function() {
 	championLaneInfo(${chamInfo.champion_id});
+	get_match_up(${chamInfo.champion_id});	
+
 });
 
 function championLaneInfo(champion_id) {
@@ -911,6 +933,7 @@ function championLaneInfo(champion_id) {
 
 function selectLane(team_position) {
 	championBuildInfo(${chamInfo.champion_id}, team_position);
+	chart_lane(${chamInfo.champion_id}, team_position)
 }
 
 function championBuildInfo(champion_id, team_position) {
@@ -931,7 +954,7 @@ function championBuildInfo(champion_id, team_position) {
 			let champTierData = championBuildInfo.champTierData;
 			let champEasyChampData = championBuildInfo.champEasyChampData;
 			let champHardChampData = championBuildInfo.champHardChampData;
-			
+
 			  console.log(champRuneData);
 			  console.log(champItemData);
 			  console.log(champMythicItemData);
@@ -957,7 +980,7 @@ function championBuildInfo(champion_id, team_position) {
 			  let easyTableHeaders = document.getElementsByClassName('easy-champ-img');
 			  for (var i = 0; i < easyTableHeaders.length; i++) {
 				  easyTableHeaders[i].innerHTML = '';
-				  easyTableHeaders[i].innerHTML = '<img alt="" src="/resources/img/champion_img/square/'+champEasyChampData[i].champion_img+'" class="champion-img">';
+				  easyTableHeaders[i].innerHTML = '<img alt="" src="/resources/img/champion_img/square/'+champEasyChampData[i].champion_img+'" class="champion-img" id="'+ champEasyChampData[i].enemy_champ_id +'">';
 			  }
 			  let hardEasyTableData = document.getElementsByClassName('easy-champ-win-rate');
 
@@ -970,7 +993,7 @@ function championBuildInfo(champion_id, team_position) {
 			  let hardTableHeaders = document.getElementsByClassName('hard-champ-img');
 			  for (var i = 0; i < hardTableHeaders.length; i++) {
 				  hardTableHeaders[i].innerHTML = '';
-				  hardTableHeaders[i].innerHTML = '<img alt="" src="/resources/img/champion_img/square/'+champHardChampData[i].champion_img+'" class="champion-img">';
+				  hardTableHeaders[i].innerHTML = '<img alt="" src="/resources/img/champion_img/square/'+champHardChampData[i].champion_img+'" class="champion-img" id="'+ champHardChampData[i].enemy_champ_id +'">';
 			  }
 			  var hardTableData = document.getElementsByClassName('hard-champ-win-rate');
 
@@ -978,6 +1001,15 @@ function championBuildInfo(champion_id, team_position) {
 				  hardTableData[i].innerHTML = '';
 				  hardTableData[i].innerHTML = champHardChampData[i].match_up_win_rate+'%';
 			  }
+			  
+			  let champ_img = document.querySelectorAll('.champion-img')
+			  champ_img.forEach(champion=>{
+				champion.addEventListener('click', function(){
+					if(champion.id){
+						location.href = `info?champion=\${champion.id}`
+					}
+				})
+			  })
 			  //-----------------------------------------------------------------------------------
 			  rune_full_data(champRuneData[0].main_KEYSTONE_ID,champRuneData[0].sub_KEYSTONE_ID,0,champRuneData);
 			  
@@ -1395,15 +1427,7 @@ function rune_full_data(main,sub,i,champRuneData) {
 		}); 
 }
  
-</script>
-
-<!-- right_container -->
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-	get_match_up(${chamInfo.champion_id});
-	
-});
-
+// right_container
 let response;
 let cid;
 
@@ -1420,7 +1444,7 @@ let cid;
 			let left = res['champion']
 			let right = res['enemy']
 			make_chart(left[0], right[0])
-			make_table(res['enemy'])
+			make_table(left, right)
 		}).fail(err=>{
 			console.log(err)
 		})
@@ -1472,22 +1496,74 @@ function make_chart(left, right){
 		})
 	})
 	
-	let left_html_list = '<img src="/resources/img/champion_img/square/'+ left.champion_img +'" alt="'+ left.champion_name +'" class="champion_img">'
+	let left_html_list = '<img src="/resources/img/champion_img/square/'+ left.champion_img +'" alt="'+ left.champion_name +'" class="champion_img" id="'+ left.champion_id +'"">'
 	left_html_list += '<span>' + left.champion_name + '</span>'
 	left_html_list += '<span>' + left.match_up_win_rate + '</span>'
 
-	let right_html_list = '<img src="/resources/img/champion_img/square/'+ right.champion_img +'" alt="'+ left.champion_name +'" class="champion_img">'
+	let right_html_list = '<img src="/resources/img/champion_img/square/'+ right.champion_img +'" alt="'+ right.champion_name +'" class="champion_img2" id="'+ right.champion_id +'">'
 	right_html_list += '<span>' + right.champion_name + '</span>'
 	right_html_list += '<span>' + right.match_up_win_rate + '</span>'
 
 	document.getElementById('match_up_left').innerHTML = left_html_list
 	document.getElementById('match_up_right').innerHTML = right_html_list
 
+	let right_champ = document.querySelector('.champion_img2')
+	
+	right_champ.addEventListener('click', function(){
+		location.href = `info?champion=\${this.id}`
+	})
+	
+	right_champ.style.cursor = 'pointer';
 }
 	
-function make_table(enemys){
+function make_table(left, enemys){
 	console.log(enemys)
+	let match_up_table_html = '<div class="match_up_table_header" style="width:">';
+	match_up_table_html += '<div>#</div>'
+	match_up_table_html += '<div>챔피언</div>'
+	match_up_table_html += '<div>라인킬 확률</div>'
+	match_up_table_html += '</div>'
+	let table_index = 1;
+	enemys.forEach(enemy=>{
+		let lane_kill_rate
+		left.forEach(lef=>{
+			if(lef['enemy_champ_id'] == enemy.champion_id){
+				lane_kill_rate = lef['lane_kill_rate']
+			}
+		})
+		match_up_table_html += '<div class="champion">';
+		match_up_table_html += '<div class="table_index">'+ table_index +'</div>';
+		match_up_table_html += '<img alt="' + enemy.champion_name +
+				'" class="bg-image champion-img" src="/resources/img/champion_img/square/' +
+				enemy.champion_img + '">';
+		match_up_table_html += '<div>'+ enemy.champion_name +'</div>'
+		match_up_table_html += '<div>'+ lane_kill_rate + '</div>'
+		match_up_table_html += '</div>';
+		table_index ++;
+	})
+	document.querySelector('.match_up_table').innerHTML = match_up_table_html
 }
 
+let chart_lane_response;
+function chart_lane(champion_id, team_position){
+	$.ajax({
+		url: '/champion/chart-lane.json',
+		type: 'POST',
+		data: {champion_id: champion_id, team_position: team_position}
+	}).done(res=>{
+		console.log('chart', res)
+		chart_lane_response = res;
+		let left = res['champion']
+		let right = res['enemy']
+		make_chart(left[0], right[0])
+		make_table(left, right)
+	}).fail(err=>{
+		console.log(err)
+	})
+	
+}
+// right_container
+
 </script>
+
 </html>
