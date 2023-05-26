@@ -146,6 +146,29 @@ public class SummonerRestController {
 		return dbd;
 	}
 	
+	@GetMapping("/dashboard/matchup")
+	public List<DashBoardDto> getDashBoardMatchUp(String summoner_name){
+		List<DashBoardDto> dbd = ss.getDashBoardMatchUp(summoner_name);
+		return dbd;
+	}
+	
+	@GetMapping("/dashboard/recent")
+	public List<DashBoardDto> getDashBoardRecent(String summoner_name){
+		List<DashBoardDto> dbd = ss.getDashBoardRecent(summoner_name);
+		return dbd;
+	}
+	
+	@GetMapping("/dashboard/getPlayer")
+	public List<DashBoardDto> getDashBoardPlayer(String match_id, String summoner_name){
+		List<DashBoardDto> dbd = ss.getDashBoardPlayer(match_id, summoner_name);
+		return dbd;
+	}
+	
+	@GetMapping("/dashboard/profile")
+	public DashBoardDto getDashBoardProfile(String summoner_name) {
+		DashBoardDto dbd = ss.getDashBoardProfile(summoner_name);
+		return dbd;
+	}
 	
 	@GetMapping("/getMatchUpPlayer")
 	public List<MatchUpPlayerDto> getMachUpPlayer(String match_id){

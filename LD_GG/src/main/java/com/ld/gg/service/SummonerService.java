@@ -128,4 +128,24 @@ public class SummonerService {
 		return crd;
 	}
 
+	public List<DashBoardDto> getDashBoardMatchUp(String summoner_name) {
+		List<DashBoardDto> dbd = SD.getDashBoardMatchUp(summoner_name);
+		return dbd;
+	}
+
+	public List<DashBoardDto> getDashBoardRecent(String summoner_name) {
+		List<DashBoardDto> dbd = SD.getDashBoardRecent(summoner_name);
+		return dbd;
+	}
+
+	public List<DashBoardDto> getDashBoardPlayer(String match_id, String summoner_name) {
+		List<DashBoardDto> dbd = SD.getDashBoardPlayer(match_id, summoner_name);
+		return dbd;
+	}
+
+	public DashBoardDto getDashBoardProfile(String summoner_name) {
+		DashBoardDto dbd = SD.getDashBoardProfile(summoner_name);
+		return dbd;
+	}
+
 }

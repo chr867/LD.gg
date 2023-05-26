@@ -1,0 +1,225 @@
+@charset "UTF-8";
+body{
+	display : flex;
+	justify-content : center;
+	align-items : center;
+}
+
+.flex-dashboard{
+	display : flex;
+	justify-content : center;
+	align-items : center;
+	max-width : 1180px;
+	flex-direction : column;
+}
+
+.flex-my-profile{
+	display : flex;
+	flex-direction : row;
+	justify-content : center;
+	align-items : center;
+	width : 100%;
+}
+
+.flex-profile-icon {
+	width : 10%;
+	height : auto;
+}
+
+.flex-summoner{
+	width : 100%;
+	display : flex;
+	flex-direction : row;
+}
+
+.flex-tier, .flex-kda{
+	flex : 1;
+}
+
+.flex-kda{
+	display : flex;
+	flex-direction : row;
+}
+
+.flex-tier-title{
+	display : flex;
+	flex-direction : column;
+}
+
+.flex-text{
+	width : 100%;
+}
+
+.flex-css{
+	display : flex;
+	flex-direction : row;
+}
+
+.flex-text{
+	text-align : center;
+}
+
+.flex-tier-emblem{
+	flex : 1;
+	width : 50%;
+	height : auto;
+}
+
+.flex-tier-data{
+	flex : 1;
+	display : flex;
+	justify-content : center;
+	align-items : center;
+	flex-direction : column;
+}
+
+.flex-winrate{
+	flex : 1;
+	display : flex;
+	justify-content : center;
+	align-items : center;
+	flex-direction : column;
+}
+
+.classDiv{
+	display : flex;
+	width : 100%;
+	flex-direction : row;
+	justify-content : center;
+	align-items : center;
+}
+
+.Div{
+	width : 30%;
+	text-align : center;
+	display : flex;
+	justify-content : center;
+	align-items : center;
+	flex-direction : column;
+}
+
+.record{
+	text-align : center;
+}
+
+.kdaDiv{
+	width : 30%;
+	display : flex;
+	flex-direction : column;
+	justify-content : center;
+	align-items : center;
+}
+
+.flex-rank-winrate{
+	width : 100%;
+	display : flex;
+	flex-direction : column;
+}
+
+.flex-winrate-title{
+	text-align : center;
+}
+
+.flex-winrate-subtitle{
+	width : 100%;
+	display : flex;
+	flex-direction : row;
+	justify-content : center;
+	align-items : center;
+	text-align : center;
+}
+
+.flex-champion, .flex-champion-winrate{
+	flex : 1;
+}
+
+.flex-champion-data{
+	width : 100%;
+}
+
+.champData{
+	width : 100%;
+	display : flex;
+	flex-direction : row;
+}
+
+.champDiv{
+	display : flex;
+	width : 20%;
+	flex-direction : row;
+	justify-content : center;
+	align-items : center;
+}
+
+.champImg{
+	width : 20%;
+	height : auto;
+}
+
+.winrateDiv{
+	display : flex;
+	width : 80%;
+	flex-direction : row;
+	justify-content : center;
+	align-items : center;
+}
+
+.flex-matchup-summoner{
+	display : flex;
+	width : 100%;
+	height : fit-content;
+	flex-direction : column;
+}
+
+.flex-matchup-title{
+	text-align : center;
+}
+
+.flex-matchup-categories{
+	width : 100%;
+	display : flex;
+	flex-direction : row;
+	text-align : center;
+	justify-content : center;
+	align-items : center;
+}
+
+.category{
+	flex : 1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
