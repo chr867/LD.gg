@@ -47,6 +47,7 @@
 	href="/resources/css/main/loginModal.css">
 <!--로그인 및 세션관련 JS-->
 <script src="/resources/js/main/loginSession.js" defer></script>
+
 <!--CHAMPION INFO CSS-->
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/champion/info.css">
@@ -85,7 +86,7 @@
 
 <!-- right_container start -->
 <style>
-.match_up_container{
+.match_up_container {
 	position: relative;
 	width: 100%;
 	left: 100px;
@@ -155,29 +156,29 @@
 	display: flex;
 }
 
-.match_up_table_header{
+.match_up_table_header {
 	display: flex;
 	justify-content: space-between;
 }
 
-.match_up_table_header :last-child{
+.match_up_table_header :last-child {
 	margin-right: 40px;
 }
 
-.match_up_table .champion{
+.match_up_table .champion {
 	justify-content: space-between;
 }
 
-.match_up_table .champion:not(:first-child){
-	margin-top:10px;
+.match_up_table .champion:not(:first-child) {
+	margin-top: 10px;
 }
 
-.champion > div:first-child{
+.champion>div:first-child {
 	line-height: 75px;
 	width: 10px;
 }
 
-.champion > div:last-child{
+.champion>div:last-child {
 	text-align: center;
 	margin-right: 65px;
 	line-height: 75px;
@@ -191,7 +192,7 @@
 	margin-right: 5px;
 }
 
-.table-champion-name{
+.table-champion-name {
 	width: 150px;
 	text-align: left;
 	position: relative;
@@ -199,23 +200,19 @@
 	line-height: 75px;
 }
 
-#match_up_left > img,
-#match_up_right > img{
+#match_up_left>img, #match_up_right>img {
 	width: 150px;
 	border-radius: 0.5rem;
 	position: relative;
 	top: -12%;
 }
 
-#match_up_left > div,
-#match_up_right > div{
+#match_up_left>div, #match_up_right>div {
 	text-align: center;
 	position: relative;
 	top: -10%;
 	margin-bottom: 10px
 }
-
-
 </style>
 <!-- right_container end -->
 
@@ -290,7 +287,7 @@
 .item-desc {
 	position: absolute;
 	z-index: 10;
-	width: 300px;
+	width: 400px;
 	background-color: black;
 	color: #fff;
 	border-radius: 1rem;
@@ -300,20 +297,65 @@
 	transition: visibility 0s, opacity 0.3s linear;
 }
 
-.start-item .item-img:hover .item-desc{
+.start-item .item-img:hover .item-desc {
 	visibility: visible;
 	opacity: 1;
 }
 
-.shoes-recom-box .item-img:hover .item-desc{
+.shoes-recom-box .item-img:hover .item-desc {
 	visibility: visible;
 	opacity: 1;
 }
-.shoes{
+
+.shoes {
 	display: flex;
 	margin-bottom: 10px;
 	align-items: center;
 	padding-left: 20px;
+}
+</style>
+
+<style type="text/css">
+.item-build-container {
+	width: 100%;
+	margin-top: 20px;
+	height: 370px;
+	border-radius: 0.5rem;
+	background-color: #fff;
+}
+
+.item-build-title {
+	text-align: center;
+	font-size: 20px;
+	font-weight: 700;
+}
+
+.item-build-box .item:hover .item-desc {
+	visibility: visible;
+	opacity: 1;
+}
+
+.item-build-box {
+	display: flex;
+	align-content: center;
+	padding-left: 20px;
+	padding-right: 20px;
+	justify-content: space-between;
+	margin-top: 20px;
+}
+
+.item img {
+	width: 40px;
+	height: 40px;
+	border-radius: 0.5rem;
+}
+.item-build{
+	display: flex;
+	align-items: center;
+}
+.rate-text-box{
+	display: flex;
+	align-items: center;
 }
 </style>
 </head>
@@ -940,16 +982,22 @@
 				<div class="shoes-box">
 					<div class="shoes-title">
 						<h4>신발 추천</h4>
-						<div class="shoes-recom-box">
-							
-						</div>
+						<div class="shoes-recom-box"></div>
 					</div>
 				</div>
 			</div>
-		</div>
 
+
+			<div class="item-build-container">
+				<h4 class="item-build-title">아이템 빌드 추천</h4>
+				<div class="item-build-stack"></div>
+			</div>
+
+
+		</div>
 	</div>
-  
+
+
 	<div class="bottom-container">
 		<!-- match_up_conatiner start -->
 		<div class="match_up_container">
@@ -988,7 +1036,7 @@
 								aria-valuemax="100"></div>
 						</div>
 					</div>
-	
+
 					<div class="bar_block">
 						<div class="bar_title kda">
 							<div class="bar_title_left kda"></div>
@@ -1003,7 +1051,7 @@
 								aria-valuemax="100"></div>
 						</div>
 					</div>
-	
+
 					<div class="bar_block">
 						<div class="bar_title tower_kill_time">
 							<div class="bar_title_left tower_kill_time"></div>
@@ -1018,7 +1066,7 @@
 								aria-valuemax="100"></div>
 						</div>
 					</div>
-	
+
 					<div class="bar_block">
 						<div class="bar_title win_rate">
 							<div class="bar_title_left win_rate"></div>
@@ -1033,7 +1081,7 @@
 								aria-valuemax="100"></div>
 						</div>
 					</div>
-	
+
 					<div class="bar_block">
 						<div class="bar_title pick_rate">
 							<div class="bar_title_left pick_rate"></div>
@@ -1048,7 +1096,7 @@
 								aria-valuemax="100"></div>
 						</div>
 					</div>
-	
+
 					<div class="bar_block">
 						<div class="bar_title ban_rate">
 							<div class="bar_title_left ban_rate"></div>
@@ -1063,20 +1111,20 @@
 								aria-valuemax="100"></div>
 						</div>
 					</div>
-	
+
 				</div>
 				<!-- chartdiv end -->
-	
+
 				<div id="match_up_right"></div>
 			</div>
 			<div id="match_up_table_container">
-				
+
 				<div class="match_up_table_header">
 					<div>#</div>
 					<div>챔피언</div>
 					<div>라인킬 확률</div>
 				</div>
-				
+
 				<div class="match_up_table"></div>
 			</div>
 			<!-- match_up_conatiner end -->
@@ -1242,9 +1290,72 @@ function championBuildInfo(champion_id, team_position) {
 				skillSplit(champSkillBuildData);
 				startItemSplit(champStartItemData);
 				shoesSplit(champShoesData);
+				itmeBuildSplit(champItemBuildData);
 		}).fail(err => {
 		  console.log(err);
 		});	
+}
+//--------------------------------------------------------------------------------------------------------------------------------
+// 아이템 빌드 출력 
+
+function itmeBuildSplit(champItemBuildData) {
+	let item_build_stack = document.getElementsByClassName('item-build-stack')[0];
+	item_build_stack.innerHTML = ''; // 기존 내용 초기화
+	for (let i = 0; i < champItemBuildData.length; i++) {
+		
+		let itemBuild = champItemBuildData[i].item_build;
+		let parts = itemBuild.split(',');
+		
+		let html = '<div class="item-build-box">';
+		html += '<div class="item-build">';
+		let ajaxCounter = 0;
+
+		for (let item_id of parts) {
+			$.ajax({
+				method: 'get',
+				url: '/champion/info/item',
+				data: { item_id: item_id },
+				async: false
+			}).done(res => {
+				for (let item of res) {
+					html += '<div class="item">'
+					html += '<img alt="" src="/resources/img/item/' + item.item_img + '">'
+					html += '<div class="item-desc">'
+					html += '<div>' + item.item_kr_name + '</div>'
+					html += '<br>'
+					html += '<div>' + item.item_ability + '</div>'
+					html += '<br>'
+					html += '<div>' + item.item_desc + '</div>'
+					html += '<br>'
+					html += '<div>가격: ' + item.item_pur_gold + '   판매가격: ' + item.item_sell_gold + '</div>'
+					html += '</div>'
+					html += '</div>'
+				
+				}
+				ajaxCounter++;
+				
+				if (ajaxCounter != parts.length) {
+					html += '<div class="arrow-img">'
+					html += '<img alt="" src="/resources/img/icon/arrow-icon-right.png">'
+					html += '</div>'
+				}
+			
+				if (ajaxCounter === parts.length) {
+					html += '</div>'
+					html += '<div class="rate-text-box">'
+					html += '<div class="rate-text"><h4>승률</h4></div>'
+					html += '<div class="rate-text"><h6>' + champItemBuildData[i].win_rate + '%</h6></div>'
+					html += '<div class="rate-text"><h4>픽률</h4></div>'
+					html += '<div class="rate-text"><h6>' + champItemBuildData[i].pick_rate + '%</h6></div>'
+					html += '</div>'
+					item_build_stack.innerHTML += html;
+				}
+			}).fail(err => {
+				console.log(err);
+			});
+		}
+	}
+
 }
 //--------------------------------------------------------------------------------------------------------------------------------
 // 신발 출력 
@@ -1298,7 +1409,6 @@ function startItemSplit(champStartItemData) {
 	for (let i = 0; i < champStartItemData.length; i++) {
 		let startItemBuild = champStartItemData[i].item_id;
 		let parts = startItemBuild.split(',');
-		console.log(parts);
 
 		let html = '<div class="start-item">';
 		let ajaxCounter = 0;
