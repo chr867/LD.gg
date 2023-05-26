@@ -578,7 +578,7 @@ for limit in tqdm(range(0, 10000, batch_size)):
         final_lst = []
 
         for end_champ, build_champ in zip(item_end_lst, item_build_lst):
-            final_champ = [end_champ[0], end_champ[1], end_champ[2]]  # Include 'win' in the final list
+            final_champ = [end_champ[0], end_champ[1], end_champ[2]]  
             for item in end_champ[3:]:
                 if item > 2055 and item not in shoe_items and item not in accessories_lst:  #
                     final_champ.append(item)

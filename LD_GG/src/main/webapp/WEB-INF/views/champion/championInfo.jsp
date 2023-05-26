@@ -1539,6 +1539,11 @@ function skillSplit(champSkillBuildData) {
 	eBoxHtml += '<h3>E</h3>'
 	eBoxHtml += '</div>'
 	
+	rBoxHtml = ''
+	rBoxHtml += '<div class="r-skill">'
+	rBoxHtml += '<h3>R</h3>'
+	rBoxHtml += '</div>'
+	
 	let count = 0;
 	for (let skill of parts) {
 		if (parseInt(skill) == 1) {
@@ -1563,6 +1568,8 @@ function skillSplit(champSkillBuildData) {
 			skill_bulid_all_box.innerHTML += wBoxHtml;
 		}else if(parseInt(skill) == 3){
 			skill_bulid_all_box.innerHTML += eBoxHtml;
+		}else if(parseInt(skill) == 4){
+			skill_bulid_all_box.innerHTML += rBoxHtml;
 		}
 	}
 	}
@@ -1670,6 +1677,7 @@ function rune_full_data(main,sub,i,champRuneData) {
 	  method: 'get',
 	  url: '/champion/info/rune/main',
 	  data: { main_key: main_key },
+	  async: false
 	}).done(res => {
 		console.log(res)
 		let main_rune_top = document.getElementsByClassName('main-rune-top')[0];
@@ -1748,6 +1756,7 @@ function rune_full_data(main,sub,i,champRuneData) {
 		  method: 'get',
 		  url: '/champion/info/rune/sub',
 		  data: { sub_key : sub_key },
+		  async: false
 		}).done(res => {
 			console.log(res)
 			let sub_rune_top = document.getElementsByClassName('sub-rune-top')[0];
