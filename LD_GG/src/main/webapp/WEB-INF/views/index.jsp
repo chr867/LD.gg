@@ -547,12 +547,7 @@
 				</div>
 				<div id="build_recom_box">
 					<span></span>
-					<form id=build_recom>
-						<input id="build_recom_left_val" type="text" name="left_champion"
-							style="display: none"> <input id="build_recom_right_val"
-							type="text" name="right_champion" style="display: none">
-						<button>추천 빌드</button>
-					</form>
+					<button onclick="recom_build()">추천 빌드</button>
 				</div>
 			</div>
 		</div>
@@ -638,9 +633,9 @@
 	function go_mypage(){
 		location.href="/member/mypage"
 	}
-	
+
+	// 라인 선택 start
 	let select_lane_imgs = document.querySelectorAll('.select_lane img')
-	
 	select_lane_imgs.forEach(lane=>{
 		lane.addEventListener('click', function(){
 			$('.select_lane img').css('background-color', '#E4E6EF');
@@ -652,9 +647,10 @@
 			}
 		})
 	})
+	// 라인 선택 end
 
+	// 역할군 선택 start
 	let select_tag_divs = document.querySelectorAll('.select_tag div')
-	
 	select_tag_divs.forEach(tag=>{
 		tag.addEventListener('click', function(){
 			$('.select_tag div').css('background-color', '#E4E6EF');
@@ -666,10 +662,9 @@
 			}
 		})
 	})
+	// 역할군 선택 end
 
-
-
-
+	// 추천 챔피언 선택 start
 	function recom_click(champ){
 		$('#my_champion_img').attr('src', champ.src);
 		$('#build_recom_left_val').attr('value', $(champ).attr('class'));
@@ -678,12 +673,15 @@
 			type: 'POST',
 			data: {champion_en_name: $(champ).attr('class')},
 		}).done(res=>{
-			$('#build_recom_box ').text(res);
+			selected_left_champion = res // champion_kr_name
+			$('#build_recom_box span').text(res);
 		}).fail(err=>{
 			$('#build_recom_box span').text('챔피언을 선택해 주세요');
 		})
 	}
+	// 추천 챔피언 선택 end
 
+	// 챔피언 추천 start
 	function recom_champ(lane, tag, right_champion){
 		$.ajax({
 			url: "/champion/champ-recom.json",
@@ -704,25 +702,30 @@
 			console.log(err)
 		})
 	}
+	// 챔피언 추천 end
 
-	$('#build_recom').submit(function(event){
-		event.preventDefault();
-		let formData = $(this).serialize();
-
-		$.ajax({
+// 빌드 추천 start
+	function recom_build(){
+		if(selected_lane && selected_left_champion && selected_right_champion){
+			$.ajax({
 			url: "/champion/build-recom.json",
 			type: 'POST',
-			data: formData,
-		}).done(res=>{
+			data: {
+				left_champion: selected_left_champion,
+				right_champion: selected_right_champion,
+				team_position: selected_lane
+			},
+			}).done(res=>{
 			console.log(res);
 						
-		}).fail(err=>{
+			}).fail(err=>{
 			console.log(err)
-		})
-		
-	})
+			})
+		}
+	}
+// 빌드 추천 end
 
-// left 챔피언
+// left 챔피언 검색 start
 	$('#champ_search').submit(function(event){		
 		event.preventDefault();
 		let formData = $(this).serialize();		
@@ -741,6 +744,7 @@
 				$('#my_champion_img').attr('src', `/resources/img/champion_img/tiles/\${res}_0.jpg`);
 				$('#build_recom_left_val').attr('value', res);
 			}else{
+				selected_left_champion = null;
 				$('#build_recom_box span').text('챔피언 이름을 확인해주세요');
 			}
 			
@@ -749,9 +753,9 @@
 		})
 		
 	})
-// left 챔피언 끝
+// left 챔피언 검색 end
 
-// right 챔피언
+// right 챔피언 검색 start
 	$('#right_champ_search').submit(function(evt){
 		event.preventDefault();
 		let formData = $(this).serialize();		
@@ -774,6 +778,7 @@
 					recom_champ(selected_lane, selected_tag, selected_right_champion)
 				}
 			}else{
+				selected_right_champion = null;
 				$('#right_champion_img').attr('src', '/resources/img/profileicon/29.png')
 				$('.search_box div').text('챔피언 이름을 확인해주세요');
 			}
@@ -783,7 +788,7 @@
 		})
 		
 	})
-// right 챔피언 끝
+// right 챔피언 검색 end
 </script>
 </body>
 

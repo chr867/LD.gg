@@ -73,8 +73,8 @@ public class ChampionRestController {
 	}
 
 	@PostMapping("/build-recom.json")
-	public Map<String, Object> build_recom(String left_champion, String right_champion) throws Exception{
-		Map<String, Object>build_map = cs.build_recom(left_champion, right_champion);
+	public Map<String, Object> build_recom(String left_champion, String right_champion, String team_position) throws Exception{
+		Map<String, Object>build_map = cs.build_recom(left_champion, right_champion, team_position);
 		return build_map;
 	}
 	

@@ -70,13 +70,13 @@ public class Champion_service {
 		return cm_list;
 	}
 
-	public Map<String, Object> build_recom(String left_champion, String right_champion) {
+	public Map<String, Object> build_recom(String left_champion, String right_champion, String team_position) {
 		Map<String, Object> build_recom_map = new HashMap<String, Object>();
 
-		List<Champ_match_up_spell> spell_recom = cd.build_recom_spell(left_champion, right_champion);
-		List<Champ_match_up_item> item_recom = cd.build_recom_item(left_champion, right_champion);
-		List<Champ_match_up_rune> rune_recom = cd.build_recom_rune(left_champion, right_champion);
-		List<Champ_match_up_skill> skill_recom = cd.build_recom_skill(left_champion, right_champion);
+		List<Champ_match_up_spell> spell_recom = cd.build_recom_spell(left_champion, right_champion, team_position);
+		List<Champ_match_up_item> item_recom = cd.build_recom_item(left_champion, right_champion, team_position);
+		List<Champ_match_up_rune> rune_recom = cd.build_recom_rune(left_champion, right_champion, team_position);
+		List<Champ_match_up_skill> skill_recom = cd.build_recom_skill(left_champion, right_champion, team_position);
 
 		build_recom_map.put("spell_recom", spell_recom);
 		build_recom_map.put("item_recom", item_recom);
