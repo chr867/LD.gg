@@ -11,6 +11,7 @@ import com.ld.gg.dao.ChampDao;
 import com.ld.gg.dto.champ.Champ_analytics;
 import com.ld.gg.dto.champ.Champ_default;
 import com.ld.gg.dto.champ.Champ_info;
+import com.ld.gg.dto.champ.Champ_item_info;
 import com.ld.gg.dto.champ.Champ_match_up_default;
 import com.ld.gg.dto.champ.Champ_match_up_item;
 import com.ld.gg.dto.champ.Champ_match_up_rune;
@@ -119,6 +120,7 @@ public class Champion_service {
 		List<Champ_recomm_info> champTierData = cd.getChampionTierData(champion_id, team_position);
 		List<Champ_recomm_info> champEasyChampData = cd.getEasyChampData(champion_id, team_position);
 		List<Champ_recomm_info> champHardChampData = cd.getHardChampData(champion_id, team_position);
+		List<Champ_recomm_info> champStartItemData = cd.getStartItemData(champion_id, team_position);
 		
 		championBuildInfo.put("champRuneData", champRuneData);
 		championBuildInfo.put("champItemData", champItemData);
@@ -131,6 +133,7 @@ public class Champion_service {
 		championBuildInfo.put("champTierData", champTierData);
 		championBuildInfo.put("champEasyChampData", champEasyChampData);
 		championBuildInfo.put("champHardChampData", champHardChampData);
+		championBuildInfo.put("champStartItemData", champStartItemData);
 
 		return championBuildInfo;
 	}
@@ -160,6 +163,22 @@ public class Champion_service {
 
 	public List<Champ_match_up_spell> getSpellInfo(int first_spell, int second_spell) {
 		return cd.getSpellInfo(first_spell,second_spell);
+	}
+
+	public Map<String, List<Champ_match_up_default>> get_champ_match_up_chart(Integer champion_id, String team_position) {
+		Map<String, List<Champ_match_up_default>> cm_map = new HashMap<>();
+		
+		List<Champ_match_up_default> cm_champion = cd.get_champion_match_up_chart(champion_id, team_position);
+		List<Champ_match_up_default> cm_enemy = cd.get_enemy_champion_match_up(champion_id, team_position);
+
+		cm_map.put("champion", cm_champion);
+		cm_map.put("enemy", cm_enemy);
+		
+		return cm_map;
+	}
+
+	public List<Champ_item_info> getItemInfo(int item_id) {
+		return cd.getItemInfo(item_id);
 	}
 
 }

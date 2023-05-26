@@ -248,9 +248,12 @@ public class MentorProfileService {
 	}
 	
 	//이메일로 멘티 태그 가져오기
-	public List<MentiTagDTO> select_by_email_menti_tag(String menti_email){
+	public String select_by_email_menti_tag(Map<String,String> menti_email_map) throws JsonProcessingException{
+		String menti_email = menti_email_map.get("menti_email");
 		List<MentiTagDTO> menti_tag_list = mentidao.select_by_email_menti_tag(menti_email);
-		return menti_tag_list;
+		ObjectMapper objectMapper = new ObjectMapper();
+		String menti_tag_list_json = objectMapper.writeValueAsString(menti_tag_list);
+		return menti_tag_list_json;
 	}
 	//멘티 태그 객체로 인서트
 	public void insert_menti_tag(List<MentiTagDTO> menti_tag_list) {

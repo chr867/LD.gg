@@ -30,6 +30,7 @@ public class Champ_match_up_rune extends Champ_match_up_default{
 	private int rune_num;
 	private String rune_kr_name;
 	private String rune_desc;
+	private String rune_long_desc;
 	private String rune_img;
 	private String rune_type;
 }

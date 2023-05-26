@@ -7,7 +7,6 @@
 			select ci.champion_kr_name, ci.champion_en_name, ci.champion_img, ct.* from champion_tier ct 
 			join champion_info ci on ci.champion_id = ct.champion_id
 			where ct.team_position = #{lane}
-			and ct.summoner_tier = #{tier}
 			and ct.pick_rate > 0.5
 			order by ct.tier asc
 		]]>
@@ -129,7 +128,7 @@
 	</select>
 	
 	<select id="getChampionSkillBuildData" resultType="champ_recomm_info">
-		SELECT * FROM champion_skill_build WHERE champion_id = #{champion_id} AND team_position = #{team_position} order by pick_rate desc;
+		SELECT * FROM champion_skill_build WHERE champion_id = #{champion_id} AND team_position = #{team_position} order by pick_rate desc limit 2;
 	</select>
 	
 	<select id="getChampionAccessoriesData" resultType="champ_recomm_info">
@@ -138,6 +137,10 @@
 	
 	<select id="getChampionTierData" resultType="champ_recomm_info">
 		SELECT * FROM champion_tier WHERE champion_id = #{champion_id} AND team_position = #{team_position};
+	</select>
+	
+	<select id="getStartItemData" resultType="champ_recomm_info">
+		SELECT * FROM champion_start_item WHERE champion_id = #{champion_id} AND team_position = #{team_position} order by pick_rate desc limit 3;
 	</select>
 	
 	<select id="getEasyChampData" resultType="champ_recomm_info">
@@ -174,7 +177,7 @@
 			FROM champion_lane AS c
 			JOIN champion_info AS i ON c.champion_id = i.champion_id
 			JOIN champion_match_up m ON c.champion_id = m.champion_id AND c.team_position = m.team_position
-			JOIN champion_tier t on c.champion_id = t.champion_id AND c.champion_id = t.champion_id AND c.team_position = t.team_position
+			JOIN champion_tier t on c.champion_id = t.champion_id AND c.team_position = t.team_position
 			WHERE c.team_position = (
 			    SELECT team_position
 			    FROM champion_lane
@@ -187,6 +190,20 @@
 			AND c.champion_id = #{champion_id}
 			ORDER BY m.match_up_cnt DESC;
 		]]>
+	</select>
+	
+	<select id="get_champion_match_up_chart" resultType="champ_match_up">
+			<![CDATA[
+			SELECT m.champion_id, m.match_up_cnt, i.champion_kr_name as champion_name, i.champion_img, m.lane_kill_rate, m.kill_participation, m.kda,
+			m.tower_kill_time, t.win_rate, t.pick_rate, t.ban_rate, m.match_up_win_rate as match_up_win_rate, m.enemy_champ_id
+			FROM champion_match_up as m
+			join champion_info as i ON m.champion_id = i.champion_id
+			join champion_tier t on m.champion_id = t.champion_id AND m.team_position = t.team_position
+			WHERE m.champion_id = #{champion_id}
+			AND m.team_position = #{team_position}
+			AND match_up_cnt > 20
+			order by m.match_up_cnt desc;
+			]]>
 	</select>
 	
 	<select id="get_enemy_champion_match_up" resultType="champ_match_up">
@@ -204,12 +221,12 @@
 	</select>
 	
 	<select id="getRuneInfo" resultType="champ_match_up_rune">
-		SELECT rune_id, rune_kr_name, rune_desc, rune_img,rune_num,rune_type
+		SELECT rune_id, rune_kr_name, rune_desc, rune_long_desc,rune_img,rune_num,rune_type
 		FROM rune_info WHERE rune_type = #{main_key} order by rune_num asc
 	</select>
 	
 	<select id="getSubRuneInfo" resultType="champ_match_up_rune">
-		SELECT rune_id, rune_kr_name, rune_desc, rune_img,rune_num,rune_type
+		SELECT rune_id, rune_kr_name, rune_desc, rune_long_desc,rune_img,rune_num,rune_type
 		FROM rune_info WHERE rune_type = #{sub_key} order by rune_num asc
 
 	</select>
@@ -217,6 +234,9 @@
 	<select id="getSpellInfo" resultType="champ_match_up_spell">
 		SELECT * FROM spell_info
 		WHERE spell_id IN (#{first_spell}, #{second_spell});
-
+	</select>
+	
+	<select id="getItemInfo" resultType="champ_item_info">
+		SELECT * FROM item_info WHERE item_id = #{item_id}
 	</select>
 </mapper>

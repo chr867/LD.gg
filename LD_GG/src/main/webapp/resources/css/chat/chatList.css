@@ -1,0 +1,130 @@
+@font-face {
+    font-family: 'noto-sans-bold';
+    src: url('/resources/fonts/Noto_Sans_KR/NotoSansKR-Bold.otf') format('truetype');
+}
+@font-face {
+    font-family: 'noto-sans-medi';
+    src: url('/resources/fonts/Noto_Sans_KR/NotoSansKR-Medium.otf') format('truetype');
+}
+@font-face {
+    font-family: 'noto-sans-light';
+    src: url('/resources/fonts/Noto_Sans_KR/NotoSansKR-Light.otf') format('truetype');
+}
+@font-face {
+    font-family: 'noto-sans-reg';
+    src: url('/resources/fonts/Noto_Sans_KR/NotoSansKR-Regular.otf') format('truetype');
+}
+body {
+    background-color: #f7f5f5;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+.chat-header {
+    width: 100%;
+    height: 90px;
+    background-color: #3d424e;
+    display: flex;
+}
+.ld-logo {
+    margin: auto;
+    width: 12%;
+}
+.chat-list {
+    display: flex;
+    height: 100%;
+}
+.tab-container {
+    width: 120px;
+    height: 100%;
+    background-color: #d8d2d2;
+    display: flex;
+    flex-direction: column;
+}
+.tab {
+    border: none;
+    height: 78px;
+    text-align: center;
+    font-family: 'noto-sans-bold';
+    background-color: #f7f5f5;
+    cursor: pointer;
+    transition: background-color 0.5s ease-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.tab:hover {
+    background-color: #c7c7c7;
+}
+.tab.selected  {
+    background-color: #c7c7c7;
+}
+.tab-contents {
+    width: 100%;
+    height: 100%;
+}
+.tab-content {
+    display: none;
+    width: 100%;
+    height: 100%;
+}
+.tab-content h3 {
+    margin-top: 0;
+}
+.profile-detail {
+    width: auto;
+    display: flex;
+    padding: 10px;
+    align-items: center;
+    margin: 5px;
+    transition: border-bottom 0.3s ease-in-out;
+}
+.profile-detail:hover{
+    border-bottom: 1px solid #f7f5f5;
+}
+.profile-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+.profile-name {
+    font-family: 'noto-sans-medi';
+    margin-left: 10px;
+}
+.profile-msg {
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px;
+    width:100px;
+    margin-left: auto;
+    margin-right: 15px;
+    font-family: 'noto-sans-light';
+    font-size: 14px;
+}
+.all-list {
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    padding-left: 0px;
+    margin-top: 0px;
+    opacity: 1;
+}
+.mentoring-list {
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    padding-left: 0px;
+    margin-top: 0px;
+    opacity: 1;
+}
+.mate-list {
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    padding-left: 0px;
+    margin-top: 0px;
+    opacity: 1;
+}
