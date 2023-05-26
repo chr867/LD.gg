@@ -66,13 +66,13 @@
 
 .middle-container {
 	box-sizing: border-box;
-	width: 630px;
+	width: 660px;
 	height: 100%;
 }
 
 .right-container {
 	box-sizing: border-box;
-	width: 770px;
+	width: 720px;
 	height: 100%;
 	margin-left: 20px;
 }
@@ -144,6 +144,83 @@
 <!-- right_container end -->
 
 <style type="text/css">
+.start-item-shoes-container{
+	width: 100%;
+	height: 400px;
+	display: flex;
+	align-items: center;
+}
+
+.start-item-box{
+	width: 350px;
+	height: 100%;
+	margin-right: 20px;
+	background-color: #fff;
+	border-radius: 0.5rem;
+}
+
+.shoes-box{
+	width: 350px;
+	height: 100%;
+	background-color: #fff;
+	border-radius: 0.5rem;
+}
+
+.start-item-title{
+	text-align: center;
+}
+.shoes-title{
+	text-align: center;
+	margin-bottom: 20px;
+}
+.start-item-title h4{
+	font-size: 18px;
+	font-weight: 700;
+}
+.shoes-title h4{
+	font-size: 18px;
+	font-weight: 700;
+}
+
+.item-img{
+	margin-right: 5px;
+}
+.item-img img{
+	width: 40px;
+	height: 40px;
+	border-radius: 0.5rem;
+}
+.start-item{
+	display: flex;
+	padding-left: 20px;
+	margin-top: 10px;
+}
+.start-item-build-box{
+	margin-top: 20px;
+}
+.start-item-rate{
+ margin-top: 5px;
+ align-items: center;
+ display: flex;
+}
+
+.item-desc {
+	position: absolute;
+	z-index: 10;
+	width: 300px;
+	background-color: black;
+	color: #fff;
+	border-radius: 1rem;
+	padding: 10px;
+	visibility: hidden;
+	opacity: 0;
+	transition: visibility 0s, opacity 0.3s linear;
+}
+
+.start-item .item-img:hover .item-desc {
+	visibility: visible;
+	opacity: 1;
+}
 </style>
 </head>
 
@@ -758,137 +835,159 @@
 			</div>
 		</div>
 		<div class="right-container">
-			<div style="width: 500px;">ㅗㅗㅗㅗ</div>
-		</div>
-	</div>
-			<div class="bottom-container">
-			<!-- match_up_conatiner start -->
-			<div class="match_up_container">
-				<!-- match_up_chart start -->
-				<div class="match_up_chart">
-					<div id="match_up_left"></div>
-					<!-- chartdiv start -->
-					<div id="chartdiv">
-						<div class="bar_block">
-							<div class="bar_title lane_kill_rate">
-								<div class="bar_title_left lane_kill_rate"></div>
-								<div class="bar_title_content">라인킬 확률</div>
-								<div class="bar_title_right enemy_lane_kill_rate"></div>
-							</div>
-
-							<div class="progress">
-								<div class="progress-bar" role="progressbar" style="width: 46%;"
-									aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-								<div class="progress-bar bg-danger" role="progressbar"
-									style="width: 100%" aria-valuenow="100" aria-valuemin="0"
-									aria-valuemax="100"></div>
-							</div>
+			<div class="start-item-shoes-container">
+				<div class="start-item-box">
+					<div class="start-item-title">
+						<h4>시작 아이템 추천</h4>
+						<div class="start-item-build-box">
+							
 						</div>
-
-						<div class="bar_block">
-							<div class="bar_title kill_participation">
-								<div class="bar_title_left kill_participation"></div>
-								<div class="bar_title_content">킬 관여율</div>
-								<div class="bar_title_right enemy_kill_participation"></div>
-							</div>
-							<div class="progress">
-								<div class="progress-bar" role="progressbar" style="width: 25%"
-									aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-								<div class="progress-bar bg-danger" role="progressbar"
-									style="width: 100%" aria-valuenow="100" aria-valuemin="0"
-									aria-valuemax="100"></div>
-							</div>
-						</div>
-
-						<div class="bar_block">
-							<div class="bar_title kda">
-								<div class="bar_title_left kda"></div>
-								<div class="bar_title_content">평점</div>
-								<div class="bar_title_right enemy_kda"></div>
-							</div>
-							<div class="progress">
-								<div class="progress-bar" role="progressbar" style="width: 50%"
-									aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-								<div class="progress-bar bg-danger" role="progressbar"
-									style="width: 100%" aria-valuenow="100" aria-valuemin="0"
-									aria-valuemax="100"></div>
-							</div>
-						</div>
-
-						<div class="bar_block">
-							<div class="bar_title tower_kill_time">
-								<div class="bar_title_left tower_kill_time"></div>
-								<div class="bar_title_content">라인 첫 타워 파괴 시간</div>
-								<div class="bar_title_right enemy_tower_kill_time"></div>
-							</div>
-							<div class="progress">
-								<div class="progress-bar" role="progressbar" style="width: 75%"
-									aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-								<div class="progress-bar bg-danger" role="progressbar"
-									style="width: 100%" aria-valuenow="100" aria-valuemin="0"
-									aria-valuemax="100"></div>
-							</div>
-						</div>
-
-						<div class="bar_block">
-							<div class="bar_title win_rate">
-								<div class="bar_title_left win_rate"></div>
-								<div class="bar_title_content">포지션 승률</div>
-								<div class="bar_title_right enemy_win_rate"></div>
-							</div>
-							<div class="progress">
-								<div class="progress-bar" role="progressbar" style="width: 100%"
-									aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-								<div class="progress-bar bg-danger" role="progressbar"
-									style="width: 100%" aria-valuenow="100" aria-valuemin="0"
-									aria-valuemax="100"></div>
-							</div>
-						</div>
-
-						<div class="bar_block">
-							<div class="bar_title pick_rate">
-								<div class="bar_title_left pick_rate"></div>
-								<div class="bar_title_content">포지션 픽률</div>
-								<div class="bar_title_right enemy_pick_rate"></div>
-							</div>
-							<div class="progress">
-								<div class="progress-bar" role="progressbar" style="width: 100%"
-									aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-								<div class="progress-bar bg-danger" role="progressbar"
-									style="width: 100%" aria-valuenow="100" aria-valuemin="0"
-									aria-valuemax="100"></div>
-							</div>
-						</div>
-
-						<div class="bar_block">
-							<div class="bar_title ban_rate">
-								<div class="bar_title_left ban_rate"></div>
-								<div class="bar_title_content">밴률</div>
-								<div class="bar_title_right enemy_ban_rate"></div>
-							</div>
-							<div class="progress">
-								<div class="progress-bar" role="progressbar" style="width: 100%"
-									aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-								<div class="progress-bar bg-danger" role="progressbar"
-									style="width: 100%" aria-valuenow="100" aria-valuemin="0"
-									aria-valuemax="100"></div>
-							</div>
-						</div>
-
+					
 					</div>
-					<!-- chartdiv end -->
-
-					<div id="match_up_right"></div>
 				</div>
-				<!-- match_up_chart end -->
-				<div id="match_up_table_container">
-					<div class="match_up_table"></div>
-
+				<div class="shoes-box">
+					<div class="shoes-title">
+						<h4>신발 추천</h4>
+					</div>
 				</div>
-				<!-- match_up_conatiner end -->
 			</div>
 		</div>
-	
+
+	</div>
+
+
+
+
+
+
+	<div class="bottom-container">
+		<!-- match_up_conatiner start -->
+		<div class="match_up_container">
+			<!-- match_up_chart start -->
+			<div class="match_up_chart">
+				<div id="match_up_left"></div>
+				<!-- chartdiv start -->
+				<div id="chartdiv">
+					<div class="bar_block">
+						<div class="bar_title lane_kill_rate">
+							<div class="bar_title_left lane_kill_rate"></div>
+							<div class="bar_title_content">라인킬 확률</div>
+							<div class="bar_title_right enemy_lane_kill_rate"></div>
+						</div>
+
+						<div class="progress">
+							<div class="progress-bar" role="progressbar" style="width: 46%;"
+								aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+							<div class="progress-bar bg-danger" role="progressbar"
+								style="width: 100%" aria-valuenow="100" aria-valuemin="0"
+								aria-valuemax="100"></div>
+						</div>
+					</div>
+
+					<div class="bar_block">
+						<div class="bar_title kill_participation">
+							<div class="bar_title_left kill_participation"></div>
+							<div class="bar_title_content">킬 관여율</div>
+							<div class="bar_title_right enemy_kill_participation"></div>
+						</div>
+						<div class="progress">
+							<div class="progress-bar" role="progressbar" style="width: 25%"
+								aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+							<div class="progress-bar bg-danger" role="progressbar"
+								style="width: 100%" aria-valuenow="100" aria-valuemin="0"
+								aria-valuemax="100"></div>
+						</div>
+					</div>
+
+					<div class="bar_block">
+						<div class="bar_title kda">
+							<div class="bar_title_left kda"></div>
+							<div class="bar_title_content">평점</div>
+							<div class="bar_title_right enemy_kda"></div>
+						</div>
+						<div class="progress">
+							<div class="progress-bar" role="progressbar" style="width: 50%"
+								aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+							<div class="progress-bar bg-danger" role="progressbar"
+								style="width: 100%" aria-valuenow="100" aria-valuemin="0"
+								aria-valuemax="100"></div>
+						</div>
+					</div>
+
+					<div class="bar_block">
+						<div class="bar_title tower_kill_time">
+							<div class="bar_title_left tower_kill_time"></div>
+							<div class="bar_title_content">라인 첫 타워 파괴 시간</div>
+							<div class="bar_title_right enemy_tower_kill_time"></div>
+						</div>
+						<div class="progress">
+							<div class="progress-bar" role="progressbar" style="width: 75%"
+								aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+							<div class="progress-bar bg-danger" role="progressbar"
+								style="width: 100%" aria-valuenow="100" aria-valuemin="0"
+								aria-valuemax="100"></div>
+						</div>
+					</div>
+
+					<div class="bar_block">
+						<div class="bar_title win_rate">
+							<div class="bar_title_left win_rate"></div>
+							<div class="bar_title_content">포지션 승률</div>
+							<div class="bar_title_right enemy_win_rate"></div>
+						</div>
+						<div class="progress">
+							<div class="progress-bar" role="progressbar" style="width: 100%"
+								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+							<div class="progress-bar bg-danger" role="progressbar"
+								style="width: 100%" aria-valuenow="100" aria-valuemin="0"
+								aria-valuemax="100"></div>
+						</div>
+					</div>
+
+					<div class="bar_block">
+						<div class="bar_title pick_rate">
+							<div class="bar_title_left pick_rate"></div>
+							<div class="bar_title_content">포지션 픽률</div>
+							<div class="bar_title_right enemy_pick_rate"></div>
+						</div>
+						<div class="progress">
+							<div class="progress-bar" role="progressbar" style="width: 100%"
+								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+							<div class="progress-bar bg-danger" role="progressbar"
+								style="width: 100%" aria-valuenow="100" aria-valuemin="0"
+								aria-valuemax="100"></div>
+						</div>
+					</div>
+
+					<div class="bar_block">
+						<div class="bar_title ban_rate">
+							<div class="bar_title_left ban_rate"></div>
+							<div class="bar_title_content">밴률</div>
+							<div class="bar_title_right enemy_ban_rate"></div>
+						</div>
+						<div class="progress">
+							<div class="progress-bar" role="progressbar" style="width: 100%"
+								aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+							<div class="progress-bar bg-danger" role="progressbar"
+								style="width: 100%" aria-valuenow="100" aria-valuemin="0"
+								aria-valuemax="100"></div>
+						</div>
+					</div>
+
+				</div>
+				<!-- chartdiv end -->
+
+				<div id="match_up_right"></div>
+			</div>
+			<!-- match_up_chart end -->
+			<div id="match_up_table_container">
+				<div class="match_up_table"></div>
+
+			</div>
+			<!-- match_up_conatiner end -->
+		</div>
+	</div>
+
 </body>
 <script type="text/javascript">
 
@@ -955,6 +1054,7 @@ function championBuildInfo(champion_id, team_position) {
 			let champTierData = championBuildInfo.champTierData;
 			let champEasyChampData = championBuildInfo.champEasyChampData;
 			let champHardChampData = championBuildInfo.champHardChampData;
+			let champStartItemData = championBuildInfo.champStartItemData;
 
 			  console.log(champRuneData);
 			  console.log(champItemData);
@@ -966,6 +1066,7 @@ function championBuildInfo(champion_id, team_position) {
 			  console.log(champAccessoriesData);
 			  console.log(champEasyChampData);
 			  console.log(champHardChampData);
+			  console.log(champStartItemData);
 			  //-----------------------------------------------------------------------------------
 			  //챔피언 티어 승률 픽률 밴률 
 			  if(champTierData[0].tier == 0){
@@ -1045,10 +1146,65 @@ function championBuildInfo(champion_id, team_position) {
 				
 				spellSplit(champSpellData);
 				skillSplit(champSkillBuildData);
+				startItemSplit(champStartItemData);
 		}).fail(err => {
 		  console.log(err);
 		});	
 }
+
+// --------------------------------------------------------------------------------------------------------------------------------
+// 시작 아이템 출력 
+function startItemSplit(champStartItemData) {
+	let start_item_build_box = document.getElementsByClassName('start-item-build-box')[0];
+	start_item_build_box.innerHTML = ''; // 기존 내용 초기화
+
+	for (let i = 0; i < champStartItemData.length; i++) {
+		let startItemBuild = champStartItemData[i].item_id;
+		let parts = startItemBuild.split(',');
+
+		let html = '<div class="start-item">';
+		let ajaxCounter = 0;
+
+		for (let item_id of parts) {
+			$.ajax({
+				method: 'get',
+				url: '/champion/info/item',
+				data: { item_id: item_id },
+			}).done(res => {
+				for (let item of res) {
+					html += '<div class="item-img">'
+					html += '<img alt="" src="/resources/img/item/' + item.item_img + '">'
+					html += '<div class="item-desc">'
+					html += '<div>' + item.item_kr_name + '</div>'
+					html += '<br>'
+					html += '<div>' + item.item_ability + '</div>'
+					html += '<br>'
+					html += '<div>' + item.item_desc + '</div>'
+					html += '<br>'
+					html += '<div>가격: ' + item.item_pur_gold + '   판매가격: ' + item.item_sell_gold + '</div>'
+					html += '</div>'
+					html += '</div>'
+				}
+
+				ajaxCounter++;
+				if (ajaxCounter === parts.length) {
+					html += '</div>'
+					html += '<div class="start-item-rate">'
+					html += '<div class="rate-text"><h4>승률</h4></div>'
+					html += '<div class="rate-text"><h6>' + champStartItemData[i].win_rate + '%</h6></div>'
+					html += '<div class="rate-text"><h4>픽률</h4></div>'
+					html += '<div class="rate-text"><h6>' + champStartItemData[i].pick_rate + '%</h6></div>'
+					start_item_build_box.innerHTML += html;
+				}
+			}).fail(err => {
+				console.log(err);
+			});
+		}
+	}
+}
+
+//--------------------------------------------------------------------------------------------------------------------------------
+// 스킬 빌드 출력 
 function skillSplit(champSkillBuildData) {
 	for (var i = 0; i < champSkillBuildData.length; i++) {
 		
@@ -1136,7 +1292,6 @@ function skillSplit(champSkillBuildData) {
 	
 	let count = 0;
 	for (let skill of parts) {
-		console.log(parseInt(skill));
 		if (parseInt(skill) == 1) {
 			skill_build_sequence_box.innerHTML += qHtml;
 		} else if (parseInt(skill) == 2) {
@@ -1153,7 +1308,6 @@ function skillSplit(champSkillBuildData) {
 	skill_build_sequence_box.innerHTML += rateHtlm;
 	
 	for (let skill of skillParts) {
-		console.log(parseInt(skill))
 		if(parseInt(skill) == 1){
 			skill_bulid_all_box.innerHTML += qBoxHtml;
 		}else if(parseInt(skill) == 2){
@@ -1164,8 +1318,8 @@ function skillSplit(champSkillBuildData) {
 	}
 	}
 }
-
-
+//--------------------------------------------------------------------------------------------------------------------------------
+// 스펠 출력 
 function spellSplit(champSpellData) {
 	let spell_box = document.getElementsByClassName('spell-box')[0]; 
 	spell_box.innerHTML = ''
@@ -1219,8 +1373,8 @@ function spellHtml(first_spell,second_spell,win_rate,pick_rate) {
 	    console.log(err);
 	  });
 }
-
-
+//--------------------------------------------------------------------------------------------------------------------------------
+// 룬 빌드 출력 
 function rune_full_data(main,sub,i,champRuneData) {
 	let main_key = '';
 	switch (main) {
@@ -1291,6 +1445,8 @@ function rune_full_data(main,sub,i,champRuneData) {
 				html += '<div>'+res[i].rune_kr_name+'</div>'
 				html += '<br>'
 				html += '<div>'+res[i].rune_desc+'</div>'
+				html += '<br>'
+				html += '<div>'+res[i].rune_long_desc+'</div>'
 				html += '</div>'
 				html += '</div>'
 				main_rune_first.innerHTML += html
@@ -1302,6 +1458,8 @@ function rune_full_data(main,sub,i,champRuneData) {
 				html += '<div>'+res[i].rune_kr_name+'</div>'
 				html += '<br>'
 				html += '<div>'+res[i].rune_desc+'</div>'
+				html += '<br>'
+				html += '<div>'+res[i].rune_long_desc+'</div>'
 				html += '</div>'
 				html += '</div>'
 				main_rune_second.innerHTML += html
@@ -1313,6 +1471,8 @@ function rune_full_data(main,sub,i,champRuneData) {
 				html += '<div>'+res[i].rune_kr_name+'</div>'
 				html += '<br>'
 				html += '<div>'+res[i].rune_desc+'</div>'
+				html += '<br>'
+				html += '<div>'+res[i].rune_long_desc+'</div>'
 				html += '</div>'
 				html += '</div>'
 				main_rune_third.innerHTML += html
@@ -1324,6 +1484,8 @@ function rune_full_data(main,sub,i,champRuneData) {
 				html += '<div>'+res[i].rune_kr_name+'</div>'
 				html += '<br>'
 				html += '<div>'+res[i].rune_desc+'</div>'
+				html += '<br>'
+				html += '<div>'+res[i].rune_long_desc+'</div>'
 				html += '</div>'
 				html += '</div>'
 				main_rune_fourth.innerHTML += html
@@ -1359,6 +1521,8 @@ function rune_full_data(main,sub,i,champRuneData) {
 					html += '<div>'+res[i].rune_kr_name+'</div>'
 					html += '<br>'
 					html += '<div>'+res[i].rune_desc+'</div>'
+					html += '<br>'
+					html += '<div>'+res[i].rune_long_desc+'</div>'
 					html += '</div>'
 					html += '</div>'
 					sub_rune_first.innerHTML += html
@@ -1370,6 +1534,8 @@ function rune_full_data(main,sub,i,champRuneData) {
 					html += '<div>'+res[i].rune_kr_name+'</div>'
 					html += '<br>'
 					html += '<div>'+res[i].rune_desc+'</div>'
+					html += '<br>'
+					html += '<div>'+res[i].rune_long_desc+'</div>'
 					html += '</div>'
 					html += '</div>'
 					sub_rune_second.innerHTML += html
@@ -1381,6 +1547,8 @@ function rune_full_data(main,sub,i,champRuneData) {
 					html += '<div>'+res[i].rune_kr_name+'</div>'
 					html += '<br>'
 					html += '<div>'+res[i].rune_desc+'</div>'
+					html += '<br>'
+					html += '<div>'+res[i].rune_long_desc+'</div>'
 					html += '</div>'
 					html += '</div>'
 					sub_rune_third.innerHTML += html
@@ -1427,7 +1595,7 @@ function rune_full_data(main,sub,i,champRuneData) {
 		  console.log(err);
 		}); 
 }
- 
+//-------------------------------------------------------------------------------------------------------------------------------- 
 // right_container
 let response;
 let cid;
