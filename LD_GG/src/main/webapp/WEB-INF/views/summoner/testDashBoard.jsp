@@ -178,6 +178,14 @@
  		      let chartId = 'chart' + i; // 각 그래프를 구분하기 위한 고유 ID
  		      canvas.id = chartId;
  		      let ctx = canvas.getContext('2d');
+ 		      
+ 		     let games = res.wins + res.losses;
+ 		     let winRate = res.wins / games;
+ 		     let lossRate = res.losses / games;
+
+ 		     let winLabel = res.wins + '승';
+ 		     let lossLabel = res.losses + '패';
+ 		      
  		     $(canvas).css({
  		    	  'max-width': '700px',
  		    	  'max-height': '40px'
@@ -185,8 +193,8 @@
  		      let myChart = new Chart(ctx,{
  		    	  type : 'bar',
  		    	  data : {
- 		    		  labels : ['승률'],
- 		    		  datasets : [{label : '승률' , data : [res.wins, res.losses],
+ 		    		  labels : [winLabel, lossLabel],
+ 		    		  datasets : [{label : '승률' , data : [winRate, lossRate],
  		    			  backgroundColor : ['rgba(54, 162, 235, 0.5)','rgba(255, 99, 132, 0.5)',],
  		    			  borderColor : ['rgba(54, 162, 235, 0.5)','rgba(255, 99, 132, 0.5)',],
  		    			  borderWidth : 1
