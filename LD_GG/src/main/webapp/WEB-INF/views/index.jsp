@@ -169,6 +169,7 @@
 
 
 #recom_img_container {
+	display: flex;
 	position: relative;
 	left: 10%;
 }
@@ -180,9 +181,21 @@
 	border-radius: 70%;
 }
 
-#span_container {
-	display: grid;
+#recom_champ{
+	display: flex;
 }
+
+#recom_champ_header{
+	display: flex;
+	flex-direction: column;
+}
+
+.recom_img{
+	display: flex;
+	flex-direction: column;
+}
+
+
 </style>
 
 <style>
@@ -703,31 +716,58 @@
 	<div id="bottom_container">
 
 		<div id="recom_champ">
+			<div id="recom_champ_header">
+				<div>만난 횟수</div>
+				<div>승률</div>	
+			</div>
+
 			<div id="recom_img_container">
-				<img src="/resources/img/profileicon/29.png" class="champ1" alt=""
-					id="recom_champ_0" onclick="recom_click(this)"> <img
+				<div class="recom_img">
+					<img src="/resources/img/profileicon/29.png" class="champ1" alt=""
+					id="recom_champ_0" onclick="recom_click(this)">
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+
+				<div class="recom_img">
+					<img
 					src="/resources/img/profileicon/29.png" class="champ2" alt=""
-					id="recom_champ_1" onclick="recom_click(this)"> <img
+					id="recom_champ_1" onclick="recom_click(this)">
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+
+				<div class="recom_img">
+					<img
 					src="/resources/img/profileicon/29.png" class="champ3" alt=""
-					id="recom_champ_2" onclick="recom_click(this)"> <img
+					id="recom_champ_2" onclick="recom_click(this)">
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+
+				<div class="recom_img">
+					<img
 					src="/resources/img/profileicon/29.png" class="champ4" alt=""
-					id="recom_champ_3" onclick="recom_click(this)"> <img
+					id="recom_champ_3" onclick="recom_click(this)"> 
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+
+				<div class="recom_img">
+					<img
 					src="/resources/img/profileicon/29.png" class="champ5" alt=""
 					id="recom_champ_4" onclick="recom_click(this)">
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+
 			</div>
 			
-			<div id="span_container">
-				<div id="recom_champ_name">
-					<span></span> <span></span> <span></span> <span></span> <span></span>
-				</div>
-				<div id="lane_kill_rate">
-					<span>만난 횟수</span> <span></span> <span></span> <span></span> <span></span>
-					<span></span>
-				</div>
-				<div id="match_up_win_rate">
-					<span>승률</span> <span></span> <span></span> <span></span> <span></span>
-					<span></span>
-				</div>
 			</div>
 		</div>
 	</div>
@@ -798,15 +838,19 @@
 			type: 'POST',
 			data: {lane: lane, tag: tag, right_champion: right_champion}
 		}).done(res=>{
+			let recom_divs = document.querySelectorAll('.recom_img div')
+			let slice_index = 0;
 			res.forEach(champ=>{
 				let idx = res.indexOf(champ)
 				let champ_name = champ.cm.champion_name
 				let path = `/resources/img/champion_img/tiles/\${champ_name}_0.jpg`
 				$(`#recom_champ_\${idx}`).attr('src', path);
 				$(`#recom_champ_\${idx}`).attr('class', champ_name);
-				$('#recom_champ_name span').eq(idx).text(champ.name)
-				$('#lane_kill_rate span:not(:first)').eq(idx).text(champ.cm.match_up_cnt);
-				$('#match_up_win_rate span:not(:first)').eq(idx).text(champ.cm.match_up_win_rate);
+				let sliced = Array.from(recom_divs).slice(slice_index, slice_index+3);
+				sliced[0].textContent = champ.name
+				sliced[1].textContent = champ.cm.match_up_cnt
+				sliced[2].textContent = champ.cm.match_up_win_rate
+				slice_index +=3;
 			})
 		}).fail(err=>{
 			console.log(err)
