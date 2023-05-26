@@ -6,219 +6,55 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <title>채팅 리스트</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>채팅</title>
+  <link rel="stylesheet" type="text/css" href="/resources/css/chat/chatList.css">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="/resources/js/chat/chatList.js" defer></script>
-  <script>
-    /* 채팅방 select, insert */
-    function go_chat__(email, chat_category){
-      console.log(email);
-      console.log(chat_category);
-
-      $.ajax({
-        url: "/chat/go_chat",
-        method: "POST",
-        data: {
-          'chat_category' : chat_category,
-          'chat_receive_user' : email,
-          'chat_send_user' : '${email}'
-        },
-        dataType : "json"
-      }).done(function(resp){
-        console.log(resp);
-
-        // res = 0 실패 => alert
-        // res = chat_room_seq => 팝업창으로 채팅방 열기
-
-        if(resp == 0) {
-          alert("잠시 후 다시 시도해주세요.");
-        }
-        else{
-          console.log(resp);
-          var url = "/chat/enter_chatroom?chat_room_seq=" + resp + "&chat_category=" + chat_category;
-
-          console.log(url);
-          // 팝업 창의 크기
-          var width = 500;
-          var height = 500;
-          // 팝업 창을 화면 중앙에 위치시키기 위한 좌표 계산
-          var left = (window.innerWidth / 2) - (width / 2);
-          var top = (window.innerHeight / 2) - (height / 2);
-          // 팝업 창을 열기 위한 window.open 함수 호출
-          //var popup = window.open(url, "popup", "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top);
-          var popup = window.open(url, 'popupView', 'width=430, height=500, location=no, status=no, scrollbars=yes');
-        }
-        console.log(resp);
-      }).fail(function (err){
-        console.log(err);
-      });
-    }
-    /* 멘토 리스트 조회 버튼 */
-    function get_mentor_list(){
-      $.ajax({
-        method : "POST",
-        url : "/chat/get_mentoring_list",
-        data : {'email' : '${email}'},
-        dataType : "json",
-      })
-              .done(function(resp){
-                console.log(resp);
-
-                let rlist = '';
-
-                if(resp !== null){
-                  $.each(resp, function(i, resp) {
-                    rlist += '<input type="button" value="' + resp + '" onClick="go_chat__(this.value, 0)">';
-                  });
-                }
-                else {
-                  rlist = '조회되는 데이터가 없거나 잠시 후 다시 시도하여 주시기 바랍니다.';
-                }
-
-                $("#mentor-list").html(rlist);
-              })
-              .fail(function(err){
-                console.log(err);
-              })
-    }
-    /* 메이트 리스트 구현하는 버튼 */
-    function get_mate_list(){
-      $.ajax({
-        method : "POST",
-        url : "/chat/get_mate_list",
-        data : {'email' : '${email}'},
-        dataType : "json",
-      })
-              .done(function(resp){
-                console.log(resp);
-
-                let rlist = '';
-
-                $.each(resp, function(i, resp) {
-                  rlist += '<input type="button" value="' + resp + '" onclick="go_chat_room(this.value, 1)">';
-                });
-
-                $("#mentor-list").html(rlist);
-              })
-              .fail(function(err){
-                console.log(err);
-              })
-    }
-
-    /* chat_room에 insert 하고 팝업창 띄우기 */
-    function go_chat_room(chat_receive_user, chat_category){
-      console.log(chat_receive_user);
-
-      $.ajax({
-        url: "/chat/go_chatroom/",
-        method: "POST",
-        data: {
-          'chat_category' : chat_category,
-          'chat_receive_user' : chat_receive_user,
-          'chat_send_user' : '${email}'
-        },
-        dataType : "json"
-      }).done(function(resp){
-        console.log(resp);
-
-        // res = 0 실패 => alert
-        // res = chat_room_seq => 팝업창으로 채팅방 열기
-
-        if(resp == 0) {
-          alert("잠시 후 다시 시도해주세요.");
-        }
-        else{
-          console.log(resp);
-          var url = "http://localhost:8080/chat/enter_chatroom?chat_room_seq=" + resp + "&chat_category=" + chat_category;
-
-          console.log(url);
-          // 팝업 창의 크기
-          var width = 500;
-          var height = 500;
-          // 팝업 창을 화면 중앙에 위치시키기 위한 좌표 계산
-          var left = (window.innerWidth / 2) - (width / 2);
-          var top = (window.innerHeight / 2) - (height / 2);
-          // 팝업 창을 열기 위한 window.open 함수 호출
-          //var popup = window.open(url, "popup", "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top);
-          var popup = window.open(url, 'popupView', 'width=430, height=500, location=no, status=no, scrollbars=yes');
-        }
-        console.log(resp);
-      }).fail(function (err){
-        console.log(err);
-      });
-    }
-
-    /* 기존 채팅방 가져오기 */
-    function go_exist_chatting(chat_receive_user, chat_category){
-      $.ajax({
-        url: "/chat/go_exist_chat/",
-        method: "POST",
-        data: {
-          'chat_category' : chat_category,
-          'chat_receive_user' : chat_receive_user,
-          'chat_send_user' : '${email}'
-        },
-        dataType : "json"
-      }).done(function(resp){
-
-        console.log(resp);
-
-        // res = 0 실패 => alert
-        // res = chat_room_seq => 팝업창으로 채팅방 열기
-
-        if(resp == 0) {
-          alert("잠시 후 다시 시도해주세요.");
-        }
-        else{
-          console.log(resp);
-          var url = "http://localhost:8080/chat/enter_chatroom?chat_room_seq=" + resp + "&chat_category=" + chat_category;
-
-          console.log(url);
-          // 팝업 창의 크기
-          var width = 500;
-          var height = 500;
-          // 팝업 창을 화면 중앙에 위치시키기 위한 좌표 계산
-          var left = (window.innerWidth / 2) - (width / 2);
-          var top = (window.innerHeight / 2) - (height / 2);
-          // 팝업 창을 열기 위한 window.open 함수 호출
-          //var popup = window.open(url, "popup", "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top);
-          var popup = window.open(url, 'popupView', 'width=430, height=500, location=no, status=no, scrollbars=yes');
-        }
-        console.log(resp);
-      }).fail(function (err){
-        console.log(err);
-      });
-    }
-
-  </script>
 </head>
 <body>
-  <div id="email" hidden="true">
-    ${email}
-  </div>
-  <div id="mento_list">
-    <div id="mento">
-      <div id="mento_profile">프로필</div>
-      <div id="mento_name">닉네임</div>
+<!-- 이메일 hidden -->
+<div id="email" hidden="true">
+  ${email}
+</div>
+<!-- 채팅 페이지 header -->
+<div class="chat-header">
+  <img src="/resources/img/logo/LDGG.png" alt="" class="ld-logo"></img>
+</div>
+<div class="chat-list">
+  <div class="tab-container">
+    <div class="tab" onclick="openTab('allTab')">
+      전체
+    </div>
+    <div class="tab" onclick="openTab('mentoringTab')">
+      멘토링
+    </div>
+    <div class="tab" onclick="openTab('mateTab')">
+      메이트
     </div>
   </div>
-  <div id="mate_list">
-    <div id="mate">
-      <div id="mate_profile">프로필</div>
-      <div id="mate_name">닉네임</div>
+  <div class="tab-contents">
+    <div class="tab-content" id="allTab">
+      <ul class="all-list">
+
+      </ul>
+    </div>
+    <div class="tab-content" id="mentoringTab">
+      <ul class="mentoring-list">
+
+      </ul>
+    </div>
+    <div class="tab-content" id="mateTab">
+      <ul class="mate-list">
+
+      </ul>
     </div>
   </div>
-  ${email}의 채팅방 페이지입니다. <br>
-  멘토링과 메이트를 조회하시고 이메일을 클릭하세요.<br><br>
-  멘토링<br>
-  <button id="get_mentor" onclick="get_mentor_list()">멘토링</button>
-  <div id="mentor-list">
-  </div>
-  메이트<br>
-  <button id="get_mate" onclick="get_mate_list()">메이트</button>
-  <div id="mate-list">
-  </div>
+</div>
+<script src="/resources/js/chat/chatList.js"></script>
 </body>
 </html>
