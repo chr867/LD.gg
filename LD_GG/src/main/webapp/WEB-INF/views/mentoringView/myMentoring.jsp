@@ -64,90 +64,149 @@ font-size: 20px;
 font-weight:bold;
 margin:8px;
 }
-#current, #target, #menti-tag{
+#current, #target, #menti-tag #menti-tag2{
 padding: 12px 24px;
+}
+#profile-icon{
+border: solid 3px white;
+border-radius: 50%;
+box-shadow: 0 3px 6px rgba(0, 0.5, 0, 0.5);
+}
+#target-champ img{
+border-radius: 10px;
+}
+#target p{
+margin-top:12px;
+background-color:black;
+color:white;
+font-weight: bold;
+}
+#target span{
+font-weight: bold;
+}
+.modal-title{
+font-weight: bold;
+}
+::-webkit-scrollbar {
+    width: 3px;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #888;
+}
+::-webkit-scrollbar-track {
+    background: none;
+}
+#nav-bar{
+width: 850px;
+margin:auto;
+margin-bottom: 60px;
 }
 </style>
 </head>
 <body>
 
 <div class='container'>
-	
-	<div class="card" id="r-est">
-		<div class="card-header">
-			<h4>받은 견적서</h4>
-		</div>
-		<div id="received_estimate" class="card-body">
-		<!-- 받은 견적서 내용 -->
-		</div>
+	<div id="nav-bar">
+		<ul class="nav nav-tabs" id="myTab" role="tablist">
+		  <li class="nav-item" role="presentation">
+		    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">견적 확인</button>
+		  </li>
+		  <li class="nav-item" role="presentation">
+		    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">수업 관리</button>
+		  </li>
+		  <li class="nav-item" role="presentation">
+		    <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">리뷰 관리</button>
+		  </li>
+		</ul>
 	</div>
 	
-	<div class="card" id="s-est">
-		<div class="card-header">
-			<h4>보낸 견적서</h4>
-		</div>
-		<div id="sent_estimate" class="card-body">
-		<!-- 보낸 견적서 내용 -->
-		</div>
-	</div>
-	
-	<div class="card" id="menti">
-		<div class="card-header">
-			<h4>도움이 필요한 멘티목록</h4>
-		</div>
-		<div id="menti_list" class="card-body">
-		<!-- 도움이 필요한 멘티목록 -->
-		</div>
-	</div>
-	
-	<div class="d-flex justify-content-center">
-		<div >
-			<div class="card" id="a-class">
+	<div class="tab-content" id="myTabContent">
+	  <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+	  		<div class="card" id="r-est">
 				<div class="card-header">
-					<h4>내가 신청한 수업 목록</h4>
+					<h4>받은 견적서</h4>
 				</div>
-				<div id="apply_class_history" class="card-body">
-				<!-- 내가 신청한 수업 목록 -->
+				<div id="received_estimate" class="card-body">
+				<!-- 받은 견적서 내용 -->
 				</div>
 			</div>
-			<div class="card" id="r-class">
+			<div class="card" id="s-est">
 				<div class="card-header">
-					<h4>수강 신청한 멘티 목록</h4>
+					<h4>보낸 견적서</h4>
 				</div>
-				<div id="request_class_history" class="card-body">
-				<!-- 수강 신청한 멘티 목록 -->
+				<div id="sent_estimate" class="card-body">
+				<!-- 보낸 견적서 내용 -->
 				</div>
 			</div>
-		</div>
-		<div>
-			<div class="card" id="like">
+			<div class="card" id="menti">
 				<div class="card-header">
-					<h4>내가 찜한 멘토 목록</h4>
+					<h4>도움이 필요한 멘티목록</h4>
 				</div>
-				<div id="like_mentor_list" class="card-body">
-				<!-- 내가 찜한 멘토 목록 -->
+				<div id="menti_list" class="card-body">
+				<!-- 도움이 필요한 멘티목록 -->
 				</div>
 			</div>
-		</div>	
+	  </div>
+	  
+	  <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+		<div class="d-flex justify-content-center">
+			<div >
+				<div class="card" id="a-class">
+					<div class="card-header">
+						<h4>내가 신청한 수업 목록</h4>
+					</div>
+					<div id="apply_class_history" class="card-body">
+					<!-- 내가 신청한 수업 목록 -->
+					</div>
+				</div>
+				<div class="card" id="r-class">
+					<div class="card-header">
+						<h4>수강 신청한 멘티 목록</h4>
+					</div>
+					<div id="request_class_history" class="card-body">
+					<!-- 수강 신청한 멘티 목록 -->
+					</div>
+				</div>
+			</div>
+			<div>
+				<div class="card" id="like">
+					<div class="card-header">
+						<h4>내가 찜한 멘토 목록</h4>
+					</div>
+					<div id="like_mentor_list" class="card-body">
+					<!-- 내가 찜한 멘토 목록 -->
+					</div>
+				</div>
+			</div>	
+		</div>
+	  </div>
+	  
+	  <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+  		<div class="card" id="w-review">
+			<div class="card-header">
+				<h4>내가 작성한 멘토 리뷰</h4>
+			</div>
+			<div id="written_review" class="card-body">
+			<!-- 내가 작성한 멘토 리뷰 -->
+			</div>
+		</div>
+		
+		<div class="card" id="m-review">
+			<div class="card-header">
+				<h4>나에게 달린 리뷰</h4>
+			</div>
+			<div id="review_for_me" class="card-body">
+			<!-- 나에게 달린 리뷰 -->
+			</div>
+		</div>
+	  </div>
 	</div>
 	
-	<div class="card" id="w-review">
-		<div class="card-header">
-			<h4>내가 작성한 멘토 리뷰</h4>
-		</div>
-		<div id="written_review" class="card-body">
-		<!-- 내가 작성한 멘토 리뷰 -->
-		</div>
-	</div>
 	
-	<div class="card" id="m-review">
-		<div class="card-header">
-			<h4>나에게 달린 리뷰</h4>
-		</div>
-		<div id="review_for_me" class="card-body">
-		<!-- 나에게 달린 리뷰 -->
-		</div>
-	</div>
+	
+	
+	
+	
 	
 <!-- 견적서 쓰기 모달 -->
 	<div class="modal fade" id="estimateModal" tabindex="-1" aria-labelledby="estimateModalLabel" aria-hidden="true" style="display: none;">
@@ -262,10 +321,10 @@ padding: 12px 24px;
 	
 <!-- 도움이 필요한 멘티 목록 -->
 	<div class="modal fade" id="customMo" tabindex="-1" aria-labelledby="customMoLabel" aria-hidden="true">
-	  <div class="modal-dialog modal-lg modal-dialog-centered">
+	  <div id="customMoDialog" class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
 	    <div class="modal-content">
 	      <div class="modal-header">
-	        <h5 class="modal-title" id="customMoLabel">Modal title</h5>
+        	<h3 class="modal-title" id="customMoLabel">Modal title</h3>
 	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 	      </div>
 	      <div class="modal-body">
@@ -280,7 +339,7 @@ padding: 12px 24px;
 						</div>
 						<div class="my-auto">
 							<div>
-								<h4>
+								<h4 class="text-center">
 									<strong id="member-tier">UNRANKED</strong>
 								</h4>
 								<div id="member-stat">
@@ -316,10 +375,12 @@ padding: 12px 24px;
 				    </div>
 			    </div>
 			    <hr>
+			    <h4>이런 수업을 듣고싶어요</h4>
 			    <div class="row" id="menti-tag">
-			      <div>
-			        <!-- 태그정보 -->
-			      </div>
+			    </div>
+			    <hr>
+			    <h4>이런 멘토님을 원해요</h4>
+			    <div class="row" id="menti-tag2">
 			    </div>
 			    
 			  </div>
@@ -417,6 +478,36 @@ $(document).ready(function() {
     		            row.on('click', function() {
     		            	$("#customMoLabel").text(menti.lol_account);
     		            	
+	    		            	$.ajax({
+	    		            		  url: "/mentor/get-summoner-info",
+	    		            		  type: "GET",
+	    		            		  data: {
+	    		            		    summoner_name: menti.lol_account
+	    		            		  },
+	    		            		  success: function(response) {
+	    		            		    var som = JSON.parse(response);
+	    		            		    $("#profile-icon").attr("src","http://ddragon.leagueoflegends.com/cdn/13.10.1/img/profileicon/"+som.profile_icon_id+".png")
+	    		            		    $("#member-tier-img").attr("src","https://online.gamecoach.pro/img/lol/emblem-"+som.tier+".svg")
+		    		            		    if(som.tier_int>6){
+		    		            		    	$("#member-tier").text(som.tier)
+		    		            		    }else{
+		    		            		    	$("#member-tier").text(som.tier +" "+som.ranking)
+		    		            		    }
+	    		            		    let winrate= (som.wins/som.games)*100
+	    		            		    winrate = winrate.toFixed(1)
+	    		            		    if(winrate == "NaN"){
+	    		            		    	winrate=0;
+	    		            		    }
+	    		            		    $("#member-stat strong").text("승률 "+winrate+"%")
+	    		            		    $("#member-stat span").text("("+som.wins+"승 "+som.losses+"패)")
+	    		            		    $("#member-lp").text(som.lp+" LP")
+	    		            		    
+	    		            		  },
+	    		            		  error: function(xhr, status, error) {
+	    		            		    console.log("에러 발생:", error);
+	    		            		  }
+	    		            		});
+	    		            	
     		            	let pos = menti.position_to_learn;
     		            	if(pos=="탑"){pos="top"}
     		            	else if(pos=="정글"){pos="jg"}
@@ -430,8 +521,46 @@ $(document).ready(function() {
     		            	$("#target-tier img").attr("src","https://online.gamecoach.pro/img/lol/emblem-"+menti.target_tier+".svg");
     		            	$("#target-tier p").text(menti.target_tier);
     		            	$("#customMo").modal("show");
+    		            	
+	    		            	$.ajax({ 
+	    		    		        type: "POST",
+	    		    		        url: "/mentor/get-menti-tag",
+	    		    		        data: JSON.stringify({"menti_email": menti.menti_email}),
+	    		    		        contentType: "application/json; charset=utf-8",
+	    		    		        dataType: "json",
+	    		    		        success: function(response) {
+	    		    		            const mentiTags = $("#menti-tag");
+	    		    		            const mentiTags2 = $("#menti-tag2");
+	    		    		            mentiTags.text("");
+	    		    		            $.each(response, function(i,tag){
+	    		    		            	let $tagButton = $("<button>").addClass("btn btn-outline-primary")
+								    		            			.css('margin', "3px")
+								    		            			.prop('disabled', true)
+								    		            			.text(tag.tag_info);
+								    		if(tag.tag_id == 0){
+								    			$tagButton.text(champion_to_learn+tag.tag_info)
+								    		}else if(tag.tag_id == 1){
+								    			$tagButton.text(menti.position_to_learn+" "+tag.tag_info)
+								    		}else if(tag.tag_id == 5){
+								    			$tagButton.text(tag.tag_info+": "+tag.tag_note)
+								    		}else if(tag.tag_id == 26){
+								    			$tagButton.text(tag.tag_info+": "+tag.tag_note)
+								    		}
+								    		
+								    		if(tag.tag_type=="target" || tag.tag_type=="class_method"){
+								    			mentiTags.append($tagButton);
+								    		}else{
+								    			mentiTags2.append($tagButton);
+								    		}
+	    		    		            	
+	    		    		            })
+	    		    		        },
+	    		    		        error: function(error) {
+	    		    		            console.error(error);
+	    		    		            // 오류 처리 로직
+	    		    		        }
+	    		    		    })
     		            });
-    		         
     	    		    tbody.append(row);
     	    		    table.append(tbody);
     	    		    }

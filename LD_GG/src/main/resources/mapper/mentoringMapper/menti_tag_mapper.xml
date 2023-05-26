@@ -10,7 +10,11 @@
 </select>
 
 <select id="select_by_email_menti_tag" resultType="mentiTag">
-  SELECT * FROM menti_tag WHERE menti_email = #{menti_email};
+  SELECT * 
+  FROM menti_tag AS mt
+  JOIN mentoring_tag_list AS mtl
+  ON mt.tag_id = mtl.tag_id
+  WHERE menti_email = #{menti_email};
 </select>
 
 <insert id="insert_menti_tag" parameterType="mentiTag">
