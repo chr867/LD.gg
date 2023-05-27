@@ -54,6 +54,85 @@ JOIN (
 WHERE mentor_email = #{mentor_email};
 </select>
 
+<select id="getChampionStats" resultType="mentorChamp">
+SELECT
+    ci.champion_id,
+    ci.champion_kr_name,
+    ci.champion_en_name,
+    COALESCE(subquery.games, 0) AS games,
+    COALESCE(subquery.winrate, 0) AS winrate,
+    COALESCE(subquery.kda, 0) AS kda,
+    COALESCE(subquery.kills, 0) AS kills,
+    COALESCE(subquery.deaths, 0) AS deaths,
+    COALESCE(subquery.assists, 0) AS assists,
+    COALESCE(subquery.cs, 0) AS cs,
+    COALESCE(subquery.cs_per_minute, 0) AS cs_per_minute,
+    COALESCE(subquery.wins, 0) AS wins,
+    COALESCE(subquery.losses, 0) AS losses,
+    COALESCE(subquery.total_games, 0) AS total_games,
+    COALESCE((subquery.games / subquery.total_games) * 100, 0) AS pick_rate
+FROM champion_info ci
+LEFT JOIN (
+    SELECT
+      COUNT(*) AS games,
+      ROUND((SUM(CASE WHEN win = 1 THEN 1 ELSE 0 END) / COUNT(*)) * 100, 2) AS winrate,
+      ROUND((SUM(kills) + SUM(assists)) / SUM(deaths), 1) AS kda,
+      SUM(kills) AS kills,
+      SUM(deaths) AS deaths,
+      SUM(assists) AS assists,
+      SUM(CS) AS cs,
+      ROUND(SUM(CS) / COUNT(*), 2) AS cs_per_minute,
+      champ_name,
+      SUM(CASE WHEN win = 1 THEN 1 ELSE 0 END) AS wins,
+      SUM(CASE WHEN win = 0 THEN 1 ELSE 0 END) AS losses,
+      (SELECT COUNT(*) FROM record WHERE summoner_name = #{summoner_name}) AS total_games
+    FROM record
+    WHERE summoner_name = #{summoner_name}
+    GROUP BY champ_name
+) subquery ON ci.champion_en_name = subquery.champ_name
+ORDER BY pick_rate desc;
+</select>
+
+<select id="getByKeywordChampionStats" resultType="mentorChamp">
+SELECT
+    ci.champion_id,
+    ci.champion_kr_name,
+    ci.champion_en_name,
+    COALESCE(subquery.games, 0) AS games,
+    COALESCE(subquery.winrate, 0) AS winrate,
+    COALESCE(subquery.kda, 0) AS kda,
+    COALESCE(subquery.kills, 0) AS kills,
+    COALESCE(subquery.deaths, 0) AS deaths,
+    COALESCE(subquery.assists, 0) AS assists,
+    COALESCE(subquery.cs, 0) AS cs,
+    COALESCE(subquery.cs_per_minute, 0) AS cs_per_minute,
+    COALESCE(subquery.wins, 0) AS wins,
+    COALESCE(subquery.losses, 0) AS losses,
+    COALESCE(subquery.total_games, 0) AS total_games,
+    COALESCE((subquery.games / subquery.total_games) * 100, 0) AS pick_rate
+FROM champion_info ci
+LEFT JOIN (
+    SELECT
+      COUNT(*) AS games,
+      ROUND((SUM(CASE WHEN win = 1 THEN 1 ELSE 0 END) / COUNT(*)) * 100, 2) AS winrate,
+      ROUND((SUM(kills) + SUM(assists)) / SUM(deaths), 1) AS kda,
+      SUM(kills) AS kills,
+      SUM(deaths) AS deaths,
+      SUM(assists) AS assists,
+      SUM(CS) AS cs,
+      ROUND(SUM(CS) / COUNT(*), 2) AS cs_per_minute,
+      champ_name,
+      SUM(CASE WHEN win = 1 THEN 1 ELSE 0 END) AS wins,
+      SUM(CASE WHEN win = 0 THEN 1 ELSE 0 END) AS losses,
+      (SELECT COUNT(*) FROM record WHERE summoner_name = #{summoner_name}) AS total_games
+    FROM record
+    WHERE summoner_name = #{summoner_name}
+    GROUP BY champ_name
+) subquery ON ci.champion_en_name = subquery.champ_name
+WHERE ci.champion_kr_name LIKE CONCAT('%', #{keyword}, '%') -- keyword로 검색 조건 추가
+ORDER BY pick_rate DESC;
+</select>
+
 <select id="findMentorsByTagIds" parameterType="Integer[]" resultType="mentorProfile">
     SELECT mp.*, m.*, si.*
 	FROM mentor_profile AS mp

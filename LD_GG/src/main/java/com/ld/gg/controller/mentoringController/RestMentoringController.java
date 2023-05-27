@@ -67,6 +67,20 @@ public class RestMentoringController {
 	@Autowired
 	private SummonerService summonerService;
 	
+	//소환사명으로 모든 챔피언 통계 가져오기
+	@GetMapping("/get-champ-stat")
+	public String getChampionStats(@RequestParam String summoner_name) throws JsonProcessingException {
+		String champ_stat_json = mtpService.getChampionStats(summoner_name);
+		return champ_stat_json;
+	}
+	
+	//소환사명과 키워드로 챔피언 통계 가져오기
+	@GetMapping("/get-keyword-champ-stat")
+	public String getByKeywordChampionStats(@RequestParam("summoner_name") String summoner_name, @RequestParam("keyword") String keyword) throws JsonProcessingException {
+		System.out.println(summoner_name+" : "+keyword);
+		String champ_stat_json = mtpService.getByKeywordChampionStats(summoner_name, keyword);
+		return champ_stat_json;
+	}
 	
 	//소환사 이름으로 소환사 정보 가져오기
 	@GetMapping("/get-summoner-info")

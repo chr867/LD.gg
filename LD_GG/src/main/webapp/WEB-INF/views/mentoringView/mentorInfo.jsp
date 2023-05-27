@@ -138,7 +138,7 @@ margin:auto;
 <div id="mentor-detail" class="row">
 <div id="mentor-info" class="col-8">
 	<div class="d-flex justify-content-end">
-		<button id="like-btn" class="btn btn-outline-danger btn-sm">찜 하기</button>
+		<button id="like-btn" class="btn btn-outline-danger">찜 하기</button>
 	</div>
 	<div id="mentor-profile" class="row">
 		<div id="profile-box" class="row">
@@ -386,7 +386,7 @@ margin:auto;
 		    	for (var i = 0; i < response.length; i++) {
 		    	    if (response[i].like_mentor === "${mentor.email}") {
 		    	        isLiked = true;
-		    	        $('#like-btn').text('찜 해제').attr("class","col-2 btn btn-danger");
+		    	        $('#like-btn').text('찜 해제').attr("class","btn btn-danger");
 		    	        break;
 		    	    }
 		    	}
@@ -594,7 +594,7 @@ margin:auto;
 		            	let email = response.email;
 					    if (isLiked) {
 					    	isLiked = false;
-					    	$('#like-btn').text('찜 하기').attr("class","col-2 btn btn-outline-danger");
+					    	$('#like-btn').text('찜 하기').attr("class","btn btn-outline-danger");
 					    	let data = {
 			                		email: email,
 			                        like_mentor: "${mentor.email}"
@@ -616,7 +616,7 @@ margin:auto;
 					      console.log('찜 해제');
 					    } else {
 					    	isLiked = true;
-					    	$('#like-btn').text('찜 해제').attr("class","col-2 btn btn-danger");
+					    	$('#like-btn').text('찜 해제').attr("class","btn btn-danger");
 					    	let data = {
 			                		email: email,
 			                        like_mentor: "${mentor.email}"
