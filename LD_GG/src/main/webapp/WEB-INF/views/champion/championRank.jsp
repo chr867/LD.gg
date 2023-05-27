@@ -115,12 +115,13 @@ button{
 	line-height: 50px;
 }
 
+
 .table tbody:nth-child(2) td:nth-child(2){
 	width: 50px;
 }
 
 .table tbody:nth-child(2) td:nth-child(3){
-	width: 140px;
+	width: 150px;
 }
 
 .table td:nth-child(2),
@@ -738,7 +739,7 @@ th{
 			}).done(res => {
 				response = res
 				console.log(res)
-				let cList = '<tbody>';
+				let cList;
 				let i = 1;
 				for (champion of res) {
 							let src;
@@ -767,9 +768,8 @@ th{
 					cList += '</tr>'
 					i++
 				}
-				cList += '</tbody>';
-				$('td').remove();
-				$('.table').append(cList);
+				$('tbody:eq(1)').empty();
+				$('tbody:eq(1)').html(cList);
 			}).fail(err => {
 				console.log(err)
 			})
@@ -939,7 +939,7 @@ function selectLane(team_position) {
 			})
 		}
 
-		let cList = '<tbody>';
+		let cList;
 		let i = 1;
 		for (champion of response) {
 			let src;
@@ -968,9 +968,8 @@ function selectLane(team_position) {
 			cList += '</tr>'
 			i++
 		}
-		cList += '</tbody>';
-		$('td').remove();
-		$('.table').append(cList);
+		$('tbody:eq(1)').empty();
+		$('tbody:eq(1)').html(cList);
 		})
 	})
 	// 정렬 버튼 끝
