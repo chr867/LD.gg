@@ -12,7 +12,7 @@ import plotly.graph_objs as go
 tqdm.pandas()
 import data_load as dl
 from scipy.stats import zscore
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.cluster import KMeans
 
 from sklearn.model_selection import train_test_split, cross_val_score
@@ -20,23 +20,25 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report, confusion_matrix
+from imblearn.under_sampling import RandomUnderSampler
+
 import joblib
 
-# RIOT-API-KEY
-riot_api_key = 'RGAPI-14667a4e-7c3c-45fa-ac8f-e53c7c3f5fe1'
-pd.set_option('display.max_columns', None)
-pd.set_option('display.max_rows', None)
+# # RIOT-API-KEY
+# riot_api_key = 'RGAPI-14667a4e-7c3c-45fa-ac8f-e53c7c3f5fe1'
+# pd.set_option('display.max_columns', None)
+# pd.set_option('display.max_rows', None)
 # ----------------------------------------------------------------------------------------------------------------------
-start_time = time.time()
-df = dl.match_raw_patch(1)
-print("JSON 변환 시작")
-df['matches'] = df['matches'].apply(json.loads)
-df['timeline'] = df['timeline'].apply(json.loads)
-end_time = time.time()
-print("변환 시간: {:.2f}초".format(end_time - start_time))
-print("JSON 변환 종료")
-
-df.iloc[0].matches
+# start_time = time.time()
+# df = dl.match_raw_patch(1)
+# print("JSON 변환 시작")
+# df['matches'] = df['matches'].apply(json.loads)
+# df['timeline'] = df['timeline'].apply(json.loads)
+# end_time = time.time()
+# print("변환 시간: {:.2f}초".format(end_time - start_time))
+# print("JSON 변환 종료")
+#
+# df.iloc[0].matches
 # ----------------------------------------------------------------------------------------------------------------------
 # 모델 학습용 데이터 연산 코드
 print("시작!")
@@ -125,15 +127,16 @@ result_df['totalScore'] = result_df['winRate'] * 0.30 + result_df['pickRate'] * 
 conditions = [
     (result_df['totalScore'] >= 1.8),
     (result_df['totalScore'] >= 1.3) & (result_df['totalScore'] < 1.8),
-    (result_df['totalScore'] >= 0.8) & (result_df['totalScore'] < 1.3),
-    (result_df['totalScore'] >= 0.3) & (result_df['totalScore'] < 0.8),
-    (result_df['totalScore'] >= 0) & (result_df['totalScore'] < 0.3),
+    (result_df['totalScore'] >= 0.5) & (result_df['totalScore'] < 1.3),
+    (result_df['totalScore'] >= 0.15) & (result_df['totalScore'] < 0.5),
+    (result_df['totalScore'] >= 0) & (result_df['totalScore'] < 0.15),
     (result_df['totalScore'] < 0)
 ]
 # OP = 0
 labels = ['0', '1', '2', '3', '4', '5']
 result_df['tier'] = np.select(conditions, labels, default='5')
 champion_tier_machine_learning = result_df.copy()
+sort_data = champion_tier_machine_learning.sort_values(by=['tier'], ascending=True)
 print("데이터 연산 완료")
 # ----------------------------------------------------------------
 # 특성 가중치를 직접 결정하여 간편하고 직관적이지만 특성 가중치 간의 상호작용을 고려하지 못해 데이터의 주관성 발생
@@ -160,7 +163,7 @@ model.fit(X_train, y_train)
 # 예측 및 평가
 y_pred = model.predict(X_test)
 print('Accuracy: ', accuracy_score(y_test, y_pred))
-# 예측값(y_pred)과 실제값(y_test)을 이용해 정밀도, 재현율, F1 점수를 측정합니다.
+# 예측값(y_pred)과 실제값(y_test)을 이용해 정밀도, 재현율, F1 점수를 측정
 print(classification_report(y_test, y_pred))
 # Confusion Matrix
 print(confusion_matrix(y_test, y_pred))
@@ -172,7 +175,6 @@ print("Mean Accuracy:", scores.mean())
 
 # 모델 저장
 joblib.dump(model, 'championTierPredictionModel2.pkl')
-
 
 # ----------------------------------------------------------------------------------------------------------------------
 # 데이터 프레임 연산 코드
@@ -270,7 +272,7 @@ def machine_learning_score(df):
                               result_df['totalDamageTaken'] * 0.05 + result_df['timeCCingOthers'] * 0.05 + \
                               result_df['total_gold'] * 0.05
     result_df = pd.get_dummies(result_df, columns=['teamPosition'])
-    model = joblib.load('championTierPredictionModel.pkl')  # 모델 로드
+    model = joblib.load('championTierPredictionModel2.pkl')  # 모델 로드
     predictions = model.predict(result_df)  # 예측 수행
     result_df['tier'] = predictions  # 예측 결과를 'tier' 컬럼으로 추가
     columns_to_consider = ['teamPosition_BOTTOM', 'teamPosition_JUNGLE', 'teamPosition_MIDDLE', 'teamPosition_TOP',
@@ -283,8 +285,8 @@ def machine_learning_score(df):
     return final_df
 
 
-machine_learning_score = machine_learning_score(df)
-sort_machine_learning_score = machine_learning_score.sort_values(by=['tier'])
+# machine_learning_score = machine_learning_score(df)
+# sort_machine_learning_score = machine_learning_score.sort_values(by=['tier'])
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -348,7 +350,7 @@ def machine_learning_score(win_pick_lst, ban_lst, meta_lst):
                               result_df['total_gold'] * 0.05
     result_df = pd.get_dummies(result_df, columns=['teamPosition'])
 
-    model = joblib.load('championTierPredictionModel.pkl')  # 모델 로드
+    model = joblib.load('championTierPredictionModel2.pkl')  # 모델 로드
 
     predictions = model.predict(result_df)  # 예측 수행
 
@@ -361,6 +363,8 @@ def machine_learning_score(win_pick_lst, ban_lst, meta_lst):
     result_df = result_df[['championId', 'teamPosition', 'tier']]
     final_df = result_df_copy.merge(result_df, on=['championId', 'teamPosition'])
     final_df = final_df[['championId', 'teamPosition', 'winRate', 'pickRate', 'banRate', 'tier']]
+    final_df = final_df[(final_df['winRate'] < 90) & (final_df['pickRate'] != 0)]
+
     return final_df
 
 def insert_tier_data(x, conn):
@@ -422,10 +426,10 @@ for limit in tqdm(range(0, 796000, batch_size)):
 
 machine_learning_df = machine_learning_score(win_pick_lst_result, ban_rate_lst_result, meta_score_lst_result)
 conn = mu.connect_mysql()
-machine_learning_df.apply(lambda x: insert_tier_data(x, conn), axis=1)
-dasdasd = machine_learning_df.sort_values(by=['tier'])
+machine_learning_df.progress_apply(lambda x: insert_tier_data(x, conn), axis=1)
 conn.commit()
 print(f'총 데이터 갯수 : {cnt} 개')
 print("끝!")
 
 row.iloc[0]['total_gold']
+sorted_df = machine_learning_df.sort_values(by=['tier'], ascending=True)
