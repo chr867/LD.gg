@@ -80,17 +80,28 @@ padding:24px;
 .tab-content{
 padding-top:30px;
 }
-#class-check-box{
-padding-bottom: 16px;
-}
 #tag-box{
 margin-bottom:12px;
 }
+#class-check-box{
+padding-top:8px;
+padding-bottom:8px;
+padding-right:8px;
+}
+.form-check-label:hover{
+cursor:pointer;
+}
 #pos-box{
 padding: 10px;
-margin-right: 10px;
+margin: 16px 12px;
+border:solid 3px black;
+border-radius:10px;
+}
+#pos-box strong{
+font-size: 24px;
 }
 #pos-img{
+width:60px;
 margin-right: 8px;
 }
 #mentor-name{
@@ -105,6 +116,9 @@ padding:24px;
 #mentor_class_info {
      position: sticky;
     top: 30px;
+}
+#review-section img{
+margin:auto;
 }
 
 </style>
@@ -235,7 +249,7 @@ padding:24px;
 			<c:forEach items="${class_list}" var="class_list" varStatus="status">
 			  <div id="class-check-box" class="form-check">
 			    <input class="form-check-input" type="radio" name="flexRadioDefault" id="${class_list.class_id}">
-			    <label class="form-check-label d-flex justify-content-between" for="${class_list.class_id}">
+			    <label class="form-check-label d-flex justify-content-between px-2" for="${class_list.class_id}">
 			      <span>${class_list.class_name}</span>
 			      <span><span id="class-price">${class_list.price}</span><em>P</em></span>
 			    </label>
@@ -290,39 +304,39 @@ padding:24px;
 	$(document).ready(function() {
 		
 		const IMP = window.IMP; // 생략 가능
-		//IMP.init("imp26843336"); // 예: imp00000000a, 본인의 가맹점 식별코드
+		IMP.init("imp26843336"); // 예: imp00000000a, 본인의 가맹점 식별코드
 		
 		let spec_pos = [${mentor_profile.specialized_position}];
 			$.each(spec_pos[0], function(i,pos){
 				console.log(pos);
 				if (pos=="탑"){
-					let posImg = $("<img>").attr("id","pos-img").attr("src","https://online.gamecoach.pro/img/coaching/lol-line-black/TOP.png")
+					let posImg = $("<img>").attr("id","pos-img").attr("src","https://online.gamecoach.pro/img/icon/lol/ico_lol_top.svg")
 					let posName = $("<strong>").text(pos);
-					let posBox = $("<div>").attr("id","pos-box").addClass("border rounded");
+					let posBox = $("<div>").attr("id","pos-box");
 					posBox.append(posImg,posName);
 					$("#specializedPosition").append(posBox);
 				}else if (pos=="바텀"){
-					let posImg = $("<img>").attr("id","pos-img").attr("src","https://online.gamecoach.pro/img/coaching/lol-line-black/AD_CARRY.png")
+					let posImg = $("<img>").attr("id","pos-img").attr("src","https://online.gamecoach.pro/img/icon/lol/ico_lol_ad.svg")
 					let posName = $("<strong>").text(pos);
-					let posBox = $("<div>").attr("id","pos-box").addClass("border rounded");
+					let posBox = $("<div>").attr("id","pos-box");
 					posBox.append(posImg,posName);
 					$("#specializedPosition").append(posBox);
 				}else if (pos=="서포터"){
-					let posImg = $("<img>").attr("id","pos-img").attr("src","https://online.gamecoach.pro/img/coaching/lol-line-black/SUPPORT.png")
+					let posImg = $("<img>").attr("id","pos-img").attr("src","https://online.gamecoach.pro/img/icon/lol/ico_lol_sup.svg")
 					let posName = $("<strong>").text(pos);
-					let posBox = $("<div>").attr("id","pos-box").addClass("border rounded");
+					let posBox = $("<div>").attr("id","pos-box");
 					posBox.append(posImg,posName);
 					$("#specializedPosition").append(posBox);
 				}else if (pos=="정글"){
-					let posImg = $("<img>").attr("id","pos-img").attr("src","https://online.gamecoach.pro/img/coaching/lol-line-black/JUNGLE.png")
+					let posImg = $("<img>").attr("id","pos-img").attr("src","https://online.gamecoach.pro/img/icon/lol/ico_lol_jg.svg")
 					let posName = $("<strong>").text(pos);
-					let posBox = $("<div>").attr("id","pos-box").addClass("border rounded");
+					let posBox = $("<div>").attr("id","pos-box");
 					posBox.append(posImg,posName);
 					$("#specializedPosition").append(posBox);
 				}else if (pos=="미드"){
-					let posImg = $("<img>").attr("id","pos-img").attr("src","https://online.gamecoach.pro/img/coaching/lol-line-black/MID.png")
+					let posImg = $("<img>").attr("id","pos-img").attr("src","https://online.gamecoach.pro/img/icon/lol/ico_lol_mid.svg")
 					let posName = $("<strong>").text(pos);
-					let posBox = $("<div>").attr("id","pos-box").addClass("border rounded");
+					let posBox = $("<div>").attr("id","pos-box");
 					posBox.append(posImg,posName);
 					$("#specializedPosition").append(posBox);
 				}
@@ -382,14 +396,14 @@ padding:24px;
 		//탑 특화 챔피언
 		if ("${mentor_profile.top_specialized_champion}" !== ""){
 			let laneChampBox = $("<div>");
-			$("<hr>").prependTo($("#specializedChampion"));
+			$("<hr>").prependTo(laneChampBox);
 			laneChampBox.appendTo($("#specializedChampion"));
 			let laneBox = $("<div>").css("padding-bottom","10px").addClass("d-flex align-items-center");
 			laneBox.appendTo(laneChampBox);
 			laneBox.append($("<img>").attr("src","https://online.gamecoach.pro/img/icon/lol/ico_lol_top_grey.svg"));
-			laneBox.append($("<span>").text("TOP"));
+			laneBox.append($("<strong>").text("TOP").addClass("mx-2"));
 			laneBox.append($("<hr>"));
-			let champBox = $("<div>").addClass("row d-flex align-items-start justify-content-start");
+			let champBox = $("<div>").addClass("d-flex align-items-start justify-content-start");
 			champBox.appendTo(laneChampBox);
 			let top_specialized_champion = [${mentor_profile.top_specialized_champion}];
 			top_specialized_champion[0].forEach(function (id) {
@@ -401,9 +415,161 @@ padding:24px;
 			        success: function (champion) {
 			        	let laneTop = $("<div>").attr("id",'lane-top')
 			            let imageUrl = "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +champion.champion_en_name + ".png?&amp;retry=0";
-			            let champImg = $("<img>").css("width","80px").addClass("rounded").attr("src", imageUrl);
-			            let champName = $("<span>").addClass("text-center").text(champion.champion_kr_name);
-			            let champDiv = $("<div>").addClass("col-2 d-flex flex-column align-items-center");
+			            let champImg = $("<img>").css("width","95px").addClass("rounded").attr("src", imageUrl);
+			            let champName = $("<span>").addClass("text-center my-2 px-2").text(champion.champion_kr_name);
+			            let champDiv = $("<div>").css("width","150px").addClass("d-flex flex-column align-items-center mx-3 my-2");
+			            champDiv.append(champImg);
+			            champDiv.append(champName);
+			            champBox.append(champDiv);
+			        },
+			        error: function (request, status, error) {
+			            console.error(error);
+			            // 오류 처리
+			        }
+			    });
+			    
+			});
+		}
+		
+		//정글 특화 챔피언
+		if ("${mentor_profile.jg_specialized_champion}" !== ""){
+			let laneChampBox = $("<div>");
+			$("<hr>").prependTo(laneChampBox);
+			laneChampBox.appendTo($("#specializedChampion"));
+			let laneBox = $("<div>").css("padding-bottom","10px").addClass("d-flex align-items-center");
+			laneBox.appendTo(laneChampBox);
+			laneBox.append($("<img>").attr("src","https://online.gamecoach.pro/img/icon/lol/ico_lol_jg_grey.svg"));
+			laneBox.append($("<strong>").text("JUNGLE").addClass("mx-2"));
+			laneBox.append($("<hr>"));
+			let champBox = $("<div>").addClass("d-flex align-items-start justify-content-start");
+			champBox.appendTo(laneChampBox);
+			let jg_specialized_champion = [${mentor_profile.jg_specialized_champion}];
+			jg_specialized_champion[0].forEach(function (id) {
+			    $.ajax({ //챔피언 id로 이름 가져오기
+			        type: "GET",
+			        url: "/mentor/get-champ-name-by-id?id=" + id,
+			        contentType: "application/json; charset=utf-8",
+			        dataType: "json",
+			        success: function (champion) {
+			        	let lanejg = $("<div>").attr("id",'lane-jg')
+			            let imageUrl = "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +champion.champion_en_name + ".png?&amp;retry=0";
+			            let champImg = $("<img>").css("width","95px").addClass("rounded").attr("src", imageUrl);
+			            let champName = $("<span>").addClass("text-center my-2 px-2").text(champion.champion_kr_name);
+			            let champDiv = $("<div>").css("width","150px").addClass("d-flex flex-column align-items-center mx-3 my-2");
+			            champDiv.append(champImg);
+			            champDiv.append(champName);
+			            champBox.append(champDiv);
+			        },
+			        error: function (request, status, error) {
+			            console.error(error);
+			            // 오류 처리
+			        }
+			    });
+			    
+			});
+		}
+		
+		//미드 특화 챔피언
+		if ("${mentor_profile.mid_specialized_champion}" !== ""){
+			let laneChampBox = $("<div>");
+			$("<hr>").prependTo(laneChampBox);
+			laneChampBox.appendTo($("#specializedChampion"));
+			let laneBox = $("<div>").css("padding-bottom","10px").addClass("d-flex align-items-center");
+			laneBox.appendTo(laneChampBox);
+			laneBox.append($("<img>").attr("src","https://online.gamecoach.pro/img/icon/lol/ico_lol_mid_grey.svg"));
+			laneBox.append($("<strong>").text("MID").addClass("mx-2"));
+			laneBox.append($("<hr>"));
+			let champBox = $("<div>").addClass("d-flex align-items-start justify-content-start");
+			champBox.appendTo(laneChampBox);
+			let mid_specialized_champion = [${mentor_profile.mid_specialized_champion}];
+			mid_specialized_champion[0].forEach(function (id) {
+			    $.ajax({ //챔피언 id로 이름 가져오기
+			        type: "GET",
+			        url: "/mentor/get-champ-name-by-id?id=" + id,
+			        contentType: "application/json; charset=utf-8",
+			        dataType: "json",
+			        success: function (champion) {
+			        	let lanemid = $("<div>").attr("id",'lane-mid')
+			            let imageUrl = "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +champion.champion_en_name + ".png?&amp;retry=0";
+			            let champImg = $("<img>").css("width","95px").addClass("rounded").attr("src", imageUrl);
+			            let champName = $("<span>").addClass("text-center my-2 px-2").text(champion.champion_kr_name);
+			            let champDiv = $("<div>").css("width","150px").addClass("d-flex flex-column align-items-center mx-3 my-2");
+			            champDiv.append(champImg);
+			            champDiv.append(champName);
+			            champBox.append(champDiv);
+			        },
+			        error: function (request, status, error) {
+			            console.error(error);
+			            // 오류 처리
+			        }
+			    });
+			    
+			});
+		}
+		
+		//바텀 특화 챔피언
+		if ("${mentor_profile.ad_specialized_champion}" !== ""){
+			let laneChampBox = $("<div>");
+			$("<hr>").prependTo(laneChampBox);
+			laneChampBox.appendTo($("#specializedChampion"));
+			let laneBox = $("<div>").css("padding-bottom","10px").addClass("d-flex align-items-center");
+			laneBox.appendTo(laneChampBox);
+			laneBox.append($("<img>").attr("src","https://online.gamecoach.pro/img/icon/lol/ico_lol_ad_grey.svg"));
+			laneBox.append($("<strong>").text("BOTTOM").addClass("mx-2"));
+			laneBox.append($("<hr>"));
+			let champBox = $("<div>").addClass("d-flex align-items-start justify-content-start");
+			champBox.appendTo(laneChampBox);
+			let ad_specialized_champion = [${mentor_profile.ad_specialized_champion}];
+			ad_specialized_champion[0].forEach(function (id) {
+			    $.ajax({ //챔피언 id로 이름 가져오기
+			        type: "GET",
+			        url: "/mentor/get-champ-name-by-id?id=" + id,
+			        contentType: "application/json; charset=utf-8",
+			        dataType: "json",
+			        success: function (champion) {
+			        	let lanead = $("<div>").attr("id",'lane-ad')
+			            let imageUrl = "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +champion.champion_en_name + ".png?&amp;retry=0";
+			            let champImg = $("<img>").css("width","95px").addClass("rounded").attr("src", imageUrl);
+			            let champName = $("<span>").addClass("text-center my-2 px-2").text(champion.champion_kr_name);
+			            let champDiv = $("<div>").css("width","150px").addClass("d-flex flex-column align-items-center mx-3 my-2");
+			            champDiv.append(champImg);
+			            champDiv.append(champName);
+			            champBox.append(champDiv);
+			        },
+			        error: function (request, status, error) {
+			            console.error(error);
+			            // 오류 처리
+			        }
+			    });
+			    
+			});
+		}
+		
+		//서포터 특화 챔피언
+		if ("${mentor_profile.sup_specialized_champion}" !== ""){
+			let laneChampBox = $("<div>");
+			$("<hr>").prependTo(laneChampBox);
+			laneChampBox.appendTo($("#specializedChampion"));
+			let laneBox = $("<div>").css("padding-bottom","10px").addClass("d-flex align-items-center");
+			laneBox.appendTo(laneChampBox);
+			laneBox.append($("<img>").attr("src","https://online.gamecoach.pro/img/icon/lol/ico_lol_sup_grey.svg"));
+			laneBox.append($("<strong>").text("SUPPORT").addClass("mx-2"));
+			laneBox.append($("<hr>"));
+			let champBox = $("<div>").addClass("d-flex align-items-start justify-content-start");
+			champBox.appendTo(laneChampBox);
+			let sup_specialized_champion = [${mentor_profile.sup_specialized_champion}];
+			sup_specialized_champion[0].forEach(function (id) {
+			    $.ajax({ //챔피언 id로 이름 가져오기
+			        type: "GET",
+			        url: "/mentor/get-champ-name-by-id?id=" + id,
+			        contentType: "application/json; charset=utf-8",
+			        dataType: "json",
+			        success: function (champion) {
+			        	let lanesup = $("<div>").attr("id",'lane-sup')
+			            let imageUrl = "https://d3hqehqh94ickx.cloudfront.net/prod/images/thirdparty/riot/lol/13.9.1/champion/" +champion.champion_en_name + ".png?&amp;retry=0";
+			            let champImg = $("<img>").css("width","95px").addClass("rounded").attr("src", imageUrl);
+			            let champName = $("<span>").addClass("text-center my-2 px-2").text(champion.champion_kr_name);
+			            let champDiv = $("<div>").css("width","150px").addClass("d-flex flex-column align-items-center mx-3 my-2");
 			            champDiv.append(champImg);
 			            champDiv.append(champName);
 			            champBox.append(champDiv);
@@ -503,8 +669,8 @@ padding:24px;
 	                    	contentType : 'application/json; charset=utf-8',
 	                    	data : JSON.stringify(applicationData)	//수업 신청 버튼 클릭 시, 멘티의 잔액 확인 후 신청 승인 여부 결정
 	                    }).done(res=>{
-	                    	console.log(res);
-	                    	if(res){
+	                    	console.log(JSON.parse(res));
+	                    	if(JSON.parse(res)){
 	                    		$.ajax({
 	    	                        url: "/mentor/save-mentoring-history",
 	    	                        method: "POST",
@@ -644,26 +810,6 @@ padding:24px;
 	        }
 	    });
 	    
-	   /*  function displaySpecializedPosition(){
-			$.ajax({
-			  url: '/mentor/get-mentor-profile',
-			  type: 'POST',
-			  contentType: 'application/json;charset=UTF-8',
-			  data: JSON.stringify({ mentor_email: '${mentor_profile.mentor_email}' }),
-			  success: function(data) {
-				  let sp = JSON.parse(data);
-				  let mpsp = JSON.parse(sp.specialized_position);
-				  if (mpsp.length == 2) {
-					    $('#specializedPosition').text(mpsp[0] + '/' + mpsp[1]);
-					  } else {
-					    $('#specializedPosition').text(mpsp[0]);
-					  }
-			  },
-			  error: function(xhr, status, error) {
-			    console.log(error);
-			  }
-			});
-			} */
 	});//ready
 	function requestPay() {
 		if(price === "1 원"){

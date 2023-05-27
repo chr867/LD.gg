@@ -3,6 +3,7 @@ package com.ld.gg.controller.mentoringController;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -376,6 +377,13 @@ public class RestMentoringController {
 		return mtpListJson;
 	}
 	
+	//정렬된 멘토 프로필 리스트 가져오기
+	@GetMapping("/get-order-profile")
+	public String ordered_mentor_profiles(@RequestParam String order_keyword) throws JsonProcessingException{
+		String mtpListjson =mtpService.ordered_mentor_profiles(order_keyword);
+		return mtpListjson;
+	}
+	
 	//일반 회원이 멘토회원으로 전환 할때 멘토 프로필 추가
 	@PostMapping("/insert-mentor-list")
 	public void insert_mentor_profile(@RequestBody Map<String, String> email){
@@ -416,6 +424,13 @@ public class RestMentoringController {
 	public void delete_mentor_profile(@RequestBody Map<String, String> email) {
 		String mentor_email = email.get("mentor_email");
 		mtpService.delete_mentor_profile(mentor_email);
+	}
+	
+	//태그 리스트로 멘토 프로필 가져오기
+	@GetMapping("/get-mentor-by-tag")
+	public String findMentorsByTagIds(@RequestParam("tagIds") Integer[] tagIds) throws JsonProcessingException {
+		String mentor_list_json = mtpService.findMentorsByTagIds(tagIds);
+	    return mentor_list_json;
 	}
 	
 	//멘토 이메일로 멘토 프로필 가져오기

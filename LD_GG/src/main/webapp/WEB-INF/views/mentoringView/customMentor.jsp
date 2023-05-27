@@ -141,8 +141,8 @@ overflow: auto; /* 스크롤바를 추가하기 위해 overflow 속성 설정 */
 #filter-champ-wrap {
   width: 430px;
   height: 500px; /* 원하는 높이로 설정 */
-  top: 20px;
-  right: 20px;
+  bottom: 5px;
+  right:20px;
   background-color: #f8f9fa;
   padding: 24px;
   border-radius: 20px;
@@ -184,6 +184,9 @@ width: 85px;
 margin-top:5px;
 color: #777;
 background-color:#eaeaea;
+}
+.tier:hover{
+cursor:pointer;
 }
 #target-summoner{
 width: 200px;
@@ -320,7 +323,7 @@ font-weight:bold;
 				</div>
 			</div>
 			
-			<div id="form-box">
+			<div id="form-box" class="position-relative">
 				<div id="pos-box">
 					<h3><strong>배우고 싶은 포지션</strong></h3>
 					<div id="position-buttons" class="d-flex align-item-center justify-content-evenly">
@@ -360,12 +363,12 @@ font-weight:bold;
 							<span id="champ-name">챔피언 선택</span>
 						</div>
 						</div>
-						<img id="arrow-icon" class="my-auto" style="width:40px" src="/resources/img/icon/arrow-icon-down.png">
+						<img id="arrow-icon" class="my-auto" style="width:40px" src="/resources/img/icon/arrow-icon-right.png">
 						</div>
 					</div>
 				</div>
 				
-				<div id="filter-champ-wrap" style="display: none">
+				<div id="filter-champ-wrap" style="display: none" class="position-absolute">
 					<div class="d-flex justify-content-between">
 						<h5><strong>챔피언</strong></h5>
 						<button type="button" class="btn-close" id="champ-wrap-close" aria-label="Close"></button>

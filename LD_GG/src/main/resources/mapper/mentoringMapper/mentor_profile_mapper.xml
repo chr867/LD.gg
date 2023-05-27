@@ -21,6 +21,23 @@ JOIN (
 WHERE mp.mentor_email = m.email;
 </select>
 
+<select id="ordered_mentor_profiles" resultType="mentorProfile">
+SELECT mp.*, m.*, si.*
+FROM mentor_profile AS mp
+JOIN member AS m ON mp.mentor_email = m.email
+JOIN (
+    SELECT si1.*
+    FROM summoner_info si1
+    JOIN (
+        SELECT summoner_name, MAX(revision_date) AS MaxRevision
+        FROM summoner_info
+        GROUP BY summoner_name
+    ) si2 ON si1.summoner_name = si2.summoner_name AND si1.revision_date = si2.MaxRevision
+) si ON m.lol_account = si.summoner_name
+WHERE mp.mentor_email = m.email
+ORDER BY ${order_keyword} DESC;
+</select>
+
 <select id="select_by_email_mentor_profile" resultType="mentorProfile">
 SELECT mp.*, m.*, si.*
 FROM mentor_profile AS mp
@@ -35,6 +52,31 @@ JOIN (
     ) si2 ON si1.summoner_name = si2.summoner_name AND si1.revision_date = si2.MaxRevision
 ) si ON m.lol_account = si.summoner_name
 WHERE mentor_email = #{mentor_email};
+</select>
+
+<select id="findMentorsByTagIds" parameterType="Integer[]" resultType="mentorProfile">
+    SELECT mp.*, m.*, si.*
+	FROM mentor_profile AS mp
+	JOIN member AS m ON mp.mentor_email = m.email
+	JOIN (
+	    SELECT si1.*
+	    FROM summoner_info si1
+	    JOIN (
+	        SELECT summoner_name, MAX(revision_date) AS MaxRevision
+	        FROM summoner_info
+	        GROUP BY summoner_name
+	    ) si2 ON si1.summoner_name = si2.summoner_name AND si1.revision_date = si2.MaxRevision
+	) si ON m.lol_account = si.summoner_name
+    WHERE mentor_email IN (
+        SELECT mentor_email
+        FROM mentor_tag
+        WHERE tag_id IN
+        <foreach item="tagId" collection="array" open="(" separator="," close=")">
+            #{tagId}
+        </foreach>
+        GROUP BY mentor_email
+        HAVING COUNT(DISTINCT tag_id) = ${array.length}
+    );
 </select>
 
 <insert id="insert_mentor_profile" parameterType="String">

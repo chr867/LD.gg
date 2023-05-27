@@ -11,6 +11,8 @@ import com.ld.gg.dto.mentoringdto.MentorTagDTO;
 @Mapper
 public interface MentorProfileDAO {
 	List<MentorProfileDTO> select_all_mentor_profiles();
+	List<MentorProfileDTO> ordered_mentor_profiles(String order_keyword);
+	List<MentorProfileDTO> findMentorsByTagIds(Integer[] tagIds);
 	MentorProfileDTO select_by_email_mentor_profile(String mentor_email);
 	void renewal_mentor_profile();
 	void insert_mentor_profile(String mentor_email);

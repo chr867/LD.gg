@@ -55,6 +55,7 @@ public class MentorProfileService {
 	@Autowired
 	private ObjectMapper objectMapper;
 	
+	
 	//모든 챔피언 이름 가져오기
 	public String select_all_champ() throws JsonProcessingException {
 		List<Champ_default> champ_name_list = mentidao.select_all_champ();
@@ -384,9 +385,23 @@ public class MentorProfileService {
 		return tagdto;
 	}
 	
+	//태그 리스트로 멘토 프로필 가져오기
+	public String findMentorsByTagIds(Integer[] tagIds) throws JsonProcessingException {
+		List<MentorProfileDTO> mtpdto = mtpdao.findMentorsByTagIds(tagIds);
+		String mtpListjson = objectMapper.writeValueAsString(mtpdto);
+		return mtpListjson;
+	}
+	
 	//모든 멘토 프로필 리스트 가져오기
 	public String select_all_mentor_profiles() throws JsonProcessingException{
 		List<MentorProfileDTO> mtpdto =mtpdao.select_all_mentor_profiles();
+		String mtpListjson = objectMapper.writeValueAsString(mtpdto);
+		return mtpListjson;
+	}
+	
+	//정렬된 멘토 프로필 리스트 가져오기
+	public String ordered_mentor_profiles(String order_keyword) throws JsonProcessingException{
+		List<MentorProfileDTO> mtpdto =mtpdao.ordered_mentor_profiles(order_keyword);
 		String mtpListjson = objectMapper.writeValueAsString(mtpdto);
 		return mtpListjson;
 	}
