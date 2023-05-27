@@ -46,7 +46,7 @@ public interface Summoner_dao {
 
 	List<ChampRecordDto> getChampClassic(String summoner_name);
 
-	List<BuildDto> getBuild(String match_id, String summoner_name);
+	BuildDto getBuild(@Param("match_id") String match_id, @Param("summoner_name") String summoner_name);
 
 	RecordRankingDto getRanking(@Param("match_id") String match_id, @Param("summoner_name") String summoner_name);
 

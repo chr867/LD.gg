@@ -336,31 +336,35 @@ WHERE
 </select>
 
 <select id="getBuild" resultType="build">
-   SELECT
-   t.mini_t_time AS
-   timestamp,
-   t.item_id,
-   t.mini_t_skill_slot,
-   r.main_rune,
-   r.main_rune1,
-   r.main_rune2,
-   r.main_rune3,
-   r.main_rune4,
-   r.sub_rune,
-   r.sub_rune1,
-   r.sub_rune2,
-   r.rune_stat1,
-   r.rune_stat2,
-   r.rune_stat3
-   FROM
-   time_line_data t
-   LEFT JOIN
-   record r ON t.match_id = r.match_id AND t.summoner_name =
-   r.summoner_name
-   WHERE
-   t.match_id = #{matchId}
-   AND t.summoner_name =
-   #{summonerName}
+SELECT
+   main_rune,
+   main_rune1,
+   main_rune2,
+   main_rune3,
+   main_rune4,
+   sub_rune,
+   sub_rune1,
+   sub_rune2,
+   rune_stat1,
+   rune_stat2,
+   rune_stat3,
+   (select rune_kr_name from rune_info where rune_id = (select main_rune from record where match_id = #{match_id) and summoner_name = #{summoner_name})) as main_rune_kr,
+   (select rune_kr_name from rune_info where rune_id = (select sub_rune from record where match_id = #{match_id) and summoner_name = #{summoner_name})) as sub_rune_kr,
+   (SELECT rune_img FROM rune_info WHERE rune_id = (SELECT main_rune FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) AS main_rune_img,
+   (SELECT rune_img FROM rune_info WHERE rune_id = (SELECT main_rune1 FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) AS main_rune1_img,
+   (SELECT rune_img FROM rune_info WHERE rune_id = (SELECT main_rune2 FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) AS main_rune2_img,
+   (SELECT rune_img FROM rune_info WHERE rune_id = (SELECT main_rune3 FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) AS main_rune3_img,
+   (SELECT rune_img FROM rune_info WHERE rune_id = (SELECT main_rune4 FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) AS main_rune4_img,
+   (SELECT rune_img FROM rune_info WHERE rune_id = (SELECT sub_rune FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as sub_rune_img,
+   (SELECT rune_img FROM rune_info WHERE rune_id = (SELECT sub_rune1 FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) AS sub_rune1_img,
+   (SELECT rune_img FROM rune_info WHERE rune_id = (SELECT sub_rune2 FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) AS sub_rune2_img,
+   (SELECT rune_type FROM rune_info WHERE rune_id = (SELECT main_rune FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) AS main_rune_type,
+   (SELECT rune_type FROM rune_info WHERE rune_id = (SELECT sub_rune FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) AS sub_rune_type
+FROM
+   record r
+WHERE
+   match_id = #{match_id}
+   AND summoner_name = #{summoner_name};
 </select>
 
 <select id="getRanking" resultType="recordRanking">
@@ -450,7 +454,7 @@ GROUP BY
 </select>
 
 <select id="getDashBoardProfile" resultType = "dashboard">
-	select profile_icon_id from summoner_info where summoner_name = #{summoner_name} order by revision date desc limit 1;
+	select profile_icon_id, LOWER(tier) as tier from summoner_info where summoner_name = #{summoner_name} order by revision_date desc limit 1;
 </select>
 
 </mapper>
