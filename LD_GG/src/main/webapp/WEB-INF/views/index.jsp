@@ -192,6 +192,14 @@
 #recom_champ_header{
 	display: flex;
 	flex-direction: column-reverse;
+	position: relative;
+	left: 2%;
+	margin-top: 7%;
+}
+
+#recom_champ_header div:last-child{
+	position: relative;
+	top: -110%;
 }
 
 .recom_img{
@@ -719,13 +727,13 @@
 
 
 	<div id="bottom_container">
-
+		<div id="recom_champ_header">
+			<div>승률</div>
+			<div>라인킬 확률</div>
+			<div>추천 챔피언</div>
+		</div>
+		
 		<div id="recom_champ">
-			<div id="recom_champ_header">
-				<div>만난 횟수</div>
-				<div>승률</div>	
-			</div>
-
 			<div id="recom_img_container">
 				<div class="recom_img">
 					<img src="/resources/img/profileicon/29.png" class="champ1" alt=""
@@ -854,7 +862,7 @@
 				$(`#recom_champ_\${idx}`).attr('class', champ_name);
 				let sliced = Array.from(recom_divs).slice(slice_index, slice_index+3);
 				sliced[0].textContent = champ.name
-				sliced[1].textContent = champ.cm.match_up_cnt
+				sliced[1].textContent = champ.cm.lane_kill_rate
 				sliced[2].textContent = champ.cm.match_up_win_rate
 				slice_index +=3;
 			})
