@@ -47,11 +47,11 @@ public class Champion_service {
 		return cm_list;
 	}
 
-	public String champ_search(String champion_kr_name) {
-		String champion_en_name = cd.champ_search(champion_kr_name);
-		log.info("champion_id = {}", champion_en_name);
+	public Champ_default champ_search(String champion_name) {
+		Champ_default champion = cd.champ_search(champion_name);
+		log.info("champion_id = {}", champion_name);
 
-		return champion_en_name;
+		return champion;
 	}
 
 	public String champ_search_eng(String champion_en_name) {

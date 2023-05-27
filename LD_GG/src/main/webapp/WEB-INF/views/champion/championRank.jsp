@@ -65,6 +65,7 @@
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+	background-color: #E4E6EF;
 }
 
 .tier_container_box {
@@ -86,7 +87,6 @@ button{
 	margin-right: 20px;
 	width: 150px;
 	height: 35px;
-	margin-bottom: 20px
 }
 
 .lane_button{
@@ -106,7 +106,26 @@ button{
 	opacity: 0.6;
 }
 
-.table td:nth-child(2), .table td:nth-child(3) {
+.table{
+	background-color: #E4E6EF;
+	margin-top: 20px;
+}
+
+.table tbody:nth-child(2) td{
+	line-height: 50px;
+}
+
+
+.table tbody:nth-child(2) td:nth-child(2){
+	width: 50px;
+}
+
+.table tbody:nth-child(2) td:nth-child(3){
+	width: 150px;
+}
+
+.table td:nth-child(2),
+ .table td:nth-child(3) {
 	cursor: pointer;
 }
 
@@ -720,7 +739,7 @@ th{
 			}).done(res => {
 				response = res
 				console.log(res)
-				let cList = '<tbody>';
+				let cList;
 				let i = 1;
 				for (champion of res) {
 							let src;
@@ -749,9 +768,8 @@ th{
 					cList += '</tr>'
 					i++
 				}
-				cList += '</tbody>';
-				$('td').remove();
-				$('.table').append(cList);
+				$('tbody:eq(1)').empty();
+				$('tbody:eq(1)').html(cList);
 			}).fail(err => {
 				console.log(err)
 			})
@@ -815,7 +833,7 @@ function selectLane(team_position) {
 <!-- container_box -->
 <script>
 	// 티어 버튼
-	let button_toggle = false; // 초기에는 옵션 숨김 상태로 시작
+/* 	let button_toggle = false; // 초기에는 옵션 숨김 상태로 시작
 	document.getElementById("tier_select").onclick = function() {
 		let option_container = document.getElementById("option_container");
 		if (button_toggle) {
@@ -836,7 +854,7 @@ function selectLane(team_position) {
 		}
 
 		button_toggle = !button_toggle;
-	};
+	}; */
 	// 티어 버튼 끝
 
 	// 정렬 버튼
@@ -921,7 +939,7 @@ function selectLane(team_position) {
 			})
 		}
 
-		let cList = '<tbody>';
+		let cList;
 		let i = 1;
 		for (champion of response) {
 			let src;
@@ -950,9 +968,8 @@ function selectLane(team_position) {
 			cList += '</tr>'
 			i++
 		}
-		cList += '</tbody>';
-		$('td').remove();
-		$('.table').append(cList);
+		$('tbody:eq(1)').empty();
+		$('tbody:eq(1)').html(cList);
 		})
 	})
 	// 정렬 버튼 끝

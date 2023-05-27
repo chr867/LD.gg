@@ -153,7 +153,10 @@
 
 .search_box{
 	display: flex;
-	width: 500px;
+	position: relative;
+	left: -10%;
+	top: 40%;
+	width: 300px;
 }
 
 .search_box div{
@@ -163,12 +166,13 @@
 
 #right_champ_search{
 	position: relative;
-	right: -52%;
 	margin-bottom: 10px;
+	background-color: #E4E6EF;
 }
 
 
 #recom_img_container {
+	text-align: center;
 	display: flex;
 	position: relative;
 	left: 10%;
@@ -187,7 +191,15 @@
 
 #recom_champ_header{
 	display: flex;
-	flex-direction: column;
+	flex-direction: column-reverse;
+	position: relative;
+	left: 2%;
+	margin-top: 7%;
+}
+
+#recom_champ_header div:last-child{
+	position: relative;
+	top: -110%;
 }
 
 .recom_img{
@@ -657,7 +669,7 @@
 				<div id="champ_search_box">
 					<form id=champ_search>
 						<input id='champion_name_input' type="text"
-							name="champion_kr_name" placeholder="내 챔피언 검색">
+							name="champion_name" placeholder="내 챔피언 검색">
 					</form>
 					<img id="my_champion_img" alt="#"
 						src="/resources/img/profileicon/29.png">
@@ -691,18 +703,19 @@
 
 				<div id="right_champ_search_box">
 					<div>
-						<form id=right_champ_search>
-							<input id='right_champ_name_input' type="text"
-								name="champion_kr_name" placeholder="상대 챔피언 검색">
-						</form>
 						<div class="search_box">
 							<img id="right_champion_img" alt="#"
-								src="/resources/img/profileicon/29.png"> <div></div>
+								src="/resources/img/profileicon/29.png" onclick="right_champion_img_click(this)"> <div></div>
 						</div>
 					</div>
 				</div>
 				
 				<div class="champion-container">
+					<form id=right_champ_search>
+						<input id='right_champ_name_input' type="text"
+							name="champion_name" placeholder="상대 챔피언 검색">
+					</form>
+					
 					<div class="champion-img-container">
 						<div class="champions"></div>
 					</div>
@@ -714,13 +727,13 @@
 
 
 	<div id="bottom_container">
-
+		<div id="recom_champ_header">
+			<div>승률</div>
+			<div>라인킬 확률</div>
+			<div>추천 챔피언</div>
+		</div>
+		
 		<div id="recom_champ">
-			<div id="recom_champ_header">
-				<div>만난 횟수</div>
-				<div>승률</div>	
-			</div>
-
 			<div id="recom_img_container">
 				<div class="recom_img">
 					<img src="/resources/img/profileicon/29.png" class="champ1" alt=""
@@ -806,7 +819,7 @@
 			$('.select_tag div').css('background-color', '#E4E6EF');
 			tag.style.backgroundColor = "black";
 			selected_tag = tag.className;
-			console.log(selected_tag);
+			console.log(selected_lane, selected_tag, selected_right_champion);
 			if(selected_lane && selected_tag && selected_right_champion){
 				recom_champ(selected_lane, selected_tag, selected_right_champion)
 			}
@@ -833,6 +846,7 @@
 
 	// 챔피언 추천 start
 	function recom_champ(lane, tag, right_champion){
+		console.log('recom', lane, tag, right_champion)
 		$.ajax({
 			url: "/champion/champ-recom.json",
 			type: 'POST',
@@ -848,7 +862,7 @@
 				$(`#recom_champ_\${idx}`).attr('class', champ_name);
 				let sliced = Array.from(recom_divs).slice(slice_index, slice_index+3);
 				sliced[0].textContent = champ.name
-				sliced[1].textContent = champ.cm.match_up_cnt
+				sliced[1].textContent = champ.cm.lane_kill_rate
 				sliced[2].textContent = champ.cm.match_up_win_rate
 				slice_index +=3;
 			})
@@ -893,12 +907,13 @@
 			data: formData,
 		}).done(res=>{
 			if(res){
-				selected_left_champion = res  // champion_en_name
+				selected_left_champion = res.champion_en_name  // champion_en_name
 				console.log(selected_left_champion)
-				$('#my_champion_img').attr('src', `/resources/img/champion_img/tiles/\${res}_0.jpg`);
+				$('#my_champion_img').attr('src', `/resources/img/champion_img/tiles/\${res.champion_en_name}_0.jpg`);
 				$('#build_recom_left_val').attr('value', res);
 			}else{
 				selected_left_champion = null;
+				$('#my_champion_img').attr('src', '/resources/img/profileicon/29.png');
 				$('#build_recom_box span').text('챔피언 이름을 확인해주세요');
 			}
 			
@@ -923,11 +938,11 @@
 			data: formData,
 		}).done(res=>{
 			if(res){
-				selected_right_champion = res  // champion_en_name
+				selected_right_champion = res.champion_en_name  // champion_en_name
 				console.log(selected_right_champion)
-				$('#right_champion_img').attr('src', `/resources/img/champion_img/tiles/\${res}_0.jpg`);
-				$('#champ_recom_right_val').attr('value', res);
-				$('#build_recom_right_val').attr('value', res);
+				$('#right_champion_img').attr('src', `/resources/img/champion_img/square/\${res.champion_img}`);
+				document.getElementById('right_champion_img').className = res.champion_id
+
 				if(selected_lane && selected_tag && selected_right_champion){
 					recom_champ(selected_lane, selected_tag, selected_right_champion)
 				}
@@ -944,6 +959,11 @@
 	})
 // right 챔피언 검색 end
 
+function right_champion_img_click(right_img){
+	if(right_img.className){
+		location.href = `/champion/info?champion=\${right_img.className}`		
+	}
+}
 
 // champion-container
 	// 챔피언 리스트
@@ -954,7 +974,6 @@ function championList() {
 	}).done(res => {
 		let championHTML = '';
 		res.forEach(function (champion) {
-			console.log(champion)
 			championHTML += '<div class="champion">';
 			championHTML += '<img alt="' + champion.champion_kr_name +
 				'" class="bg-image champion-img" src="/resources/img/champion_img/square/' +
@@ -987,7 +1006,7 @@ function selectLane(team_position) {
 			championHTML += '<img alt="' + champion.champion_kr_name +
 				'" class="bg-image champion-img" src="/resources/img/champion_img/square/' +
 				champion.champion_img + '" onclick="selectChampion(\'' + champion.champion_en_name + '\', \'' + champion.champion_img + '\', \'' +
-			    champion.champion_kr_name + '\')">';
+			    champion.champion_kr_name + '\', \'' + champion.champion_id + '\')">';
 			championHTML += '</div>';
 		});
 
@@ -1001,14 +1020,15 @@ function selectLane(team_position) {
 	})
 }
 
-function selectChampion(champion_en_name, champion_img, champion_kr_name){
+function selectChampion(champion_en_name, champion_img, champion_kr_name, champion_id){
 	selected_right_champion = champion_en_name
 	$('#right_champion_img').attr('src', `/resources/img/champion_img/square/\${champion_img}`);
+	document.getElementById('right_champion_img').className = champion_id
 	$('.search_box div').text(champion_kr_name);
 
 	if(selected_lane && selected_tag && selected_right_champion){
 				recom_champ(selected_lane, selected_tag, selected_right_champion)
-			}
+	}
 
 }
 // 라인 선택 끝
