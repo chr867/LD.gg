@@ -17,7 +17,9 @@ from sklearn.cluster import KMeans
 
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report, confusion_matrix
 import joblib
 
 # RIOT-API-KEY
@@ -38,56 +40,43 @@ df.iloc[0].matches
 # ----------------------------------------------------------------------------------------------------------------------
 # 모델 학습용 데이터 연산 코드
 print("시작!")
-conn = mu.connect_mysql()
-matchId_count = pd.DataFrame(mu.mysql_execute_dict(f"SELECT match_id_substr FROM match_raw_patch", conn))
-conn.close()
-print(f'매치아이디 갯수 : {len(matchId_count.match_id_substr.unique())}개')
+print(f'총 데이터 갯수 : 796000 개')
 
-batch_size = 40000
+batch_size = 100000
 win_pick_lst_result = []
 ban_rate_lst_result = []
 meta_score_lst_result = []
-
-for limit in tqdm(range(0, len(matchId_count.match_id_substr.unique()), batch_size)):
+cnt = 0
+for limit in tqdm(range(0, 796000, batch_size)):
     conn = mu.connect_mysql()
-    query = f"SELECT matches, timeline FROM match_raw_patch LIMIT {limit}, {batch_size}"
+    query = f"SELECT * FROM match_solr_rank LIMIT {limit}, {batch_size}"
     row = pd.DataFrame(mu.mysql_execute_dict(query, conn))
     conn.close()
 
-    row['matches'] = row['matches'].apply(json.loads)
-    row['timeline'] = row['timeline'].apply(json.loads)
-
-    for x in range(len(row)):
-        for player in row.iloc[x]['matches']['participants']:
-            lst = []
-            lst.append(player['championId'])
-            lst.append(player['win'])
+    for _, player in tqdm(row.iterrows()):
+        lst = []
+        lst.append(player['championId'])
+        lst.append(player['win'])
+        lst.append(player['teamPosition'])
+        win_pick_lst_result.append(lst)
+        cnt += 1
+    for _, player in tqdm(row.iterrows()):
+        lst = []
+        if player['ban_champion_id'] != 0 and player['ban_champion_id'] != -1:
             lst.append(player['teamPosition'])
-            win_pick_lst_result.append(lst)
+            lst.append(player['ban_champion_id'])
+            ban_rate_lst_result.append(lst)
 
-    for x in range(len(row)):
-        ban_lst = row.iloc[x]['matches']['bans']
-        for idx, ban in enumerate(ban_lst):
-            if ban != 0 and ban != -1:
-                lst = []
-                team_position = row.iloc[x]['matches']['participants'][idx]['teamPosition']
-                if team_position:
-                    lst.append(team_position)
-                    lst.append(ban)
-                    ban_rate_lst_result.append(lst)
-
-    for x in range(len(row)):
-        summoner = row.iloc[x]['matches']['participants']
-        for player in summoner:
-            lst = []
-            lst.append(player['championId'])
-            lst.append(player['teamPosition'])
-            lst.append(player['kda'])
-            lst.append(player['totalDamageDealtToChampions'])
-            lst.append(player['totalDamageTaken'])
-            lst.append(player['timeCCingOthers'])
-            lst.append(player['total_gold'])
-            meta_score_lst_result.append(lst)
+    for _, player in tqdm(row.iterrows()):
+        lst = []
+        lst.append(player['championId'])
+        lst.append(player['teamPosition'])
+        lst.append(player['kda'])
+        lst.append(player['totalDamageDealtToChampions'])
+        lst.append(player['totalDamageTaken'])
+        lst.append(player['timeCCingOthers'])
+        lst.append(player['total_gold'])
+        meta_score_lst_result.append(lst)
 print("데이터 셀렉트 및 리스트 저장완료")
 # ----------------------------------------------------------------
 win_pick_columns = ['championId', 'win', 'teamPosition']
@@ -134,12 +123,12 @@ result_df['totalScore'] = result_df['winRate'] * 0.30 + result_df['pickRate'] * 
                           result_df['total_gold'] * 0.05
 # Zscore 이용하여 엄격하게 티어분류
 conditions = [
-    (result_df['totalScore'] >= 2),
-    (result_df['totalScore'] >= 1.5) & (result_df['totalScore'] < 2),
-    (result_df['totalScore'] >= 0.5) & (result_df['totalScore'] < 1),
-    (result_df['totalScore'] >= 0) & (result_df['totalScore'] < 0.5),
-    (result_df['totalScore'] < 0),
-    (result_df['totalScore'] < -0.1)
+    (result_df['totalScore'] >= 1.8),
+    (result_df['totalScore'] >= 1.3) & (result_df['totalScore'] < 1.8),
+    (result_df['totalScore'] >= 0.8) & (result_df['totalScore'] < 1.3),
+    (result_df['totalScore'] >= 0.3) & (result_df['totalScore'] < 0.8),
+    (result_df['totalScore'] >= 0) & (result_df['totalScore'] < 0.3),
+    (result_df['totalScore'] < 0)
 ]
 # OP = 0
 labels = ['0', '1', '2', '3', '4', '5']
@@ -162,7 +151,7 @@ X = champion_tier_machine_learning.drop('tier', axis=1)  # 'tier' 열을 제외�
 y = champion_tier_machine_learning['tier']  # 'tier' 열을 레이블로 사용
 
 # 학습 데이터와 테스트 데이터 분리
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # 랜덤 포레스트 분류기 학습
 model = RandomForestClassifier(n_estimators=100, random_state=42)
@@ -171,15 +160,18 @@ model.fit(X_train, y_train)
 # 예측 및 평가
 y_pred = model.predict(X_test)
 print('Accuracy: ', accuracy_score(y_test, y_pred))
-
+# 예측값(y_pred)과 실제값(y_test)을 이용해 정밀도, 재현율, F1 점수를 측정합니다.
+print(classification_report(y_test, y_pred))
+# Confusion Matrix
+print(confusion_matrix(y_test, y_pred))
 # 교차 검증
-scores = cross_val_score(model, X, y, cv=5)
+scores = cross_val_score(model, X, y, cv=10)
 # 교차 검증 결과 출력
 print("Cross Validation Scores:", scores)
 print("Mean Accuracy:", scores.mean())
 
 # 모델 저장
-joblib.dump(model, 'championTierPredictionModel.pkl')
+joblib.dump(model, 'championTierPredictionModel2.pkl')
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -355,9 +347,13 @@ def machine_learning_score(win_pick_lst, ban_lst, meta_lst):
                               result_df['totalDamageTaken'] * 0.05 + result_df['timeCCingOthers'] * 0.05 + \
                               result_df['total_gold'] * 0.05
     result_df = pd.get_dummies(result_df, columns=['teamPosition'])
+
     model = joblib.load('championTierPredictionModel.pkl')  # 모델 로드
+
     predictions = model.predict(result_df)  # 예측 수행
+
     result_df['tier'] = predictions  # 예측 결과를 'tier' 컬럼으로 추가
+
     columns_to_consider = ['teamPosition_BOTTOM', 'teamPosition_JUNGLE', 'teamPosition_MIDDLE', 'teamPosition_TOP',
                            'teamPosition_UTILITY']
     result_df['teamPosition'] = result_df[columns_to_consider].idxmax(axis=1)
@@ -367,19 +363,11 @@ def machine_learning_score(win_pick_lst, ban_lst, meta_lst):
     final_df = final_df[['championId', 'teamPosition', 'winRate', 'pickRate', 'banRate', 'tier']]
     return final_df
 
-
-machine_learning_score = machine_learning_score(win_pick_lst_result, ban_rate_lst_result, meta_score_lst_result)
-
-machine_learning_score = machine_learning_score(df)
-sort_machine_learning_score = machine_learning_score.sort_values(by=['tier'])
-
-
-# tier_int 컬럼 추가해주셈 summoner.py 파일에 함수 있음
 def insert_tier_data(x, conn):
     query = (
-        f"INSERT INTO champion_tier (champion_id, team_position , summoner_tier, win_rate ,"
+        f"INSERT INTO champion_tier (champion_id, team_position , win_rate ,"
         f" pick_rate,ban_rate ,tier) "
-        f"VALUES ({x.championId}, {repr(x.teamPosition)}, 1,{x.winRate},{x.pickRate},{x.banRate},{x.tier})"
+        f"VALUES ({x.championId}, {repr(x.teamPosition)},{x.winRate},{x.pickRate},{x.banRate},{x.tier})"
     )
     try:
         mu.mysql_execute(query, conn)
@@ -393,66 +381,35 @@ machine_learning_score.progress_apply(lambda x: insert_tier_data(x, conn), axis=
 conn.commit()
 
 # ----------------------------------------------------------------------------------------------------------------------
-conn = mu.connect_mysql()
-query = f"SELECT * FROM match_solr_rank where summonerTier = 'MASTER'"
-row = pd.DataFrame(mu.mysql_execute_dict(query, conn))
-conn.close()
-def tier_int(tier):
-    if tier == 'IRON':
-        return 1
-    elif tier == 'BRONZE':
-        return 2
-    elif tier == 'SILVER':
-        return 3
-    elif tier == 'GOLD':
-        return 4
-    elif tier == 'PLATINUM':
-        return 5
-    elif tier == 'DIAMOND':
-        return 6
-    elif tier == 'MASTER':
-        return 7
-    elif tier == 'GRANDMASTER':
-        return 8
-    elif tier == 'CHALLENGER':
-        return 9
-
-
-
 print("시작!")
-tier_list = ['IRON', 'BRONZE', 'SILVER', 'GOLD', 'PLATINUM', 'DIAMOND', 'MASTER', 'GRANDMASTER', 'CHALLENGER']
+print(f'총 데이터 갯수 : 796000 개')
 
-for tier in tier_list:
-    try:
-        conn = mu.connect_mysql()
-        query = f"SELECT * FROM match_solr_rank WHERE summonerTier = '{tier}'"
-        row = pd.DataFrame(mu.mysql_execute_dict(query, conn))
-        conn.close()
-    except Exception as e:
-        print(f"Error occurred for tier {tier}: {str(e)}")
-        conn.close()
-        continue
+batch_size = 100000
+win_pick_lst_result = []
+ban_rate_lst_result = []
+meta_score_lst_result = []
+cnt = 0
+for limit in tqdm(range(0, 796000, batch_size)):
+    conn = mu.connect_mysql()
+    query = f"SELECT * FROM match_solr_rank LIMIT {limit}, {batch_size}"
+    row = pd.DataFrame(mu.mysql_execute_dict(query, conn))
+    conn.close()
 
-    print(f'{tier} 데이터 연산 시작')
-    win_pick_lst_result = []
-    ban_rate_lst_result = []
-    meta_score_lst_result = []
-
-    for _, player in row.iterrows():
+    for _, player in tqdm(row.iterrows()):
         lst = []
         lst.append(player['championId'])
         lst.append(player['win'])
         lst.append(player['teamPosition'])
         win_pick_lst_result.append(lst)
-
-    for _, player in row.iterrows():
+        cnt += 1
+    for _, player in tqdm(row.iterrows()):
         lst = []
         if player['ban_champion_id'] != 0 and player['ban_champion_id'] != -1:
             lst.append(player['teamPosition'])
             lst.append(player['ban_champion_id'])
             ban_rate_lst_result.append(lst)
 
-    for _, player in row.iterrows():
+    for _, player in tqdm(row.iterrows()):
         lst = []
         lst.append(player['championId'])
         lst.append(player['teamPosition'])
@@ -463,13 +420,12 @@ for tier in tier_list:
         lst.append(player['total_gold'])
         meta_score_lst_result.append(lst)
 
-    machine_learning_df = machine_learning_score(win_pick_lst_result, ban_rate_lst_result, meta_score_lst_result)
-    machine_learning_df['summonerTier'] = tier_int(tier)
-
-    conn = mu.connect_mysql()
-    machine_learning_df.apply(lambda x: insert_tier_data(x, conn), axis=1)
-    conn.commit()
-
+machine_learning_df = machine_learning_score(win_pick_lst_result, ban_rate_lst_result, meta_score_lst_result)
+conn = mu.connect_mysql()
+machine_learning_df.apply(lambda x: insert_tier_data(x, conn), axis=1)
+dasdasd = machine_learning_df.sort_values(by=['tier'])
+conn.commit()
+print(f'총 데이터 갯수 : {cnt} 개')
 print("끝!")
 
 row.iloc[0]['total_gold']
