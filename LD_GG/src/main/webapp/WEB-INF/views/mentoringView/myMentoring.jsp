@@ -532,6 +532,7 @@ $(document).ready(function() {
 	    		    		            const mentiTags = $("#menti-tag");
 	    		    		            const mentiTags2 = $("#menti-tag2");
 	    		    		            mentiTags.text("");
+	    		    		            mentiTags2.text("");
 	    		    		            $.each(response, function(i,tag){
 	    		    		            	let $tagButton = $("<button>").addClass("btn btn-outline-primary")
 								    		            			.css('margin', "3px")
@@ -604,13 +605,18 @@ $(document).ready(function() {
 	        table.append(header);
 	        for (let i = 0; i < data.length; i++) {
 	            let myMt = data[i];
+	            let parts = myMt.done_date;
+  			  let done_date = ""
+  			  if(parts !== null){
+	    			done_date = parts[0]+"년 "+parts[1]+"월 "+parts[2]+"일 "+parts[3]+":"+parts[4]+":"+parts[5];
+  			  }
 	            let tbody = $("<tbody>");
 	            let row = $("<tr>").append(
 	            		$("<th>").addClass("numbering").attr("scope","row").text(i+1),
 	                $("<td>").text(myMt.class_name),
 	                $("<td>").text(myMt.mentor_lol_account),
 	                $("<td>").text(myMt.apply_date),
-	                $("<td>").text(myMt.done_date),
+	                $("<td>").text(done_date),
 	                $("<td>").text(myMt.menti_state === 0 ? "대기중" : myMt.menti_state === 1 ? "진행중" : "수업 완료"),
 	                $("<td>").addClass("btn-td").append(
 	                myMt.menti_state === 0 ? $("<button>").attr("type","button")
@@ -1052,6 +1058,12 @@ $(document).ready(function() {
 		    		  table.append(header);
 		    		  for (let i = 0; i < data.length; i++) {
 		    			  let myMt = data[i];
+		    			  let parts = myMt.done_date;
+		    			  let done_date = ""
+		    			  if(parts !== null){
+			    			done_date = parts[0]+"년 "+parts[1]+"월 "+parts[2]+"일 "+parts[3]+":"+parts[4]+":"+parts[5];
+		    			  }
+  					    	
 		    			  let tbody = $("<tbody>");
 		    			  let row = $("<tr>").append(
 		    					  $("<th>").addClass("numbering").attr("scope","row").text(i+1),
@@ -1059,7 +1071,7 @@ $(document).ready(function() {
 		    			    $("<td>").text(myMt.class_name),
 		    			    $("<td>").text(myMt.menti_state === 0 ? "대기중" : myMt.menti_state === 1 ? "진행중" : "수업 완료"),
 		    			    $("<td>").text(myMt.apply_date),
-		    			    $("<td>").text(myMt.done_date),
+		    			    $("<td>").text(done_date),
 		    			    $("<td>").addClass("btn-td").append(
 		    			    myMt.menti_state === 0 ? 
 		    			    		$("<div>").append(

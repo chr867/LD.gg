@@ -3,6 +3,7 @@ package com.ld.gg.controller.mentoringController;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -66,6 +67,20 @@ public class RestMentoringController {
 	@Autowired
 	private SummonerService summonerService;
 	
+	//소환사명으로 모든 챔피언 통계 가져오기
+	@GetMapping("/get-champ-stat")
+	public String getChampionStats(@RequestParam String summoner_name) throws JsonProcessingException {
+		String champ_stat_json = mtpService.getChampionStats(summoner_name);
+		return champ_stat_json;
+	}
+	
+	//소환사명과 키워드로 챔피언 통계 가져오기
+	@GetMapping("/get-keyword-champ-stat")
+	public String getByKeywordChampionStats(@RequestParam("summoner_name") String summoner_name, @RequestParam("keyword") String keyword) throws JsonProcessingException {
+		System.out.println(summoner_name+" : "+keyword);
+		String champ_stat_json = mtpService.getByKeywordChampionStats(summoner_name, keyword);
+		return champ_stat_json;
+	}
 	
 	//소환사 이름으로 소환사 정보 가져오기
 	@GetMapping("/get-summoner-info")
@@ -376,6 +391,13 @@ public class RestMentoringController {
 		return mtpListJson;
 	}
 	
+	//정렬된 멘토 프로필 리스트 가져오기
+	@GetMapping("/get-order-profile")
+	public String ordered_mentor_profiles(@RequestParam String order_keyword) throws JsonProcessingException{
+		String mtpListjson =mtpService.ordered_mentor_profiles(order_keyword);
+		return mtpListjson;
+	}
+	
 	//일반 회원이 멘토회원으로 전환 할때 멘토 프로필 추가
 	@PostMapping("/insert-mentor-list")
 	public void insert_mentor_profile(@RequestBody Map<String, String> email){
@@ -416,6 +438,13 @@ public class RestMentoringController {
 	public void delete_mentor_profile(@RequestBody Map<String, String> email) {
 		String mentor_email = email.get("mentor_email");
 		mtpService.delete_mentor_profile(mentor_email);
+	}
+	
+	//태그 리스트로 멘토 프로필 가져오기
+	@GetMapping("/get-mentor-by-tag")
+	public String findMentorsByTagIds(@RequestParam("tagIds") Integer[] tagIds) throws JsonProcessingException {
+		String mentor_list_json = mtpService.findMentorsByTagIds(tagIds);
+	    return mentor_list_json;
 	}
 	
 	//멘토 이메일로 멘토 프로필 가져오기

@@ -34,7 +34,10 @@ margin:24px;
 	box-sizing: border-box;
 	border: 1px solid #d5d5de;
 }
-.progress{
+.pick-rate,#champion span{
+font-size:12px;
+}
+#pro-bar{
 width: 500px;
 }
 .inner-contents{
@@ -123,6 +126,7 @@ width:72px;
 }
 #champ-item{
 padding: 18px 10px;
+padding-right: 0px;
 }
 #champ-item:hover{
 background-color: white;
@@ -141,8 +145,8 @@ overflow: auto; /* 스크롤바를 추가하기 위해 overflow 속성 설정 */
 #filter-champ-wrap {
   width: 430px;
   height: 500px; /* 원하는 높이로 설정 */
-  top: 20px;
-  right: 20px;
+  bottom: 5px;
+  right:20px;
   background-color: #f8f9fa;
   padding: 24px;
   border-radius: 20px;
@@ -184,6 +188,9 @@ width: 85px;
 margin-top:5px;
 color: #777;
 background-color:#eaeaea;
+}
+.tier:hover{
+cursor:pointer;
 }
 #target-summoner{
 width: 200px;
@@ -282,7 +289,7 @@ font-weight:bold;
 						<h4><img src="https://online.gamecoach.pro/img/coaching/emoji-star.svg"><strong>목표를 설정해 볼까요?</strong></h4>
 					</div>
 					<div class="d-flex justify-content-center">
-						<div class="progress my-auto" role="progressbar" aria-label="Example with label" aria-valuenow="17" aria-valuemin="0" aria-valuemax="100">
+						<div id="pro-bar" class="progress my-auto" role="progressbar" aria-label="Example with label" aria-valuenow="17" aria-valuemin="0" aria-valuemax="100">
 						  <div class="progress-bar" style="width: 17%">17%</div>
 						</div>
 						<span id="volume">1/6</span>
@@ -320,7 +327,7 @@ font-weight:bold;
 				</div>
 			</div>
 			
-			<div id="form-box">
+			<div id="form-box" class="position-relative">
 				<div id="pos-box">
 					<h3><strong>배우고 싶은 포지션</strong></h3>
 					<div id="position-buttons" class="d-flex align-item-center justify-content-evenly">
@@ -360,12 +367,12 @@ font-weight:bold;
 							<span id="champ-name">챔피언 선택</span>
 						</div>
 						</div>
-						<img id="arrow-icon" class="my-auto" style="width:40px" src="/resources/img/icon/arrow-icon-down.png">
+						<img id="arrow-icon" class="my-auto" style="width:40px" src="/resources/img/icon/arrow-icon-right.png">
 						</div>
 					</div>
 				</div>
 				
-				<div id="filter-champ-wrap" style="display: none">
+				<div id="filter-champ-wrap" style="display: none" class="position-absolute">
 					<div class="d-flex justify-content-between">
 						<h5><strong>챔피언</strong></h5>
 						<button type="button" class="btn-close" id="champ-wrap-close" aria-label="Close"></button>
@@ -492,7 +499,7 @@ font-weight:bold;
 						어떤 부분을 배우고 싶으신가요?</h4>
 					</div>
 					<div class="d-flex justify-content-center">
-						<div class="progress my-auto" role="progressbar" aria-label="Example with label" aria-valuenow="34" aria-valuemin="0" aria-valuemax="100">
+						<div id="pro-bar" class="progress my-auto" role="progressbar" aria-label="Example with label" aria-valuenow="34" aria-valuemin="0" aria-valuemax="100">
 						  <div class="progress-bar" style="width: 34%">34%</div>
 						</div>
 						<span id="volume">2/6</span>
@@ -534,7 +541,7 @@ font-weight:bold;
 					어떤 방식으로 수업을 받고 싶나요?</h4>
 				</div>
 				<div class="d-flex justify-content-center">
-					<div class="progress my-auto" role="progressbar" aria-label="Example with label" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+					<div id="pro-bar" class="progress my-auto" role="progressbar" aria-label="Example with label" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
 					  <div class="progress-bar" style="width: 50%">50%</div>
 					</div>
 					<span id="volume">3/6</span>
@@ -565,7 +572,7 @@ font-weight:bold;
 					어떤 스타일의 멘토님을 선호하세요?</h4>
 				</div>
 				<div class="d-flex justify-content-center">
-					<div class="progress my-auto" role="progressbar" aria-label="Example with label" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100">
+					<div id="pro-bar" class="progress my-auto" role="progressbar" aria-label="Example with label" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100">
 					  <div class="progress-bar" style="width: 66%">66%</div>
 					</div>
 					<span id="volume">4/6</span>
@@ -627,7 +634,7 @@ font-weight:bold;
 					어떤 스타일의 멘토님을 선호하세요?</h4>
 				</div>
 				<div class="d-flex justify-content-center">
-					<div class="progress my-auto" role="progressbar" aria-label="Example with label" aria-valuenow="83" aria-valuemin="0" aria-valuemax="100">
+					<div id="pro-bar" class="progress my-auto" role="progressbar" aria-label="Example with label" aria-valuenow="83" aria-valuemin="0" aria-valuemax="100">
 					  <div class="progress-bar" style="width: 83%">83%</div>
 					</div>
 					<span id="volume">5/6</span>
@@ -658,7 +665,7 @@ font-weight:bold;
 					어떤 경력의 멘토님을 선호하세요?</h4>
 				</div>
 				<div class="d-flex justify-content-center">
-					<div class="progress my-auto" role="progressbar" aria-label="Example with label" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+					<div id="pro-bar" class="progress my-auto" role="progressbar" aria-label="Example with label" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
 					  <div class="progress-bar" style="width: 100%">100%</div>
 					</div>
 					<span id="volume">6/6</span>
@@ -965,9 +972,10 @@ font-weight:bold;
 			$("#champ-search").on("input", function() { 
 				var searchText = $(this).val();
 			      $.ajax({
-			        url: "/mentor/get-champ-name-by-keyword",//키워드로 챔피언 찾기
+			        url: "/mentor/get-keyword-champ-stat",//키워드로 챔피언 찾기
 			        type: "GET",
 			        data: {
+			        	summoner_name: "${member.lol_account}",
 			        	keyword: searchText
 			        },
 			        success: function(data) {
@@ -992,20 +1000,27 @@ font-weight:bold;
 							});
 							let championDiv = $("<div>").addClass("d-flex my-auto").attr("id", "champion");
 							let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
-							let champName = $("<div>").addClass("my-auto mx-3")
+							let champName = $("<div>").addClass("my-auto mx-2")
 											.append($("<span>").text(champion.champion_kr_name));
 							championDiv.append(champImg);
 							championDiv.append(champName);
 							champItem.append(championDiv);
-							let rateWrap = $("<div>").addClass("rate-wrap");
+							let rateWrap = $("<div>").addClass("rate-wrap d-flex");
 							let rateBarWrap = $("<div>").addClass("rate-bar-wrap");
 							let rateBarBg = $("<div>").addClass("rate-bar-bg");
 							rateBarWrap.append(rateBarBg);
 							rateWrap.append(rateBarWrap);
-							let pickRate = $("<span>").addClass("pick-rate").text("픽률 " + 0 + "%");
-							let pickMeter = $("<meter>").addClass("pick-meter").attr("min", 0).attr("max", 100)
-	            								.attr("low", 30).attr("high", 65).attr("optimum", 90).val(11);
-							rateWrap.append(pickMeter);
+							let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champion.pick_rate + "%");
+							let meter = $("<div>").addClass("progress my-auto").css("width","110px");
+							let winMeter = $("<div>").addClass("progress-bar").attr("role", "progressbar").attr("aria-label", "Example with label")
+	            								.attr("aria-valuenow", ""+champion.winrate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
+	            								.text(champion.wins+"승").css("width",champion.winrate+"%");
+							let loserate = 100-champion.winrate;
+							let loseMeter = $("<div>").addClass("progress-bar bg-danger").attr("role", "progressbar").attr("aria-label", "Example with label")
+												.attr("aria-valuenow", ""+loserate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
+												.text(champion.losses+"패").css("width",loserate+"%");
+							meter.append(winMeter,loseMeter);
+							rateWrap.append(meter);
 							rateWrap.append(pickRate);
 							champItem.append(rateWrap);
 							$("#champ-list").append(champItem);
@@ -1018,8 +1033,11 @@ font-weight:bold;
 			});
 
 			$.ajax({ //챔피언 목록 가져오기
-				url: "/mentor/get-all-champ",
+				url: "/mentor/get-champ-stat",
 				type: "GET",
+				data: {
+		        	summoner_name: "${member.lol_account}"
+		        },
 				success: function (data) {
 					let championList = JSON.parse(data);
 					championList.forEach(function (champion) {
@@ -1041,20 +1059,27 @@ font-weight:bold;
 						});
 						let championDiv = $("<div>").addClass("d-flex my-auto").attr("id", "champion");
 						let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
-						let champName = $("<div>").addClass("my-auto mx-3")
+						let champName = $("<div>").addClass("my-auto mx-2")
 										.append($("<span>").text(champion.champion_kr_name));
 						championDiv.append(champImg);
 						championDiv.append(champName);
 						champItem.append(championDiv);
-						let rateWrap = $("<div>").addClass("rate-wrap");
+						let rateWrap = $("<div>").addClass("rate-wrap d-flex");
 						let rateBarWrap = $("<div>").addClass("rate-bar-wrap");
 						let rateBarBg = $("<div>").addClass("rate-bar-bg");
 						rateBarWrap.append(rateBarBg);
 						rateWrap.append(rateBarWrap);
-						let pickRate = $("<span>").addClass("pick-rate").text("픽률 " + 0 + "%");
-						let pickMeter = $("<meter>").addClass("pick-meter").attr("min", 0).attr("max", 100)
-            								.attr("low", 30).attr("high", 65).attr("optimum", 90).val(11);
-						rateWrap.append(pickMeter);
+						let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champion.pick_rate + "%");
+						let meter = $("<div>").addClass("progress my-auto").css("width","110px");
+						let winMeter = $("<div>").addClass("progress-bar").attr("role", "progressbar").attr("aria-label", "Example with label")
+            								.attr("aria-valuenow", ""+champion.winrate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
+            								.text(champion.wins+"승").css("width",champion.winrate+"%");
+						let loserate = 100-champion.winrate;
+						let loseMeter = $("<div>").addClass("progress-bar bg-danger").attr("role", "progressbar").attr("aria-label", "Example with label")
+											.attr("aria-valuenow", ""+loserate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
+											.text(champion.losses+"패").css("width",loserate+"%");
+						meter.append(winMeter,loseMeter);
+						rateWrap.append(meter);
 						rateWrap.append(pickRate);
 						champItem.append(rateWrap);
 						$("#champ-list").append(champItem);

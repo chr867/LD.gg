@@ -32,6 +32,7 @@ border-radius: 10px;
 section{
   padding:24px;
   border-bottom: 1px solid #dee2e6;
+  
  }
  #time-set, #about_mentor, #careers, #recom_ment{
  margin:16px 0;
@@ -70,6 +71,7 @@ padding:30px;
 }
 #champ-item{
 padding: 18px 10px;
+padding-right: 0px;
 }
 #champ-item:hover{
 background-color: white;
@@ -100,8 +102,6 @@ margin:auto;
 #filter-champ-wrap {
   width: 430px;
   height: 500px; /* 원하는 높이로 설정 */
-  top: 20px;
-  right: 20px;
   background-color: #f8f9fa;
   padding: 24px;
   border-radius: 20px;
@@ -124,13 +124,14 @@ cursor: pointer;
 #champ-search{
 margin-top: 8px;
 }
-
+.pick-rate,#champion span{
+font-size:12px;
+}
 </style>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 </head>
 <body>
 	<div id="container" class="container">
-	
 		<section id="profile-box" class="row border">
 			<div class="col-2" id="mentor-img">
 				<img style="width: 128px" class="rounded" src="http://ddragon.leagueoflegends.com/cdn/13.10.1/img/profileicon/${mentor_profile.profile_icon_id}.png">
@@ -585,11 +586,12 @@ margin-top: 8px;
 		$("#top #champ-search").on("input", function() { 
 			var searchText = $(this).val();
 		      $.ajax({
-		        url: "/mentor/get-champ-name-by-keyword",//키워드로 챔피언 찾기
-		        type: "GET",
-		        data: {
-		        	keyword: searchText
-		        },
+		    	  url: "/mentor/get-keyword-champ-stat",//키워드로 챔피언 찾기
+			        type: "GET",
+			        data: {
+			        	summoner_name: "${mentor_profile.lol_account}",
+			        	keyword: searchText
+			        },
 		        success: function(data) {
 		          $("#top #champ-list").text("");
 		          let championList = JSON.parse(data);
@@ -706,18 +708,25 @@ margin-top: 8px;
 						let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
 						let champName = $("<div>").addClass("my-auto mx-2")
 										.append($("<span>").text(champion.champion_kr_name));
-			            championDiv.append(champImg);
-			            championDiv.append(champName);
-			            champItem.append(championDiv);
-			            let rateWrap = $("<div>").addClass("rate-wrap");
-			            let rateBarWrap = $("<div>").addClass("rate-bar-wrap");
-			            let rateBarBg = $("<div>").addClass("rate-bar-bg");
-			            rateBarWrap.append(rateBarBg);
-			            rateWrap.append(rateBarWrap);
-			            let pickRate = $("<span>").addClass("pick-rate").text("픽률 " + 0 + "%");
-			            let pickMeter = $("<meter>").addClass("pick-meter").attr("min", 0).attr("max", 100)
-			            			.attr("low", 30).attr("high", 65).attr("optimum", 90).val(11);
-			            rateWrap.append(pickMeter);
+						championDiv.append(champImg);
+						championDiv.append(champName);
+						champItem.append(championDiv);
+						let rateWrap = $("<div>").addClass("rate-wrap d-flex");
+						let rateBarWrap = $("<div>").addClass("rate-bar-wrap");
+						let rateBarBg = $("<div>").addClass("rate-bar-bg");
+						rateBarWrap.append(rateBarBg);
+						rateWrap.append(rateBarWrap);
+						let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champion.pick_rate + "%");
+						let meter = $("<div>").addClass("progress my-auto").css("width","110px");
+						let winMeter = $("<div>").addClass("progress-bar").attr("role", "progressbar").attr("aria-label", "Example with label")
+            								.attr("aria-valuenow", ""+champion.winrate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
+            								.text(champion.wins+"승").css("width",champion.winrate+"%");
+						let loserate = 100-champion.winrate;
+						let loseMeter = $("<div>").addClass("progress-bar bg-danger").attr("role", "progressbar").attr("aria-label", "Example with label")
+											.attr("aria-valuenow", ""+loserate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
+											.text(champion.losses+"패").css("width",loserate+"%");
+						meter.append(winMeter,loseMeter);
+						rateWrap.append(meter);
 			            rateWrap.append(pickRate);
 			            champItem.append(rateWrap);
 			            $("#top #champ-list").append(champItem);
@@ -734,11 +743,12 @@ margin-top: 8px;
 		$("#jg #champ-search").on("input", function() { 
 			var searchText = $(this).val();
 		      $.ajax({
-		        url: "/mentor/get-champ-name-by-keyword",//키워드로 챔피언 찾기
-		        type: "GET",
-		        data: {
-		        	keyword: searchText
-		        },
+		    	  url: "/mentor/get-keyword-champ-stat",//키워드로 챔피언 찾기
+			        type: "GET",
+			        data: {
+			        	summoner_name: "${mentor_profile.lol_account}",
+			        	keyword: searchText
+			        },
 		        success: function(data) {
 		          $("#jg #champ-list").text("");
 		          let championList = JSON.parse(data);
@@ -855,18 +865,25 @@ margin-top: 8px;
 						let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
 						let champName = $("<div>").addClass("my-auto mx-2")
 										.append($("<span>").text(champion.champion_kr_name));
-			            championDiv.append(champImg);
-			            championDiv.append(champName);
-			            champItem.append(championDiv);
-			            let rateWrap = $("<div>").addClass("rate-wrap");
-			            let rateBarWrap = $("<div>").addClass("rate-bar-wrap");
-			            let rateBarBg = $("<div>").addClass("rate-bar-bg");
-			            rateBarWrap.append(rateBarBg);
-			            rateWrap.append(rateBarWrap);
-			            let pickRate = $("<span>").addClass("pick-rate").text("픽률 " + 0 + "%");
-			            let pickMeter = $("<meter>").addClass("pick-meter").attr("min", 0).attr("max", 100)
-			            			.attr("low", 30).attr("high", 65).attr("optimum", 90).val(11);
-			            rateWrap.append(pickMeter);
+						championDiv.append(champImg);
+						championDiv.append(champName);
+						champItem.append(championDiv);
+						let rateWrap = $("<div>").addClass("rate-wrap d-flex");
+						let rateBarWrap = $("<div>").addClass("rate-bar-wrap");
+						let rateBarBg = $("<div>").addClass("rate-bar-bg");
+						rateBarWrap.append(rateBarBg);
+						rateWrap.append(rateBarWrap);
+						let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champion.pick_rate + "%");
+						let meter = $("<div>").addClass("progress my-auto").css("width","110px");
+						let winMeter = $("<div>").addClass("progress-bar").attr("role", "progressbar").attr("aria-label", "Example with label")
+            								.attr("aria-valuenow", ""+champion.winrate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
+            								.text(champion.wins+"승").css("width",champion.winrate+"%");
+						let loserate = 100-champion.winrate;
+						let loseMeter = $("<div>").addClass("progress-bar bg-danger").attr("role", "progressbar").attr("aria-label", "Example with label")
+											.attr("aria-valuenow", ""+loserate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
+											.text(champion.losses+"패").css("width",loserate+"%");
+						meter.append(winMeter,loseMeter);
+						rateWrap.append(meter);
 			            rateWrap.append(pickRate);
 			            champItem.append(rateWrap);
 			            $("#jg #champ-list").append(champItem);
@@ -883,11 +900,12 @@ margin-top: 8px;
 		$("#mid #champ-search").on("input", function() { 
 			var searchText = $(this).val();
 		      $.ajax({
-		        url: "/mentor/get-champ-name-by-keyword",//키워드로 챔피언 찾기
-		        type: "GET",
-		        data: {
-		        	keyword: searchText
-		        },
+		    	  url: "/mentor/get-keyword-champ-stat",//키워드로 챔피언 찾기
+			        type: "GET",
+			        data: {
+			        	summoner_name: "${mentor_profile.lol_account}",
+			        	keyword: searchText
+			        },
 		        success: function(data) {
 		          $("#mid #champ-list").text("");
 		          let championList = JSON.parse(data);
@@ -1004,18 +1022,25 @@ margin-top: 8px;
 						let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
 						let champName = $("<div>").addClass("my-auto mx-2")
 										.append($("<span>").text(champion.champion_kr_name));
-			            championDiv.append(champImg);
-			            championDiv.append(champName);
-			            champItem.append(championDiv);
-			            let rateWrap = $("<div>").addClass("rate-wrap");
-			            let rateBarWrap = $("<div>").addClass("rate-bar-wrap");
-			            let rateBarBg = $("<div>").addClass("rate-bar-bg");
-			            rateBarWrap.append(rateBarBg);
-			            rateWrap.append(rateBarWrap);
-			            let pickRate = $("<span>").addClass("pick-rate").text("픽률 " + 0 + "%");
-			            let pickMeter = $("<meter>").addClass("pick-meter").attr("min", 0).attr("max", 100)
-			            			.attr("low", 30).attr("high", 65).attr("optimum", 90).val(11);
-			            rateWrap.append(pickMeter);
+						championDiv.append(champImg);
+						championDiv.append(champName);
+						champItem.append(championDiv);
+						let rateWrap = $("<div>").addClass("rate-wrap d-flex");
+						let rateBarWrap = $("<div>").addClass("rate-bar-wrap");
+						let rateBarBg = $("<div>").addClass("rate-bar-bg");
+						rateBarWrap.append(rateBarBg);
+						rateWrap.append(rateBarWrap);
+						let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champion.pick_rate + "%");
+						let meter = $("<div>").addClass("progress my-auto").css("width","110px");
+						let winMeter = $("<div>").addClass("progress-bar").attr("role", "progressbar").attr("aria-label", "Example with label")
+            								.attr("aria-valuenow", ""+champion.winrate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
+            								.text(champion.wins+"승").css("width",champion.winrate+"%");
+						let loserate = 100-champion.winrate;
+						let loseMeter = $("<div>").addClass("progress-bar bg-danger").attr("role", "progressbar").attr("aria-label", "Example with label")
+											.attr("aria-valuenow", ""+loserate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
+											.text(champion.losses+"패").css("width",loserate+"%");
+						meter.append(winMeter,loseMeter);
+						rateWrap.append(meter);
 			            rateWrap.append(pickRate);
 			            champItem.append(rateWrap);
 			            $("#mid #champ-list").append(champItem);
@@ -1032,11 +1057,12 @@ margin-top: 8px;
 		$("#ad #champ-search").on("input", function() { 
 			var searchText = $(this).val();
 		      $.ajax({
-		        url: "/mentor/get-champ-name-by-keyword",//키워드로 챔피언 찾기
-		        type: "GET",
-		        data: {
-		        	keyword: searchText
-		        },
+		    	  url: "/mentor/get-keyword-champ-stat",//키워드로 챔피언 찾기
+			        type: "GET",
+			        data: {
+			        	summoner_name: "${mentor_profile.lol_account}",
+			        	keyword: searchText
+			        },
 		        success: function(data) {
 		          $("#ad #champ-list").text("");
 		          let championList = JSON.parse(data);
@@ -1153,18 +1179,25 @@ margin-top: 8px;
 						let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
 						let champName = $("<div>").addClass("my-auto mx-2")
 										.append($("<span>").text(champion.champion_kr_name));
-			            championDiv.append(champImg);
-			            championDiv.append(champName);
-			            champItem.append(championDiv);
-			            let rateWrap = $("<div>").addClass("rate-wrap");
-			            let rateBarWrap = $("<div>").addClass("rate-bar-wrap");
-			            let rateBarBg = $("<div>").addClass("rate-bar-bg");
-			            rateBarWrap.append(rateBarBg);
-			            rateWrap.append(rateBarWrap);
-			            let pickRate = $("<span>").addClass("pick-rate").text("픽률 " + 0 + "%");
-			            let pickMeter = $("<meter>").addClass("pick-meter").attr("min", 0).attr("max", 100)
-			            			.attr("low", 30).attr("high", 65).attr("optimum", 90).val(11);
-			            rateWrap.append(pickMeter);
+						championDiv.append(champImg);
+						championDiv.append(champName);
+						champItem.append(championDiv);
+						let rateWrap = $("<div>").addClass("rate-wrap d-flex");
+						let rateBarWrap = $("<div>").addClass("rate-bar-wrap");
+						let rateBarBg = $("<div>").addClass("rate-bar-bg");
+						rateBarWrap.append(rateBarBg);
+						rateWrap.append(rateBarWrap);
+						let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champion.pick_rate + "%");
+						let meter = $("<div>").addClass("progress my-auto").css("width","110px");
+						let winMeter = $("<div>").addClass("progress-bar").attr("role", "progressbar").attr("aria-label", "Example with label")
+            								.attr("aria-valuenow", ""+champion.winrate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
+            								.text(champion.wins+"승").css("width",champion.winrate+"%");
+						let loserate = 100-champion.winrate;
+						let loseMeter = $("<div>").addClass("progress-bar bg-danger").attr("role", "progressbar").attr("aria-label", "Example with label")
+											.attr("aria-valuenow", ""+loserate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
+											.text(champion.losses+"패").css("width",loserate+"%");
+						meter.append(winMeter,loseMeter);
+						rateWrap.append(meter);
 			            rateWrap.append(pickRate);
 			            champItem.append(rateWrap);
 			            $("#ad #champ-list").append(champItem);
@@ -1181,11 +1214,12 @@ margin-top: 8px;
 		$("#sup #champ-search").on("input", function() { 
 			var searchText = $(this).val();
 		      $.ajax({
-		        url: "/mentor/get-champ-name-by-keyword",//키워드로 챔피언 찾기
-		        type: "GET",
-		        data: {
-		        	keyword: searchText
-		        },
+		    	  url: "/mentor/get-keyword-champ-stat",//키워드로 챔피언 찾기
+			        type: "GET",
+			        data: {
+			        	summoner_name: "${mentor_profile.lol_account}",
+			        	keyword: searchText
+			        },
 		        success: function(data) {
 		          $("#sup #champ-list").text("");
 		          let championList = JSON.parse(data);
@@ -1302,18 +1336,25 @@ margin-top: 8px;
 						let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
 						let champName = $("<div>").addClass("my-auto mx-2")
 										.append($("<span>").text(champion.champion_kr_name));
-			            championDiv.append(champImg);
-			            championDiv.append(champName);
-			            champItem.append(championDiv);
-			            let rateWrap = $("<div>").addClass("rate-wrap");
-			            let rateBarWrap = $("<div>").addClass("rate-bar-wrap");
-			            let rateBarBg = $("<div>").addClass("rate-bar-bg");
-			            rateBarWrap.append(rateBarBg);
-			            rateWrap.append(rateBarWrap);
-			            let pickRate = $("<span>").addClass("pick-rate").text("픽률 " + 0 + "%");
-			            let pickMeter = $("<meter>").addClass("pick-meter").attr("min", 0).attr("max", 100)
-			            			.attr("low", 30).attr("high", 65).attr("optimum", 90).val(11);
-			            rateWrap.append(pickMeter);
+						championDiv.append(champImg);
+						championDiv.append(champName);
+						champItem.append(championDiv);
+						let rateWrap = $("<div>").addClass("rate-wrap d-flex");
+						let rateBarWrap = $("<div>").addClass("rate-bar-wrap");
+						let rateBarBg = $("<div>").addClass("rate-bar-bg");
+						rateBarWrap.append(rateBarBg);
+						rateWrap.append(rateBarWrap);
+						let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champion.pick_rate + "%");
+						let meter = $("<div>").addClass("progress my-auto").css("width","110px");
+						let winMeter = $("<div>").addClass("progress-bar").attr("role", "progressbar").attr("aria-label", "Example with label")
+            								.attr("aria-valuenow", ""+champion.winrate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
+            								.text(champion.wins+"승").css("width",champion.winrate+"%");
+						let loserate = 100-champion.winrate;
+						let loseMeter = $("<div>").addClass("progress-bar bg-danger").attr("role", "progressbar").attr("aria-label", "Example with label")
+											.attr("aria-valuenow", ""+loserate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
+											.text(champion.losses+"패").css("width",loserate+"%");
+						meter.append(winMeter,loseMeter);
+						rateWrap.append(meter);
 			            rateWrap.append(pickRate);
 			            champItem.append(rateWrap);
 			            $("#sup #champ-list").append(champItem);
@@ -1428,8 +1469,11 @@ margin-top: 8px;
 		
 
 		$.ajax({ //탑 챔피언 목록 가져오기
-		    url: "/mentor/get-all-champ",
-		    type: "GET",
+			url: "/mentor/get-champ-stat",
+			type: "GET",
+			data: {
+	        	summoner_name: "${mentor_profile.lol_account}"
+	        },
 		    success: function (data) {
 		        let championList = JSON.parse(data);
 		        championList.forEach(function (champion) {
@@ -1544,18 +1588,25 @@ margin-top: 8px;
 					let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
 					let champName = $("<div>").addClass("my-auto mx-2")
 									.append($("<span>").text(champion.champion_kr_name));
-		            championDiv.append(champImg);
-		            championDiv.append(champName);
-		            champItem.append(championDiv);
-		            let rateWrap = $("<div>").addClass("rate-wrap");
-		            let rateBarWrap = $("<div>").addClass("rate-bar-wrap");
-		            let rateBarBg = $("<div>").addClass("rate-bar-bg");
-		            rateBarWrap.append(rateBarBg);
-		            rateWrap.append(rateBarWrap);
-		            let pickRate = $("<span>").addClass("pick-rate").text("픽률 " + 0 + "%");
-		            let pickMeter = $("<meter>").addClass("pick-meter").attr("min", 0).attr("max", 100)
-		            			.attr("low", 30).attr("high", 65).attr("optimum", 90).val(11);
-		            rateWrap.append(pickMeter);
+					championDiv.append(champImg);
+					championDiv.append(champName);
+					champItem.append(championDiv);
+					let rateWrap = $("<div>").addClass("rate-wrap d-flex");
+					let rateBarWrap = $("<div>").addClass("rate-bar-wrap");
+					let rateBarBg = $("<div>").addClass("rate-bar-bg");
+					rateBarWrap.append(rateBarBg);
+					rateWrap.append(rateBarWrap);
+					let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champion.pick_rate + "%");
+					let meter = $("<div>").addClass("progress my-auto").css("width","110px");
+					let winMeter = $("<div>").addClass("progress-bar").attr("role", "progressbar").attr("aria-label", "Example with label")
+        								.attr("aria-valuenow", ""+champion.winrate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
+        								.text(champion.wins+"승").css("width",champion.winrate+"%");
+					let loserate = 100-champion.winrate;
+					let loseMeter = $("<div>").addClass("progress-bar bg-danger").attr("role", "progressbar").attr("aria-label", "Example with label")
+										.attr("aria-valuenow", ""+loserate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
+										.text(champion.losses+"패").css("width",loserate+"%");
+					meter.append(winMeter,loseMeter);
+					rateWrap.append(meter);
 		            rateWrap.append(pickRate);
 		            champItem.append(rateWrap);
 		            $("#top #champ-list").append(champItem);
@@ -1567,8 +1618,11 @@ margin-top: 8px;
 		});
 		
 		$.ajax({ //정글 챔피언 목록 가져오기
-		    url: "/mentor/get-all-champ",
-		    type: "GET",
+			url: "/mentor/get-champ-stat",
+			type: "GET",
+			data: {
+	        	summoner_name: "${mentor_profile.lol_account}"
+	        },
 		    success: function (data) {
 		        let championList = JSON.parse(data);
 		        championList.forEach(function (champion) {
@@ -1683,18 +1737,25 @@ margin-top: 8px;
 					let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
 					let champName = $("<div>").addClass("my-auto mx-2")
 									.append($("<span>").text(champion.champion_kr_name));
-		            championDiv.append(champImg);
-		            championDiv.append(champName);
-		            champItem.append(championDiv);
-		            let rateWrap = $("<div>").addClass("rate-wrap");
-		            let rateBarWrap = $("<div>").addClass("rate-bar-wrap");
-		            let rateBarBg = $("<div>").addClass("rate-bar-bg");
-		            rateBarWrap.append(rateBarBg);
-		            rateWrap.append(rateBarWrap);
-		            let pickRate = $("<span>").addClass("pick-rate").text("픽률 " + 0 + "%");
-		            let pickMeter = $("<meter>").addClass("pick-meter").attr("min", 0).attr("max", 100)
-		            			.attr("low", 30).attr("high", 65).attr("optimum", 90).val(11);
-		            rateWrap.append(pickMeter);
+					championDiv.append(champImg);
+					championDiv.append(champName);
+					champItem.append(championDiv);
+					let rateWrap = $("<div>").addClass("rate-wrap d-flex");
+					let rateBarWrap = $("<div>").addClass("rate-bar-wrap");
+					let rateBarBg = $("<div>").addClass("rate-bar-bg");
+					rateBarWrap.append(rateBarBg);
+					rateWrap.append(rateBarWrap);
+					let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champion.pick_rate + "%");
+					let meter = $("<div>").addClass("progress my-auto").css("width","110px");
+					let winMeter = $("<div>").addClass("progress-bar").attr("role", "progressbar").attr("aria-label", "Example with label")
+        								.attr("aria-valuenow", ""+champion.winrate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
+        								.text(champion.wins+"승").css("width",champion.winrate+"%");
+					let loserate = 100-champion.winrate;
+					let loseMeter = $("<div>").addClass("progress-bar bg-danger").attr("role", "progressbar").attr("aria-label", "Example with label")
+										.attr("aria-valuenow", ""+loserate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
+										.text(champion.losses+"패").css("width",loserate+"%");
+					meter.append(winMeter,loseMeter);
+					rateWrap.append(meter);
 		            rateWrap.append(pickRate);
 		            champItem.append(rateWrap);
 		            $("#jg #champ-list").append(champItem);
@@ -1706,8 +1767,11 @@ margin-top: 8px;
 		});
 		
 		$.ajax({ //미드 챔피언 목록 가져오기
-		    url: "/mentor/get-all-champ",
-		    type: "GET",
+			url: "/mentor/get-champ-stat",
+			type: "GET",
+			data: {
+	        	summoner_name: "${mentor_profile.lol_account}"
+	        },
 		    success: function (data) {
 		        let championList = JSON.parse(data);
 		        championList.forEach(function (champion) {
@@ -1823,18 +1887,25 @@ margin-top: 8px;
 					let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
 					let champName = $("<div>").addClass("my-auto mx-2")
 									.append($("<span>").text(champion.champion_kr_name));
-		            championDiv.append(champImg);
-		            championDiv.append(champName);
-		            champItem.append(championDiv);
-		            let rateWrap = $("<div>").addClass("rate-wrap");
-		            let rateBarWrap = $("<div>").addClass("rate-bar-wrap");
-		            let rateBarBg = $("<div>").addClass("rate-bar-bg");
-		            rateBarWrap.append(rateBarBg);
-		            rateWrap.append(rateBarWrap);
-		            let pickRate = $("<span>").addClass("pick-rate").text("픽률 " + 0 + "%");
-		            let pickMeter = $("<meter>").addClass("pick-meter").attr("min", 0).attr("max", 100)
-		            			.attr("low", 30).attr("high", 65).attr("optimum", 90).val(11);
-		            rateWrap.append(pickMeter);
+					championDiv.append(champImg);
+					championDiv.append(champName);
+					champItem.append(championDiv);
+					let rateWrap = $("<div>").addClass("rate-wrap d-flex");
+					let rateBarWrap = $("<div>").addClass("rate-bar-wrap");
+					let rateBarBg = $("<div>").addClass("rate-bar-bg");
+					rateBarWrap.append(rateBarBg);
+					rateWrap.append(rateBarWrap);
+					let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champion.pick_rate + "%");
+					let meter = $("<div>").addClass("progress my-auto").css("width","110px");
+					let winMeter = $("<div>").addClass("progress-bar").attr("role", "progressbar").attr("aria-label", "Example with label")
+        								.attr("aria-valuenow", ""+champion.winrate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
+        								.text(champion.wins+"승").css("width",champion.winrate+"%");
+					let loserate = 100-champion.winrate;
+					let loseMeter = $("<div>").addClass("progress-bar bg-danger").attr("role", "progressbar").attr("aria-label", "Example with label")
+										.attr("aria-valuenow", ""+loserate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
+										.text(champion.losses+"패").css("width",loserate+"%");
+					meter.append(winMeter,loseMeter);
+					rateWrap.append(meter);
 		            rateWrap.append(pickRate);
 		            champItem.append(rateWrap);
 		            $("#mid #champ-list").append(champItem);
@@ -1846,8 +1917,11 @@ margin-top: 8px;
 		});
 		
 		$.ajax({ //원딜 챔피언 목록 가져오기
-		    url: "/mentor/get-all-champ",
-		    type: "GET",
+			url: "/mentor/get-champ-stat",
+			type: "GET",
+			data: {
+	        	summoner_name: "${mentor_profile.lol_account}"
+	        },
 		    success: function (data) {
 		        let championList = JSON.parse(data);
 		        championList.forEach(function (champion) {
@@ -1963,18 +2037,25 @@ margin-top: 8px;
 					let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
 					let champName = $("<div>").addClass("my-auto mx-2")
 									.append($("<span>").text(champion.champion_kr_name));
-		            championDiv.append(champImg);
-		            championDiv.append(champName);
-		            champItem.append(championDiv);
-		            let rateWrap = $("<div>").addClass("rate-wrap");
-		            let rateBarWrap = $("<div>").addClass("rate-bar-wrap");
-		            let rateBarBg = $("<div>").addClass("rate-bar-bg");
-		            rateBarWrap.append(rateBarBg);
-		            rateWrap.append(rateBarWrap);
-		            let pickRate = $("<span>").addClass("pick-rate").text("픽률 " + 0 + "%");
-		            let pickMeter = $("<meter>").addClass("pick-meter").attr("min", 0).attr("max", 100)
-		            			.attr("low", 30).attr("high", 65).attr("optimum", 90).val(11);
-		            rateWrap.append(pickMeter);
+					championDiv.append(champImg);
+					championDiv.append(champName);
+					champItem.append(championDiv);
+					let rateWrap = $("<div>").addClass("rate-wrap d-flex");
+					let rateBarWrap = $("<div>").addClass("rate-bar-wrap");
+					let rateBarBg = $("<div>").addClass("rate-bar-bg");
+					rateBarWrap.append(rateBarBg);
+					rateWrap.append(rateBarWrap);
+					let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champion.pick_rate + "%");
+					let meter = $("<div>").addClass("progress my-auto").css("width","110px");
+					let winMeter = $("<div>").addClass("progress-bar").attr("role", "progressbar").attr("aria-label", "Example with label")
+        								.attr("aria-valuenow", ""+champion.winrate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
+        								.text(champion.wins+"승").css("width",champion.winrate+"%");
+					let loserate = 100-champion.winrate;
+					let loseMeter = $("<div>").addClass("progress-bar bg-danger").attr("role", "progressbar").attr("aria-label", "Example with label")
+										.attr("aria-valuenow", ""+loserate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
+										.text(champion.losses+"패").css("width",loserate+"%");
+					meter.append(winMeter,loseMeter);
+					rateWrap.append(meter);
 		            rateWrap.append(pickRate);
 		            champItem.append(rateWrap);
 		            $("#ad #champ-list").append(champItem);
@@ -1986,8 +2067,11 @@ margin-top: 8px;
 		});
 		
 		$.ajax({ //서포터 챔피언 목록 가져오기
-		    url: "/mentor/get-all-champ",
-		    type: "GET",
+			url: "/mentor/get-champ-stat",
+			type: "GET",
+			data: {
+	        	summoner_name: "${mentor_profile.lol_account}"
+	        },
 		    success: function (data) {
 		        let championList = JSON.parse(data);
 		        championList.forEach(function (champion) {
@@ -2103,18 +2187,25 @@ margin-top: 8px;
 					let champImg = $("<img>").css("width","56px").attr("id","champ-icon").addClass("rounded").attr("src", imageUrl);
 					let champName = $("<div>").addClass("my-auto mx-2")
 									.append($("<span>").text(champion.champion_kr_name));
-		            championDiv.append(champImg);
-		            championDiv.append(champName);
-		            champItem.append(championDiv);
-		            let rateWrap = $("<div>").addClass("rate-wrap");
-		            let rateBarWrap = $("<div>").addClass("rate-bar-wrap");
-		            let rateBarBg = $("<div>").addClass("rate-bar-bg");
-		            rateBarWrap.append(rateBarBg);
-		            rateWrap.append(rateBarWrap);
-		            let pickRate = $("<span>").addClass("pick-rate").text("픽률 " + 0 + "%");
-		            let pickMeter = $("<meter>").addClass("pick-meter").attr("min", 0).attr("max", 100)
-		            			.attr("low", 30).attr("high", 65).attr("optimum", 90).val(11);
-		            rateWrap.append(pickMeter);
+					championDiv.append(champImg);
+					championDiv.append(champName);
+					champItem.append(championDiv);
+					let rateWrap = $("<div>").addClass("rate-wrap d-flex");
+					let rateBarWrap = $("<div>").addClass("rate-bar-wrap");
+					let rateBarBg = $("<div>").addClass("rate-bar-bg");
+					rateBarWrap.append(rateBarBg);
+					rateWrap.append(rateBarWrap);
+					let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champion.pick_rate + "%");
+					let meter = $("<div>").addClass("progress my-auto").css("width","110px");
+					let winMeter = $("<div>").addClass("progress-bar").attr("role", "progressbar").attr("aria-label", "Example with label")
+        								.attr("aria-valuenow", ""+champion.winrate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
+        								.text(champion.wins+"승").css("width",champion.winrate+"%");
+					let loserate = 100-champion.winrate;
+					let loseMeter = $("<div>").addClass("progress-bar bg-danger").attr("role", "progressbar").attr("aria-label", "Example with label")
+										.attr("aria-valuenow", ""+loserate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
+										.text(champion.losses+"패").css("width",loserate+"%");
+					meter.append(winMeter,loseMeter);
+					rateWrap.append(meter);
 		            rateWrap.append(pickRate);
 		            champItem.append(rateWrap);
 		            $("#sup #champ-list").append(champItem);

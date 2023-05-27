@@ -3,7 +3,9 @@ package com.ld.gg.dao.mentoringdao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
+import com.ld.gg.dto.mentoringdto.MentorChampDTO;
 import com.ld.gg.dto.mentoringdto.MentorClassDTO;
 import com.ld.gg.dto.mentoringdto.MentorProfileDTO;
 import com.ld.gg.dto.mentoringdto.MentorTagDTO;
@@ -11,6 +13,8 @@ import com.ld.gg.dto.mentoringdto.MentorTagDTO;
 @Mapper
 public interface MentorProfileDAO {
 	List<MentorProfileDTO> select_all_mentor_profiles();
+	List<MentorProfileDTO> ordered_mentor_profiles(String order_keyword);
+	List<MentorProfileDTO> findMentorsByTagIds(Integer[] tagIds);
 	MentorProfileDTO select_by_email_mentor_profile(String mentor_email);
 	void renewal_mentor_profile();
 	void insert_mentor_profile(String mentor_email);
@@ -21,6 +25,8 @@ public interface MentorProfileDAO {
 	void update_mentor_profile_grade(MentorProfileDTO mentor_profile);
 	void delete_mentor_profile(String mentor_email);
 	
+	List<MentorChampDTO> getChampionStats(String summoner_name);
+	List<MentorChampDTO> getByKeywordChampionStats(@Param("summoner_name") String summoner_name, @Param("keyword") String keyword);
 	
 	List<MentorTagDTO> select_by_email_mentor_tag(String mentor_email);
 	void insert_mentor_tag(MentorTagDTO mentor_tag_dto);
