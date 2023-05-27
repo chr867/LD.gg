@@ -51,11 +51,13 @@
 <!--CHAMPION INFO CSS-->
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/champion/info.css">
+	
 <style type="text/css">
+
 .top-container {
 	display: flex;
 	box-sizing: border-box;
-	padding: 100px 50px 100px 100px;
+	padding: 100px 50px 0px 100px;
 }
 
 .left-container {
@@ -79,285 +81,54 @@
 }
 
 .bottom-container {
+	padding: 20px 50px 50px 100px;
 	display: flex;
 	box-sizing: border-box;
 }
 </style>
 
-<!-- right_container start -->
-<style>
-.match_up_container {
-	position: relative;
-	width: 100%;
-	left: 100px;
-	display: flex;
-}
-
-.match_up_chart {
-	display: flex;
-	width: 70%;
-	height: 400px;
-}
-
-#match_up_left, #match_up_right {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-}
-
-#match_up_left span, #match_up_right span {
-	text-align: center;
-}
-
-#chartdiv {
-	margin-left: 50px;
-	margin-right: 50px;
-	width: 65%;
-}
-
-.bar_title {
-	display: grid;
-	position: relative;
-	text-align: center;
-}
-
-.bar_title_left {
-	grid-row: 1;
-	justify-self: left;
-}
-
-.bar_title_content {
-	grid-row: 1;
-	justify-self: center;
-}
-
-.bar_title_right {
-	grid-row: 1;
-	justify-self: right;
-}
-
-#match_up_table_container {
-	width: 22%;
-	height: 300px;
-}
-
-.champion_name_container {
-	width: 240px;
-}
-
-.match_up_table {
-	overflow: scroll;
-	position: relative;
-	width: 100%;
-	height: 270px;
-}
-
-.match_up_table div {
-	display: flex;
-}
-
-.match_up_table_header {
-	display: flex;
-	justify-content: space-between;
-}
-
-.match_up_table_header :last-child {
-	margin-right: 40px;
-}
-
-.match_up_table .champion {
-	justify-content: space-between;
-}
-
-.match_up_table .champion:not(:first-child) {
-	margin-top: 10px;
-}
-
-.champion>div:first-child {
-	line-height: 75px;
-	width: 10px;
-}
-
-.champion>div:last-child {
-	text-align: center;
-	margin-right: 65px;
-	line-height: 75px;
-	width: 30px;
-}
-
-.table-img {
-	width: 75px;
-	height: 75px;
-	border-radius: 0.5rem;
-	margin-right: 5px;
-}
-
-.table-champion-name {
-	width: 150px;
-	text-align: left;
-	position: relative;
-	left: 5%;
-	line-height: 75px;
-}
-
-#match_up_left>img, #match_up_right>img {
-	width: 150px;
-	border-radius: 0.5rem;
-	position: relative;
-	top: -12%;
-}
-
-#match_up_left>div, #match_up_right>div {
-	text-align: center;
-	position: relative;
-	top: -10%;
-	margin-bottom: 10px
-}
-</style>
-<!-- right_container end -->
 
 <style type="text/css">
-.start-item-shoes-container {
-	width: 100%;
+.mythic-common-item-container{
+	width: 720px;
 	height: 300px;
 	display: flex;
-	align-items: center;
+	box-sizing: border-box;
 }
-
-.start-item-box {
+.mythic-item-container{
 	width: 350px;
 	height: 100%;
+	background-color: #fff;
+	border-radius: 0.5rem;
 	margin-right: 20px;
-	background-color: #fff;
-	border-radius: 0.5rem;
+	box-sizing: border-box;
+	
 }
-
-.shoes-box {
+.common-item-container{
 	width: 350px;
 	height: 100%;
 	background-color: #fff;
 	border-radius: 0.5rem;
+	box-sizing: border-box;
+	
 }
-
-.start-item-title {
+.mythic-item-title{
 	text-align: center;
 }
-
-.shoes-title {
-	text-align: center;
-	margin-bottom: 20px;
-}
-
-.start-item-title h4 {
-	font-size: 18px;
-	font-weight: 700;
-}
-
-.shoes-title h4 {
-	font-size: 18px;
-	font-weight: 700;
-}
-
-.item-img {
-	margin-right: 5px;
-}
-
-.item-img img {
-	width: 40px;
-	height: 40px;
-	border-radius: 0.5rem;
-}
-
-.start-item {
-	display: flex;
-	padding-left: 20px;
-	margin-top: 10px;
-}
-
-.start-item-build-box {
-	margin-top: 20px;
-}
-
-.start-item-rate {
-	margin-top: 5px;
-	align-items: center;
-	display: flex;
-}
-
-.item-desc {
-	position: absolute;
-	z-index: 10;
-	width: 400px;
-	background-color: black;
-	color: #fff;
-	border-radius: 1rem;
-	padding: 10px;
-	visibility: hidden;
-	opacity: 0;
-	transition: visibility 0s, opacity 0.3s linear;
-}
-
-.start-item .item-img:hover .item-desc {
-	visibility: visible;
-	opacity: 1;
-}
-
-.shoes-recom-box .item-img:hover .item-desc {
-	visibility: visible;
-	opacity: 1;
-}
-
-.shoes {
-	display: flex;
-	margin-bottom: 10px;
-	align-items: center;
-	padding-left: 20px;
-}
-</style>
-
-<style type="text/css">
-.item-build-container {
-	width: 100%;
-	margin-top: 20px;
-	height: 370px;
-	border-radius: 0.5rem;
-	background-color: #fff;
-}
-
-.item-build-title {
-	text-align: center;
+.mythic-item-title h4{
 	font-size: 20px;
 	font-weight: 700;
 }
-
-.item-build-box .item:hover .item-desc {
-	visibility: visible;
-	opacity: 1;
+.common-item-title{
+	text-align: center;
 }
-
-.item-build-box {
-	display: flex;
-	align-content: center;
-	padding-left: 20px;
-	padding-right: 20px;
-	justify-content: space-between;
-	margin-top: 20px;
-}
-
-.item img {
-	width: 40px;
-	height: 40px;
-	border-radius: 0.5rem;
-}
-.item-build{
-	display: flex;
-	align-items: center;
-}
-.rate-text-box{
-	display: flex;
-	align-items: center;
+.common-item-title h4{
+	font-size: 20px;
+	font-weight: 700;
 }
 </style>
+
+
 </head>
 
 <body>
@@ -1120,7 +891,7 @@
 			<div id="match_up_table_container">
 
 				<div class="match_up_table_header">
-					<div>#</div>
+	<!-- 				<div>#</div> -->
 					<div>챔피언</div>
 					<div>라인킬 확률</div>
 				</div>
@@ -1128,6 +899,21 @@
 				<div class="match_up_table"></div>
 			</div>
 			<!-- match_up_conatiner end -->
+		</div>
+		
+		<div class="mythic-common-item-container">
+			<div class="mythic-item-container">
+				<div class="mythic-item-title">
+					<h4>신화 아이템 추천</h4>
+					<div class="mythic-recomm-box"></div>
+				</div>
+			</div>
+			<div class="common-item-container">
+				<div class="common-item-title">
+					<h4>일반 아이템 추천</h4>
+					<div class="common-recomm-box"></div>
+				</div>
+			</div>
 		</div>
 	</div>
 </body>
@@ -1291,9 +1077,95 @@ function championBuildInfo(champion_id, team_position) {
 				startItemSplit(champStartItemData);
 				shoesSplit(champShoesData);
 				itmeBuildSplit(champItemBuildData);
+				mythicItemSplit(champMythicItemData);
+				commonItemSplit(champItemData);
 		}).fail(err => {
 		  console.log(err);
 		});	
+}
+//--------------------------------------------------------------------------------------------------------------------------------
+// 일반 아이템 출력 
+function commonItemSplit(champItemData) {
+	let common_recomm_box = document.getElementsByClassName('common-recomm-box')[0];
+	common_recomm_box.innerHTML = ''; // 기존 내용 초기화
+	
+	for (let i = 0; i < champItemData.length; i++) {
+		let item_id = champItemData[i].item_id;
+
+		$.ajax({
+			method: 'get',
+			url: '/champion/info/item',
+			data: { item_id: item_id },
+			async: false
+		}).done(res => {
+			for (let item of res) {
+				let html = '<div class="shoes">';
+				html += '<div class="item-img">'
+				html += '<img alt="" src="/resources/img/item/' + item.item_img + '">'
+				html += '<div class="item-desc">'
+				html += '<div>' + item.item_kr_name + '</div>'
+				html += '<br>'
+				html += '<div>' + item.item_ability + '</div>'
+				html += '<br>'
+				html += '<div>' + item.item_desc + '</div>'
+				html += '<br>'
+				html += '<div>가격: ' + item.item_pur_gold + '   판매가격: ' + item.item_sell_gold + '</div>'
+				html += '</div>'
+				html += '</div>'
+				html += '<div class="rate-text"><h4>승률</h4></div>'
+				html += '<div class="rate-text"><h6>' + champItemData[i].win_rate + '%</h6></div>'
+				html += '<div class="rate-text"><h4>픽률</h4></div>'
+				html += '<div class="rate-text"><h6>' + champItemData[i].pick_rate + '%</h6></div>'
+				common_recomm_box.innerHTML += html;
+			}
+
+
+		}).fail(err => {
+			console.log(err);
+		});
+	}
+}
+//--------------------------------------------------------------------------------------------------------------------------------
+// 신화 아이템 출력 
+function mythicItemSplit(champMythicItemData) {
+	let mythic_recomm_box = document.getElementsByClassName('mythic-recomm-box')[0];
+	mythic_recomm_box.innerHTML = ''; // 기존 내용 초기화
+	
+	for (let i = 0; i < champMythicItemData.length; i++) {
+		let item_id = champMythicItemData[i].mythic_item;
+
+		$.ajax({
+			method: 'get',
+			url: '/champion/info/item',
+			data: { item_id: item_id },
+			async: false
+		}).done(res => {
+			for (let item of res) {
+				let html = '<div class="shoes">';
+				html += '<div class="item-img">'
+				html += '<img alt="" src="/resources/img/item/' + item.item_img + '">'
+				html += '<div class="item-desc">'
+				html += '<div>' + item.item_kr_name + '</div>'
+				html += '<br>'
+				html += '<div>' + item.item_ability + '</div>'
+				html += '<br>'
+				html += '<div>' + item.item_desc + '</div>'
+				html += '<br>'
+				html += '<div>가격: ' + item.item_pur_gold + '   판매가격: ' + item.item_sell_gold + '</div>'
+				html += '</div>'
+				html += '</div>'
+				html += '<div class="rate-text"><h4>승률</h4></div>'
+				html += '<div class="rate-text"><h6>' + champMythicItemData[i].win_rate + '%</h6></div>'
+				html += '<div class="rate-text"><h4>픽률</h4></div>'
+				html += '<div class="rate-text"><h6>' + champMythicItemData[i].pick_rate + '%</h6></div>'
+				mythic_recomm_box.innerHTML += html;
+			}
+
+
+		}).fail(err => {
+			console.log(err);
+		});
+	}
 }
 //--------------------------------------------------------------------------------------------------------------------------------
 // 아이템 빌드 출력 
@@ -1927,11 +1799,11 @@ function make_chart(left, right){
 	
 	let left_html_list = '<img src="/resources/img/champion_img/square/'+ left.champion_img +'" alt="'+ left.champion_name +'" class="champion_img" id="'+ left.champion_id +'"">'
 	left_html_list += '<div>' + left.champion_name + '</div>'
-	left_html_list += '<div>' + left.match_up_win_rate + '</div>'
+	left_html_list += '<div>' + left.match_up_win_rate + '%</div>'
 
 	let right_html_list = '<img src="/resources/img/champion_img/square/'+ right.champion_img +'" alt="'+ right.champion_name +'" class="champion_img2" id="'+ right.champion_id +'">'
 	right_html_list += '<div>' + right.champion_name + '</div>'
-	right_html_list += '<div>' + right.match_up_win_rate + '</div>'
+	right_html_list += '<div>' + right.match_up_win_rate + '%</div>'
 
 	document.getElementById('match_up_left').innerHTML = left_html_list
 	document.getElementById('match_up_right').innerHTML = right_html_list
@@ -1964,7 +1836,7 @@ function make_table(left, enemys){
 				enemy.champion_img + '">';
 		match_up_table_html += '<div class="table-champion-name">'+ enemy.champion_name +'</div>'
 		match_up_table_html += '</div>'
-		match_up_table_html += '<div>'+ lane_kill_rate + '</div>'
+		match_up_table_html += '<div>'+ lane_kill_rate + '%</div>'
 		match_up_table_html += '</div>';
 		table_index ++;
 	})
