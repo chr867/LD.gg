@@ -11,21 +11,21 @@ tqdm.pandas()
 import data_load as dl
 
 # RIOT-API-KEY
-riot_api_key = 'RGAPI-14667a4e-7c3c-45fa-ac8f-e53c7c3f5fe1'
-pd.set_option('display.max_columns', None)
-pd.set_option('display.max_rows', None)
+# riot_api_key = 'RGAPI-14667a4e-7c3c-45fa-ac8f-e53c7c3f5fe1'
+# pd.set_option('display.max_columns', None)
+# pd.set_option('display.max_rows', None)
 # ----------------------------------------------------------------------------------------------------------------------
-test_df = dl.matches_timeline_data_select(5000)
-asd = dl.matches_timeline_data(10)
-
-start_time = time.time()
-df = dl.match_raw_patch(1000)
-print("JSON 변환 시작")
-df['matches'] = df['matches'].apply(json.loads)
-df['timeline'] = df['timeline'].apply(json.loads)
-end_time = time.time()
-print("변환 시간: {:.2f}초".format(end_time - start_time))
-print("JSON 변환 종료")
+# test_df = dl.matches_timeline_data_select(5000)
+# asd = dl.matches_timeline_data(10)
+#
+# start_time = time.time()
+# df = dl.match_raw_patch(1000)
+# print("JSON 변환 시작")
+# df['matches'] = df['matches'].apply(json.loads)
+# df['timeline'] = df['timeline'].apply(json.loads)
+# end_time = time.time()
+# print("변환 시간: {:.2f}초".format(end_time - start_time))
+# print("JSON 변환 종료")
 
 # ----------------------------------------------------------------------------------------------------------------------
 def rune_data(rune_list):
@@ -377,7 +377,7 @@ matchId_count = pd.DataFrame(mu.mysql_execute_dict(f"SELECT match_id_substr FROM
 conn.close()
 print(f'매치아이디 갯수 : {len(matchId_count.match_id_substr.unique())}개')
 
-batch_size = 30000
+batch_size = 50000
 rune_list = []
 item_list = []
 mythic_item_lst = []
@@ -390,7 +390,7 @@ item_build_list = []
 lane_list = []
 
 # for limit in tqdm(range(0, len(matchId_count.match_id_substr.unique()), batch_size)):
-for limit in tqdm(range(0, 10000, batch_size)):
+for limit in tqdm(range(0, 30000, batch_size)):
     conn = mu.connect_mysql()
     query = f"SELECT matches, timeline FROM match_raw_patch LIMIT {limit}, {batch_size}"
     df = pd.DataFrame(mu.mysql_execute_dict(query, conn))
@@ -617,7 +617,6 @@ item_build_data = item_build_data(item_build_list)
 lane_data = lane_data(lane_list)
 
 print("데이터프레임 제작 완료")
-rune_data[:10]
 
 # ----------------------------------------------------------------------------------------------------------------------
 def insert_rune_data(x, conn):
