@@ -19,7 +19,7 @@ test_df = dl.matches_timeline_data_select(5000)
 asd = dl.matches_timeline_data(10)
 
 start_time = time.time()
-df = dl.match_raw_patch(1000)
+df = dl.match_raw_patch(10000)
 print("JSON 변환 시작")
 df['matches'] = df['matches'].apply(json.loads)
 df['timeline'] = df['timeline'].apply(json.loads)
@@ -38,7 +38,7 @@ def rune_data(rune_list):
     rune_df['WIN'] = rune_df['WIN'].astype(int)
 
     new_df = rune_df[['championId', 'teamPosition', 'WIN']].join(
-        rune_df.iloc[:, 2:13].apply(lambda x: tuple(sorted(x)), axis=1).rename('rune_combination'))
+        rune_df.iloc[:, 2:13].apply(tuple, axis=1).rename('rune_combination'))
 
     rune_count = new_df.groupby(['championId', 'teamPosition', 'rune_combination']).agg(
         {'WIN': ['sum', 'size']}).reset_index()
