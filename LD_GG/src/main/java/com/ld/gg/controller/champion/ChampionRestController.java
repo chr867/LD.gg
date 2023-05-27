@@ -43,10 +43,10 @@ public class ChampionRestController {
 	}
 	
 	@PostMapping("/search.json")
-	public String champ_search(String champion_kr_name) throws Exception{
-
-		String champion_en_name = cs.champ_search(champion_kr_name);
-		return champion_en_name;
+	public Champ_default champ_search(String champion_name) throws Exception{
+		log.info("champion_name = {}", champion_name);
+		Champ_default champion = cs.champ_search(champion_name);
+		return champion;
 	}
 
 	@PostMapping(value="/search-eng.json", produces="text/plain;charset=UTF-8")
@@ -60,7 +60,6 @@ public class ChampionRestController {
 	public List<Map<String, Object>> champ_recom(String lane, String tag, String right_champion) throws Exception{
 		List<Map<String, Object>> cm_result = new ArrayList<>();
 		List<Champ_match_up_default> cm_list = cs.champ_recom(lane, tag, right_champion);
-
 		for(int i=0;i<cm_list.size();i++){
 			Map<String, Object> tmp = new HashMap<>();
 			String champion_kr_name = cs.champ_search_eng(cm_list.get(i).getChampion_name());
