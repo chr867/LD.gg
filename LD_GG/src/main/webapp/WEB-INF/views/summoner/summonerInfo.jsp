@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>${summoner.summoner_name} - 소환사 전적</title>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.3.js"
 	integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
 	crossorigin="anonymous"></script>
@@ -261,6 +261,10 @@
 		let champRecordDiv = $('<div class = "flex-champ-table"></div>');
 		champRecordDiv.append(champ_div, winrate_div, games_div, wins_div, losses_div, kda_div, kills_div, deaths_div, assists_div, cs_div, cs_pm_div);
 		$('.flex-champ-record').html(champRecordDiv);
+		if(res.length >= 20){
+			let moreBtn = $('<button class = "moreBtn">더 보기</button>');
+			$('.flex-champ-record').append(moreBtn);
+		}
 	}).fail(err => {
 		console.log(err);
 	});
@@ -716,7 +720,7 @@
 		        whole.append(header, data); // 2. 생성된 태그들을 whole 태그 내부에 추가
 		        // 3. 'data_header' 내부에 div 태그 3개 생성
 		        let synthesis = $('<div class = "synthesis" onclick = "synthesis('+record.match_id+', this)">종합</div>');
-		        let build = $('<div class="build" onclick="build('+record.match_id+', this)">빌드</div>');
+		        let build = $('<div class="build" onclick="build(\'' + record.match_id + '\', \'' + summoner_name + '\', this)">빌드</div>');
 		        let ranking = $('<div class="ranking" onclick="ranking(\'' + record.match_id + '\', \'' + summoner_name + '\', this)">랭킹</div>');
 		        header.append(synthesis, build, ranking);
 
@@ -929,7 +933,10 @@
 			
 		})
 		$('#record').html(div);
-		
+		if(res.length >= 20){
+			let moreBtn = $('<button class = "recordMoreBtn">더 보기</button>');
+			$('.flex-record-div').append(moreBtn);
+		}
 	}).fail(err=>{
 		console.log(err);
 	});
@@ -1163,47 +1170,41 @@
 	}
 	
 	//빌드 버튼 클릭 시
-	/* function build(match_id, thisDiv){
+	 function build(match_id, summoner_name ,thisDiv){
 		$.ajax({
 			method : 'get',
 			url : '/summoner/info/getBuild',
 			data : {match_id : match_id, summoner_name : summoner_name}
 		}).done(res=>{
-			console.log(res)
-			let data_div = $('<div></div>');
-			let rune_build_div = $('<div class = "rune_build_div"></div>');
+			console.log(res);
+			let runeBuildDiv = $('<div class = "runeBuildDiv"></div>');
 			
-			let rune_div1 = $('<div></div>');
-			let rune_div2 = $('<div></div>');
-			let rune_stat = $('<div></div>');
+			let mainRuneDiv = $('<div class = "mainRuneDiv"></div>');
+			let subRuneDiv = $('<div class = "subRuneDiv"></div>');
+			let runeStatsDiv = $('<div class = "runeStatsDiv"></div>');
 			
-			let main_rune = $('<img src = "https://ddragon.leagueoflegends.com/cdn/img/'+res.main_rune+'.png">');
-			let main1 = $('<img src = "https://ddragon.leagueoflegends.com/cdn/img/'+res.main_rune1+'.png">');
-			let main2 = $('<img src = "https://ddragon.leagueoflegends.com/cdn/img/'+res.main_rune2+'.png">');
-			let main3 = $('<img src = "https://ddragon.leagueoflegends.com/cdn/img/'+res.main_rune3+'.png">');
-			let main4 = $('<img src = "https://ddragon.leagueoflegends.com/cdn/img/'+res.main_rune4+'.png">');
-			rune_div1.append(main_rune,main1,main2,main3,main4);
+			let mainRuneType = $('<div class = "mainRuneType"></div>');
+			let mainRune1 = $('<div class = "mainRune1"></div>');
+			let mainRune2 = $('<div class = "mainRune2"></div>');
+			let mainRune3 = $('<div class = "mainRune3"></div>');
+			let mainRune4 = $('<div class = "mainRune4"></div>');
 			
-			let sub_rune = $('<img src = "https://ddragon.leagueoflegends.com/cdn/img/'+res.main_rune+'.png">');
-			let sub1 = $('<img src = "https://ddragon.leagueoflegends.com/cdn/img/'+res.sub_rune1+'.png">');
-			let sub2 = $('<img src = "https://ddragon.leagueoflegends.com/cdn/img/'+res.sub_rune2+'.png">');
-			let sub3 = $('<img src = "https://ddragon.leagueoflegends.com/cdn/img/'+res.sub_rune3+'.png">');
-			rune_div2.append(sub_rune,sub1,sub2,sub3);
+			let subRuneType = $('<div class = "subRuneType"></div>');
+			let subRune1 = $('<div class = "subRune1"></div>');
+			let subRune2 = $('<div class = "subRune2"></div>');
+			let subRune3 = $('<div class = "subRune3"></div>');
 			
-			let stat1 = $('<img src = "">');
-			let stat2 = $('<img src = "">');
-			let stat3 = $('<img src = "">');
+			let runeStat1 = $('<div class = "runeStat1"></div>');
+			let runeStat2 = $('<div class = "runeStat2"></div>');
+			let runeStat3 = $('<div class = "runeStat3"></div>');
 			
-			rune_stat.append(stat1,stat2,stat3);
+			//runeMaking(res.main_rune, res.sub_rune);
 			
-			rune_build_div.append(rune_div1,rune_div2,rune_stat);	
-			
-			data_div.append(rune_build_div);
-			$(thisDiv).parent().siblings('div').filter('.data').html(data_div);
+			//$(thisDiv).parent().siblings('div').filter('.data').html(data_div);
 		}).fail(err=>{
 			console.log(err)
 		})
-	} */
+	}
 	
 	//랭킹 버튼 클릭 시
  	function ranking(matchId, summoner_name, thisDiv){
@@ -1213,7 +1214,6 @@
 			url : '/summoner/getRanking',
 			data : {match_id : matchId, summoner_name : summoner_name}
 		}).done(res=>{
-			
 			$.ajax({
 				method : 'get',
 				url : '/summoner/getTeamData',
@@ -1244,9 +1244,9 @@
 				
 				playersKills.push({kills : res.self_kills});
 				$.each(response, function(i, kills){
-					playersKills.push({Kills : kills.team_kills});
+					playersKills.push({kills : kills.team_kills});
 				});
-				playersKills.sort((a, b) => b.Kills - a.Kills);
+				playersKills.sort((a, b) => b.kills - a.kills);
 				let playersKillsRank = playersKills.findIndex(player => player.kills === res.self_kills) + 1;
 				
 				playersDeaths.push({deaths : res.self_deaths})
@@ -1275,95 +1275,367 @@
 				$.each(response, function(i, CS){
 					playersCS.push({CS : CS.team_cs});
 				});
-				playersDamage.sort((a, b) => b.CS - a.CS);
+				playersCS.sort((a, b) => b.CS - a.CS);
 				let playersCSRank = playersCS.findIndex(player => player.CS === res.self_cs) + 1;
+				
+				let myDealt = res.self_dealt;
+				let totalDealt = res.total_dealt;
+				let myTaken = res.self_taken;
+				let totalTaken = res.total_taken;
+				let myKills = res.self_kills;
+				let totalKills = res.team_champion_kills;
+				let myDeaths = res.self_deaths;
+				let totalDeaths = res.team_champion_deaths;
+				let myAssists = res.self_assists;
+				let totalAssists = res.team_champion_assists;
+				let myRedWard = res.self_red_ward_placed;
+				let totalRedWard = res.team_total_red_ward;
+				let myCs = res.self_cs;
+				let totalCs = res.team_total_cs;
 				
 				let dealtDiv = $('<div class = "delatDiv"></div>');
 				let takenDiv = $('<div class = "takenDiv"></div>');
 				let killsDiv = $('<div class = "killsDiv"></div>');
 				let deathsDiv = $('<div class = "deathsDiv"></div>');
 				let assistsDiv = $('<div class = "assistsDiv"></div>');
-				let goldsDiv = $('<div class = "goldsDiv"></div>');
 				let redWardsDiv = $('<div class = "redWardsDiv"></div>');
 				let csDiv = $('<div class = "csDiv"></div>');
 				
 				let dealtTitle = $('<div class = "dealtTitleDiv"><span>피해량</span></div>');
 				let dealtRank = $('<div class = "dealtRankDiv">'+playersDamageRank+'위</div>');
 				let dealtGraph = $('<div class = "dealtGraphDiv"></div>');
-				$.each(res, function(k, res){
-					let canvas = $('<canvas></canvas>')[k];
-					let ctx = canvas.getContext('2d');
-					$(canvas).css({
-						'max-width' : '100px',
-						'max-height' : '20px'
-					});
-					let ratio = res.self_dealt / response.total_dealt;
-					
-					let myChart = new Chart(ctx,{
-						type : 'bar',
-						data : {
-							labels : ['피해량'],
-							datasets:[{
-								label : '피해량 비율',
-								data : [ratio],
-								backgroundColor: ['rgba(54, 162, 235, 0.5)'],
-							    borderColor: ['rgba(54, 162, 235, 0.5)'],
-							    borderWidth: 1
-							}]
-						},
-						options : {
-							indexAxis : 'y',
-							scales : {
-								x : {ticks : {display : false}, grid : {display : false},},
-								y : {display : false, grid : {display : false}}
-								},
-							plugins : {
-								legend : {display : false}
-							}
-						}
-					});
-					dealtGraph.append(canvas);
+				
+				let canvas = $('<canvas></canvas>');
+				// canvas 요소의 스타일 설정
+				$(canvas).css({
+				  'max-width': '250px',
+				  'max-height': '25px'
 				});
+				let ctx = canvas[0].getContext('2d');
+				let myChart = new Chart(ctx, {
+				  type: 'bar',
+				  data: {
+				    labels: ['피해량'],
+				    datasets: [{
+				      label: '내가 가한 피해량',
+				      data: [myDealt],
+				      backgroundColor: ['rgba(54, 162, 235, 0.5)'],
+				      borderColor: ['rgba(54, 162, 235, 0.5)'],
+				      borderWidth: 1
+				    }, {
+				      label: '내가 가하지 않은 피해량',
+				      data: [totalDealt - myDealt],
+				      backgroundColor: ['rgba(255, 0, 0, 0.5)'],
+				      borderColor: ['rgba(255, 0, 0, 0.5)'],
+				      borderWidth: 1
+				    }]
+				  },
+				  options: {
+				    indexAxis: 'y',
+				    scales: {
+				      x: {
+				        ticks: { display: false },
+				        grid: { display: false },
+				        stacked:true
+				      },
+				      y: { display: false, grid: { display: false }, stacked:true }
+				    },
+				    plugins: {
+				      legend: { display: false }
+				    }
+				  }
+				});
+				dealtGraph.append(canvas);
 				let dealtText = $('<div class = "dealtTextDiv"><span><strong>'+res.self_dealt+'</strong><span>/'+res.total_dealt+'</span></span></div>');
 				dealtDiv.append(dealtTitle,dealtRank,dealtGraph,dealtText);
 				
 				let takenTitle = $('<div class = "takenTitleDiv"><span>받은 피해량</span></div>');
 				let takenRank = $('<div class = "takenRankDiv">'+playersTakenRank+'위</div>');
 				let takenGraph = $('<div class = "takenGraph"></div>');
+				let canvas2 = $('<canvas></canvas>');
+				// canvas 요소의 스타일 설정
+				$(canvas2).css({
+				  'max-width': '250px',
+				  'max-height': '25px'
+				});
+				let ctx2 = canvas2[0].getContext('2d');
+				let myChart2 = new Chart(ctx2, {
+					  type: 'bar',
+					  data: {
+					    labels: ['받은 피해량'],
+					    datasets: [{
+					      label: '내가 받은 피해량',
+					      data: [myTaken],
+					      backgroundColor: ['rgba(54, 162, 235, 0.5)'],
+					      borderColor: ['rgba(54, 162, 235, 0.5)'],
+					      borderWidth: 1
+					    }, {
+					      label: '내가 받지 않은 피해량',
+					      data: [totalTaken - myTaken],
+					      backgroundColor: ['rgba(255, 0, 0, 0.5)'],
+					      borderColor: ['rgba(255, 0, 0, 0.5)'],
+					      borderWidth: 1
+					    }]
+					  },
+					  options: {
+					    indexAxis: 'y',
+					    scales: {
+					      x: {
+					        ticks: { display: false },
+					        grid: { display: false },
+					        stacked:true
+					      },
+					      y: { display: false, grid: { display: false }, stacked:true }
+					    },
+					    plugins: {
+					      legend: { display: false }
+					    }
+					  }
+					});
+				takenGraph.append(canvas2);
 				let takenText = $('<div class = "takenTextDiv"><span><strong>'+res.self_taken+'</strong><span>/'+res.total_taken+'</span></span></div>');
 				takenDiv.append(takenTitle,takenRank,takenGraph,takenText);
 				
 				let killsTitle = $('<div class = "killsTitleDiv"><span>킬</span></div>');
 				let killsRank = $('<div class = "killsRankDiv">'+playersKillsRank+'위</div>');
 				let killsGraph = $('<div class = "killsGraphDiv"></div>');
+				let canvas3 = $('<canvas></canvas>');
+				// canvas 요소의 스타일 설정
+				$(canvas3).css({
+				  'max-width': '250px',
+				  'max-height': '25px'
+				});
+				let ctx3 = canvas3[0].getContext('2d');
+				let myChart3 = new Chart(ctx3, {
+					  type: 'bar',
+					  data: {
+					    labels: ['킬수'],
+					    datasets: [{
+					      label: '내 킬수',
+					      data: [myKills],
+					      backgroundColor: ['rgba(54, 162, 235, 0.5)'],
+					      borderColor: ['rgba(54, 162, 235, 0.5)'],
+					      borderWidth: 1
+					    }, {
+					      label: '팀 킬수',
+					      data: [totalKills - myKills],
+					      backgroundColor: ['rgba(255, 0, 0, 0.5)'],
+					      borderColor: ['rgba(255, 0, 0, 0.5)'],
+					      borderWidth: 1
+					    }]
+					  },
+					  options: {
+					    indexAxis: 'y',
+					    scales: {
+					      x: {
+					        ticks: { display: false },
+					        grid: { display: false },
+					        stacked:true
+					      },
+					      y: { display: false, grid: { display: false }, stacked:true }
+					    },
+					    plugins: {
+					      legend: { display: false }
+					    }
+					  }
+					});
+				killsGraph.append(canvas3);
 				let killsText = $('<div class = "killsTextDiv"><span><strong>'+res.self_kills+'</strong><span>/'+res.team_champion_kills+'</span></span></div>');
 				killsDiv.append(killsTitle,killsRank,killsGraph,killsText);
 				
 				let deathsTitle = $('<div class = "deathsTitleDiv"><span>데스</span></div>');
 				let deathsRank = $('<div class = "deathsRankDiv">'+playersDeathsRank+'위</div>');
 				let deathsGraph = $('<div class = "deathsGraphDiv"></div>');
+				let canvas4 = $('<canvas></canvas>');
+				// canvas 요소의 스타일 설정
+				$(canvas4).css({
+				  'max-width': '250px',
+				  'max-height': '25px'
+				});
+				let ctx4 = canvas4[0].getContext('2d');
+				let myChart4 = new Chart(ctx4, {
+					  type: 'bar',
+					  data: {
+					    labels: ['데스'],
+					    datasets: [{
+					      label: '내 데스',
+					      data: [myDeaths],
+					      backgroundColor: ['rgba(54, 162, 235, 0.5)'],
+					      borderColor: ['rgba(54, 162, 235, 0.5)'],
+					      borderWidth: 1
+					    }, {
+					      label: '팀 데스',
+					      data: [totalDeaths - myDeaths],
+					      backgroundColor: ['rgba(255, 0, 0, 0.5)'],
+					      borderColor: ['rgba(255, 0, 0, 0.5)'],
+					      borderWidth: 1
+					    }]
+					  },
+					  options: {
+					    indexAxis: 'y',
+					    scales: {
+					      x: {
+					        ticks: { display: false },
+					        grid: { display: false },
+					        stacked:true
+					      },
+					      y: { display: false, grid: { display: false }, stacked:true }
+					    },
+					    plugins: {
+					      legend: { display: false }
+					    }
+					  }
+					});
+				deathsGraph.append(canvas4);
 				let deathsText = $('<div deathsTextDiv><span><strong>'+res.self_deaths+'</strong><span>/'+res.team_champion_deaths+'</span></span></div>');
 				deathsDiv.append(deathsTitle,deathsRank,deathsGraph,deathsText);
 				
 				let assistsTitle = $('<div class = "assistsTitleDiv"><span>어시스트</span></div>');
 				let assistsRank = $('<div class = "assistsRankDiv">'+playersAssistsRank+'위</div>');
 				let assistsGraph = $('<div class = "assistsGraphDiv"></div>');
+				let canvas5 = $('<canvas></canvas>');
+				// canvas 요소의 스타일 설정
+				$(canvas5).css({
+				  'max-width': '250px',
+				  'max-height': '25px'
+				});
+				let ctx5 = canvas5[0].getContext('2d');
+				let myChart5 = new Chart(ctx5, {
+					  type: 'bar',
+					  data: {
+					    labels: ['어시스트'],
+					    datasets: [{
+					      label: '내 어시스트킬수',
+					      data: [myAssists],
+					      backgroundColor: ['rgba(54, 162, 235, 0.5)'],
+					      borderColor: ['rgba(54, 162, 235, 0.5)'],
+					      borderWidth: 1
+					    }, {
+					      label: '팀 어시스트',
+					      data: [totalAssists - myAssists],
+					      backgroundColor: ['rgba(255, 0, 0, 0.5)'],
+					      borderColor: ['rgba(255, 0, 0, 0.5)'],
+					      borderWidth: 1
+					    }]
+					  },
+					  options: {
+					    indexAxis: 'y',
+					    scales: {
+					      x: {
+					        ticks: { display: false },
+					        grid: { display: false },
+					        stacked:true
+					      },
+					      y: { display: false, grid: { display: false }, stacked:true }
+					    },
+					    plugins: {
+					      legend: { display: false }
+					    }
+					  }
+					});
+				assistsGraph.append(canvas5);
 				let assistsText = $('<div class = "assistsTextDiv"><span><strong>'+res.self_assists+'</strong><span>/'+res.team_champion_assists+'</span></span></div>');
 				assistsDiv.append(assistsTitle,assistsRank,assistsGraph,assistsText);
 				
 				let redWardsTitle = $('<div class = "redWardsTitleDiv"><span>제어와드</span></div>');
 				let redWardsRank = $('<div class = "redWardsRankDiv">'+playersRedWardsRank+'위</div>');
 				let redWardsGraph = $('<div class = "redWardsGraphDiv"></div>');
+				let canvas6 = $('<canvas></canvas>');
+				// canvas 요소의 스타일 설정
+				$(canvas6).css({
+				  'max-width': '250px',
+				  'max-height': '25px'
+				});
+				let ctx6 = canvas6[0].getContext('2d');
+				let myChart6 = new Chart(ctx6, {
+					  type: 'bar',
+					  data: {
+					    labels: ['레드 와드 설치'],
+					    datasets: [{
+					      label: '내 레드 와드 설치 수',
+					      data: [myRedWard],
+					      backgroundColor: ['rgba(54, 162, 235, 0.5)'],
+					      borderColor: ['rgba(54, 162, 235, 0.5)'],
+					      borderWidth: 1
+					    }, {
+					      label: '팀 레드 와드 설치 수',
+					      data: [totalRedWard - myRedWard],
+					      backgroundColor: ['rgba(255, 0, 0, 0.5)'],
+					      borderColor: ['rgba(255, 0, 0, 0.5)'],
+					      borderWidth: 1
+					    }]
+					  },
+					  options: {
+					    indexAxis: 'y',
+					    scales: {
+					      x: {
+					        ticks: { display: false },
+					        grid: { display: false },
+					        stacked:true
+					      },
+					      y: { display: false, grid: { display: false }, stacked:true }
+					    },
+					    plugins: {
+					      legend: { display: false }
+					    }
+					  }
+					});
+				redWardsGraph.append(canvas6);
 				let redWardsText = $('<div class = "redWardsTextDiv"><span><strong>'+res.self_red_ward_placed+'</strong><span>/'+res.team_total_red_ward+'</span></span></div>');
 				redWardsDiv.append(redWardsTitle,redWardsRank,redWardsGraph,redWardsText);
 				
 				let CSTitle = $('<div class = "CSTitleDiv"><span>CS</span></div>');
 				let CSRank = $('<div class = "CSRankDiv">'+playersCSRank+'위</div>');
 				let CSGraph = $('<div class = "CSGraphDiv"></div>');
+				let canvas7 = $('<canvas></canvas>');
+				// canvas 요소의 스타일 설정
+				$(canvas7).css({
+				  'max-width': '250px',
+				  'max-height': '25px'
+				});
+				let ctx7 = canvas7[0].getContext('2d');
+				let myChart7 = new Chart(ctx7, {
+					  type: 'bar',
+					  data: {
+					    labels: ['CS'],
+					    datasets: [{
+					      label: '내 CS',
+					      data: [myCs],
+					      backgroundColor: ['rgba(54, 162, 235, 0.5)'],
+					      borderColor: ['rgba(54, 162, 235, 0.5)'],
+					      borderWidth: 1
+					    }, {
+					      label: '팀 CS',
+					      data: [totalCs - myCs],
+					      backgroundColor: ['rgba(255, 0, 0, 0.5)'],
+					      borderColor: ['rgba(255, 0, 0, 0.5)'],
+					      borderWidth: 1
+					    }]
+					  },
+					  options: {
+					    indexAxis: 'y',
+					    scales: {
+					      x: {
+					        ticks: { display: false },
+					        grid: { display: false },
+					        stacked:true
+					      },
+					      y: { display: false, grid: { display: false }, stacked:true }
+					    },
+					    plugins: {
+					      legend: { display: false }
+					    }
+					  }
+					});
+				CSGraph.append(canvas7);
 				let CSText = $('<div class = "CSTextDiv"><span><strong>'+res.self_cs+'</strong><span>/ '+res.team_total_cs+'</span></span></div>');
 				csDiv.append(CSTitle,CSRank,CSGraph,CSText);
 				
-				data_div.append(dealtDiv, takenDiv, killsDiv, deathsDiv, assistsDiv, goldsDiv, redWardsDiv, csDiv);
+				let firstDiv = $("<div class = 'firstDiv'></div>");
+				let secondDiv = $('<div class = "secondDiv"></div>');
+				firstDiv.append(dealtDiv, takenDiv, killsDiv, deathsDiv);
+				secondDiv.append(assistsDiv, redWardsDiv, csDiv);
+				data_div.append(firstDiv, secondDiv);
 				
 			})
 			$(thisDiv).parent().siblings('div').filter('.data').html(data_div);
@@ -1371,6 +1643,191 @@
 			console.log(err);
 		});
 	};
+	
+	/* function runeMaking(mainRune, subRune){
+		let main = '';
+		switch (mainRune) {
+		case 8000 :
+			main = 'Precision';
+			break;
+		case 8100 :
+			main = 'Domination';
+		case 8200 :
+			main = 'Sorcery';
+		case 8300 :
+			main = 'Inspiration';
+		case 8400 :
+			main = 'Resolve';
+		default:
+			break;
+		}
+		
+		let sub = '';
+		switch (subRune) {
+		case 8000 :
+			sub = 'Precision';
+			break;
+		case 8100 :
+			sub = 'Domination';
+		case 8200 :
+			sub = 'Sorcery';
+		case 8300 :
+			sub = 'Inspiration';
+		case 8400 :
+			sub = 'Resolve';
+		default:
+			break;
+		}
+		
+		$.ajax({
+			  method: 'get',
+			  url: '/summoner/getMainMaking',
+			  data: { main : main },
+			  async: false
+			}).done(res => {
+				console.log(res);
+				for (let i = 0; i < res.length; i++) {
+					rune_num = res[i].rune_num % res[0].rune_num
+					if(rune_num == 0){
+						main_rune_top.innerHTML += '<img src="/resources/img/'+res[i].rune_img+'" alt="">'
+					}else if(rune_num > 0 && rune_num < 100){
+						html = ''
+						html += '<div class="rune">'
+						html += '<img src="/resources/img/'+res[i].rune_img+'" alt="" id="'+res[i].rune_id+'">'
+						html += '<div class="rune-desc">'
+						html += '<div>'+res[i].rune_kr_name+'</div>'
+						html += '<br>'
+						html += '<div>'+res[i].rune_desc+'</div>'
+						html += '<br>'
+						html += '<div>'+res[i].rune_long_desc+'</div>'
+						html += '</div>'
+						html += '</div>'
+						main_rune_first.innerHTML += html
+					}else if(rune_num > 100 && rune_num < 200){
+						html = ''
+						html += '<div class="rune">'
+						html += '<img src="/resources/img/'+res[i].rune_img+'" alt="" id="'+res[i].rune_id+'">'
+						html += '<div class="rune-desc">'
+						html += '<div>'+res[i].rune_kr_name+'</div>'
+						html += '<br>'
+						html += '<div>'+res[i].rune_desc+'</div>'
+						html += '<br>'
+						html += '<div>'+res[i].rune_long_desc+'</div>'
+						html += '</div>'
+						html += '</div>'
+						main_rune_second.innerHTML += html
+					}else if(rune_num > 200 && rune_num < 300){
+						html = ''
+						html += '<div class="rune">'
+						html += '<img src="/resources/img/'+res[i].rune_img+'" alt="" id="'+res[i].rune_id+'">'
+						html += '<div class="rune-desc">'
+						html += '<div>'+res[i].rune_kr_name+'</div>'
+						html += '<br>'
+						html += '<div>'+res[i].rune_desc+'</div>'
+						html += '<br>'
+						html += '<div>'+res[i].rune_long_desc+'</div>'
+						html += '</div>'
+						html += '</div>'
+						main_rune_third.innerHTML += html
+					}else if(rune_num > 300){
+						html = ''
+						html += '<div class="rune">'
+						html += '<img src="/resources/img/'+res[i].rune_img+'" alt="" id="'+res[i].rune_id+'">'
+						html += '<div class="rune-desc">'
+						html += '<div>'+res[i].rune_kr_name+'</div>'
+						html += '<br>'
+						html += '<div>'+res[i].rune_desc+'</div>'
+						html += '<br>'
+						html += '<div>'+res[i].rune_long_desc+'</div>'
+						html += '</div>'
+						html += '</div>'
+						main_rune_fourth.innerHTML += html
+					}
+				}
+			}).fail(err => {
+			  console.log(err);
+			});
+		
+		$.ajax({
+			  method: 'get',
+			  url: '/champion/info/rune/main',
+			  data: { main_key: main_key },
+			  async: false
+			}).done(res => {
+				console.log(res)
+				let main_rune_top = document.getElementsByClassName('main-rune-top')[0];
+				let main_rune_first = document.getElementsByClassName('main-rune-first')[0];
+				let main_rune_second = document.getElementsByClassName('main-rune-second')[0];
+				let main_rune_third = document.getElementsByClassName('main-rune-third')[0];
+				let main_rune_fourth = document.getElementsByClassName('main-rune-fourth')[0];
+				main_rune_top.innerHTML = ''
+				main_rune_first.innerHTML = ''
+				main_rune_second.innerHTML = ''
+				main_rune_third.innerHTML = ''
+				main_rune_fourth.innerHTML = ''
+				for (let i = 0; i < res.length; i++) {
+					rune_num = res[i].rune_num % res[0].rune_num
+					if(rune_num == 0){
+						main_rune_top.innerHTML += '<img src="/resources/img/'+res[i].rune_img+'" alt="">'
+					}else if(rune_num > 0 && rune_num < 100){
+						html = ''
+						html += '<div class="rune">'
+						html += '<img src="/resources/img/'+res[i].rune_img+'" alt="" id="'+res[i].rune_id+'">'
+						html += '<div class="rune-desc">'
+						html += '<div>'+res[i].rune_kr_name+'</div>'
+						html += '<br>'
+						html += '<div>'+res[i].rune_desc+'</div>'
+						html += '<br>'
+						html += '<div>'+res[i].rune_long_desc+'</div>'
+						html += '</div>'
+						html += '</div>'
+						main_rune_first.innerHTML += html
+					}else if(rune_num > 100 && rune_num < 200){
+						html = ''
+						html += '<div class="rune">'
+						html += '<img src="/resources/img/'+res[i].rune_img+'" alt="" id="'+res[i].rune_id+'">'
+						html += '<div class="rune-desc">'
+						html += '<div>'+res[i].rune_kr_name+'</div>'
+						html += '<br>'
+						html += '<div>'+res[i].rune_desc+'</div>'
+						html += '<br>'
+						html += '<div>'+res[i].rune_long_desc+'</div>'
+						html += '</div>'
+						html += '</div>'
+						main_rune_second.innerHTML += html
+					}else if(rune_num > 200 && rune_num < 300){
+						html = ''
+						html += '<div class="rune">'
+						html += '<img src="/resources/img/'+res[i].rune_img+'" alt="" id="'+res[i].rune_id+'">'
+						html += '<div class="rune-desc">'
+						html += '<div>'+res[i].rune_kr_name+'</div>'
+						html += '<br>'
+						html += '<div>'+res[i].rune_desc+'</div>'
+						html += '<br>'
+						html += '<div>'+res[i].rune_long_desc+'</div>'
+						html += '</div>'
+						html += '</div>'
+						main_rune_third.innerHTML += html
+					}else if(rune_num > 300){
+						html = ''
+						html += '<div class="rune">'
+						html += '<img src="/resources/img/'+res[i].rune_img+'" alt="" id="'+res[i].rune_id+'">'
+						html += '<div class="rune-desc">'
+						html += '<div>'+res[i].rune_kr_name+'</div>'
+						html += '<br>'
+						html += '<div>'+res[i].rune_desc+'</div>'
+						html += '<br>'
+						html += '<div>'+res[i].rune_long_desc+'</div>'
+						html += '</div>'
+						html += '</div>'
+						main_rune_fourth.innerHTML += html
+					}
+				}
+			}).fail(err => {
+			  console.log(err);
+			});
+		
+	} */
 	
 	
 	$('.rank_filter').click(function(){

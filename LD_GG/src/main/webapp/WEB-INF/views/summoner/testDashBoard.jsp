@@ -179,9 +179,8 @@
  		      canvas.id = chartId;
  		      let ctx = canvas.getContext('2d');
  		      
- 		     let games = res.wins + res.losses;
- 		     let winRate = res.wins / games;
- 		     let lossRate = res.losses / games;
+ 		     let myWins = res.wins;
+ 		     let myLosses = res.losses;
 
  		     let winLabel = res.wins + '승';
  		     let lossLabel = res.losses + '패';
@@ -193,12 +192,19 @@
  		      let myChart = new Chart(ctx,{
  		    	  type : 'bar',
  		    	  data : {
- 		    		  labels : [winLabel, lossLabel],
- 		    		  datasets : [{label : '승률' , data : [winRate, lossRate],
- 		    			  backgroundColor : ['rgba(54, 162, 235, 0.5)','rgba(255, 99, 132, 0.5)',],
- 		    			  borderColor : ['rgba(54, 162, 235, 0.5)','rgba(255, 99, 132, 0.5)',],
+ 		    		  labels : ['승률'],
+ 		    		  datasets : [
+ 		    			  {label : '승리' , data : [myWins],
+ 		    			  backgroundColor : ['rgba(54, 162, 235, 0.5)'],
+ 		    			  borderColor : ['rgba(54, 162, 235, 0.5)'],
  		    			  borderWidth : 1
- 		    		  }]
+ 		    		  }, {
+ 		    			 label : '패배' , data : [myLosses],
+		    			  backgroundColor : ['rgba(255, 99, 132, 0.5)'],
+		    			  borderColor : ['rgba(255, 99, 132, 0.5)',],
+		    			  borderWidth : 1
+ 		    		  }
+ 		    		  ]
  		    	  },
  		    	  options : {
  		    		  indexAxis : 'y',
@@ -210,12 +216,14 @@
  		    				  grid : {
  		    					  display : false
  		    				  },
+ 		    				  stacked : true
  		    			  },
  		    			  y : {
  		    				  display : false,
  		    				  grid : {
  		    					  display : false
- 		    				  }
+ 		    				  },
+ 		    				  stacked : true
  		    			  }
  		    		  },
  		    		  plugins : {
@@ -234,59 +242,105 @@
  		    console.log(err);
  		  });
  		}
- 	
+ 	let allDataDiv = $('<div class = "allDataDiv"></div>');
  	function loadingMatchUpData() {
- 		  let matchIdList = [];
- 		  let summonerStats = [];
+ 		let matchIdList = [];
 
- 		  $.ajax({
- 		    method: 'get',
- 		    url: '/summoner/dashboard/matchup',
- 		    data: { summoner_name: '${summoner.summoner_name}' }
- 		  }).done(res => {
- 		    $.each(res, function(i, res) {
- 		      matchIdList[i] = res.match_id;
- 		    });
+ 		$.ajax({
+ 		  method: 'get',
+ 		  url: '/summoner/dashboard/matchup',
+ 		  data: { summoner_name: '${summoner.summoner_name}' }
+ 		}).done(res => {
+ 		  $.each(res, function(i, res) {
+ 		  matchIdList[i] = res.match_id;
+ 		});
+ 		    
+ 		getPlayer(matchIdList);
+ 		    
+ 		$('.flex-matchup-data').html(allDataDiv);
+ 		}).fail(err => {
+		  console.log(err);
+		});
+ 	}
+ 	
+ 	function getPlayer(matchIdList){
+ 		let summonerStats = [];
+ 		$.each(matchIdList, function(i, ing) {
+		    matchId = matchIdList[i];
+   	        $.ajax({
+		        method: 'get',
+		        url: '/summoner/dashboard/getPlayer',
+		        data: { match_id: matchId, summoner_name: '${summoner.summoner_name}' }
+		      }).done(response => {
+		        $.each(response, function(j, summoner) {
+		          let sName = summoner.summoner_name;
+		          let sWin = summoner.win;
 
- 		    $.each(matchIdList, function(i, ing) {
- 		      matchId = matchIdList[i];
- 		      $.ajax({
- 		        method: 'get',
- 		        url: '/summoner/dashboard/getPlayer',
- 		        data: { match_id: matchId, summoner_name: '${summoner.summoner_name}' }
- 		      }).done(response => {
- 		        $.each(response, function(j, summoner) {
- 		          let sName = summoner.summoner_name;
- 		          let sWin = summoner.win;
-
- 		          let existingSummoner = summonerStats.find(s => s.summonerName === sName);
- 		          if (existingSummoner) {
- 		            existingSummoner.games++;
- 		            if (sWin === 1) {
- 		              existingSummoner.wins++;
- 		            } else {
- 		              existingSummoner.losses++;
- 		            }
- 		          } else {
- 		            if (sName.trim() !== "") { // 공백 문자열이 아닌 경우에만 추가
- 		              summonerStats.push({ summonerName: sName, games: 1, wins: sWin === 1 ? 1 : 0, losses: sWin === 0 ? 1 : 0 });
- 		            }
- 		          }
- 		        });
-
- 		        console.log("summonerStats : ",summonerStats);
- 		        
- 		      }).fail(error => {
- 		        console.log(error);
- 		      });
- 		    });
- 		  }).fail(err => {
- 		    console.log(err);
- 		  });
- 		}
-
-
-
+		          let existingSummoner = summonerStats.find(s => s.summonerName === sName);
+		          if (existingSummoner) {
+		            existingSummoner.games++;
+		            if (sWin === 1) {
+		              existingSummoner.wins++;
+		            } else {
+		              existingSummoner.losses++;
+		            }
+		          } else {
+		            if (sName.trim() !== "") {
+		              summonerStats.push({ summonerName: sName, games: 1, wins: sWin === 1 ? 1 : 0, losses: sWin === 0 ? 1 : 0 });
+		            }
+		          }
+		          
+		          getMaking(sName, summonerStats[j]);
+		        });
+		        
+		      }).fail(error => {
+		        console.log(error);
+		      });
+		      
+		 });
+ 	}
+ 	
+ 	function getMaking(sName, summonerStats){
+ 		$.ajax({
+      	  method : 'get',
+      	  url : '/summoner/dashboard/profile',
+      	  data : {summoner_name : sName}
+        }).done(o=>{
+  		  let fullSummonerData = $('<div class = "fullSummonerData"></div>');
+  		  let summonerNameDiv = $('<div class = "summonerNameDiv"></div>');
+  		  let soloRankTierDiv = $('<div class = "soloRankTierDiv"></div>');
+  		  let gamesDiv = $('<div class = "gamesDiv"></div>');
+  		  let winsDiv = $('<div class = "winsDiv"></div>');
+  		  let lossesDiv = $('<div class = "lossesDiv"></div>');
+  		  let winrateDiv = $('<div class = "allWinrateDiv"></div>');
+  		  
+  		  let profileImg = $('<img class = "profileImg" src = "/resources/img/profileicon/'+o.profile_icon_id+'.png">');
+  		  let summonerNameText = $('<span class = "summonerNameText">'+sName+'</span>');
+  		  summonerNameDiv.append(profileImg, summonerNameText);
+  		  
+  		  let rankTierImg = $('<img class = "rankTierImg" src = "/resources/img/ranked-emblem/emblem-'+o.tier+'.png">');
+  		  let rankTierText = $('<span class = "rankTierText">'+o.tier+'</span>');
+  		  soloRankTierDiv.append(rankTierImg, rankTierText);
+  		  
+  		  let gamesText = $('<span class = "gamesText">'+summonerStats.games+'</span>');
+  		  gamesDiv.append(gamesText);
+  		  
+  		  let winsText = $('<span class = "winsText">'+summonerStats.wins+'</span>');
+  		  winsDiv.append(winsText);
+  		  
+  		  let lossesText = $('<span class = "lossesText">'+summonerStats.losses+'</span>');
+  		  lossesDiv.append(lossesText);
+  		  
+  		  let winrate = (summonerStats.wins / summonerStats.games) * 100; 
+  		  let winrateText = $('<span class = "winrateText">'+winrate+'%</span>');
+  		  winrateDiv.append(winrateText);
+  		  fullSummonerData.append(summonerNameDiv, soloRankTierDiv, gamesDiv, winsDiv, lossesDiv, winrateDiv);
+  		  allDataDiv.append(fullSummonerData);
+        }).fail(x=>{
+      	  console.log(x);
+        });
+ 	}
+ 	
  	loadingKdaData();
  	loadingRecentWinrate();
  	loadingMatchUpData();

@@ -129,8 +129,8 @@ public class SummonerRestController {
 	}
 	
 	@GetMapping("/info/getBuild")
-	public List<BuildDto> getBuild(String match_id, String summoner_name){
-		List<BuildDto> bd = ss.getBuild(match_id, summoner_name);
+	public BuildDto getBuild(String match_id, String summoner_name){
+		BuildDto bd = ss.getBuild(match_id, summoner_name);
 		return bd;
 	}
 	

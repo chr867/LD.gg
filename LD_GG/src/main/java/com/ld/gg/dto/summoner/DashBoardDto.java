@@ -22,4 +22,5 @@ public class DashBoardDto {
 	private String summoner_name;
 	private int win;
 	private String profile_icon_id;
+	private String tier;
 }

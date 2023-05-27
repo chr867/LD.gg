@@ -839,24 +839,119 @@ body{
 	display : flex;
 }
 
+.RankingDataDiv{
+	width : 100%;
+	display : flex;
+	flex-direction : column;
+}
 
+.firstDiv{
+	width : 100%;
+	display : flex;
+	flex-direction : row;
+}
 
+.secondDiv{
+	width : 100%;
+	display : flex;
+	flex-direction : row;
+}
 
+.delatDiv, .takenDiv, .killsDiv, .deathsDiv, .assistsDiv, .redWardsDiv, .csDiv{
+	flex : 1;
+}
 
+.dealtTitleDiv {
+  position: relative;
+}
 
+.dealtTitleDiv span {
+  position: absolute;
+  top: 0;
+  right: 10px;
+  margin-left: 10px;
+}
 
+.takenTitleDiv{
+	position : relative;
+}
 
+.takenTitleDiv span{
+	position : absolute;
+	top : 0;
+	right : 10px;
+	margin-left : 10px;
+}
 
+.killsTitleDiv{
+	position : relative;
+}
 
+.killsTitleDiv span{
+	position : absolute;
+	top : 0;
+	right : 10px;
+	margin-left : 10px;
+}
 
+.deathsTitleDiv{
+	position : relative;
+}
 
+.deathsTitleDiv span{
+	position : absolute;
+	top : 0;
+	right : 10px;
+	margin-left : 10px;
+}
 
+.assistsTitleDiv{
+	width : 70%;
+	position : relative;
+}
 
+.assistsTitleDiv span{
+	position : absolute;
+	top : 0;
+	right : 10px;
+	margin-left : 10px;
+}
 
+.redWardsTitleDiv{
+	width : 70%;
+	position : relative;
+}
 
+.redWardsTitleDiv span{
+	position : absolute;
+	top : 0;
+	right : 10px;
+	margin-left : 10px;
+}
 
+.CSTitleDiv{
+	width : 70%;
+	position : relative;
+}
 
+.CSTitleDiv span{
+	position : absolute;
+	top : 0;
+	right : 10px;
+	margin-left : 10px;
+}
 
+.flex-record-div{
+	width : 100%;
+}
+
+#record{
+	width : 100%;
+}
+
+.recordMoreBtn{
+	width : 100%;
+}
 
 
 
