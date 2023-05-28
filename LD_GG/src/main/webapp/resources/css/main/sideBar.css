@@ -50,48 +50,48 @@ body {
   font-size: 20px;
 }
 
-.accordion-item {
+.sidebar .accordion-item {
   background-color: #202B46;
   border: inherit;
 }
 
-.accordion {
+.sidebar .accordion {
   --bs-accordion-btn-bg: #202B46;
   --bs-accordion-btn-color: #a8abb6;
   --bs-accordion-btn-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23a8abb6'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
 }
 
-.accordion-button:not(.collapsed) {
+.sidebar .accordion-button:not(.collapsed) {
   color: #a8abb6;
   background-color: #2f3f68;
   box-shadow: inherit;
 
 }
 
-.accordion-item:first-of-type .accordion-button {
+.sidebar .accordion-item:first-of-type .accordion-button {
   border-top-right-radius: inherit;
   border-top-left-radius: inherit;
   border-radius: 4rem;
 }
 
-.accordion-button:focus {
+.sidebar .accordion-button:focus {
   border-color: inherit;
   box-shadow: inherit;
   border-radius: 4rem;
 }
 
-.accordion-body-menu {
+.sidebar .accordion-body-menu {
   margin-bottom: 20px;
 }
-.accordion-body-menu:hover{
+.sidebar .accordion-body-menu:hover{
 	background-color: #222E4E;
 }
-.accordion-body-link {
+.sidebar .accordion-body-link {
   color: #a8abb6;
   text-decoration: none;
 }
 
-.accordion-body-link span {
+.sidebar .accordion-body-link span {
   font-size: 16px;
   margin-left: 20px;
 }

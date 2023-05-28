@@ -400,7 +400,7 @@ $(document).ready(function() {
 	
 	$("#go-record-btn").click(function() {
 		  let summoner_name = $(this).closest(".modal").find(".modal-title").text();
-		  window.location.href = '/summoner/info?summoner_name=' +summoner_name;
+		  window.open('/summoner/info?summoner_name=' +summoner_name);
 		});
 	$("#write-est-btn").click(function() {
 		  let summoner_name = $(this).closest(".modal").find(".modal-title").text();
@@ -693,7 +693,7 @@ $(document).ready(function() {
 	         	// <tr> 클릭 이벤트 핸들러 추가
 	            row.on('click', function() {
 	            // 다른 페이지로 이동하는 코드 작성
-	             window.location.href = '/mentor/profile/' + myMt.mentor_lol_account;
+	             window.open('/mentor/profile/' + myMt.mentor_lol_account);
 	            });
 	         
 	            tbody.append(row)
@@ -829,7 +829,7 @@ $(document).ready(function() {
     		 	// <tr> 클릭 이벤트 핸들러 추가
 	            row.on('click', function() {
 	            // 찜한 멘토 like_mentor.mentor_lol_account 의 멘토프로필로 이동
-	             window.location.href = '/mentor/profile/' + like_mentor.mentor_lol_account;
+	             window.open('/mentor/profile/' + like_mentor.mentor_lol_account);
 	            });
     		    tbody.append(row);
     		    table.append(tbody);
@@ -1075,7 +1075,7 @@ $(document).ready(function() {
 		    			    $("<td>").addClass("btn-td").append(
 		    			    myMt.menti_state === 0 ? 
 		    			    		$("<div>").append(
-		    			    		    $("<button>").attr("type","button").addClass("btn btn-outline-primary btn-sm")
+		    			    		    $("<button>").attr("type","button").addClass("btn btn-outline-primary btn-sm mx-1")
 		    			    		        .attr("id", myMt.mentoring_id)
 		    			    		        .attr("data", myMt.class_id)
 		    			    		        .text("수락").on('click', function(event) { //수락 버튼 누를떄 멘토링 내역 수정
@@ -1194,7 +1194,7 @@ $(document).ready(function() {
 		    			// <tr> 클릭 이벤트 핸들러 추가
 		  	            row.on('click', function() {
 		  	            // 수강 신청한 멘티의 요청서 모달 띄우기
-		  	             window.location.href = '/summoner/info?summoner_name=' + myMt.menti_lol_account;
+		  	             window.open('/summoner/info?summoner_name=' + myMt.menti_lol_account);
 		  	            });
 		    			  tbody.append(row);
 		    		    table.append(tbody);

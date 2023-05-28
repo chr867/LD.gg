@@ -515,8 +515,9 @@ font-weight:bold;
 				         </div>
 				        <c:if test="${target_tag.tag_id eq 5}">
 				          <div class="d-flex d-none">
-				        	<input type="text" class="form-control" id="target-summoner">
-				        	<button type="button" id="target-check-btn" class="btn btn-dark d-flex" onclick="특정함수()">확인</button>
+				        	<input type="text" class="form-control" style="font-size:12px" id="target-summoner">
+				        	<button type="button" id="target-check-btn" class="btn btn-success d-flex mx-1">확인</button>
+				        	<button type="button" id="target-retry-btn" class="btn btn-dark d-flex mx-1 d-none">재입력</button>
 				          </div>
 				        </c:if>
 				        <c:if test="${target_tag.tag_id eq 26}">
@@ -726,6 +727,40 @@ font-weight:bold;
 	
 	
 		$(document).ready(function () {
+			$("#target-check-btn").click(function(){
+				let summoner_name = $("#target-summoner").val();
+				console.log(summoner_name);
+				
+				$.ajax({
+          		  url: "/mentor/get-summoner-info",
+          		  type: "GET",
+          		  data: {
+          		    summoner_name: summoner_name
+          		  },
+          		  dataType: 'json',
+          		  success: function(response) {
+         		    console.log(response);
+          		  $("#target-check-btn").addClass("d-none");
+           		  $("#target-retry-btn").removeClass("d-none");
+           		  $("#target-summoner").prop("disabled", true);
+           		  $("#target-summoner").val(response.summoner_name);
+          		  },
+          		  error: function(xhr, status, error) {
+          		  console.log("에러 발생:", error);
+          		  $("#target-check-btn").addClass("d-none");
+          		  $("#target-retry-btn").removeClass("d-none");
+          		  $("#target-summoner").val("존재하지 않는 소환사입니다.").css("color","red");
+          		  $("#target-summoner").prop("disabled", true);
+          		  }
+          		})
+			});
+			
+			$("#target-retry-btn").click(function(){
+				$("#target-retry-btn").addClass("d-none");
+				$("#target-check-btn").removeClass("d-none");
+				$("#target-summoner").prop("disabled", false).css("color","black");	
+				$("#target-summoner").val("");
+			})
 			
 			$("#first-next").click(function(){
 				$("#first").addClass("d-none");

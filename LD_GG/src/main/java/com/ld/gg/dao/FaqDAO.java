@@ -2,6 +2,9 @@ package com.ld.gg.dao;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.ld.gg.dto.faq.CustomerInquiriesDTO;
 import com.ld.gg.dto.faq.CustomerServiceDTO;
 import com.ld.gg.dto.faq.FaqDTO;
@@ -15,9 +18,9 @@ public interface FaqDAO {
 	FaqDTO select_by_id_faq(int faq_id);
 	
 	//keyword로 고객 질문 목록 가져오기
-	List<CustomerInquiriesDTO> select_by_keyword_inquiries(String keyword);
+	List<CustomerInquiriesDTO> select_by_keyword_inquiries(@Param("keyword") String keyword, @Param("start") int start);
 	//모든 고객 질문 가져오기
-	List<CustomerInquiriesDTO> select_all_inquiries();
+	List<CustomerInquiriesDTO> select_all_inquiries(int start);
 	//이메일로 고객 질문 가져오기
 	List<CustomerInquiriesDTO> select_by_email_inquiries(String customer_email);
 	//아이디로 고객 질문 가져오기

@@ -19,14 +19,16 @@
 	WHERE inquiries_title LIKE CONCAT('%', #{keyword}, '%')
 	OR inquiries_info LIKE
 	CONCAT('%', #{keyword}, '%')
-	ORDER BY date DESC;
+	ORDER BY date DESC
+	LIMIT 10 OFFSET #{start};
 </select>
 <select id="select_all_inquiries" resultType="ci">
 	SELECT * 
 	FROM customer_inquiries AS ci
 	JOIN member AS m
 	on ci.customer_email = m.email
-	ORDER BY inquiries_id DESC;
+	ORDER BY inquiries_id DESC
+	LIMIT 10 OFFSET #{start};
 </select>
 <select id="select_by_id_inquiries" resultType="ci">
 	SELECT * FROM customer_inquiries
