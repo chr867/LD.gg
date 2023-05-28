@@ -36,16 +36,16 @@ public class FaqService {
 	}
 	
 	//keyword로 고객 질문 목록 가져오기
-	public String select_by_keyword_inquiries(String keyword) throws JsonProcessingException {
-		List<CustomerInquiriesDTO> ci_dto_list = faqdao.select_by_keyword_inquiries(keyword);
+	public String select_by_keyword_inquiries(String keyword, int start) throws JsonProcessingException {
+		List<CustomerInquiriesDTO> ci_dto_list = faqdao.select_by_keyword_inquiries(keyword, start);
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new JavaTimeModule());
 		String ci_dto_list_json = objectMapper.writeValueAsString(ci_dto_list);
 		return ci_dto_list_json;
 	}
 	//모든 고객 질문 가져오기
-	public String select_all_inquiries() throws JsonProcessingException {
-		List<CustomerInquiriesDTO> ci_dto_list = faqdao.select_all_inquiries();
+	public String select_all_inquiries(int start) throws JsonProcessingException {
+		List<CustomerInquiriesDTO> ci_dto_list = faqdao.select_all_inquiries(start);
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new JavaTimeModule());
 		String ci_dto_list_json = objectMapper.writeValueAsString(ci_dto_list);

@@ -40,8 +40,8 @@ public class RestFaqController {
 	
 	//모든 고객 질문 목록 가져오기
 	@GetMapping("/get-all-ci")
-	public String select_all_inquiries() throws JsonProcessingException {
-		String ci_dto_list_json = faqService.select_all_inquiries();
+	public String select_all_inquiries(@RequestParam int start) throws JsonProcessingException {
+		String ci_dto_list_json = faqService.select_all_inquiries(start);
 		return ci_dto_list_json;
 	}
 	//id로 고객 질문 가져오기
@@ -52,8 +52,8 @@ public class RestFaqController {
 	}
 	//keyword로 고객 질문 목록 가져오기
 	@GetMapping("/get-by-keyword-ci")
-	public String select_by_keyword_inquiries(String keyword) throws JsonProcessingException {
-		String ci_dto_list_json = faqService.select_by_keyword_inquiries(keyword);
+	public String select_by_keyword_inquiries(@RequestParam String keyword, @RequestParam int start) throws JsonProcessingException {
+		String ci_dto_list_json = faqService.select_by_keyword_inquiries(keyword,start);
 		return ci_dto_list_json;
 	}
 	//이메일로 고객 질문 가져오기
