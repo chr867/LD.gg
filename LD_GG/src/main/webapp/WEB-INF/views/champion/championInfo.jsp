@@ -125,6 +125,16 @@
 .common-item-title h4{
 	font-size: 20px;
 	font-weight: 700;
+	
+}
+
+.mythic-recomm-box .item-img:hover .item-desc {
+	visibility: visible;
+	opacity: 1;
+}
+.common-recomm-box .item-img:hover .item-desc {
+	visibility: visible;
+	opacity: 1;
 }
 </style>
 
@@ -969,6 +979,7 @@ function championBuildInfo(champion_id, team_position) {
 		  method: 'get',
 		  url: '/champion/info/build',
 		  data: { champion_id: champion_id, team_position: team_position},
+		  async: false
 		}).done(res => {
 			let championBuildInfo = res;
 			let champRuneData = championBuildInfo.champRuneData;
@@ -1008,26 +1019,26 @@ function championBuildInfo(champion_id, team_position) {
 			  //-----------------------------------------------------------------------------------
 			  // 상대하기 쉬운 챔피언 
 			  let easyTableHeaders = document.getElementsByClassName('easy-champ-img');
-			  for (var i = 0; i < easyTableHeaders.length; i++) {
+			  for (let i = 0; i < easyTableHeaders.length; i++) {
 				  easyTableHeaders[i].innerHTML = '';
 				  easyTableHeaders[i].innerHTML = '<img alt="" src="/resources/img/champion_img/square/'+champEasyChampData[i].champion_img+'" class="champion-img" id="'+ champEasyChampData[i].enemy_champ_id +'">';
 			  }
 			  let hardEasyTableData = document.getElementsByClassName('easy-champ-win-rate');
 
-			  for (var i = 0; i < hardEasyTableData.length; i++) {
+			  for (let i = 0; i < hardEasyTableData.length; i++) {
 				  hardEasyTableData[i].innerHTML = '';
 				  hardEasyTableData[i].innerHTML = champEasyChampData[i].match_up_win_rate+'%';
 			  }
 			  //-----------------------------------------------------------------------------------
 			  // 상대하기 어려운 챔피언 
 			  let hardTableHeaders = document.getElementsByClassName('hard-champ-img');
-			  for (var i = 0; i < hardTableHeaders.length; i++) {
+			  for (let i = 0; i < hardTableHeaders.length; i++) {
 				  hardTableHeaders[i].innerHTML = '';
 				  hardTableHeaders[i].innerHTML = '<img alt="" src="/resources/img/champion_img/square/'+champHardChampData[i].champion_img+'" class="champion-img" id="'+ champHardChampData[i].enemy_champ_id +'">';
 			  }
 			  var hardTableData = document.getElementsByClassName('hard-champ-win-rate');
 
-			  for (var i = 0; i < hardTableData.length; i++) {
+			  for (let i = 0; i < hardTableData.length; i++) {
 				  hardTableData[i].innerHTML = '';
 				  hardTableData[i].innerHTML = champHardChampData[i].match_up_win_rate+'%';
 			  }
@@ -1045,7 +1056,7 @@ function championBuildInfo(champion_id, team_position) {
 			  
 			  let rune_select_box = document.getElementsByClassName('rune-select-box')[0]; 
 			  rune_select_box.innerHTML = ''
-			  for (var i = 0; i < champRuneData.length; i++) {
+			  for (let i = 0; i < champRuneData.length; i++) {
 				html = ''
 				html += '<div class="rune-select-button">'
 				html += '<div class="rune-select-main">'
@@ -1066,11 +1077,12 @@ function championBuildInfo(champion_id, team_position) {
 				}
 			  
 			  let rune_select_buttons = document.getElementsByClassName('rune-select-button');
-				for (let i = 0; i < rune_select_buttons.length; i++) {
-					rune_select_buttons[i].addEventListener('click', function() {
-						rune_full_data(champRuneData[i].main_KEYSTONE_ID,champRuneData[i].sub_KEYSTONE_ID,i,champRuneData);
-					});
+			  for (let i = 0; i < rune_select_buttons.length; i++) {
+				    rune_select_buttons[i].addEventListener('click', function() {
+				        rune_full_data(champRuneData[i].main_KEYSTONE_ID, champRuneData[i].sub_KEYSTONE_ID, i, champRuneData);
+				    });
 				}
+
 				
 				spellSplit(champSpellData);
 				skillSplit(champSkillBuildData);
@@ -1333,7 +1345,7 @@ function skillSplit(champSkillBuildData) {
 	let skillSequence = champSkillBuildData[i].mastery_sequence
 	let parts = skillSequence.split(','); 
 	
-	let skillAllSequnece = champSkillBuildData[0].skill_build
+	let skillAllSequnece = champSkillBuildData[i].skill_build
 	let skillParts = skillAllSequnece.split(','); 
 	
 	let skill_build_sequence_box = document.getElementsByClassName('skill-build-sequence-box')[i]; 
@@ -1355,7 +1367,7 @@ function skillSplit(champSkillBuildData) {
 	qHtml += '<div class="squence-tooltip">'
 	qHtml += '<div>${chamInfo.champion_q_name}</div>'
 	qHtml += '<br>'
-	qHtml += '<div>${chamInfo.champion_q_desc}</div>'
+	qHtml += "<div>${chamInfo.champion_q_desc}</div>"
 	qHtml += '</div>'
 	qHtml += '<div class="skill-build-sequence">'
 	qHtml += '</div>'
@@ -1369,7 +1381,7 @@ function skillSplit(champSkillBuildData) {
  	wHtml += '<div class="squence-tooltip">'
  	wHtml += '<div>${chamInfo.champion_w_name}</div>'
  	wHtml += '<br>'
- 	wHtml += '<div>${chamInfo.champion_w_desc}</div>'
+ 	wHtml += "<div>${chamInfo.champion_w_desc}</div>"
  	wHtml += '</div>'
  	wHtml += '<div class="skill-build-sequence">'
  	wHtml += '</div>'
@@ -1383,7 +1395,7 @@ function skillSplit(champSkillBuildData) {
 	eHtml += '<div class="squence-tooltip">'
 	eHtml += '<div>${chamInfo.champion_e_name}</div>'
 	eHtml += '<br>'
-	eHtml += '<div>${chamInfo.champion_e_desc}</div>'
+	eHtml += "<div>${chamInfo.champion_e_desc}</div>"
 	eHtml += '</div>'
 	eHtml += '<div class="skill-build-sequence">'
 	eHtml += '</div>'													

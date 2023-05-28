@@ -15,17 +15,17 @@ import data_load as dl
 # pd.set_option('display.max_columns', None)
 # pd.set_option('display.max_rows', None)
 # ----------------------------------------------------------------------------------------------------------------------
-test_df = dl.matches_timeline_data_select(5000)
-asd = dl.matches_timeline_data(10)
-
-start_time = time.time()
-df = dl.match_raw_patch(10000)
-print("JSON 변환 시작")
-df['matches'] = df['matches'].apply(json.loads)
-df['timeline'] = df['timeline'].apply(json.loads)
-end_time = time.time()
-print("변환 시간: {:.2f}초".format(end_time - start_time))
-print("JSON 변환 종료")
+# test_df = dl.matches_timeline_data_select(5000)
+# asd = dl.matches_timeline_data(10)
+#
+# start_time = time.time()
+# df = dl.match_raw_patch(10000)
+# print("JSON 변환 시작")
+# df['matches'] = df['matches'].apply(json.loads)
+# df['timeline'] = df['timeline'].apply(json.loads)
+# end_time = time.time()
+# print("변환 시간: {:.2f}초".format(end_time - start_time))
+# print("JSON 변환 종료")
 # ----------------------------------------------------------------------------------------------------------------------
 def rune_data(rune_list):
 
@@ -388,8 +388,8 @@ skill_build_list = []
 item_build_list = []
 lane_list = []
 
-# for limit in tqdm(range(0, len(matchId_count.match_id_substr.unique()), batch_size)):
-for limit in tqdm(range(0, 30000, batch_size)):
+for limit in tqdm(range(0, len(matchId_count.match_id_substr.unique()), batch_size)):
+# for limit in tqdm(range(0, 30000, batch_size)):
     conn = mu.connect_mysql()
     query = f"SELECT matches, timeline FROM match_raw_patch LIMIT {limit}, {batch_size}"
     df = pd.DataFrame(mu.mysql_execute_dict(query, conn))
@@ -587,7 +587,7 @@ for limit in tqdm(range(0, 30000, batch_size)):
 
         for sublist in final_lst:
             if len(sublist[3:]) > 2:
-                modified_sublist = [sublist[0], sublist[1], sublist[2], ', '.join(map(str, sublist[3:6]))]
+                modified_sublist = [sublist[0], sublist[1], sublist[2], sublist[3], ', '.join(map(str, sublist[3:7]))]
                 modified_lst.append(modified_sublist)
 
         for lst in modified_lst:
