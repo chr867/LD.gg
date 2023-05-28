@@ -5,7 +5,6 @@
 <head>
 <meta charset="UTF-8">
 <title>MateWrite.jsp</title>
-</head>
 <link
 	href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
 	rel="stylesheet">
@@ -21,9 +20,49 @@
 	src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 <script
 	src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/lang/summernote-ko-KR.js"></script>
+</head>
+<style type="text/css">
+body {
+      image-rendering: -webkit-optimize-contrast; /* chrome */
+      background-image: url("/resources/img/mate/back.png");
+      background-size: 100%;
+      overflow-x: hidden;
+}
+form {
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.note-editor note-frame panel panel-default {
+ display:flex;
+ flex-start:center;
+ align-items: center;
+
+}
+form div {
+ display:block;
+}
+.note-editor.note-airframe .note-editing-area, .note-editor.note-frame .note-editing-area {
+    height: 740px;
+    overflow: hidden;
+}
+
+.panel {
+
+    height: 800px;
+    width:900px;
+    margin-bottom: 20px;
+    background-image: url("/resources/img/mate/m-w-b3.png");
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+}
+</style>
 <body>
-	<h1>메이트 게시판 글 수정 페이지</h1>
-	<h2 style="text-align: center;">글 작성</h2>
 	<h3 style="text-align: center; color:red;">${errorMsg}</h3>
 	<div style="width: 60%; margin: auto;">
 		<form method="post" action="/mate/write_mateModify"><!-- 액션=요청URL -->
@@ -35,6 +74,7 @@
 		<input id="subBtn" type="button"
 			   value="글 작성" onclick="goWrite(this.form)" /> <input id="reset"
 			   type="reset" value="취소">
+		<input type="hidden" name="mate_id" value="${mate_id}"/>
 		</form>
 	</div>
 </body>

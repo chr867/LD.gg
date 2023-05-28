@@ -91,8 +91,11 @@ body {
       background-size: 100%;
       min-width: 1312px;
       overflow-x: hidden;
+   
     }
-
+.container {
+   margin-top:60px;
+}
 
 /*그리드 제목 */
 .ui-jqgrid .ui-jqgrid-htable .ui-jqgrid-labels th div {
@@ -225,40 +228,39 @@ input:focus {outline: none;} /* outline 테두리 없애기 */
 /*북마크 모달*/
 .bookmark-modal {
   position: fixed;
-  display: none;
   z-index: 200;
-  top: 10%;
-  left: 60%;
-  width: 40%;
-  background: white;
-  padding: 1rem;
-  border: 1px solid #ccc;
-  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+  width: 200px; /* 가로 크기 */
+  height: auto; /* 높이 */
+  background-image: url("/resources/img/mate/bookmarkModalBack.png");
+  background-repeat: no-repeat;
+  background-position: top;
+  background-size:contain;
   opacity: 0;
   transition: opacity 1s;
+  margin-left:-50px;
+  margin-top:4 px;
 }
+#bookmark-flex{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .bookmark-icon-box:hover + .bookmark-modal {
   display: block;
   opacity: 1; 
 }
-.bookmark-title {
-  text-align: center;
-  margin: 0 0 1rem 0;
-}
-
-.bookmark-actions {
-  text-align: center;
-}
 
 /* 북마크 버튼 */
 .bookmarkBt {
-  border: 1px solid #0e4f1f;
-  background: #0e4f1f;
+  width: 50px; 
+  height: 50px;
   text-decoration: none;
-  color: white;
-  font: inherit;
   padding: 0.5rem 1rem;
   cursor: pointer;
+  background: none;
+  border:none;
+ 
 }
 
 
@@ -271,7 +273,7 @@ input:focus {outline: none;} /* outline 테두리 없애기 */
 	<div id="error-check" style="display: none">${check}</div>
 	<!----------------------------------------------------------------------------------------------------------------->
 	<!-- 사이드바 -->
-	<div class="sidebar" style="z-index: 2;">
+<div class="sidebar" style="z-index: 2; margin-top: -60px;">
 		<div class="sidebar-nothover-menu">
 			<div class="sidebar-menu" style="padding: 8px 0px 8px 12px;">
 				<img src="/resources/img/logo/LD_logo_gray.png" alt=""
@@ -489,15 +491,14 @@ input:focus {outline: none;} /* outline 테두리 없애기 */
 <!-- 북마크 영역시작 -->
 				<div class="bookmark-icon-box" id="bookmark">
 					<img src="/resources/img/icon/free-icon-bookmark-white-25667.png" onclick="insertBookmark()" alt="이미지 버튼" id="bookmarkicon" class="bookmark-icon-img">
-				</div>
 					<div class="bookmark-modal" id="bookmark-modal">
-					  <h1 class="bookmark-title">모달테스트</h1>
-					  	<div class="bookmark-actions">
+						<div id ="bookmark-flex">
 							<table id="bookmark-list">
 					
 							</table>
 						</div>
 					</div>
+				</div>
 <!-- 북마크 영역끝 -->
 	
 			</div>
@@ -789,23 +790,24 @@ function loadBookmark() {
         	
         	  if (now_page === '/member/myPage') {
         		  if(res.tip_page ===1){
-    				tip_page = '<td><button class="bookmarkBt" onclick="goUrl(\'/tip/\')">tip_page로 이동</button></td>';
+    				tip_page = '<td><button class="bookmarkBt" id="tip-b-bt " onclick="goUrl(\'/tip/\')" style="background-image: url(\'/resources/img/mate/tip.png\'); background-repeat: no-repeat; background-position: top; background-size: contain;"></button></td>';
         		  }if(res.mate_page === 1){
-     			 	mate_page = '<td><button class="bookmarkBt" onclick="goUrl(\'/mate/\')">mate_page로 이동</button></td>';  
+     			 	mate_page = '<td><button class="bookmarkBt" id="mate-b-bt" onclick="goUrl(\'/mate/\')" style="background-image: url(\'/resources/img/mate/mate.png\'); background-repeat: no-repeat; background-position: top; background-size: contain;"></button></td>';  
         		  }
         	  }
+        	///summoner/testDashBoard
         	  else if (now_page === '/tip/') {
         		  if(res.my_page ===1){
-    				my_page = '<td><button class="bookmarkBt" onclick="goUrl(\'/member/myPage)">my_page로 이동</button></td>';
+        			  my_page = '<td><button class="bookmarkBt" id="my-b-bt" onclick="goUrl(\'/summoner/testDashBoard\')" style="background-image: url(\'/resources/img/mate/my.png\'); background-repeat: no-repeat; background-position: top; background-size: contain;"></button></td>';
         		  }if(res.mate_page === 1){
-     			 	mate_page = '<td><button class="bookmarkBt" onclick="goUrl(\'/mate/\')">mate_page로 이동</button></td>';  
+     			 	mate_page = '<td><button class="bookmarkBt" id="mate-b-bt" onclick="goUrl(\'/mate/\')" style="background-image: url(\'/resources/img/mate/mate.png\'); background-repeat: no-repeat; background-position: top; background-size: contain;"></button></td>';  
         		  }
         	  }
         	  else if (now_page === '/mate/') {
         		  if(res.my_page ===1){
-    				my_page = '<td><button class="bookmarkBt" onclick="goUrl(\'/member/myPage)">my_page로 이동</button></td>';
+        			  my_page = '<td><button class="bookmarkBt" id="my-b-bt" onclick="goUrl(\'/summoner/testDashBoard\')" style="background-image: url(\'/resources/img/mate/my.png\'); background-repeat: no-repeat; background-position: top; background-size: contain;"></button></td>';
         		  }if(res.tip_page === 1){
-    				tip_page = '<td><button class="bookmarkBt" onclick="goUrl(\'/tip/\')">tip_page로 이동</button></td>';
+    				tip_page = '<td><button class="bookmarkBt" id="tip-b-bt " onclick="goUrl(\'/tip/\')" style="background-image: url(\'/resources/img/mate/tip.png\'); background-repeat: no-repeat; background-position: top; background-size: contain;"></button></td>';
         		  }
         	  }
         	bookmarkList += '<tr>'

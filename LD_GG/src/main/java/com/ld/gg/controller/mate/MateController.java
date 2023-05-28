@@ -71,6 +71,7 @@ public class MateController {
 		MateDto mateModify = ms.getMateDetails(mate_id);
 		ModelAndView mav =new ModelAndView("mate/modify");
 		
+		mav.addObject("mate_id",mateModify.getMate_id());
 		mav.addObject("title",mateModify.getMate_title());
 		mav.addObject("content",mateModify.getMate_content());
 		log.info("mateModify mav 값:"+mav);
