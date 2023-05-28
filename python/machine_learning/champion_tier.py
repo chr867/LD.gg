@@ -455,7 +455,7 @@ def machine_learning_score(win_pick_lst, ban_lst, meta_lst):
     result_df = result_df[['championId', 'teamPosition', 'tier']]
     final_df = result_df_copy.merge(result_df, on=['championId', 'teamPosition'])
     final_df = final_df[['championId', 'teamPosition', 'winRate', 'pickRate', 'banRate', 'tier']]
-    final_df = final_df[(final_df['winRate'] < 90) & (final_df['pickRate'] != 0)]
+    # final_df = final_df[(final_df['winRate'] < 90) & (final_df['pickRate'] != 0)]
 
     return final_df
 
@@ -525,3 +525,4 @@ print("끝!")
 
 row.iloc[0]['total_gold']
 sorted_df = machine_learning_df.sort_values(by=['tier'], ascending=True)
+

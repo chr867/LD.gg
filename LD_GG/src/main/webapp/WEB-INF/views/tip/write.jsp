@@ -81,6 +81,8 @@
 	padding: 50px 30px 0 30px;
 	box-shadow: 0 0 10px rgba(0,0,0,0.1);
 	padding-top: 20xp;
+	background: no-repeat;
+	background-size: cover;
 }
 
 .title-box{
