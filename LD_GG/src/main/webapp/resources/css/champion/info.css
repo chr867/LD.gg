@@ -316,7 +316,7 @@
 .rune-combination-desc {
 	position: absolute;
 	top: 35px;
-	z-index: 10;
+	z-index: 300;
 	width: 150px;
 	background-color: black;
 	color: #fff;
@@ -784,7 +784,7 @@ box-sizing: border-box;
 
 .item-desc {
 	position: absolute;
-	z-index: 10;
+	z-index: 300;
 	width: 400px;
 	background-color: black;
 	color: #fff;
