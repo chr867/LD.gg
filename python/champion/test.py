@@ -13,37 +13,34 @@ def item_df(item_list):
     return
 
 def common_item_data(item_df):
+    shoe_items = set([3111, 3117, 3009, 3047, 3006, 3158, 3020])
+    mythic_items = set(item_df.mythicItem.unique())
 
-    shoe_items = [3111, 3117, 3009, 3047, 3006, 3158, 3020]
-    mythic_items = item_df.mythicItem.unique()
-    for item in item_df:
+    item_list = []
+
+    for _, player in tqdm(item_df.iterrows()):
+        for i in range(6):
+            item = player[f'item{i}']
+            win = player.win
+
+            if item > 3000 and item not in shoe_items and item not in mythic_items:
+                item_list.append([player.championId, player.teamPosition, item, win])
+
+    columns = ['championId', 'teamPosition', 'itemId', 'win']
+    items = pd.DataFrame(item_list, columns=columns)
 
 
-    # top_items = []
-    # for (championId, teamPosition), group in item_df.groupby(['championId', 'teamPosition']):
-    #     top_items_df = group.groupby('itemId').agg({'itemId': 'count', 'win': 'sum'})
-    #     top_items_df.columns = ['pickCount', 'winCount']
-    #     top_items_df['winRate'] = round((top_items_df['winCount'] / top_items_df['pickCount']) * 100, 2)
-    #     top_items_df = top_items_df[top_items_df['pickCount'] > 10]  # pickCount가 10 이하인 행 제거
-    #     top_items_df = top_items_df.sort_values(['pickCount', 'winRate'], ascending=[False, False])
-    #     top_items_df = top_items_df.iloc[:5].reset_index()
-    #     top_items_df['championId'] = championId
-    #     top_items_df['teamPosition'] = teamPosition
-    #     top_items.append(top_items_df)
-    #
-    # top_items_df = pd.concat(top_items)
-    # top_items_df['rank'] = top_items_df.groupby(['championId', 'teamPosition'])['pickCount'].rank(ascending=False,
-    #                                                                                               method='first')
-    # top_items_df['rank'] = top_items_df['rank'].astype(int)
-    #
-    # total_game_df = item_df.groupby(['championId', 'teamPosition']).agg({'win': ['count']})
-    # total_game_df.columns = ['total_game']
-    # total_game_df.reset_index(inplace=True)
-    # merged_df = pd.merge(top_items_df, total_game_df, on=['championId', 'teamPosition'])
-    # merged_df['pickRate'] = round((merged_df['pickCount'] / merged_df['total_game']) * 100, 2)
-    # final_df = merged_df.drop(columns=['total_game'])
-    # print("일반 아이템 데이터 정제 완료 ")
-    # return final_df[['championId', 'teamPosition', 'itemId', 'pickCount', 'winCount', 'winRate', 'pickRate']]
+    grouped = items.groupby(['championId', 'teamPosition', 'itemId']).agg({
+        'win': ['count', 'sum'],
+    }).reset_index()
+    grouped.columns = ['championId', 'teamPosition', 'itemId', 'pickCount', 'winCount']
+    total_games = grouped.groupby(['championId', 'teamPosition']).agg({'pickCount': 'sum'}).rename(columns={'pickCount': 'totalGames'})
+    grouped = grouped.merge(total_games, on=['championId', 'teamPosition'])
+    grouped['pickRate'] = round(grouped['pickCount'] / grouped['totalGames']*100,2)
+    grouped['winRate'] = round(grouped['winCount'] / grouped['pickCount']*100,2)
+    grouped = grouped[grouped['pickCount'] > 10]
+    grouped = grouped[['championId', 'teamPosition', 'itemId', 'pickRate', 'winRate']]
+    return grouped
 
 item_list = []
 
@@ -55,6 +52,7 @@ conn.close()
 
 df['matches'] = df['matches'].apply(json.loads)
 df['timeline'] = df['timeline'].apply(json.loads)
+
 for i in tqdm(range(len(df))):
     participants = df.iloc[i]['matches']['participants']
     for summoner in range(len(participants)):
@@ -75,6 +73,42 @@ for i in tqdm(range(len(df))):
         lst.append(participants[summoner]['win'])
         item_list.append(lst)
 
+columns = ['championId', 'teamPosition', 'mythicItem', 'item0', 'item1', 'item2', 'item3', 'item4', 'item5',
+               'item6', 'win']
+item_df = pd.DataFrame(item_list, columns=columns)
+item_df['win'] = item_df['win'].astype(int)
+print("아이템 데이터 정제 완료 ")
 
 item_df = item_df(item_list)
-common_item_data = common_item_data(item_df)
+# common_item_data = common_item_data(item_df)
+
+shoe_items = set([3111, 3117, 3009, 3047, 3006, 3158, 3020])
+mythic_items = set(item_df.mythicItem.unique())
+
+item_list = []
+
+for _, player in tqdm(item_df.iterrows()):
+    for i in range(6):
+        item = player[f'item{i}']
+        win = player.win
+
+        if item > 3000 and item not in shoe_items and item not in mythic_items:
+            item_list.append([player.championId, player.teamPosition, item, win])
+
+columns = ['championId', 'teamPosition', 'itemId', 'win']
+items = pd.DataFrame(item_list, columns=columns)
+
+
+grouped = items.groupby(['championId', 'teamPosition', 'itemId']).agg({
+    'win': ['count', 'sum'],
+}).reset_index()
+grouped.columns = ['championId', 'teamPosition', 'itemId', 'pickCount', 'winCount']
+total_games = grouped.groupby(['championId', 'teamPosition']).agg({'pickCount': 'sum'}).rename(columns={'pickCount': 'totalGames'})
+grouped = grouped.merge(total_games, on=['championId', 'teamPosition'])
+grouped['pickRate'] = round(grouped['pickCount'] / grouped['totalGames']*100,2)
+grouped['winRate'] = round(grouped['winCount'] / grouped['pickCount']*100,2)
+grouped = grouped[grouped['pickCount'] > 10]
+grouped = grouped[['championId', 'teamPosition', 'itemId', 'pickRate', 'winRate']]
+
+
+testt= grouped[grouped['championId'] == 1]
