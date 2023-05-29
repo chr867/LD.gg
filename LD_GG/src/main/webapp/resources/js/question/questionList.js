@@ -1,5 +1,6 @@
 const email = $("#email").html().trim();
 var question_list = $("#question_list");
+var tag1;
 
 console.log(email);
 
@@ -229,4 +230,114 @@ function my_scrape(question_id){
         alert("중복 스크랩입니다. 내 스크랩에서 확인해주세요.");
         console.log(err);
     });
+}
+function tag1_search(event){
+    tag1 = event.target.value;
+    var tag2 = document.getElementById("champion_txt").value;
+
+    if(tag2 !== ""){
+        $.ajax({
+            method : "POST",
+            url : "/question/select_tag_by_two",
+            data : {
+                'tag1' : tag1,
+                'tag2' : tag2
+            },
+            dataType : "json",
+        }).done(function(resp){
+            var rHtml = '';
+
+            if(resp.length === 0){
+                rHtml += "지금 질문을 작성해보세요!";
+            }
+            else {
+                for(var key of resp) {
+                    rHtml += makeQuestion(key);
+                }
+            }
+            $("#question_list").html(rHtml);
+        }).fail(function(err){
+            console.log(err);
+        });
+    }
+    else {
+        $.ajax({
+            method : "POST",
+            url : "/question/select_tag_one",
+            data : {
+                'tag1' : tag1
+            },
+            dataType : "json",
+        }).done(function(resp){
+            var rHtml = '';
+
+            if(resp.length === 0){
+                rHtml += "지금 질문을 작성해보세요!";
+            }
+            else {
+                for(var key of resp) {
+                    rHtml += makeQuestion(key);
+                }
+            }
+            $("#question_list").html(rHtml);
+        }).fail(function(err){
+            console.log(err);
+        });
+    }
+}
+function tag2_search(){
+    var tag2 = document.getElementById("champion_txt").value;
+
+    if(tag1 !== undefined && tag1 !== "") {
+        $.ajax({
+            method: "POST",
+            url: "/question/select_tag_by_two",
+            data: {
+                'tag1': tag1,
+                'tag2': tag2
+            },
+            dataType: "json",
+        }).done(function (resp) {
+            var rHtml = '';
+
+            if (resp.length === 0) {
+                rHtml += "지금 질문을 작성해보세요!";
+            } else {
+                for (var key of resp) {
+                    rHtml += makeQuestion(key);
+                }
+            }
+            $("#question_list").html(rHtml);
+        }).fail(function (err) {
+            console.log(err);
+        });
+    }
+    else {
+        $.ajax({
+            method : "POST",
+            url : "/question/select_tag_two",
+            data : {
+                'tag2' : tag2
+            },
+            dataType : "json",
+        }).done(function(resp){
+            var rHtml = '';
+
+            if(resp.length === 0){
+                rHtml += "지금 질문을 작성해보세요!";
+            }
+            else {
+                for(var key of resp) {
+                    rHtml += makeQuestion(key);
+                }
+            }
+            $("#question_list").html(rHtml);
+        }).fail(function(err){
+            console.log(err);
+        });
+    }
+    if(tag2 == "") {
+        alert("검색어를 입력해주세요!")
+    }
+    console.log(tag2);
 }
