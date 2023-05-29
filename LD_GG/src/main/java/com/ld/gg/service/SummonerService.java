@@ -43,8 +43,8 @@ public class SummonerService {
 		return sd;
 	}
 
-	public List<RecordDto> get_summoner_record(String summoner_name) {
-		List<RecordDto> sr = SD.get_summoner_record(summoner_name);
+	public List<RecordDto> get_summoner_record(String summoner_name, int offset) {
+		List<RecordDto> sr = SD.get_summoner_record(summoner_name, offset);
 		return sr;
 	}
 
@@ -58,8 +58,8 @@ public class SummonerService {
 		return sd;
 	}
 
-	public List<ChampRecordDto> get_champ_record(String summoner_name) {
-		List<ChampRecordDto> crd = SD.get_champ_record(summoner_name);
+	public List<ChampRecordDto> get_champ_record(String summoner_name, int offset) {
+		List<ChampRecordDto> crd = SD.get_champ_record(summoner_name, offset);
 		return crd;
 	}
 
@@ -123,8 +123,8 @@ public class SummonerService {
 		return TRDD;
 	}
 
-	public List<ChampRecordDto> getChampRecordLane(String summoner_name, String paramLane) {
-		List<ChampRecordDto> crd = SD.getChampRecordLane(summoner_name, paramLane);
+	public List<ChampRecordDto> getChampRecordLane(String summoner_name, String paramLane, int offset) {
+		List<ChampRecordDto> crd = SD.getChampRecordLane(summoner_name, paramLane, offset);
 		return crd;
 	}
 
@@ -146,6 +146,14 @@ public class SummonerService {
 	public DashBoardDto getDashBoardProfile(String summoner_name) {
 		DashBoardDto dbd = SD.getDashBoardProfile(summoner_name);
 		return dbd;
+	}
+
+	public List<BuildDto> getMainMaking(String main) {
+		return SD.getMainMaking(main);
+	}
+
+	public List<BuildDto> getSubMaking(String sub) {
+		return SD.getSubMaking(sub);
 	}
 
 }

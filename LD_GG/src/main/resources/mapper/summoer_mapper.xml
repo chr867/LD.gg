@@ -99,7 +99,7 @@ SELECT
     ri2.rune_img as sub_rune,
     si1.spell_en_name as spell1,
     si2.spell_en_name as spell2,
-    ROUND((kills+assists) / team_champion_kills, 2) as kill_involve,
+    ROUND(((kills + assists) / team_champion_kills) * 100, 0) AS kill_involve,
     kda,
     kills,
     deaths,
@@ -127,7 +127,8 @@ inner join
 inner join
 	rune_info as ri2 on sub_rune = ri2.rune_id
 WHERE
-    summoner_name = #{summoner_name};
+    summoner_name = #{summoner_name}
+LIMIT 20 OFFSET #{offset};
 </select>
 
 <select id="getMatchUpPlayer" resultType = "matchUpPlayer">
@@ -136,7 +137,7 @@ WHERE
 	where match_id = #{match_id};
 </select>
 
-<select id="get_champ_record" resultType="champ_record">
+<select id="get_champ_record" resultType="champ_record" parameterType = "Map">
   SELECT
     COUNT(*) AS games,
     ROUND((SUM(CASE WHEN win = 1 THEN 1 ELSE 0 END) / COUNT(*)) * 100,2) AS winrate,
@@ -155,7 +156,8 @@ WHERE
   WHERE
     summoner_name = #{summoner_name}
   GROUP BY
-    champ_name;
+    champ_name
+  LIMIT 20 OFFSET #{offset};
 </select>
 
 <select id="getChampRecordLane" resultType = "champ_record" parameterType = "Map">
@@ -177,7 +179,8 @@ WHERE
   WHERE
     summoner_name = #{summoner_name} and lane = #{paramLane}
   GROUP BY
-    champ_name;
+    champ_name
+  LIMIT 20 OFFSET #{offset};
 </select>
 
 	<select id="getChampSolo">
@@ -348,16 +351,6 @@ SELECT
    rune_stat1,
    rune_stat2,
    rune_stat3,
-   (select rune_kr_name from rune_info where rune_id = (select main_rune from record where match_id = #{match_id) and summoner_name = #{summoner_name})) as main_rune_kr,
-   (select rune_kr_name from rune_info where rune_id = (select sub_rune from record where match_id = #{match_id) and summoner_name = #{summoner_name})) as sub_rune_kr,
-   (SELECT rune_img FROM rune_info WHERE rune_id = (SELECT main_rune FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) AS main_rune_img,
-   (SELECT rune_img FROM rune_info WHERE rune_id = (SELECT main_rune1 FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) AS main_rune1_img,
-   (SELECT rune_img FROM rune_info WHERE rune_id = (SELECT main_rune2 FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) AS main_rune2_img,
-   (SELECT rune_img FROM rune_info WHERE rune_id = (SELECT main_rune3 FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) AS main_rune3_img,
-   (SELECT rune_img FROM rune_info WHERE rune_id = (SELECT main_rune4 FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) AS main_rune4_img,
-   (SELECT rune_img FROM rune_info WHERE rune_id = (SELECT sub_rune FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) as sub_rune_img,
-   (SELECT rune_img FROM rune_info WHERE rune_id = (SELECT sub_rune1 FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) AS sub_rune1_img,
-   (SELECT rune_img FROM rune_info WHERE rune_id = (SELECT sub_rune2 FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) AS sub_rune2_img,
    (SELECT rune_type FROM rune_info WHERE rune_id = (SELECT main_rune FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) AS main_rune_type,
    (SELECT rune_type FROM rune_info WHERE rune_id = (SELECT sub_rune FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) AS sub_rune_type
 FROM
@@ -455,6 +448,16 @@ GROUP BY
 
 <select id="getDashBoardProfile" resultType = "dashboard">
 	select profile_icon_id, LOWER(tier) as tier from summoner_info where summoner_name = #{summoner_name} order by revision_date desc limit 1;
+</select>
+
+<select id="getMainMaking" resultType = "build">
+	SELECT rune_id,rune_img,rune_num,rune_type
+	FROM rune_info WHERE rune_type = #{main} order by rune_num asc
+</select>
+
+<select id="getSubMaking" resultType = "build">
+	SELECT rune_id,rune_img,rune_num,rune_type
+	FROM rune_info WHERE rune_type = #{sub} order by rune_num asc
 </select>
 
 </mapper>
