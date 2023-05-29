@@ -21,8 +21,10 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report, confusion_matrix
 from imblearn.under_sampling import RandomUnderSampler
-
+from imblearn.over_sampling import SMOTE
 import joblib
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import StandardScaler
 
 # # RIOT-API-KEY
 # riot_api_key = 'RGAPI-14667a4e-7c3c-45fa-ac8f-e53c7c3f5fe1'
@@ -79,6 +81,58 @@ for limit in tqdm(range(0, 796000, batch_size)):
         lst.append(player['timeCCingOthers'])
         lst.append(player['total_gold'])
         meta_score_lst_result.append(lst)
+    # ----------------------------------------------------------------
+print("시작!")
+conn = mu.connect_mysql()
+matchId_count = pd.DataFrame(mu.mysql_execute_dict(f"SELECT match_id_substr FROM match_raw_patch", conn))
+conn.close()
+print(f'매치아이디 갯수 : {len(matchId_count.match_id_substr.unique())}개')
+
+batch_size = 100000
+win_pick_lst_result = []
+ban_rate_lst_result = []
+meta_score_lst_result = []
+for limit in tqdm(range(0, len(matchId_count.match_id_substr.unique()), batch_size)):
+    conn = mu.connect_mysql()
+    query = f"SELECT matches FROM match_raw_patch LIMIT {limit}, {batch_size}"
+    df = pd.DataFrame(mu.mysql_execute_dict(query, conn))
+    conn.close()
+
+    df['matches'] = df['matches'].apply(json.loads)
+
+
+    for x in tqdm(range(len(df))):
+        for player in df.iloc[x]['matches']['participants']:
+            lst = []
+            lst.append(player['championId'])
+            lst.append(player['win'])
+            lst.append(player['teamPosition'])  # 팀 포지션 추가
+            win_pick_lst_result.append(lst)
+
+    for x in tqdm(range(len(df))):
+        ban_lst = df.iloc[x]['matches']['bans']
+        for idx, ban in enumerate(ban_lst):
+            if ban != 0 and ban != -1:
+                lst = []
+                team_position = df.iloc[x]['matches']['participants'][idx]['teamPosition']
+                if team_position:
+                    lst.append(team_position)
+                    lst.append(ban)
+                    ban_rate_lst_result.append(lst)
+
+    for x in tqdm(range(len(df))):
+        summoner = df.iloc[x]['matches']['participants']
+        for player in summoner:
+            lst = []
+            lst.append(player['championId'])
+            lst.append(player['teamPosition'])
+            lst.append(player['kda'])
+            lst.append(player['totalDamageDealtToChampions'])
+            lst.append(player['totalDamageTaken'])
+            lst.append(player['timeCCingOthers'])
+            lst.append(player['total_gold'])
+            meta_score_lst_result.append(lst)
+
 print("데이터 셀렉트 및 리스트 저장완료")
 # ----------------------------------------------------------------
 win_pick_columns = ['championId', 'win', 'teamPosition']
@@ -175,6 +229,44 @@ print("Mean Accuracy:", scores.mean())
 
 # 모델 저장
 joblib.dump(model, 'championTierPredictionModel2.pkl')
+# ----------------------------------------------------------------
+# 머신러닝 테스트 코드
+# One-Hot Encoding
+champion_tier_machine_learning = pd.get_dummies(champion_tier_machine_learning, columns=['teamPosition'])
+
+# 특성
+X = champion_tier_machine_learning.drop('tier', axis=1)  # 'tier' 열을 제외한 모든 열을 특성으로 사용
+# 레이블
+y = champion_tier_machine_learning['tier']  # 'tier' 열을 레이블로 사용
+
+# MinMaxScaler 정규화
+scaler = MinMaxScaler()
+X = scaler.fit_transform(X)
+
+# SMOTE 적용
+sm = SMOTE(k_neighbors=4, random_state=42)
+X_res, y_res = sm.fit_resample(X, y)
+
+# 학습 데이터와 테스트 데이터 분리
+X_train, X_test, y_train, y_test = train_test_split(X_res, y_res, test_size=0.2, random_state=42)
+
+# 랜덤 포레스트 분류기 학습
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+
+# 예측 및 평가
+y_pred = model.predict(X_test)
+print('정확성 : ', accuracy_score(y_test, y_pred))
+# 예측값(y_pred)과 실제값(y_test)을 이용해 정밀도, 재현율, F1 점수를 측정
+print(classification_report(y_test, y_pred))
+# Confusion Matrix
+print(confusion_matrix(y_test, y_pred))
+# 교차 검증
+scores = cross_val_score(model, X_res, y_res, cv=10)
+# 교차 검증 결과 출력
+print("교차 검증 결과 리스트:", scores)
+print("교차 검증 평균:", scores.mean())
+joblib.dump(model, 'championTierPredictionModel3.pkl')
 
 # ----------------------------------------------------------------------------------------------------------------------
 # 데이터 프레임 연산 코드
@@ -272,7 +364,7 @@ def machine_learning_score(df):
                               result_df['totalDamageTaken'] * 0.05 + result_df['timeCCingOthers'] * 0.05 + \
                               result_df['total_gold'] * 0.05
     result_df = pd.get_dummies(result_df, columns=['teamPosition'])
-    model = joblib.load('championTierPredictionModel2.pkl')  # 모델 로드
+    model = joblib.load('championTierPredictionModel3.pkl')  # 모델 로드
     predictions = model.predict(result_df)  # 예측 수행
     result_df['tier'] = predictions  # 예측 결과를 'tier' 컬럼으로 추가
     columns_to_consider = ['teamPosition_BOTTOM', 'teamPosition_JUNGLE', 'teamPosition_MIDDLE', 'teamPosition_TOP',
@@ -363,7 +455,7 @@ def machine_learning_score(win_pick_lst, ban_lst, meta_lst):
     result_df = result_df[['championId', 'teamPosition', 'tier']]
     final_df = result_df_copy.merge(result_df, on=['championId', 'teamPosition'])
     final_df = final_df[['championId', 'teamPosition', 'winRate', 'pickRate', 'banRate', 'tier']]
-    final_df = final_df[(final_df['winRate'] < 90) & (final_df['pickRate'] != 0)]
+    # final_df = final_df[(final_df['winRate'] < 90) & (final_df['pickRate'] != 0)]
 
     return final_df
 
@@ -433,3 +525,4 @@ print("끝!")
 
 row.iloc[0]['total_gold']
 sorted_df = machine_learning_df.sort_values(by=['tier'], ascending=True)
+
