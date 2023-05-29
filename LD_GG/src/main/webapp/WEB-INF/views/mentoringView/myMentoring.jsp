@@ -6,10 +6,17 @@
 <head>
 <meta charset="UTF-8">
 <title>마이멘토링</title>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 <style>
+.wrap{
+width:100%;
+min-height:100vh;
+background-color:white;
+margin:0px;
+}
+.container{
+  padding-top:120px;
+  padding-bottom:100px;
+}
 .card{
 margin:auto;
 margin-bottom:1.5rem;
@@ -102,9 +109,40 @@ margin:auto;
 margin-bottom: 60px;
 }
 </style>
+<!--BOOTSTRAP CSS-->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+<!--BOOTSTRAP JavaScript-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+<!--JQUERY-->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!--SWEET-ALERT2 CSS-->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<!--SWEET-ALERT2 JS-->
+<script
+	src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<!--sideBar CSS-->
+<link rel="stylesheet" type="text/css"
+      href="/resources/css/main/sideBar.css">
+<!--header CSS-->
+<link rel="stylesheet" type="text/css"
+      href="/resources/css/main/header.css">
+<!--footer CSS-->
+<link rel="stylesheet" type="text/css"
+      href="/resources/css/main/footer.css">
+<!--loginModal CSS-->
+<link rel="stylesheet" type="text/css"
+      href="/resources/css/main/loginModal.css">
+<!--로그인 및 세션관련 JS-->
+<script src="/resources/js/main/loginSession.js" defer></script>
+<!-- 채팅 관련 JS-->
+<script src="/resources/js/main/chat.js" defer></script>
 </head>
 <body>
-
+<%@ include file="../header.jsp" %>
+<%@ include file="../sidebar.jsp" %>
+<%@ include file="../footer.jsp" %>
+<div class='wrap'>
 <div class='container'>
 	<div id="nav-bar">
 		<ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -201,8 +239,8 @@ margin-bottom: 60px;
 		</div>
 	  </div>
 	</div>
-	
-	
+</div> <!-- container -->	
+</div><!-- wrap -->	
 	
 	
 	
@@ -393,8 +431,7 @@ margin-bottom: 60px;
 	  </div>
 	</div>
 
-</div> <!-- container -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+
 <script>
 $(document).ready(function() {
 	

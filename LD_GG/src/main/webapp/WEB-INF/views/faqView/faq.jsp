@@ -24,10 +24,12 @@
   li {
     margin-bottom: 5px;
   }
+  .container{
+padding-top: 120px;
+padding-bottom: 100px;
+}
   #faqInfo{
   background-color:white;
-  margin-top:120px;
-  margin-bottom:100px;
   padding:50px;
   border-radius: 20px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);

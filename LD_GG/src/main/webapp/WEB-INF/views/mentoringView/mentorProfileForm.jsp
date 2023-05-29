@@ -5,10 +5,17 @@
 <html>
 <head>
 <title>멘토 프로필 작성</title>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
-#container{
-width:800px;
+.wrap{
+width:100%;
+min-height:100vh;
+background-color:white;
+margin:0px;
+}
+#whole-box{
+	width:800px;
+  padding-top:100px;
+  padding-bottom:100px;
 }
 .position-buttons button.selected {
   background-color: #ced4da;
@@ -128,10 +135,42 @@ margin-top: 8px;
 font-size:12px;
 }
 </style>
+<!--BOOTSTRAP CSS-->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+<!--BOOTSTRAP JavaScript-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+<!--JQUERY-->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!--SWEET-ALERT2 CSS-->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<!--SWEET-ALERT2 JS-->
+<script
+	src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<!--sideBar CSS-->
+<link rel="stylesheet" type="text/css"
+      href="/resources/css/main/sideBar.css">
+<!--header CSS-->
+<link rel="stylesheet" type="text/css"
+      href="/resources/css/main/header.css">
+<!--footer CSS-->
+<link rel="stylesheet" type="text/css"
+      href="/resources/css/main/footer.css">
+<!--loginModal CSS-->
+<link rel="stylesheet" type="text/css"
+      href="/resources/css/main/loginModal.css">
+<!--로그인 및 세션관련 JS-->
+<script src="/resources/js/main/loginSession.js" defer></script>
+<!-- 채팅 관련 JS-->
+<script src="/resources/js/main/chat.js" defer></script>
 </head>
 <body>
-	<div id="container" class="container">
+<%@ include file="../header.jsp" %>
+<%@ include file="../sidebar.jsp" %>
+<%@ include file="../footer.jsp" %>
+	<div class="wrap">
+	<div class="container">
+	<div id="whole-box" class="mx-auto">
 		<section id="profile-box" class="row border">
 			<div class="col-2" id="mentor-img">
 				<img style="width: 128px" class="rounded" src="http://ddragon.leagueoflegends.com/cdn/13.10.1/img/profileicon/${mentor_profile.profile_icon_id}.png">
@@ -228,8 +267,6 @@ font-size:12px;
 					<h5><strong>&nbspTOP&nbsp</strong></h5>
 					<h5><strong>특화 챔피언</strong></h5>
 				</div>
-			<%-- <input type="text" class="form-control" id="top_specializedChampion" name="top_specialized_champion"
-				value="${mentor_profile.top_specialized_champion}"> --%>
 			<div id="champ-selector-inner" class="d-flex align-items-center text-center justify-content-start">
 				<div id="champ-selected-box" class="d-flex align-items-center">
 					<div id="champ-info">
@@ -262,8 +299,6 @@ font-size:12px;
 					<h5><strong>&nbspJUNGLE&nbsp</strong></h5>
 					<h5><strong>특화 챔피언</strong></h5>
 				</div>
-			<%-- <input type="text" class="form-control" id="jg_specializedChampion" name="jg_specialized_champion"
-				value="${mentor_profile.jg_specialized_champion}"> --%>
 			<div id="champ-selector-inner" class="d-flex align-items-center text-center justify-content-start">
 				<div id="champ-selected-box" class="d-flex align-items-center">
 					<div id="champ-info">
@@ -296,8 +331,6 @@ font-size:12px;
 					<h5><strong>&nbspMID&nbsp</strong></h5>
 					<h5><strong>특화 챔피언</strong></h5>
 				</div>
-			<%-- <input type="text" class="form-control" id="mid_specializedChampion" name="mid_specialized_champion"
-				value="${mentor_profile.mid_specialized_champion}"> --%>
 			<div id="champ-selector-inner" class="d-flex align-items-center text-center justify-content-start">
 				<div id="champ-selected-box" class="d-flex align-items-center">
 					<div id="champ-info">
@@ -330,8 +363,6 @@ font-size:12px;
 					<h5><strong>&nbspBOTTOM&nbsp</strong></h5>
 					<h5><strong>특화 챔피언</strong></h5>
 				</div>
-			<%-- <input type="text" class="form-control" id="ad_specializedChampion" name="ad_specialized_champion"
-				value="${mentor_profile.ad_specialized_champion}"> --%>
 			<div id="champ-selector-inner" class="d-flex align-items-center text-center justify-content-start">
 				<div id="champ-selected-box" class="d-flex align-items-center">
 					<div id="champ-info">
@@ -364,8 +395,6 @@ font-size:12px;
 					<h5><strong>&nbspSUPPORT&nbsp</strong></h5>
 					<h5><strong>특화 챔피언</strong></h5>
 				</div>
-			<%-- <input type="text" class="form-control" id="sup_specializedChampion" name="sup_specialized_champion"
-				value="${mentor_profile.sup_specialized_champion}"> --%>
 			<div id="champ-selector-inner" class="d-flex align-items-center text-center justify-content-start">
 				<div id="champ-selected-box" class="d-flex align-items-center">
 					<div id="champ-info">
@@ -465,7 +494,9 @@ font-size:12px;
 	
 	</div><!-- tab-content -->	
 		
+	</div><!-- whole-box-->
 	</div><!-- container -->
+	</div><!-- wrap -->
 	
 	<!-- 수업 만들기 모달 -->
 	<div class="modal fade" id="classModal" tabindex="-1" aria-labelledby="classModalLabel" aria-hidden="true" style="display: none;">
@@ -716,7 +747,8 @@ font-size:12px;
 						let rateBarBg = $("<div>").addClass("rate-bar-bg");
 						rateBarWrap.append(rateBarBg);
 						rateWrap.append(rateBarWrap);
-						let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champion.pick_rate + "%");
+						let champPickRate = Math.floor(champion.pick_rate);
+						let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champPickRate + "%");
 						let meter = $("<div>").addClass("progress my-auto").css("width","110px");
 						let winMeter = $("<div>").addClass("progress-bar").attr("role", "progressbar").attr("aria-label", "Example with label")
             								.attr("aria-valuenow", ""+champion.winrate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
@@ -873,7 +905,8 @@ font-size:12px;
 						let rateBarBg = $("<div>").addClass("rate-bar-bg");
 						rateBarWrap.append(rateBarBg);
 						rateWrap.append(rateBarWrap);
-						let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champion.pick_rate + "%");
+						let champPickRate = Math.floor(champion.pick_rate);
+						let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champPickRate + "%");
 						let meter = $("<div>").addClass("progress my-auto").css("width","110px");
 						let winMeter = $("<div>").addClass("progress-bar").attr("role", "progressbar").attr("aria-label", "Example with label")
             								.attr("aria-valuenow", ""+champion.winrate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
@@ -1030,7 +1063,8 @@ font-size:12px;
 						let rateBarBg = $("<div>").addClass("rate-bar-bg");
 						rateBarWrap.append(rateBarBg);
 						rateWrap.append(rateBarWrap);
-						let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champion.pick_rate + "%");
+						let champPickRate = Math.floor(champion.pick_rate);
+						let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champPickRate + "%");
 						let meter = $("<div>").addClass("progress my-auto").css("width","110px");
 						let winMeter = $("<div>").addClass("progress-bar").attr("role", "progressbar").attr("aria-label", "Example with label")
             								.attr("aria-valuenow", ""+champion.winrate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
@@ -1187,7 +1221,8 @@ font-size:12px;
 						let rateBarBg = $("<div>").addClass("rate-bar-bg");
 						rateBarWrap.append(rateBarBg);
 						rateWrap.append(rateBarWrap);
-						let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champion.pick_rate + "%");
+						let champPickRate = Math.floor(champion.pick_rate);
+						let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champPickRate + "%");
 						let meter = $("<div>").addClass("progress my-auto").css("width","110px");
 						let winMeter = $("<div>").addClass("progress-bar").attr("role", "progressbar").attr("aria-label", "Example with label")
             								.attr("aria-valuenow", ""+champion.winrate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
@@ -1344,7 +1379,8 @@ font-size:12px;
 						let rateBarBg = $("<div>").addClass("rate-bar-bg");
 						rateBarWrap.append(rateBarBg);
 						rateWrap.append(rateBarWrap);
-						let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champion.pick_rate + "%");
+						let champPickRate = Math.floor(champion.pick_rate);
+						let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champPickRate + "%");
 						let meter = $("<div>").addClass("progress my-auto").css("width","110px");
 						let winMeter = $("<div>").addClass("progress-bar").attr("role", "progressbar").attr("aria-label", "Example with label")
             								.attr("aria-valuenow", ""+champion.winrate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
@@ -1596,7 +1632,8 @@ font-size:12px;
 					let rateBarBg = $("<div>").addClass("rate-bar-bg");
 					rateBarWrap.append(rateBarBg);
 					rateWrap.append(rateBarWrap);
-					let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champion.pick_rate + "%");
+					let champPickRate = Math.floor(champion.pick_rate);
+					let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champPickRate + "%");
 					let meter = $("<div>").addClass("progress my-auto").css("width","110px");
 					let winMeter = $("<div>").addClass("progress-bar").attr("role", "progressbar").attr("aria-label", "Example with label")
         								.attr("aria-valuenow", ""+champion.winrate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
@@ -1745,7 +1782,8 @@ font-size:12px;
 					let rateBarBg = $("<div>").addClass("rate-bar-bg");
 					rateBarWrap.append(rateBarBg);
 					rateWrap.append(rateBarWrap);
-					let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champion.pick_rate + "%");
+					let champPickRate = Math.floor(champion.pick_rate);
+					let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champPickRate + "%");
 					let meter = $("<div>").addClass("progress my-auto").css("width","110px");
 					let winMeter = $("<div>").addClass("progress-bar").attr("role", "progressbar").attr("aria-label", "Example with label")
         								.attr("aria-valuenow", ""+champion.winrate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
@@ -1895,7 +1933,8 @@ font-size:12px;
 					let rateBarBg = $("<div>").addClass("rate-bar-bg");
 					rateBarWrap.append(rateBarBg);
 					rateWrap.append(rateBarWrap);
-					let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champion.pick_rate + "%");
+					let champPickRate = Math.floor(champion.pick_rate);
+					let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champPickRate + "%");
 					let meter = $("<div>").addClass("progress my-auto").css("width","110px");
 					let winMeter = $("<div>").addClass("progress-bar").attr("role", "progressbar").attr("aria-label", "Example with label")
         								.attr("aria-valuenow", ""+champion.winrate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
@@ -2045,7 +2084,8 @@ font-size:12px;
 					let rateBarBg = $("<div>").addClass("rate-bar-bg");
 					rateBarWrap.append(rateBarBg);
 					rateWrap.append(rateBarWrap);
-					let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champion.pick_rate + "%");
+					let champPickRate = Math.floor(champion.pick_rate);
+					let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champPickRate + "%");
 					let meter = $("<div>").addClass("progress my-auto").css("width","110px");
 					let winMeter = $("<div>").addClass("progress-bar").attr("role", "progressbar").attr("aria-label", "Example with label")
         								.attr("aria-valuenow", ""+champion.winrate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
@@ -2195,7 +2235,8 @@ font-size:12px;
 					let rateBarBg = $("<div>").addClass("rate-bar-bg");
 					rateBarWrap.append(rateBarBg);
 					rateWrap.append(rateBarWrap);
-					let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champion.pick_rate + "%");
+					let champPickRate = Math.floor(champion.pick_rate);
+					let pickRate = $("<span>").addClass("pick-rate mx-1").css("width","52px").text("픽률 " + champPickRate + "%");
 					let meter = $("<div>").addClass("progress my-auto").css("width","110px");
 					let winMeter = $("<div>").addClass("progress-bar").attr("role", "progressbar").attr("aria-label", "Example with label")
         								.attr("aria-valuenow", ""+champion.winrate).attr("aria-valuemin", "0").attr("aria-valuemax", "100")
