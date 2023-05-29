@@ -590,7 +590,7 @@ th{
 			<table class="table table-striped">
 				<th class='rank'>순위</th>
 				<th class='champ' colspan="2">챔피언</th>
-				<th class='tier'>티어</th>
+				<th class='tier'>Ai-Tier</th>
 				<th class='ai_score'>Ai-Score</th>
 				<th class='win_rate'>승률</th>
 				<th class='pick_rate'>픽률</th>

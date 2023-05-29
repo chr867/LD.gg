@@ -586,13 +586,15 @@
 			<div class="champion-twpb-box">
 				<table>
 					<tr>
-						<th class="champion-twpb">티어</th>
+						<th class="champion-twpb">Ai-Tier</th>
+						<th class="champion-twpb">Ai-Score</th>
 						<th class="champion-twpb">승률</th>
 						<th class="champion-twpb">픽률</th>
 						<th class="champion-twpb">밴률</th>
 					</tr>
 					<tr>
 						<td class="champion-tier" id="tier"></td>
+						<td class="champion-tier" id ="ai-score"></td>
 						<td class="champion-tier" id="win-rate"></td>
 						<td class="champion-tier" id="pick-rate"></td>
 						<td class="champion-tier" id="ban-rate"></td>
@@ -1066,6 +1068,7 @@ function championBuildInfo(champion_id, team_position) {
 			  }else{
 				  document.getElementById('tier').textContent = champTierData[0].tier;  
 			  }
+			  document.getElementById('ai-score').textContent = champTierData[0].ai_score;
 			  document.getElementById('win-rate').textContent = champTierData[0].win_rate+'%';
 			  document.getElementById('pick-rate').textContent = champTierData[0].pick_rate+'%';
 			  document.getElementById('ban-rate').textContent = champTierData[0].ban_rate+'%';
