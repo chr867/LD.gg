@@ -28,13 +28,13 @@ public interface Summoner_dao {
 
 	SummonerDto get_summoner_info(@Param("summoner_name") String summoner_name);
 
-	List<RecordDto> get_summoner_record(@Param("summoner_name") String summoner_name);
+	List<RecordDto> get_summoner_record(@Param("summoner_name") String summoner_name, @Param("offset") int offset);
 
 	List<SummonerDto> get_renewal_info(@Param("summoner_name") String summoner_name);
 
 	List<SummonerDto> get_champ_position_filter(@Param("summoner_name") String summoner_name);
 
-	List<ChampRecordDto> get_champ_record(@Param("summoner_name") String summoner_name);
+	List<ChampRecordDto> get_champ_record(@Param("summoner_name") String summoner_name, @Param("offset") int offset);
 
 	List<ChampRecordDto> get_20games_summary(@Param("summoner_name") String summoner_name);
 
@@ -46,11 +46,11 @@ public interface Summoner_dao {
 
 	List<ChampRecordDto> getChampClassic(String summoner_name);
 
-	List<BuildDto> getBuild(String match_id, String summoner_name);
+	BuildDto getBuild(@Param("match_id") String match_id, @Param("summoner_name") String summoner_name);
 
 	RecordRankingDto getRanking(@Param("match_id") String match_id, @Param("summoner_name") String summoner_name);
 
-	SummonerDto getSummoner(String lol_account);
+	SummonerDto getSummoner(@Param("lol_account") String lol_account);
 
 	DashBoardDto getDashBoardKDA(String summoner_name);
 
@@ -58,6 +58,18 @@ public interface Summoner_dao {
 
 	List<TeamRankingDataDto> getTeamData(@Param("match_id") String match_id, @Param("summoner_name") String summoner_name);
 
-	List<ChampRecordDto> getChampRecordLane(@Param("summoner_name") String summoner_name, @Param("paramLane") String paramLane);
+	List<ChampRecordDto> getChampRecordLane(@Param("summoner_name") String summoner_name, @Param("paramLane") String paramLane, @Param("offset") int offset);
+
+	List<DashBoardDto> getDashBoardMatchUp(String summoner_name);
+
+	List<DashBoardDto> getDashBoardRecent(String summoner_name);
+
+	List<DashBoardDto> getDashBoardPlayer(@Param("match_id") String match_id, @Param("summoner_name") String summoner_name);
+
+	DashBoardDto getDashBoardProfile(String summoner_name);
+
+	List<BuildDto> getMainMaking(String main);
+
+	List<BuildDto> getSubMaking(String sub);
 
 }

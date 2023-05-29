@@ -3,6 +3,7 @@ package com.ld.gg.service;
 import com.ld.gg.dao.QuestionDao;
 import com.ld.gg.dto.question.AnswerDto;
 import com.ld.gg.dto.question.QuestionDto;
+import com.ld.gg.dto.question.ScrapeDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -97,5 +98,78 @@ public class QuestionService {
         List<AnswerDto> answerDtoList = qd.select_answer(questionId);
 
         return answerDtoList;
+    }
+
+    public int my_scrape(ScrapeDto scrapeDto) {
+        int res = qd.my_scrape(scrapeDto);
+
+        System.out.println("sv res : " + res);
+
+        return res;
+    }
+
+    public List<QuestionDto> select_tag_one(String tag1) {
+        List<QuestionDto> questionDtoList = null;
+
+        String tag = "";
+
+        if (tag1.equals("top")) {
+            tag = "탑";
+        }
+        else if (tag1.equals("mid")) {
+            tag = "미드";
+        }
+        else if (tag1.equals("bottom")) {
+            tag = "바텀";
+        }
+        else if (tag1.equals("jungle")) {
+            tag = "정글";
+        }
+        else if (tag1.equals("supporter")) {
+            tag = "서포터";
+        }
+        else tag = tag1;
+
+
+        questionDtoList = qd.select_tag_one(tag);
+
+        return questionDtoList;
+    }
+
+    public List<QuestionDto> select_tag_by_two(String tag1, String tag2) {
+        List<QuestionDto> questionDtoList = null;
+
+        String tag = "";
+
+        if (tag1.equals("top")) {
+            tag = "탑";
+        }
+        else if (tag1.equals("mid")) {
+            tag = "미드";
+        }
+        else if (tag1.equals("bottom")) {
+            tag = "바텀";
+        }
+        else if (tag1.equals("jungle")) {
+            tag = "정글";
+        }
+        else if (tag1.equals("supporter")) {
+            tag = "서포터";
+        }
+        else tag = tag1;
+
+
+        System.out.println("ㅇㄹㅁ +" + tag1 + tag2 + tag);
+        questionDtoList = qd.select_tag_by_two(tag, tag2);
+
+        return questionDtoList;
+    }
+
+    public List<QuestionDto> select_tag_two(String tag2) {
+        List<QuestionDto> questionDtoList = null;
+
+        questionDtoList = qd.select_tag_two(tag2);
+
+        return questionDtoList;
     }
 }

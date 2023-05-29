@@ -24,7 +24,7 @@ public interface ChampDao {
 	List<Champ_match_up_default> champ_match_up_both(@Param("left_champion")Integer left_champion,
 			@Param("right_champion")Integer right_champion);
 
-	String champ_search(String champion_kr_name);
+	Champ_info champ_search(String champion_name);
 
 	String champ_search_eng(String champion_en_name);
 

@@ -5,101 +5,169 @@
   Time: 7:30 AM
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <html>
 <head>
-    <title>질문글 게시판</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>title</title>
+    <link rel="stylesheet" href="/resources/css/question/questionList.css">
     <link
-            href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
-            rel="stylesheet">
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+            crossorigin="anonymous">
+    <!--BOOTSTRAP JavaScript-->
     <script
-            src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
-    <!-- include summernote css/js -->
-    <link
-            href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css"
-            rel="stylesheet">
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+            crossorigin="anonymous">
+    </script>
+    <!--SWEET-ALERT2 CSS-->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+    <!--SWEET-ALERT2 JS-->
     <script
-            src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+            src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+    <!--JQUERY-->
+    <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+            crossorigin="anonymous"></script>
+    <!--AJAX-->
     <script
-            src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/lang/summernote-ko-KR.js"></script>
+            src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!--JQUERY VALIDATE-->
+    <script
+            src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.0/jquery.validate.min.js"></script>
+    <!--sideBar CSS-->
+    <link rel="stylesheet" type="text/css"
+          href="/resources/css/main/sideBar.css">
+    <!--header CSS-->
+    <link rel="stylesheet" type="text/css"
+          href="/resources/css/main/header.css">
+    <!--footer CSS-->
+    <link rel="stylesheet" type="text/css"
+          href="/resources/css/main/footer.css">
+    <!--loginModal CSS-->
+    <link rel="stylesheet" type="text/css"
+          href="/resources/css/main/loginModal.css">
+    <!--로그인 및 세션관련 JS-->
+    <script src="/resources/js/main/loginSession.js" defer></script>
+    <!-- 채팅 관련 JS-->
+    <script src="/resources/js/main/chat.js" defer></script>
 </head>
+<style>
+
+    .main-container {
+        justify-content: center;
+        text-align: center;
+    }
+
+    #my_champion{
+        position: absolute;
+        top: 15%;
+        left: 15%;
+    }
+
+    #champ_search_box input{
+        width: 220px;
+        border-radius: 5px;
+    }
+
+    #my_champion_img{
+        width: 370px;
+        height: 400px;
+        padding-top: 20px;
+        padding-bottom: 15px;
+        border-radius: 70%;
+    }
+
+    #build_recom_box button{
+        margin-top: 20px;
+    }
+
+    #counter_champion{
+        position: absolute;
+        height: auto;
+        top: 25%;
+        left: 55%;
+    }
+
+    #right_champion_img{
+        width: 140px;
+        height: 140px;
+        border-radius: 70%;
+    }
+
+    #right_champ_search_box{
+        position: relative;
+        left: -30%;
+        top: 30%;
+    }
+
+    #recom_champ{
+        position: absolute;
+        left: 36%;
+        top: 67%;
+    }
+
+    #recom_champ img{
+        width: 140px;
+        height: 140px;
+        margin-right: 20px;
+        border-radius: 70%;
+    }
+
+    #span_container{
+        display: grid;
+    }
+
+</style>
 <body>
-<div id="email" hidden>
-    ${email}
-</div>
-<div>
-    <div>
-        <div><button onclick="select_question(this.value)" value="1">답변 완료</button></div>
-        <div><button onclick="select_question(this.value)" value="2">답변 대기</button></div>
-        <div><button onclick="select_question(this.value)" value="3">내 스크랩</button></div>
-        <div><button onclick="select_question(this.value)" value="4">내 질문</button></div>
+<%@ include file="../header.jsp" %>
+<%@ include file="../sidebar.jsp" %>
+<%@ include file="../footer.jsp" %>
+<div class="main-container-q">
+    <div id="email" hidden="true">
+        ${email}
     </div>
-    <div id="tag_list">
-        <div id="all">전체</div>
-        <div id="position">
-            <button id="hidden_position">포지션</button>
-            <div id="tag_position" hidden="true">
-                <select id="position-dropdown">
-                    <option value="top">탑</option>
-                    <option value="jungle">정글</option>
-                    <option value="mid">미드</option>
-                    <option value="bottom">바텀</option>
-                    <option value="supporter">서포터</option>
-                </select>
-            </div>
-        <div id="champion">
-            <button id="hidden_champion">챔피언</button>
-            <div id="tag_champion" hidden="true"><input type="text" id="champion_txt"></div>
-        </div>
+    <div class="select-question-box">
+        <button class="select-option-btn" onclick="select_question(this.value)" value="1">답변 완료</button>
+        <button class="select-option-btn" onclick="select_question(this.value)" value="2">답변 대기</button>
+        <button class="select-option-btn" onclick="select_question(this.value)" value="3">내 스크랩</button>
+        <button class="select-option-btn" onclick="select_question(this.value)" value="4">내 질문</button>
     </div>
-    <div>
-        <div><button id="question_write">질문 작성하기</button></div>
+    <div class="tag-box" id="tag_list">
+        <table>
+            <tr>
+                <td>포지션</td>
+                <td>
+                    <button class="table-btn" id="position_btn" value="all" onclick="tag1_search(event)">전체</button>
+                    <button class="table-btn" id="position_btn" value="top" onclick="tag1_search(event)">탑</button>
+                    <button class="table-btn" id="position_btn" value="jungle" onclick="tag1_search(event)">정글</button>
+                    <button class="table-btn" id="position_btn" value="mid" onclick="tag1_search(event)">미드</button>
+                    <button class="table-btn" id="position_btn" value="bottom" onclick="tag1_search(event)">바텀</button>
+                    <button class="table-btn" id="position_btn" value="supporter" onclick="tag1_search(event)">서포터</button>
+                </td>
+            </tr>
+            <tr>
+                <td>챔피언</td>
+                <td>
+                    <input class="input_champ"type="text" id="champion_txt">
+                    <button class="table-btn" id="tag-2" onclick="tag2_search(event)">검색</button>
+                </td>
+            </tr>
+        </table>
     </div>
-    <div id="question_list">
-        <div id="question">
-            <div id="question_hashtag">
-                <div id="tag1"></div>
-                <div id="tag2"></div>
-            </div>
-            <div id="question_date">날짜</div>
-            <div id="question_profile">사진</div>
-            <div id="question_title">질문 제목</div>
-            <div id="question_content">질문 내용</div>
-            <div id="answer">
-                <div id="answerer_id">답변 작성자</div>
-                <div id="answer_content">답변 내용</div>
-                <div id="write_answer">
-                    <form method="post" action="/question/write_answer">
-                        <div id="answer_hidden1" hidden><input type="text" name="email" value="${email}"></div>
-                        <div id="answer_hidden2" hidden><input type="text" name="question_id" value="0"></div>
-                        <textarea id="summernote" name="a_content">${content}</textarea></br>
-                        <input id="subBtn" type="button" value="답변 작성" onclick="goWrite(this.form)" />
-                    </form>
-                </div>
-            </div>
-        </div>
+    <div class="question-write-box">
+        <div class="recom-ment">궁금하신 점이 있으신가요? 질문글을 작성하세요!</div>
+        <button class="question-write-btn" id="question_write">질문 작성하기</button>
+    </div>
+    <div class="question-box" id="question_list">
     </div>
 </div>
-<script src="/resources/js/questionList.js"></script>
-</body>
+<div></div>
+<script src="/resources/js/question/questionList.js"></script>
 <script type="text/javascript">
-    $(document).ready(function() {
-        //여기 아래 부분
-        $('#summernote').summernote({
-            width : 200,
-            height : 200, // 에디터 높이
-            minHeight : null, // 최소 높이
-            maxHeight : null, // 최대 높이
-            focus : true, // 에디터 로딩후 포커스를 맞출지 여부
-            lang : "ko-KR", // 한글 설정
-            placeholder : '최대 2048자까지 쓸 수 있습니다' //placeholder 설정
-
-        });
-    });
-
     function goWrite(frm) {
+        console.log(frm);
         let contents = frm.a_content.value; //공백 => &nbsp
         console.log(contents);
         let question_id = frm.question_id.value;
@@ -115,4 +183,5 @@
         frm.submit();
     }
 </script>
+</body>
 </html>

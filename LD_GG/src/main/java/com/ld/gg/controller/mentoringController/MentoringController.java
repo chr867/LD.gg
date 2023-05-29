@@ -148,7 +148,7 @@ public class MentoringController {
 					.addObject("member", mbdto);
 			}
 		}else {
-			return new ModelAndView("redirect:/member/profile");
+			return new ModelAndView("redirect:/member/changeUserType");
 		}
     }
 }

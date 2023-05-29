@@ -4,11 +4,11 @@
 <mapper namespace="com.ld.gg.dao.ChampDao">
 	<select id="champ_rank" resultType="champ_analytics">
 		<![CDATA[
-			select ci.champion_kr_name, ci.champion_en_name, ci.champion_img, ct.* from champion_tier ct 
-			join champion_info ci on ci.champion_id = ct.champion_id
-			where ct.team_position = #{lane}
-			and ct.pick_rate > 0.5
-			order by ct.tier asc
+			SELECT ci.champion_kr_name, ci.champion_en_name, ci.champion_img, ct.*
+			FROM champion_tier ct
+			JOIN champion_info ci ON ci.champion_id = ct.champion_id
+			WHERE ct.team_position = #{lane} AND ct.pick_rate > 0.01
+			ORDER BY ct.tier ASC, ct.ai_score DESC
 		]]>
 	</select>
 
@@ -22,10 +22,11 @@
 		]]>
 	</select>
 
-	<select id="champ_search" resultType="String">
-		select champion_en_name from
-		champion_info
-		where champion_kr_name = #{champion_kr_name}
+	<select id="champ_search" resultType="champ_info">
+		select * 
+		from champion_info
+		where champion_kr_name = #{champion_name}
+		or champion_en_name = #{champion_name}
 	</select>
 	
 	<select id="champ_search_eng" resultType="String">
@@ -35,15 +36,19 @@
 	</select>
 	
 	<select id="champ_recom" resultType="champ_match_up">  
+	<![CDATA[
 		SELECT cmu.*
 		FROM champion_info ci
 		JOIN champion_match_up cmu ON ci.champion_id = cmu.champion_id
 		JOIN champion_info enemy_ci ON enemy_ci.champion_id = cmu.enemy_champ_id
-		WHERE enemy_ci.champion_en_name = #{right_champion}
+		WHERE (enemy_ci.champion_en_name = #{right_champion} OR enemy_ci.champion_kr_name = #{right_champion})
 			AND cmu.team_position = #{lane}
 			AND ci.champion_tag LIKE '%${tag}%'
-		ORDER BY cmu.match_up_win_rate DESC
-		LIMIT 5;
+			AND cmu.match_up_cnt > 20
+		ORDER BY cmu.lane_kill_rate DESC, cmu.match_up_win_rate DESC
+		LIMIT 1, 5;
+	]]>
+		
 	</select>
 	
 	<select id="build_recom_spell" resultType="champ_match_up_spell">
@@ -51,7 +56,7 @@
 		FROM champion_match_up_spell cms
 		JOIN champion_info left_champion ON cms.champion_id = left_champion.champion_id
 		JOIN champion_info right_champion ON cms.enemy_champ_id = right_champion.champion_id
-		WHERE left_champion.champion_kr_name = #{left_champion}
+		WHERE (left_champion.champion_kr_name = #{left_champion} OR left_champion.champion_en_name = #{left_champion})
 		AND right_champion.champion_en_name = #{right_champion}
 		AND cms.team_position = #{team_position}
 	</select>
@@ -61,18 +66,22 @@
 		FROM champion_match_up_item cmi
 		JOIN champion_info left_champion ON cmi.champion_id = left_champion.champion_id
 		JOIN champion_info right_champion ON cmi.enemy_champ_id = right_champion.champion_id
-		WHERE left_champion.champion_kr_name = #{left_champion}
+		WHERE (left_champion.champion_kr_name = #{left_champion} OR left_champion.champion_en_name = #{left_champion})
 		AND right_champion.champion_en_name = #{right_champion}
 		AND cmi.team_position = #{team_position}
 		
 	</select>
 	
 	<select id="build_recom_rune" resultType="champ_match_up_rune">
-		SELECT cmr.*, left_champion.champion_kr_name AS champion_name, right_champion.champion_kr_name AS enemy_champ
+		SELECT cmr.*, left_champion.champion_kr_name AS champion_name, right_champion.champion_kr_name AS enemy_champ,
+		MRI.RUNE_IMG main_keystone_id_img, MRI2.RUNE_IMG main_sub1_id_img, SRI.RUNE_IMG sub_keystone_id_img
 		FROM champion_match_up_rune cmr
 		JOIN champion_info left_champion ON cmr.champion_id = left_champion.champion_id
 		JOIN champion_info right_champion ON cmr.enemy_champ_id = right_champion.champion_id
-		WHERE left_champion.champion_kr_name = #{left_champion}
+		JOIN RUNE_INFO MRI ON CMR.MAIN_KEYSTONE_ID = MRI.RUNE_ID
+		JOIN RUNE_INFO MRI2 ON CMR.MAIN_SUB1_ID = MRI2.RUNE_ID
+		JOIN RUNE_INFO SRI ON CMR.SUB_KEYSTONE_ID = SRI.RUNE_ID
+		WHERE (left_champion.champion_kr_name = #{left_champion} OR left_champion.champion_en_name = #{left_champion})
 		AND right_champion.champion_en_name = #{right_champion}
 		AND cmr.team_position = #{team_position}
 	</select>
@@ -82,7 +91,7 @@
 		FROM champion_match_up_skill cms
 		JOIN champion_info left_champion ON cms.champion_id = left_champion.champion_id
 		JOIN champion_info right_champion ON cms.enemy_champ_id = right_champion.champion_id
-		WHERE left_champion.champion_kr_name = #{left_champion}
+		WHERE (left_champion.champion_kr_name = #{left_champion} OR left_champion.champion_en_name = #{left_champion})
 		AND right_champion.champion_en_name = #{right_champion}
 		AND cms.team_position = #{team_position}
 	</select>
@@ -113,11 +122,11 @@
 	</select>
 	
 	<select id="getChampionItemData" resultType="champ_recomm_info">
-		SELECT * FROM champion_recom_item WHERE champion_id = #{champion_id} AND team_position = #{team_position} order by pick_rate desc;
+		SELECT * FROM champion_recom_item WHERE champion_id = #{champion_id} AND team_position = #{team_position} order by pick_rate desc limit 5
 	</select>
 	
 	<select id="getChampionMythicItemData" resultType="champ_recomm_info">
-		SELECT * FROM champion_mythic_item WHERE champion_id = #{champion_id} AND team_position = #{team_position} order by pick_rate desc;
+		SELECT * FROM champion_mythic_item WHERE champion_id = #{champion_id} AND team_position = #{team_position} order by pick_rate desc limit 5;
 	</select>
 	
 	<select id="getChampionItemBuildData" resultType="champ_recomm_info">
@@ -125,7 +134,7 @@
 	</select>
 	
 	<select id="getChampionShoesData" resultType="champ_recomm_info">
-		SELECT * FROM champion_shoes WHERE champion_id = #{champion_id} AND team_position = #{team_position} order by pick_rate desc;
+		SELECT * FROM champion_shoes WHERE champion_id = #{champion_id} AND team_position = #{team_position} order by pick_rate desc limit 5;
 	</select>
 
 	<select id="getChampionSpellData" resultType="champ_recomm_info">

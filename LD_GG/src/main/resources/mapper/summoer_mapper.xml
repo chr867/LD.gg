@@ -99,7 +99,7 @@ SELECT
     ri2.rune_img as sub_rune,
     si1.spell_en_name as spell1,
     si2.spell_en_name as spell2,
-    ROUND((kills+assists) / team_champion_kills, 2) as kill_involve,
+    ROUND(((kills + assists) / team_champion_kills) * 100, 0) AS kill_involve,
     kda,
     kills,
     deaths,
@@ -127,7 +127,8 @@ inner join
 inner join
 	rune_info as ri2 on sub_rune = ri2.rune_id
 WHERE
-    summoner_name = #{summoner_name};
+    summoner_name = #{summoner_name}
+LIMIT 20 OFFSET #{offset};
 </select>
 
 <select id="getMatchUpPlayer" resultType = "matchUpPlayer">
@@ -136,7 +137,7 @@ WHERE
 	where match_id = #{match_id};
 </select>
 
-<select id="get_champ_record" resultType="champ_record">
+<select id="get_champ_record" resultType="champ_record" parameterType = "Map">
   SELECT
     COUNT(*) AS games,
     ROUND((SUM(CASE WHEN win = 1 THEN 1 ELSE 0 END) / COUNT(*)) * 100,2) AS winrate,
@@ -155,7 +156,8 @@ WHERE
   WHERE
     summoner_name = #{summoner_name}
   GROUP BY
-    champ_name;
+    champ_name
+  LIMIT 20 OFFSET #{offset};
 </select>
 
 <select id="getChampRecordLane" resultType = "champ_record" parameterType = "Map">
@@ -177,7 +179,8 @@ WHERE
   WHERE
     summoner_name = #{summoner_name} and lane = #{paramLane}
   GROUP BY
-    champ_name;
+    champ_name
+  LIMIT 20 OFFSET #{offset};
 </select>
 
 	<select id="getChampSolo">
@@ -248,8 +251,8 @@ WHERE
 
     <select id="get_20games_summary" resultType = "recordsummary">
       SELECT
-        (SELECT COUNT(*) FROM record WHERE summoner_name = #{summoner_name} AND win = 1) AS wins,
-        (SELECT COUNT(*) FROM record WHERE summoner_name = #{summoner_name} AND win = 0) AS losses,
+        SUM(CASE WHEN win = 1 THEN 1 ELSE 0 end) AS wins,
+    	SUM(CASE WHEN win = 0 THEN 1 ELSE 0 end) AS losses,
         ROUND((SUM(CASE WHEN win = 1 THEN 1 ELSE 0 END) / COUNT(*)) * 100, 2) AS winrate,
         ROUND(SUM(kills) / COUNT(*), 1) AS kills_avg,
       ROUND(SUM(deaths) / COUNT(*), 1) AS deaths_avg,
@@ -278,7 +281,7 @@ WHERE
       (SELECT COUNT(*) FROM record WHERE summoner_name = #{summoner_name} AND champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = #{summoner_name} GROUP BY champ_name ORDER BY champ_count DESC LIMIT 2, 1) AS subquery3) AND win = 0) AS top_champ3_losses,
       ROUND((SELECT COUNT(*) FROM record WHERE summoner_name = #{summoner_name} AND champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = #{summoner_name} GROUP BY champ_name ORDER BY champ_count DESC LIMIT 2, 1) AS subquery3) AND win = 1) / (SELECT COUNT(*) FROM record WHERE summoner_name = #{summoner_name} AND champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = #{summoner_name} GROUP BY champ_name ORDER BY champ_count DESC LIMIT 2, 1) AS subquery3)) * 100, 2) AS top_champ3_winrate,
       ROUND(SUM(CASE WHEN champ_name = (SELECT champ_name FROM (SELECT champ_name, COUNT(*) AS champ_count FROM record WHERE summoner_name = #{summoner_name} GROUP BY champ_name ORDER BY champ_count DESC LIMIT 2, 1) AS subquery3) THEN kda ELSE 0 END) / COUNT(*), 2) AS top_champ3_kda_avg
-      FROM record
+      FROM (SELECT * FROM record WHERE summoner_name = #{summoner_name} LIMIT 20) as sub
       WHERE summoner_name = #{summoner_name};
    </select>
 
@@ -336,31 +339,25 @@ WHERE
 </select>
 
 <select id="getBuild" resultType="build">
-   SELECT
-   t.mini_t_time AS
-   timestamp,
-   t.item_id,
-   t.mini_t_skill_slot,
-   r.main_rune,
-   r.main_rune1,
-   r.main_rune2,
-   r.main_rune3,
-   r.main_rune4,
-   r.sub_rune,
-   r.sub_rune1,
-   r.sub_rune2,
-   r.rune_stat1,
-   r.rune_stat2,
-   r.rune_stat3
-   FROM
-   time_line_data t
-   LEFT JOIN
-   record r ON t.match_id = r.match_id AND t.summoner_name =
-   r.summoner_name
-   WHERE
-   t.match_id = #{matchId}
-   AND t.summoner_name =
-   #{summonerName}
+SELECT
+   main_rune,
+   main_rune1,
+   main_rune2,
+   main_rune3,
+   main_rune4,
+   sub_rune,
+   sub_rune1,
+   sub_rune2,
+   rune_stat1,
+   rune_stat2,
+   rune_stat3,
+   (SELECT rune_type FROM rune_info WHERE rune_id = (SELECT main_rune FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) AS main_rune_type,
+   (SELECT rune_type FROM rune_info WHERE rune_id = (SELECT sub_rune FROM record WHERE match_id = #{match_id} AND summoner_name = #{summoner_name})) AS sub_rune_type
+FROM
+   record r
+WHERE
+   match_id = #{match_id}
+   AND summoner_name = #{summoner_name};
 </select>
 
 <select id="getRanking" resultType="recordRanking">
@@ -402,30 +399,65 @@ WHERE
 </select>
 
 <select id="getSummoner" resultType="summoner">
-   select summoner_name,
+   select distinct
+   summoner_name,
    LOWER(tier) as tier,
    profile_icon_id,
    games,
    wins,
    losses,
    lp,
-   round((wins /
-   games) * 100,2) as winrate
-   from summoner_info
-   where summoner_name =
-   "8찬이하밥상엎음"
+   round((wins / games) * 100,2) as winrate from summoner_info
+   where revision_date = (SELECT MAX(revision_date) FROM summoner_info WHERE summoner_name = #{lol_account}) and summoner_name = #{lol_account};
 </select>
 
 <select id="getDashBoardKDA" resultType="dashboard">
-SELECT COUNT(CASE WHEN win = 1 THEN 1 END) AS wins,
-COUNT(CASE WHEN win = 0 THEN 1 END) AS losses,
-SUM(kills) / 20 AS kills_avg,
-SUM(deaths) / 20 AS deaths_avg,
-SUM(assists) / 20 AS assists_avg,
-SUM(kda) / 20 AS kda_avg
-FROM record
-WHERE summoner_name 
-= #{summoner_name} LIMIT 20;
+SELECT
+    SUM(CASE WHEN win = 1 THEN 1 ELSE 0 end) AS wins,
+    SUM(CASE WHEN win = 0 THEN 1 ELSE 0 end) AS losses,
+    ROUND(AVG(kills), 1) AS kills_avg,
+    ROUND(AVG(deaths), 1) AS deaths_avg,
+    ROUND(AVG(assists), 1) AS assists_avg,
+    ROUND(AVG(kda), 1) AS kda_avg,
+    ROUND(SUM(kills + assists) / SUM(team_champion_kills), 2) AS kill_involve
+FROM
+   (SELECT * FROM record WHERE summoner_name = #{summoner_name} LIMIT 20) as sub
+WHERE
+    summoner_name = #{summoner_name};
+</select>
+
+<select id="getDashBoardMatchUp" resultType = "dashboard">
+	select match_id from record where summoner_name = #{summoner_name} limit 4;
+</select>
+
+<select id="getDashBoardPlayer" parameterType = "Map" resultType = "dashboard">
+	select summoner_name, win from record where match_id = #{match_id} and summoner_name &lt;&gt; #{summoner_name}
+</select>
+
+<select id="getDashBoardRecent" resultType = "dashboard">
+SELECT
+  champ_name,
+  SUM(CASE WHEN win = 1 THEN 1 ELSE 0 END) AS wins,
+  SUM(CASE WHEN win = 0 THEN 1 ELSE 0 END) AS losses,
+  IFNULL(ROUND((SUM(CASE WHEN win = 1 THEN 1 ELSE 0 END) / NULLIF(SUM(win), 0)) * 100, 2), 0) AS win_rate
+FROM
+  (SELECT * FROM record WHERE summoner_name = #{summoner_name} LIMIT 10) AS sub
+GROUP BY
+  champ_name;
+</select>
+
+<select id="getDashBoardProfile" resultType = "dashboard">
+	select profile_icon_id, LOWER(tier) as tier from summoner_info where summoner_name = #{summoner_name} order by revision_date desc limit 1;
+</select>
+
+<select id="getMainMaking" resultType = "build">
+	SELECT rune_id,rune_img,rune_num,rune_type
+	FROM rune_info WHERE rune_type = #{main} order by rune_num asc
+</select>
+
+<select id="getSubMaking" resultType = "build">
+	SELECT rune_id,rune_img,rune_num,rune_type
+	FROM rune_info WHERE rune_type = #{sub} order by rune_num asc
 </select>
 
 </mapper>

@@ -24,6 +24,7 @@ import com.ld.gg.dto.champ.Champ_default;
 import com.ld.gg.dto.mentoringdto.CustomMentorDTO;
 import com.ld.gg.dto.mentoringdto.LikeMentorDTO;
 import com.ld.gg.dto.mentoringdto.MentiTagDTO;
+import com.ld.gg.dto.mentoringdto.MentorChampDTO;
 import com.ld.gg.dto.mentoringdto.MentorClassDTO;
 import com.ld.gg.dto.mentoringdto.MentorProfileDTO;
 import com.ld.gg.dto.mentoringdto.MentorReviewDTO;
@@ -54,6 +55,21 @@ public class MentorProfileService {
 	private MemberService mbService;
 	@Autowired
 	private ObjectMapper objectMapper;
+	
+	//소환사명으로 모든 챔피언 통계 가져오기
+	public String getChampionStats(String summoner_name) throws JsonProcessingException {
+		List<MentorChampDTO> champ_stat = mtpdao.getChampionStats(summoner_name);
+		String champ_stat_json = objectMapper.writeValueAsString(champ_stat);
+		return champ_stat_json;
+	}
+	
+	//키워드로 소환사의 챔피언 통계 가져오기
+	public String getByKeywordChampionStats(String summoner_name, String keyword) throws JsonProcessingException {
+		System.out.println(summoner_name+" : "+keyword);
+		List<MentorChampDTO> champ_stat = mtpdao.getByKeywordChampionStats(summoner_name, keyword);
+		String champ_stat_json = objectMapper.writeValueAsString(champ_stat);
+		return champ_stat_json;
+	}
 	
 	//모든 챔피언 이름 가져오기
 	public String select_all_champ() throws JsonProcessingException {
@@ -384,9 +400,23 @@ public class MentorProfileService {
 		return tagdto;
 	}
 	
+	//태그 리스트로 멘토 프로필 가져오기
+	public String findMentorsByTagIds(Integer[] tagIds) throws JsonProcessingException {
+		List<MentorProfileDTO> mtpdto = mtpdao.findMentorsByTagIds(tagIds);
+		String mtpListjson = objectMapper.writeValueAsString(mtpdto);
+		return mtpListjson;
+	}
+	
 	//모든 멘토 프로필 리스트 가져오기
 	public String select_all_mentor_profiles() throws JsonProcessingException{
 		List<MentorProfileDTO> mtpdto =mtpdao.select_all_mentor_profiles();
+		String mtpListjson = objectMapper.writeValueAsString(mtpdto);
+		return mtpListjson;
+	}
+	
+	//정렬된 멘토 프로필 리스트 가져오기
+	public String ordered_mentor_profiles(String order_keyword) throws JsonProcessingException{
+		List<MentorProfileDTO> mtpdto =mtpdao.ordered_mentor_profiles(order_keyword);
 		String mtpListjson = objectMapper.writeValueAsString(mtpdto);
 		return mtpListjson;
 	}

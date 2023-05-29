@@ -15,7 +15,12 @@ body{
 
 #renewal{
 	width : 40%;
-	height : fit-content;
+	height : 40px;
+	border : none;
+	background-color : #001940;
+	color : white;
+	cursor : pointer;
+	font-size : 16px;
 }
 
 #background-profile{
@@ -25,8 +30,11 @@ body{
 }
 
 #summoner-profile{
+	flex : 1;
 	display : flex;
 	flex-direction : row;
+	justify-content : center;
+	align-items : center;
 }
 
 .flex-profile-img{
@@ -39,16 +47,19 @@ body{
 
 #profile-icon{
 	position : relative;
+	display : flex;
+	flex-direction : row;
+	justify-content : center;
+	align-items : center;
 }
 
 .flex-summoner-level{
 	position : absolute;
-	bottom : -0.5px;
-	right : 175px;
+	bottom : 0;
+	right : 177px;
 	font-size : 18px;
 	width : 40px;
 	height : 25px;
-	border : 0.7px solid white;
 	background-color : black;
 	display : flex;
 	justify-content : center;
@@ -61,7 +72,11 @@ body{
 }
 
 #solo-rank{
-	width : 50%;
+	flex : 1;
+	display : flex;
+	flex-direction : row;
+	align-items : center;
+	justify-content : center;
 	height : fit-content;
 }
 
@@ -839,40 +854,180 @@ body{
 	display : flex;
 }
 
+.RankingDataDiv{
+	width : 100%;
+	display : flex;
+	flex-direction : column;
+}
 
+.firstDiv{
+	width : 100%;
+	display : flex;
+	flex-direction : row;
+}
 
+.secondDiv{
+	width : 100%;
+	display : flex;
+	flex-direction : row;
+}
 
+.delatDiv, .takenDiv, .killsDiv, .deathsDiv, .assistsDiv, .redWardsDiv, .csDiv{
+	flex : 1;
+}
 
+.dealtTitleDiv {
+  position: relative;
+}
 
+.dealtTitleDiv span {
+  position: absolute;
+  top: 0;
+  right: 10px;
+  margin-left: 10px;
+}
 
+.takenTitleDiv{
+	position : relative;
+}
 
+.takenTitleDiv span{
+	position : absolute;
+	top : 0;
+	right : 10px;
+	margin-left : 10px;
+}
 
+.killsTitleDiv{
+	position : relative;
+}
 
+.killsTitleDiv span{
+	position : absolute;
+	top : 0;
+	right : 10px;
+	margin-left : 10px;
+}
 
+.deathsTitleDiv{
+	position : relative;
+}
 
+.deathsTitleDiv span{
+	position : absolute;
+	top : 0;
+	right : 10px;
+	margin-left : 10px;
+}
 
+.assistsTitleDiv{
+	width : 70%;
+	position : relative;
+}
 
+.assistsTitleDiv span{
+	position : absolute;
+	top : 0;
+	right : 10px;
+	margin-left : 10px;
+}
 
+.redWardsTitleDiv{
+	width : 70%;
+	position : relative;
+}
 
+.redWardsTitleDiv span{
+	position : absolute;
+	top : 0;
+	right : 10px;
+	margin-left : 10px;
+}
 
+.CSTitleDiv{
+	width : 70%;
+	position : relative;
+}
 
+.CSTitleDiv span{
+	position : absolute;
+	top : 0;
+	right : 10px;
+	margin-left : 10px;
+}
 
+.flex-record-div{
+	width : 100%;
+}
 
+#record{
+	width : 100%;
+}
 
+.recordMoreBtn{
+	width : 100%;
+	margin : 5px;
+	border : none;
+	height : 25px;
+}
 
+.runeBuildDiv{
+	width : 100%;
+	display : flex;
+	flex-direction : row;
+}
 
+.buildMainRuneDiv, .buildSubRuneDiv{
+	flex : 1;
+	display : flex;
+	flex-direction : column;
+	align-items : center;
+	justify-content : center;
+}
 
+.mainRuneTitle, .subRuneTitle{
+	display : flex;
+	align-items : center;
+	justify-content : center;
+}
 
+.mainRune1, .mainRune2, .mainRune3, .mainRune4{
+	display : flex;
+	align-items : center;
+	justify-content : center;
+}
 
+.subRune1, .subRune2, .subRune3{
+	display : flex;
+	align-items : center;
+	justify-content : center;
+}
 
+.buildRuneImg{
+	width : 40px;
+	height : auto;
+}
 
+.fragmentImg{
+	width : 40px;
+	height : auto;
+}
 
+.mainRuneTitle, .mainRune1, .mainRune2, .mainRune3, .mainRune4{
+	margin : 15px 0 0 0;
+}
 
+.subRuneTitle, .subRune1, .subRune2, .subRune3, .firstFragmentDiv, .secondFragmentDiv, .thirdFragmentDiv{
+	margin : 8px 0 0 0;
+}
 
+.mainRune1 img, .mainRune2 img, .mainRune3 img, .mainRune4 img{
+	margin : 0 20px 0 20px;
+}
 
-
-
-
+.subRune1 img, .subRune2 img, .subRune3 img, .firstFragmentDiv img, .secondFragmentDiv img, .thirdFragmentDiv img{
+	margin : 0 20px 0 20px;
+}
 
 
 

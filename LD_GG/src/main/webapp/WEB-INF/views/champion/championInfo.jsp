@@ -3,9 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>챔피언 상세</title>
-<!--BOOTSTRAP CSS-->
+<title>LD.GG</title>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
 	rel="stylesheet"
@@ -16,7 +14,7 @@
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
 	integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
 	crossorigin="anonymous">
-</script>
+    </script>
 <!--SWEET-ALERT2 CSS-->
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
@@ -47,14 +45,18 @@
 	href="/resources/css/main/loginModal.css">
 <!--로그인 및 세션관련 JS-->
 <script src="/resources/js/main/loginSession.js" defer></script>
+<!-- 채팅 관련 JS-->
+<script src="/resources/js/main/chat.js" defer></script>
 <!--CHAMPION INFO CSS-->
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/champion/info.css">
+
+
 <style type="text/css">
 .top-container {
 	display: flex;
 	box-sizing: border-box;
-	padding: 100px 50px 100px 100px;
+	padding: 100px 50px 0px 100px;
 }
 
 .left-container {
@@ -78,528 +80,102 @@
 }
 
 .bottom-container {
+	padding: 20px 50px 50px 100px;
 	display: flex;
 	box-sizing: border-box;
 }
 </style>
 
-<!-- right_container start -->
-<style>
-.match_up_container{
-	position: relative;
-	width: 100%;
-	left: 100px;
-	display: flex;
-}
-
-.match_up_chart {
-	display: flex;
-	width: 70%;
-	height: 400px;
-}
-
-#match_up_left, #match_up_right {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-}
-
-#match_up_left span, #match_up_right span {
-	text-align: center;
-}
-
-#chartdiv {
-	margin-left: 50px;
-	margin-right: 50px;
-	width: 65%;
-}
-
-.bar_title {
-	display: grid;
-	position: relative;
-	text-align: center;
-}
-
-.bar_title_left {
-	grid-row: 1;
-	justify-self: left;
-}
-
-.bar_title_content {
-	grid-row: 1;
-	justify-self: center;
-}
-
-.bar_title_right {
-	grid-row: 1;
-	justify-self: right;
-}
-
-#match_up_table_container {
-	width: 22%;
-	height: 300px;
-}
-
-.champion_name_container {
-	width: 240px;
-}
-
-.match_up_table {
-	overflow: scroll;
-	position: relative;
-	width: 100%;
-	height: 270px;
-}
-
-.match_up_table div {
-	display: flex;
-}
-
-.match_up_table_header{
-	display: flex;
-	justify-content: space-between;
-}
-
-.match_up_table_header :last-child{
-	margin-right: 40px;
-}
-
-.match_up_table .champion{
-	justify-content: space-between;
-}
-
-.match_up_table .champion:not(:first-child){
-	margin-top:10px;
-}
-
-.champion > div:first-child{
-	line-height: 75px;
-	width: 10px;
-}
-
-.champion > div:last-child{
-	text-align: center;
-	margin-right: 65px;
-	line-height: 75px;
-	width: 30px;
-}
-
-.table-img {
-	width: 75px;
-	height: 75px;
-	border-radius: 0.5rem;
-	margin-right: 5px;
-}
-
-.table-champion-name{
-	width: 150px;
-	text-align: left;
-	position: relative;
-	left: 5%;
-	line-height: 75px;
-}
-
-#match_up_left > img,
-#match_up_right > img{
-	width: 150px;
-	border-radius: 0.5rem;
-	position: relative;
-	top: -12%;
-}
-
-#match_up_left > div,
-#match_up_right > div{
-	text-align: center;
-	position: relative;
-	top: -10%;
-	margin-bottom: 10px
-}
-
-
-</style>
-<!-- right_container end -->
 
 <style type="text/css">
-.start-item-shoes-container {
-	width: 100%;
+.mythic-common-item-container {
+	width: 720px;
 	height: 300px;
 	display: flex;
-	align-items: center;
+	box-sizing: border-box;
 }
 
-.start-item-box {
+.mythic-item-container {
 	width: 350px;
 	height: 100%;
+	background-color: #fff;
+	border-radius: 0.5rem;
 	margin-right: 20px;
-	background-color: #fff;
-	border-radius: 0.5rem;
+	box-sizing: border-box;
 }
 
-.shoes-box {
+.common-item-container {
 	width: 350px;
 	height: 100%;
 	background-color: #fff;
 	border-radius: 0.5rem;
+	box-sizing: border-box;
 }
 
-.start-item-title {
+.mythic-item-title {
 	text-align: center;
 }
 
-.shoes-title {
+.mythic-item-title h4 {
+	font-size: 20px;
+	font-weight: 700;
+}
+
+.common-item-title {
 	text-align: center;
-	margin-bottom: 20px;
 }
 
-.start-item-title h4 {
-	font-size: 18px;
+.common-item-title h4 {
+	font-size: 20px;
 	font-weight: 700;
 }
 
-.shoes-title h4 {
-	font-size: 18px;
-	font-weight: 700;
+.mythic-recomm-box .item-img:hover .item-desc {
+	visibility: visible;
+	opacity: 1;
 }
 
-.item-img {
-	margin-right: 5px;
+.common-recomm-box .item-img:hover .item-desc {
+	visibility: visible;
+	opacity: 1;
 }
 
-.item-img img {
-	width: 40px;
-	height: 40px;
-	border-radius: 0.5rem;
-}
-
-.start-item {
-	display: flex;
-	padding-left: 20px;
-	margin-top: 10px;
-}
-
-.start-item-build-box {
-	margin-top: 20px;
-}
-
-.start-item-rate {
-	margin-top: 5px;
-	align-items: center;
-	display: flex;
-}
-
-.item-desc {
+.lane-desc {
 	position: absolute;
-	z-index: 10;
-	width: 300px;
+	top: 35px;
+	z-index: 300;
+	width: 150px;
 	background-color: black;
 	color: #fff;
-	border-radius: 1rem;
+	border-radius: 0.5rem;
 	padding: 10px;
 	visibility: hidden;
 	opacity: 0;
 	transition: visibility 0s, opacity 0.3s linear;
+	font-size: 14px;
 }
 
-.start-item .item-img:hover .item-desc{
+.lane-img:hover .lane-desc {
 	visibility: visible;
 	opacity: 1;
-}
-
-.shoes-recom-box .item-img:hover .item-desc{
-	visibility: visible;
-	opacity: 1;
-}
-.shoes{
-	display: flex;
-	margin-bottom: 10px;
-	align-items: center;
-	padding-left: 20px;
 }
 </style>
+
+
 </head>
 
 <body>
-
+	<%@ include file="../header.jsp"%>
+	<%@ include file="../sidebar.jsp"%>
+	<%@ include file="../footer.jsp"%>
+  
+	<!----------------------------------------------------------------------------------------------------------------->
 	<div id="session-summoner-name" style="display: none">${sessionScope.lol_account}</div>
 	<div id="session-user-type" style="display: none">${sessionScope.user_type}</div>
 	<div id="session-summoner-name" style="display: none">${sessionScope.summoner_name}</div>
 	<div id="session-summoner-icon" style="display: none">${sessionScope.summoner_icon}</div>
 	<!----------------------------------------------------------------------------------------------------------------->
-	<!-- 사이드바 -->
-	<div class="sidebar">
-		<div class="sidebar-nothover-menu">
-			<div class="sidebar-menu" style="padding: 8px 0px 8px 12px;">
-				<img src="/resources/img/logo/LD_logo_gray.png" alt=""
-					style="width: 40px; height: 40px;">
-			</div>
-			<div class="sidebar-menu" style="padding: 18px;">
-				<img src="" alt="">
-			</div>
-			<div class="sidebar-menu">
-				<img src="/resources/img/icon/free-icon-ranking-3162263.png" alt=""
-					class="side-bar-icon">
-			</div>
-			<div class="sidebar-menu">
-				<img src="/resources/img/icon/free-icon-community-3594834.png"
-					alt="" class="side-bar-icon">
-			</div>
-			<div class="sidebar-menu">
-				<img src="/resources/img/icon/free-icon-mentorship-8920780.png"
-					alt="" class="side-bar-icon">
-			</div>
-			<div class="sidebar-menu">
-				<img src="/resources/img/icon/free-icon-game-control-4315528.png"
-					alt="" class="side-bar-icon">
-			</div>
-			<div class="sidebar-menu">
-				<img src="/resources/img/icon/free-icon-user-996484.png" alt=""
-					class="side-bar-icon">
-			</div>
-			<div class="sidebar-menu">
-				<img src="/resources/img/icon/free-icon-megaphone-92206.png" alt=""
-					class="side-bar-icon">
-			</div>
-		</div>
 
-		<div class="sidebar-area">
-			<div class="sidebar-logo-box" onclick="moveMain()">
-				<img src="/resources/img/logo/LoLing in the Deep2.svg" alt="LD.GG로고">
-			</div>
-
-			<div class="accordion" id="accordionExample">
-
-				<div class="accordion-item">
-					<h2 class="accordion-header" id="headingOne">
-						<button class="accordion-button" type="button"
-							data-bs-toggle="collapse" data-bs-target="#collapseOne"
-							aria-expanded="true" aria-controls="collapseOne">
-							<img src="/resources/img/icon/free-icon-ranking-3162263.png"
-								alt="" class="side-bar-icon"> 랭킹
-						</button>
-					</h2>
-					<div id="collapseOne" class="accordion-collapse collapse"
-						aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-						<div class="accordion-body">
-							<div class="accordion-body-menu">
-								<a href="/champion/rank" class="accordion-body-link"><span>•
-										챔피언 티어</span></a>
-							</div>
-							<div class="accordion-body-menu">
-								<a href="/summoner/rank" class="accordion-body-link"><span>•
-										소환사 랭킹</span></a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="accordion-item">
-					<h2 class="accordion-header" id="headingTwo">
-						<button class="accordion-button collapsed" type="button"
-							data-bs-toggle="collapse" data-bs-target="#collapseTwo"
-							aria-expanded="false" aria-controls="collapseTwo">
-							<img src="/resources/img/icon/free-icon-community-3594834.png"
-								alt="" class="side-bar-icon"> 커뮤니티
-						</button>
-					</h2>
-					<div id="collapseTwo" class="accordion-collapse collapse"
-						aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-						<div class="accordion-body">
-							<span class="bullet bullet-dot"></span>
-							<div class="accordion-body-menu">
-								<a href="/tip/" class="accordion-body-link"><span>•
-										챔피언 공략</span></a>
-							</div>
-							<div class="accordion-body-menu">
-								<a href="/mate/" class="accordion-body-link"><span>•
-										롤 메이트</span></a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="accordion-item">
-					<h2 class="accordion-header" id="headingThree">
-						<button class="accordion-button collapsed" type="button"
-							data-bs-toggle="collapse" data-bs-target="#collapseThree"
-							aria-expanded="false" aria-controls="collapseThree">
-							<img src="/resources/img/icon/free-icon-mentorship-8920780.png"
-								alt="" class="side-bar-icon"> 멘토링
-						</button>
-					</h2>
-					<div id="collapseThree" class="accordion-collapse collapse"
-						aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-						<div class="accordion-body">
-							<div class="accordion-body-menu">
-								<a href="/mentor/custom-mentor/" class="accordion-body-link"><span>•
-										맞춤 멘토</span></a>
-							</div>
-							<div class="accordion-body-menu">
-								<a href="/mentor/list/" class="accordion-body-link"><span>•
-										멘토 찾기</span></a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="accordion-item">
-					<h2 class="accordion-header" id="headingFour">
-						<button class="accordion-button collapsed" type="button"
-							data-bs-toggle="collapse" data-bs-target="#collapseFour"
-							aria-expanded="false" aria-controls="collapseFour">
-							<img src="/resources/img/icon/free-icon-game-control-4315528.png"
-								alt="" class="side-bar-icon"> 미니게임
-						</button>
-					</h2>
-					<div id="collapseFour" class="accordion-collapse collapse"
-						aria-labelledby="headingFour" data-bs-parent="#accordionExample">
-						<div class="accordion-body">
-							<div class="accordion-body-menu">
-								<a href="" class="accordion-body-link"><span>• 승부예측</span></a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="accordion-item">
-					<h2 class="accordion-header" id="headingFive">
-						<button class="accordion-button collapsed" type="button"
-							data-bs-toggle="collapse" data-bs-target="#collapseFive"
-							aria-expanded="false" aria-controls="collapseFive">
-							<img src="/resources/img/icon/free-icon-user-996484.png" alt=""
-								class="side-bar-icon"> 마이 메뉴
-						</button>
-					</h2>
-					<div id="collapseFive" class="accordion-collapse collapse"
-						aria-labelledby="headingFive" data-bs-parent="#accordionExample">
-						<div class="accordion-body">
-							<div class="accordion-body-menu">
-								<a href="/summoner/testDashBoard" class="accordion-body-link"><span>•
-										대시보드</span></a>
-							</div>
-							<div class="accordion-body-menu">
-								<a href="/mentor/write-profile" class="accordion-body-link"><span>•
-										프로필</span></a>
-							</div>
-							<div class="accordion-body-menu">
-								<a href="" class="accordion-body-link"><span>• 개인정보
-										수정</span></a>
-							</div>
-							<div class="accordion-body-menu">
-								<a href="/mentor/my-mentoring/" class="accordion-body-link"><span>•
-										마이 멘토링</span></a>
-							</div>
-							<div class="accordion-body-menu">
-								<a href="" class="accordion-body-link"><span>• 내 지갑</span></a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="accordion-item">
-					<h2 class="accordion-header" id="headingSix">
-						<button class="accordion-button collapsed" type="button"
-							data-bs-toggle="collapse" data-bs-target="#collapseSix"
-							aria-expanded="false" aria-controls="collapseSix">
-							<img src="/resources/img/icon/free-icon-megaphone-92206.png"
-								alt="" class="side-bar-icon"> 고객지원
-						</button>
-					</h2>
-					<div id="collapseSix" class="accordion-collapse collapse"
-						aria-labelledby="headingSix" data-bs-parent="#accordionExample">
-						<div class="accordion-body">
-							<div class="accordion-body-menu">
-								<a href="/userinterface/notice" class="accordion-body-link"><span>•
-										공지사항</span></a>
-							</div>
-							<div class="accordion-body-menu">
-								<a href="/faq/" class="accordion-body-link"><span>•
-										FAQ</span></a>
-							</div>
-							<div class="accordion-body-menu">
-								<a href="/faq/inquiries/" class="accordion-body-link"><span>•
-										문의사항</span></a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-			</div>
-		</div>
-	</div>
-	<!----------------------------------------------------------------------------------------------------------------->
-	<!----------------------------------------------------------------------------------------------------------------->
-	<!-- 헤더 -->
-	<div class="header-container">
-		<header>
-
-			<div class="search-bar-box">
-				<img src="/resources/img/logo/LD_logo_bluered.png" alt=""
-					class="search-bar-logo"> <input type="text"
-					class="search-bar-input" placeholder="소환사명을 입력해주세요"
-					autocomplete="off"> <img
-					src="/resources/img/icon/free-icon-magnifying-glass-49116.png"
-					alt="" class="search-bar-icon">
-			</div>
-
-			<div class="header-icon-box" style="display: none;">
-				<div class="message-icon-box">
-					<img src="/resources/img/icon/free-icon-message-5941217.png" alt=""
-						class="message-icon-img" onclick="chatPopup();">
-					<div class="message-notification"></div>
-				</div>
-				<div class="alarm-icon-box">
-					<img
-						src="/resources/img/icon/free-icon-notification-bell-3680267.png"
-						alt="" class="alarm-icon-img"> <span
-						class="alarm-notification"></span>
-				</div>
-				<div class="bookmark-icon-box">
-					<img src="/resources/img/icon/free-icon-bookmark-white-25667.png"
-						alt="" class="bookmark-icon-img">
-				</div>
-			</div>
-
-			<div class="user-info-box" style="display: none;"
-				onclick="go_mypage()">
-				<div class="summoner-profile-icon-box">
-					<img
-						src="/resources/img/profileicon/${sessionScope.summoner_icon}.png"
-						alt="">
-				</div>
-				<div class="summoner-name-box">
-					<h5>${sessionScope.lol_account}님</h5>
-				</div>
-				<div class="user-type-box">
-					<div class="user-type-common" style="display: none;">
-						<h5>일반회원</h5>
-					</div>
-					<div class="user-type-mentor" style="display: none;">
-						<h5>멘토회원</h5>
-					</div>
-					<div class="user-type-admin" style="display: none;">
-						<h5>어드민</h5>
-					</div>
-					<div class="user-type-stop" style="display: none;">
-						<h5>정지회원</h5>
-					</div>
-				</div>
-			</div>
-
-			<div class="login-button-box">
-				<button class="login-button" data-bs-toggle="modal"
-					data-bs-target="#login-modal" onclick="loginCheck()">LOGIN</button>
-			</div>
-
-			<div class="logout-button-box" style="display: none;">
-				<form id="logoutFrm" action="/member/logout" method="post">
-					<button class="logout-button" onclick="logout()">LOGOUT</button>
-				</form>
-			</div>
-
-		</header>
-	</div>
-	<!----------------------------------------------------------------------------------------------------------------->
-	<!----------------------------------------------------------------------------------------------------------------->
 	<!-- 로그인 모달박스 -->
 	<div class="modal fade" id="login-modal" tabindex="-1"
 		aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -650,23 +226,7 @@
 		</div>
 	</div>
 	<!----------------------------------------------------------------------------------------------------------------->
-	<!----------------------------------------------------------------------------------------------------------------->
-	<!-- 푸터 -->
-	<div class="footer-container">
-		<footer>
-			<div class="team-name-box">
-				<img src="/resources/img/logo/team_name_logo.png" alt=""
-					class="team-name-img">
-				<h5 class="team-name-h5">TEAM : Loling Thunder</h5>
-			</div>
 
-			<div class="team-members-box">
-				<h5 class="team-members-box">TEAM MEMBERS: 오건오, 박민규, 채희정, 최형로,
-					김시현, 이태현</h5>
-			</div>
-		</footer>
-	</div>
-	<!----------------------------------------------------------------------------------------------------------------->
 	<!----------------------------------------------------------------------------------------------------------------->
 	<div class="top-container">
 		<div class="left-container">
@@ -741,13 +301,15 @@
 			<div class="champion-twpb-box">
 				<table>
 					<tr>
-						<th class="champion-twpb">티어</th>
+						<th class="champion-twpb">Ai-Tier</th>
+						<th class="champion-twpb">Ai-Score</th>
 						<th class="champion-twpb">승률</th>
 						<th class="champion-twpb">픽률</th>
 						<th class="champion-twpb">밴률</th>
 					</tr>
 					<tr>
 						<td class="champion-tier" id="tier"></td>
+						<td class="champion-tier" id="ai-score"></td>
 						<td class="champion-tier" id="win-rate"></td>
 						<td class="champion-tier" id="pick-rate"></td>
 						<td class="champion-tier" id="ban-rate"></td>
@@ -940,16 +502,21 @@
 				<div class="shoes-box">
 					<div class="shoes-title">
 						<h4>신발 추천</h4>
-						<div class="shoes-recom-box">
-							
-						</div>
+						<div class="shoes-recom-box"></div>
 					</div>
 				</div>
 			</div>
-		</div>
 
+
+			<div class="item-build-container">
+				<h4 class="item-build-title">아이템 빌드 추천</h4>
+				<div class="item-build-stack"></div>
+			</div>
+
+
+		</div>
 	</div>
-  
+
 	<div class="bottom-container">
 		<!-- match_up_conatiner start -->
 		<div class="match_up_container">
@@ -988,7 +555,7 @@
 								aria-valuemax="100"></div>
 						</div>
 					</div>
-	
+
 					<div class="bar_block">
 						<div class="bar_title kda">
 							<div class="bar_title_left kda"></div>
@@ -1003,7 +570,7 @@
 								aria-valuemax="100"></div>
 						</div>
 					</div>
-	
+
 					<div class="bar_block">
 						<div class="bar_title tower_kill_time">
 							<div class="bar_title_left tower_kill_time"></div>
@@ -1018,7 +585,7 @@
 								aria-valuemax="100"></div>
 						</div>
 					</div>
-	
+
 					<div class="bar_block">
 						<div class="bar_title win_rate">
 							<div class="bar_title_left win_rate"></div>
@@ -1033,7 +600,7 @@
 								aria-valuemax="100"></div>
 						</div>
 					</div>
-	
+
 					<div class="bar_block">
 						<div class="bar_title pick_rate">
 							<div class="bar_title_left pick_rate"></div>
@@ -1048,7 +615,7 @@
 								aria-valuemax="100"></div>
 						</div>
 					</div>
-	
+
 					<div class="bar_block">
 						<div class="bar_title ban_rate">
 							<div class="bar_title_left ban_rate"></div>
@@ -1063,23 +630,38 @@
 								aria-valuemax="100"></div>
 						</div>
 					</div>
-	
+
 				</div>
 				<!-- chartdiv end -->
-	
+
 				<div id="match_up_right"></div>
 			</div>
 			<div id="match_up_table_container">
-				
+
 				<div class="match_up_table_header">
-					<div>#</div>
+					<!-- 				<div>#</div> -->
 					<div>챔피언</div>
 					<div>라인킬 확률</div>
 				</div>
-				
+
 				<div class="match_up_table"></div>
 			</div>
 			<!-- match_up_conatiner end -->
+		</div>
+
+		<div class="mythic-common-item-container">
+			<div class="mythic-item-container">
+				<div class="mythic-item-title">
+					<h4>신화 아이템 추천</h4>
+					<div class="mythic-recomm-box"></div>
+				</div>
+			</div>
+			<div class="common-item-container">
+				<div class="common-item-title">
+					<h4>일반 아이템 추천</h4>
+					<div class="common-recomm-box"></div>
+				</div>
+			</div>
 		</div>
 	</div>
 </body>
@@ -1099,22 +681,53 @@ function championLaneInfo(champion_id) {
 	  }).done(res => {
 	    let laneSelectBox = document.querySelector('.lane-select-box');
 	    laneSelectBox.innerHTML = ''; // 기존 내용 초기화
+	    console.log(res)
 
 	    for (let i = 0; i < res.length; i++) {
 	      let team_position = res[i].team_position;
 	      let html = '';
 
 	      if (team_position === 'TOP') {
-	        html = '<div class="lane-img lane-top" onclick="selectLane(\'TOP\')"><img src="/resources/img/ranked-positions/Position_Silver-Top.png" alt="로그인 이미지"></div>';
-	      } else if (team_position === 'JUNGLE') {
-	        html = '<div class="lane-img lane-jungle" onclick="selectLane(\'JUNGLE\')"><img src="/resources/img/ranked-positions/Position_Silver-Jungle.png" alt="로그인 이미지"></div>';
-	      } else if (team_position === 'MIDDLE') {
-	        html = '<div class="lane-img lane-middle" onclick="selectLane(\'MIDDLE\')"><img src="/resources/img/ranked-positions/Position_Silver-Mid.png" alt="로그인 이미지"></div>';
-	      } else if (team_position === 'BOTTOM') {
-	        html = '<div class="lane-img lane-bottom" onclick="selectLane(\'BOTTOM\')"><img src="/resources/img/ranked-positions/Position_Silver-Bot.png" alt="로그인 이미지"></div>';
-	      } else if (team_position === 'UTILITY') {
-	        html = '<div class="lane-img lane-support" onclick="selectLane(\'UTILITY\')"><img src="/resources/img/ranked-positions/Position_Silver-Support.png" alt="로그인 이미지"></div>';
-	      }
+	    	  html += '<div class="lane-img lane-top" onclick="selectLane(\'TOP\')">';
+	    	  html += '<img src="/resources/img/ranked-positions/Position_Silver-Top.png" alt="로그인 이미지">';
+	    	  html += '<div class="lane-desc">';
+	    	  html += '<div>승률 : ' + res[i].win_rate + '%</div>';
+	    	  html += '<div>픽률 : ' + res[i].pick_rate + '%</div>';
+	    	  html += '</div>';
+	    	  html += '</div>';
+	    	} else if (team_position === 'JUNGLE') {
+	    	  html += '<div class="lane-img lane-jungle" onclick="selectLane(\'JUNGLE\')">';
+	    	  html += '<img src="/resources/img/ranked-positions/Position_Silver-Jungle.png" alt="로그인 이미지">';
+	    	  html += '<div class="lane-desc">';
+	    	  html += '<div>승률 : ' + res[i].win_rate + '%</div>';
+	    	  html += '<div>픽률 : ' + res[i].pick_rate + '%</div>';
+	    	  html += '</div>';
+	    	  html += '</div>';
+	    	} else if (team_position === 'MIDDLE') {
+	    	  html += '<div class="lane-img lane-middle" onclick="selectLane(\'MIDDLE\')">';
+	    	  html += '<img src="/resources/img/ranked-positions/Position_Silver-Mid.png" alt="로그인 이미지">';
+	    	  html += '<div class="lane-desc">';
+	    	  html += '<div>승률 : ' + res[i].win_rate + '%</div>';
+	    	  html += '<div>픽률 : ' + res[i].pick_rate + '%</div>';
+	    	  html += '</div>';
+	    	  html += '</div>';
+	    	} else if (team_position === 'BOTTOM') {
+	    	  html += '<div class="lane-img lane-bottom" onclick="selectLane(\'BOTTOM\')">';
+	    	  html += '<img src="/resources/img/ranked-positions/Position_Silver-Bot.png" alt="로그인 이미지">';
+	    	  html += '<div class="lane-desc">';
+	    	  html += '<div>승률 : ' + res[i].win_rate + '%</div>';
+	    	  html += '<div>픽률 : ' + res[i].pick_rate + '%</div>';
+	    	  html += '</div>';
+	    	  html += '</div>';
+	    	} else if (team_position === 'UTILITY') {
+	    	  html += '<div class="lane-img lane-support" onclick="selectLane(\'UTILITY\')">';
+	    	  html += '<img src="/resources/img/ranked-positions/Position_Silver-Support.png" alt="로그인 이미지">';
+	    	  html += '<div class="lane-desc">';
+	    	  html += '<div>승률 : ' + res[i].win_rate + '%</div>';
+	    	  html += '<div>픽률 : ' + res[i].pick_rate + '%</div>';
+	    	  html += '</div>';
+	    	  html += '</div>';
+	    	}
 
 	      laneSelectBox.innerHTML += html;
 	    }
@@ -1135,6 +748,7 @@ function championBuildInfo(champion_id, team_position) {
 		  method: 'get',
 		  url: '/champion/info/build',
 		  data: { champion_id: champion_id, team_position: team_position},
+		  async: false
 		}).done(res => {
 			let championBuildInfo = res;
 			let champRuneData = championBuildInfo.champRuneData;
@@ -1168,32 +782,33 @@ function championBuildInfo(champion_id, team_position) {
 			  }else{
 				  document.getElementById('tier').textContent = champTierData[0].tier;  
 			  }
+			  document.getElementById('ai-score').textContent = champTierData[0].ai_score;
 			  document.getElementById('win-rate').textContent = champTierData[0].win_rate+'%';
 			  document.getElementById('pick-rate').textContent = champTierData[0].pick_rate+'%';
 			  document.getElementById('ban-rate').textContent = champTierData[0].ban_rate+'%';
 			  //-----------------------------------------------------------------------------------
 			  // 상대하기 쉬운 챔피언 
 			  let easyTableHeaders = document.getElementsByClassName('easy-champ-img');
-			  for (var i = 0; i < easyTableHeaders.length; i++) {
+			  for (let i = 0; i < easyTableHeaders.length; i++) {
 				  easyTableHeaders[i].innerHTML = '';
 				  easyTableHeaders[i].innerHTML = '<img alt="" src="/resources/img/champion_img/square/'+champEasyChampData[i].champion_img+'" class="champion-img" id="'+ champEasyChampData[i].enemy_champ_id +'">';
 			  }
 			  let hardEasyTableData = document.getElementsByClassName('easy-champ-win-rate');
 
-			  for (var i = 0; i < hardEasyTableData.length; i++) {
+			  for (let i = 0; i < hardEasyTableData.length; i++) {
 				  hardEasyTableData[i].innerHTML = '';
 				  hardEasyTableData[i].innerHTML = champEasyChampData[i].match_up_win_rate+'%';
 			  }
 			  //-----------------------------------------------------------------------------------
 			  // 상대하기 어려운 챔피언 
 			  let hardTableHeaders = document.getElementsByClassName('hard-champ-img');
-			  for (var i = 0; i < hardTableHeaders.length; i++) {
+			  for (let i = 0; i < hardTableHeaders.length; i++) {
 				  hardTableHeaders[i].innerHTML = '';
 				  hardTableHeaders[i].innerHTML = '<img alt="" src="/resources/img/champion_img/square/'+champHardChampData[i].champion_img+'" class="champion-img" id="'+ champHardChampData[i].enemy_champ_id +'">';
 			  }
 			  var hardTableData = document.getElementsByClassName('hard-champ-win-rate');
 
-			  for (var i = 0; i < hardTableData.length; i++) {
+			  for (let i = 0; i < hardTableData.length; i++) {
 				  hardTableData[i].innerHTML = '';
 				  hardTableData[i].innerHTML = champHardChampData[i].match_up_win_rate+'%';
 			  }
@@ -1211,7 +826,7 @@ function championBuildInfo(champion_id, team_position) {
 			  
 			  let rune_select_box = document.getElementsByClassName('rune-select-box')[0]; 
 			  rune_select_box.innerHTML = ''
-			  for (var i = 0; i < champRuneData.length; i++) {
+			  for (let i = 0; i < champRuneData.length; i++) {
 				html = ''
 				html += '<div class="rune-select-button">'
 				html += '<div class="rune-select-main">'
@@ -1232,19 +847,169 @@ function championBuildInfo(champion_id, team_position) {
 				}
 			  
 			  let rune_select_buttons = document.getElementsByClassName('rune-select-button');
-				for (let i = 0; i < rune_select_buttons.length; i++) {
-					rune_select_buttons[i].addEventListener('click', function() {
-						rune_full_data(champRuneData[i].main_KEYSTONE_ID,champRuneData[i].sub_KEYSTONE_ID,i,champRuneData);
-					});
+			  for (let i = 0; i < rune_select_buttons.length; i++) {
+				    rune_select_buttons[i].addEventListener('click', function() {
+				        rune_full_data(champRuneData[i].main_KEYSTONE_ID, champRuneData[i].sub_KEYSTONE_ID, i, champRuneData);
+				    });
 				}
+
 				
 				spellSplit(champSpellData);
 				skillSplit(champSkillBuildData);
 				startItemSplit(champStartItemData);
 				shoesSplit(champShoesData);
+				itmeBuildSplit(champItemBuildData);
+				mythicItemSplit(champMythicItemData);
+				commonItemSplit(champItemData);
 		}).fail(err => {
 		  console.log(err);
 		});	
+}
+//--------------------------------------------------------------------------------------------------------------------------------
+// 일반 아이템 출력 
+function commonItemSplit(champItemData) {
+	let common_recomm_box = document.getElementsByClassName('common-recomm-box')[0];
+	common_recomm_box.innerHTML = ''; // 기존 내용 초기화
+	
+	for (let i = 0; i < champItemData.length; i++) {
+		let item_id = champItemData[i].item_id;
+
+		$.ajax({
+			method: 'get',
+			url: '/champion/info/item',
+			data: { item_id: item_id },
+			async: false
+		}).done(res => {
+			for (let item of res) {
+				let html = '<div class="shoes">';
+				html += '<div class="item-img">'
+				html += '<img alt="" src="/resources/img/item/' + item.item_img + '">'
+				html += '<div class="item-desc">'
+				html += '<div>' + item.item_kr_name + '</div>'
+				html += '<br>'
+				html += '<div>' + item.item_ability + '</div>'
+				html += '<br>'
+				html += '<div>' + item.item_desc + '</div>'
+				html += '<br>'
+				html += '<div>가격: ' + item.item_pur_gold + '   판매가격: ' + item.item_sell_gold + '</div>'
+				html += '</div>'
+				html += '</div>'
+				html += '<div class="rate-text"><h4>승률</h4></div>'
+				html += '<div class="rate-text"><h6>' + champItemData[i].win_rate + '%</h6></div>'
+				html += '<div class="rate-text"><h4>픽률</h4></div>'
+				html += '<div class="rate-text"><h6>' + champItemData[i].pick_rate + '%</h6></div>'
+				common_recomm_box.innerHTML += html;
+			}
+
+
+		}).fail(err => {
+			console.log(err);
+		});
+	}
+}
+//--------------------------------------------------------------------------------------------------------------------------------
+// 신화 아이템 출력 
+function mythicItemSplit(champMythicItemData) {
+	let mythic_recomm_box = document.getElementsByClassName('mythic-recomm-box')[0];
+	mythic_recomm_box.innerHTML = ''; // 기존 내용 초기화
+	
+	for (let i = 0; i < champMythicItemData.length; i++) {
+		let item_id = champMythicItemData[i].mythic_item;
+
+		$.ajax({
+			method: 'get',
+			url: '/champion/info/item',
+			data: { item_id: item_id },
+			async: false
+		}).done(res => {
+			for (let item of res) {
+				let html = '<div class="shoes">';
+				html += '<div class="item-img">'
+				html += '<img alt="" src="/resources/img/item/' + item.item_img + '">'
+				html += '<div class="item-desc">'
+				html += '<div>' + item.item_kr_name + '</div>'
+				html += '<br>'
+				html += '<div>' + item.item_ability + '</div>'
+				html += '<br>'
+				html += '<div>' + item.item_desc + '</div>'
+				html += '<br>'
+				html += '<div>가격: ' + item.item_pur_gold + '   판매가격: ' + item.item_sell_gold + '</div>'
+				html += '</div>'
+				html += '</div>'
+				html += '<div class="rate-text"><h4>승률</h4></div>'
+				html += '<div class="rate-text"><h6>' + champMythicItemData[i].win_rate + '%</h6></div>'
+				html += '<div class="rate-text"><h4>픽률</h4></div>'
+				html += '<div class="rate-text"><h6>' + champMythicItemData[i].pick_rate + '%</h6></div>'
+				mythic_recomm_box.innerHTML += html;
+			}
+
+
+		}).fail(err => {
+			console.log(err);
+		});
+	}
+}
+//--------------------------------------------------------------------------------------------------------------------------------
+// 아이템 빌드 출력 
+
+function itmeBuildSplit(champItemBuildData) {
+	let item_build_stack = document.getElementsByClassName('item-build-stack')[0];
+	item_build_stack.innerHTML = ''; // 기존 내용 초기화
+	for (let i = 0; i < champItemBuildData.length; i++) {
+		
+		let itemBuild = champItemBuildData[i].item_build;
+		let parts = itemBuild.split(',');
+		
+		let html = '<div class="item-build-box">';
+		html += '<div class="item-build">';
+		let ajaxCounter = 0;
+
+		for (let item_id of parts) {
+			$.ajax({
+				method: 'get',
+				url: '/champion/info/item',
+				data: { item_id: item_id },
+				async: false
+			}).done(res => {
+				for (let item of res) {
+					html += '<div class="item">'
+					html += '<img alt="" src="/resources/img/item/' + item.item_img + '">'
+					html += '<div class="item-desc">'
+					html += '<div>' + item.item_kr_name + '</div>'
+					html += '<br>'
+					html += '<div>' + item.item_ability + '</div>'
+					html += '<br>'
+					html += '<div>' + item.item_desc + '</div>'
+					html += '<br>'
+					html += '<div>가격: ' + item.item_pur_gold + '   판매가격: ' + item.item_sell_gold + '</div>'
+					html += '</div>'
+					html += '</div>'
+				
+				}
+				ajaxCounter++;
+				
+				if (ajaxCounter != parts.length) {
+					html += '<div class="arrow-img">'
+					html += '<img alt="" src="/resources/img/icon/arrow-icon-right.png">'
+					html += '</div>'
+				}
+			
+				if (ajaxCounter === parts.length) {
+					html += '</div>'
+					html += '<div class="rate-text-box">'
+					html += '<div class="rate-text"><h4>승률</h4></div>'
+					html += '<div class="rate-text"><h6>' + champItemBuildData[i].win_rate + '%</h6></div>'
+					html += '<div class="rate-text"><h4>픽률</h4></div>'
+					html += '<div class="rate-text"><h6>' + champItemBuildData[i].pick_rate + '%</h6></div>'
+					html += '</div>'
+					item_build_stack.innerHTML += html;
+				}
+			}).fail(err => {
+				console.log(err);
+			});
+		}
+	}
+
 }
 //--------------------------------------------------------------------------------------------------------------------------------
 // 신발 출력 
@@ -1298,7 +1063,6 @@ function startItemSplit(champStartItemData) {
 	for (let i = 0; i < champStartItemData.length; i++) {
 		let startItemBuild = champStartItemData[i].item_id;
 		let parts = startItemBuild.split(',');
-		console.log(parts);
 
 		let html = '<div class="start-item">';
 		let ajaxCounter = 0;
@@ -1351,7 +1115,7 @@ function skillSplit(champSkillBuildData) {
 	let skillSequence = champSkillBuildData[i].mastery_sequence
 	let parts = skillSequence.split(','); 
 	
-	let skillAllSequnece = champSkillBuildData[0].skill_build
+	let skillAllSequnece = champSkillBuildData[i].skill_build
 	let skillParts = skillAllSequnece.split(','); 
 	
 	let skill_build_sequence_box = document.getElementsByClassName('skill-build-sequence-box')[i]; 
@@ -1373,7 +1137,7 @@ function skillSplit(champSkillBuildData) {
 	qHtml += '<div class="squence-tooltip">'
 	qHtml += '<div>${chamInfo.champion_q_name}</div>'
 	qHtml += '<br>'
-	qHtml += '<div>${chamInfo.champion_q_desc}</div>'
+	qHtml += "<div>${chamInfo.champion_q_desc}</div>"
 	qHtml += '</div>'
 	qHtml += '<div class="skill-build-sequence">'
 	qHtml += '</div>'
@@ -1387,7 +1151,7 @@ function skillSplit(champSkillBuildData) {
  	wHtml += '<div class="squence-tooltip">'
  	wHtml += '<div>${chamInfo.champion_w_name}</div>'
  	wHtml += '<br>'
- 	wHtml += '<div>${chamInfo.champion_w_desc}</div>'
+ 	wHtml += "<div>${chamInfo.champion_w_desc}</div>"
  	wHtml += '</div>'
  	wHtml += '<div class="skill-build-sequence">'
  	wHtml += '</div>'
@@ -1401,7 +1165,7 @@ function skillSplit(champSkillBuildData) {
 	eHtml += '<div class="squence-tooltip">'
 	eHtml += '<div>${chamInfo.champion_e_name}</div>'
 	eHtml += '<br>'
-	eHtml += '<div>${chamInfo.champion_e_desc}</div>'
+	eHtml += "<div>${chamInfo.champion_e_desc}</div>"
 	eHtml += '</div>'
 	eHtml += '<div class="skill-build-sequence">'
 	eHtml += '</div>'													
@@ -1429,6 +1193,11 @@ function skillSplit(champSkillBuildData) {
 	eBoxHtml += '<h3>E</h3>'
 	eBoxHtml += '</div>'
 	
+	rBoxHtml = ''
+	rBoxHtml += '<div class="r-skill">'
+	rBoxHtml += '<h3>R</h3>'
+	rBoxHtml += '</div>'
+	
 	let count = 0;
 	for (let skill of parts) {
 		if (parseInt(skill) == 1) {
@@ -1453,6 +1222,8 @@ function skillSplit(champSkillBuildData) {
 			skill_bulid_all_box.innerHTML += wBoxHtml;
 		}else if(parseInt(skill) == 3){
 			skill_bulid_all_box.innerHTML += eBoxHtml;
+		}else if(parseInt(skill) == 4){
+			skill_bulid_all_box.innerHTML += rBoxHtml;
 		}
 	}
 	}
@@ -1560,6 +1331,7 @@ function rune_full_data(main,sub,i,champRuneData) {
 	  method: 'get',
 	  url: '/champion/info/rune/main',
 	  data: { main_key: main_key },
+	  async: false
 	}).done(res => {
 		console.log(res)
 		let main_rune_top = document.getElementsByClassName('main-rune-top')[0];
@@ -1638,6 +1410,7 @@ function rune_full_data(main,sub,i,champRuneData) {
 		  method: 'get',
 		  url: '/champion/info/rune/sub',
 		  data: { sub_key : sub_key },
+		  async: false
 		}).done(res => {
 			console.log(res)
 			let sub_rune_top = document.getElementsByClassName('sub-rune-top')[0];
@@ -1808,11 +1581,11 @@ function make_chart(left, right){
 	
 	let left_html_list = '<img src="/resources/img/champion_img/square/'+ left.champion_img +'" alt="'+ left.champion_name +'" class="champion_img" id="'+ left.champion_id +'"">'
 	left_html_list += '<div>' + left.champion_name + '</div>'
-	left_html_list += '<div>' + left.match_up_win_rate + '</div>'
+	left_html_list += '<div>' + left.match_up_win_rate + '%</div>'
 
 	let right_html_list = '<img src="/resources/img/champion_img/square/'+ right.champion_img +'" alt="'+ right.champion_name +'" class="champion_img2" id="'+ right.champion_id +'">'
 	right_html_list += '<div>' + right.champion_name + '</div>'
-	right_html_list += '<div>' + right.match_up_win_rate + '</div>'
+	right_html_list += '<div>' + right.match_up_win_rate + '%</div>'
 
 	document.getElementById('match_up_left').innerHTML = left_html_list
 	document.getElementById('match_up_right').innerHTML = right_html_list
@@ -1845,7 +1618,7 @@ function make_table(left, enemys){
 				enemy.champion_img + '">';
 		match_up_table_html += '<div class="table-champion-name">'+ enemy.champion_name +'</div>'
 		match_up_table_html += '</div>'
-		match_up_table_html += '<div>'+ lane_kill_rate + '</div>'
+		match_up_table_html += '<div>'+ lane_kill_rate + '%</div>'
 		match_up_table_html += '</div>';
 		table_index ++;
 	})

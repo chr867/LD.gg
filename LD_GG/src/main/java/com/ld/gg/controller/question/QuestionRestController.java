@@ -2,6 +2,7 @@ package com.ld.gg.controller.question;
 
 import com.ld.gg.dto.question.AnswerDto;
 import com.ld.gg.dto.question.QuestionDto;
+import com.ld.gg.dto.question.ScrapeDto;
 import com.ld.gg.service.QuestionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,5 +59,59 @@ public class QuestionRestController {
         }
 
         return answerDtoList;
+    }
+    @PostMapping("/my_scrape")
+    public int my_scrape(int question_id, String email){
+        System.out.println("my_scrape : " + question_id + email);
+
+        ScrapeDto scrapeDto = new ScrapeDto();
+
+        scrapeDto.setQuestion_id(question_id);
+        scrapeDto.setEmail(email);
+
+        int res = questionService.my_scrape(scrapeDto);
+
+        if(res < 0){
+            System.out.println("restController question_scrape insert 실패!");
+        }
+
+        return res;
+    }
+
+    @PostMapping("/select_tag_one")
+    public List<QuestionDto> select_tag_one(String tag1){
+        System.out.println("select_tag_one : " + tag1);
+
+        List<QuestionDto> questionDtoList = questionService.select_tag_one(tag1);
+
+        if(questionDtoList.size() == 0){
+            System.out.println("select 결과 없음!!");
+        }
+
+        return questionDtoList;
+    }
+    @PostMapping("/select_tag_by_two")
+    public List<QuestionDto> select_tag_by_two(String tag1, String tag2){
+        System.out.println("select_tag_one : " + tag1 +  tag2);
+
+        List<QuestionDto> questionDtoList = questionService.select_tag_by_two(tag1, tag2);
+
+        if(questionDtoList.size() == 0){
+            System.out.println("select 결과 없음!!");
+        }
+
+        return questionDtoList;
+    }
+    @PostMapping("/select_tag_two")
+    public List<QuestionDto> select_tag_two(String tag2){
+        System.out.println("select_tag_two : " + tag2);
+
+        List<QuestionDto> questionDtoList = questionService.select_tag_two(tag2);
+
+        if(questionDtoList.size() == 0){
+            System.out.println("select 결과 없음!!");
+        }
+
+        return questionDtoList;
     }
 }

@@ -6,10 +6,17 @@
 <head>
 <meta charset="UTF-8">
 <title>마이멘토링</title>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 <style>
+.wrap{
+width:100%;
+min-height:100vh;
+background-color:white;
+margin:0px;
+}
+.container{
+  padding-top:120px;
+  padding-bottom:100px;
+}
 .card{
 margin:auto;
 margin-bottom:1.5rem;
@@ -102,9 +109,40 @@ margin:auto;
 margin-bottom: 60px;
 }
 </style>
+<!--BOOTSTRAP CSS-->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+<!--BOOTSTRAP JavaScript-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+<!--JQUERY-->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!--SWEET-ALERT2 CSS-->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<!--SWEET-ALERT2 JS-->
+<script
+	src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<!--sideBar CSS-->
+<link rel="stylesheet" type="text/css"
+      href="/resources/css/main/sideBar.css">
+<!--header CSS-->
+<link rel="stylesheet" type="text/css"
+      href="/resources/css/main/header.css">
+<!--footer CSS-->
+<link rel="stylesheet" type="text/css"
+      href="/resources/css/main/footer.css">
+<!--loginModal CSS-->
+<link rel="stylesheet" type="text/css"
+      href="/resources/css/main/loginModal.css">
+<!--로그인 및 세션관련 JS-->
+<script src="/resources/js/main/loginSession.js" defer></script>
+<!-- 채팅 관련 JS-->
+<script src="/resources/js/main/chat.js" defer></script>
 </head>
 <body>
-
+<%@ include file="../header.jsp" %>
+<%@ include file="../sidebar.jsp" %>
+<%@ include file="../footer.jsp" %>
+<div class='wrap'>
 <div class='container'>
 	<div id="nav-bar">
 		<ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -201,8 +239,8 @@ margin-bottom: 60px;
 		</div>
 	  </div>
 	</div>
-	
-	
+</div> <!-- container -->	
+</div><!-- wrap -->	
 	
 	
 	
@@ -393,14 +431,13 @@ margin-bottom: 60px;
 	  </div>
 	</div>
 
-</div> <!-- container -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+
 <script>
 $(document).ready(function() {
 	
 	$("#go-record-btn").click(function() {
 		  let summoner_name = $(this).closest(".modal").find(".modal-title").text();
-		  window.location.href = '/summoner/info?summoner_name=' +summoner_name;
+		  window.open('/summoner/info?summoner_name=' +summoner_name);
 		});
 	$("#write-est-btn").click(function() {
 		  let summoner_name = $(this).closest(".modal").find(".modal-title").text();
@@ -532,6 +569,7 @@ $(document).ready(function() {
 	    		    		            const mentiTags = $("#menti-tag");
 	    		    		            const mentiTags2 = $("#menti-tag2");
 	    		    		            mentiTags.text("");
+	    		    		            mentiTags2.text("");
 	    		    		            $.each(response, function(i,tag){
 	    		    		            	let $tagButton = $("<button>").addClass("btn btn-outline-primary")
 								    		            			.css('margin', "3px")
@@ -604,13 +642,18 @@ $(document).ready(function() {
 	        table.append(header);
 	        for (let i = 0; i < data.length; i++) {
 	            let myMt = data[i];
+	            let parts = myMt.done_date;
+  			  let done_date = ""
+  			  if(parts !== null){
+	    			done_date = parts[0]+"년 "+parts[1]+"월 "+parts[2]+"일 "+parts[3]+":"+parts[4]+":"+parts[5];
+  			  }
 	            let tbody = $("<tbody>");
 	            let row = $("<tr>").append(
 	            		$("<th>").addClass("numbering").attr("scope","row").text(i+1),
 	                $("<td>").text(myMt.class_name),
 	                $("<td>").text(myMt.mentor_lol_account),
 	                $("<td>").text(myMt.apply_date),
-	                $("<td>").text(myMt.done_date),
+	                $("<td>").text(done_date),
 	                $("<td>").text(myMt.menti_state === 0 ? "대기중" : myMt.menti_state === 1 ? "진행중" : "수업 완료"),
 	                $("<td>").addClass("btn-td").append(
 	                myMt.menti_state === 0 ? $("<button>").attr("type","button")
@@ -687,7 +730,7 @@ $(document).ready(function() {
 	         	// <tr> 클릭 이벤트 핸들러 추가
 	            row.on('click', function() {
 	            // 다른 페이지로 이동하는 코드 작성
-	             window.location.href = '/mentor/profile/' + myMt.mentor_lol_account;
+	             window.open('/mentor/profile/' + myMt.mentor_lol_account);
 	            });
 	         
 	            tbody.append(row)
@@ -823,7 +866,7 @@ $(document).ready(function() {
     		 	// <tr> 클릭 이벤트 핸들러 추가
 	            row.on('click', function() {
 	            // 찜한 멘토 like_mentor.mentor_lol_account 의 멘토프로필로 이동
-	             window.location.href = '/mentor/profile/' + like_mentor.mentor_lol_account;
+	             window.open('/mentor/profile/' + like_mentor.mentor_lol_account);
 	            });
     		    tbody.append(row);
     		    table.append(tbody);
@@ -1052,6 +1095,12 @@ $(document).ready(function() {
 		    		  table.append(header);
 		    		  for (let i = 0; i < data.length; i++) {
 		    			  let myMt = data[i];
+		    			  let parts = myMt.done_date;
+		    			  let done_date = ""
+		    			  if(parts !== null){
+			    			done_date = parts[0]+"년 "+parts[1]+"월 "+parts[2]+"일 "+parts[3]+":"+parts[4]+":"+parts[5];
+		    			  }
+  					    	
 		    			  let tbody = $("<tbody>");
 		    			  let row = $("<tr>").append(
 		    					  $("<th>").addClass("numbering").attr("scope","row").text(i+1),
@@ -1059,11 +1108,11 @@ $(document).ready(function() {
 		    			    $("<td>").text(myMt.class_name),
 		    			    $("<td>").text(myMt.menti_state === 0 ? "대기중" : myMt.menti_state === 1 ? "진행중" : "수업 완료"),
 		    			    $("<td>").text(myMt.apply_date),
-		    			    $("<td>").text(myMt.done_date),
+		    			    $("<td>").text(done_date),
 		    			    $("<td>").addClass("btn-td").append(
 		    			    myMt.menti_state === 0 ? 
 		    			    		$("<div>").append(
-		    			    		    $("<button>").attr("type","button").addClass("btn btn-outline-primary btn-sm")
+		    			    		    $("<button>").attr("type","button").addClass("btn btn-outline-primary btn-sm mx-1")
 		    			    		        .attr("id", myMt.mentoring_id)
 		    			    		        .attr("data", myMt.class_id)
 		    			    		        .text("수락").on('click', function(event) { //수락 버튼 누를떄 멘토링 내역 수정
@@ -1182,7 +1231,7 @@ $(document).ready(function() {
 		    			// <tr> 클릭 이벤트 핸들러 추가
 		  	            row.on('click', function() {
 		  	            // 수강 신청한 멘티의 요청서 모달 띄우기
-		  	             window.location.href = '/summoner/info?summoner_name=' + myMt.menti_lol_account;
+		  	             window.open('/summoner/info?summoner_name=' + myMt.menti_lol_account);
 		  	            });
 		    			  tbody.append(row);
 		    		    table.append(tbody);

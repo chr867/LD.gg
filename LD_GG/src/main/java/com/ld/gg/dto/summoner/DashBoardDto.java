@@ -15,4 +15,12 @@ public class DashBoardDto {
 	private double deaths_avg;
 	private double assists_avg;
 	private double kda_avg;
+	private double kill_involve;
+	private String champ_name;
+	private double winrate;
+	private String match_id;
+	private String summoner_name;
+	private int win;
+	private String profile_icon_id;
+	private String tier;
 }

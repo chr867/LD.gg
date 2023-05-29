@@ -43,8 +43,8 @@ public class SummonerService {
 		return sd;
 	}
 
-	public List<RecordDto> get_summoner_record(String summoner_name) {
-		List<RecordDto> sr = SD.get_summoner_record(summoner_name);
+	public List<RecordDto> get_summoner_record(String summoner_name, int offset) {
+		List<RecordDto> sr = SD.get_summoner_record(summoner_name, offset);
 		return sr;
 	}
 
@@ -58,8 +58,8 @@ public class SummonerService {
 		return sd;
 	}
 
-	public List<ChampRecordDto> get_champ_record(String summoner_name) {
-		List<ChampRecordDto> crd = SD.get_champ_record(summoner_name);
+	public List<ChampRecordDto> get_champ_record(String summoner_name, int offset) {
+		List<ChampRecordDto> crd = SD.get_champ_record(summoner_name, offset);
 		return crd;
 	}
 
@@ -93,8 +93,8 @@ public class SummonerService {
 		return crd;
 	}
 
-	public List<BuildDto> getBuild(String match_id, String summoner_name) {
-		List<BuildDto> bd = SD.getBuild(match_id, summoner_name);
+	public BuildDto getBuild(String match_id, String summoner_name) {
+		BuildDto bd = SD.getBuild(match_id, summoner_name);
 		return bd;
 	}
 
@@ -123,9 +123,37 @@ public class SummonerService {
 		return TRDD;
 	}
 
-	public List<ChampRecordDto> getChampRecordLane(String summoner_name, String paramLane) {
-		List<ChampRecordDto> crd = SD.getChampRecordLane(summoner_name, paramLane);
+	public List<ChampRecordDto> getChampRecordLane(String summoner_name, String paramLane, int offset) {
+		List<ChampRecordDto> crd = SD.getChampRecordLane(summoner_name, paramLane, offset);
 		return crd;
+	}
+
+	public List<DashBoardDto> getDashBoardMatchUp(String summoner_name) {
+		List<DashBoardDto> dbd = SD.getDashBoardMatchUp(summoner_name);
+		return dbd;
+	}
+
+	public List<DashBoardDto> getDashBoardRecent(String summoner_name) {
+		List<DashBoardDto> dbd = SD.getDashBoardRecent(summoner_name);
+		return dbd;
+	}
+
+	public List<DashBoardDto> getDashBoardPlayer(String match_id, String summoner_name) {
+		List<DashBoardDto> dbd = SD.getDashBoardPlayer(match_id, summoner_name);
+		return dbd;
+	}
+
+	public DashBoardDto getDashBoardProfile(String summoner_name) {
+		DashBoardDto dbd = SD.getDashBoardProfile(summoner_name);
+		return dbd;
+	}
+
+	public List<BuildDto> getMainMaking(String main) {
+		return SD.getMainMaking(main);
+	}
+
+	public List<BuildDto> getSubMaking(String sub) {
+		return SD.getSubMaking(sub);
 	}
 
 }

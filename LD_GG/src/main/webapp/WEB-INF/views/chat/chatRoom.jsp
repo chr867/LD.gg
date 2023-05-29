@@ -40,7 +40,7 @@
                 <img src="/resources/img/profileicon/0.png" alt="이미지" class="profile-image">
                 <div class="profile-name" id="mento_name">달래발바닥</div>
             </div>
-            <div
+            <div>
             <div class="chat-time-content">
                 <div class="speech-bubble-l">
                     <p>말풍선 모양의 내용입니다.</p>
