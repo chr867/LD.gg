@@ -7,11 +7,16 @@
 <meta charset="UTF-8">
 <title>멘토 프로필</title>
 <style>
-
-.container{
-	margin-top: 30px;
+.wrap{
+width:100%;
+min-height:100vh;
+background-color:white;
+margin:0px;
 }
-
+#whole-box{
+  padding-top:120px;
+  padding-bottom:100px;
+}
 #flex-add-store {
 	display: none;
 	position: fixed;
@@ -115,20 +120,52 @@ padding:24px;
 }
 #mentor_class_info {
      position: sticky;
-    top: 30px;
+    top: 120px;
 }
 #review-section img{
 margin:auto;
 }
 
 </style>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!--BOOTSTRAP CSS-->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+<!--BOOTSTRAP JavaScript-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+<!--JQUERY-->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!--SWEET-ALERT2 CSS-->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<!--SWEET-ALERT2 JS-->
+<script
+	src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<!--sideBar CSS-->
+<link rel="stylesheet" type="text/css"
+      href="/resources/css/main/sideBar.css">
+<!--header CSS-->
+<link rel="stylesheet" type="text/css"
+      href="/resources/css/main/header.css">
+<!--footer CSS-->
+<link rel="stylesheet" type="text/css"
+      href="/resources/css/main/footer.css">
+<!--loginModal CSS-->
+<link rel="stylesheet" type="text/css"
+      href="/resources/css/main/loginModal.css">
+<!--로그인 및 세션관련 JS-->
+<script src="/resources/js/main/loginSession.js" defer></script>
+<!-- 채팅 관련 JS-->
+<script src="/resources/js/main/chat.js" defer></script>
+<!-- 결제 관련 JS -->
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 
 </head>
 <body>
+<%@ include file="../header.jsp" %>
+<%@ include file="../sidebar.jsp" %>
+<%@ include file="../footer.jsp" %>
+<div class="wrap">
 <div class="container">
+<div id="whole-box">
 	<div id="go-list" style="padding-left: 15px" class="row">
 		<a href="/mentor/list" style="width: 75px" class="col-1 btn btn-light btn-sm">
 		<img style="width: 15px" src="/resources/img/icon/arrow-icon-left.png">
@@ -263,7 +300,9 @@ margin:auto;
 		</div>
 	</article>
 	</div><!-- mentor detail -->
+</div><!-- whole-box -->
 </div><!-- 여까지 컨테이너 -->
+</div><!-- 여까지 wrap -->
 	
 <!-- 추가 결제 모달 : 가격 옵션 및 결제 -->
 	<div id="flex-add-store">
@@ -294,7 +333,6 @@ margin:auto;
 		</div>
 	</div>
 	
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 <script>
 	
 	let GlobalEmail = "";

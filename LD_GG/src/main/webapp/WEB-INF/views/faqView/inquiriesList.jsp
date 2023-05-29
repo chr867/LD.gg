@@ -201,7 +201,7 @@ var currentSearchPage = 1; // 현재 검색 페이지 번호
     									    	var csCom = $('<div>').addClass("d-flex flex-column").attr("id","cs-box").append(csHeader,csInfo,csDate)
     									    	$cs.append(csCom);
     								    	}else{ // 답변이 없을 경우
-    								    		if(${member.user_type}==3){ // 관리자 회원인경우
+    								    		if("${member.user_type}"=="3"){ // 관리자 회원인경우
     								    			var asHeader = $('<div>').addClass("d-flex justify-content-between my-2 px-1").append(
         									    			$('<p>').addClass("my-auto").text("답변 작성"),
         									    			$('<button>').attr("id","answer-btn").addClass("btn btn-dark").text("작성")
