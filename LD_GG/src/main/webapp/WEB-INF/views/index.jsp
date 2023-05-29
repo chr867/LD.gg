@@ -1041,7 +1041,7 @@ box-sizing: border-box;
 						<tr>
 							<td rowspan="2"><img alt=""
 								src="/resources/img/champion_img/square/${chamInfo.champion_img}"
-								class="champion-img"></td>
+								class="champion-img_"></td>
 							<td colspan="5"><h3 class="champion_name">${chamInfo.champion_kr_name}</h3></td>
 						</tr>
 						<tr>
@@ -1127,7 +1127,7 @@ box-sizing: border-box;
 					</div>
 
 					<div class="item-build-container" style="margin-left: 20px;">
-						<h4 class="item-build-title">아이템 빌드 추천</h4>
+						<h4 class="item-build-title" style="margin-left: 40px;">아이템 빌드 추천</h4>
 						<div class="item-build-stack" style="display: flex; flex-direction: column;"></div>
 					</div>
 				</div>
@@ -1517,44 +1517,112 @@ function selectChampion(champion_en_name, champion_img, champion_kr_name, champi
   }
 
 // 빌드 추천 start
+let champinfo
 
-	function recom_build(){
-		if(selected_lane && selected_left_champion && selected_right_champion){
-			$.ajax({
-			url: "/champion/build-recom.json",
-			type: 'POST',
-			data: {
-				left_champion: selected_left_champion,
-				right_champion: selected_right_champion,
-				team_position: selected_lane
-			},
-			}).done(res=>{
-				// 모달 창 열기
-				openModal(res);
+async function get_champinfo(champion_kr_name) {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: '/champion/search.json',
+      type: 'post',
+      data: { champion_name: champion_kr_name }
+    }).done(res => {
+      console.log(res);
+			champinfo = res;
+			let src = "/resources/img/champion_img/square/" + champinfo.champion_img;
+			document.getElementsByClassName('champion-img_')[0].src = src
+			console.log(document.getElementsByClassName('champion-img_')[0])
+			document.getElementsByClassName('champion_name')[0].innerHTML=champinfo.champion_kr_name;
+			console.log(champinfo)
+			let abil = document.getElementsByClassName('ability-img')
+			let tool = document.getElementsByClassName('tooltip')
 
-			 	// rune_full_data(champRuneData[0].main_KEYSTONE_ID,champRuneData[0].sub_KEYSTONE_ID,0,champRuneData);
-				let spell = res['spell_recom'];
-				let item = res['item_recom'];
-				let rune = res['rune_recom'];
-				let skill = res['skill_recom'];
-				console.log('spell ', spell);
-				console.log('item ', item)
-				console.log('rune ', rune)
-				console.log('skill ', skill)
-				spellSplit(spell);
-				startItemSplit(item[0]['start_item'], item[0]['start_item_pick_rate'], item[0]['start_item_win_rate']);
-				shoesSplit(item[0]['shoe_item'], item[0]['shoe_item_win_rate'], item[0]['shoe_item_pick_rate']);
-				// mythicItemSplit(res['item_recom']);
-				itmeBuildSplit(item);
-				
-				// rune_full_data(res['rune_recom'][0]['main_keystone_id'],)
-				// skillSplit(res['skill_recom'])
+			abil[0].src = `/resources/img/passive/\${champinfo['champion_p_img']}`
+			abil[1].src = `/resources/img/spell/\${champinfo['champion_q_img']}`
+			abil[2].src = `/resources/img/spell/\${champinfo['champion_w_img']}`
+			abil[3].src = `/resources/img/spell/\${champinfo['champion_e_img']}`
+			abil[4].src = `/resources/img/spell/\${champinfo['champion_r_img']}`
+			
+			tool[0].innerHTML = champinfo['champion_p_desc'];
+			tool[1].innerHTML = champinfo['champion_q_desc'];
+			tool[2].innerHTML = champinfo['champion_w_desc'];
+			tool[3].innerHTML = champinfo['champion_e_desc'];
+			tool[4].innerHTML = champinfo['champion_r_desc'];
 
-			}).fail(err=>{
-			console.log(err)
-			})
-		}
-	}
+      resolve(res);
+    }).fail(err => {
+      console.log(err);
+      reject(err);
+    });
+  });
+}
+
+async function recom_build() {
+  if (selected_lane && selected_left_champion && selected_right_champion) {
+    try {
+      const res = await $.ajax({
+        url: "/champion/build-recom.json",
+        type: 'POST',
+        data: {
+          left_champion: selected_left_champion,
+          right_champion: selected_right_champion,
+          team_position: selected_lane
+        },
+      });
+
+      await get_champinfo(selected_left_champion);
+      openModal(res);
+      
+      let spell = res['spell_recom'];
+      let item = res['item_recom'];
+      let rune = res['rune_recom'];
+      let skill = res['skill_recom'];
+
+      console.log('spell', spell);
+      console.log('item', item);
+      console.log('rune', rune);
+      console.log('skill', skill);
+
+      spellSplit(spell);
+      startItemSplit(item[0]['start_item'], item[0]['start_item_pick_rate'], item[0]['start_item_win_rate']);
+      shoesSplit(item[0]['shoe_item'], item[0]['shoe_item_win_rate'], item[0]['shoe_item_pick_rate']);
+      itmeBuildSplit(item);
+      skillSplit(skill);
+			rune_full_data(rune[0].main_keystone_id, rune[0].sub_keystone_id, 0, rune);
+			  
+			  let rune_select_box = document.getElementsByClassName('rune-select-box')[0]; 
+			  rune_select_box.innerHTML = ''
+			  for (let i = 0; i < rune.length; i++) {
+				html = ''
+				html += '<div class="rune-select-button">'
+				html += '<div class="rune-select-main">'
+				html += '<img src="/resources/img/'+rune[i].main_keystone_id_img+'" alt="">'
+				html += '</div>'
+				html += '<div class="rune-select-mainStyle rune-combination">'
+				html += '<img src="/resources/img/'+rune[i].main_sub1_id_img+'" alt="">'
+				html += '</div>'
+				html += '<div class="rune-select-sub rune-combination">'
+				html += '<img src="/resources/img/'+rune[i].sub_keystone_id_img+'" alt="">'
+				html += '</div>'
+				html += '<div class="rune-combination-desc">'
+				html += '<div>승률 : '+rune[i].win_rate+'%</div>'
+				html += '<div>픽률 : '+rune[i].pick_rate+'%</div>'
+				html += '</div>'
+				html += '</div>'
+				rune_select_box.innerHTML += html
+				}
+			  
+			  let rune_select_buttons = document.getElementsByClassName('rune-select-button');
+			  for (let i = 0; i < rune_select_buttons.length; i++) {
+				    rune_select_buttons[i].addEventListener('click', function() {
+				        rune_full_data(rune[i].main_keystone_id, rune[i].sub_keystone_id, i, rune);
+				    });
+				}
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+}
 	// 빌드 추천 end
 
 // 아이템 빌드 출력 
@@ -1567,7 +1635,7 @@ function itmeBuildSplit(champItemBuildData) {
 		let parts = itemBuild.split(',');
 		
 		let html = '<div class="item-build-box">';
-		html += '<div class="item-build" style="display: flex;">';
+		html += '<div class="item-build" style="display: flex; margin-left:50px;">';
 		let ajaxCounter = 0;
 
 		for (let item_id of parts) {
@@ -1604,9 +1672,9 @@ function itmeBuildSplit(champItemBuildData) {
 					html += '</div>'
 					html += '<div class="rate-text-box" style="display: flex;">'
 					html += '<div class="rate-text"><h4>승률</h4></div>'
-					html += '<div class="rate-text"><h6>' + champItemBuildData[i].win_rate + '%</h6></div>'
+					html += '<div class="rate-text"><h6>' + champItemBuildData[i].item_build_win_rate + '%</h6></div>'
 					html += '<div class="rate-text"><h4>픽률</h4></div>'
-					html += '<div class="rate-text"><h6>' + champItemBuildData[i].pick_rate + '%</h6></div>'
+					html += '<div class="rate-text"><h6>' + champItemBuildData[i].item_build_pick_rate + '%</h6></div>'
 					html += '</div>'
 					item_build_stack.innerHTML += html;
 				}
@@ -1716,12 +1784,11 @@ function startItemSplit(champStartItemData, win_rate, pick_rate) {
 // 스킬 빌드 출력 
 function skillSplit(champSkillBuildData) {
 	for (var i = 0; i < champSkillBuildData.length; i++) {
-		
 	
-	let skillSequence = champSkillBuildData[i].mastery_sequence
+	let skillSequence = champSkillBuildData[i].skill_build
 	let parts = skillSequence.split(','); 
 	
-	let skillAllSequnece = champSkillBuildData[i].skill_build
+	let skillAllSequnece = champSkillBuildData[i].skill_tree
 	let skillParts = skillAllSequnece.split(','); 
 	
 	let skill_build_sequence_box = document.getElementsByClassName('skill-build-sequence-box')[i]; 
@@ -1736,42 +1803,42 @@ function skillSplit(champSkillBuildData) {
 			
 	qHtml = ''
 	qHtml += '<div class="skill-build-sequence">'
-	qHtml += '<img alt="" src="/resources/img/spell/${chamInfo.champion_q_img}" class="ability-img">'
+	qHtml += `<img alt="" src="/resources/img/spell/\${champinfo.champion_q_img}" class="ability-img">`
 	qHtml += '<div class="skill-key-icon">'
 	qHtml += '<h6>Q</h6>'
 	qHtml += '</div>'
 	qHtml += '<div class="squence-tooltip">'
-	qHtml += '<div>${chamInfo.champion_q_name}</div>'
+	qHtml += `<div>\${champinfo.champion_q_name}</div>`
 	qHtml += '<br>'
-	qHtml += "<div>${chamInfo.champion_q_desc}</div>"
+	qHtml += `<div>\${champinfo.champion_q_desc}</div>`
 	qHtml += '</div>'
 	qHtml += '<div class="skill-build-sequence">'
 	qHtml += '</div>'
 	
  	wHtml = ''
  	wHtml += '<div class="skill-build-sequence">'
- 	wHtml += '<img alt="" src="/resources/img/spell/${chamInfo.champion_w_img}" class="ability-img">'
+ 	wHtml += `<img alt="" src="/resources/img/spell/\${champinfo.champion_w_img}" class="ability-img">`
  	wHtml += '<div class="skill-key-icon">'
  	wHtml += '<h6>W</h6>'
  	wHtml += '</div>'
  	wHtml += '<div class="squence-tooltip">'
- 	wHtml += '<div>${chamInfo.champion_w_name}</div>'
+ 	wHtml += `<div>\${champinfo.champion_w_name}</div>`
  	wHtml += '<br>'
- 	wHtml += "<div>${chamInfo.champion_w_desc}</div>"
+ 	wHtml += `<div>\${champinfo.champion_w_desc}</div>`
  	wHtml += '</div>'
  	wHtml += '<div class="skill-build-sequence">'
  	wHtml += '</div>'
 
 	eHtml = ''
 	eHtml += '<div class="skill-build-sequence">'
-	eHtml += '<img alt="" src="/resources/img/spell/${chamInfo.champion_e_img}" class="ability-img">'
+	eHtml += `<img alt="" src="/resources/img/spell/\${champinfo.champion_e_img}" class="ability-img">`
 	eHtml += '<div class="skill-key-icon">'
 	eHtml += '<h6>E</h6>'
 	eHtml += '</div>'
 	eHtml += '<div class="squence-tooltip">'
-	eHtml += '<div>${chamInfo.champion_e_name}</div>'
+	eHtml += `<div>\${champinfo.champion_e_name}</div>`
 	eHtml += '<br>'
-	eHtml += "<div>${chamInfo.champion_e_desc}</div>"
+	eHtml += `<div>\${champinfo.champion_e_desc}</div>`
 	eHtml += '</div>'
 	eHtml += '<div class="skill-build-sequence">'
 	eHtml += '</div>'													
@@ -1891,22 +1958,22 @@ function spellHtml(first_spell,second_spell,win_rate,pick_rate) {
 //--------------------------------------------------------------------------------------------------------------------------------
 
 // 룬 빌드 출력 
-function rune_full_data(main,sub,i,champRuneData) {
+function rune_full_data(main, sub, i, champRuneData) {
 	let main_key = '';
 	switch (main) {
-	  case '8200':
+	  case 8200:
 		  main_key = 'Sorcery';
 	    break;
-	  case '8400':
+	  case 8400:
 		  main_key = 'Resolve';
 	    break;
-	  case '8000':
+	  case 8000:
 		  main_key = 'Precision';
 	    break;
-	  case '8300':
+	  case 8300:
 		  main_key = 'Inspiration';
 	    break;
-	  case '8100':
+	  case 8100:
 		  main_key = 'Domination';
 	    break;
 	  default:
@@ -1914,25 +1981,25 @@ function rune_full_data(main,sub,i,champRuneData) {
 	} 
 	let sub_key = '';
 	switch (sub) {
-	  case '8200':
+	  case 8200:
 		  sub_key = 'Sorcery';
 	    break;
-	  case '8400':
+	  case 8400:
 		  sub_key = 'Resolve';
 	    break;
-	  case '8000':
+	  case 8000:
 		  sub_key = 'Precision';
 	    break;
-	  case '8300':
+	  case 8300:
 		  sub_key = 'Inspiration';
 	    break;
-	  case '8100':
+	  case 8100:
 		  sub_key = 'Domination';
 	    break;
 	  default:
 	    break;
 	}
-	
+	console.log(main_key, sub_key)
 	$.ajax({
 	  method: 'get',
 	  url: '/champion/info/rune/main',
@@ -2073,42 +2140,43 @@ function rune_full_data(main,sub,i,champRuneData) {
 				}
 			}
 			setTimeout(() => {
-			    main_SUB1_ID = champRuneData[i].main_SUB1_ID;
-			    main_SUB2_ID = champRuneData[i].main_SUB2_ID;
-			    main_SUB3_ID = champRuneData[i].main_SUB3_ID;
-			    main_SUB4_ID = champRuneData[i].main_SUB4_ID;
-			    sub_SUB1_ID = champRuneData[i].sub_SUB1_ID;
-			    sub_SUB2_ID = champRuneData[i].sub_SUB2_ID;
-				 fragment1_ID = champRuneData[i].fragment1_ID;
-				 fragment2_ID = champRuneData[i].fragment2_ID;
-				 fragment3_ID = champRuneData[i].fragment3_ID;
+				main_SUB1_ID = champRuneData[i].main_sub1_id;
+			  main_SUB2_ID = champRuneData[i].main_sub2_id;
+			  main_SUB3_ID = champRuneData[i].main_sub3_id;
+			  main_SUB4_ID = champRuneData[i].main_sub4_id;
+			  sub_SUB1_ID = champRuneData[i].sub_sub1_id;
+			  sub_SUB2_ID = champRuneData[i].sub_sub2_id;
+				fragment1_ID = champRuneData[i].fragment1_id;
+				fragment2_ID = champRuneData[i].fragment2_id;
+				fragment3_ID = champRuneData[i].fragment3_id;
 
-			    document.getElementById(main_SUB1_ID).style.filter = 'none';
-			    document.getElementById(main_SUB2_ID).style.filter = 'none';
-			    document.getElementById(main_SUB3_ID).style.filter = 'none';
-			    document.getElementById(main_SUB4_ID).style.filter = 'none';
-			    document.getElementById(sub_SUB1_ID).style.filter = 'none';
-			    document.getElementById(sub_SUB2_ID).style.filter = 'none';
-			    document.getElementById(main_SUB1_ID).style.opacity = '1';
-			    document.getElementById(main_SUB2_ID).style.opacity = '1';
-			    document.getElementById(main_SUB3_ID).style.opacity = '1';
-			    document.getElementById(main_SUB4_ID).style.opacity = '1';
-			    document.getElementById(sub_SUB1_ID).style.opacity = '1';
-			    document.getElementById(sub_SUB2_ID).style.opacity = '1';
-			    let elements = document.getElementsByClassName('fragment-img');
+				console.log(main_SUB1_ID, champRuneData[i])
+			  document.getElementById(main_SUB1_ID).style.filter = 'none';
+			  document.getElementById(main_SUB2_ID).style.filter = 'none';
+			  document.getElementById(main_SUB3_ID).style.filter = 'none';
+			  document.getElementById(main_SUB4_ID).style.filter = 'none';
+			  document.getElementById(sub_SUB1_ID).style.filter = 'none';
+			  document.getElementById(sub_SUB2_ID).style.filter = 'none';
+			  document.getElementById(main_SUB1_ID).style.opacity = '1';
+			  document.getElementById(main_SUB2_ID).style.opacity = '1';
+			  document.getElementById(main_SUB3_ID).style.opacity = '1';
+			  document.getElementById(main_SUB4_ID).style.opacity = '1';
+			  document.getElementById(sub_SUB1_ID).style.opacity = '1';
+			  document.getElementById(sub_SUB2_ID).style.opacity = '1';
+			  let elements = document.getElementsByClassName('fragment-img');
 
-				 for (let i = 0; i < elements.length; i++) {
-				     elements[i].style.filter = "grayscale(100%)";
-				     elements[i].style.filter = "0.5";
-				 }
-				 document.getElementById('first-fragment-'+fragment3_ID).style.filter = 'none'; 
-				 document.getElementById('second-fragment-'+fragment2_ID).style.filter = 'none'; 
-				 document.getElementById('third-fragment-'+fragment1_ID).style.filter = 'none'; 
-				 document.getElementById('first-fragment-'+fragment3_ID).style.opacity = "1";
-				 document.getElementById('second-fragment-'+fragment2_ID).style.opacity = "1"; 
-				 document.getElementById('third-fragment-'+fragment1_ID).style.opacity = "1"; 
+				for (let i = 0; i < elements.length; i++) {
+				    elements[i].style.filter = "grayscale(100%)";
+				    elements[i].style.filter = "0.5";
+				}
+				document.getElementById('first-fragment-'+fragment3_ID).style.filter = 'none'; 
+				document.getElementById('second-fragment-'+fragment2_ID).style.filter = 'none'; 
+				document.getElementById('third-fragment-'+fragment1_ID).style.filter = 'none'; 
+				document.getElementById('first-fragment-'+fragment3_ID).style.opacity = "1";
+				document.getElementById('second-fragment-'+fragment2_ID).style.opacity = "1"; 
+				document.getElementById('third-fragment-'+fragment1_ID).style.opacity = "1"; 
 			    
-			  }, 100);  // 0.1초 후에 코드 실행
+			}, 100);  // 0.1초 후에 코드 실행
 		}).fail(err => {
 		  console.log(err);
 		}); 

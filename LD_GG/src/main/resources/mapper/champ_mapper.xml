@@ -22,7 +22,7 @@
 		]]>
 	</select>
 
-	<select id="champ_search" resultType="champ">
+	<select id="champ_search" resultType="champ_info">
 		select * 
 		from champion_info
 		where champion_kr_name = #{champion_name}
@@ -73,10 +73,14 @@
 	</select>
 	
 	<select id="build_recom_rune" resultType="champ_match_up_rune">
-		SELECT cmr.*, left_champion.champion_kr_name AS champion_name, right_champion.champion_kr_name AS enemy_champ
+		SELECT cmr.*, left_champion.champion_kr_name AS champion_name, right_champion.champion_kr_name AS enemy_champ,
+		MRI.RUNE_IMG main_keystone_id_img, MRI2.RUNE_IMG main_sub1_id_img, SRI.RUNE_IMG sub_keystone_id_img
 		FROM champion_match_up_rune cmr
 		JOIN champion_info left_champion ON cmr.champion_id = left_champion.champion_id
 		JOIN champion_info right_champion ON cmr.enemy_champ_id = right_champion.champion_id
+		JOIN RUNE_INFO MRI ON CMR.MAIN_KEYSTONE_ID = MRI.RUNE_ID
+		JOIN RUNE_INFO MRI2 ON CMR.MAIN_SUB1_ID = MRI2.RUNE_ID
+		JOIN RUNE_INFO SRI ON CMR.SUB_KEYSTONE_ID = SRI.RUNE_ID
 		WHERE (left_champion.champion_kr_name = #{left_champion} OR left_champion.champion_en_name = #{left_champion})
 		AND right_champion.champion_en_name = #{right_champion}
 		AND cmr.team_position = #{team_position}
