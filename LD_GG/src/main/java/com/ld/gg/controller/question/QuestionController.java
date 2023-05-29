@@ -22,7 +22,7 @@ public class QuestionController {
     QuestionService questionService;
 
     /* 채팅방 목록으로 이동 */
-    @GetMapping("/question")
+    @GetMapping("/")
     public ModelAndView go_question_list(HttpServletRequest request) {
         HttpSession session = request.getSession();
 

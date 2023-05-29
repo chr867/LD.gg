@@ -3,6 +3,7 @@ package com.ld.gg.service;
 import com.ld.gg.dao.QuestionDao;
 import com.ld.gg.dto.question.AnswerDto;
 import com.ld.gg.dto.question.QuestionDto;
+import com.ld.gg.dto.question.ScrapeDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -97,5 +98,13 @@ public class QuestionService {
         List<AnswerDto> answerDtoList = qd.select_answer(questionId);
 
         return answerDtoList;
+    }
+
+    public int my_scrape(ScrapeDto scrapeDto) {
+        int res = qd.my_scrape(scrapeDto);
+
+        System.out.println("sv res : " + res);
+
+        return res;
     }
 }
