@@ -190,6 +190,7 @@
 		</div>
 	</div>
 
+	
 
 	<div id="payment-modal" class="flex-modal">
 		<div class="modal-content">
