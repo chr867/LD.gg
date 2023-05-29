@@ -139,19 +139,19 @@
             <tr>
                 <td>포지션</td>
                 <td>
-                    <button class="table-btn" id="position_btn" value="all">전체</button>
-                    <button class="table-btn" id="position_btn" value="top">탑</button>
-                    <button class="table-btn" id="position_btn" value="jungle">정글</button>
-                    <button class="table-btn" id="position_btn" value="mid">미드</button>
-                    <button class="table-btn" id="position_btn" value="bottom">바텀</button>
-                    <button class="table-btn" id="position_btn" value="suppoter">서포터</button>
+                    <button class="table-btn" id="position_btn" value="all" onclick="tag1_search(event)">전체</button>
+                    <button class="table-btn" id="position_btn" value="top" onclick="tag1_search(event)">탑</button>
+                    <button class="table-btn" id="position_btn" value="jungle" onclick="tag1_search(event)">정글</button>
+                    <button class="table-btn" id="position_btn" value="mid" onclick="tag1_search(event)">미드</button>
+                    <button class="table-btn" id="position_btn" value="bottom" onclick="tag1_search(event)">바텀</button>
+                    <button class="table-btn" id="position_btn" value="supporter" onclick="tag1_search(event)">서포터</button>
                 </td>
             </tr>
             <tr>
                 <td>챔피언</td>
                 <td>
                     <input class="input_champ"type="text" id="champion_txt">
-                    <button class="table-btn" id="tag-2">검색</button>
+                    <button class="table-btn" id="tag-2" onclick="tag2_search(event)">검색</button>
                 </td>
             </tr>
         </table>

@@ -57,4 +57,42 @@
         insert into question_scrape(question_id, email)
         values(#{question_id}, #{email})
     </insert>
+    <select id="select_tag_one" parameterType="String" resultType="question_post">
+        select qp.*, mem.lol_account
+        from question_post qp
+                 join member mem
+                      on mem.email = qp.email
+        <where>
+            <if test="tag1 == 'all'">
+                trim(tag1) != '' and tag1 is not null
+            </if>
+            <if test="tag1 != 'all'">
+                tag1 = #{tag1}
+            </if>
+        </where>
+        order by question_id desc
+    </select>
+    <select id="select_tag_by_two" resultType="question_post">
+        select qp.*, mem.lol_account
+        from question_post qp
+        join member mem
+        on mem.email = qp.email
+        <where>
+            <if test="tag1 == 'all'">
+                trim(tag1) != '' and tag1 is not null and tag2 = #{tag2}
+            </if>
+            <if test="tag1 != 'all'">
+                tag1 = #{tag1} and tag2 = #{tag2}
+            </if>
+        </where>
+        order by question_id desc
+    </select>
+    <select id="select_tag_two" resultType="question_post">
+        select qp.*, mem.lol_account
+        from question_post qp
+                 join member mem
+                      on mem.email = qp.email
+        where tag2 = #{tag2}
+        order by question_id desc
+    </select>
 </mapper>
