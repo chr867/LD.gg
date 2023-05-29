@@ -47,8 +47,8 @@ public class Champion_service {
 		return cm_list;
 	}
 
-	public Champ_default champ_search(String champion_name) {
-		Champ_default champion = cd.champ_search(champion_name);
+	public Champ_info champ_search(String champion_name) {
+		Champ_info champion = cd.champ_search(champion_name);
 		log.info("champion_id = {}", champion_name);
 
 		return champion;

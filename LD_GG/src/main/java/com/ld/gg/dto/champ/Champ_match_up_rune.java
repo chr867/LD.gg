@@ -10,11 +10,14 @@ import lombok.experimental.Accessors;
 @Alias("champ_match_up_rune")
 public class Champ_match_up_rune extends Champ_match_up_default{
 	private int main_keystone_id;
+	private String main_keystone_id_img;
 	private int main_sub1_id;
+	private String main_sub1_id_img;
 	private int main_sub2_id;
 	private int main_sub3_id;
 	private int main_sub4_id;
 	private int sub_keystone_id;
+	private String sub_keystone_id_img;
 	private int sub_sub1_id;
 	private int sub_sub2_id;
 	private int fragment1_id;
