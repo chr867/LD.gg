@@ -160,6 +160,8 @@ margin:0px;
             dataType: 'json',
             contentType: 'application/json',
             success: function(data) {
+            	$('#search-key').text("");
+            	$('#search-ment').text("");
             	$('#mentor-count em').text(data.length);
                 const mentorList = $("#mentor-list");
                 $.each(data, function(i, mentor) {

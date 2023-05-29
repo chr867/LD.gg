@@ -174,7 +174,7 @@ margin:auto;
 	</div>
 <div id="mentor-detail" class="row">
 <div id="mentor-info" class="col-8">
-	<div class="d-flex justify-content-end">
+	<div class="d-flex justify-content-end my-2">
 		<button id="like-btn" class="btn btn-outline-danger">찜 하기</button>
 	</div>
 	<div id="mentor-profile" class="row">
@@ -183,8 +183,9 @@ margin:auto;
 				<img style="width: 128px" class="rounded" src="http://ddragon.leagueoflegends.com/cdn/13.10.1/img/profileicon/${mentor_profile.profile_icon_id}.png">
 			</div>
 			<div class="col" id="mentor-intro">
-				<div id= "mentor-name" class="row">
+				<div id= "mentor-name" class="d-flex justify-content-between">
 					<span class='col'><span class="h3"><strong>${mentor_profile.lol_account}</strong></span><em>&nbsp멘토님</em></span>
+					<button id="go-record-btn" class="btn btn-light btn-sm">멘토 전적 확인</button>
 				</div>
 				<div id="mentor-stat" class="row">
 					<div id="mentor-spec" class="col-10">
@@ -343,6 +344,11 @@ margin:auto;
 		
 		const IMP = window.IMP; // 생략 가능
 		IMP.init("imp26843336"); // 예: imp00000000a, 본인의 가맹점 식별코드
+		
+		$("#go-record-btn").click(function() {
+			  let summoner_name = "${mentor_profile.lol_account}";
+			  window.open('/summoner/info?summoner_name=' +summoner_name);
+			});
 		
 		let spec_pos = [${mentor_profile.specialized_position}];
 			$.each(spec_pos[0], function(i,pos){
