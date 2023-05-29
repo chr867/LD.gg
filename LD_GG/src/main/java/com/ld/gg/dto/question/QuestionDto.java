@@ -18,4 +18,5 @@ public class QuestionDto {
     private int status;
     private String tag1;
     private String tag2;
+    private String lol_account;
 }

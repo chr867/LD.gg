@@ -2,6 +2,7 @@ package com.ld.gg.controller.question;
 
 import com.ld.gg.dto.question.AnswerDto;
 import com.ld.gg.dto.question.QuestionDto;
+import com.ld.gg.dto.question.ScrapeDto;
 import com.ld.gg.service.QuestionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,5 +59,22 @@ public class QuestionRestController {
         }
 
         return answerDtoList;
+    }
+    @PostMapping("/my_scrape")
+    public int my_scrape(int question_id, String email){
+        System.out.println("my_scrape : " + question_id + email);
+
+        ScrapeDto scrapeDto = new ScrapeDto();
+
+        scrapeDto.setQuestion_id(question_id);
+        scrapeDto.setEmail(email);
+
+        int res = questionService.my_scrape(scrapeDto);
+
+        if(res < 0){
+            System.out.println("restController question_scrape insert 실패!");
+        }
+
+        return res;
     }
 }

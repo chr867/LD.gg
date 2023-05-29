@@ -2,6 +2,7 @@ package com.ld.gg.dao;
 
 import com.ld.gg.dto.question.AnswerDto;
 import com.ld.gg.dto.question.QuestionDto;
+import com.ld.gg.dto.question.ScrapeDto;
 
 import java.util.List;
 
@@ -21,4 +22,6 @@ public interface QuestionDao {
     List<AnswerDto> select_answer(int questionId);
 
     void update_question_status(int questionId);
+
+    int my_scrape(ScrapeDto scrapeDto);
 }
