@@ -63,9 +63,9 @@
 	flex-direction: column;
 	justify-content: space-between;
 	box-sizing: border-box;
-	margin-left: 200px;
+	margin-left: 350px;
 	margin-top: 20px;
-	width: 40%;
+	width: 20%;
 	height: 58vh;
 }
 
@@ -73,6 +73,7 @@
 	display: flex;
 	flex-direction: column;
 	box-sizing: border-box;
+	margin-left: 200px;
 	margin-top: 20px;
 	width: 40%;
 	height: 58vh;
@@ -81,7 +82,7 @@
 #bottom_container {
 	display: flex;
 	box-sizing: border-box;
-	margin-left: 540px;
+	margin-left: 400px;
 	width: 100%;
 }
 
@@ -89,6 +90,10 @@
 #champ_search_box input {
 	width: 220px;
 	border-radius: 5px;
+}
+
+#champ_search{
+	margin-top: 20px;
 }
 
 #my_champion_img {
@@ -100,11 +105,11 @@
 }
 
 #build_recom_box button {
-	margin-top: 20px;
+	margin-top: 10px;
 }
 
 .select_lane{
-	background-color: #E4E6EF;
+	border-radius: 10px;
 	display: flex;
 	justify-content: space-between;
 	position: relative;
@@ -117,7 +122,6 @@
 	height: 100px;
 }
 .select_tag{
-	background-color: #E4E6EF;
 	display: flex;
 	width: 100%;
 	height: 100px;
@@ -167,9 +171,17 @@
 #right_champ_search{
 	position: relative;
 	margin-bottom: 10px;
-	background-color: #E4E6EF;
+	margin-top: 10px;
 }
 
+#recom_champ,
+#recom_container{
+	display: flex;
+}
+
+#recom_container{
+	height: 200px;
+}
 
 #recom_img_container {
 	text-align: center;
@@ -185,10 +197,6 @@
 	border-radius: 70%;
 }
 
-#recom_champ{
-	display: flex;
-}
-
 #recom_champ_header{
 	display: flex;
 	flex-direction: column-reverse;
@@ -199,7 +207,7 @@
 
 #recom_champ_header div:last-child{
 	position: relative;
-	top: -110%;
+	top: -50%;
 }
 
 .recom_img{
@@ -217,7 +225,7 @@
 	top: -21%;
 	width: 65%;
 	height: 250px;
-	background-color: #fff;
+	background-color: #F4F4F4;
 	box-sizing: border-box;
 }
 
@@ -233,7 +241,7 @@
 	width: 90%;
 	margin: auto;
 	margin-top: 10px;
-	background-color: #E4E6EF;
+	background-color: #F4F4F4;
 	box-sizing: border-box;
 	padding: 0 50px 0 50px;
 	margin-bottom: 20px;
@@ -256,8 +264,8 @@
 
 .champion-img-container {
 	width: 100%;
-	background-color: #E4E6EF;
-	height: 100%;
+	background-color: #F4F4F4;
+	height: 87%;
 	margin: auto;
 	box-sizing: border-box;
 	overflow-y: auto;
@@ -277,7 +285,7 @@
 	width: 60px;
 	height: 60px;
 	border-radius: 1rem;
-	border: 5px solid #fff;
+	border: 5px solid #E4E6EF;
 	transition: 0.5s;
 }
 
@@ -316,281 +324,10 @@
 	<div id="session-summoner-icon" style="display: none">${sessionScope.summoner_icon}</div>
 	<div id="error-check" style="display: none">${check}</div>
 	<!----------------------------------------------------------------------------------------------------------------->
-	<!-- 사이드바 -->
-	<div class="sidebar">
-		<div class="sidebar-nothover-menu">
-			<div class="sidebar-menu" style="padding: 8px 0px 8px 12px;">
-				<img src="/resources/img/logo/LD_logo_gray.png" alt=""
-					style="width: 40px; height: 40px;">
-			</div>
-			<div class="sidebar-menu" style="padding: 18px;">
-				<img src="" alt="">
-			</div>
-			<div class="sidebar-menu">
-				<img src="/resources/img/icon/free-icon-ranking-3162263.png" alt=""
-					class="side-bar-icon">
-			</div>
-			<div class="sidebar-menu">
-				<img src="/resources/img/icon/free-icon-community-3594834.png"
-					alt="" class="side-bar-icon">
-			</div>
-			<div class="sidebar-menu">
-				<img src="/resources/img/icon/free-icon-mentorship-8920780.png"
-					alt="" class="side-bar-icon">
-			</div>
-			<div class="sidebar-menu">
-				<img src="/resources/img/icon/free-icon-game-control-4315528.png"
-					alt="" class="side-bar-icon">
-			</div>
-			<div class="sidebar-menu">
-				<img src="/resources/img/icon/free-icon-user-996484.png" alt=""
-					class="side-bar-icon">
-			</div>
-			<div class="sidebar-menu">
-				<img src="/resources/img/icon/free-icon-megaphone-92206.png" alt=""
-					class="side-bar-icon">
-			</div>
-		</div>
+	<%@ include file="header.jsp" %>
+	<%@ include file="sidebar.jsp" %>
+	<%@ include file="footer.jsp" %>
 
-		<div class="sidebar-area">
-			<div class="sidebar-logo-box" onclick="moveMain()">
-				<img src="/resources/img/logo/LoLing in the Deep2.svg" alt="LD.GG로고">
-			</div>
-
-			<div class="accordion" id="accordionExample">
-
-				<div class="accordion-item">
-					<h2 class="accordion-header" id="headingOne">
-						<button class="accordion-button" type="button"
-							data-bs-toggle="collapse" data-bs-target="#collapseOne"
-							aria-expanded="true" aria-controls="collapseOne">
-							<img src="/resources/img/icon/free-icon-ranking-3162263.png"
-								alt="" class="side-bar-icon"> 랭킹
-						</button>
-					</h2>
-					<div id="collapseOne" class="accordion-collapse collapse"
-						aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-						<div class="accordion-body">
-							<div class="accordion-body-menu">
-								<a href="/champion/rank" class="accordion-body-link"><span>•
-										챔피언 티어</span></a>
-							</div>
-							<div class="accordion-body-menu">
-								<a href="/summoner/rank" class="accordion-body-link"><span>•
-										소환사 랭킹</span></a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="accordion-item">
-					<h2 class="accordion-header" id="headingTwo">
-						<button class="accordion-button collapsed" type="button"
-							data-bs-toggle="collapse" data-bs-target="#collapseTwo"
-							aria-expanded="false" aria-controls="collapseTwo">
-							<img src="/resources/img/icon/free-icon-community-3594834.png"
-								alt="" class="side-bar-icon"> 커뮤니티
-						</button>
-					</h2>
-					<div id="collapseTwo" class="accordion-collapse collapse"
-						aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-						<div class="accordion-body">
-							<span class="bullet bullet-dot"></span>
-							<div class="accordion-body-menu">
-								<a href="/tip/" class="accordion-body-link"><span>•
-										챔피언 공략</span></a>
-							</div>
-							<div class="accordion-body-menu">
-								<a href="/mate/" class="accordion-body-link"><span>•
-										롤 메이트</span></a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="accordion-item">
-					<h2 class="accordion-header" id="headingThree">
-						<button class="accordion-button collapsed" type="button"
-							data-bs-toggle="collapse" data-bs-target="#collapseThree"
-							aria-expanded="false" aria-controls="collapseThree">
-							<img src="/resources/img/icon/free-icon-mentorship-8920780.png"
-								alt="" class="side-bar-icon"> 멘토링
-						</button>
-					</h2>
-					<div id="collapseThree" class="accordion-collapse collapse"
-						aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-						<div class="accordion-body">
-							<div class="accordion-body-menu">
-								<a href="/mentor/custom-mentor/" class="accordion-body-link"><span>•
-										맞춤 멘토</span></a>
-							</div>
-							<div class="accordion-body-menu">
-								<a href="/mentor/list/" class="accordion-body-link"><span>•
-										멘토 찾기</span></a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="accordion-item">
-					<h2 class="accordion-header" id="headingFour">
-						<button class="accordion-button collapsed" type="button"
-							data-bs-toggle="collapse" data-bs-target="#collapseFour"
-							aria-expanded="false" aria-controls="collapseFour">
-							<img src="/resources/img/icon/free-icon-game-control-4315528.png"
-								alt="" class="side-bar-icon"> 미니게임
-						</button>
-					</h2>
-					<div id="collapseFour" class="accordion-collapse collapse"
-						aria-labelledby="headingFour" data-bs-parent="#accordionExample">
-						<div class="accordion-body">
-							<div class="accordion-body-menu">
-								<a href="" class="accordion-body-link"><span>• 승부예측</span></a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="accordion-item">
-					<h2 class="accordion-header" id="headingFive">
-						<button class="accordion-button collapsed" type="button"
-							data-bs-toggle="collapse" data-bs-target="#collapseFive"
-							aria-expanded="false" aria-controls="collapseFive">
-							<img src="/resources/img/icon/free-icon-user-996484.png" alt=""
-								class="side-bar-icon"> 마이 메뉴
-						</button>
-					</h2>
-					<div id="collapseFive" class="accordion-collapse collapse"
-						aria-labelledby="headingFive" data-bs-parent="#accordionExample">
-						<div class="accordion-body">
-							<div class="accordion-body-menu">
-								<a href="/summoner/testDashBoard" class="accordion-body-link"><span>•
-										대시보드</span></a>
-							</div>
-							<div class="accordion-body-menu">
-								<a href="/mentor/write-profile" class="accordion-body-link"><span>•
-										프로필</span></a>
-							</div>
-							<div class="accordion-body-menu">
-								<a href="" class="accordion-body-link"><span>• 개인정보
-										수정</span></a>
-							</div>
-							<div class="accordion-body-menu">
-								<a href="/mentor/my-mentoring/" class="accordion-body-link"><span>•
-										마이 멘토링</span></a>
-							</div>
-							<div class="accordion-body-menu">
-								<a href="" class="accordion-body-link"><span>• 내 지갑</span></a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="accordion-item">
-					<h2 class="accordion-header" id="headingSix">
-						<button class="accordion-button collapsed" type="button"
-							data-bs-toggle="collapse" data-bs-target="#collapseSix"
-							aria-expanded="false" aria-controls="collapseSix">
-							<img src="/resources/img/icon/free-icon-megaphone-92206.png"
-								alt="" class="side-bar-icon"> 고객지원
-						</button>
-					</h2>
-					<div id="collapseSix" class="accordion-collapse collapse"
-						aria-labelledby="headingSix" data-bs-parent="#accordionExample">
-						<div class="accordion-body">
-							<div class="accordion-body-menu">
-								<a href="/userinterface/notice" class="accordion-body-link"><span>•
-										공지사항</span></a>
-							</div>
-							<div class="accordion-body-menu">
-								<a href="/faq/" class="accordion-body-link"><span>•
-										FAQ</span></a>
-							</div>
-							<div class="accordion-body-menu">
-								<a href="/faq/inquiries/" class="accordion-body-link"><span>•
-										문의사항</span></a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-			</div>
-		</div>
-	</div>
-	<!----------------------------------------------------------------------------------------------------------------->
-	<!----------------------------------------------------------------------------------------------------------------->
-	<!-- 헤더 -->
-	<div class="header-container">
-		<header>
-
-			<div class="search-bar-box">
-				<img src="/resources/img/logo/LD_logo_bluered.png" alt=""
-					class="search-bar-logo"> <input type="text"
-					class="search-bar-input" placeholder="소환사명을 입력해주세요"
-					autocomplete="off"> <img
-					src="/resources/img/icon/free-icon-magnifying-glass-49116.png"
-					alt="" class="search-bar-icon">
-			</div>
-
-			<div class="header-icon-box" style="display: none;">
-				<div class="message-icon-box">
-					<img src="/resources/img/icon/free-icon-message-5941217.png" alt=""
-						class="message-icon-img" onclick="chatPopup();">
-					<div class="message-notification"></div>
-				</div>
-				<div class="alarm-icon-box">
-					<img
-						src="/resources/img/icon/free-icon-notification-bell-3680267.png"
-						alt="" class="alarm-icon-img"> <span
-						class="alarm-notification"></span>
-				</div>
-				<div class="bookmark-icon-box">
-					<img src="/resources/img/icon/free-icon-bookmark-white-25667.png"
-						alt="" class="bookmark-icon-img">
-				</div>
-			</div>
-
-			<div class="user-info-box" style="display: none;"
-				onclick="go_mypage()">
-				<div class="summoner-profile-icon-box">
-					<img
-						src="/resources/img/profileicon/${sessionScope.summoner_icon}.png"
-						alt="">
-				</div>
-				<div class="summoner-name-box">
-					<h5>${sessionScope.lol_account}님</h5>
-				</div>
-				<div class="user-type-box">
-					<div class="user-type-common" style="display: none;">
-						<h5>일반회원</h5>
-					</div>
-					<div class="user-type-mentor" style="display: none;">
-						<h5>멘토회원</h5>
-					</div>
-					<div class="user-type-admin" style="display: none;">
-						<h5>어드민</h5>
-					</div>
-					<div class="user-type-stop" style="display: none;">
-						<h5>정지회원</h5>
-					</div>
-				</div>
-			</div>
-
-			<div class="login-button-box">
-				<button class="login-button" data-bs-toggle="modal"
-					data-bs-target="#login-modal" onclick="loginCheck()">LOGIN</button>
-			</div>
-
-			<div class="logout-button-box" style="display: none;">
-				<form id="logoutFrm" action="/member/logout" method="post">
-					<button class="logout-button" onclick="logout()">LOGOUT</button>
-				</form>
-			</div>
-
-		</header>
-	</div>
-	<!----------------------------------------------------------------------------------------------------------------->
-	<!----------------------------------------------------------------------------------------------------------------->
 	<!-- 로그인 모달박스 -->
 	<div class="modal fade" id="login-modal" tabindex="-1"
 		aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -641,24 +378,7 @@
 		</div>
 	</div>
 	<!----------------------------------------------------------------------------------------------------------------->
-	<!----------------------------------------------------------------------------------------------------------------->
-	<!-- 푸터 -->
-	<div class="footer-container">
-		<footer>
-			<div class="team-name-box">
-				<img src="/resources/img/logo/team_name_logo.png" alt=""
-					class="team-name-img">
-				<h5 class="team-name-h5">TEAM : Loling Thunder</h5>
-			</div>
 
-			<div class="team-members-box">
-				<h5 class="team-members-box">TEAM MEMBERS: 오건오, 박민규, 채희정, 최형로,
-					김시현, 이태현</h5>
-			</div>
-		</footer>
-	</div>
-	<!----------------------------------------------------------------------------------------------------------------->
-	<!----------------------------------------------------------------------------------------------------------------->
 	<!-- 메인 컨테이너 -->
 	<div class="main-container">
 		<br> <br> <br> <br> <br> <br> <br>
@@ -674,8 +394,8 @@
 					<img id="my_champion_img" alt="#"
 						src="/resources/img/profileicon/29.png">
 				</div>
-				<div id="build_recom_box">
-					<span></span>
+				<div id="build_recom_box" style="height: 70px;">
+					<div style="height: 20px;"></div>
 					<button onclick="recom_build()">추천 빌드</button>
 				</div>
 			</div>
@@ -727,66 +447,68 @@
 
 
 	<div id="bottom_container">
-		<div id="recom_champ_header">
-			<div>승률</div>
-			<div>라인킬 확률</div>
-			<div>추천 챔피언</div>
-		</div>
-		
-		<div id="recom_champ">
-			<div id="recom_img_container">
-				<div class="recom_img">
-					<img src="/resources/img/profileicon/29.png" class="champ1" alt=""
-					id="recom_champ_0" onclick="recom_click(this)">
-					<div></div>
-					<div></div>
-					<div></div>
-				</div>
-
-				<div class="recom_img">
-					<img
-					src="/resources/img/profileicon/29.png" class="champ2" alt=""
-					id="recom_champ_1" onclick="recom_click(this)">
-					<div></div>
-					<div></div>
-					<div></div>
-				</div>
-
-				<div class="recom_img">
-					<img
-					src="/resources/img/profileicon/29.png" class="champ3" alt=""
-					id="recom_champ_2" onclick="recom_click(this)">
-					<div></div>
-					<div></div>
-					<div></div>
-				</div>
-
-				<div class="recom_img">
-					<img
-					src="/resources/img/profileicon/29.png" class="champ4" alt=""
-					id="recom_champ_3" onclick="recom_click(this)"> 
-					<div></div>
-					<div></div>
-					<div></div>
-				</div>
-
-				<div class="recom_img">
-					<img
-					src="/resources/img/profileicon/29.png" class="champ5" alt=""
-					id="recom_champ_4" onclick="recom_click(this)">
-					<div></div>
-					<div></div>
-					<div></div>
-				</div>
-
+		<div id="recom_container">
+			<div id="recom_champ_header">
+				<div>승률</div>
+				<div>라인킬 확률</div>
+				<div>추천 챔피언</div>
 			</div>
 			
+			<div id="recom_champ">
+				<div id="recom_img_container">
+					<div class="recom_img">
+						<img src="/resources/img/profileicon/29.png" class="champ1" alt=""
+						id="recom_champ_0" onclick="recom_click(this)">
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
+
+					<div class="recom_img">
+						<img
+						src="/resources/img/profileicon/29.png" class="champ2" alt=""
+						id="recom_champ_1" onclick="recom_click(this)">
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
+
+					<div class="recom_img">
+						<img
+						src="/resources/img/profileicon/29.png" class="champ3" alt=""
+						id="recom_champ_2" onclick="recom_click(this)">
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
+
+					<div class="recom_img">
+						<img
+						src="/resources/img/profileicon/29.png" class="champ4" alt=""
+						id="recom_champ_3" onclick="recom_click(this)"> 
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
+
+					<div class="recom_img">
+						<img
+						src="/resources/img/profileicon/29.png" class="champ5" alt=""
+						id="recom_champ_4" onclick="recom_click(this)">
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
+
+				</div>
+				
 			</div>
 		</div>
 	</div>
+	
 	<!-- 추천 빌드 모달 -->
 
-	<script type="text/javascript">
+<script type="text/javascript">
 	let selected_lane;
 	let selected_tag;
 	let selected_left_champion;
@@ -801,8 +523,8 @@
 	let select_lane_imgs = document.querySelectorAll('.select_lane img')
 	select_lane_imgs.forEach(lane=>{
 		lane.addEventListener('click', function(){
-			$('.select_lane img').css('background-color', '#E4E6EF');
-			lane.style.backgroundColor = "black";
+			$('.select_lane img').css('background-color', '#F4F4F4');
+			lane.style.backgroundColor = "#E4E6EF";
 			selected_lane = lane.className;
 			console.log(selected_lane);
 			if(selected_lane && selected_tag && selected_right_champion){
@@ -816,8 +538,8 @@
 	let select_tag_divs = document.querySelectorAll('.select_tag div')
 	select_tag_divs.forEach(tag=>{
 		tag.addEventListener('click', function(){
-			$('.select_tag div').css('background-color', '#E4E6EF');
-			tag.style.backgroundColor = "black";
+			$('.select_tag div').css('background-color', '#F4F4F4');
+			tag.style.backgroundColor = "#E4E6EF";
 			selected_tag = tag.className;
 			console.log(selected_lane, selected_tag, selected_right_champion);
 			if(selected_lane && selected_tag && selected_right_champion){
@@ -837,9 +559,9 @@
 			data: {champion_en_name: $(champ).attr('class')},
 		}).done(res=>{
 			selected_left_champion = res // champion_kr_name
-			$('#build_recom_box span').text(res);
+			$('#build_recom_box div').text(res);
 		}).fail(err=>{
-			$('#build_recom_box span').text('챔피언을 선택해 주세요');
+			$('#build_recom_box div').text('챔피언을 선택해 주세요');
 		})
 	}
 	// 추천 챔피언 선택 end
@@ -898,7 +620,7 @@
 		event.preventDefault();
 		let formData = $(this).serialize();		
 		
-		$('#build_recom_box span').text($('#champion_name_input').val());
+		$('#build_recom_box div').text($('#champion_name_input').val());
 		$('#champion_name_input').val('');
 		
 		$.ajax({
@@ -914,7 +636,7 @@
 			}else{
 				selected_left_champion = null;
 				$('#my_champion_img').attr('src', '/resources/img/profileicon/29.png');
-				$('#build_recom_box span').text('챔피언 이름을 확인해주세요');
+				$('#build_recom_box div').text('챔피언 이름을 확인해주세요');
 			}
 			
 		}).fail(err=>{
@@ -978,7 +700,7 @@ function championList() {
 			championHTML += '<img alt="' + champion.champion_kr_name +
 				'" class="bg-image champion-img" src="/resources/img/champion_img/square/' +
 				champion.champion_img + '" onclick="selectChampion(\'' + champion.champion_en_name + '\', \'' + champion.champion_img + '\', \'' +
-			    champion.champion_kr_name + '\')">';
+			    champion.champion_kr_name + '\', \'' + champion.champion_id + '\')">';
 			championHTML += '</div>';
 		});
 
