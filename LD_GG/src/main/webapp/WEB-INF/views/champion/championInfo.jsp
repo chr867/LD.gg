@@ -3,9 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>챔피언 상세</title>
-<!--BOOTSTRAP CSS-->
+<title>LD.GG</title>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
 	rel="stylesheet"
@@ -16,7 +14,7 @@
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
 	integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
 	crossorigin="anonymous">
-</script>
+    </script>
 <!--SWEET-ALERT2 CSS-->
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
@@ -47,13 +45,14 @@
 	href="/resources/css/main/loginModal.css">
 <!--로그인 및 세션관련 JS-->
 <script src="/resources/js/main/loginSession.js" defer></script>
-
+<!-- 채팅 관련 JS-->
+<script src="/resources/js/main/chat.js" defer></script>
 <!--CHAMPION INFO CSS-->
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/champion/info.css">
-	
-<style type="text/css">
 
+
+<style type="text/css">
 .top-container {
 	display: flex;
 	box-sizing: border-box;
@@ -89,50 +88,53 @@
 
 
 <style type="text/css">
-
-.mythic-common-item-container{
+.mythic-common-item-container {
 	width: 720px;
 	height: 300px;
 	display: flex;
 	box-sizing: border-box;
 }
-.mythic-item-container{
+
+.mythic-item-container {
 	width: 350px;
 	height: 100%;
 	background-color: #fff;
 	border-radius: 0.5rem;
 	margin-right: 20px;
 	box-sizing: border-box;
-	
 }
-.common-item-container{
+
+.common-item-container {
 	width: 350px;
 	height: 100%;
 	background-color: #fff;
 	border-radius: 0.5rem;
 	box-sizing: border-box;
-	
 }
-.mythic-item-title{
+
+.mythic-item-title {
 	text-align: center;
 }
-.mythic-item-title h4{
+
+.mythic-item-title h4 {
 	font-size: 20px;
 	font-weight: 700;
 }
-.common-item-title{
+
+.common-item-title {
 	text-align: center;
 }
-.common-item-title h4{
+
+.common-item-title h4 {
 	font-size: 20px;
 	font-weight: 700;
-	
 }
 
 .mythic-recomm-box .item-img:hover .item-desc {
 	visibility: visible;
 	opacity: 1;
 }
+
 .common-recomm-box .item-img:hover .item-desc {
 	visibility: visible;
 	opacity: 1;
@@ -157,22 +159,22 @@
 	visibility: visible;
 	opacity: 1;
 }
-
 </style>
 
 
 </head>
 
 <body>
-
+	<%@ include file="../header.jsp"%>
+	<%@ include file="../sidebar.jsp"%>
+	<%@ include file="../footer.jsp"%>
+  
+	<!----------------------------------------------------------------------------------------------------------------->
 	<div id="session-summoner-name" style="display: none">${sessionScope.lol_account}</div>
 	<div id="session-user-type" style="display: none">${sessionScope.user_type}</div>
 	<div id="session-summoner-name" style="display: none">${sessionScope.summoner_name}</div>
 	<div id="session-summoner-icon" style="display: none">${sessionScope.summoner_icon}</div>
 	<!----------------------------------------------------------------------------------------------------------------->
-	<%@ include file="../header.jsp" %>
-	<%@ include file="../sidebar.jsp" %>
-	<%@ include file="../footer.jsp" %>
 
 	<!-- 로그인 모달박스 -->
 	<div class="modal fade" id="login-modal" tabindex="-1"
@@ -299,13 +301,15 @@
 			<div class="champion-twpb-box">
 				<table>
 					<tr>
-						<th class="champion-twpb">티어</th>
+						<th class="champion-twpb">Ai-Tier</th>
+						<th class="champion-twpb">Ai-Score</th>
 						<th class="champion-twpb">승률</th>
 						<th class="champion-twpb">픽률</th>
 						<th class="champion-twpb">밴률</th>
 					</tr>
 					<tr>
 						<td class="champion-tier" id="tier"></td>
+						<td class="champion-tier" id="ai-score"></td>
 						<td class="champion-tier" id="win-rate"></td>
 						<td class="champion-tier" id="pick-rate"></td>
 						<td class="champion-tier" id="ban-rate"></td>
@@ -635,7 +639,7 @@
 			<div id="match_up_table_container">
 
 				<div class="match_up_table_header">
-	<!-- 				<div>#</div> -->
+					<!-- 				<div>#</div> -->
 					<div>챔피언</div>
 					<div>라인킬 확률</div>
 				</div>
@@ -644,7 +648,7 @@
 			</div>
 			<!-- match_up_conatiner end -->
 		</div>
-		
+
 		<div class="mythic-common-item-container">
 			<div class="mythic-item-container">
 				<div class="mythic-item-title">
@@ -778,6 +782,7 @@ function championBuildInfo(champion_id, team_position) {
 			  }else{
 				  document.getElementById('tier').textContent = champTierData[0].tier;  
 			  }
+			  document.getElementById('ai-score').textContent = champTierData[0].ai_score;
 			  document.getElementById('win-rate').textContent = champTierData[0].win_rate+'%';
 			  document.getElementById('pick-rate').textContent = champTierData[0].pick_rate+'%';
 			  document.getElementById('ban-rate').textContent = champTierData[0].ban_rate+'%';

@@ -2,11 +2,8 @@
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-
 <head>
-<meta charset="UTF-8">
-<title>챔피언 랭크</title>
-<!--BOOTSTRAP CSS-->
+<title>LD.GG</title>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
 	rel="stylesheet"
@@ -17,7 +14,7 @@
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
 	integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
 	crossorigin="anonymous">
-	</script>
+    </script>
 <!--SWEET-ALERT2 CSS-->
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
@@ -43,10 +40,17 @@
 <!--footer CSS-->
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/main/footer.css">
+<!--loginModal CSS-->
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/main/loginModal.css">
 <!--로그인 및 세션관련 JS-->
 <script src="/resources/js/main/loginSession.js" defer></script>
 <!-- 채팅 관련 JS-->
 <script src="/resources/js/main/chat.js" defer></script>
+<!--CHAMPION INFO CSS-->
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/champion/info.css">
+
 </head>
 <style>
 .container_box {
@@ -83,58 +87,61 @@
 	cursor: pointer;
 }
 
-button{
+button {
 	border: 1px solid black;
 }
 
-.lane_button button{
+.lane_button button {
 	margin-right: 20px;
 	width: 150px;
 	height: 35px;
 }
 
-.lane_button{
+.lane_button {
 	position: relative;
 	left: 150px;
 }
 
-
-#option_container button,
-#tier_select{
+#option_container button, #tier_select {
 	width: 120px;
 	height: 35px;
 }
 
-.lane_button button:hover{
+.lane_button button:hover {
 	background-color: #7c83a0;
 	opacity: 0.6;
 }
 
-.table{
+.table {
 	background-color: #E4E6EF;
 	margin-top: 20px;
 }
 
-.table tbody:nth-child(2) td{
+.table tbody:nth-child(2) td {
 	line-height: 50px;
 }
 
-
-.table tbody:nth-child(2) td:nth-child(2){
+.table tbody:nth-child(2) td:nth-child(2) {
 	width: 50px;
 }
 
-.table tbody:nth-child(2) td:nth-child(3){
+.table tbody:nth-child(2) td:nth-child(3) {
 	width: 150px;
 }
 
-.table td:nth-child(2),
- .table td:nth-child(3) {
+.table td:nth-child(2), .table td:nth-child(3) {
 	cursor: pointer;
 }
 
-th{
+.table td {
+	font-size: 16px;
+	font-weight: 700;
+}
+
+th {
 	text-align: center;
+	font-weight: 700;
+	font-size: 18px;
 }
 
 .table img {
@@ -243,6 +250,19 @@ th{
 	background-color: #888;
 	/* 스크롤바의 썸(막대) 색상 */
 }
+
+.ai-score {
+	width: 60px;
+	background-color: #75c7fb;
+	color: #fff;
+	font-size: 22px;
+	font-weight: 900;
+	border-radius: 1rem;
+}
+
+.hi-score {
+	background-color: #ff3847;
+}
 </style>
 
 <body>
@@ -334,11 +354,11 @@ th{
 	<div class="container_box">
 		<div>
 			<div class="container">
-<!-- 				<div class="tier_container_box">
+				<!-- 				<div class="tier_container_box">
 					<button id="tier_select">티어 선택</button>
 					<div id="option_container"></div>
 				</div> -->
-				
+
 				<div class="col">
 					<div class='lane_button'>
 						<button class="TOP">탑</button>
@@ -353,7 +373,8 @@ th{
 			<table class="table table-striped">
 				<th class='rank'>순위</th>
 				<th class='champ' colspan="2">챔피언</th>
-				<th class='tier'>티어</th>
+				<th class='tier'>Ai-Tier</th>
+				<th class='ai_score'>Ai-Score</th>
 				<th class='win_rate'>승률</th>
 				<th class='pick_rate'>픽률</th>
 				<th class='ban_rate'>밴률</th>
@@ -401,6 +422,11 @@ th{
 			champion.champion_img + '" alt="#"></td>'
 			cList += '<td onclick="selectChampion('+ champion.champion_id +')" align="center">' + champion.champion_kr_name + '</td>'
 			cList += '<td align="center"><img src="'+ src +'"></td>'
+			if (champion.ai_score > 70){
+				cList += '<td align="center"><div class="ai-score hi-score">' + champion.ai_score + '</div></td>'
+			}else{
+				cList += '<td align="center"><div class="ai-score">' + champion.ai_score + '</div></td>'
+			}
 			cList += '<td align="center">' + champion.win_rate + '%</td>'
 			cList += '<td align="center">' + champion.pick_rate + '%</td>'
 			cList += '<td align="center">' + champion.ban_rate + '%</td>'
@@ -480,6 +506,11 @@ th{
 				champion.champion_img + '" alt="#"></td>'
 				cList += '<td onclick="selectChampion('+ champion.champion_id +')" align="center">' + champion.champion_kr_name + '</td>'
 				cList += '<td align="center"><img src="'+ src +'"></td>'
+				if (champion.ai_score > 70){
+					cList += '<td align="center"><div class="ai-score hi-score">' + champion.ai_score + '</div></td>'
+				}else{
+					cList += '<td align="center"><div class="ai-score">' + champion.ai_score + '</div></td>'
+				}
 				cList += '<td align="center">' + champion.win_rate + '%</td>'
 				cList += '<td align="center">' + champion.pick_rate + '%</td>'
 				cList += '<td align="center">' + champion.ban_rate + '%</td>'
@@ -544,6 +575,11 @@ th{
 					champion.champion_img + '" alt="#"></td>'
 					cList += '<td onclick="selectChampion('+ champion.champion_id +')" align="center">' + champion.champion_kr_name + '</td>'
 					cList += '<td align="center"><img src="'+ src +'"></td>'
+					if (champion.ai_score > 70){
+						cList += '<td align="center"><div class="ai-score hi-score">' + champion.ai_score + '</div></td>'
+					}else{
+						cList += '<td align="center"><div class="ai-score">' + champion.ai_score + '</div></td>'
+					}
 					cList += '<td align="center">' + champion.win_rate + '%</td>'
 					cList += '<td align="center">' + champion.pick_rate + '%</td>'
 					cList += '<td align="center">' + champion.ban_rate + '%</td>'
@@ -761,5 +797,7 @@ function selectLane(team_position) {
 	}
 </script>
 
+<script type="text/javascript">
 
+</script>
 </html>

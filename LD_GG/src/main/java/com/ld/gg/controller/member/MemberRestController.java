@@ -113,14 +113,16 @@ public class MemberRestController {
 	}
 	
 	@PostMapping("/change_password")
-	public boolean changePassword(String email, String password, String changePw) throws Exception{
+	public boolean changePassword(HttpSession session, String password, String changePw) throws Exception{
+		String email = (String) session.getAttribute("email");
 		boolean result = ms.changePassword(email,password,changePw);
 		log.info("비밀번호 변경 컨트롤러 반환부 : "+result);
 		return result;
 	}
 
 	@PostMapping("/drop_member")
-	public boolean dropMember(String email, String password, HttpSession session) throws Exception{
+	public boolean dropMember(String password, HttpSession session) throws Exception{
+		String email = (String) session.getAttribute("email");
 		boolean result = ms.dropMember(email,password);
 		if(result) {
 			log.info("탈퇴 완료");

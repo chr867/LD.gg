@@ -33,10 +33,10 @@
       <img src="/resources/img/icon/free-icon-mentorship-8920780.png"
            alt="" class="side-bar-icon">
     </div>
-    <div class="sidebar-menu">
+<!--     <div class="sidebar-menu">
       <img src="/resources/img/icon/free-icon-game-control-4315528.png"
            alt="" class="side-bar-icon">
-    </div>
+    </div> -->
     <div class="sidebar-menu">
       <img src="/resources/img/icon/free-icon-user-996484.png" alt=""
            class="side-bar-icon">
@@ -96,7 +96,7 @@
               <a href="/mate/" class="accordion-body-link"><span>• 롤 메이트</span></a>
             </div>
             <div class="accordion-body-menu">
-              <a href="/question/question" class="accordion-body-link"><span>• 질문</span></a>
+              <a href="/question/" class="accordion-body-link"><span>• 질문</span></a>
             </div>
           </div>
         </div>
@@ -120,11 +120,14 @@
             <div class="accordion-body-menu">
               <a href="/mentor/list/" class="accordion-body-link"><span>• 멘토 찾기</span></a>
             </div>
+                        <div class="accordion-body-menu">
+              <a href="/mentor/my-mentoring/" class="accordion-body-link"><span>• 마이 멘토링</span></a>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="accordion-item">
+<!--       <div class="accordion-item">
         <h2 class="accordion-header" id="headingFour">
           <button class="accordion-button collapsed" type="button"
                   data-bs-toggle="collapse" data-bs-target="#collapseFour"
@@ -141,7 +144,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <div class="accordion-item">
         <h2 class="accordion-header" id="headingFive">
@@ -162,14 +165,16 @@
               <a href="/mentor/write-profile" class="accordion-body-link"><span>• 프로필</span></a>
             </div>
             <div class="accordion-body-menu">
-              <a href="" class="accordion-body-link"><span>• 개인정보
-										수정</span></a>
-            </div>
-            <div class="accordion-body-menu">
-              <a href="/mentor/my-mentoring/" class="accordion-body-link"><span>• 마이 멘토링</span></a>
-            </div>
-            <div class="accordion-body-menu">
               <a href="" class="accordion-body-link"><span>• 내 지갑</span></a>
+            </div>
+                        <div class="accordion-body-menu">
+              <a href="/member/changePassword" class="accordion-body-link"><span>• 비밀번호 변경</span></a>
+            </div>
+                        <div class="accordion-body-menu">
+              <a href="/member/changeUserType" class="accordion-body-link"><span>• 일반/멘토회원 전환</span></a>
+            </div>
+                        <div class="accordion-body-menu">
+              <a href="/member/dropMember" class="accordion-body-link"><span>• 회원탈퇴</span></a>
             </div>
           </div>
         </div>
