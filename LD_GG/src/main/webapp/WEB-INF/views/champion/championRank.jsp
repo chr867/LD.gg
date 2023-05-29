@@ -128,9 +128,15 @@ button{
  .table td:nth-child(3) {
 	cursor: pointer;
 }
+.table td{
+	font-size: 16px;
+	font-weight: 700;
+}
 
 th{
 	text-align: center;
+	font-weight: 700;
+	font-size: 18px;
 }
 
 .table img {
@@ -238,6 +244,19 @@ th{
 ::-webkit-scrollbar-thumb {
 	background-color: #888;
 	/* 스크롤바의 썸(막대) 색상 */
+}
+
+.ai-score{
+	width: 60px;
+	background-color: #75c7fb;
+	color: #fff;
+	font-size: 22px;
+	font-weight: 900;
+	border-radius: 1rem;
+}
+
+.hi-score{
+	background-color: #ff3847;
 }
 </style>
 
@@ -572,6 +591,7 @@ th{
 				<th class='rank'>순위</th>
 				<th class='champ' colspan="2">챔피언</th>
 				<th class='tier'>티어</th>
+				<th class='ai_score'>Ai-Score</th>
 				<th class='win_rate'>승률</th>
 				<th class='pick_rate'>픽률</th>
 				<th class='ban_rate'>밴률</th>
@@ -619,6 +639,11 @@ th{
 			champion.champion_img + '" alt="#"></td>'
 			cList += '<td onclick="selectChampion('+ champion.champion_id +')" align="center">' + champion.champion_kr_name + '</td>'
 			cList += '<td align="center"><img src="'+ src +'"></td>'
+			if (champion.ai_score > 70){
+				cList += '<td align="center"><div class="ai-score hi-score">' + champion.ai_score + '</div></td>'
+			}else{
+				cList += '<td align="center"><div class="ai-score">' + champion.ai_score + '</div></td>'
+			}
 			cList += '<td align="center">' + champion.win_rate + '%</td>'
 			cList += '<td align="center">' + champion.pick_rate + '%</td>'
 			cList += '<td align="center">' + champion.ban_rate + '%</td>'
@@ -698,6 +723,11 @@ th{
 				champion.champion_img + '" alt="#"></td>'
 				cList += '<td onclick="selectChampion('+ champion.champion_id +')" align="center">' + champion.champion_kr_name + '</td>'
 				cList += '<td align="center"><img src="'+ src +'"></td>'
+				if (champion.ai_score > 70){
+					cList += '<td align="center"><div class="ai-score hi-score">' + champion.ai_score + '</div></td>'
+				}else{
+					cList += '<td align="center"><div class="ai-score">' + champion.ai_score + '</div></td>'
+				}
 				cList += '<td align="center">' + champion.win_rate + '%</td>'
 				cList += '<td align="center">' + champion.pick_rate + '%</td>'
 				cList += '<td align="center">' + champion.ban_rate + '%</td>'
@@ -762,6 +792,11 @@ th{
 					champion.champion_img + '" alt="#"></td>'
 					cList += '<td onclick="selectChampion('+ champion.champion_id +')" align="center">' + champion.champion_kr_name + '</td>'
 					cList += '<td align="center"><img src="'+ src +'"></td>'
+					if (champion.ai_score > 70){
+						cList += '<td align="center"><div class="ai-score hi-score">' + champion.ai_score + '</div></td>'
+					}else{
+						cList += '<td align="center"><div class="ai-score">' + champion.ai_score + '</div></td>'
+					}
 					cList += '<td align="center">' + champion.win_rate + '%</td>'
 					cList += '<td align="center">' + champion.pick_rate + '%</td>'
 					cList += '<td align="center">' + champion.ban_rate + '%</td>'
@@ -979,5 +1014,7 @@ function selectLane(team_position) {
 	}
 </script>
 
+<script type="text/javascript">
 
+</script>
 </html>
