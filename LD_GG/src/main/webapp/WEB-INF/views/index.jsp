@@ -60,9 +60,9 @@
 	flex-direction: column;
 	justify-content: space-between;
 	box-sizing: border-box;
-	margin-left: 200px;
+	margin-left: 350px;
 	margin-top: 20px;
-	width: 40%;
+	width: 20%;
 	height: 58vh;
 }
 
@@ -70,6 +70,7 @@
 	display: flex;
 	flex-direction: column;
 	box-sizing: border-box;
+	margin-left: 200px;
 	margin-top: 20px;
 	width: 40%;
 	height: 58vh;
@@ -78,7 +79,7 @@
 #bottom_container {
 	display: flex;
 	box-sizing: border-box;
-	margin-left: 540px;
+	margin-left: 400px;
 	width: 100%;
 }
 
@@ -86,6 +87,10 @@
 #champ_search_box input {
 	width: 220px;
 	border-radius: 5px;
+}
+
+#champ_search{
+	margin-top: 20px;
 }
 
 #my_champion_img {
@@ -97,11 +102,11 @@
 }
 
 #build_recom_box button {
-	margin-top: 20px;
+	margin-top: 10px;
 }
 
 .select_lane{
-	background-color: #E4E6EF;
+	border-radius: 10px;
 	display: flex;
 	justify-content: space-between;
 	position: relative;
@@ -114,7 +119,6 @@
 	height: 100px;
 }
 .select_tag{
-	background-color: #E4E6EF;
 	display: flex;
 	width: 100%;
 	height: 100px;
@@ -164,9 +168,17 @@
 #right_champ_search{
 	position: relative;
 	margin-bottom: 10px;
-	background-color: #E4E6EF;
+	margin-top: 10px;
 }
 
+#recom_champ,
+#recom_container{
+	display: flex;
+}
+
+#recom_container{
+	height: 200px;
+}
 
 #recom_img_container {
 	text-align: center;
@@ -182,10 +194,6 @@
 	border-radius: 70%;
 }
 
-#recom_champ{
-	display: flex;
-}
-
 #recom_champ_header{
 	display: flex;
 	flex-direction: column-reverse;
@@ -196,7 +204,7 @@
 
 #recom_champ_header div:last-child{
 	position: relative;
-	top: -110%;
+	top: -50%;
 }
 
 .recom_img{
@@ -214,7 +222,7 @@
 	top: -21%;
 	width: 65%;
 	height: 250px;
-	background-color: #fff;
+	background-color: #F4F4F4;
 	box-sizing: border-box;
 }
 
@@ -230,7 +238,7 @@
 	width: 90%;
 	margin: auto;
 	margin-top: 10px;
-	background-color: #E4E6EF;
+	background-color: #F4F4F4;
 	box-sizing: border-box;
 	padding: 0 50px 0 50px;
 	margin-bottom: 20px;
@@ -253,8 +261,8 @@
 
 .champion-img-container {
 	width: 100%;
-	background-color: #E4E6EF;
-	height: 100%;
+	background-color: #F4F4F4;
+	height: 87%;
 	margin: auto;
 	box-sizing: border-box;
 	overflow-y: auto;
@@ -274,7 +282,7 @@
 	width: 60px;
 	height: 60px;
 	border-radius: 1rem;
-	border: 5px solid #fff;
+	border: 5px solid #E4E6EF;
 	transition: 0.5s;
 }
 
@@ -310,8 +318,66 @@
 	<%@ include file="./header.jsp"%>
 	<%@ include file="./sidebar.jsp"%>
 	<%@ include file="./footer.jsp"%>
+  
 	<!----------------------------------------------------------------------------------------------------------------->
+	<div id="session-summoner-name" style="display: none">${sessionScope.lol_account}</div>
+	<div id="session-user-type" style="display: none">${sessionScope.user_type}</div>
+	<div id="session-summoner-name" style="display: none">${sessionScope.summoner_name}</div>
+	<div id="session-summoner-icon" style="display: none">${sessionScope.summoner_icon}</div>
+	<div id="error-check" style="display: none">${check}</div>
 	<!----------------------------------------------------------------------------------------------------------------->
+
+	<!-- 로그인 모달박스 -->
+	<div class="modal fade" id="login-modal" tabindex="-1"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-xl">
+			<div class="modal-content">
+				<div class="modal-header" style="background-color: #172B36;">
+					<h1 class="modal-title fs-5" id="exampleModalLabel"></h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close" style="background-color: #ffffff;"></button>
+				</div>
+				<div class="modal-body login-modal-body"
+					style="background-image: url(/resources/img/logo/2020_key_art_Banner.png);">
+					<div class="login-img-box">
+						<img src="/resources/img/logo/main.png" alt="로그인 이미지">
+					</div>
+					<div class="login-box">
+						<div class="input-area">
+							<div>
+								<img src="/resources/img/logo/LD_logo.svg" alt="LD_logo"
+									style="width: 100px; height: 100px;">
+							</div>
+							<form action="/member/login" name="logFrm" method="post">
+								<div class="input-id">
+									<input type="text" placeholder="아이디" name="email">
+								</div>
+								<div class="input-pw">
+									<input type="password" placeholder="비밀번호" name="password">
+								</div>
+								<div>
+									<button class="login-modal-button">로그인</button>
+								</div>
+							</form>
+							<div>
+								<button class="login-modal-button" onclick="join()">회원가입</button>
+							</div>
+							<div>
+								<a href="/member/findEmail" class="find-tag">이메일아이디 찾기</a>
+							</div>
+							<div>
+								<a href="/member/findPassword" class="find-tag">비밀번호 찾기</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer" style="background-color: #1E3D4F;">
+				</div>
+			</div>
+		</div>
+	</div>
+	<!----------------------------------------------------------------------------------------------------------------->
+
 	<!-- 메인 컨테이너 -->
 	<div class="main-container">
 		<br> <br> <br> <br> <br> <br> <br>
@@ -327,8 +393,8 @@
 					<img id="my_champion_img" alt="#"
 						src="/resources/img/profileicon/29.png">
 				</div>
-				<div id="build_recom_box">
-					<span></span>
+				<div id="build_recom_box" style="height: 70px;">
+					<div style="height: 20px;"></div>
 					<button onclick="recom_build()">추천 빌드</button>
 				</div>
 			</div>
@@ -380,66 +446,68 @@
 
 
 	<div id="bottom_container">
-		<div id="recom_champ_header">
-			<div>승률</div>
-			<div>라인킬 확률</div>
-			<div>추천 챔피언</div>
-		</div>
-		
-		<div id="recom_champ">
-			<div id="recom_img_container">
-				<div class="recom_img">
-					<img src="/resources/img/profileicon/29.png" class="champ1" alt=""
-					id="recom_champ_0" onclick="recom_click(this)">
-					<div></div>
-					<div></div>
-					<div></div>
-				</div>
-
-				<div class="recom_img">
-					<img
-					src="/resources/img/profileicon/29.png" class="champ2" alt=""
-					id="recom_champ_1" onclick="recom_click(this)">
-					<div></div>
-					<div></div>
-					<div></div>
-				</div>
-
-				<div class="recom_img">
-					<img
-					src="/resources/img/profileicon/29.png" class="champ3" alt=""
-					id="recom_champ_2" onclick="recom_click(this)">
-					<div></div>
-					<div></div>
-					<div></div>
-				</div>
-
-				<div class="recom_img">
-					<img
-					src="/resources/img/profileicon/29.png" class="champ4" alt=""
-					id="recom_champ_3" onclick="recom_click(this)"> 
-					<div></div>
-					<div></div>
-					<div></div>
-				</div>
-
-				<div class="recom_img">
-					<img
-					src="/resources/img/profileicon/29.png" class="champ5" alt=""
-					id="recom_champ_4" onclick="recom_click(this)">
-					<div></div>
-					<div></div>
-					<div></div>
-				</div>
-
+		<div id="recom_container">
+			<div id="recom_champ_header">
+				<div>승률</div>
+				<div>라인킬 확률</div>
+				<div>추천 챔피언</div>
 			</div>
 			
+			<div id="recom_champ">
+				<div id="recom_img_container">
+					<div class="recom_img">
+						<img src="/resources/img/profileicon/29.png" class="champ1" alt=""
+						id="recom_champ_0" onclick="recom_click(this)">
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
+
+					<div class="recom_img">
+						<img
+						src="/resources/img/profileicon/29.png" class="champ2" alt=""
+						id="recom_champ_1" onclick="recom_click(this)">
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
+
+					<div class="recom_img">
+						<img
+						src="/resources/img/profileicon/29.png" class="champ3" alt=""
+						id="recom_champ_2" onclick="recom_click(this)">
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
+
+					<div class="recom_img">
+						<img
+						src="/resources/img/profileicon/29.png" class="champ4" alt=""
+						id="recom_champ_3" onclick="recom_click(this)"> 
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
+
+					<div class="recom_img">
+						<img
+						src="/resources/img/profileicon/29.png" class="champ5" alt=""
+						id="recom_champ_4" onclick="recom_click(this)">
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
+
+				</div>
+				
 			</div>
 		</div>
 	</div>
+	
 	<!-- 추천 빌드 모달 -->
 
-	<script type="text/javascript">
+<script type="text/javascript">
 	let selected_lane;
 	let selected_tag;
 	let selected_left_champion;
@@ -454,8 +522,8 @@
 	let select_lane_imgs = document.querySelectorAll('.select_lane img')
 	select_lane_imgs.forEach(lane=>{
 		lane.addEventListener('click', function(){
-			$('.select_lane img').css('background-color', '#E4E6EF');
-			lane.style.backgroundColor = "black";
+			$('.select_lane img').css('background-color', '#F4F4F4');
+			lane.style.backgroundColor = "#E4E6EF";
 			selected_lane = lane.className;
 			console.log(selected_lane);
 			if(selected_lane && selected_tag && selected_right_champion){
@@ -469,8 +537,8 @@
 	let select_tag_divs = document.querySelectorAll('.select_tag div')
 	select_tag_divs.forEach(tag=>{
 		tag.addEventListener('click', function(){
-			$('.select_tag div').css('background-color', '#E4E6EF');
-			tag.style.backgroundColor = "black";
+			$('.select_tag div').css('background-color', '#F4F4F4');
+			tag.style.backgroundColor = "#E4E6EF";
 			selected_tag = tag.className;
 			console.log(selected_lane, selected_tag, selected_right_champion);
 			if(selected_lane && selected_tag && selected_right_champion){
@@ -490,9 +558,9 @@
 			data: {champion_en_name: $(champ).attr('class')},
 		}).done(res=>{
 			selected_left_champion = res // champion_kr_name
-			$('#build_recom_box span').text(res);
+			$('#build_recom_box div').text(res);
 		}).fail(err=>{
-			$('#build_recom_box span').text('챔피언을 선택해 주세요');
+			$('#build_recom_box div').text('챔피언을 선택해 주세요');
 		})
 	}
 	// 추천 챔피언 선택 end
@@ -551,7 +619,7 @@
 		event.preventDefault();
 		let formData = $(this).serialize();		
 		
-		$('#build_recom_box span').text($('#champion_name_input').val());
+		$('#build_recom_box div').text($('#champion_name_input').val());
 		$('#champion_name_input').val('');
 		
 		$.ajax({
@@ -567,7 +635,7 @@
 			}else{
 				selected_left_champion = null;
 				$('#my_champion_img').attr('src', '/resources/img/profileicon/29.png');
-				$('#build_recom_box span').text('챔피언 이름을 확인해주세요');
+				$('#build_recom_box div').text('챔피언 이름을 확인해주세요');
 			}
 			
 		}).fail(err=>{
@@ -631,7 +699,7 @@ function championList() {
 			championHTML += '<img alt="' + champion.champion_kr_name +
 				'" class="bg-image champion-img" src="/resources/img/champion_img/square/' +
 				champion.champion_img + '" onclick="selectChampion(\'' + champion.champion_en_name + '\', \'' + champion.champion_img + '\', \'' +
-			    champion.champion_kr_name + '\')">';
+			    champion.champion_kr_name + '\', \'' + champion.champion_id + '\')">';
 			championHTML += '</div>';
 		});
 

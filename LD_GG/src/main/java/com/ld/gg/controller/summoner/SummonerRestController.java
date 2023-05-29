@@ -75,8 +75,8 @@ public class SummonerRestController {
 	}
 
 	@GetMapping("/get_summoner_record")
-	public List<RecordDto> summoner_record(String summoner_name) {
-		List<RecordDto> rd = ss.get_summoner_record(summoner_name);
+	public List<RecordDto> summoner_record(String summoner_name, int offset) {
+		List<RecordDto> rd = ss.get_summoner_record(summoner_name, offset);
 		return rd;
 	}
 
@@ -87,14 +87,14 @@ public class SummonerRestController {
 	}
 
 	@GetMapping("/get_champ_record")
-	public List<ChampRecordDto> get_champ_record(String summoner_name) {
-		List<ChampRecordDto> crd = ss.get_champ_record(summoner_name);
+	public List<ChampRecordDto> get_champ_record(String summoner_name, int offset) {
+		List<ChampRecordDto> crd = ss.get_champ_record(summoner_name, offset);
 		return crd;
 	}
 	
 	@GetMapping("/getChampRecordLane")
-	public List<ChampRecordDto> getChampRecordLane(String summoner_name, String paramLane){
-		List<ChampRecordDto> crd = ss.getChampRecordLane(summoner_name, paramLane);
+	public List<ChampRecordDto> getChampRecordLane(String summoner_name, String paramLane, int offset){
+		List<ChampRecordDto> crd = ss.getChampRecordLane(summoner_name, paramLane, offset);
 		return crd;
 	}
 	
@@ -180,6 +180,20 @@ public class SummonerRestController {
 	public List<TeamRankingDataDto> getTeamData(String match_id, String summoner_name){
 		List<TeamRankingDataDto> TRDD = ss.getTeamData(match_id, summoner_name);
 		return TRDD;
+	}
+	
+	@GetMapping("/getMainMaking")
+	public List<BuildDto> getMainMaking(String main){
+		List<BuildDto> RBD = ss.getMainMaking(main);
+		System.out.println(RBD);
+		return RBD;
+	}
+	
+	@GetMapping("/getSubMaking")
+	public List<BuildDto> getSubMaking(String sub){
+		List<BuildDto> RBD = ss.getSubMaking(sub);
+		System.out.println(RBD);
+		return RBD;
 	}
 
 }

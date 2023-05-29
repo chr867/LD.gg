@@ -168,7 +168,65 @@
 	<%@ include file="../header.jsp"%>
 	<%@ include file="../sidebar.jsp"%>
 	<%@ include file="../footer.jsp"%>
+  
 	<!----------------------------------------------------------------------------------------------------------------->
+	<div id="session-summoner-name" style="display: none">${sessionScope.lol_account}</div>
+	<div id="session-user-type" style="display: none">${sessionScope.user_type}</div>
+	<div id="session-summoner-name" style="display: none">${sessionScope.summoner_name}</div>
+	<div id="session-summoner-icon" style="display: none">${sessionScope.summoner_icon}</div>
+	<!----------------------------------------------------------------------------------------------------------------->
+
+	<!-- 로그인 모달박스 -->
+	<div class="modal fade" id="login-modal" tabindex="-1"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-xl">
+			<div class="modal-content">
+				<div class="modal-header" style="background-color: #172B36;">
+					<h1 class="modal-title fs-5" id="exampleModalLabel"></h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close" style="background-color: #ffffff;"></button>
+				</div>
+				<div class="modal-body login-modal-body"
+					style="background-image: url(/resources/img/logo/2020_key_art_Banner.png);">
+					<div class="login-img-box">
+						<img src="/resources/img/logo/main.png" alt="로그인 이미지">
+					</div>
+					<div class="login-box">
+						<div class="input-area">
+							<div>
+								<img src="/resources/img/logo/LD_logo.svg" alt="LD_logo"
+									style="width: 100px; height: 100px;">
+							</div>
+							<form action="/member/login" name="logFrm" method="post">
+								<div class="input-id">
+									<input type="text" placeholder="아이디" name="email">
+								</div>
+								<div class="input-pw">
+									<input type="password" placeholder="비밀번호" name="password">
+								</div>
+								<div>
+									<button class="login-modal-button">로그인</button>
+								</div>
+							</form>
+							<div>
+								<button class="login-modal-button" onclick="join()">회원가입</button>
+							</div>
+							<div>
+								<a href="/member/findEmail" class="find-tag">이메일아이디 찾기</a>
+							</div>
+							<div>
+								<a href="/member/findPassword" class="find-tag">비밀번호 찾기</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer" style="background-color: #1E3D4F;">
+				</div>
+			</div>
+		</div>
+	</div>
+	<!----------------------------------------------------------------------------------------------------------------->
+
 	<!----------------------------------------------------------------------------------------------------------------->
 	<div class="top-container">
 		<div class="left-container">
@@ -458,7 +516,6 @@
 
 		</div>
 	</div>
-
 
 	<div class="bottom-container">
 		<!-- match_up_conatiner start -->
