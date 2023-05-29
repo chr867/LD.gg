@@ -105,11 +105,11 @@
 }
 
 #build_recom_box button {
-	margin-top: 20px;
+	margin-top: 10px;
 }
 
 .select_lane{
-	background-color: #E4E6EF;
+	border-radius: 10px;
 	display: flex;
 	justify-content: space-between;
 	position: relative;
@@ -122,7 +122,6 @@
 	height: 100px;
 }
 .select_tag{
-	background-color: #E4E6EF;
 	display: flex;
 	width: 100%;
 	height: 100px;
@@ -172,9 +171,17 @@
 #right_champ_search{
 	position: relative;
 	margin-bottom: 10px;
-	background-color: #E4E6EF;
+	margin-top: 10px;
 }
 
+#recom_champ,
+#recom_container{
+	display: flex;
+}
+
+#recom_container{
+	height: 200px;
+}
 
 #recom_img_container {
 	text-align: center;
@@ -190,10 +197,6 @@
 	border-radius: 70%;
 }
 
-#recom_champ{
-	display: flex;
-}
-
 #recom_champ_header{
 	display: flex;
 	flex-direction: column-reverse;
@@ -204,7 +207,7 @@
 
 #recom_champ_header div:last-child{
 	position: relative;
-	top: -110%;
+	top: -50%;
 }
 
 .recom_img{
@@ -222,7 +225,7 @@
 	top: -21%;
 	width: 65%;
 	height: 250px;
-	background-color: #fff;
+	background-color: #F4F4F4;
 	box-sizing: border-box;
 }
 
@@ -238,7 +241,7 @@
 	width: 90%;
 	margin: auto;
 	margin-top: 10px;
-	background-color: #E4E6EF;
+	background-color: #F4F4F4;
 	box-sizing: border-box;
 	padding: 0 50px 0 50px;
 	margin-bottom: 20px;
@@ -261,8 +264,8 @@
 
 .champion-img-container {
 	width: 100%;
-	background-color: #E4E6EF;
-	height: 100%;
+	background-color: #F4F4F4;
+	height: 87%;
 	margin: auto;
 	box-sizing: border-box;
 	overflow-y: auto;
@@ -282,7 +285,7 @@
 	width: 60px;
 	height: 60px;
 	border-radius: 1rem;
-	border: 5px solid #fff;
+	border: 5px solid #E4E6EF;
 	transition: 0.5s;
 }
 
@@ -391,8 +394,8 @@
 					<img id="my_champion_img" alt="#"
 						src="/resources/img/profileicon/29.png">
 				</div>
-				<div id="build_recom_box">
-					<div></div>
+				<div id="build_recom_box" style="height: 70px;">
+					<div style="height: 20px;"></div>
 					<button onclick="recom_build()">추천 빌드</button>
 				</div>
 			</div>
@@ -444,60 +447,61 @@
 
 
 	<div id="bottom_container">
-		<div id="recom_champ_header">
-			<div>승률</div>
-			<div>라인킬 확률</div>
-			<div>추천 챔피언</div>
-		</div>
-		
-		<div id="recom_champ">
-			<div id="recom_img_container">
-				<div class="recom_img">
-					<img src="/resources/img/profileicon/29.png" class="champ1" alt=""
-					id="recom_champ_0" onclick="recom_click(this)">
-					<div></div>
-					<div></div>
-					<div></div>
-				</div>
-
-				<div class="recom_img">
-					<img
-					src="/resources/img/profileicon/29.png" class="champ2" alt=""
-					id="recom_champ_1" onclick="recom_click(this)">
-					<div></div>
-					<div></div>
-					<div></div>
-				</div>
-
-				<div class="recom_img">
-					<img
-					src="/resources/img/profileicon/29.png" class="champ3" alt=""
-					id="recom_champ_2" onclick="recom_click(this)">
-					<div></div>
-					<div></div>
-					<div></div>
-				</div>
-
-				<div class="recom_img">
-					<img
-					src="/resources/img/profileicon/29.png" class="champ4" alt=""
-					id="recom_champ_3" onclick="recom_click(this)"> 
-					<div></div>
-					<div></div>
-					<div></div>
-				</div>
-
-				<div class="recom_img">
-					<img
-					src="/resources/img/profileicon/29.png" class="champ5" alt=""
-					id="recom_champ_4" onclick="recom_click(this)">
-					<div></div>
-					<div></div>
-					<div></div>
-				</div>
-
+		<div id="recom_container">
+			<div id="recom_champ_header">
+				<div>승률</div>
+				<div>라인킬 확률</div>
+				<div>추천 챔피언</div>
 			</div>
 			
+			<div id="recom_champ">
+				<div id="recom_img_container">
+					<div class="recom_img">
+						<img src="/resources/img/profileicon/29.png" class="champ1" alt=""
+						id="recom_champ_0" onclick="recom_click(this)">
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
+
+					<div class="recom_img">
+						<img
+						src="/resources/img/profileicon/29.png" class="champ2" alt=""
+						id="recom_champ_1" onclick="recom_click(this)">
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
+
+					<div class="recom_img">
+						<img
+						src="/resources/img/profileicon/29.png" class="champ3" alt=""
+						id="recom_champ_2" onclick="recom_click(this)">
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
+
+					<div class="recom_img">
+						<img
+						src="/resources/img/profileicon/29.png" class="champ4" alt=""
+						id="recom_champ_3" onclick="recom_click(this)"> 
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
+
+					<div class="recom_img">
+						<img
+						src="/resources/img/profileicon/29.png" class="champ5" alt=""
+						id="recom_champ_4" onclick="recom_click(this)">
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
+
+				</div>
+				
 			</div>
 		</div>
 	</div>
@@ -519,8 +523,8 @@
 	let select_lane_imgs = document.querySelectorAll('.select_lane img')
 	select_lane_imgs.forEach(lane=>{
 		lane.addEventListener('click', function(){
-			$('.select_lane img').css('background-color', '#E4E6EF');
-			lane.style.backgroundColor = "#475577";
+			$('.select_lane img').css('background-color', '#F4F4F4');
+			lane.style.backgroundColor = "#E4E6EF";
 			selected_lane = lane.className;
 			console.log(selected_lane);
 			if(selected_lane && selected_tag && selected_right_champion){
@@ -534,8 +538,8 @@
 	let select_tag_divs = document.querySelectorAll('.select_tag div')
 	select_tag_divs.forEach(tag=>{
 		tag.addEventListener('click', function(){
-			$('.select_tag div').css('background-color', '#E4E6EF');
-			tag.style.backgroundColor = "#475577";
+			$('.select_tag div').css('background-color', '#F4F4F4');
+			tag.style.backgroundColor = "#E4E6EF";
 			selected_tag = tag.className;
 			console.log(selected_lane, selected_tag, selected_right_champion);
 			if(selected_lane && selected_tag && selected_right_champion){
@@ -696,7 +700,7 @@ function championList() {
 			championHTML += '<img alt="' + champion.champion_kr_name +
 				'" class="bg-image champion-img" src="/resources/img/champion_img/square/' +
 				champion.champion_img + '" onclick="selectChampion(\'' + champion.champion_en_name + '\', \'' + champion.champion_img + '\', \'' +
-			    champion.champion_kr_name + '\')">';
+			    champion.champion_kr_name + '\', \'' + champion.champion_id + '\')">';
 			championHTML += '</div>';
 		});
 
