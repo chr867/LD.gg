@@ -4,10 +4,12 @@ document.getElementById("dropMember").addEventListener("click", function() {
 			$.ajax({
 		        method: 'post',
 		        url: '/member/drop_member',
-		        data: {email:'${sessionScope.email}', password:password},
+		        data: {password:password},
 		      }).done(res=>{
 		        console.log(res);
-		        location.href = '/';
+		        if(res){
+		        	location.href = '/';
+		        }
 		      }).fail(err=>{
 		        console.log(err);
 		        alert("회원탈퇴 실패")
