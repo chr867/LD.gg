@@ -42,29 +42,29 @@ public class MemberController {
 	}
 	
 	@PostMapping("/login")
-	public ModelAndView login(HttpServletRequest request,MemberDto md, HttpSession session, RedirectAttributes ra) throws Exception {
-		MemberDto member = ms.login(md);
-		SummonerDto sDto = ms.getSummonerIcon(member);
-		log.info("--------------SDTO 결과 !!!!{}",sDto);
-		log.info("{}",md);
-		log.info("--------------MDTO 결과 !!!!{}",member);
-		System.out.println("로그인 반환 결과:"+member);
-		if (member != null) { 
-			session.setAttribute("email", member.getEmail());
-			session.setAttribute("lol_account", member.getLol_account());
-			session.setAttribute("user_type", member.getUser_type());
-			session.setAttribute("summoner_name", sDto.getSummoner_name());
-			session.setAttribute("summoner_icon", sDto.getProfile_icon_id());
-			
+	public ModelAndView login(HttpServletRequest request, MemberDto md, HttpSession session, RedirectAttributes ra) throws Exception {
+	    MemberDto member = ms.login(md);
+	    SummonerDto sDto = ms.getSummonerIcon(member);
+	    String referer = request.getHeader("Referer");
+	    log.info("--------------SDTO 결과 !!!!{}", sDto);
+	    log.info("{}", md);
+	    log.info("--------------MDTO 결과 !!!!{}", member);
+	    System.out.println("로그인 반환 결과:" + member);
+	    if (member != null) {
+	        session.setAttribute("email", member.getEmail());
+	        session.setAttribute("lol_account", member.getLol_account());
+	        session.setAttribute("user_type", member.getUser_type());
+	        session.setAttribute("summoner_name", sDto.getSummoner_name());
+	        session.setAttribute("summoner_icon", sDto.getProfile_icon_id());
 
-		    sl.login(member.getEmail(),request);
-            
-			ra.addFlashAttribute("msg", "로그인 성공");
-			return new ModelAndView("redirect:/");
-		}
-		ra.addFlashAttribute("msg", "로그인 실패");
-		ra.addFlashAttribute("check", 2);
-		return new ModelAndView("redirect:/");
+	        sl.login(member.getEmail(), request);
+
+	        ra.addFlashAttribute("msg", "로그인 성공");
+	        return new ModelAndView("redirect:" + referer);
+	    }
+	    ra.addFlashAttribute("msg", "로그인 실패");
+	    ra.addFlashAttribute("check", 2);
+	    return new ModelAndView("redirect:" + referer);
 	}
 	
 	@GetMapping("/testMain")

@@ -44,45 +44,6 @@ from sklearn.preprocessing import StandardScaler
 # ----------------------------------------------------------------------------------------------------------------------
 # 모델 학습용 데이터 연산 코드
 print("시작!")
-print(f'총 데이터 갯수 : 796000 개')
-
-batch_size = 100000
-win_pick_lst_result = []
-ban_rate_lst_result = []
-meta_score_lst_result = []
-cnt = 0
-for limit in tqdm(range(0, 796000, batch_size)):
-    conn = mu.connect_mysql()
-    query = f"SELECT * FROM match_solr_rank LIMIT {limit}, {batch_size}"
-    row = pd.DataFrame(mu.mysql_execute_dict(query, conn))
-    conn.close()
-
-    for _, player in tqdm(row.iterrows()):
-        lst = []
-        lst.append(player['championId'])
-        lst.append(player['win'])
-        lst.append(player['teamPosition'])
-        win_pick_lst_result.append(lst)
-        cnt += 1
-    for _, player in tqdm(row.iterrows()):
-        lst = []
-        if player['ban_champion_id'] != 0 and player['ban_champion_id'] != -1:
-            lst.append(player['teamPosition'])
-            lst.append(player['ban_champion_id'])
-            ban_rate_lst_result.append(lst)
-
-    for _, player in tqdm(row.iterrows()):
-        lst = []
-        lst.append(player['championId'])
-        lst.append(player['teamPosition'])
-        lst.append(player['kda'])
-        lst.append(player['totalDamageDealtToChampions'])
-        lst.append(player['totalDamageTaken'])
-        lst.append(player['timeCCingOthers'])
-        lst.append(player['total_gold'])
-        meta_score_lst_result.append(lst)
-    # ----------------------------------------------------------------
-print("시작!")
 conn = mu.connect_mysql()
 matchId_count = pd.DataFrame(mu.mysql_execute_dict(f"SELECT match_id_substr FROM match_raw_patch", conn))
 conn.close()
@@ -200,38 +161,6 @@ print("데이터 연산 완료")
 
 # One-Hot Encoding
 # 머신러닝에 맞게 이진벡터 변환
-champion_tier_machine_learning = pd.get_dummies(champion_tier_machine_learning, columns=['teamPosition'])
-
-# 특성
-X = champion_tier_machine_learning.drop('tier', axis=1)  # 'tier' 열을 제외한 모든 열을 특성으로 사용
-# 레이블
-y = champion_tier_machine_learning['tier']  # 'tier' 열을 레이블로 사용
-
-# 학습 데이터와 테스트 데이터 분리
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# 랜덤 포레스트 분류기 학습
-model = RandomForestClassifier(n_estimators=100, random_state=42)
-model.fit(X_train, y_train)
-
-# 예측 및 평가
-y_pred = model.predict(X_test)
-print('Accuracy: ', accuracy_score(y_test, y_pred))
-# 예측값(y_pred)과 실제값(y_test)을 이용해 정밀도, 재현율, F1 점수를 측정
-print(classification_report(y_test, y_pred))
-# Confusion Matrix
-print(confusion_matrix(y_test, y_pred))
-# 교차 검증
-scores = cross_val_score(model, X, y, cv=10)
-# 교차 검증 결과 출력
-print("Cross Validation Scores:", scores)
-print("Mean Accuracy:", scores.mean())
-
-# 모델 저장
-joblib.dump(model, 'championTierPredictionModel2.pkl')
-# ----------------------------------------------------------------
-# 머신러닝 테스트 코드
-# One-Hot Encoding
 champion_tier_machine_learning = pd.get_dummies(champion_tier_machine_learning, columns=['teamPosition'])
 
 # 특성

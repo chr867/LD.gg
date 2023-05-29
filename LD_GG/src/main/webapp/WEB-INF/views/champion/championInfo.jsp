@@ -89,6 +89,7 @@
 
 
 <style type="text/css">
+
 .mythic-common-item-container{
 	width: 720px;
 	height: 300px;
@@ -136,6 +137,27 @@
 	visibility: visible;
 	opacity: 1;
 }
+
+.lane-desc {
+	position: absolute;
+	top: 35px;
+	z-index: 300;
+	width: 150px;
+	background-color: black;
+	color: #fff;
+	border-radius: 0.5rem;
+	padding: 10px;
+	visibility: hidden;
+	opacity: 0;
+	transition: visibility 0s, opacity 0.3s linear;
+	font-size: 14px;
+}
+
+.lane-img:hover .lane-desc {
+	visibility: visible;
+	opacity: 1;
+}
+
 </style>
 
 
@@ -943,22 +965,53 @@ function championLaneInfo(champion_id) {
 	  }).done(res => {
 	    let laneSelectBox = document.querySelector('.lane-select-box');
 	    laneSelectBox.innerHTML = ''; // 기존 내용 초기화
+	    console.log(res)
 
 	    for (let i = 0; i < res.length; i++) {
 	      let team_position = res[i].team_position;
 	      let html = '';
 
 	      if (team_position === 'TOP') {
-	        html = '<div class="lane-img lane-top" onclick="selectLane(\'TOP\')"><img src="/resources/img/ranked-positions/Position_Silver-Top.png" alt="로그인 이미지"></div>';
-	      } else if (team_position === 'JUNGLE') {
-	        html = '<div class="lane-img lane-jungle" onclick="selectLane(\'JUNGLE\')"><img src="/resources/img/ranked-positions/Position_Silver-Jungle.png" alt="로그인 이미지"></div>';
-	      } else if (team_position === 'MIDDLE') {
-	        html = '<div class="lane-img lane-middle" onclick="selectLane(\'MIDDLE\')"><img src="/resources/img/ranked-positions/Position_Silver-Mid.png" alt="로그인 이미지"></div>';
-	      } else if (team_position === 'BOTTOM') {
-	        html = '<div class="lane-img lane-bottom" onclick="selectLane(\'BOTTOM\')"><img src="/resources/img/ranked-positions/Position_Silver-Bot.png" alt="로그인 이미지"></div>';
-	      } else if (team_position === 'UTILITY') {
-	        html = '<div class="lane-img lane-support" onclick="selectLane(\'UTILITY\')"><img src="/resources/img/ranked-positions/Position_Silver-Support.png" alt="로그인 이미지"></div>';
-	      }
+	    	  html += '<div class="lane-img lane-top" onclick="selectLane(\'TOP\')">';
+	    	  html += '<img src="/resources/img/ranked-positions/Position_Silver-Top.png" alt="로그인 이미지">';
+	    	  html += '<div class="lane-desc">';
+	    	  html += '<div>승률 : ' + res[i].win_rate + '%</div>';
+	    	  html += '<div>픽률 : ' + res[i].pick_rate + '%</div>';
+	    	  html += '</div>';
+	    	  html += '</div>';
+	    	} else if (team_position === 'JUNGLE') {
+	    	  html += '<div class="lane-img lane-jungle" onclick="selectLane(\'JUNGLE\')">';
+	    	  html += '<img src="/resources/img/ranked-positions/Position_Silver-Jungle.png" alt="로그인 이미지">';
+	    	  html += '<div class="lane-desc">';
+	    	  html += '<div>승률 : ' + res[i].win_rate + '%</div>';
+	    	  html += '<div>픽률 : ' + res[i].pick_rate + '%</div>';
+	    	  html += '</div>';
+	    	  html += '</div>';
+	    	} else if (team_position === 'MIDDLE') {
+	    	  html += '<div class="lane-img lane-middle" onclick="selectLane(\'MIDDLE\')">';
+	    	  html += '<img src="/resources/img/ranked-positions/Position_Silver-Mid.png" alt="로그인 이미지">';
+	    	  html += '<div class="lane-desc">';
+	    	  html += '<div>승률 : ' + res[i].win_rate + '%</div>';
+	    	  html += '<div>픽률 : ' + res[i].pick_rate + '%</div>';
+	    	  html += '</div>';
+	    	  html += '</div>';
+	    	} else if (team_position === 'BOTTOM') {
+	    	  html += '<div class="lane-img lane-bottom" onclick="selectLane(\'BOTTOM\')">';
+	    	  html += '<img src="/resources/img/ranked-positions/Position_Silver-Bot.png" alt="로그인 이미지">';
+	    	  html += '<div class="lane-desc">';
+	    	  html += '<div>승률 : ' + res[i].win_rate + '%</div>';
+	    	  html += '<div>픽률 : ' + res[i].pick_rate + '%</div>';
+	    	  html += '</div>';
+	    	  html += '</div>';
+	    	} else if (team_position === 'UTILITY') {
+	    	  html += '<div class="lane-img lane-support" onclick="selectLane(\'UTILITY\')">';
+	    	  html += '<img src="/resources/img/ranked-positions/Position_Silver-Support.png" alt="로그인 이미지">';
+	    	  html += '<div class="lane-desc">';
+	    	  html += '<div>승률 : ' + res[i].win_rate + '%</div>';
+	    	  html += '<div>픽률 : ' + res[i].pick_rate + '%</div>';
+	    	  html += '</div>';
+	    	  html += '</div>';
+	    	}
 
 	      laneSelectBox.innerHTML += html;
 	    }
