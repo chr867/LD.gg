@@ -608,7 +608,7 @@
 
 .rune-combination-desc {
 	position: absolute;
-	top: 35px;
+	top: 320px;
 	z-index: 300;
 	width: 150px;
 	background-color: black;
@@ -626,11 +626,29 @@
 	opacity: 1;
 }
 
+
+.tooltip {
+	position: absolute;
+	z-index: 10;
+	width: 300px;
+	background-color: black;
+	color: #fff;
+	border-radius: 1rem;
+	padding: 10px;
+	visibility: hidden;
+	opacity: 0;
+	transition: visibility 0s, opacity 0.3s linear;
+}
+
+.champion-table td:hover .tooltip {
+	visibility: visible;
+	opacity: 1;
+}
+
 .spell-container{
 	background-color: #fff;
 	height: 150px;
 	border-radius: 0.5rem;
-	margin-top: 20px;
 	box-sizing: border-box;
 }
 .spell-title h4{
@@ -1038,69 +1056,71 @@ box-sizing: border-box;
 
 				<div class="champion-info-box">
 					<table class="champion-table">
-						<tr>
-							<td rowspan="2"><img alt=""
-								src="/resources/img/champion_img/square/${chamInfo.champion_img}"
-								class="champion-img_"></td>
-							<td colspan="5"><h3 class="champion_name">${chamInfo.champion_kr_name}</h3></td>
-						</tr>
-						<tr>
-							<td><img alt=""
-								src="/resources/img/passive/${chamInfo.champion_p_img}"
-								class="ability-img">
-								<div class="skill-key-icon">
-									<h6>P</h6>
-								</div>
-								<div class="tooltip">
-									<div>${chamInfo.champion_p_name}</div>
-									<br>
-									<div>${chamInfo.champion_p_desc}</div>
-								</div></td>
-							<td><img alt=""
-								src="/resources/img/spell/${chamInfo.champion_q_img}"
-								class="ability-img">
-								<div class="skill-key-icon">
-									<h6>Q</h6>
-								</div>
-								<div class="tooltip">
-									<div>${chamInfo.champion_q_name}</div>
-									<br>
-									<div>${chamInfo.champion_q_desc}</div>
-								</div></td>
-							<td><img alt=""
-								src="/resources/img/spell/${chamInfo.champion_w_img}"
-								class="ability-img">
-								<div class="skill-key-icon">
-									<h6>W</h6>
-								</div>
-								<div class="tooltip">
-									<div>${chamInfo.champion_w_name}</div>
-									<br>
-									<div>${chamInfo.champion_w_desc}</div>
-								</div></td>
-							<td><img alt=""
-								src="/resources/img/spell/${chamInfo.champion_e_img}"
-								class="ability-img">
-								<div class="skill-key-icon">
-									<h6>E</h6>
-								</div>
-								<div class="tooltip">
-									<div>${chamInfo.champion_e_name}</div>
-									<br>
-									<div>${chamInfo.champion_e_desc}</div>
-								</div></td>
-							<td><img alt=""
-								src="/resources/img/spell/${chamInfo.champion_r_img}"
-								class="ability-img">
-								<div class="skill-key-icon">
-									<h6>R</h6>
-								</div>
-								<div class="tooltip">
-									<div>${chamInfo.champion_r_name}</div>
-									<br>
-									<div>${chamInfo.champion_r_desc}</div>
-								</div></td>
-						</tr>
+						<tbody style="display: flex; flex-direction: column; width: 335px; height: 200px;">
+							<tr>
+								<td rowspan="2"><img alt=""
+									src="/resources/img/champion_img/square/${chamInfo.champion_img}"
+									class="champion-img_"></td>
+								<td colspan="5"><h3 class="champion_name">${chamInfo.champion_kr_name}</h3></td>
+							</tr>
+							<tr style="display: flex;">
+								<td><img alt=""
+									src="/resources/img/passive/${chamInfo.champion_p_img}"
+									class="ability-img">
+									<div class="skill-key-icon">
+										<h6>P</h6>
+									</div>
+									<div class="tooltip">
+										<div>${chamInfo.champion_p_name}</div>
+										<br>
+										<div>${chamInfo.champion_p_desc}</div>
+									</div></td>
+								<td><img alt=""
+									src="/resources/img/spell/${chamInfo.champion_q_img}"
+									class="ability-img">
+									<div class="skill-key-icon">
+										<h6>Q</h6>
+									</div>
+									<div class="tooltip">
+										<div>${chamInfo.champion_q_name}</div>
+										<br>
+										<div>${chamInfo.champion_q_desc}</div>
+									</div></td>
+								<td><img alt=""
+									src="/resources/img/spell/${chamInfo.champion_w_img}"
+									class="ability-img">
+									<div class="skill-key-icon">
+										<h6>W</h6>
+									</div>
+									<div class="tooltip">
+										<div>${chamInfo.champion_w_name}</div>
+										<br>
+										<div>${chamInfo.champion_w_desc}</div>
+									</div></td>
+								<td><img alt=""
+									src="/resources/img/spell/${chamInfo.champion_e_img}"
+									class="ability-img">
+									<div class="skill-key-icon">
+										<h6>E</h6>
+									</div>
+									<div class="tooltip">
+										<div>${chamInfo.champion_e_name}</div>
+										<br>
+										<div>${chamInfo.champion_e_desc}</div>
+									</div></td>
+								<td><img alt=""
+									src="/resources/img/spell/${chamInfo.champion_r_img}"
+									class="ability-img">
+									<div class="skill-key-icon">
+										<h6>R</h6>
+									</div>
+									<div class="tooltip">
+										<div>${chamInfo.champion_r_name}</div>
+										<br>
+										<div>${chamInfo.champion_r_desc}</div>
+									</div></td>
+							</tr>
+						</tbody>
 					</table>
 
 					<div class="spell-container">
@@ -1846,9 +1866,9 @@ function skillSplit(champSkillBuildData) {
 	rateHtlm = ''
 	rateHtlm += '<div class="skill-build-rate">'
 	rateHtlm += '<div class="rate-text"><h4>승률</h4></div>'
-	rateHtlm += '<div class="rate-text"><h6>'+champSkillBuildData[i].win_rate+'%</h6></div>'
+	rateHtlm += '<div class="rate-text"><h6>'+champSkillBuildData[i].skill_build_win_rate+'%</h6></div>'
 	rateHtlm += '<div class="rate-text"><h4>픽률</h4></div>'
-	rateHtlm += '<div class="rate-text"><h6>'+champSkillBuildData[i].pick_rate+'%</h6></div>'
+	rateHtlm += '<div class="rate-text"><h6>'+champSkillBuildData[i].skill_build_pick_rate+'%</h6></div>'
 	rateHtlm += '</div>'
 	
 	qBoxHtml = ''
