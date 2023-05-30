@@ -3,124 +3,71 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+<title>LD.GG 내 지갑</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+	crossorigin="anonymous">
+<!--BOOTSTRAP JavaScript-->
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+	crossorigin="anonymous">
+    </script>
+<!--SWEET-ALERT2 CSS-->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<!--SWEET-ALERT2 JS-->
+<script
+	src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<!--AJAX-->
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!--JQUERY VALIDATE-->
+<script
+	src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.0/jquery.validate.min.js"></script>
+<!--sideBar CSS-->
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/main/sideBar.css">
+<!--header CSS-->
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/main/header.css">
+<!--footer CSS-->
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/main/footer.css">
+<!--loginModal CSS-->
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/main/loginModal.css">
+<!--로그인 및 세션관련 JS-->
+<script src="/resources/js/main/loginSession.js" defer></script>
+<!-- 채팅 관련 JS-->
+<script src="/resources/js/main/chat.js" defer></script>
+<!-- 결제 관련 CSS -->
+<link href = "/resources/css/wallet/payment.css" rel = "stylesheet">
 
-<style>
-/* 모달 창을 초기에는 보이지 않게 함 */
-.flex-modal {
-	display: none;
-	position: fixed;
-	z-index: 1;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	overflow: auto;
-	background-color: rgba(0, 0, 0, 0.4);
-}
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+	crossorigin="anonymous">
 
-/* 모달 창 내용 */
-.modal-content {
-	background-color: #fefefe;
-	margin: 15% auto;
-	padding: 20px;
-	border: 1px solid #888;
-	width: 80%;
-	max-width: 600px;
-}
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<script
+	src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
 
-/* 닫기 버튼 */
-.close {
-	color: #aaa;
-	float: right;
-	font-size: 28px;
-	font-weight: bold;
-}
+<script src="https://code.jquery.com/jquery-3.6.3.js"
+	integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+	crossorigin="anonymous"></script>
 
-.close:hover, .close:focus {
-	color: black;
-	text-decoration: none;
-	cursor: pointer;
-}
+<!-- jqGrid CSS -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/css/ui.jqgrid.min.css">
 
-.flex-store-div {
-	display: flex;
-	flex-flow: wrap;
-	flex-direction: column;
-	width: 70%;
-	justify-content: center;
-	align-items: center;
-	height: 100vh;
-}
+<!-- jqGrid JS -->
+<script	src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/jquery.jqgrid.min.js"></script>
 
-.flex-store-title {
-	display: flex;
-	width: 90%;
-}
-
-.flex-hold-cash {
-	display: flex;
-	height: 5%;
-	border: 1px solid #000000;
-	background-color: #000000;
-	border-radius: 5px;
-	width: 90%;
-	justify-content: center;
-	align-items: center;
-}
-
-.flex-strong-cash {
-	color: #ffffff;
-}
-
-.flex-store-notice {
-	display: flex;
-	width: 90%;
-	height: 3%;
-	border: 1px solid #EAEAEA;
-	background-color: #EAEAEA;
-	border-radius: 5px;
-	justify-content: center;
-	align-items: center;
-}
-
-.flex-payment-info {
-	width: 90%;
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-}
-
-.flex-payment-header {
-	align-self: flex-start;
-	margin-left: 0;
-}
-
-.flex-normal-charge {
-	margin-left: 0;
-}
-
-.flex-paymnent-cash {
-	display: flex;
-	align-items: center;
-	border: 1px solid #EAEAEA;
-	background-color : #fcfcfc;
-}
-
-.flex-label {
-	display: flex;
-	align-items: center;
-}
-
-.flex-payment-button {
-	margin-left: 10px; /* 원하는 간격으로 조정 가능 */
-}
-</style>
-
-<!-- jQuery -->
-<script type="text/javascript"
-	src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <!-- iamport.payment.js -->
 <script type="text/javascript"
 	src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
@@ -135,33 +82,27 @@
 	//결제 완료 이후 결제 위변조 대사 작업시 주문번호를 이용하여 검증이 필요하므로 주문번호는 가맹점 서버에서 고유하게(unique)채번하여 DB 상에 저장해주세요.
 </script>
 
-
 </head>
 <body>
 
+<%@ include file="../header.jsp"%>
+<%@ include file="../sidebar.jsp"%>
+<%@ include file="../footer.jsp"%>
+<div class = "store-container">
 	<div class="flex-store-div">
-		<h2 class="flex-store-title">스토어</h2>
+	
+	<h2 class="flex-store-title">스토어</h2>
+	
+		<div class = "flex-store-tab">
+			<div class = "flex-purchaseTab">포인트 충전</div>	<div class = "flex-chargeTab">충전/사용내역</div>
+		</div>
+		
 		<div class="flex-hold-cash">
 			<strong class="flex-strong-cash" id="flex-hold-title">보유 캐시</strong>
-			<strong class="flex-strong-cash" id="flex-hold-cash">${cash}
-				캐시</strong>
+			<strong class="flex-strong-cash" id="flex-hold-cash">${buyer.point_balance} 캐시</strong>
 		</div>
-		<div class="flex-store-notice">
-			<span class="flex-span-notice">고객캐시는 '알바'카테고리에서 사용이 가능하며, 이력서
-				열람 시 개당 2,500 캐시가 사용됩니다.</span>
-		</div>
+		
 		<div class="flex-payment-info">
-			<header class="flex-payment-header">
-				<strong class="flex-normal-charge">일반 충전</strong>
-			</header>
-
-			<div class="flex-paymnent-cash">
-				<div class="flex-label">
-					<strong>1 캐시</strong>
-				</div>
-				<input type="button" class="flex-payment-button" value="1 원"
-					style="cursor: pointer">
-			</div>
 
 			<div class="flex-paymnent-cash">
 				<div class="flex-label">
@@ -190,7 +131,8 @@
 		</div>
 	</div>
 
-	
+	<table id = "UsageHistory"></table>
+	<div id = "pager"></div>
 
 	<div id="payment-modal" class="flex-modal">
 		<div class="modal-content">
@@ -212,16 +154,18 @@
 			<span class="close">닫기</span>
 		</div>
 	</div>
-
+</div>
 	<script type="text/javascript">
+	let holder_email = "${buyer.holder_email}"
 	let email = "";
 	let phone_num = "";
 	let lol_account = "";
+	console.log(holder_email);
 	window.onload = function() {
         $.ajax({
         	method : 'post',
         	url : '/wallet/payment/userinfo',
-        	data : {email : "${email}"}
+        	data : {email : '${buyer.holder_email}'}
         }).done(res=>{
         	email = res[0].email;
         	phone_num = res[0].phone_num;
@@ -399,7 +343,79 @@
 				}
 			});
 		}
-	}
+	};
+	
+	$('.flex-chargeTab').click(function(){
+		$('#UsageHistory').jqGrid({
+			url : '/wallet/payment/getCharge',
+			method : 'post',
+			data : {email : '${buyer.holder_email}'},
+			loadtext : '로딩중..',
+			sortable : true,
+			loadonce : true,
+			multiselect : false,
+			pager : '#pager',
+			rowNum : 10,
+			sortname : 'date',
+			sortorder : 'desc',
+			width : 1000,
+			height : 500,
+			pgbuttons : true, // 이전/다음 버튼 표시 여부
+			pgtext : null, // 페이징 정보(1 - 10 / 100) 표시 여부
+			viewrecords : false, // 레코드 수 표시 여부
+			recordpos : 'left', // 레코드 수 위치
+			pagerpos : 'center', // 페이징 버튼 위치
+			pginput : false, // 페이지 번호 입력칸 표시 여부,
+			colNames : [ '거래 번호', '거래 날짜', '거래 금액', '받은 금액', '멘티 신청자', '멘토', '결제 방법', '가격', '주문번호' ],
+			colModel : [{
+							name : 'tx_id',
+							index : 'tx_id',
+							width : 30,
+							align : "center",
+							key : true,
+						}, {
+							name : 'tx_date',
+							index : 'tx_date',
+							width : 60,
+							align : "center"
+						}, {
+							name : 'points_sent',
+							index : 'points_sent',
+							width : 90,
+							align : "center"
+						}, {
+							name : 'points_received',
+							index : 'points_received',
+							width : 90,
+							align : "center"
+						}, {
+							name : 'sender_id',
+							index : 'sender_id',
+							width : 90,
+							align : "center"
+						}, {
+							name : 'receiver_id',
+							index : 'receiver_id',
+							width : 90,
+							align : "center"
+						}, {
+							name : "merchant_id",
+							index : "merchant_id",
+							width : 90,
+							align : "center"
+						}, {
+							name : 'payment_method',
+							index : 'payment_method',
+							width : 90,
+							align : "center"
+						}, {
+							name : 'price',
+							index : 'price',
+							width : 90,
+							align : "center"
+						}]
+					});
+				});
 	  
 	</script>
 

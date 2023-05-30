@@ -16,6 +16,7 @@ import com.ld.gg.dto.MemberDto;
 import com.ld.gg.dto.payment.PaymentDto;
 import com.ld.gg.dto.payment.PointDto;
 import com.ld.gg.dto.payment.TransactionHistoryDTO;
+import com.ld.gg.dto.payment.UsageHistoryDto;
 
 @Service
 public class PaymentService {
@@ -113,5 +114,13 @@ public class PaymentService {
 	//멤버테이블에 있지만 포인트테이블에 없는 사람들 포인트 테이블에 추가
 	public void renewal_point_0() {
 		PD.renewal_point_0();
+	}
+
+	public PointDto getBalance(String email) {
+		return PD.getBalance(email);
+	}
+
+	public List<UsageHistoryDto> getCharge(String email) {
+		return PD.getCharge(email);
 	}
 }

@@ -460,4 +460,8 @@ GROUP BY
 	FROM rune_info WHERE rune_type = #{sub} order by rune_num asc
 </select>
 
+<select id="searchSummoner" resultType = "summoner">
+	select summoner_name from summoner_info where summoner_name = #{summoner_name} ORDER BY revision_date desc LIMIT 1;
+</select>
+
 </mapper>

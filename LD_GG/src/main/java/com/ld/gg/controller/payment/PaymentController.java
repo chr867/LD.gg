@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ld.gg.dto.MemberDto;
+import com.ld.gg.dto.payment.PointDto;
 import com.ld.gg.service.PaymentService;
 
 @Controller
@@ -29,7 +30,10 @@ public class PaymentController {
 	public String goPayment(HttpServletRequest request, Model model) {
 		HttpSession session = request.getSession();
 		String email = (String)session.getAttribute("email");
-		model.addAttribute("email", email);
+		PointDto pd = ps.getBalance(email);
+		model.addAttribute("buyer", pd);
+		System.out.println("pd : " + pd);
+		System.out.println("model : " + model);
 		return "/wallet/payment";
 	}
 	

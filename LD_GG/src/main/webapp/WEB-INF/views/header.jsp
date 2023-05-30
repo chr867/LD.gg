@@ -24,12 +24,9 @@
   <header>
 
     <div class="search-bar-box">
-      <img src="/resources/img/logo/LD_logo_bluered.png" alt=""
-           class="search-bar-logo"> <input type="text"
-                                           class="search-bar-input" placeholder="소환사명을 입력해주세요"
-                                           autocomplete="off"> <img
-            src="/resources/img/icon/free-icon-magnifying-glass-49116.png"
-            alt="" class="search-bar-icon">
+      <img src="/resources/img/logo/LD_logo_bluered.png" alt="" class="search-bar-logo">
+      <input type="text" class="search-bar-input" placeholder="소환사명을 입력해주세요" autocomplete="off" onkeypress = "searchSummoner(event)">
+      <img src="/resources/img/icon/free-icon-magnifying-glass-49116.png" alt="" class="search-bar-icon">
     </div>
 
     <div class="header-icon-box" style="display: none;">
@@ -142,6 +139,27 @@
   <script type="text/javascript">
     function go_mypage(){
       location.href="/member/mypage"
+    }
+    
+    function searchSummoner(event){
+    	if(event.key === 'Enter'){
+    		let testValue = $('.search-bar-input').val();
+    		$.ajax({
+    			method : 'get',
+    			url : '/summoner/searchSummoner',
+    			data : {summoner_name : testValue}
+    		}).done(res=>{
+    			if(res.summoner_name != undefined){
+    				locationName = res.summoner_name;
+    				console.log(locationName);
+    				location.href = "/summoner/info?summoner_name="+locationName;
+    			}else if(res.summoner_name === undefined){
+    				alert("없는 솬사임 ㅅㄱ");
+    			}
+    		}).fail(err=>{
+    			console.log(err);
+    		})
+    	}
     }
   </script>
 </body>
