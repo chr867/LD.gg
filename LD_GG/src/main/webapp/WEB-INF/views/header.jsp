@@ -20,6 +20,10 @@
 <div id="error-check" style="display: none">${check}</div>
 <!----------------------------------------------------------------------------------------------------------------->
 <!-- 헤더 -->
+<div class="chat-noti" style="display: none;">
+</div>
+<div class="toast-container" id="toast-container">
+</div>
 <div class="header-container">
   <header>
 
@@ -36,13 +40,13 @@
       <div class="message-icon-box">
         <img src="/resources/img/icon/free-icon-message-5941217.png" alt=""
              class="message-icon-img" onclick="chatPopup();">
-        <div class="message-notification"></div>
+        <div class="message-notification" style="display: none;"></div>
       </div>
       <div class="alarm-icon-box">
         <img
                 src="/resources/img/icon/free-icon-notification-bell-3680267.png"
-                alt="" class="alarm-icon-img"> <span
-              class="alarm-notification"></span>
+                alt="" class="alarm-icon-img" onclick="showChatnoti()"> <span
+              class="alarm-notification" style="display: none;"></span>
       </div>
       <div class="bookmark-icon-box">
         <img src="/resources/img/icon/free-icon-bookmark-white-25667.png"
