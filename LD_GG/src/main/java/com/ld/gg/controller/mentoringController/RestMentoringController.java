@@ -258,6 +258,7 @@ public class RestMentoringController {
 	//견적 내용을 받아서 견적 내역 저장
 	@PostMapping("/save-estimate")
 	public void insert_estimate(@RequestBody EstimateDTO estdto) {
+		System.out.println(estdto);
 		mtpService.insert_estimate(estdto);
 	}
 	
