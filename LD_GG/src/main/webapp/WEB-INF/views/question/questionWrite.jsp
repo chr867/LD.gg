@@ -54,7 +54,7 @@
 </head>
 <style>
   .main-container {
-    margin: 71px auto auto auto;
+    margin: 0px auto auto auto;
     width: 60%;
     display: flex;
     flex-direction: column;
@@ -64,7 +64,7 @@
   form {
     display: flex;
     flex-direction: column;
-    margin: 20px auto auto auto;
+    margin: 85px auto auto auto;
     width: 80%;
   }
   form > * {
