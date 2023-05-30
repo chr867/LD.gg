@@ -276,7 +276,7 @@ input:focus {outline: none;} /* outline 테두리 없애기 */
 	<div id="error-check" style="display: none">${check}</div>
 	<!----------------------------------------------------------------------------------------------------------------->
 	<!-- 사이드바 -->
-<div class="sidebar" style="z-index: 2; margin-top: -60px;">
+<div class="sidebar" style="margin-top: -60px;">
 		<div class="sidebar-nothover-menu">
 			<div class="sidebar-menu" style="padding: 8px 0px 8px 12px;">
 				<img src="/resources/img/logo/LD_logo_gray.png" alt=""
