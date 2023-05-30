@@ -57,6 +57,7 @@
             </div>
         </div>
     </div>
+    </div>
     <div class="send-content">
         <textarea name="" oninput="textareaHeight(this)" id="send_content" cols="50" rows="1"></textarea>
         <img src="/resources/img/icon/send.png" alt="" onclick="send()" class="send-img">

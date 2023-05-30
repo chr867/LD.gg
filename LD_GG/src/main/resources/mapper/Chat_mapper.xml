@@ -85,5 +85,4 @@
 			join member mem on mem.email = mate.email
 		where mate.mate_apply = #{email}
 	</select>
-
 </mapper>

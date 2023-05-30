@@ -1,5 +1,6 @@
 package com.ld.gg.service;
 
+import com.ld.gg.controller.chat.Message;
 import com.ld.gg.dao.mentoringdao.MentiDAO;
 import com.ld.gg.dao.mentoringdao.MentorProfileDAO;
 import com.ld.gg.dto.MemberDto;

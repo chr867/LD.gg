@@ -1,5 +1,6 @@
 package com.ld.gg.dao;
 
+import com.ld.gg.controller.chat.Message;
 import com.ld.gg.dto.MemberDto;
 import com.ld.gg.dto.chat.ChatDto_mini;
 import com.ld.gg.dto.chat.ChatListDto;
