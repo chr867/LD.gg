@@ -115,46 +115,49 @@
 	</div>
 	<!----------------------------------------------------------------------------------------------------------------->
 
-<div class="container">
-	<div id="title">
-		<img src="/resources/img/logo/LDGG.png" style=" width: 160px; height: 160px;" alt="ldgg">
-	</div>
-
-	<div>
-			<table id="info">
-			<tr>
-				<td class="value" width="100">글 번호</td>
-				<td class="value">제목</td>
-				<td class="value">좋아요 수</td>
-				<td class="value">작성일</td>
-			</tr>
-			<br>
-			<tr>
-				<td id="t_b_num" class="value">${notice.t_b_num}</td>
-				<td class="value">${notice.t_b_title}</td>
-				<td class="value">${notice.t_b_recom}</td>
-				<td class="value">${notice.t_b_date}</td>
-			</tr>
-			
-			<tr>
-				<td class="label">내용</td>
-				<td class="value">${notice.t_b_content}</td>
-			</tr>
-		</table>
-			
-		<!-- <button onclick="modify(${notice.t_b_num})">수정</button> -->
-		<button onclick="go_list()">목록</button>
-	</div>
-
-	<div>
-		<div id="comment-form">
-			<input type="text" placeholder="댓글을 입력해주세요" id="comment-textarea">
-			<button id="comment-submit-btn" onclick="submitComment()">등록</button>
+<div class="main_container">
+	<div class="container">
+		<div id="title">
+			<img src="/resources/img/logo/LDGG.png" style=" width: 160px; height: 160px;" alt="ldgg">
 		</div>
-
-		<table id="reply_table"/>
+	
+		<div>
+			<table id="info">
+				<tr>
+					<td class="value" width="100">글 번호</td>
+					<td class="value">제목</td>
+					<td class="value">좋아요 수</td>
+					<td class="value">작성일</td>
+				</tr>
+				<br>
+				<tr>
+					<td id="t_b_num" class="value">${notice.t_b_num}</td>
+					<td class="value">${notice.t_b_title}</td>
+					<td class="value">${notice.t_b_recom}</td>
+					<td class="value">${notice.t_b_date}</td>
+				</tr>
+				
+				<tr>
+					<td class="label">내용</td>
+					<td class="value" style="position: relative; left: -20%;">${notice.t_b_content}</td>
+				</tr>
+			</table>
+				
+			<!-- <button onclick="modify(${notice.t_b_num})">수정</button> -->
+		</div>
+	
+		<div style="width: 700px; margin-left: 330px;">
+			<button onclick="go_list()">목록</button>
+		
+			<div id="comment-form">
+				<input type="text" placeholder="댓글을 입력해주세요" id="comment-textarea">
+				<button id="comment-submit-btn" onclick="submitComment()">등록</button>
+			</div>
+	
+			<table id="comment-section"/>
+		</div>
+	
 	</div>
-
 </div>
 
 

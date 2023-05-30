@@ -5,7 +5,7 @@
 	<select id="get_notice_history" resultType="notice">
 		SELECT * FROM
 		NOTICE_BOARD
-		ORDER BY t_b_num asc;
+		ORDER BY t_b_num desc;
 	</select>
 
 	<select id="get_notice_detail" resultType="notice">
@@ -23,6 +23,7 @@
 	<select id="search_notice" resultType="notice">
 		SELECT * FROM NOTICE_BOARD
 		WHERE T_B_CONTENT LIKE '%${keyword}%'
+		ORDER BY t_b_num desc;
 	</select>
 
 	<insert id="write_notice" parameterType="notice">

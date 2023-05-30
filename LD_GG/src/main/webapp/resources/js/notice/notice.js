@@ -23,7 +23,7 @@ $("#grid").jqGrid({
 	rowNum: 10,
 	rowList: [10, 20, 50],
 	sortname: 't_b_num',
-	sortorder: 'asc',
+	sortorder: 'desc',
 	height: 600,
 	onCellSelect: function(rowid, icol){
 		if(icol != 0){
@@ -57,7 +57,7 @@ document.getElementById("search").addEventListener("click", function() {
 			rowNum: 10,
 			rowList: [10, 20, 50],
 			sortname: 't_b_num',
-			sortorder: 'asc',
+			sortorder: 'desc',
 			height: 600,
 		onCellSelect: function(rowid, icol){
 			if(icol != 0){

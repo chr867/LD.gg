@@ -165,7 +165,7 @@ margin-top:40px
 #keyword {
 	
 	width: 240px;
-	height: 350px;
+	height: 40px;
     text-align: start;
     cursor: text;
     background: none;

@@ -34,7 +34,7 @@ function loadComments(){  // 댓글 리스트
       replyList += modifyButton
       replyList += '</tr>'
     });
-    document.getElementById('reply_table').innerHTML=replyList
+    document.getElementById('comment-section').innerHTML=replyList
   }).fail(err=>{
     console.log(err)
   })

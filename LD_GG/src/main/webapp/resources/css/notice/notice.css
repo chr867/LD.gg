@@ -6,9 +6,18 @@ a{
   width: 100%;
 }
 
+#search{
+	width: 75px;
+	height: 30px;
+	margin-left: 10px;
+	margin-top: 35px;
+}
+
+
 .search_box .element{
   position: relative;
-  left: 8%;
+  display: flex;
+  margin-top: 23px;
 }
 
 .search_box .element a{
@@ -30,7 +39,6 @@ html{
       justify-content: center;
 }
 body {
- 	  padding-top: 110px;
       image-rendering: -webkit-optimize-contrast; /* chrome */
       background-image: url("/resources/img/mate/back.png");
       background-size: 100%;
