@@ -118,7 +118,7 @@
 		</div>
 
 			<div id="match_history">
-				<span id="history">매치 히스토리</span>
+				<h3 id="history">매치 히스토리</h3>
 			</div>
 			<!-- 전적 정보 필터 -->
 
@@ -1040,7 +1040,7 @@
 		        let whole = $('<div class="whole"></div>');
 
 		        // 2. header와 div 태그 생성
-		        let header = $('<header class="data_header"></header>');
+		        let header = $('<div class="data_header"></div>');
 		        let data = $('<div class="data"></div>');
 		        whole.append(header, data); // 2. 생성된 태그들을 whole 태그 내부에 추가
 		        // 3. 'data_header' 내부에 div 태그 3개 생성
@@ -1050,8 +1050,8 @@
 		        header.append(synthesis, build, ranking);
 
 		        // 4. 'data' 내부에 새로운 div 태그 두 개를 생성
-		        let win = $('<div class="win"><header class="win_header"></header></div>');
-		        let lose = $('<div class="lose"><header class="lose_header"></header></div>');
+		        let win = $('<div class="win"><div class="win_header"></div></div>');
+		        let lose = $('<div class="lose"><div class="lose_header"></div></div>');
 		        data.append(win, lose);
 
 		        $.each(response, function (i, syn) {
@@ -1433,7 +1433,7 @@
 			        let whole = $('<div class="whole"></div>');
 
 			        // 2. header와 div 태그 생성
-			        let header = $('<header class="data_header"></header>');
+			        let header = $('<div class="data_header"></div>');
 			        let data = $('<div class="data"></div>');
 			        whole.append(header, data); // 2. 생성된 태그들을 whole 태그 내부에 추가
 			        // 3. 'data_header' 내부에 div 태그 3개 생성
@@ -1443,8 +1443,8 @@
 			        header.append(synthesis, build, ranking);
 
 			        // 4. 'data' 내부에 새로운 div 태그 두 개를 생성
-			        let win = $('<div class="win"><header class="win_header"></header></div>');
-			        let lose = $('<div class="lose"><header class="lose_header"></header></div>');
+			        let win = $('<div class="win"><div class="win_header"></div></div>');
+			        let lose = $('<div class="lose"><div class="lose_header"></div></div>');
 			        data.append(win, lose);
 
 			        $.each(response, function (i, syn) {
@@ -1688,8 +1688,8 @@
 	    }).done(response => {
 			let data = $('<div class = "dataDiv"></div>');
 	        // 4. 'data' 내부에 새로운 div 태그 두 개를 생성
-	        let win = $('<div class="win"><header class="win_header"></header></div>');
-	        let lose = $('<div class="lose"><header class="lose_header"></header></div>');
+	        let win = $('<div class="win"><div class="win_header"></div></div>');
+	        let lose = $('<div class="lose"><div class="lose_header"></div></div>');
 	        data.append(win, lose);
 
 	        $.each(response, function (i, syn) {

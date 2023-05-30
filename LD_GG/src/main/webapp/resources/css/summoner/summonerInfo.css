@@ -1,9 +1,4 @@
 #flex_div {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: fit-content;
-  flex-wrap : wrap;
   box-sizing: border-box;
 }
 
@@ -18,6 +13,7 @@
 	margin-top: 27px;
 	border-radius: 0.5rem;
 	font-weight: 700;
+	z-index: 20;
 }
 
 #background-profile{
@@ -33,7 +29,7 @@
 	padding: 10px;
 	border-radius: 0.5rem;
 	width: 230px;
-/* 	align-items : center;  */
+	z-index: 20;
 }
 
 .flex-profile-img{
@@ -77,17 +73,11 @@
 	transform: scale(2.5);
 	opacity: 0.1;
 	z-index: 0;
-	display: none;
 }
 .flex-profile-tier-text{
 	font-size: 22px;
 	font-weight: 700;
 	margin-top: 60px;
-}
-
-#champ-stat{
-	width : 95%;
-	hegiht : fit-content;
 }
 
 .flex-header{
@@ -202,7 +192,7 @@
 	height : 50px;
 	display: inline-block;
 	border-radius: 0.5rem;
-	margin-right: 10px;
+	margin-right: 2px;
 	margin-bottom: 5px;
 }
 
@@ -392,7 +382,14 @@
 .flex-summary-category{
 	width : 100%;
 	display : flex;
-	flex-direction : row;
+	background-color: #fff;
+	border-radius: 0.5rem;
+	margin-top: 20px;
+	align-items: center;
+}
+.flex-summary-category div{
+	font-size: 18px;
+	font-weight: 700;
 }
 .flex-summary-category div{
 	margin-bottom: 10px;
@@ -430,9 +427,17 @@
 }
 
 #match_history{
-	width : 100%;
-	display : flex;
-	height : fit-content;
+	background-color: #fff;
+	margin-top: 20px;
+	border-radius: 0.5rem;
+	display: flex;
+	text-align: center;
+	align-items: center;
+	height: 40px;
+}
+#match_history h3{
+	font-size: 22px;
+	font-weight: 700;
 }
 
 #history{
@@ -442,18 +447,33 @@
 #record_filter{
 	display : flex;
 	flex-direction : row;
+	background-color: #fff;
+	margin-top: 20px;
+	border-radius: 0.5rem;
+	text-align: center;
+	align-items: center;
+	height: 60px;
+	justify-content: center;
 }
-
-#recent_20games{
-	display : flex;
-	flex-direction : row;
-	width : 100%;
+.record-filter-btn{
+	border: none;
+	border-radius: 0.5rem;
+	margin-right: 20px;
+	height: 40px;
+	width: 100px;
+	background-color: #f4f4f4;
+	font-weight: 700;
+	z-index: 20;
+}
+.record-filter-btn:hover{
+	background-color: #606060;
 }
 
 .flex-summary-div0{
 	display : flex;
-	flex-direction : row;
-	width : 100%;
+	background-color: #fff;
+	margin-top: 20px;
+	border-radius: 0.5rem;
 }
 
 .mostChamp{
@@ -468,7 +488,8 @@
 .champDataDiv{
 	width : 20%;
 	text-align : center;
-	font-size : 15px;
+	font-size : 18px;
+	font-weight: 700;
 	display : flex;
 	justify-content : center;
 	align-items : center;
@@ -478,7 +499,8 @@
 .kdaAvgDiv{
 	width : 20%;
 	text-align : center;
-	font-size : 15px;
+	font-size : 18px;
+	font-weight: 700;
 	display : flex;
 	justify-content : center;
 	align-items : center;
@@ -487,7 +509,8 @@
 
 .bestKdaDiv{
 	width : 30%;
-	font-size : 15px;
+	font-size : 18px;
+	font-weight: 700;
 	text-align : center;
 	display : flex;
 	justify-content : center;
@@ -497,35 +520,27 @@
 
 .positionDiv{
 	width : 35%;
-	font-size : 15px;
+	font-size : 18px;
 	text-align : center;
 	display : flex;
 	justify-content : center;
 	align-items:center;
-	flex-wrap : wrap;
+	font-weight: 700;
 }
 
 .mostChampDiv{
 	width : 70%;
-	font-size : 15px;
+	font-size : 18px;
 	text-align : center;
 	display : flex;
-	justify-content:center;
-	align-items:center;
-	flex-wrap : wrap;
-}
-
-.mostChamp{
-	flex : 1;
-	display : flex;
-	flex-direction : column;
-	justify-content : center;
-	align-items : center;
+	padding-top: 20px;
+	font-weight: 700;
 }
 
 .flex-top-champ-img{
-	width : 40%;
-	height : auto;
+	width: 100px;
+	height: 100px;
+	border-radius: 0.5rem;
 }
 
 .strong-winrate{
@@ -569,6 +584,7 @@
 	align-items: center;
 	border-radius: 0.5rem;
 	padding-left: 10px;
+	z-index: 10;
 }
 
 .champRecordFilterBtn{
@@ -589,6 +605,7 @@
 .filterBtnDiv{
 	display : flex;
 	height: 50px;
+	z-index: 10;
 }
 
 .record{
@@ -635,6 +652,8 @@
 	display : flex;
 	justify-content : center;
 	align-items : center;
+	font-size: 15px;
+    font-weight: 700;
 }
 
 .record_cs_sight_sub_div{
@@ -656,6 +675,8 @@
 	width : 25%;
 	display : flex;
 	flex-direction : row;
+	margin-right: 110px;
+	border-radius: 0.5rem;
 }
 
 .record_spell_div{
@@ -669,16 +690,22 @@
 }
 
 .button_div{
-	width : 10%;
+	width : 60px;
 	background-color : #62b1f8;
 	cursor : pointer;
 	border : none;
+	z-index: 20;
+	transition: 0.3s;
+	border-radius: 0.5rem;
+}
+.button_div:hover{
+	filter: grayscale(0.8);
 }
 
 .recordChampImg{
-	position : relative;
-	width : 50px;
-	height : 50px;
+	width : 70px;
+	height : 70px;
+	border-radius: 0.5rem;
 }
 
 .record_champ_level{
@@ -686,27 +713,38 @@
 	bottom : 4px;
 	right : 2px;
 	background-color : black;
+	width: 20px;
+	height: 20px;
+	font-size: 15px;
+	font-weight: 700;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
 	color : white; 
 }
 
 .record_spell_img1, .record_spell_img2{
-	width : 24px;
-	height : 24px;
+	width : 35px;
+	height : 35px;
+	border-radius: 0.3rem;
 }
 
 .record_rune_img1{
-	width : 25px;
-	height : 25px;
+	width : 35px;
+	height : 35px;
 }
 
 .record_rune_img2{
-	width : 22px;
-	height : 22px;
+	width : 35px;
+	height : 35px;
 }
 
 .record_res_wards_img{
-	width : 20%;
-	height : auto;
+	width : 30px;
+	height : 30px;
+	border-radius: 0.5rem;
+	margin-right: 20px;
 }
 
 .record_red_wards{
@@ -722,9 +760,9 @@
 
 .record_div{
 	display : flex;
-	width : 100%;
-	border : 1px solid black;
-	margin : 5px;
+	background-color: #fff;
+	border-radius: 0.5rem;
+	margin-top : 10px;
 }
 
 .playerDiv{
@@ -735,8 +773,11 @@
 }
 
 .playerImg{
-	width : 10%;
-	height : 10%;
+	width: 30px;
+    height: 30px;
+    border-radius: 0.3rem;
+    margin-bottom: 1.5px;
+    margin-right: 10px;
 }
 
 .playerName{
@@ -766,17 +807,29 @@
 	display : flex;
 	flex-direction : row;
 	text-align : center;
-	margin : 1%;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	background-color: #fff;
+	border-radius: 0.5rem;
+	
 }
 
 .synthesis, .build, .ranking{
 	flex : 1;
+	transition: 0.3s;
+	
+}
+.synthesis:hover, .build:hover, .ranking:hover{
+	background-color: #606060;
+	color: #fff;
 }
 
 .data{
 	width : 100%;
 	display : flex;
-	margin : 1%;
+	background-color: #fff;
+	border-radius: 0.5rem;
+	padding: 20px;
 }
 
 .win, .lose{
@@ -786,10 +839,8 @@
 }
 
 .win_team, .lose_team{
-	width : 100%;
-	height : fit-content;
 	display : flex;
-	flex-direction : row;
+	margin-bottom: 3px;
 }
 
 .champ_info{
@@ -874,52 +925,62 @@
 }
 
 .syn-summoner-tier{
-	font-size : 10px;
-	width : 15px;
-	height : 15px;
+	font-size : 12px;
+	width : 20px;
+	height : 20px;
+	border-radius: 0.1rem;
+	font-weight: 700;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	background-color : #ff6767;
 	color : white;
 }
 
 .syn-summoner-name{
 	width : 20%;
-	font-size : 10px;
+	font-size : 16px;
+	font-weight: 700;
 	display : flex;
 	white-space : nowrap;
 }
 
 .flex-champion{
-	width : 35px;
-	height : 35px;
+	width : 50px;
+	height : 50px;
+	border-radius: 0.3rem;
 }
 
 .flex-spell1, .flex-spell2{
-	width : 18px;
-	height : 18px;
+	width : 25px;
+	height : 25px;
+	border-radius: 0.3rem;
 }
 
 .flex-rune1{
-	width : 20px;
-	height : 20px;
+	width : 25px;
+	height : 25px;
 }
 
 .flex-rune2{
-	width : 16px;
-	height : 16px;
+	width : 25px;
+	height : 25px;
 }
 
 .syn-item-img{
-	width : 20px;
-	height : 20px;
+	width : 40px;
+	height : 40px;
 }
 
 .syn-kda-text{
-	font-size : 13px;
+	font-size : 16px;
+	font-weight: 700px;
 	text-align : center;
 }
 
 .syn-cs-text{
-	font-size : 13px;
+	font-size : 16px;
+	font-weight: 700px;
 }
 
 .synthesis, .build, .ranking{
