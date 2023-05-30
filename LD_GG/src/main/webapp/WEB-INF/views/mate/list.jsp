@@ -226,7 +226,47 @@ input:focus {outline: none;} /* outline 테두리 없애기 */
 	line-height: 40px;
 } 
 
+/*북마크 모달*/
+.bookmark-modal {
+  position: fixed;
+  z-index: 200;
+  width: 200px; /* 가로 크기 */
+  height: auto; /* 높이 */
+  background-image: url("/resources/img/mate/bookmarkModalBack.png");
+  background-repeat: no-repeat;
+  background-position: top;
+  background-size:contain;
+  opacity: 0;
+  transition: opacity 1s;
+  margin-left:-50px;
+  margin-top:4 px;
+}
+#bookmark-flex{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
 
+.bookmark-icon-box:hover + .bookmark-modal {
+  display: block;
+  opacity: 1; 
+}
+
+/* 북마크 버튼 */
+.bookmarkBt {
+  width: 50px; 
+  height: 50px;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  background: none;
+  border:none;
+ 
+}
+#bookmarkicon {
+	width: 40px; /* 버튼 이미지의 너비 */
+	height: 40px; /* 버튼 이미지의 높이 */
+}
 </style>
 <body>
 	<div id="session-summoner-name" style="display: none">${sessionScope.lol_account}</div>
