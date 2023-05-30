@@ -134,7 +134,7 @@ function makeQuestion(res){
         '                <div class="question-title" id="question_title">' + res.question_title + '</div>\n' +
         '                <div class="question-ppt">\n' +
         '                    <div class="profile-detail">\n' +
-        '                        <img src="img/profileicon/0.png" alt="이미지" class="profile-image">\n' +
+        '                        <img src="/resources/img/profileicon/0.png" alt="이미지" class="profile-image">\n' +
         '                        <div class="profile-name" id="mento_name">'+ res.lol_account +'</div>\n' +
         '                        <div class="date" id="question_date">\n' +
         '                            <span class="vertical-bar"></span>\n' +
@@ -190,8 +190,8 @@ function makeQuestion(res){
                     '                </div>\n' +
                     '                <div class="answer-ppt">\n' +
                     '                    <div class="profile-detail">\n' +
-                    '                        <img src="img/profileicon/0.png" alt="이미지" class="profile-image">\n' +
-                    '                        <div class="profile-name" id="answerer_id">'+ key.answerer_id +'</div>\n' +
+                    '                        <img src="/resources/img/profileicon/0.png" alt="이미지" class="profile-image">\n' +
+                    '                        <div class="profile-name" id="answerer_id">'+ key.lol_account +'</div>\n' +
                     '                        <div class="question-date" id="answer_date">\n' +
                     '                            <span class="vertical-bar"></span>\n' +
                     '                            ' + formattedDate + '\n' +
