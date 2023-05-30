@@ -83,7 +83,7 @@
 	z-index: 90;
 }
 
-.table th:nth-last-child(-n+4) {
+.table th:nth-last-child(-n+5) {
 	cursor: pointer;
 }
 
@@ -680,8 +680,10 @@ function selectLane(team_position) {
 	let pick_rate_reverse = false
 	let ban_rate_reverse = false
 	let tier_reverse = true
+	let score_reverse = false
+
 	const th_list = document.querySelectorAll('.table th')
-	const sort_buttons = Array.from(th_list).slice(-4);
+	const sort_buttons = Array.from(th_list).slice(-5);
 	sort_buttons.forEach((sort_button) => {
 		sort_button.addEventListener('click', () => {
 		key = sort_button.className;
@@ -692,24 +694,34 @@ function selectLane(team_position) {
 			pick_rate_reverse = false
 			ban_rate_reverse = false
 			tier_reverse = false
+			score_reverse = false
 		} else if (key == 'pick_rate') {
 			pick_rate_reverse = !pick_rate_reverse;
 			win_rate_reverse = false
 			ban_rate_reverse = false
 			tier_reverse = false
+			score_reverse = false
 		} else if (key == 'ban_rate') {
 			ban_rate_reverse = !ban_rate_reverse;
 			pick_rate_reverse = false
 			win_rate_reverse = false
+			score_reverse = false
 			tier_reverse = false
 		} else if (key == 'tier') {
 			pick_rate_reverse = false
 			win_rate_reverse = false
 			ban_rate_reverse = false
+			score_reverse = false
 			tier_reverse = !tier_reverse;
+		} else if (key == 'ai_score'){
+			pick_rate_reverse = false
+			win_rate_reverse = false
+			ban_rate_reverse = false
+			tier_reverse = false
+			score_reverse = !score_reverse;
 		}
 
-		if (win_rate_reverse || pick_rate_reverse || ban_rate_reverse || tier_reverse) {
+		if (win_rate_reverse || pick_rate_reverse || ban_rate_reverse || tier_reverse || score_reverse) {
 			console.log('역방향')
 			response.sort((a, b) => {
 				if (key == 'tier') {
@@ -780,6 +792,11 @@ function selectLane(team_position) {
 			champion.champion_img + '" alt="#"></td>'
 			cList += '<td onclick="selectChampion('+ champion.champion_id +')" align="center" >' + champion.champion_kr_name + '</td>'
 			cList += '<td align="center"><img src="'+ src +'"></td>'
+			if (champion.ai_score > 70){
+						cList += '<td align="center"><div class="ai-score hi-score">' + champion.ai_score + '</div></td>'
+					}else{
+						cList += '<td align="center"><div class="ai-score">' + champion.ai_score + '</div></td>'
+					}
 			cList += '<td align="center">' + champion.win_rate + '%</td>'
 			cList += '<td align="center">' + champion.pick_rate + '%</td>'
 			cList += '<td align="center">' + champion.ban_rate + '%</td>'

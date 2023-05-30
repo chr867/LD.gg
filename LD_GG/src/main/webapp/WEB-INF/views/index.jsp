@@ -674,7 +674,7 @@
 }
 .spells h6{
 	margin: 0 10px 0 0;
-	font-weight: 900;
+	font-weight: 900;2
 	font-size: 16px;
 }
 .spell{
