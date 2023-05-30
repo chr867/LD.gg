@@ -5,37 +5,26 @@
   Time: 7:30 AM
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"%>
+<!DOCTYPE html>
 <html>
 <head>
-    <title>title</title>
+    <meta charset="UTF-8">ㅋ
+    <title>질문글</title>
     <link rel="stylesheet" href="/resources/css/question/questionList.css">
-    <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
-            crossorigin="anonymous">
+    <!--BOOTSTRAP CSS-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <!--BOOTSTRAP JavaScript-->
-    <script
-            src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-            crossorigin="anonymous">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <!--JQUERY-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!--SWEET-ALERT2 CSS-->
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
     <!--SWEET-ALERT2 JS-->
     <script
             src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
-<%--    <!--JQUERY-->--%>
-<%--    <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="--%>
-<%--            crossorigin="anonymous"></script>--%>
-    <!--AJAX-->
-    <script
-            src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <!--JQUERY VALIDATE-->
-    <script
-            src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.0/jquery.validate.min.js"></script>
     <!--sideBar CSS-->
     <link rel="stylesheet" type="text/css"
           href="/resources/css/main/sideBar.css">
@@ -52,77 +41,9 @@
     <script src="/resources/js/main/loginSession.js" defer></script>
     <!-- 채팅 관련 JS-->
     <script src="/resources/js/main/chat.js" defer></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </head>
-<style>
-
-    .main-container {
-        justify-content: center;
-        text-align: center;
-    }
-
-    #my_champion{
-        position: absolute;
-        top: 15%;
-        left: 15%;
-    }
-
-    #champ_search_box input{
-        width: 220px;
-        border-radius: 5px;
-    }
-
-    #my_champion_img{
-        width: 370px;
-        height: 400px;
-        padding-top: 20px;
-        padding-bottom: 15px;
-        border-radius: 70%;
-    }
-
-    #build_recom_box button{
-        margin-top: 20px;
-    }
-
-    #counter_champion{
-        position: absolute;
-        height: auto;
-        top: 25%;
-        left: 55%;
-    }
-
-    #right_champion_img{
-        width: 140px;
-        height: 140px;
-        border-radius: 70%;
-    }
-
-    #right_champ_search_box{
-        position: relative;
-        left: -30%;
-        top: 30%;
-    }
-
-    #recom_champ{
-        position: absolute;
-        left: 36%;
-        top: 67%;
-    }
-
-    #recom_champ img{
-        width: 140px;
-        height: 140px;
-        margin-right: 20px;
-        border-radius: 70%;
-    }
-
-    #span_container{
-        display: grid;
-    }
-
-</style>
 <body>
 <%@ include file="../header.jsp" %>
 <%@ include file="../sidebar.jsp" %>
@@ -166,7 +87,6 @@
     <div class="question-box" id="question_list">
     </div>
 </div>
-<div></div>
 <script src="/resources/js/question/questionList.js"></script>
 <script type="text/javascript">
     function goWrite(frm) {
