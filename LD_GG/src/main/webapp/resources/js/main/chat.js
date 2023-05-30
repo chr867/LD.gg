@@ -38,24 +38,12 @@ function showMessage(message){
         var chat_noti = document.querySelector(".chat-noti")
         var noti_box = '<div className="noti-box">' + messageBody.chat_user + '님이 메시지를 보냈습니다.</div>'
         chat_noti.insertAdjacentHTML('beforeend', noti_box);
+
+        /* 메시지 토스트 */
+        showToast("메시지가 도착했습니다.");
     }
 
     console.log("messageContent : ", messageBody);
-
-    /* 알림이 왔다고 toast로 알려주기 */
-    toast = '<div class="toast" role="alert" aria-live="assertive" aria-atomic="true">\n' +
-        '  <div class="toast-header">\n' +
-        '    <img src="..." class="rounded me-2" alt="...">\n' +
-        '    <strong class="me-auto">Bootstrap</strong>\n' +
-        '    <small class="text-muted">11 mins ago</small>\n' +
-        '    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>\n' +
-        '  </div>\n' +
-        '  <div class="toast-body">\n' +
-        '    Hello, world! This is a toast message.\n' +
-        '  </div>\n' +
-        '</div>';
-
-    showToast("toast test");
 }
 
 function showChatnoti(){
