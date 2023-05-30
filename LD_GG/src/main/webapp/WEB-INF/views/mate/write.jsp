@@ -112,6 +112,11 @@ form div {
 
 		frm.submit(); 
 	}
+	  let resetButton = document.getElementById("reset");
+
+	  resetButton.addEventListener("click", function() {
+	    window.location.href = "/mate/";
+	  });
 
 </script>
 </html>

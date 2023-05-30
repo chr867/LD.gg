@@ -29,7 +29,6 @@
 <!--JQUERY VALIDATE-->
 <script
 	src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.0/jquery.validate.min.js"></script>
-
 <!--sideBar CSS-->
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/main/sideBar.css">
@@ -37,6 +36,8 @@
 <!--header CSS-->
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/main/header.css">
+
+
 
 <!--footer CSS-->
 <link rel="stylesheet" type="text/css"
@@ -48,6 +49,7 @@
 
 <!--로그인 및 세션관련 JS-->
 <script src="/resources/js/main/loginSession.js" defer></script>
+
 
 
 <!-- jqGrid CSS -->
@@ -68,6 +70,8 @@
 <!-- jqGrid JS -->
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/jquery.jqgrid.min.js"></script>
+
+
 </head>
 
 <style type="text/css">
@@ -79,10 +83,6 @@
 }
 *{
  font-family: 'NanumSquareNeo-Variable';
-}
-#bookmarkicon {
-	width: 40px; /* 버튼 이미지의 너비 */
-	height: 40px; /* 버튼 이미지의 높이 */
 }
 
 body {
@@ -225,43 +225,6 @@ input:focus {outline: none;} /* outline 테두리 없애기 */
 	height: 20px;
 	line-height: 40px;
 } 
-/*북마크 모달*/
-.bookmark-modal {
-  position: fixed;
-  z-index: 200;
-  width: 200px; /* 가로 크기 */
-  height: auto; /* 높이 */
-  background-image: url("/resources/img/mate/bookmarkModalBack.png");
-  background-repeat: no-repeat;
-  background-position: top;
-  background-size:contain;
-  opacity: 0;
-  transition: opacity 1s;
-  margin-left:-50px;
-  margin-top:4 px;
-}
-#bookmark-flex{
-  display:flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.bookmark-icon-box:hover + .bookmark-modal {
-  display: block;
-  opacity: 1; 
-}
-
-/* 북마크 버튼 */
-.bookmarkBt {
-  width: 50px; 
-  height: 50px;
-  text-decoration: none;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  background: none;
-  border:none;
- 
-}
 
 
 </style>
@@ -728,7 +691,6 @@ document.getElementById("search").addEventListener("click", function() {
 		}
 	}).trigger("reloadGrid");
 });
-
 function insertBookmark(){
 	console.log("click bookmark");
      let button = document.getElementById("bookmarkicon");
@@ -737,11 +699,9 @@ function insertBookmark(){
      if (currentSrc === "/resources/img/icon/free-icon-bookmark-white-25667.png") {
     	 button.setAttribute("src", "/resources/img/icon/free-icon-bookmark-white-256672.png");
     	 bookmark_val=1;
-    	 alert(bookmark_val);
    		} else {
          button.setAttribute("src", "/resources/img/icon/free-icon-bookmark-white-25667.png");
          bookmark_val=0;
-    	 alert(bookmark_val);
             }
     	 modifybookmark(bookmark_val);
 }	
@@ -795,7 +755,6 @@ function loadBookmark() {
      			 	mate_page = '<td><button class="bookmarkBt" id="mate-b-bt" onclick="goUrl(\'/mate/\')" style="background-image: url(\'/resources/img/mate/mate.png\'); background-repeat: no-repeat; background-position: top; background-size: contain;"></button></td>';  
         		  }
         	  }
-        	///summoner/testDashBoard
         	  else if (now_page === '/tip/') {
         		  if(res.my_page ===1){
         			  my_page = '<td><button class="bookmarkBt" id="my-b-bt" onclick="goUrl(\'/summoner/testDashBoard\')" style="background-image: url(\'/resources/img/mate/my.png\'); background-repeat: no-repeat; background-position: top; background-size: contain;"></button></td>';
@@ -839,6 +798,7 @@ function loadBookmark() {
         }
     }
     loadBookmark();
+
 	/* 	document.getElementById("search") */
 </script>
 

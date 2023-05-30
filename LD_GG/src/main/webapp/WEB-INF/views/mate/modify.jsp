@@ -72,8 +72,8 @@ form div {
 		<textarea id="summernote" name="mate_content">${content}</textarea>
 		<br> 
 		<input id="subBtn" type="button"
-			   value="글 작성" onclick="goWrite(this.form)" /> <input id="reset"
-			   type="reset" value="취소">
+			   value="글 작성" onclick="goWrite(this.form)" /> 
+	    <input id="reset" type="reset" value="취소">
 		<input type="hidden" name="mate_id" value="${mate_id}"/>
 		</form>
 	</div>
@@ -108,6 +108,11 @@ form div {
 
 		frm.submit(); 
 	}
+	  let resetButton = document.getElementById("reset");
+
+	  resetButton.addEventListener("click", function() {
+	    window.location.href = "/mate/";
+	  });
 
 </script>
 </html>
