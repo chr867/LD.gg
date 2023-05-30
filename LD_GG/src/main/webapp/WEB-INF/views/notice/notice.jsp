@@ -164,8 +164,8 @@ margin-top:40px
 }
 #keyword {
 	
-	width: 310px;
-	height: 70px;
+	width: 240px;
+	height: 350px;
     text-align: start;
     cursor: text;
     background: none;
@@ -322,12 +322,12 @@ input:focus {outline: none;} /* outline 테두리 없애기 */
 	<div class="grid full-height full-height-strict" style="width: auto;">
 		<table id="grid" class="full-size-jq-grid"></table>
 	</div>
-	<div id="pager" style="height: 35px;"></div>
-	
-	<div class="search_box">
-		<div class="element">
-			<input type="text" id="keyword" name="keyword">
-			<button id='search'>검색</button>
+	<div id="pager" style="height: 150px; display: flex;">
+		<div class="search_box">
+			<div class="element">
+				<input type="text" id="keyword" name="keyword">
+				<button id='search'>검색</button>
+			</div>
 		</div>
 	</div>
 	

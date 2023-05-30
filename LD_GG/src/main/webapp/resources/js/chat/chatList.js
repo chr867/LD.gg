@@ -119,7 +119,7 @@ function makeLi(arr){
     });
 
     /*for(k of arr){
-        liHtml += '<li><div class="profile-detail"><img src="img/profileicon/0.png" alt="이미지" class="profile-image">';
+        liHtml += '<li><div class="profile-detail"><img src="/resources/img/profileicon/0.png" alt="이미지" class="profile-image">';
         liHtml += '<div class="profile-name" value="'+ k.email +'" onclick="go_chat__(' + "'" + k.email + "'" + ', 1)">'+ k.lol_account +'</div>';
         liHtml += '</div></li>';
     }*/
