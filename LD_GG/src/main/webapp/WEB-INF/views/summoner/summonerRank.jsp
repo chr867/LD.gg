@@ -25,8 +25,7 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/css/ui.jqgrid.min.css">
 
 <!-- jqGrid JS -->
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/jquery.jqgrid.min.js"></script>
+<script	src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/jquery.jqgrid.min.js"></script>
 	
 <link href = "/resources/css/summoner/summonerRank.css" rel = "stylesheet">
 </head>
@@ -84,7 +83,7 @@
 			width : 90,
 			key : true,
 			formatter : function(cellvalue, options, rowObject){
-				return "<div style = 'text-align : left;'><img style = 'display : inline' src='https://ddragon.leagueoflegends.com/cdn/13.8.1/img/profileicon/" + rowObject.profile_icon_id + ".png'/>" + cellvalue;"</div>"
+				return "<div style = 'text-align : left;'><img style = 'display : inline' src='/resources/img/profileicon/" + rowObject.profile_icon_id + ".png'/>" + cellvalue;"</div>"
 			},
 			cellattr : function(rowId, val,	rawObject) {
 				let decodeStr = (rawObject.summoner_name);
@@ -137,7 +136,7 @@
 			loadonce : true,
 			multiselect : false,
 			pager : '#pager',
-			rowNum : 10,
+			rowNum : 100,
 			sortname : 'date',
 			sortorder : 'desc',
 			width : 1000,
@@ -156,9 +155,10 @@
 							align : "center",
 							key : true,
 							formatter : function(cellvalue,	options, rowObject) {
-								return "<img src='https://ddragon.leagueoflegends.com/cdn/13.8.1/img/profileicon/" + rowObject.profile_icon_id + ".png'/>" + cellvalue;
+								return "<div style = 'text-align : left;'><img style = 'display : inline' src='/resources/img/profileicon/" + rowObject.profile_icon_id + ".png'/>" + cellvalue;"</div>"
 							},
 							cellattr : function(rowId, val,	rawObject) {
+								console.log(val)
 								return "onclick=\"location.href='/summoner/info/?'+val\"";
 							}
 						}, {
@@ -195,165 +195,142 @@
 										});
 						})
 
-		$('#flex_rank')
-				.click(
-						function() {
-							$('#summoner_rank_table')
-									.jqGrid(
-											{
-												url : "/summoner/rank/flex/data.json",
-												datatype : "json",
-												loadtext : '로딩중..',
-												sortable : true,
-												loadonce : true,
-												multiselect : false,
-												pager : '#pager',
-												rowNum : 10,
-												sortname : 'date',
-												sortorder : 'desc',
-												width : 1000,
-												height : 500,
-												pgbuttons : true, // 이전/다음 버튼 표시 여부
-												pgtext : null, // 페이징 정보(1 - 10 / 100) 표시 여부
-												viewrecords : false, // 레코드 수 표시 여부
-												recordpos : 'left', // 레코드 수 위치
-												pagerpos : 'center', // 페이징 버튼 위치
-												pginput : false, // 페이지 번호 입력칸 표시 여부,
-												colNames : [ '소환사', '소환사 레벨',
-														'티어', '승리', '패배',
-														'리그포인트', '승률' ],
-												colModel : [
-														{
-															name : 'summoner_name',
-															index : 'summoner_name',
-															width : 90,
-															align : "center",
-															key : true,
-															formatter : function(
-																	cellvalue,
-																	options,
-																	rowObject) {
-																return "<img src='https://ddragon.leagueoflegends.com/cdn/13.8.1/img/profileicon/" + rowObject.profile_icon_id + ".png'/>"
-																		+ cellvalue;
-															},
-															cellattr : function(
-																	rowId, val,
-																	rawObject) {
-																return "onclick=\"location.href='/summoner/info/?'+val\"";
-															}
-														}, {
-															name : 's_level',
-															index : 's_level',
-															width : 90,
-															align : "center"
-														}, {
-															name : 'tier',
-															index : 'tier',
-															width : 90,
-															align : "center"
-														}, {
-															name : 'wins',
-															index : 'wins',
-															width : 90,
-															align : "center"
-														}, {
-															name : 'losses',
-															index : 'losses',
-															width : 90,
-															align : "center"
-														}, {
-															name : 'lp',
-															index : 'lp',
-															width : 90,
-															align : "center"
-														}, {
-															name : 'winrate',
-															index : 'winrate',
-															width : 90,
-															align : "center"
-														} ]
-											});
-						});
+		$('#flex_rank').click(function() {
+			$('#summoner_rank_table').jqGrid({
+					url : "/summoner/rank/flex/data.json",
+					datatype : "json",
+					loadtext : '로딩중..',
+					sortable : true,
+					loadonce : true,
+					multiselect : false,
+					pager : '#pager',
+					rowNum : 100,
+					sortname : 'date',
+					sortorder : 'desc',
+					width : 1000,
+					height : 500,
+					pgbuttons : true, // 이전/다음 버튼 표시 여부
+					pgtext : null, // 페이징 정보(1 - 10 / 100) 표시 여부
+					viewrecords : false, // 레코드 수 표시 여부
+					recordpos : 'left', // 레코드 수 위치
+					pagerpos : 'center', // 페이징 버튼 위치
+					pginput : false, // 페이지 번호 입력칸 표시 여부,
+					colNames : [ '소환사', '소환사 레벨','티어', '승리', '패배','리그포인트', '승률' ],
+					colModel : [
+							{
+								name : 'summoner_name',
+								index : 'summoner_name',
+								width : 90,
+								align : "center",
+								key : true,
+								formatter : function(cellvalue,	options,rowObject) {
+									return "<div style = 'text-align : left;'><img style = 'display : inline' src='/resources/img/profileicon/" + rowObject.profile_icon_id + ".png'/>" + cellvalue;"</div>"
+								},
+								cellattr : function(rowId, val,	rawObject) {
+									return "onclick=\"location.href='/summoner/info/?'+val\"";
+								}
+							}, {
+								name : 's_level',
+								index : 's_level',
+								width : 90,
+								align : "center"
+							}, {
+								name : 'tier',
+								index : 'tier',
+								width : 90,
+								align : "center"
+							}, {
+								name : 'wins',
+								index : 'wins',
+								width : 90,
+								align : "center"
+							}, {
+								name : 'losses',
+								index : 'losses',
+								width : 90,
+								align : "center"
+							}, {
+								name : 'lp',
+								index : 'lp',
+								width : 90,
+								align : "center"
+							}, {
+								name : 'winrate',
+								index : 'winrate',
+								width : 90,
+								align : "center"
+							} ]
+					});
+		});
 
-		$('#level')
-				.click(
-						function() {
-							$('#summoner_rank_table')
-									.jqGrid(
-											{
-												url : "/summoner/rank/level/data.json",
-												datatype : "json",
-												loadtext : '로딩중..',
-												sortable : true,
-												loadonce : true,
-												multiselect : false,
-												pager : '#pager',
-												rowNum : 10,
-												sortname : 'date',
-												sortorder : 'desc',
-												width : 1000,
-												height : 500,
-												pgbuttons : true, // 이전/다음 버튼 표시 여부
-												pgtext : null, // 페이징 정보(1 - 10 / 100) 표시 여부
-												viewrecords : false, // 레코드 수 표시 여부
-												recordpos : 'left', // 레코드 수 위치
-												pagerpos : 'center', // 페이징 버튼 위치
-												pginput : false, // 페이지 번호 입력칸 표시 여부,
-												colNames : [ '소환사', '소환사 레벨',
-														'티어', '승리', '패배',
-														'리그포인트', '승률' ],
-												colModel : [
-														{
-															name : 'summoner_name',
-															index : 'summoner_name',
-															width : 90,
-															align : "center",
-															key : true,
-															formatter : function(
-																	cellvalue,
-																	options,
-																	rowObject) {
-																return "<img src='https://ddragon.leagueoflegends.com/cdn/13.8.1/img/profileicon/" + rowObject.profile_icon_id + ".png'/>"
-																		+ cellvalue;
-															},
-															cellattr : function(
-																	rowId, val,
-																	rawObject) {
-																return "onclick=\"location.href='/summoner/info/?'+val\"";
-															}
-														}, {
-															name : 's_level',
-															index : 's_level',
-															width : 90,
-															align : "center"
-														}, {
-															name : 'tier',
-															index : 'tier',
-															width : 90,
-															align : "center"
-														}, {
-															name : 'wins',
-															index : 'wins',
-															width : 90,
-															align : "center"
-														}, {
-															name : 'losses',
-															index : 'losses',
-															width : 90,
-															align : "center"
-														}, {
-															name : 'lp',
-															index : 'lp',
-															width : 90,
-															align : "center"
-														}, {
-															name : 'winrate',
-															index : 'winrate',
-															width : 90,
-															align : "center"
-														} ]
-											})
+		$('#level').click(function() {
+			$('#summoner_rank_table').jqGrid(
+				{
+					url : "/summoner/rank/level/data.json",
+					datatype : "json",
+					loadtext : '로딩중..',
+					sortable : true,
+					loadonce : true,
+					multiselect : false,
+					pager : '#pager',
+					rowNum : 10,
+					sortname : 'date',
+					sortorder : 'desc',
+					width : 1000,
+					height : 500,
+					pgbuttons : true, // 이전/다음 버튼 표시 여부
+					pgtext : null, // 페이징 정보(1 - 10 / 100) 표시 여부
+					viewrecords : false, // 레코드 수 표시 여부
+					recordpos : 'left', // 레코드 수 위치
+					pagerpos : 'center', // 페이징 버튼 위치
+					pginput : false, // 페이지 번호 입력칸 표시 여부,
+					colNames : [ '소환사', '소환사 레벨','티어', '승리', '패배','리그포인트', '승률' ],
+					colModel : [
+							{
+								name : 'summoner_name',
+								index : 'summoner_name',
+								width : 90,
+								align : "center",
+								key : true,
+								formatter : function(cellvalue,	options, rowObject) {
+									return "<div style = 'text-align : left;'><img style = 'display : inline' src='/resources/img/profileicon/" + rowObject.profile_icon_id + ".png'/>" + cellvalue;"</div>"
+								},
+								cellattr : function(rowId, val,	rawObject) {
+									return "onclick=\"location.href='/summoner/info/?'+val\"";
+								}
+							}, {
+								name : 's_level',
+								index : 's_level',
+								width : 90,
+								align : "center"
+							}, {
+								name : 'tier',
+								index : 'tier',
+								width : 90,
+								align : "center"
+							}, {
+								name : 'wins',
+								index : 'wins',
+								width : 90,
+								align : "center"
+							}, {
+								name : 'losses',
+								index : 'losses',
+								width : 90,
+								align : "center"
+							}, {
+								name : 'lp',
+								index : 'lp',
+								width : 90,
+								align : "center"
+							}, {
+								name : 'winrate',
+								index : 'winrate',
+								width : 90,
+								align : "center"
+							} ]
 						})
+		})
 						
 		function handleClick(rowId, summonerName) {
 		    let decodedSummonerName = decodeURIComponent(summonerName);

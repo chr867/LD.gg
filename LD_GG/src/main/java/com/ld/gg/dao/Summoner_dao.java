@@ -72,4 +72,6 @@ public interface Summoner_dao {
 
 	List<BuildDto> getSubMaking(String sub);
 
+	SummonerDto searchSummoner(String summoner_name);
+
 }

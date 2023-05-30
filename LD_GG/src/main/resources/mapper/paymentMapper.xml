@@ -53,5 +53,16 @@
 	  WHERE NOT EXISTS(
 	  SELECT 1 FROM point WHERE point.holder_email = member.email);
 	</insert>
+	
+	<select id="getBalance" resultType = "point">
+		select point_balance, holder_email from point where holder_email = #{email}
+	</select>
+	
+	<select id="getCharge" resultType = "usage">
+		select tx_date, tx_id, points_sent, points_received, sender_id, receiver_id, payment_method, price, merchant_id
+		from transaction_history th join paymentinfo p on
+		th.sender_id = p.email or th.receiver_id = p.email
+		where p.email = #{email};
+	</select>
 
 </mapper>

@@ -165,7 +165,7 @@
               <a href="/mentor/write-profile" class="accordion-body-link"><span>• 프로필</span></a>
             </div>
             <div class="accordion-body-menu">
-              <a href="" class="accordion-body-link"><span>• 내 지갑</span></a>
+              <a href="/wallet/payment" class="accordion-body-link"><span>• 내 지갑</span></a>
             </div>
                         <div class="accordion-body-menu">
               <a href="/member/changePassword" class="accordion-body-link"><span>• 비밀번호 변경</span></a>
