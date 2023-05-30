@@ -1,112 +1,108 @@
-body{
-	display : flex;
-	align-items: center;
-	justify-content: center;
-}
-
 #flex_div {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: fit-content;
-  max-width : 1180px;
-  flex-wrap : wrap;
+  box-sizing: border-box;
 }
 
 #renewal{
-	width : 40%;
+	width : 100px;
 	height : 40px;
 	border : none;
 	background-color : #001940;
 	color : white;
 	cursor : pointer;
 	font-size : 16px;
+	margin-top: 27px;
+	border-radius: 0.5rem;
+	font-weight: 700;
+	z-index: 20;
 }
 
 #background-profile{
-	width : 100%;
-	height : fit-content;
+	width : 95%;
+	height : 100px;
 	display : flex;
 }
 
 #summoner-profile{
-	flex : 1;
 	display : flex;
-	flex-direction : row;
-	justify-content : center;
-	align-items : center;
+	background-color: #fff;
+	height: 120px;
+	padding: 10px;
+	border-radius: 0.5rem;
+	width: 230px;
+	z-index: 20;
 }
 
 .flex-profile-img{
-	width : 40%;
-	height : auto;
-	border-radius : 50%;
-	obejct-fit : cover;
-	overflow : hidden;
+	width : 100px;
+	height : 100px;
+	border-radius : 1rem;
+	margin-right: 10px;
+/* 	obejct-fit : cover;
+	overflow : hidden; */
 }
 
-#profile-icon{
-	position : relative;
-	display : flex;
-	flex-direction : row;
-	justify-content : center;
-	align-items : center;
-}
+.flex-summoner-profile-name{
+	width: 100px;
+	font-size: 22px;
+	font-weight: 700;
+	margin-right: 20px;
+	padding-left: 5px;
+	
+} 
 
 .flex-summoner-level{
-	position : absolute;
-	bottom : 0;
-	right : 177px;
+	position : relative;
+	bottom: 30px;
+    left: 50px;
 	font-size : 18px;
-	width : 40px;
-	height : 25px;
+	width : 50px;
+	height : 30px;
 	background-color : black;
-	display : flex;
+ 	display : flex;
 	justify-content : center;
-	align-items : center;
-	border-radius : 35%;
+	align-items : center; 
+	border-radius : 0.5rem;
+	padding-top: 10px;
 }
 
 #summoner-level{
 	color : white;
+	font-weight: 700;
 }
-
-#solo-rank{
-	flex : 1;
-	display : flex;
-	flex-direction : row;
-	align-items : center;
-	justify-content : center;
-	height : fit-content;
-}
-
 .flex-tier{
-	width : 80%;
-	height : auto;
+	transform: scale(2.5);
+	opacity: 0.1;
+	z-index: 0;
 }
-
-#champ-stat{
-	width : 95%;
-	hegiht : fit-content;
+.flex-profile-tier-text{
+	font-size: 22px;
+	font-weight: 700;
+	margin-top: 60px;
 }
 
 .flex-header{
-	width : 100%;
-	height : fit-content;
-	margin : 2%;
 	text-align : center;
-	background-color : #f3f6f4;
+	background-color : #fff;
+	border-radius: 0.5rem;
+	margin-top: 20px;
+	font-size: 22px;
+	font-weight: 700;
+	align-items: center;
+	height: 40px;
 }
 
 .flex-category{
 	display : flex;
-	width : 100%;
-	align-items: center;
-	justify-content: center;
-	text-align : center;
-	margin : 2%;
-	border : 0.4px solid #eeeeee;
-	background-color : #f3f6f4;	
+	margin-top: 20px;
+	border-radius: 0.5rem;
+	background-color : #fff;	
+	font-size:16px;
+	font-weight: 700;
+	margin-bottom: 10px;
+}
+.flex-category div{
+	text-align: center;
+	
 }
 
 .champion_category{
@@ -169,13 +165,13 @@ body{
 	flex : 1;
 	display : flex;
 	flex-direction : row;
-	align-items: center;
-	justify-content: center;
 }
 
 .flex-champ-record{
-	width : 100%;
-	margin : 2%;
+	box-sizing: border-box;
+	background-color: #fff;
+	padding-top: 10px;
+	border-radius: 0.5rem;
 }
 
 .flex-champ {
@@ -188,16 +184,21 @@ body{
 
 .champ-div{
 	flex : 1;
+	padding-left: 10px;
 }
 
 .champ-img {
-	width : 25%;
-	height : 25%;
+	width : 50px;
+	height : 50px;
 	display: inline-block;
+	border-radius: 0.5rem;
+	margin-right: 2px;
+	margin-bottom: 5px;
 }
 
 .champ-name {
-	font-size: 12px;
+	font-size: 15px;
+	font-weight: 700;
 	text-align: center;
 	display: inline-block;
 }
@@ -206,7 +207,12 @@ body{
 	flex : 1;
 	display : flex;
 	flex-direction : column;
-	height : 100%;
+	justify-content: space-between;
+	align-items: center;
+}
+.flex-champ-winrate strong{
+	    height: 45px;
+    margin-top: 11px;
 }
 
 .champ-winrate{
@@ -219,21 +225,31 @@ body{
 	flex : 1;
 	display : flex;
 	flex-direction : column;
-	height : 100%;
+	justify-content: space-between;
+	align-items: center;
+}
+.flex-champ-games span{
+	    height: 45px;
+    margin-top: 11px;
 }
 
 .champ-games{
 	text-align : center;
 	height : 29.47px;
+		justify-content: space-between;
 }
 
 .flex-champ-wins{
 	flex : 1;
 	display : flex;
 	flex-direction : column;
-	height : 100%;
+	justify-content: space-between;
+	align-items: center;
 }
-
+.flex-champ-wins span{
+	    height: 45px;
+    margin-top: 11px;
+}
 .champ-wins{
 	text-align : center;
 	height : 29.47px;
@@ -243,7 +259,12 @@ body{
 	flex : 1;
 	display : flex;
 	flex-direction : column;
-	height : 100%;
+	justify-content: space-between;
+	align-items: center;
+}
+.flex-champ-losses span{
+	    height: 45px;
+    margin-top: 11px;
 }
 
 .champ-losses{
@@ -255,7 +276,12 @@ body{
 	flex : 1;
 	display : flex;
 	flex-direction : column;
-	height : 100%;
+	justify-content: space-between;
+	align-items: center;
+}
+.flex-champ-kda strong{
+	    height: 45px;
+    margin-top: 11px;
 }
 
 .champ-kda{
@@ -267,7 +293,12 @@ body{
 	flex : 1;
 	display : flex;
 	flex-direction : column;
-	height : 100%;
+	justify-content: space-between;
+	align-items: center;
+}
+.flex-champ-kills span{
+	    height: 45px;
+    margin-top: 11px;
 }
 
 .champ-kills{
@@ -279,7 +310,12 @@ body{
 	flex : 1;
 	display : flex;
 	flex-direction : column;
-	height : 100%;
+	justify-content: space-between;
+	align-items: center;
+}
+.flex-champ-deaths span{
+	    height: 45px;
+    margin-top: 11px;
 }
 
 .champ-deaths{
@@ -291,7 +327,12 @@ body{
 	flex : 1;
 	display : flex;
 	flex-direction : column;
-	height : 100%;
+	justify-content: space-between;
+	align-items: center;
+}
+.flex-champ-assists span{
+	    height: 45px;
+    margin-top: 11px;
 }
 
 .champ-assists{
@@ -303,7 +344,12 @@ body{
 	flex : 1;
 	display : flex;
 	flex-direction : column;
-	height : 100%;
+	justify-content: space-between;
+	align-items: center;
+}
+.flex-champ-cs strong{
+	    height: 45px;
+    margin-top: 11px;
 }
 
 .champ-cs{
@@ -315,7 +361,12 @@ body{
 	flex : 1;
 	display : flex;
 	flex-direction : column;
-	height : 100%;
+	justify-content: space-between;
+	align-items: center;
+}
+.flex-champ-cs-pm span{
+	    height: 45px;
+    margin-top: 11px;
 }
 
 .champ-cs-pm{
@@ -331,7 +382,17 @@ body{
 .flex-summary-category{
 	width : 100%;
 	display : flex;
-	flex-direction : row;
+	background-color: #fff;
+	border-radius: 0.5rem;
+	margin-top: 20px;
+	align-items: center;
+}
+.flex-summary-category div{
+	font-size: 18px;
+	font-weight: 700;
+}
+.flex-summary-category div{
+	margin-bottom: 10px;
 }
 
 .header-winrate-category{
@@ -366,9 +427,17 @@ body{
 }
 
 #match_history{
-	width : 100%;
-	display : flex;
-	height : fit-content;
+	background-color: #fff;
+	margin-top: 20px;
+	border-radius: 0.5rem;
+	display: flex;
+	text-align: center;
+	align-items: center;
+	height: 40px;
+}
+#match_history h3{
+	font-size: 22px;
+	font-weight: 700;
 }
 
 #history{
@@ -378,18 +447,33 @@ body{
 #record_filter{
 	display : flex;
 	flex-direction : row;
+	background-color: #fff;
+	margin-top: 20px;
+	border-radius: 0.5rem;
+	text-align: center;
+	align-items: center;
+	height: 60px;
+	justify-content: center;
 }
-
-#recent_20games{
-	display : flex;
-	flex-direction : row;
-	width : 100%;
+.record-filter-btn{
+	border: none;
+	border-radius: 0.5rem;
+	margin-right: 20px;
+	height: 40px;
+	width: 100px;
+	background-color: #f4f4f4;
+	font-weight: 700;
+	z-index: 20;
+}
+.record-filter-btn:hover{
+	background-color: #606060;
 }
 
 .flex-summary-div0{
 	display : flex;
-	flex-direction : row;
-	width : 100%;
+	background-color: #fff;
+	margin-top: 20px;
+	border-radius: 0.5rem;
 }
 
 .mostChamp{
@@ -404,7 +488,8 @@ body{
 .champDataDiv{
 	width : 20%;
 	text-align : center;
-	font-size : 15px;
+	font-size : 18px;
+	font-weight: 700;
 	display : flex;
 	justify-content : center;
 	align-items : center;
@@ -414,7 +499,8 @@ body{
 .kdaAvgDiv{
 	width : 20%;
 	text-align : center;
-	font-size : 15px;
+	font-size : 18px;
+	font-weight: 700;
 	display : flex;
 	justify-content : center;
 	align-items : center;
@@ -423,7 +509,8 @@ body{
 
 .bestKdaDiv{
 	width : 30%;
-	font-size : 15px;
+	font-size : 18px;
+	font-weight: 700;
 	text-align : center;
 	display : flex;
 	justify-content : center;
@@ -433,35 +520,27 @@ body{
 
 .positionDiv{
 	width : 35%;
-	font-size : 15px;
+	font-size : 18px;
 	text-align : center;
 	display : flex;
 	justify-content : center;
 	align-items:center;
-	flex-wrap : wrap;
+	font-weight: 700;
 }
 
 .mostChampDiv{
 	width : 70%;
-	font-size : 15px;
+	font-size : 18px;
 	text-align : center;
 	display : flex;
-	justify-content:center;
-	align-items:center;
-	flex-wrap : wrap;
-}
-
-.mostChamp{
-	flex : 1;
-	display : flex;
-	flex-direction : column;
-	justify-content : center;
-	align-items : center;
+	padding-top: 20px;
+	font-weight: 700;
 }
 
 .flex-top-champ-img{
-	width : 40%;
-	height : auto;
+	width: 100px;
+	height: 100px;
+	border-radius: 0.5rem;
 }
 
 .strong-winrate{
@@ -498,19 +577,35 @@ body{
 
 #champ_position_filter{
 	display : flex;
-	flex-direction : row;
+	margin-top: 30px;
+	width: 230px;
+	height: 70px;
+	background-color: #fff;
+	align-items: center;
+	border-radius: 0.5rem;
+	padding-left: 10px;
+	z-index: 10;
 }
 
 .champRecordFilterBtn{
-	flex :1;
 	display : flex;
 	justify-content : center;
 	align-items : center;
+	height: 50px;
+	margin-right: 5px;
+	border: none;
+	background-color: #f4f4f4;
+	border-radius: 0.5rem;
+	font-weight: 700;
+}
+.champRecordFilterBtn:hover{
+	background-color: #606060;
 }
 
 .filterBtnDiv{
 	display : flex;
-	flex-direction : row;
+	height: 50px;
+	z-index: 10;
 }
 
 .record{
@@ -557,6 +652,8 @@ body{
 	display : flex;
 	justify-content : center;
 	align-items : center;
+	font-size: 15px;
+    font-weight: 700;
 }
 
 .record_cs_sight_sub_div{
@@ -578,6 +675,8 @@ body{
 	width : 25%;
 	display : flex;
 	flex-direction : row;
+	margin-right: 110px;
+	border-radius: 0.5rem;
 }
 
 .record_spell_div{
@@ -591,16 +690,22 @@ body{
 }
 
 .button_div{
-	width : 10%;
+	width : 60px;
 	background-color : #62b1f8;
 	cursor : pointer;
 	border : none;
+	z-index: 20;
+	transition: 0.3s;
+	border-radius: 0.5rem;
+}
+.button_div:hover{
+	filter: grayscale(0.8);
 }
 
 .recordChampImg{
-	position : relative;
-	width : 50px;
-	height : 50px;
+	width : 70px;
+	height : 70px;
+	border-radius: 0.5rem;
 }
 
 .record_champ_level{
@@ -608,27 +713,38 @@ body{
 	bottom : 4px;
 	right : 2px;
 	background-color : black;
+	width: 20px;
+	height: 20px;
+	font-size: 15px;
+	font-weight: 700;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
 	color : white; 
 }
 
 .record_spell_img1, .record_spell_img2{
-	width : 24px;
-	height : 24px;
+	width : 35px;
+	height : 35px;
+	border-radius: 0.3rem;
 }
 
 .record_rune_img1{
-	width : 25px;
-	height : 25px;
+	width : 35px;
+	height : 35px;
 }
 
 .record_rune_img2{
-	width : 22px;
-	height : 22px;
+	width : 35px;
+	height : 35px;
 }
 
 .record_res_wards_img{
-	width : 20%;
-	height : auto;
+	width : 30px;
+	height : 30px;
+	border-radius: 0.5rem;
+	margin-right: 20px;
 }
 
 .record_red_wards{
@@ -644,9 +760,9 @@ body{
 
 .record_div{
 	display : flex;
-	width : 100%;
-	border : 1px solid black;
-	margin : 5px;
+	background-color: #fff;
+	border-radius: 0.5rem;
+	margin-top : 10px;
 }
 
 .playerDiv{
@@ -657,8 +773,11 @@ body{
 }
 
 .playerImg{
-	width : 10%;
-	height : 10%;
+	width: 30px;
+    height: 30px;
+    border-radius: 0.3rem;
+    margin-bottom: 1.5px;
+    margin-right: 10px;
 }
 
 .playerName{
@@ -688,17 +807,29 @@ body{
 	display : flex;
 	flex-direction : row;
 	text-align : center;
-	margin : 1%;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	background-color: #fff;
+	border-radius: 0.5rem;
+	
 }
 
 .synthesis, .build, .ranking{
 	flex : 1;
+	transition: 0.3s;
+	
+}
+.synthesis:hover, .build:hover, .ranking:hover{
+	background-color: #606060;
+	color: #fff;
 }
 
 .data{
 	width : 100%;
 	display : flex;
-	margin : 1%;
+	background-color: #fff;
+	border-radius: 0.5rem;
+	padding: 20px;
 }
 
 .win, .lose{
@@ -708,10 +839,8 @@ body{
 }
 
 .win_team, .lose_team{
-	width : 100%;
-	height : fit-content;
 	display : flex;
-	flex-direction : row;
+	margin-bottom: 3px;
 }
 
 .champ_info{
@@ -796,52 +925,62 @@ body{
 }
 
 .syn-summoner-tier{
-	font-size : 10px;
-	width : 15px;
-	height : 15px;
+	font-size : 12px;
+	width : 20px;
+	height : 20px;
+	border-radius: 0.1rem;
+	font-weight: 700;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	background-color : #ff6767;
 	color : white;
 }
 
 .syn-summoner-name{
 	width : 20%;
-	font-size : 10px;
+	font-size : 16px;
+	font-weight: 700;
 	display : flex;
 	white-space : nowrap;
 }
 
 .flex-champion{
-	width : 35px;
-	height : 35px;
+	width : 50px;
+	height : 50px;
+	border-radius: 0.3rem;
 }
 
 .flex-spell1, .flex-spell2{
-	width : 18px;
-	height : 18px;
+	width : 25px;
+	height : 25px;
+	border-radius: 0.3rem;
 }
 
 .flex-rune1{
-	width : 20px;
-	height : 20px;
+	width : 25px;
+	height : 25px;
 }
 
 .flex-rune2{
-	width : 16px;
-	height : 16px;
+	width : 25px;
+	height : 25px;
 }
 
 .syn-item-img{
-	width : 20px;
-	height : 20px;
+	width : 40px;
+	height : 40px;
 }
 
 .syn-kda-text{
-	font-size : 13px;
+	font-size : 16px;
+	font-weight: 700px;
 	text-align : center;
 }
 
 .syn-cs-text{
-	font-size : 13px;
+	font-size : 16px;
+	font-weight: 700px;
 }
 
 .synthesis, .build, .ranking{

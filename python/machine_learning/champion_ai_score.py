@@ -117,6 +117,7 @@ result_df[['winRate', 'pickRate', 'banRate', 'kda', 'totalDamageDealtToChampions
                                                                               'totalDamageDealtToChampions',
                                                                               'totalDamageTaken', 'timeCCingOthers',
                                                                               'total_gold']].apply(zscore)
+
 # AI_SCORE
 result_df['aiScore'] = result_df['winRate'] * 0.30 + result_df['pickRate'] * 0.25 + \
                         result_df['banRate'] * 0.15 + result_df['kda'] * 0.05 + \

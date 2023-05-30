@@ -138,26 +138,29 @@ LIMIT 20 OFFSET #{offset};
 </select>
 
 <select id="get_champ_record" resultType="champ_record" parameterType = "Map">
-  SELECT
+SELECT
     COUNT(*) AS games,
-    ROUND((SUM(CASE WHEN win = 1 THEN 1 ELSE 0 END) / COUNT(*)) * 100,2) AS winrate,
-    ROUND((SUM(kills) + SUM(assists)) / SUM(deaths),1) AS kda,
+    ROUND((SUM(CASE WHEN win = 1 THEN 1 ELSE 0 END) / COUNT(*)) * 100, 2) AS winrate,
+    ROUND((SUM(kills) + SUM(assists)) / SUM(deaths), 1) AS kda,
     SUM(kills) AS kills,
     SUM(deaths) AS deaths,
     SUM(assists) AS assists,
     SUM(CS) AS cs,
     ROUND(SUM(CS) / COUNT(*), 2) AS cs_per_minute,
-    champ_name,
+    MAX(ci.champion_kr_name) AS champion_kr_name,
+    champ_name,  -- 추가된 부분
     COUNT(*) AS total_games,
     SUM(CASE WHEN win = 1 THEN 1 ELSE 0 END) AS wins,
     SUM(CASE WHEN win = 0 THEN 1 ELSE 0 END) AS losses
-  FROM
+FROM
     record
-  WHERE
+JOIN
+    champion_info ci ON record.champ_name = ci.champion_en_name
+WHERE
     summoner_name = #{summoner_name}
-  GROUP BY
+GROUP BY
     champ_name
-  LIMIT 20 OFFSET #{offset};
+LIMIT 20 OFFSET #{offset};
 </select>
 
 <select id="getChampRecordLane" resultType = "champ_record" parameterType = "Map">

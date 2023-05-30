@@ -3,18 +3,64 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>${summoner.summoner_name} - 소환사 전적</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+<title>LD.GG</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+	crossorigin="anonymous">
+<!--BOOTSTRAP JavaScript-->
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+	crossorigin="anonymous">
+    </script>
+<!--SWEET-ALERT2 CSS-->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<!--SWEET-ALERT2 JS-->
+<script
+	src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<!--JQUERY-->
 <script src="https://code.jquery.com/jquery-3.6.3.js"
 	integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
 	crossorigin="anonymous"></script>
+<!--AJAX-->
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!--JQUERY VALIDATE-->
+<script
+	src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.0/jquery.validate.min.js"></script>
+<!--sideBar CSS-->
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/main/sideBar.css">
+<!--header CSS-->
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/main/header.css">
+<!--footer CSS-->
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/main/footer.css">
+<!--loginModal CSS-->
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/main/loginModal.css">
+<!--로그인 및 세션관련 JS-->
+<script src="/resources/js/main/loginSession.js" defer></script>
+<!-- 채팅 관련 JS-->
+<script src="/resources/js/main/chat.js" defer></script>
 
 <link  href = "/resources/css/summoner/summonerInfo.css?after" rel = "stylesheet">
-
+<style type="text/css">
+.main-container{
+	padding: 100px 50px 0px 100px;
+	box-sizing: border-box;
+}
+</style>
 </head>
 <body>
-
+	<%@ include file="../header.jsp"%>
+	<%@ include file="../sidebar.jsp"%>
+	<%@ include file="../footer.jsp"%>
+	<div class="main-container">
 	<div id="flex_div">
 	
 		<div id="background-profile">
@@ -22,14 +68,15 @@
 				<div id="profile-icon">
 					<img class = "flex-profile-img" alt="#" src="/resources/img/profileicon/${summoner.profile_icon_id}.png">
 					<div class = "flex-summoner-level"> <p id="summoner-level">${summoner.s_level}</p> </div>
-					<span class = "flex-summoner-profile-name">${summoner.summoner_name}</span>
 				</div>
+				<div>
+				<div class = "flex-summoner-profile-name">${summoner.summoner_name}</div>
 				<button id="renewal" value="전적 갱신">전적 갱신</button>
+				</div>
 			</div>
 			
 			<div id="solo-rank">
-			<img class = "flex-tier" alt="#" src="/resources/img/ranked-emblem/emblem-${summoner.tier}.png">
-			<span class = "flex-profile-tier-text">${summoner.tier}</span>
+				<img class = "flex-tier" alt="#" src="/resources/img/ranked-emblem/emblem-${summoner.tier}.png">
 			</div>
 		</div>
 
@@ -40,7 +87,7 @@
 			<div id="champ_position_filter"></div>
 
 			<div class = "flex-champ-div">
-				<header class = "flex-header">챔피언 통계</header>
+				<div class = "flex-header">챔피언 통계</div>
 				<div class = "flex-category">
 						<div class = "champion_category">챔피언</div>
 						
@@ -71,7 +118,7 @@
 		</div>
 
 			<div id="match_history">
-				<span id="history">매치 히스토리</span>
+				<h3 id="history">매치 히스토리</h3>
 			</div>
 			<!-- 전적 정보 필터 -->
 
@@ -82,11 +129,11 @@
 				<button type="button" class = "record-filter-btn" value = "classic">일반</button>
 			</div>
 
-			<div class = "flex-summary-table">
+<!-- 			<div class = "flex-summary-table">
 				<header class = "flex-summary-header">
 					<span>최근 20게임 전적 요약</span>
 				</header>
-			</div>
+			</div> -->
 			
 			<div class = "flex-summary-category">
 				
@@ -107,7 +154,7 @@
 			<div id="record"></div>
 
 		</div>
-
+</div>
  	<script type="text/javascript">
  	let Sessiontier = '${summoner.tier}';
  	let tier = "";
@@ -145,7 +192,7 @@
 		let lane2 = "";
 		let lane3 = "";
 		let filterBtnDiv = $('<div class = "filterBtnDiv"></div>');
-		let filterBtnAll = $('<button class = "champRecrodFilterBtn" type = "button" value = "all-btn">전체</button>');
+		let filterBtnAll = $('<button class = "champRecordFilterBtn" type = "button" value = "all-btn">전체</button>');
 		filterBtnDiv.append(filterBtnAll);
 		$.each(res, function(i, res){
 			if(res.lane1 != null){
@@ -205,6 +252,7 @@
 			url: '/summoner/get_champ_record',
 			data: { summoner_name: '${summoner.summoner_name}', offset : champOffset }
 		}).done(res => {
+			console.log(res);
 			let champ_div = $('<div class = "flex-champ"></div>');
 			let winrate_div = $('<div class = "flex-champ-winrate"></div>');
 			let games_div = $('<div class = "flex-champ-games"></div>');
@@ -218,7 +266,7 @@
 			let cs_pm_div = $('<div class = "flex-champ-cs-pm"></div>');
 			$.each(res, function (i, champ) {
 				let champ_box = $('<div class = "champ-div"></div>')
-				let champ_img = $('<img class = "champ-img" alt="#" src="/resources/img/champion_img/square/'+champ.champ_name+'.png"><span class = "champ-name">' + champ.champ_name + '</span>');
+				let champ_img = $('<img class = "champ-img" alt="#" src="/resources/img/champion_img/square/'+champ.champ_name+'.png"><span class = "champ-name">' + champ.champion_kr_name + '</span>');
 				champ_box.append(champ_img);
 				champ_div.append(champ_box);
 			});
@@ -992,7 +1040,7 @@
 		        let whole = $('<div class="whole"></div>');
 
 		        // 2. header와 div 태그 생성
-		        let header = $('<header class="data_header"></header>');
+		        let header = $('<div class="data_header"></div>');
 		        let data = $('<div class="data"></div>');
 		        whole.append(header, data); // 2. 생성된 태그들을 whole 태그 내부에 추가
 		        // 3. 'data_header' 내부에 div 태그 3개 생성
@@ -1002,8 +1050,8 @@
 		        header.append(synthesis, build, ranking);
 
 		        // 4. 'data' 내부에 새로운 div 태그 두 개를 생성
-		        let win = $('<div class="win"><header class="win_header"></header></div>');
-		        let lose = $('<div class="lose"><header class="lose_header"></header></div>');
+		        let win = $('<div class="win"><div class="win_header"></div></div>');
+		        let lose = $('<div class="lose"><div class="lose_header"></div></div>');
 		        data.append(win, lose);
 
 		        $.each(response, function (i, syn) {
@@ -1385,7 +1433,7 @@
 			        let whole = $('<div class="whole"></div>');
 
 			        // 2. header와 div 태그 생성
-			        let header = $('<header class="data_header"></header>');
+			        let header = $('<div class="data_header"></div>');
 			        let data = $('<div class="data"></div>');
 			        whole.append(header, data); // 2. 생성된 태그들을 whole 태그 내부에 추가
 			        // 3. 'data_header' 내부에 div 태그 3개 생성
@@ -1395,8 +1443,8 @@
 			        header.append(synthesis, build, ranking);
 
 			        // 4. 'data' 내부에 새로운 div 태그 두 개를 생성
-			        let win = $('<div class="win"><header class="win_header"></header></div>');
-			        let lose = $('<div class="lose"><header class="lose_header"></header></div>');
+			        let win = $('<div class="win"><div class="win_header"></div></div>');
+			        let lose = $('<div class="lose"><div class="lose_header"></div></div>');
 			        data.append(win, lose);
 
 			        $.each(response, function (i, syn) {
@@ -1640,8 +1688,8 @@
 	    }).done(response => {
 			let data = $('<div class = "dataDiv"></div>');
 	        // 4. 'data' 내부에 새로운 div 태그 두 개를 생성
-	        let win = $('<div class="win"><header class="win_header"></header></div>');
-	        let lose = $('<div class="lose"><header class="lose_header"></header></div>');
+	        let win = $('<div class="win"><div class="win_header"></div></div>');
+	        let lose = $('<div class="lose"><div class="lose_header"></div></div>');
 	        data.append(win, lose);
 
 	        $.each(response, function (i, syn) {

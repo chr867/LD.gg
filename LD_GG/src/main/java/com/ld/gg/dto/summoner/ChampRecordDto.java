@@ -20,4 +20,5 @@ public class ChampRecordDto {
 	private int wins;
 	private int losses;
 	private String champ_name;
+	private String champion_kr_name;
 }
