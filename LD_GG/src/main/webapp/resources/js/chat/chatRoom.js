@@ -50,41 +50,43 @@ function sendMessage(chat_content) {
     /* chat_content */
     console.log(chat_content);
 
-    /* 시간 관련 */
-    const currentTime = new Date();
-    const options = {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false,
-        timeZone: 'Asia/Seoul' // 한국 표준시간대 (KST)
-    };
-    const time = currentTime.toLocaleString('ko-KR', options)
-        .replace(/\. /g, '-');
-    const datePart = time.slice(0, 10);
-    const timePart = time.slice(11);
+    if(chat_content !== ""){
+        /* 시간 관련 */
+        const currentTime = new Date();
+        const options = {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+            timeZone: 'Asia/Seoul' // 한국 표준시간대 (KST)
+        };
+        const time = currentTime.toLocaleString('ko-KR', options)
+            .replace(/\. /g, '-');
+        const datePart = time.slice(0, 10);
+        const timePart = time.slice(11);
 
-    const timeStamp = datePart + " " + timePart;
+        const timeStamp = datePart + " " + timePart;
 
-    console.log(datePart);
-    console.log(timePart);
+        console.log(datePart);
+        console.log(timePart);
 
-    console.log("chat_content: " + chat_content);
-    console.log("timestamp: " + timeStamp);
+        console.log("chat_content: " + chat_content);
+        console.log("timestamp: " + timeStamp);
 
-    const message = {
-        chat_category: parseInt(chat_category),
-        chat_content: chat_content,
-        chat_user: email,
-        chat_time : timeStamp
-    };
+        const message = {
+            chat_category: parseInt(chat_category),
+            chat_content: chat_content,
+            chat_user: email,
+            chat_time : timeStamp
+        };
 
-    console.info(message);
+        console.info(message);
 
-    stompClient.send('/app/chat/chatroom/' + chat_room_seq, {}, JSON.stringify(message));
+        stompClient.send('/app/chat/chatroom/' + chat_room_seq, {}, JSON.stringify(message));
+    }
 }
 
 /* 메시지 수신 */
@@ -156,15 +158,19 @@ function makeBalloon(chat){
 }
 document.getElementById("send_content").addEventListener("keyup", function(event) {
     if (event.shiftKey && event.key === "Enter") {
+        console.log('ENTER + SHIFT 호출');
         textarea.style.height = "auto";
         textarea.style.height = textarea.scrollHeight + "px";
     }
     else if (event.key === "Enter") {
+        console.log('ENTER 호출');
         sendMessage(this.value);
+
         this.style.height = 'auto';
         this.value = "";
     }
 });
+
 function send(){
     send_message = document.getElementById("send_content").value;
     sendMessage(send_message);
