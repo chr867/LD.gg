@@ -30,6 +30,10 @@
 		UPDATE point SET point_balance = #{point} WHERE holder_email = #{email}
 	</update>
 	
+	<update id="updatePayBalance" parameterType = "Map">
+		UPDATE POINT SET point_balance = #{point} - #{price} WHERE holder_email = #{holder_email}
+	</update>
+	
 	<select id="checkMentoringApplication" resultType = "Integer">
 		SELECT point_balance FROM point WHERE holder_email = #{holder_email}
 	</select>
@@ -42,6 +46,10 @@
 		INSERT INTO transaction_history (points_sent, points_received, sender_id, receiver_id) 
 		VALUES (#{points_sent}, #{points_received}, #{sender_id}, #{receiver_id});
 	</insert>
+	
+	<update id="updateTrade" parameterType = "tx">
+		UPDATE POINT SET point_balance = point_balance + #{points_received} WHERE holder_email = #{receiver_id}
+	</update>
 	
 	<insert id="insert_point_0" parameterType="String">
 	  INSERT INTO point (holder_email) VALUES (#{holder_email});

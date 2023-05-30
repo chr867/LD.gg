@@ -15,6 +15,7 @@ import com.ld.gg.dao.PaymentDao;
 import com.ld.gg.dto.MemberDto;
 import com.ld.gg.dto.payment.PaymentDto;
 import com.ld.gg.dto.payment.PointDto;
+import com.ld.gg.dto.payment.TradeDto;
 import com.ld.gg.dto.payment.TransactionHistoryDTO;
 import com.ld.gg.dto.payment.UsageHistoryDto;
 
@@ -90,6 +91,7 @@ public class PaymentService {
 	    if (point < price) {
 	        return false;
 	    } else {
+	    	PD.updatePayBalance(holder_email, point, price);
 	        return true;
 	    }
 	}
@@ -105,7 +107,10 @@ public class PaymentService {
 		List<MemberDto> mbdto = mbdao.getUserLolAccount(menti_lol_account);
 		String menti_email = mbdto.get(0).getEmail();
 		tx_history.setSender_id(menti_email);
-		PD.insert_tx_history(tx_history);
+		int checknum = PD.insert_tx_history(tx_history);
+		if(checknum == 1) {
+			PD.updateTrade(tx_history);
+		}
 	}
 	//이메일을 받아서 포인트 테이블에 포인트 0으로 저장(회원가입 시)
 	public void insert_point_0(String holder_email) {

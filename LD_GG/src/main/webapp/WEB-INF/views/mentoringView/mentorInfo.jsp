@@ -389,7 +389,7 @@ margin:auto;
 	    $.ajax({
 	    	method : 'post',
 	    	url : '/wallet/payment/userinfo',
-	    	data : {email : "${mentor_profile.mentor_email}"}
+	    	data : {email : "${member.email}"}
 	    }).done(res=>{
 	    	GlobalEmail = res[0].email;
 	    	GlobalPhone_num = res[0].phone_num;
@@ -727,6 +727,7 @@ margin:auto;
 	    	                            alert("이미 신청한 수업입니다.");
 	    	                        }
 	    	                    });
+	                    		location.reload();
 	                    	}else{
 	                    		alert("잔액이 부족합니다. 충전 후 이용해주세요.");
 	                    		$('#flex-add-store').css("display","block");
@@ -856,13 +857,15 @@ margin:auto;
 	    
 	});//ready
 	function requestPay() {
+		let requestPrice = 0;
+		requestPrice = $('.flex-payment-button:checked').val();
 		if(price === "1 원"){
 			let regex = /\d+/;
-			price = parseInt(price.match(regex)[0]);
+			requestPrice = parseInt(price.match(regex)[0]);
 			console.log(price);
 		}else{
-			price = parseInt(price.replace(/,/g, ""));
-			console.log(price);
+			requestPrice = parseInt(price.replace(/,/g, ""));
+			console.log(requestPrice);
 		}
 		let orderId = "";
 		$.ajax({
@@ -881,7 +884,7 @@ margin:auto;
 			pay_method: "card",
 			merchant_uid: orderId,
 			name: "테스트용 상품",
-			amount: price,
+			amount: requestPrice,
 			buyer_email : GlobalEmail,
 			buyer_name : GlobalLol_account,
 			buyer_tel : GlobalPhone_num,
@@ -904,7 +907,55 @@ margin:auto;
 			}).done(res => {
 				alert("결제가 완료되었습니다");
 				console.log(res);
-				location.reload();
+				
+				let class_id = $('input:checked').attr('id');
+		    	let price = $('input:checked').next('label').find('#class-price').text();
+		        $.ajax({
+		            url: "/mentor/check-session",
+		            method: "GET",
+		            success: function(response) {
+		                if (response.isLoggedIn) {
+		                    let email = response.email;
+		                    let data = {
+		                    		menti_email: email,
+		                            class_id: class_id,
+		                            mentor_email: "${mentor_profile.mentor_email}"
+		                    };
+		                    let applicationData = {
+		                    		holder_email : email,
+	                    			price : price.toString()
+	                    	};
+		                    $.ajax({
+		                    	url: '/mentor/profile/payment/mentoring-application',
+		                    	method : 'post',
+		                    	contentType : 'application/json; charset=utf-8',
+		                    	data : JSON.stringify(applicationData)	//수업 신청 버튼 클릭 시, 멘티의 잔액 확인 후 신청 승인 여부 결정
+		                    }).done(res=>{
+		                    	console.log(JSON.parse(res));
+		                    	if(JSON.parse(res)){
+		                    		$.ajax({
+		    	                        url: "/mentor/save-mentoring-history",
+		    	                        method: "POST",
+		    	                        data: JSON.stringify(data),
+		    	                        contentType: "application/json; charset=utf-8",
+		    	                        success: function() {
+		    	                        	location.reload();
+		    	                            alert("수강 신청이 완료되었습니다.");
+		    	                        },
+		    	                        error: function() {
+		    	                            alert("이미 신청한 수업입니다.");
+		    	                        }
+		    	                    });
+		                    	}
+		                    }).fail(err=>{
+		                    	console.log(err);
+		                    });
+		                } else {
+		                    alert("로그인 후 이용 가능합니다.");
+		                }
+		            }
+		        });
+				
 			}).fail(err => {
 				console.log(err);
 			});
