@@ -39,8 +39,8 @@ public class PaymentController {
 	
 	@PostMapping("/payment/userinfo")
 	@ResponseBody
-	public List<MemberDto> getUserInfo(@RequestParam String email) {
-	    List<MemberDto> md = ps.getUserInfo(email);
+	public MemberDto getUserInfo(@RequestParam String email) {
+	    MemberDto md = ps.getUserInfo(email);
 	    return md;
 	}
 

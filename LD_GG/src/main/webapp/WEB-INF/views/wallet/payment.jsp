@@ -127,12 +127,47 @@
 				<input type="button" class="flex-payment-button" value="50,000 원"
 					style="cursor: pointer">
 			</div>
+			
+			<div class="flex-paymnent-cash">
+				<div class="flex-label">
+					<strong>100,000 캐시</strong>
+				</div>
+				<input type="button" class="flex-payment-button" value="50,000 원"
+					style="cursor: pointer">
+			</div>
+			
+			<div class="flex-paymnent-cash">
+				<div class="flex-label">
+					<strong>150,000 캐시</strong>
+				</div>
+				<input type="button" class="flex-payment-button" value="50,000 원"
+					style="cursor: pointer">
+			</div>
+			
+			<div class="flex-paymnent-cash">
+				<div class="flex-label">
+					<strong>200,000 캐시</strong>
+				</div>
+				<input type="button" class="flex-payment-button" value="50,000 원"
+					style="cursor: pointer">
+			</div>
 
 		</div>
+		
 	</div>
-
-	<table id = "UsageHistory"></table>
-	<div id = "pager"></div>
+	
+	<div id = "usageHistory">
+	
+		<div class = "usageCategory">
+			<div class = "usageMiniCategory">거래 날짜</div>
+			<div class = "usageMiniCategory">거래 금액</div>
+			<div class = "usageMiniCategory">구매 번호</div>
+			<div class = "usageMiniCategory">충전 금액</div>
+		</div>
+		
+		<div class = "usageHistoryWindow"></div>
+		
+	</div>
 
 	<div id="payment-modal" class="flex-modal">
 		<div class="modal-content">
@@ -167,9 +202,9 @@
         	url : '/wallet/payment/userinfo',
         	data : {email : '${buyer.holder_email}'}
         }).done(res=>{
-        	email = res[0].email;
-        	phone_num = res[0].phone_num;
-        	lol_account = res[0].lol_account;
+        	email = res.email;
+        	phone_num = res.phone_num;
+        	lol_account = res.lol_account;
         }).fail(err=>{
         	console.log(err)
         })
@@ -263,7 +298,8 @@
 						}
 					}).done(res=>{
 						// 가맹점 서버 결제 API 성공시 로직
-						console.log(res)
+						location.reload();
+						console.log(res);
 					}).fail(err=>{
 						console.log(err);
 					})
@@ -282,8 +318,9 @@
 							payment_method : rsp.pg_type
 						}
 					}).done(res=>{
-						// 가맹점 서버 결제 API 성공시 로직
-						console.log(res)
+						// 가맹점 서버 결제 API 실패시 로직
+						location.reload();
+						console.log(res);
 					})
 					alert("결제에 실패하였습니다. 에러 내용: " + rsp.error_msg);
 				}
@@ -319,6 +356,7 @@
 						}
 					}).done(res=>{
 						// 가맹점 서버 결제 API 성공시 로직
+						location.reload();
 						console.log(res)
 					})
 				} else {
@@ -336,7 +374,7 @@
 							payment_method : rsp.pg_type
 						}
 					}).done(res=>{
-						// 가맹점 서버 결제 API 성공시 로직
+						// 가맹점 서버 결제 API 실패 시 로직
 						console.log(res)
 					})
 					alert("결제에 실패하였습니다. 에러 내용: " + rsp.error_msg);
@@ -346,77 +384,46 @@
 	};
 	
 	$('.flex-chargeTab').click(function(){
-		$('#UsageHistory').jqGrid({
+		$("#usageHistory").fadeIn();
+		$.ajax({
 			url : '/wallet/payment/getCharge',
 			method : 'post',
-			data : {email : '${buyer.holder_email}'},
-			loadtext : '로딩중..',
-			sortable : true,
-			loadonce : true,
-			multiselect : false,
-			pager : '#pager',
-			rowNum : 10,
-			sortname : 'date',
-			sortorder : 'desc',
-			width : 1000,
-			height : 500,
-			pgbuttons : true, // 이전/다음 버튼 표시 여부
-			pgtext : null, // 페이징 정보(1 - 10 / 100) 표시 여부
-			viewrecords : false, // 레코드 수 표시 여부
-			recordpos : 'left', // 레코드 수 위치
-			pagerpos : 'center', // 페이징 버튼 위치
-			pginput : false, // 페이지 번호 입력칸 표시 여부,
-			colNames : [ '거래 번호', '거래 날짜', '거래 금액', '받은 금액', '멘티 신청자', '멘토', '결제 방법', '가격', '주문번호' ],
-			colModel : [{
-							name : 'tx_id',
-							index : 'tx_id',
-							width : 30,
-							align : "center",
-							key : true,
-						}, {
-							name : 'tx_date',
-							index : 'tx_date',
-							width : 60,
-							align : "center"
-						}, {
-							name : 'points_sent',
-							index : 'points_sent',
-							width : 90,
-							align : "center"
-						}, {
-							name : 'points_received',
-							index : 'points_received',
-							width : 90,
-							align : "center"
-						}, {
-							name : 'sender_id',
-							index : 'sender_id',
-							width : 90,
-							align : "center"
-						}, {
-							name : 'receiver_id',
-							index : 'receiver_id',
-							width : 90,
-							align : "center"
-						}, {
-							name : "merchant_id",
-							index : "merchant_id",
-							width : 90,
-							align : "center"
-						}, {
-							name : 'payment_method',
-							index : 'payment_method',
-							width : 90,
-							align : "center"
-						}, {
-							name : 'price',
-							index : 'price',
-							width : 90,
-							align : "center"
-						}]
-					});
-				});
-	  
+			data : {email : holder_email}
+		}).done(res=>{
+			console.log(res);
+			let historyDiv = $('<div class = "historyDiv"></div>');
+			$.each(res, function(i, history){
+				let dateDiv = $('<div class = "dateDiv"></div>')
+				let dateText = $('<span class = "dateText">'+history.tx_date+'</span>');
+				dateDiv.append(dateText);
+				
+				let pointsDiv = $('<div class = "pointsDiv"></div>');
+				let pointsText = $('<span class = "pointsText">'+history.points_sent+'</span>');
+				pointsDiv.append(pointsText);
+				
+				let merchantIdDiv = $('<div class = "merchantIdDiv"></div>');
+				let merchantIdText = $('<span class = "merchantIdText">'+history.merchant_id+'</span>');
+				merchantIdDiv.append(merchantIdText);
+				
+				let priceDiv = $('<div class = "priceDiv"></div>');
+				let priceText = $('<span class = priceText>'+history.price+'</span>');
+				priceDiv.append(priceText);
+				
+				historyDiv.append(dateDiv, pointsDiv, merchantIdDiv, priceDiv);
+			})
+			$('.usageHistoryWindow').html(historyDiv);
+		}).fail(err=>{
+			console.log(err);
+		})
+	});
+	
+	window.addEventListener("click", function(event) {
+		  if (event.target == document.getElementById("usageHistory")) {
+		    document.getElementById("usageHistory").style.display = "none";
+		  }else if(event.target == document.getElementById("payment-modal")) {
+			  document.getElementById("payment-modal").style.display = "none";
+		  }
+		});
 	</script>
 
 </body>

@@ -14,7 +14,7 @@ import com.ld.gg.dto.payment.UsageHistoryDto;
 
 public interface PaymentDao {
 
-	List<MemberDto> getUserInfo(String email);
+	MemberDto getUserInfo(String email);
 
 	PaymentDto checkOrderId(String orderId);
 
