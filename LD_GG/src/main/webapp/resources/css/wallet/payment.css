@@ -1,0 +1,179 @@
+@charset "UTF-8";
+
+.store-container{
+	width : 1500px;
+	display : flex;
+	justify-content : center;
+	align-items : center;
+	flex-direction : column;
+}
+
+.flex-modal {
+	display: none;
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* 모달 창 내용 */
+.modal-content {
+	background-color: #fefefe;
+	margin: 15% auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 80%;
+	max-width: 600px;
+}
+
+/* 닫기 버튼 */
+.close {
+	color: #aaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+}
+
+.close:hover, .close:focus {
+	color: black;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.flex-store-div {
+	display: flex;
+	flex-flow: wrap;
+	flex-direction: column;
+	width : 100%;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+}
+
+.flex-store-title {
+	width: 90%;
+	text-align : center;
+}
+
+.flex-hold-cash {
+	display: flex;
+	height: 3%;
+	background-color: #000000;
+	border-radius: 5px;
+	width: 70%;
+	justify-content: center;
+	align-items: center;
+	margin : 1%;
+}
+
+.flex-strong-cash {
+	color: #ffffff;
+}
+
+.flex-store-notice {
+	display: flex;
+	width: 90%;
+	height: 3%;
+	border: 1px solid #EAEAEA;
+	background-color: #EAEAEA;
+	border-radius: 5px;
+	justify-content: center;
+	align-items: center;
+}
+
+.flex-payment-info {
+	width:80%;
+	display: flex;
+	flex-direction: column;
+	justify-content : center;
+	align-items: center;
+	margin : 1%;
+}
+
+.flex-payment-header {
+	align-self: flex-start;
+	margin-left: 0;
+}
+
+.flex-normal-charge {
+	margin-left: 0;
+}
+
+.flex-paymnent-cash {
+	display: flex;
+	align-items: center;
+	border: 1px solid #EAEAEA;
+	background-color : #fcfcfc;
+	margin : 1%;
+	width : 100%;
+}
+
+.flex-label {
+	display: flex;
+	align-items: center;
+}
+
+.flex-payment-button {
+	margin-left: 10px; /* 원하는 간격으로 조정 가능 */
+}
+
+.flex-store-div{
+	display : flex;
+	flex-direction : column;
+	justify-content : center;
+	align-items : center;
+}
+
+.flex-store-tab{
+	width : 70%;
+	display : flex;
+	flex-direction : row;
+	justify-content : center;
+	align-items : center;
+	margin : 1%;
+}
+
+.flex-purchaseTab, .flex-chargeTab{
+	cursor : pointer;
+	margin : 0 80px 0 80px;
+}
+
+.flex-strong-cash{
+	margin : 0 220px 0 220px;
+}
+
+.flex-payment-cash{
+	width : 80%;
+}
+
+#flex-hold-title{
+	width : 50%;
+	text-align : left;
+}
+
+#flex-hold-cash{
+	width : 50%;
+	text-align : right;
+}
+
+.flex-label, .flex-payment-button{
+	margin : 0 220px 0 220px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

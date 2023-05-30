@@ -9,6 +9,7 @@ import com.ld.gg.dto.MemberDto;
 import com.ld.gg.dto.payment.PaymentDto;
 import com.ld.gg.dto.payment.PointDto;
 import com.ld.gg.dto.payment.TransactionHistoryDTO;
+import com.ld.gg.dto.payment.UsageHistoryDto;
 
 public interface PaymentDao {
 
@@ -35,5 +36,9 @@ public interface PaymentDao {
 	void insert_point_0(String holder_email);
 	//멤버테이블에 있지만 포인트테이블에 없는 사람들 포인트 테이블에 저장
 	void renewal_point_0();
+
+	PointDto getBalance(@Param("email") String email);
+
+	List<UsageHistoryDto> getCharge(@Param("email") String email);
 
 }

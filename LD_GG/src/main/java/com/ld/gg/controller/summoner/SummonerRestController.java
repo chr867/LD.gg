@@ -195,5 +195,11 @@ public class SummonerRestController {
 		System.out.println(RBD);
 		return RBD;
 	}
+	
+	@GetMapping("/searchSummoner")
+	public SummonerDto searchSummoner(String summoner_name) {
+		SummonerDto sd = ss.searchSummoner(summoner_name);
+		return sd;
+	}
 
 }

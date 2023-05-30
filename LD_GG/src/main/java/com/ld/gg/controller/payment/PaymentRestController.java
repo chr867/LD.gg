@@ -1,5 +1,7 @@
 package com.ld.gg.controller.payment;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ld.gg.service.PaymentService;
 import com.ld.gg.dto.payment.PointDto;
+import com.ld.gg.dto.payment.UsageHistoryDto;
 
 
 @RestController
@@ -41,5 +44,10 @@ public class PaymentRestController {
 		return ppd;
 	}
 	
+	@PostMapping("/payment/getCharge")
+	public List<UsageHistoryDto> getCharge(@RequestParam String email){
+		List<UsageHistoryDto> uhd = ps.getCharge(email);
+		return uhd;
+	}
 	
 }

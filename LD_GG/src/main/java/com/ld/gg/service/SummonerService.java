@@ -156,4 +156,8 @@ public class SummonerService {
 		return SD.getSubMaking(sub);
 	}
 
+	public SummonerDto searchSummoner(String summoner_name) {
+		return SD.searchSummoner(summoner_name);
+	}
+
 }
