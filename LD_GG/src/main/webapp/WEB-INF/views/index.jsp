@@ -52,7 +52,7 @@
 .main-container {
 	display: flex;
 	text-align: center;
-	margin-top: 80px;
+	padding-top: 80px;
 }
 
 #left_container {
