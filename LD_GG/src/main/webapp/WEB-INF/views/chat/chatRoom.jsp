@@ -29,33 +29,10 @@
 </div>
 <div class="chatroom-header">
     <div class="profile-detail">
-        <img src="img/profileicon/0.png" alt="이미지" class="profile-image">
-        <div class="profile-name" id="mento_name">달래발바닥</div>
     </div>
 </div>
 <div class="chat-around">
     <div class="chat-content">
-        <div class="chat-content-send" id="chatting-content-send">
-            <div class="profile-detail">
-                <img src="/resources/img/profileicon/0.png" alt="이미지" class="profile-image">
-                <div class="profile-name" id="mento_name">달래발바닥</div>
-            </div>
-            <div>
-            <div class="chat-time-content">
-                <div class="speech-bubble-l">
-                    <p>말풍선 모양의 내용입니다.</p>
-                </div>
-                <div class="time">8월 29일 9:00</div>
-            </div>
-        </div>
-        <div class="chat-content-receive" id="chatting-content-receive">
-            <div class="chat-time-content">
-                <div class="time">8월 29일 9:00</div>
-                <div class="speech-bubble-r">
-                    <p>말풍선 모양의 내용입니다.</p>
-                </div>
-            </div>
-        </div>
     </div>
     </div>
     <div class="send-content">
