@@ -1044,10 +1044,11 @@ $(document).ready(function() {
 	});
 	  $("#estimateForm").submit(function(event) {
 	    event.preventDefault();
+	    console.log($("#estimateModalLabel").attr("data"));
 	    let form_data = {
 	    	estimate_info: $("#estimateContent").val(),
 	      	mentor_email: "${member.email}",
-	      	menti_email: $(".modal-title").attr("data")
+	      	menti_email: $("#estimateModalLabel").attr("data")
 	    };
 	    $.ajax({ //견적서 보내기 기능
 	      type: "POST",
@@ -1299,7 +1300,8 @@ $(document).ready(function() {
 	    		    );
 	    		 // <tr> 클릭 이벤트 핸들러 추가
 	  	            row.on('click', function() {
-	  	            $("#estMoLabel").text(est.mentor_lol_account);
+	  	            	$("#estMoLabel").text("");
+	  	            	$("#estMoLabel").append($('<a>').attr('href', '/mentor/profile/'+ est.mentor_lol_account).text(est.mentor_lol_account));
 	  	          $("#estContent").prev("label").text(" 멘토님께서 보내신 견적입니다.");
 	  	            $("#estContent").text(est.estimate_info);
 	  	            $("#estDate").text(est.estimate_date+" 작성됨");
