@@ -17,6 +17,7 @@ public class Champ_recomm_info {
 	private double win_rate;
 	private double pick_rate;
 	private String mythic_item;
+	private int ai_score;
 	
     private String MAIN_KEYSTONE_ID;
     private String MAIN_SUB1_ID;

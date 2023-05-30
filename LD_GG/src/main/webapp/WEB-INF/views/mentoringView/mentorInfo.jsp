@@ -296,7 +296,7 @@ margin:auto;
 			<hr>
 			<div class="d-flex justify-content-evenly">
 				<button class="col-5 btn btn-dark" id="apply-btn">수업신청</button>
-				<button class="col-5 btn btn-dark" id="chat-btn">1:1 상담</button>
+				<button class="col-5 btn btn-dark" id="chat-btn" data="${mentor_profile.mentor_email}">1:1 상담</button>
 			</div>
 		</div>
 	</article>

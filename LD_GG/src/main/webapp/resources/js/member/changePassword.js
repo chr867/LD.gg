@@ -8,7 +8,7 @@ document.getElementById("changePassword").addEventListener("click", function() {
  	      $.ajax({
 	        method: 'post',
 	        url: '/member/change_password',
-	        data: {email:'${sessionScope.email}', password:password, changePw:passwordTochange2},
+	        data: {password:password, changePw:passwordTochange2},
 	      }).done(res=>{
 	        console.log(res);
 	        if (res) {

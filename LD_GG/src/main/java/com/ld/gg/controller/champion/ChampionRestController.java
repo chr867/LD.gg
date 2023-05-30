@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ld.gg.dto.champ.Champ_analytics;
 import com.ld.gg.dto.champ.Champ_default;
+import com.ld.gg.dto.champ.Champ_info;
 import com.ld.gg.dto.champ.Champ_item_info;
 import com.ld.gg.dto.champ.Champ_match_up_default;
 import com.ld.gg.dto.champ.Champ_match_up_rune;
@@ -43,9 +44,9 @@ public class ChampionRestController {
 	}
 	
 	@PostMapping("/search.json")
-	public Champ_default champ_search(String champion_name) throws Exception{
+	public Champ_info champ_search(String champion_name) throws Exception{
 		log.info("champion_name = {}", champion_name);
-		Champ_default champion = cs.champ_search(champion_name);
+		Champ_info champion = cs.champ_search(champion_name);
 		return champion;
 	}
 

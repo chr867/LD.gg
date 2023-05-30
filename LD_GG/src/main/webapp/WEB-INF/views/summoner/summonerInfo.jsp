@@ -130,6 +130,7 @@
 	let recordOffset = 0;
 	let champBtnIndex = 0;
 	let recordBtnIndex = 0;
+	let champFilterIndex = 0;
 	
 	$('#renewal').click(function(){
 		location.reload();
@@ -266,10 +267,12 @@
 			$('.flex-champ-record').html(champRecordDiv);
 			if(res.length >= 20){
 				champOffset += 20;
-				let moreBtn = $('<button class = "moreBtn" onclick = "getMoreChampRecord(champOffset)">더 보기</button>');
+				let moreBtn = $('<button id = "champRecordBtn'+champBtnIndex+'" class = "moreBtn" onclick = "getMoreChampRecord(champOffset)">더 보기</button>');
 				$('.flex-champ-record').append(moreBtn);
+				champBtnIndex++;
 			}else{
 				champOffset = 0;
+				champBtnIndex = 0;
 			}
 		}).fail(err => {
 			console.log(err);
@@ -343,13 +346,16 @@
 			});
 			let champRecordDiv = $('<div class = "flex-champ-table"></div>');
 			champRecordDiv.append(champ_div, winrate_div, games_div, wins_div, losses_div, kda_div, kills_div, deaths_div, assists_div, cs_div, cs_pm_div);
-			$('.flex-champ-record').html(champRecordDiv);
+			$('.flex-champ-record').append(champRecordDiv);
+			$('#champRecordBtn' + (champRecordIndex - 1)).remove();
 			if(res.length >= 20){
 				champOffset += 20;
-				let moreBtn = $('<button class = "moreBtn" onclick = "getMoreChampRecord(champOffset)">더 보기</button>');
+				let moreBtn = $('<button id = "champRecordBtn'+champRecordIndex+'" class = "moreBtn" onclick = "getMoreChampRecord(champOffset)">더 보기</button>');
 				$('.flex-champ-record').append(moreBtn);
+				champRecordIndex++;
 			}else{
 				champOffset = 0;
+				champBtnIndex = 0;
 			}
 		}).fail(err => {
 			console.log(err);
@@ -425,10 +431,12 @@
 				$('.flex-champ-record').html(champRecordDiv);
 				if(res.length >= 20){
 					champOffset += 20;
-					let moreBtn = $('<button class = "moreBtn" onclick = "getMoreChampRecord(champOffset)">더 보기</button>');
+					let moreBtn = $('<button id = "champRecordFilterBtn'+champRecordFilterIndex+'" class = "moreBtn" onclick = "getMoreFilterRecord(champOffset)">더 보기</button>');
 					$('.flex-champ-record').append(moreBtn);
+					champRecordFilterIndex++;
 				}else{
 					champOffset = 0;
+					champRecordFilterIndex = 0;
 				}
 			}).fail(err => {
 				console.log(err);
@@ -503,16 +511,184 @@
 				$('.flex-champ-record').html(champRecordDiv);
 				if(res.length >= 20){
 					champOffset += 20;
-					let moreBtn = $('<button class = "moreBtn" onclick = "getMoreChampRecord(champOffset)">더 보기</button>');
-					$('.flex-champ-record').append(moreBtn);
+					let moreBtn = $('<button id = "champRecordFilterBtn'+champRecordFilterIndex+'" class = "moreBtn" onclick = "getMoreFilterRecord(champOffset)">더 보기</button>');
+					$('.flex-champ-record').html(moreBtn);
+					champRecordFilterIndex++;
 				}else{
 					champOffset = 0;
+					champRecordFilterIndex = 0;
 				}
 			}).fail(err => {
 				console.log(err);
 			});
 		}
 	});
+	
+	function getMoreFilterRecord(champOffset){
+		$('.champRecordFilterBtn').click(function(){
+			if($(this).val() === 'all-btn'){
+				$.ajax({//소환사의 챔피언 통계
+					method: 'get',
+					url: '/summoner/get_champ_record',
+					data: { summoner_name: '${summoner.summoner_name}', offset : champOffst }
+				}).done(res => {
+					let champ_div = $('<div class = "flex-champ"></div>');
+					let winrate_div = $('<div class = "flex-champ-winrate"></div>');
+					let games_div = $('<div class = "flex-champ-games"></div>');
+					let wins_div = $('<div class = "flex-champ-wins"></div>');
+					let losses_div = $('<div class = "flex-champ-losses"></div>');
+					let kda_div = $('<div class = "flex-champ-kda"></div>');
+					let kills_div = $('<div class = "flex-champ-kills"></div>');
+					let deaths_div = $('<div class = "flex-champ-deaths"></div>');
+					let assists_div = $('<div class = "flex-champ-assists"></div>');
+					let cs_div = $('<div class = "flex-champ-cs"></div>');
+					let cs_pm_div = $('<div class = "flex-champ-cs-pm"></div>');
+					$.each(res, function (i, champ) {
+						let champ_box = $('<div class = "champ-div"></div>')
+						let champ_img = $('<img class = "champ-img" alt="#" src="/resources/img/champion_img/square/'+champ.champ_name+'.png"><span class = "champ-name">' + champ.champ_name + '</span>');
+						champ_box.append(champ_img);
+						champ_div.append(champ_box);
+					});
+					$.each(res, function (i, winrate) {
+						let winrate_text = $('<strong class = "champ-winrate">' + winrate.winrate + '%</strong>');
+						winrate_div.append(winrate_text);
+					});
+					$.each(res, function (i, games) {
+						let games_text = $('<span class = "champ-games">' + games.games + '</span>');
+						games_div.append(games_text);
+					});
+					$.each(res, function (i, wins) {
+						let win_text = $('<span class = "champ-wins">' + wins.wins + '</span>');
+						wins_div.append(win_text);
+					});
+					$.each(res, function (i, losses) {
+						let losses_text = $('<span class = "champ-losses">' + losses.losses + '</span>');
+						losses_div.append(losses_text);
+					});
+					$.each(res, function (i, kda) {
+						let kda_text = $('<strong class = "champ-kda">' + kda.kda + '</strong>');
+						kda_div.append(kda_text);
+					});
+					$.each(res, function (i, kills) {
+						let kills_text = $('<span class = "champ-kills">' + kills.kills + '</span>');
+						kills_div.append(kills_text);
+					});
+					$.each(res, function (i, deaths) {
+						let deaths_text = $('<span class = "champ-deaths">' + deaths.deaths + '</span>');
+						deaths_div.append(deaths_text);
+					});
+					$.each(res, function (i, assists) {
+						let assists_text = $('<span class = "champ-assists">' + assists.assists + '</span>');
+						assists_div.append(assists_text);
+					});
+					$.each(res, function (i, cs) {
+						let cs_text = $('<strong class = "champ-cs">' + cs.cs + '</strong>');
+						cs_div.append(cs_text);
+					});
+					$.each(res, function (i, cs_pm) {
+						let cs_pm_text = $('<span class = "champ-cs-pm">' + cs_pm.cs_per_minute + '<span>');
+						cs_pm_div.append(cs_pm_text);
+					});
+					let champRecordDiv = $('<div class = "flex-champ-table"></div>');
+					champRecordDiv.append(champ_div, winrate_div, games_div, wins_div, losses_div, kda_div, kills_div, deaths_div, assists_div, cs_div, cs_pm_div);
+					$('.flex-champ-record').append(champRecordDiv);
+					$('#champRecordFilterBtn' + (champRecordFilterIdex -1)).remove();
+					if(res.length >= 20){
+						champOffset += 20;
+						let moreBtn = $('<button id = "champRecordFilterBtn'+champRecordFilterIndex+'" class = "moreBtn" onclick = "getMoreFilterRecord(champOffset)">더 보기</button>');
+						$('.flex-champ-record').append(moreBtn);
+						champRecordFilterIndex++;
+					}else{
+						champOffset = 0;
+						champRecordFilterIndex = 0;
+					}
+				}).fail(err => {
+					console.log(err);
+				});
+			}else{
+				let paramLane = $(this).val();
+				paramLane = paramLane.toUpperCase();
+				$.ajax({//소환사의 챔피언 통계
+					method: 'get',
+					url: '/summoner/getChampRecordLane',
+					data: { summoner_name: '${summoner.summoner_name}', lane : paramLane }
+				}).done(res => {
+					let champ_div = $('<div class = "flex-champ"></div>');
+					let winrate_div = $('<div class = "flex-champ-winrate"></div>');
+					let games_div = $('<div class = "flex-champ-games"></div>');
+					let wins_div = $('<div class = "flex-champ-wins"></div>');
+					let losses_div = $('<div class = "flex-champ-losses"></div>');
+					let kda_div = $('<div class = "flex-champ-kda"></div>');
+					let kills_div = $('<div class = "flex-champ-kills"></div>');
+					let deaths_div = $('<div class = "flex-champ-deaths"></div>');
+					let assists_div = $('<div class = "flex-champ-assists"></div>');
+					let cs_div = $('<div class = "flex-champ-cs"></div>');
+					let cs_pm_div = $('<div class = "flex-champ-cs-pm"></div>');
+					$.each(res, function (i, champ) {
+						let champ_box = $('<div class = "champ-div"></div>')
+						let champ_img = $('<img class = "champ-img" alt="#" src="/resources/img/champion_img/square/'+champ.champ_name+'.png"><span class = "champ-name">' + champ.champ_name + '</span>');
+						champ_box.append(champ_img);
+						champ_div.append(champ_box);
+					});
+					$.each(res, function (i, winrate) {
+						let winrate_text = $('<strong class = "champ-winrate">' + winrate.winrate + '%</strong>');
+						winrate_div.append(winrate_text);
+					});
+					$.each(res, function (i, games) {
+						let games_text = $('<span class = "champ-games">' + games.games + '</span>');
+						games_div.append(games_text);
+					});
+					$.each(res, function (i, wins) {
+						let win_text = $('<span class = "champ-wins">' + wins.wins + '</span>');
+						wins_div.append(win_text);
+					});
+					$.each(res, function (i, losses) {
+						let losses_text = $('<span class = "champ-losses">' + losses.losses + '</span>');
+						losses_div.append(losses_text);
+					});
+					$.each(res, function (i, kda) {
+						let kda_text = $('<strong class = "champ-kda">' + kda.kda + '</strong>');
+						kda_div.append(kda_text);
+					});
+					$.each(res, function (i, kills) {
+						let kills_text = $('<span class = "champ-kills">' + kills.kills + '</span>');
+						kills_div.append(kills_text);
+					});
+					$.each(res, function (i, deaths) {
+						let deaths_text = $('<span class = "champ-deaths">' + deaths.deaths + '</span>');
+						deaths_div.append(deaths_text);
+					});
+					$.each(res, function (i, assists) {
+						let assists_text = $('<span class = "champ-assists">' + assists.assists + '</span>');
+						assists_div.append(assists_text);
+					});
+					$.each(res, function (i, cs) {
+						let cs_text = $('<strong class = "champ-cs">' + cs.cs + '</strong>');
+						cs_div.append(cs_text);
+					});
+					$.each(res, function (i, cs_pm) {
+						let cs_pm_text = $('<span class = "champ-cs-pm">' + cs_pm.cs_per_minute + '<span>');
+						cs_pm_div.append(cs_pm_text);
+					});
+					let champRecordDiv = $('<div class = "flex-champ-table"></div>');
+					champRecordDiv.append(champ_div, winrate_div, games_div, wins_div, losses_div, kda_div, kills_div, deaths_div, assists_div, cs_div, cs_pm_div);
+					$('.flex-champ-record').append(champRecordDiv);
+					$('#champRecordFilterBtn' + (champRecordFilterIdex -1)).remove();
+					if(res.length >= 20){
+						champOffset += 20;
+						let moreBtn = $('<button id = "champRecordFilterBtn'+champRecordFilterIndex+'" class = "moreBtn" onclick = "getMoreFilterRecord(champOffset)">더 보기</button>');
+						$('.flex-champ-record').append(moreBtn);
+						champRecordFilterIndex++;
+					}else{
+						champOffset = 0;
+						champRecordFilterIndex = 0;
+					}
+				}).fail(err => {
+					console.log(err);
+				});
+			}
+		});
+	}
 	
  	 $.ajax({//최근 20전적 요약본
 		method : 'get',
@@ -1426,7 +1602,6 @@
 			    });
 				
 			})
-			console.log(recordBtnIndex);
 			console.log(recordBtnIndex -1);
 			$('#recordBtn' + (recordBtnIndex - 1)).remove();
 			$('#record').append(div);

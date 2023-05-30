@@ -22,7 +22,6 @@
 <script
 	src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/lang/summernote-ko-KR.js"></script>
 <body>
-	<h1>공지 작성 페이지</h1>
 	<h2 style="text-align: center;">공지 작성</h2>
 
 	<div style="width: 60%; margin: auto;">

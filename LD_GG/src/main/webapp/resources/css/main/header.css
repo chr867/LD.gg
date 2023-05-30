@@ -255,6 +255,7 @@ header {
 .logout-button:hover {
   background-color: #2f3f68;
 }
+
 .chat-noti {
   position: absolute;
   left: 900px;
@@ -267,9 +268,11 @@ header {
   height: auto;
   background-color: white;
 }
+
 .noti-box {
   border-bottom: 1px solid rgb(160, 160, 160);
 }
+
 .toast-container{
   position: absolute;
   left: 50%;
