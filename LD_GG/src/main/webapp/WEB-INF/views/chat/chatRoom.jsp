@@ -29,7 +29,7 @@
 </div>
 <div class="chatroom-header">
     <div class="profile-detail">
-        <img src="img/profileicon/0.png" alt="이미지" class="profile-image">
+        <img src="/resources/img/profileicon/0.png" alt="이미지" class="profile-image">
         <div class="profile-name" id="mento_name">달래발바닥</div>
     </div>
 </div>
