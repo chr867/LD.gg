@@ -317,7 +317,7 @@
 
 <style>
 /* 모달 스타일 */
-.modal {
+#build_modal {
   display: none; /* 초기에 모달을 숨김 */
   position: fixed;
   z-index: 1;
@@ -329,7 +329,7 @@
   background-color: rgba(0, 0, 0, 0.5); /* 배경을 어둡게 처리 */
 }
 
-.modal-content {
+#build_modal_content {
 	flex-direction: columns;
 	top: -22%;
   background-color: #fefefe;
@@ -444,6 +444,7 @@
 	
 .rune-container {
 	display: flex;
+	width: 500px;
 	box-sizing: border-box;
 	background-color: #fff;
 	border-radius: 0 0 0.5rem 0.5rem;
@@ -529,8 +530,6 @@
 	font-size: 14px;
 }
 
-
-
 .rune:hover .rune-desc {
 	visibility: visible;
 	opacity: 1;
@@ -551,6 +550,7 @@
 	width: 100%;
 	height: 50px;
 	background-color: #fff;
+	margin-left: 200px;
 	box-sizing: border-box;
 	padding: 5px;
 	display: flex;
@@ -709,10 +709,11 @@ text-align: center;
 }
 
 .skill-build-container {
-	width: 100%;
+	width: auto;
 	height: 278px;
 	background-color: #fff;
-	margin-top: 20px;
+	margin-top: 79px;
+	margin-left: 100px;
 	border-radius: 0.5rem;
 }
 .skill-build-title{
@@ -1050,8 +1051,8 @@ box-sizing: border-box;
 	<!-- 추천 빌드 모달 -->
 	<div id="modalContainer">
 		<!-- 모달 창 -->
-		<div id="modal" class="modal">
-			<div class="modal-content">
+		<div id="build_modal" class="modal">
+			<div id="build_modal_content" class="modal-content">
 				<span id="closeModalBtn" class="close">&times;</span>
 
 				<div class="champion-info-box">
@@ -1152,125 +1153,127 @@ box-sizing: border-box;
 					</div>
 				</div>
 
-				<div class="middle-container">
-					<div class="rune-select-box"></div>
-					<div class="rune-title">
-						<h4>추천 룬</h4>
+				<div class="middle-container" style="display: flex;">
+					<div style="width: 610px;">
+						<div class="rune-select-box"></div>
+						<div class="rune-title">
+							<h4>추천 룬</h4>
+						</div>
+						<div class="rune-container">
+							<div class="rune-box main-runes">
+								<div class="first-rune main-rune-top" style="margin: 0 auto"></div>
+								<div class="runes main-rune-first"></div>
+								<div class="runes main-rune-second"></div>
+								<div class="runes main-rune-third"></div>
+								<div class="runes main-rune-fourth"></div>
+							</div>
+							<div class="rune-box sub-runes">
+								<div class="first-rune sub-rune-top" style="margin: 10px auto"></div>
+								<div class="runes sub-rune-first"></div>
+								<div class="runes sub-rune-second"></div>
+								<div class="runes sub-rune-third"></div>
+							</div>
+							<div class="rune-box sub-ability">
+								<div class="runes sub-ability-first">
+									<div class="rune fragment">
+										<img
+											src="/resources/img/perk-images/StatMods/StatModsAdaptiveForceIcon.png"
+											alt="" id="first-fragment-5008" class="fragment-img">
+										<div class="rune-desc">
+											<div>OFFENSE</div>
+											<br>
+											<div>적응형 능력치 +9</div>
+										</div>
+									</div>
+									<div class="rune fragment">
+										<img
+											src="/resources/img/perk-images/StatMods/StatModsAttackSpeedIcon.png"
+											alt="" id="first-fragment-5005" class="fragment-img">
+										<div class="rune-desc">
+											<div>OFFENSE</div>
+											<br>
+											<div>공격속도 10%</div>
+										</div>
+									</div>
+									<div class="rune fragment">
+										<img
+											src="/resources/img/perk-images/StatMods/StatModsCDRScalingIcon.png"
+											alt="" id="first-fragment-5007" class="fragment-img">
+										<div class="rune-desc">
+											<div>OFFENSE</div>
+											<br>
+											<div>스킬 가속 +8</div>
+										</div>
+									</div>
+								</div>
+								<div class="runes sub-ability-second">
+									<div class="rune fragment">
+										<img
+											src="/resources/img/perk-images/StatMods/StatModsAdaptiveForceIcon.png"
+											alt="" id="second-fragment-5008" class="fragment-img">
+										<div class="rune-desc">
+											<div>OFFENSE</div>
+											<br>
+											<div>적응형 능력치 +9</div>
+										</div>
+									</div>
+									<div class="rune  fragment">
+										<img
+											src="/resources/img/perk-images/StatMods/StatModsArmorIcon.png"
+											alt="" id="second-fragment-5002" class="fragment-img">
+										<div class="rune-desc">
+											<div>FLEX</div>
+											<br>
+											<div>방어력 +6</div>
+										</div>
+									</div>
+									<div class="rune fragment">
+										<img
+											src="/resources/img/perk-images/StatMods/StatModsMagicResIcon.png"
+											alt="" id="second-fragment-5003" class="fragment-img">
+										<div class="rune-desc">
+											<div>FLEX</div>
+											<br>
+											<div>마법저항력 +8</div>
+										</div>
+									</div>
+								</div>
+								<div class="runes sub-ability-third">
+									<div class="rune fragment">
+										<img
+											src="/resources/img/perk-images/StatMods/StatModsHealthScalingIcon.png"
+											alt="" id="third-fragment-5001" class="fragment-img">
+										<div class="rune-desc">
+											<div>DEFFENSE</div>
+											<br>
+											<div>체력 +15 ~ 140</div>
+										</div>
+									</div>
+									<div class="rune fragment">
+										<img
+											src="/resources/img/perk-images/StatMods/StatModsArmorIcon.png"
+											alt="" id="third-fragment-5002" class="fragment-img">
+										<div class="rune-desc">
+											<div>FLEX</div>
+											<br>
+											<div>방어력 +6</div>
+										</div>
+									</div>
+									<div class="rune fragment">
+										<img
+											src="/resources/img/perk-images/StatMods/StatModsMagicResIcon.png"
+											alt="" id="third-fragment-5003" class="fragment-img">
+										<div class="rune-desc">
+											<div>FLEX</div>
+											<br>
+											<div>마법저항력 +8</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
-					<div class="rune-container">
-						<div class="rune-box main-runes">
-							<div class="first-rune main-rune-top" style="margin: 0 auto"></div>
-							<div class="runes main-rune-first"></div>
-							<div class="runes main-rune-second"></div>
-							<div class="runes main-rune-third"></div>
-							<div class="runes main-rune-fourth"></div>
-						</div>
-						<div class="rune-box sub-runes">
-							<div class="first-rune sub-rune-top" style="margin: 10px auto"></div>
-							<div class="runes sub-rune-first"></div>
-							<div class="runes sub-rune-second"></div>
-							<div class="runes sub-rune-third"></div>
-						</div>
-						<div class="rune-box sub-ability">
-							<div class="runes sub-ability-first">
-								<div class="rune fragment">
-									<img
-										src="/resources/img/perk-images/StatMods/StatModsAdaptiveForceIcon.png"
-										alt="" id="first-fragment-5008" class="fragment-img">
-									<div class="rune-desc">
-										<div>OFFENSE</div>
-										<br>
-										<div>적응형 능력치 +9</div>
-									</div>
-								</div>
-								<div class="rune fragment">
-									<img
-										src="/resources/img/perk-images/StatMods/StatModsAttackSpeedIcon.png"
-										alt="" id="first-fragment-5005" class="fragment-img">
-									<div class="rune-desc">
-										<div>OFFENSE</div>
-										<br>
-										<div>공격속도 10%</div>
-									</div>
-								</div>
-								<div class="rune fragment">
-									<img
-										src="/resources/img/perk-images/StatMods/StatModsCDRScalingIcon.png"
-										alt="" id="first-fragment-5007" class="fragment-img">
-									<div class="rune-desc">
-										<div>OFFENSE</div>
-										<br>
-										<div>스킬 가속 +8</div>
-									</div>
-								</div>
-							</div>
-							<div class="runes sub-ability-second">
-								<div class="rune fragment">
-									<img
-										src="/resources/img/perk-images/StatMods/StatModsAdaptiveForceIcon.png"
-										alt="" id="second-fragment-5008" class="fragment-img">
-									<div class="rune-desc">
-										<div>OFFENSE</div>
-										<br>
-										<div>적응형 능력치 +9</div>
-									</div>
-								</div>
-								<div class="rune  fragment">
-									<img
-										src="/resources/img/perk-images/StatMods/StatModsArmorIcon.png"
-										alt="" id="second-fragment-5002" class="fragment-img">
-									<div class="rune-desc">
-										<div>FLEX</div>
-										<br>
-										<div>방어력 +6</div>
-									</div>
-								</div>
-								<div class="rune fragment">
-									<img
-										src="/resources/img/perk-images/StatMods/StatModsMagicResIcon.png"
-										alt="" id="second-fragment-5003" class="fragment-img">
-									<div class="rune-desc">
-										<div>FLEX</div>
-										<br>
-										<div>마법저항력 +8</div>
-									</div>
-								</div>
-							</div>
-							<div class="runes sub-ability-third">
-								<div class="rune fragment">
-									<img
-										src="/resources/img/perk-images/StatMods/StatModsHealthScalingIcon.png"
-										alt="" id="third-fragment-5001" class="fragment-img">
-									<div class="rune-desc">
-										<div>DEFFENSE</div>
-										<br>
-										<div>체력 +15 ~ 140</div>
-									</div>
-								</div>
-								<div class="rune fragment">
-									<img
-										src="/resources/img/perk-images/StatMods/StatModsArmorIcon.png"
-										alt="" id="third-fragment-5002" class="fragment-img">
-									<div class="rune-desc">
-										<div>FLEX</div>
-										<br>
-										<div>방어력 +6</div>
-									</div>
-								</div>
-								<div class="rune fragment">
-									<img
-										src="/resources/img/perk-images/StatMods/StatModsMagicResIcon.png"
-										alt="" id="third-fragment-5003" class="fragment-img">
-									<div class="rune-desc">
-										<div>FLEX</div>
-										<br>
-										<div>마법저항력 +8</div>
-									</div>
-								</div>
-							</div>
-		
-						</div>
-					</div>
+
 					<div class="skill-build-container">
 						<div class="skill-build-title">
 							<h4>추천 스킬 빌드</h4>
@@ -1525,14 +1528,14 @@ function selectChampion(champion_en_name, champion_img, champion_kr_name, champi
 
   // 모달 열기 함수
   function openModal(build) {
-    let modal = document.getElementById('modal');
+    let modal = document.getElementById('build_modal');
     modal.style.display = 'block';
 		console.log(build)
   }
 
   // 모달 닫기 함수
   function closeModal() {
-    let modal = document.getElementById('modal');
+    let modal = document.getElementById('build_modal');
     modal.style.display = 'none';
   }
 
