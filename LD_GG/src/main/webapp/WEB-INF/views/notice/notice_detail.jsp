@@ -123,7 +123,7 @@
 	<div>
 			<table id="info">
 			<tr>
-				<td class="value">글 번호</td>
+				<td class="value" width="100">글 번호</td>
 				<td class="value">제목</td>
 				<td class="value">좋아요 수</td>
 				<td class="value">작성일</td>

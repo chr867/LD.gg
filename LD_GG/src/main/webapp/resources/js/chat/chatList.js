@@ -108,7 +108,7 @@ function makeLi(arr){
     var liHtml = '';
 
     arr.forEach((key, index) => {
-        liHtml += '<li><div class="profile-detail"><img src="img/profileicon/'+ index + '.png" alt="이미지" class="profile-image">';
+        liHtml += '<li><div class="profile-detail"><img src="/resources/img/profileicon/'+ index + '.png" alt="이미지" class="profile-image">';
         liHtml += '<div class="profile-name" value="'+ key.email +'" onclick="go_chat__(' + "'" + key.email + "'" + ', 1, ' + "'" + key.lol_account + "'"  +')">' +  key.lol_account +'</div>';
         if(index == 1){
             liHtml += '<div class="profile-msg">좋은 하루!</div>';
