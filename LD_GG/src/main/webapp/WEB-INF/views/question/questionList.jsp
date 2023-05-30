@@ -27,9 +27,9 @@
     <!--SWEET-ALERT2 JS-->
     <script
             src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
-    <!--JQUERY-->
-    <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
-            crossorigin="anonymous"></script>
+<%--    <!--JQUERY-->--%>
+<%--    <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="--%>
+<%--            crossorigin="anonymous"></script>--%>
     <!--AJAX-->
     <script
             src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -52,6 +52,9 @@
     <script src="/resources/js/main/loginSession.js" defer></script>
     <!-- 채팅 관련 JS-->
     <script src="/resources/js/main/chat.js" defer></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </head>
 <style>
 
