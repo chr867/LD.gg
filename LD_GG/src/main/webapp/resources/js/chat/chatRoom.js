@@ -101,7 +101,7 @@ function showMessage(message){
 
 /* css control */
 function makeHeader(receive_user){
-    var hl = '<div class="profile-detail"><img src="img/profileicon/0.png" alt="이미지" class="profile-image"><div class="profile-name" id="mento_name">' + receive_user + '</div></div></div>';
+    var hl = '<div class="profile-detail"><img src="/resources/img/profileicon/0.png" alt="이미지" class="profile-image"><div class="profile-name" id="mento_name">' + receive_user + '</div></div></div>';
     $(".chatroom-header").html(hl);
 }
 function formattedDate(dateString){
