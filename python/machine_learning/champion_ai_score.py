@@ -1,7 +1,7 @@
 # --------------------------------------------------------
-# Package
+# Module
 import pandas as pd
-import sns as sns
+import seaborn as sns
 from matplotlib import pyplot as plt
 from sklearn.compose import ColumnTransformer
 from sklearn.feature_selection import SelectKBest, f_regression
@@ -9,38 +9,23 @@ from sklearn.neighbors import KNeighborsRegressor
 from sklearn.pipeline import Pipeline
 from tqdm import tqdm
 from xgboost import XGBRegressor
-
 import my_utils as mu
 import json
 import time
 import numpy as np
 import plotly.offline as pyo
 import plotly.graph_objs as go
-
-tqdm.pandas()
 import data_load as dl
 from scipy.stats import zscore
-from sklearn.preprocessing import StandardScaler, LabelEncoder, PolynomialFeatures
+from sklearn.preprocessing import StandardScaler, LabelEncoder, PolynomialFeatures, MinMaxScaler
 from sklearn.cluster import KMeans
-from sklearn.model_selection import RandomizedSearchCV, KFold
-from xgboost import XGBRegressor
-from sklearn.metrics import make_scorer, mean_squared_error
-from sklearn.model_selection import train_test_split, cross_val_score, GridSearchCV, RandomizedSearchCV
-from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor, AdaBoostRegressor, StackingRegressor
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, mean_absolute_error
-from sklearn.linear_model import LogisticRegression, LinearRegression
-from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.model_selection import RandomizedSearchCV, KFold, train_test_split, cross_val_score, GridSearchCV
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor, AdaBoostRegressor, StackingRegressor, GradientBoostingRegressor
+from sklearn.metrics import make_scorer, mean_squared_error, accuracy_score, precision_score, recall_score, f1_score, mean_absolute_error, classification_report, confusion_matrix
 from imblearn.under_sampling import RandomUnderSampler
 from imblearn.over_sampling import SMOTE
 import joblib
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.preprocessing import StandardScaler
-from sklearn.ensemble import GradientBoostingRegressor
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error
 import xgboost as xgb
-from sklearn.model_selection import GridSearchCV
-from scipy import stats
 # --------------------------------------------------------
 print("시작!")
 conn = mu.connect_mysql()
@@ -193,7 +178,7 @@ print("RMSE:", rmse)
 print("MAE:", mae)
 
 # KFold 정의
-#  데이터를 K개의 폴드로 나누고, 각 폴드를 한 번씩 검증 데이터로 사용하여 모델을 평가 교차검증
+#  데이터를 K개의 폴드로 나누고, 각 폴드를 한 번씩 검증 데이터로 사용하여 모델을 교차검증 평가
 kfold = KFold(n_splits=10, shuffle=True, random_state=42)
 
 # 교차 검증
