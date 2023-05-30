@@ -141,7 +141,7 @@
 <!----------------------------------------------------------------------------------------------------------------->
   <script type="text/javascript">
     function go_mypage(){
-      location.href="/member/mypage"
+      location.href="/summoner/testDashBoard"
     }
   </script>
 </body>
