@@ -36,4 +36,6 @@ public class RecordDto {
 	private String spell2;
 	private int sight_point;
 	private double kill_involve;
+	private String chmapion_kr_name;
+	private String champion_img;
 }
