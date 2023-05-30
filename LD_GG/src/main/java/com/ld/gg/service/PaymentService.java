@@ -34,8 +34,8 @@ public class PaymentService {
 	@Autowired
 	private MemberDao mbdao;
 
-	public List<MemberDto> getUserInfo(String email) {
-		List<MemberDto> md = PD.getUserInfo(email);
+	public MemberDto getUserInfo(String email) {
+		MemberDto md = PD.getUserInfo(email);
 		return md;
 	}
 
@@ -126,6 +126,7 @@ public class PaymentService {
 	}
 
 	public List<UsageHistoryDto> getCharge(String email) {
-		return PD.getCharge(email);
+		List<UsageHistoryDto> uhd = PD.getCharge(email);
+		return uhd;
 	}
 }

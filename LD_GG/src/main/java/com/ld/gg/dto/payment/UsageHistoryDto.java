@@ -8,12 +8,7 @@ import lombok.Data;
 @Alias("usage")
 public class UsageHistoryDto {
 	private String tx_date;
-	private int tx_id;
-	private int points_sents;
-	private int points_received;
-	private String sender_id;
-	private String receiver_id;
+	private int points_sent;
 	private String merchant_id;
 	private int price;
-	private String payment_method;
 }

@@ -47,6 +47,7 @@ public class PaymentRestController {
 	@PostMapping("/payment/getCharge")
 	public List<UsageHistoryDto> getCharge(@RequestParam String email){
 		List<UsageHistoryDto> uhd = ps.getCharge(email);
+		System.out.println("uhd : " + uhd);
 		return uhd;
 	}
 	
