@@ -3,35 +3,78 @@
 
 <mapper namespace="com.ld.gg.dao.QuestionDao">
     <select id="select_list_all" resultType="question_post">
-        select qp.question_id, qp.question_content, qp.question_title, qp.question_date, qp.status, qp.tag1, qp.tag2, mem.lol_account
-        from question_post qp
-            join member mem
-                on mem.email = qp.email
-        order by question_id desc
+        SELECT DISTINCT qp.*, mem.lol_account, si.profile_icon_id
+        FROM question_post qp
+                 JOIN member mem ON mem.email = qp.email
+                 JOIN (
+            SELECT mem.lol_account, si.summoner_name, si.profile_icon_id
+            FROM summoner_info si
+                     JOIN member mem ON mem.lol_account = si.summoner_name
+                     JOIN (
+                SELECT summoner_name, MAX(revision_date) AS max_revision_date
+                FROM summoner_info
+                GROUP BY summoner_name
+            ) latest_si ON si.summoner_name = latest_si.summoner_name AND si.revision_date = latest_si.max_revision_date
+            ORDER BY si.revision_date
+        ) si ON mem.lol_account = si.summoner_name
+        ORDER BY qp.question_id DESC
     </select>
     <select id="select_list_by_status" parameterType="int" resultType="question_post">
-        select qp.*, m.lol_account
+        select qp.*, m.lol_account, si.profile_icon_id
         from question_post qp
                  join member m on qp.email = m.email
+                 JOIN (
+            SELECT mem.lol_account, si.summoner_name, si.profile_icon_id
+            FROM summoner_info si
+                     JOIN member mem ON mem.lol_account = si.summoner_name
+                     JOIN (
+                SELECT summoner_name, MAX(revision_date) AS max_revision_date
+                FROM summoner_info
+                GROUP BY summoner_name
+            ) latest_si ON si.summoner_name = latest_si.summoner_name AND si.revision_date = latest_si.max_revision_date
+            ORDER BY si.revision_date
+        ) si ON m.lol_account = si.summoner_name
         where status = #{status}
+        order by qp.question_id desc
     </select>
     <select id="select_list_by_scrape" parameterType="String" resultType="question_post">
-        select qp.*, m.lol_account
+        select qp.*, m.lol_account, si.profile_icon_id
         from question_post qp
                  join question_scrape qs
                       on qp.question_id = qs.question_id
                  join member m on qp.email = m.email
+                 JOIN (
+            SELECT mem.lol_account, si.summoner_name, si.profile_icon_id
+            FROM summoner_info si
+                     JOIN member mem ON mem.lol_account = si.summoner_name
+                     JOIN (
+                SELECT summoner_name, MAX(revision_date) AS max_revision_date
+                FROM summoner_info
+                GROUP BY summoner_name
+            ) latest_si ON si.summoner_name = latest_si.summoner_name AND si.revision_date = latest_si.max_revision_date
+            ORDER BY si.revision_date
+        ) si ON m.lol_account = si.summoner_name
         where qs.email = #{email}
-        order by question_id desc
+        order by qp.question_id desc
     </select>
     <select id="select_list_by_email" parameterType="String" resultType="question_post">
-        select qp.*, mem.lol_account
+        select qp.*, mem.lol_account, si.profile_icon_id
         from question_post qp
                  join member mem
                       on mem.email = qp.email
-                 join question_scrape qs on qp.question_id = qs.question_id
+                 JOIN (
+            SELECT mem.lol_account, si.summoner_name, si.profile_icon_id
+            FROM summoner_info si
+                     JOIN member mem ON mem.lol_account = si.summoner_name
+                     JOIN (
+                SELECT summoner_name, MAX(revision_date) AS max_revision_date
+                FROM summoner_info
+                GROUP BY summoner_name
+            ) latest_si ON si.summoner_name = latest_si.summoner_name AND si.revision_date = latest_si.max_revision_date
+            ORDER BY si.revision_date
+        ) si ON mem.lol_account = si.summoner_name
         where qp.email = #{email}
-        order by question_id desc
+        order by qp.question_id desc
     </select>
     <insert id="write_question" parameterType="question_post">
         insert into question_post(question_id, question_content, question_title, question_date, email, status, tag1, tag2)
@@ -42,10 +85,12 @@
         values (null, #{answer_content}, CURRENT_TIMESTAMP(), #{question_id}, #{answerer_id}, 0)
     </insert>
     <select id="select_answer" parameterType="int" resultType="answer">
-        select qa.answer_content, qa.answer_date, qa.answerer_id, qa.answer_status, mem.lol_account
+        select distinct qa.answer_content, qa.answer_date, qa.answerer_id, qa.answer_status, mem.lol_account, si.profile_icon_id
         from question_answer qa
                  join member mem
                       on mem.email = qa.answerer_id
+                 join summoner_info si
+                      on mem.lol_account = si.summoner_name
         where question_id = #{question_id}
     </select>
     <update id="update_question_status" parameterType="int">
@@ -62,6 +107,17 @@
         from question_post qp
                  join member mem
                       on mem.email = qp.email
+        JOIN (
+        SELECT mem.lol_account, si.summoner_name, si.profile_icon_id
+        FROM summoner_info si
+        JOIN member mem ON mem.lol_account = si.summoner_name
+        JOIN (
+        SELECT summoner_name, MAX(revision_date) AS max_revision_date
+        FROM summoner_info
+        GROUP BY summoner_name
+        ) latest_si ON si.summoner_name = latest_si.summoner_name AND si.revision_date = latest_si.max_revision_date
+        ORDER BY si.revision_date
+        ) si ON mem.lol_account = si.summoner_name
         <where>
             <if test="tag1 == 'all'">
                 trim(tag1) != '' and tag1 is not null
@@ -77,6 +133,17 @@
         from question_post qp
         join member mem
         on mem.email = qp.email
+        JOIN (
+        SELECT mem.lol_account, si.summoner_name, si.profile_icon_id
+        FROM summoner_info si
+        JOIN member mem ON mem.lol_account = si.summoner_name
+        JOIN (
+        SELECT summoner_name, MAX(revision_date) AS max_revision_date
+        FROM summoner_info
+        GROUP BY summoner_name
+        ) latest_si ON si.summoner_name = latest_si.summoner_name AND si.revision_date = latest_si.max_revision_date
+        ORDER BY si.revision_date
+        ) si ON mem.lol_account = si.summoner_name
         <where>
             <if test="tag1 == 'all'">
                 trim(tag1) != '' and tag1 is not null and tag2 = #{tag2}
@@ -92,6 +159,17 @@
         from question_post qp
                  join member mem
                       on mem.email = qp.email
+                 JOIN (
+            SELECT mem.lol_account, si.summoner_name, si.profile_icon_id
+            FROM summoner_info si
+                     JOIN member mem ON mem.lol_account = si.summoner_name
+                     JOIN (
+                SELECT summoner_name, MAX(revision_date) AS max_revision_date
+                FROM summoner_info
+                GROUP BY summoner_name
+            ) latest_si ON si.summoner_name = latest_si.summoner_name AND si.revision_date = latest_si.max_revision_date
+            ORDER BY si.revision_date
+        ) si ON mem.lol_account = si.summoner_name
         where tag2 = #{tag2}
         order by question_id desc
     </select>
