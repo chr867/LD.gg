@@ -1,7 +1,4 @@
-footer{
-/*   position: fixed; */
-  left: 0;
-  bottom: 0;
+footer {
   width: 100%;
   height: 60px;
   background-color: #f7f5f5;
@@ -33,4 +30,10 @@ footer{
   margin-left: auto;
   margin-right: 10px;
   color: #aaaaaa;
+}
+
+.footer-container {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 }
