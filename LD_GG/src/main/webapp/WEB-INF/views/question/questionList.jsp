@@ -90,20 +90,25 @@
 <script src="/resources/js/question/questionList.js"></script>
 <script type="text/javascript">
     function goWrite(frm) {
-        console.log(frm);
-        let contents = frm.a_content.value; //공백 => &nbsp
-        console.log(contents);
-        let question_id = frm.question_id.value;
-        console.log(question_id);
-        let email = frm.email.value;
-        console.log(email);
+        if(email != ""){
+            let contents = frm.a_content.value; //공백 => &nbsp
+            let question_id = frm.question_id.value;
+            let email = frm.email.value;
 
-        if (contents.trim() == '') {
-            alert('내용을 입력해주세욧!!!')
-            return false;
+            if (contents.trim() == '') {
+                alert('내용을 입력해주세욧!!!')
+                return false;
+            }
+
+            frm.submit();
         }
-
-        frm.submit();
+        else{
+            alert("로그인 창으로 이동합니다.");
+            var loginModal = new bootstrap.Modal(document.getElementById('login-modal'), {
+                keyboard: true
+            })
+            loginModal.show();
+        }
     }
 </script>
 </body>

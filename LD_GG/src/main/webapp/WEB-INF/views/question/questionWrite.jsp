@@ -9,19 +9,19 @@
   <style>
     .main-container {
       margin: 0px auto auto auto;
-      width: 60%;
+      width: 100%;
       display: flex;
       flex-direction: column;
       justify-content: center;
       text-align: center;
     }
-    form {
+    .write-form {
       display: flex;
       flex-direction: column;
       margin: 85px auto auto auto;
-      width: 80%;
+      width: 60%;
     }
-    form > * {
+    .write-form > * {
       margin-top: 5px;
       margin-bottom: 5px;
     }
@@ -94,7 +94,7 @@
 <%@ include file="../sidebar.jsp" %>
 <%@ include file="../footer.jsp" %>
 <div class="main-container">
-  <form method="post" action="/question/write_question">
+  <form class="write-form" method="post" action="/question/write_question">
     <div id="email" hidden="true">
       ${email}
     </div>

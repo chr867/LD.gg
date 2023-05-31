@@ -52,10 +52,16 @@ function select_question(option){
 }
 
 $("#question_write").click(function() {
-    window.location.href = "/question/question_write";
-});
-$("#answer_write").click(function() {
-    window.location.href = "/question/answer_write";
+    if(email != ""){
+        window.location.href = "/question/question_write";
+    }
+    else{
+        alert("로그인 창으로 이동합니다.");
+        var loginModal = new bootstrap.Modal(document.getElementById('login-modal'), {
+            keyboard: true
+        })
+        loginModal.show();
+    }
 });
 function makeQuestion(res){
     /* Time 변환 */
