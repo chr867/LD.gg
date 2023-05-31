@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>테스트 대시보드</title>
+<!-- 차트 JS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.3.js"
 	integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="

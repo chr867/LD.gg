@@ -47,6 +47,9 @@
 <script src="/resources/js/main/loginSession.js" defer></script>
 <!-- 채팅 관련 JS-->
 <script src="/resources/js/main/chat.js" defer></script>
+<!-- 차트 JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+
 
 <link  href = "/resources/css/summoner/summonerInfo.css?after" rel = "stylesheet">
 <style type="text/css">
@@ -122,12 +125,6 @@
 			</div>
 			<!-- 전적 정보 필터 -->
 
-			<div id="record_filter">
-				<button type="button" class = "record-filter-btn" value = "all">전체</button>
-				<button type="button" class = "record-filter-btn" value = "solo">솔로 랭크</button>
-				<button type="button" class = "record-filter-btn" value = "flex">자유 랭크</button>
-				<button type="button" class = "record-filter-btn" value = "classic">일반</button>
-			</div>
 
 <!-- 			<div class = "flex-summary-table">
 				<header class = "flex-summary-header">
@@ -933,9 +930,16 @@
 			})
 			
 			if(record.win === 1){//승패 여부에 따라 승리 div 패배 div 생성
+				record_champ_div.css('background-color' , 'rgba(117, 199, 251, 0.3)');
+				record_kda_div.css('background-color', 'rgba(117, 199, 251, 0.3)');
+				record_cs_sight_div.css('background-color', 'rgba(117, 199, 251, 0.3)');
+				record_item_div.css('background-color', 'rgba(117, 199, 251, 0.3)');
+				record_player_div.css('background-color', 'rgba(117, 199, 251, 0.3)');
+				record_team1_div.css('background-color', 'rgba(117, 199, 251, 0.3)');
+				record_team2_div.css('background-color', 'rgba(117, 199, 251, 0.3)')
 				let record_win_div = $('<div class = "record_win_div"></div>');
 				let record_win_strong = $('<strong class = "record_win_strong"></strong>');
-				let record_win_span = $('<span class = "record_win_span">승리</span>');
+				let record_win_span = $('<span class = "record_win_span" style = "color : #75C7FB">승리</span>');
 				record_win_strong.append(record_win_span);
 				//let record_game_mode = $('<span class = "record_game_mode">'+record.game_mode+'</span>');
 				let gameDuration = (record.game_duration / 60).toFixed(2);
@@ -945,9 +949,16 @@
 				record_win_div.append(record_win_strong,record_game_duration);
 				record_win_lose_div.append(record_win_div);
 			}else{
+				record_champ_div.css('background-color' , 'rgba(255, 56, 71, 0.3)');
+				record_kda_div.css('background-color', 'rgba(255, 56, 71, 0.3)');
+				record_cs_sight_div.css('background-color', 'rgba(255, 56, 71, 0.3)');
+				record_item_div.css('background-color', 'rgba(255, 56, 71, 0.3)');
+				record_player_div.css('background-color', 'rgba(255, 56, 71, 0.3)');
+				record_team1_div.css('background-color', 'rgba(255, 56, 71, 0.3)');
+				record_team2_div.css('background-color', 'rgba(255, 56, 71, 0.3)');
 				let record_lose_div = $('<div class = "record_lose_div"></div>');
 				let record_lose_strong = $('<strong class = "record_lose_strong"></strong>');
-				let record_lose_span = $('<span class = "record_lose_span">패배</span>');
+				let record_lose_span = $('<span class = "record_lose_span" style = "color : #FF3847">패배</span>');
 				record_lose_strong.append(record_lose_span);
 				//let record_game_mode = $('<span class = "record_game_mode">'+record.game_mode+'</span>');
 				let gameDuration = (record.game_duration / 60).toFixed(2);
@@ -993,37 +1004,68 @@
 			if(record.item1 != 0){
 				let record_item_img1 = $('<img class = "record-item" src = "/resources/img/item/'+record.item1+'.png">');//아이템1 이미지
 				record_item_sub_div.append(record_item_img1);
+			}else{
+				let record_item_img1 = $('<img class = "record-item" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+				record_item_sub_div.append(record_item_img1);
 			}
 			if(record.item2 != 0){
 				let record_item_img2 = $('<img class = "record-item" src = "/resources/img/item/'+record.item2+'.png">');//아이템2 이미지
+				record_item_sub_div.append(record_item_img2);
+			}else{
+				let record_item_img2 = $('<img class = "record-item" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
 				record_item_sub_div.append(record_item_img2);
 			}
 			if(record.item3 != 0){
 				let record_item_img3 = $('<img class = "record-item" src = "/resources/img/item/'+record.item3+'.png">');//아이템3 이미지
 				record_item_sub_div.append(record_item_img3);
+			}else{
+				let record_item_img3 = $('<img class = "record-item" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+				record_item_sub_div.append(record_item_img3);
 			}
 			if(record.item4 != 0){
 				let record_item_img4 = $('<img class = "record-item" src = "/resources/img/item/'+record.item4+'.png">');//아이템4 이미지
+				record_item_sub_div.append(record_item_img4);
+			}else{
+				let record_item_img4 = $('<img class = "record-item" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
 				record_item_sub_div.append(record_item_img4);
 			}
 			if(record.item5 !=0){
 				let record_item_img5 = $('<img class = "record-item" src = "/resources/img/item/'+record.item5+'.png">');//아이템5 이미지
 				record_item_sub_div.append(record_item_img5);
+			}else{
+				let record_item_img5 = $('<img class = "record-item" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+				record_item_sub_div.append(record_item_img5);
 			}
 			if(record.item6 != 0){
 				let record_item_img6 = $('<img class = "record-item" src = "/resources/img/item/'+record.item6+'.png">');//아이템6 이미지
+				record_item_sub_div.append(record_item_img6);
+			}else{
+				let record_item_img6 = $('<img class = "record-item" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
 				record_item_sub_div.append(record_item_img6);
 			}
 			if(record.item7 != 0){
 				let record_item_img7 = $('<img class = "record-item" src = "/resources/img/item/'+record.item7+'.png">');//아이템7 이미지
 				record_item_sub_div.append(record_item_img7);
+			}else{
+				let record_item_img7 = $('<img class = "record-item" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+				record_item_sub_div.append(record_item_img7);
 			}
 			record_item_div.append(record_item_sub_div);//서브 div를 아이템 정보를 담을 div에 append
-			let button_div = $('<button>').addClass('button_div').attr({
-				  type: 'button',
-				  value: record.match_id,
-				  onclick: "getRecordDetail('" + record.match_id + "',$(this))"
-				});
+			let button_div = "";
+			if (record.win === 1) {
+				  button_div = $('<button>').addClass('button_div').attr({
+				    type: 'button',
+				    value: record.match_id,
+				    onclick: "getRecordDetail('" + record.match_id + "',$(this))"
+				  }).css('background-color', '#75C7FB');
+				} else {
+				  button_div = $('<button>').addClass('button_div').attr({
+				    type: 'button',
+				    value: record.match_id,
+				    onclick: "getRecordDetail('" + record.match_id + "',$(this))"
+				  }).css('background-color', '#FF3847');
+				}
+			
 			let hiddenDiv = $('<div id = "'+record.match_id+'" class = "hidden_div" style = "display : none"></div>');
 			
 			record_div.append(record_win_lose_div,record_champ_div,record_champ_div,record_kda_div,record_cs_sight_div,record_item_div,record_player_div,button_div);
@@ -1058,6 +1100,7 @@
 		            if (syn.win === 1) {
 		                // 5. 'win' 내부에 res의 win 값이 true 인 데이터 수 만큼 div 태그 생성
 		                let winTeam = $('<div class="win_team"></div>');
+		                win.css('background-color', 'rgba(117, 199, 251, 0.5)');
 		                // 7. 각 'win_team' 내부에 작업할 내용
 		                // 7-1. div 태그 4개 생성. 각 div 태그의 class 속성에 'champ_info','kda_info','cs_ward_info','item_info' 부여.
 		                let champInfo = $('<div class="champ_info"></div>');
@@ -1129,36 +1172,58 @@
 		                if(syn.item1 != 0){
 		                	let itemImg1 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item1+'.png">');
 		                	itemImgDiv.append(itemImg1);
-		                }
+		                }else{
+		    				let itemImg1 = $('<img class = "syn-item-img" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+		    				itemImgDiv.append(itemImg1);
+		    			}
 		                if(syn.item2 != 0){
 		                	let itemImg2 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item2+'.png">');
 		                	itemImgDiv.append(itemImg2);
-		                }
+		                }else{
+		    				let itemImg2 = $('<img class = "syn-item-img" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+		    				itemImgDiv.append(itemImg2);
+		    			}
 		                if(syn.item3 != 0){
 		                	let itemImg3 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item3+'.png">');
 		                	itemImgDiv.append(itemImg3);
-		                }
+		                }else{
+		    				let itemImg3 = $('<img class = "syn-item-img" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+		    				itemImgDiv.append(itemImg3);
+		    			}
 		                if(syn.item4 != 0){
 		                	let itemImg4 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item4+'.png">');
 		                	itemImgDiv.append(itemImg4);
-		                }
+		                }else{
+		    				let itemImg4 = $('<img class = "syn-item-img" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+		    				itemImgDiv.append(itemImg4);
+		    			}
 		                if(syn.item5 != 0){
 		                	let itemImg5 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item5+'.png">');
 		                	itemImgDiv.append(itemImg5);
-		                }
+		                }else{
+		    				let itemImg5 = $('<img class = "syn-item-img" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+		    				itemImgDiv.append(itemImg5);
+		    			}
 		                if(syn.item6 != 0){
 		                	let itemImg6 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item6+'.png">');
 		                	itemImgDiv.append(itemImg6);
-		                }
+		                }else{
+		    				let itemImg6 = $('<img class = "syn-item-img" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+		    				itemImgDiv.append(itemImg6);
+		    			}
 		                if(syn.item7 != 0){
 		                	let itemImg7 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item7+'.png">');
 		                	itemImgDiv.append(itemImg7);
-		                }
+		                }else{
+		    				let itemImg7 = $('<img class = "syn-item-img" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+		    				itemImgDiv.append(itemImg7);
+		    			}
 		                itemInfo.append(itemImgDiv);
 		                win.append(winTeam);
 		            } else {
 		                // 9. 'lose' 내부에 res의 win 값이 false 인 데이터 수 만큼 div 태그 생성 (위와 동일한 작업)
 		                let loseTeam = $('<div class="lose_team"></div>');
+		                lose.css('background-color', 'rgba(255, 56, 71, 0.5)');
 		                let champion = $('<div class="champion"><img class="flex-champion" src="/resources/img/champion_img/square/'+syn.champ_name+'.png"></div>');
 		                let champLevel = $('<span class="champ_level">'+syn.champ_level+'</span>');
 		                champion.append(champLevel);
@@ -1224,31 +1289,52 @@
 		                if(syn.item1 != 0){
 		                	let itemImg1 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item1+'.png">');
 		                	itemImgDiv.append(itemImg1);
-		                }
+		                }else{
+		    				let itemImg1 = $('<img class = "syn-item-img" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+		    				itemImgDiv.append(itemImg1);
+		    			}
 		                if(syn.item2 != 0){
 		                	let itemImg2 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item2+'.png">');
 		                	itemImgDiv.append(itemImg2);
-		                }
+		                }else{
+		    				let itemImg2 = $('<img class = "syn-item-img" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+		    				itemImgDiv.append(itemImg2);
+		    			}
 		                if(syn.item3 != 0){
 		                	let itemImg3 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item3+'.png">');
 		                	itemImgDiv.append(itemImg3);
-		                }
+		                }else{
+		    				let itemImg3 = $('<img class = "syn-item-img" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+		    				itemImgDiv.append(itemImg3);
+		    			}
 		                if(syn.item4 != 0){
 		                	let itemImg4 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item4+'.png">');
 		                	itemImgDiv.append(itemImg4);
-		                }
+		                }else{
+		    				let itemImg4 = $('<img class = "syn-item-img" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+		    				itemImgDiv.append(itemImg4);
+		    			}
 		                if(syn.item5 != 0){
 		                	let itemImg5 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item5+'.png">');
 		                	itemImgDiv.append(itemImg5);
-		                }
+		                }else{
+		    				let itemImg5 = $('<img class = "syn-item-img" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+		    				itemImgDiv.append(itemImg5);
+		    			}
 		                if(syn.item6 != 0){
 		                	let itemImg6 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item6+'.png">');
 		                	itemImgDiv.append(itemImg6);
-		                }
+		                }else{
+		    				let itemImg6 = $('<img class = "syn-item-img" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+		    				itemImgDiv.append(itemImg6);
+		    			}
 		                if(syn.item7 != 0){
 		                	let itemImg7 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item7+'.png">');
 		                	itemImgDiv.append(itemImg7);
-		                }
+		                }else{
+		    				let itemImg7 = $('<img class = "syn-item-img" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+		    				itemImgDiv.append(itemImg7);
+		    			}
 						itemInfo.append(itemImgDiv);
 		                lose.append(loseTeam);
 		            }
@@ -1326,6 +1412,13 @@
 				})
 				
 				if(record.win === 1){//승패 여부에 따라 승리 div 패배 div 생성
+					record_champ_div.css('background-color' , 'rgba(117, 199, 251, 0.3)');
+					record_kda_div.css('background-color', 'rgba(117, 199, 251, 0.3)');
+					record_cs_sight_div.css('background-color', 'rgba(117, 199, 251, 0.3)');
+					record_item_div.css('background-color', 'rgba(117, 199, 251, 0.3)');
+					record_player_div.css('background-color', 'rgba(117, 199, 251, 0.3)');
+					record_team1_div.css('background-color', 'rgba(117, 199, 251, 0.3)');
+					record_team2_div.css('background-color', 'rgba(117, 199, 251, 0.3)');
 					let record_win_div = $('<div class = "record_win_div"></div>');
 					let record_win_strong = $('<strong class = "record_win_strong"></strong>');
 					let record_win_span = $('<span class = "record_win_span">승리</span>');
@@ -1338,6 +1431,13 @@
 					record_win_div.append(record_win_strong,record_game_duration);
 					record_win_lose_div.append(record_win_div);
 				}else{
+					record_champ_div.css('background-color' , 'rgba(255, 56, 71, 0.3)');
+					record_kda_div.css('background-color', 'rgba(255, 56, 71, 0.3)');
+					record_cs_sight_div.css('background-color', 'rgba(255, 56, 71, 0.3)');
+					record_item_div.css('background-color', 'rgba(255, 56, 71, 0.3)');
+					record_player_div.css('background-color', 'rgba(255, 56, 71, 0.3)');
+					record_team1_div.css('background-color', 'rgba(255, 56, 71, 0.3)');
+					record_team2_div.css('background-color', 'rgba(255, 56, 71, 0.3)');
 					let record_lose_div = $('<div class = "record_lose_div"></div>');
 					let record_lose_strong = $('<strong class = "record_lose_strong"></strong>');
 					let record_lose_span = $('<span class = "record_lose_span">패배</span>');
@@ -1386,37 +1486,67 @@
 				if(record.item1 != 0){
 					let record_item_img1 = $('<img class = "record-item" src = "/resources/img/item/'+record.item1+'.png">');//아이템1 이미지
 					record_item_sub_div.append(record_item_img1);
+				}else{
+					let record_item_img1 = $('<img class = "record-item" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+					record_item_sub_div.append(record_item_img1);
 				}
 				if(record.item2 != 0){
 					let record_item_img2 = $('<img class = "record-item" src = "/resources/img/item/'+record.item2+'.png">');//아이템2 이미지
+					record_item_sub_div.append(record_item_img2);
+				}else{
+					let record_item_img2 = $('<img class = "record-item" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
 					record_item_sub_div.append(record_item_img2);
 				}
 				if(record.item3 != 0){
 					let record_item_img3 = $('<img class = "record-item" src = "/resources/img/item/'+record.item3+'.png">');//아이템3 이미지
 					record_item_sub_div.append(record_item_img3);
+				}else{
+					let record_item_img3 = $('<img class = "record-item" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+					record_item_sub_div.append(record_item_img3);
 				}
 				if(record.item4 != 0){
 					let record_item_img4 = $('<img class = "record-item" src = "/resources/img/item/'+record.item4+'.png">');//아이템4 이미지
+					record_item_sub_div.append(record_item_img4);
+				}else{
+					let record_item_img4 = $('<img class = "record-item" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
 					record_item_sub_div.append(record_item_img4);
 				}
 				if(record.item5 !=0){
 					let record_item_img5 = $('<img class = "record-item" src = "/resources/img/item/'+record.item5+'.png">');//아이템5 이미지
 					record_item_sub_div.append(record_item_img5);
+				}else{
+					let record_item_img5 = $('<img class = "record-item" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+					record_item_sub_div.append(record_item_img5);
 				}
 				if(record.item6 != 0){
 					let record_item_img6 = $('<img class = "record-item" src = "/resources/img/item/'+record.item6+'.png">');//아이템6 이미지
+					record_item_sub_div.append(record_item_img6);
+				}else{
+					let record_item_img6 = $('<img class = "record-item" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
 					record_item_sub_div.append(record_item_img6);
 				}
 				if(record.item7 != 0){
 					let record_item_img7 = $('<img class = "record-item" src = "/resources/img/item/'+record.item7+'.png">');//아이템7 이미지
 					record_item_sub_div.append(record_item_img7);
+				}else{
+					let record_item_img7 = $('<img class = "record-item" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+					record_item_sub_div.append(record_item_img7);
 				}
 				record_item_div.append(record_item_sub_div);//서브 div를 아이템 정보를 담을 div에 append
-				let button_div = $('<button>').addClass('button_div').attr({
-					  type: 'button',
-					  value: record.match_id,
-					  onclick: "getRecordDetail('" + record.match_id + "',$(this))"
-					});
+				let button_div = "";
+				if (record.win === 1) {
+					  button_div = $('<button>').addClass('button_div').attr({
+					    type: 'button',
+					    value: record.match_id,
+					    onclick: "getRecordDetail('" + record.match_id + "',$(this))"
+					  }).css('background-color', '#75C7FB');
+					} else {
+					  button_div = $('<button>').addClass('button_div').attr({
+					    type: 'button',
+					    value: record.match_id,
+					    onclick: "getRecordDetail('" + record.match_id + "',$(this))"
+					  }).css('background-color', '#FF3847');
+					}
 				let hiddenDiv = $('<div id = "'+record.match_id+'" class = "hidden_div" style = "display : none"></div>');
 				
 				record_div.append(record_win_lose_div,record_champ_div,record_champ_div,record_kda_div,record_cs_sight_div,record_item_div,record_player_div,button_div);
@@ -1450,6 +1580,7 @@
 			        $.each(response, function (i, syn) {
 			            if (syn.win === 1) {
 			                // 5. 'win' 내부에 res의 win 값이 true 인 데이터 수 만큼 div 태그 생성
+			                win.css('background-color', 'rgba(117, 199, 251, 0.5)');
 			                let winTeam = $('<div class="win_team"></div>');
 			                // 7. 각 'win_team' 내부에 작업할 내용
 			                // 7-1. div 태그 4개 생성. 각 div 태그의 class 속성에 'champ_info','kda_info','cs_ward_info','item_info' 부여.
@@ -1522,35 +1653,57 @@
 			                if(syn.item1 != 0){
 			                	let itemImg1 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item1+'.png">');
 			                	itemImgDiv.append(itemImg1);
-			                }
+			                }else{
+			    				let itemImg1 = $('<img class = "syn-item-img" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+			    				itemImgDiv.append(itemImg1);
+			    			}
 			                if(syn.item2 != 0){
 			                	let itemImg2 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item2+'.png">');
 			                	itemImgDiv.append(itemImg2);
-			                }
+			                }else{
+			    				let itemImg2 = $('<img class = "syn-item-img" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+			    				itemImgDiv.append(itemImg2);
+			    			}
 			                if(syn.item3 != 0){
 			                	let itemImg3 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item3+'.png">');
 			                	itemImgDiv.append(itemImg3);
-			                }
+			                }else{
+			    				let itemImg3 = $('<img class = "syn-item-img" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+			    				itemImgDiv.append(itemImg3);
+			    			}
 			                if(syn.item4 != 0){
 			                	let itemImg4 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item4+'.png">');
 			                	itemImgDiv.append(itemImg4);
-			                }
+			                }else{
+			    				let itemImg4 = $('<img class = "syn-item-img" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+			    				itemImgDiv.append(itemImg4);
+			    			}
 			                if(syn.item5 != 0){
 			                	let itemImg5 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item5+'.png">');
 			                	itemImgDiv.append(itemImg5);
-			                }
+			                }else{
+			    				let itemImg5 = $('<img class = "syn-item-img" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+			    				itemImgDiv.append(itemImg5);
+			    			}
 			                if(syn.item6 != 0){
 			                	let itemImg6 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item6+'.png">');
 			                	itemImgDiv.append(itemImg6);
-			                }
+			                }else{
+			    				let itemImg6 = $('<img class = "syn-item-img" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+			    				itemImgDiv.append(itemImg6);
+			    			}
 			                if(syn.item7 != 0){
 			                	let itemImg7 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item7+'.png">');
 			                	itemImgDiv.append(itemImg7);
-			                }
+			                }else{
+			    				let itemImg7 = $('<img class = "syn-item-img" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+			    				itemImgDiv.append(itemImg7);
+			    			}
 			                itemInfo.append(itemImgDiv);
 			                win.append(winTeam);
 			            } else {
 			                // 9. 'lose' 내부에 res의 win 값이 false 인 데이터 수 만큼 div 태그 생성 (위와 동일한 작업)
+			                lose.css('background-color', 'rgba(255, 56, 71, 0.5)');
 			                let loseTeam = $('<div class="lose_team"></div>');
 			                let champion = $('<div class="champion"><img class="flex-champion" src="/resources/img/champion_img/square/'+syn.champ_name+'.png"></div>');
 			                let champLevel = $('<span class="champ_level">'+syn.champ_level+'</span>');
@@ -1617,31 +1770,52 @@
 			                if(syn.item1 != 0){
 			                	let itemImg1 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item1+'.png">');
 			                	itemImgDiv.append(itemImg1);
-			                }
+			                }else{
+			    				let itemImg1 = $('<img class = "syn-item-img" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+			    				itemImgDiv.append(itemImg1);
+			    			}
 			                if(syn.item2 != 0){
 			                	let itemImg2 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item2+'.png">');
 			                	itemImgDiv.append(itemImg2);
-			                }
+			                }else{
+			    				let itemImg2 = $('<img class = "syn-item-img" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+			    				itemImgDiv.append(itemImg2);
+			    			}
 			                if(syn.item3 != 0){
 			                	let itemImg3 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item3+'.png">');
 			                	itemImgDiv.append(itemImg3);
-			                }
+			                }else{
+			    				let itemImg3 = $('<img class = "syn-item-img" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+			    				itemImgDiv.append(itemImg3);
+			    			}
 			                if(syn.item4 != 0){
 			                	let itemImg4 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item4+'.png">');
 			                	itemImgDiv.append(itemImg4);
-			                }
+			                }else{
+			    				let itemImg4 = $('<img class = "syn-item-img" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+			    				itemImgDiv.append(itemImg4);
+			    			}
 			                if(syn.item5 != 0){
 			                	let itemImg5 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item5+'.png">');
 			                	itemImgDiv.append(itemImg5);
-			                }
+			                }else{
+			    				let itemImg5 = $('<img class = "syn-item-img" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+			    				itemImgDiv.append(itemImg5);
+			    			}
 			                if(syn.item6 != 0){
 			                	let itemImg6 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item6+'.png">');
 			                	itemImgDiv.append(itemImg6);
-			                }
+			                }else{
+			    				let itemImg6 = $('<img class = "syn-item-img" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+			    				itemImgDiv.append(itemImg6);
+			    			}
 			                if(syn.item7 != 0){
 			                	let itemImg7 = $('<img class = "syn-item-img" src = "/resources/img/item/'+syn.item7+'.png">');
 			                	itemImgDiv.append(itemImg7);
-			                }
+			                }else{
+			    				let itemImg7 = $('<img class = "syn-item-img" src = "/resources/img/champion_img/bg/A6000000.png">');//아이템1 이미지
+			    				itemImgDiv.append(itemImg7);
+			    			}
 							itemInfo.append(itemImgDiv);
 			                lose.append(loseTeam);
 			            }
