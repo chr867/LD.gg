@@ -146,7 +146,7 @@ SELECT
     SUM(deaths) AS deaths,
     SUM(assists) AS assists,
     SUM(CS) AS cs,
-    ROUND(SUM(CS) / COUNT(*), 2) AS cs_per_minute,
+    ROUND(SUM(CS) / 60, 2) AS cs_per_minute,
     MAX(ci.champion_kr_name) AS champion_kr_name,
     champ_name,  -- 추가된 부분
     COUNT(*) AS total_games,
