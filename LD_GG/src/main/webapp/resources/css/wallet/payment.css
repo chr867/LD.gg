@@ -1,41 +1,67 @@
 @charset "UTF-8";
 
 .store-container{
-	width : 1500px;
-	display : flex;
-	justify-content : center;
-	align-items : center;
-	flex-direction : column;
+	padding: 100px 50px 0px 100px;
+    box-sizing: border-box;
 }
 
-.flex-modal {
-	display: none;
-	position: fixed;
-	z-index: 1;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	overflow: auto;
-	background-color: rgba(0, 0, 0, 0.4);
+#payment-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 /* 모달 창 내용 */
-.modal-content {
-	background-color: #fefefe;
-	margin: 15% auto;
-	padding: 20px;
-	border: 1px solid #888;
-	width: 80%;
-	max-width: 600px;
+.payment-modal-content {
+	background-color: white;
+    border: none;
+    max-width: 800px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    width: 920px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.payment-modal-header{
+	text-align : center;
+	margin : 5px 0 5px 0;
+}
+
+.modal-payment-method{
+	margin: 5px 0 5px 0;
+}
+
+.payment-method{
+	margin: 0 0 5px 0px;
+    width: 100%;
+    background-color: whitesmoke;
+    border-radius : 4px;
+}
+
+.requestBtn{
+	border: none;
+    border-radius: 8px;
+    height: 30px;
+    background-color: #4b4949;
+    color: white;
 }
 
 /* 닫기 버튼 */
 .close {
-	color: #aaa;
-	float: right;
-	font-size: 28px;
-	font-weight: bold;
+    font-size: 20px;
+    margin: 5px 0 2px 340px;
+    width: 120px;
+    background-color: #7ec1ff;
+    text-align: center;
+    border-radius : 10px;
 }
 
 .close:hover, .close:focus {
@@ -55,19 +81,16 @@
 }
 
 .flex-store-title {
-	width: 90%;
 	text-align : center;
 }
 
 .flex-hold-cash {
-	display: flex;
-	height: 3%;
-	background-color: #000000;
-	border-radius: 5px;
-	width: 70%;
-	justify-content: center;
-	align-items: center;
-	margin : 1%;
+	height: 50px;
+    background-color: #313131;
+    border-radius: 9px;
+    width: 920px;
+    display: flex;
+    align-items: center;
 }
 
 .flex-strong-cash {
@@ -86,12 +109,12 @@
 }
 
 .flex-payment-info {
-	width:80%;
 	display: flex;
-	flex-direction: column;
-	justify-content : center;
-	align-items: center;
-	margin : 1%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 40px 0 0 0;
+    width : 920px;
 }
 
 .flex-payment-header {
@@ -105,20 +128,30 @@
 
 .flex-paymnent-cash {
 	display: flex;
-	align-items: center;
-	border: 1px solid #EAEAEA;
-	background-color : #fcfcfc;
-	margin : 1%;
-	width : 100%;
+    align-items: center;
+    background-color: #75C7FB;
+    margin: 0 0 35px 0;
+    height : 50px;
+    width : 920px;
 }
 
 .flex-label {
-	display: flex;
-	align-items: center;
+	margin-left: 80px;
+    width: 120px;
+    text-align: center
 }
 
 .flex-payment-button {
-	margin-left: 10px; /* 원하는 간격으로 조정 가능 */
+	margin-left: 555px;
+    border: none;
+    text-align: center;
+    cursor: pointer;
+    width: 110px;
+    height: 33px;
+    border-radius: inherit;
+    background-color: white;
+    color: #44a5ff;
+    border-radius: 8px;
 }
 
 .flex-store-div{
@@ -129,61 +162,105 @@
 }
 
 .flex-store-tab{
-	width : 70%;
-	display : flex;
-	flex-direction : row;
-	justify-content : center;
-	align-items : center;
-	margin : 1%;
+	display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 15px 0 15px 0;
 }
 
 .flex-purchaseTab, .flex-chargeTab{
-	cursor : pointer;
-	margin : 0 80px 0 80px;
+	cursor: pointer;
+    margin: 0 80px 0 80px;
+    background-color: #eeeeee;
+    width: 150px;
+    border-radius: 4px;
+    text-align: center;
 }
 
-.flex-strong-cash{
-	margin : 0 220px 0 220px;
-}
-
-.flex-payment-cash{
-	width : 80%;
+.cash-title-div{
+	width : 460px;
 }
 
 #flex-hold-title{
-	width : 50%;
-	text-align : left;
+	text-align: left;
+    margin: 0 0 0 90px;
+    margin-left: 105px;
+}
+
+.flex-payment-cash{
+	display: flex;
+    align-items: center;
+    background-color: #aed8ff;
+    margin: 0 0 35px 0;
+    height : 50px;
+    width : 920px;
+    border-radius: 8px;
 }
 
 #flex-hold-cash{
-	width : 50%;
-	text-align : right;
+    text-align: right;
+    margin: 0 0 0 310px;
 }
 
-.flex-label, .flex-payment-button{
-	margin : 0 220px 0 220px;
+.felx-payment-cash-text{
+	margin : 0 420px 0 0;
 }
 
-#usageHistory{
-	display : none;
-	position: fixed;
-	z-index: 9999;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	overflow: auto;
-	background-color: rgba(0, 0, 0, 0.4); /* 배경에 어둡게 표시 */
+#usageHistory {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
+#history-content {
+	position : absolute;
+	background-color: #fff;
+	width: 800px;
+	top: 50%; /* 중앙보다 약간 위로 이동 */
+	left: 50%;
+	transform: translate(-50%, -50%);
+	display : flex;
+	flex-direction : column;
+	justify-content : center;
+	align-items : center;
+}
 
+.usageWindow{
+	width: 950px;
+    height : 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color : white;
+}
 
+.usageCategory{
+	width : 100%;
+	margin: 20px 0 15px 0;
+	background-color: #fce5cd;
+}
 
+.usageMiniCategory{
+	width: 237.5px;
+    text-align: center;
+    border-bottom: 1px solid wheat;
+    border-top: 1px solid wheat;
+}
 
+.dateTd, .pointsTd, .merchantIdTd, .priceTd{
+	width : 237.5px;
+	text-align : center;
+}
 
-
-
-
-
-
-
+.historyTr{
+	margin : 0 0 5px 0;
+	height: 40px;
+}

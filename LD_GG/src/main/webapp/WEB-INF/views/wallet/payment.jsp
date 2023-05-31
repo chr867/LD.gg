@@ -44,7 +44,7 @@
 <!-- 채팅 관련 JS-->
 <script src="/resources/js/main/chat.js" defer></script>
 <!-- 결제 관련 CSS -->
-<link href = "/resources/css/wallet/payment.css" rel = "stylesheet">
+<link href = "/resources/css/wallet/payment.css?after" rel = "stylesheet">
 
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
@@ -98,15 +98,15 @@
 		</div>
 		
 		<div class="flex-hold-cash">
-			<strong class="flex-strong-cash" id="flex-hold-title">보유 캐시</strong>
-			<strong class="flex-strong-cash" id="flex-hold-cash">${buyer.point_balance} 캐시</strong>
+			<div class = "cash-title-div"><strong class="flex-strong-cash" id="flex-hold-title">보유 캐시</strong></div>
+			<div class = "cash-title-div"><strong class="flex-strong-cash" id="flex-hold-cash">${buyer.point_balance} 캐시</strong></div>
 		</div>
 		
 		<div class="flex-payment-info">
 
 			<div class="flex-paymnent-cash">
 				<div class="flex-label">
-					<strong>10,000 캐시</strong>
+					<strong class = "flex-payment-cash-text">10,000 캐시</strong>
 				</div>
 				<input type="button" class="flex-payment-button" value="10,000 원"
 					style="cursor: pointer">
@@ -114,7 +114,7 @@
 
 			<div class="flex-paymnent-cash">
 				<div class="flex-label">
-					<strong>30,000 캐시</strong>
+					<strong class = "flex-payment-cash-text">30,000 캐시</strong>
 				</div>
 				<input type="button" class="flex-payment-button" value="30,000 원"
 					style="cursor: pointer">
@@ -122,7 +122,7 @@
 
 			<div class="flex-paymnent-cash">
 				<div class="flex-label">
-					<strong>50,000 캐시</strong>
+					<strong class = "flex-payment-cash-text">50,000 캐시</strong>
 				</div>
 				<input type="button" class="flex-payment-button" value="50,000 원"
 					style="cursor: pointer">
@@ -130,25 +130,25 @@
 			
 			<div class="flex-paymnent-cash">
 				<div class="flex-label">
-					<strong>100,000 캐시</strong>
+					<strong class = "flex-payment-cash-text">100,000 캐시</strong>
 				</div>
-				<input type="button" class="flex-payment-button" value="50,000 원"
+				<input type="button" class="flex-payment-button" value="100,000 원"
 					style="cursor: pointer">
 			</div>
 			
 			<div class="flex-paymnent-cash">
 				<div class="flex-label">
-					<strong>150,000 캐시</strong>
+					<strong class = "flex-payment-cash-text">150,000 캐시</strong>
 				</div>
-				<input type="button" class="flex-payment-button" value="50,000 원"
+				<input type="button" class="flex-payment-button" value="150,000 원"
 					style="cursor: pointer">
 			</div>
 			
 			<div class="flex-paymnent-cash">
 				<div class="flex-label">
-					<strong>200,000 캐시</strong>
+					<strong class = "flex-payment-cash-text">200,000 캐시</strong>
 				</div>
-				<input type="button" class="flex-payment-button" value="50,000 원"
+				<input type="button" class="flex-payment-button" value="200,000 원"
 					style="cursor: pointer">
 			</div>
 
@@ -157,34 +157,41 @@
 	</div>
 	
 	<div id = "usageHistory">
-	
-		<div class = "usageCategory">
-			<div class = "usageMiniCategory">거래 날짜</div>
-			<div class = "usageMiniCategory">거래 금액</div>
-			<div class = "usageMiniCategory">구매 번호</div>
-			<div class = "usageMiniCategory">충전 금액</div>
+		<div id = "history-content">
+			<table class="usageWindow">
+			  <thead>
+			    <tr class="usageCategory">
+			      <th class="usageMiniCategory">거래 날짜</th>
+			      <th class="usageMiniCategory">거래 금액</th>
+			      <th class="usageMiniCategory">구매 번호</th>
+			      <th class="usageMiniCategory">충전 금액</th>
+			    </tr>
+			  </thead>
+			  <tbody class="usageHistoryWindow"></tbody>
+			</table>
+			
 		</div>
-		
-		<div class = "usageHistoryWindow"></div>
-		
 	</div>
 
 	<div id="payment-modal" class="flex-modal">
-		<div class="modal-content">
-			<header class="modal-header">
-				<strong>결제 수단</strong>
-			</header>
-
+		<div class="payment-modal-content">
+			<div class = "payment-modal-header">
+				<strong class = "payment-method-text">결제 수단</strong>
+			</div>
+			
 			<div class="modal-payment-method">
-				<input type="checkbox" value="card" class="payment-button"
-					id="check1"><label for="check1">신용/체크카드</label>
-				<div class="separator"></div>
-				<!-- 구분선 -->
-				<input type="checkbox" value="kakaopay" class="payment-button"
-					id="check2"><label for="check2">카카오페이</label>
+			
+				<div class = "payment-method">
+					<input type="checkbox" value="card" class="payment-button"id="check1"><label for="check1">신용/체크카드</label>
+				</div>
+				
+				<div class = "payment-method">
+					<input type="checkbox" value="kakaopay" class="payment-button"id="check2"><label for="check2">카카오페이</label>
+				</div>
+				
 			</div>
 
-			<button onclick="requestPay()">결제하기</button>
+			<button class = "requestBtn" onclick="requestPay()">결제하기</button>
 
 			<span class="close">닫기</span>
 		</div>
@@ -218,6 +225,7 @@
 	    $(".close").click(function() {
 	      $(".flex-modal").fadeOut();
 	    });
+	    $("#usageHistory").css("display","none");
 	  });
 	
 	$('.payment-button').on('change',function(){
@@ -391,27 +399,16 @@
 			data : {email : holder_email}
 		}).done(res=>{
 			console.log(res);
-			let historyDiv = $('<div class = "historyDiv"></div>');
 			$.each(res, function(i, history){
-				let dateDiv = $('<div class = "dateDiv"></div>')
-				let dateText = $('<span class = "dateText">'+history.tx_date+'</span>');
-				dateDiv.append(dateText);
-				
-				let pointsDiv = $('<div class = "pointsDiv"></div>');
-				let pointsText = $('<span class = "pointsText">'+history.points_sent+'</span>');
-				pointsDiv.append(pointsText);
-				
-				let merchantIdDiv = $('<div class = "merchantIdDiv"></div>');
-				let merchantIdText = $('<span class = "merchantIdText">'+history.merchant_id+'</span>');
-				merchantIdDiv.append(merchantIdText);
-				
-				let priceDiv = $('<div class = "priceDiv"></div>');
-				let priceText = $('<span class = priceText>'+history.price+'</span>');
-				priceDiv.append(priceText);
-				
-				historyDiv.append(dateDiv, pointsDiv, merchantIdDiv, priceDiv);
-			})
-			$('.usageHistoryWindow').html(historyDiv);
+				  let historyTr = $('<tr class="historyTr"></tr>');
+				  let dateTd = $('<td class="dateTd">'+history.tx_date+'</td>');
+				  let pointsTd = $('<td class="pointsTd">'+history.points_sent+'</td>');
+				  let merchantIdTd = $('<td class="merchantIdTd">'+history.merchant_id+'</td>');
+				  let priceTd = $('<td class="priceTd">'+history.price+'</td>');
+				  historyTr.append(dateTd, pointsTd, merchantIdTd, priceTd);
+				  $('.usageHistoryWindow').append(historyTr);
+				});
+			$('.usageHistoryWindow').html(historyTable);
 		}).fail(err=>{
 			console.log(err);
 		})

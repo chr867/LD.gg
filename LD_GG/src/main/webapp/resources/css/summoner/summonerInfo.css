@@ -197,7 +197,7 @@
 }
 
 .champ-name {
-	font-size: 15px;
+	font-size: 12px;
 	font-weight: 700;
 	text-align: center;
 	display: inline-block;
@@ -754,8 +754,8 @@
 }
 
 .record-item{
-	width : 15%;
-	height : 10%;
+	width : 13%;
+	height : 8%;
 }
 
 .record_div{
@@ -968,8 +968,8 @@
 }
 
 .syn-item-img{
-	width : 40px;
-	height : 40px;
+	width : 35px;
+	height : 35px;
 }
 
 .syn-kda-text{
