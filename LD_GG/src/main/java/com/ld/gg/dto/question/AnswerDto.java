@@ -17,4 +17,5 @@ public class AnswerDto {
     private String answerer_id;
     private int answer_status;
     private String lol_account;
+    private String profile_icon_id;
 }

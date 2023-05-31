@@ -57,58 +57,6 @@ $("#question_write").click(function() {
 $("#answer_write").click(function() {
     window.location.href = "/question/answer_write";
 });
-
-/* 답변 찾아오기 */
-function select_answer(question_id){
-    $.ajax({
-        method : "POST",
-        url : "/question/select_answer",
-        data : {
-            'question_id' : question_id
-        },
-        dataType : "json",
-        async: false,
-    }).done(function(resp){
-        var answerHtml = '';
-
-        console.log(resp);
-
-        for(res of resp){
-            /* Time 변환 */
-            const timestamp = res.question_date;
-            const date = new Date(timestamp);
-
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-
-            const formattedDate = `${year}. ${month}. ${day}`;
-
-            answerHtml += '                <div class="answer-label">\n' +
-                '                    <span class="yes-answer"></span>\n' +
-                '                </div>\n' +
-                '                <div class="answer-ppt">\n' +
-                '                    <div class="profile-detail">\n' +
-                '                        <img src="img/profileicon/0.png" alt="이미지" class="profile-image">\n' +
-                '                        <div class="profile-name" id="answerer_id">'+ res.answerer_id +'</div>\n' +
-                '                        <div class="question-date" id="answer_date">\n' +
-                '                            <span class="vertical-bar"></span>\n' +
-                '                            ' + formattedDate + '\n' +
-                '                        </div>\n' +
-                '                    </div>\n' +
-                '                </div>\n' +
-                '                <div class="answer-content" id="answer_content">\n' + res.answer_content +
-                '                </div>\n' +
-                '            </div>\n' +
-                '        </div>';
-        }
-
-        return answerHtml;
-    }).fail(function(err){
-        console.log(err);
-    });
-}
-
 function makeQuestion(res){
     /* Time 변환 */
     const timestamp = res.question_date;
@@ -134,7 +82,7 @@ function makeQuestion(res){
         '                <div class="question-title" id="question_title">' + res.question_title + '</div>\n' +
         '                <div class="question-ppt">\n' +
         '                    <div class="profile-detail">\n' +
-        '                        <img src="/resources/img/profileicon/0.png" alt="이미지" class="profile-image">\n' +
+        '                        <img src="/resources/img/profileicon/' + res.profile_icon_id + '.png" alt="이미지" class="profile-image">\n' +
         '                        <div class="profile-name" id="mento_name">'+ res.lol_account +'</div>\n' +
         '                        <div class="date" id="question_date">\n' +
         '                            <span class="vertical-bar"></span>\n' +
@@ -173,7 +121,6 @@ function makeQuestion(res){
             async: false,
         }).done(function(resp){
             var answerHtml = '';
-
             for(key of resp){
                 /* Time 변환 */
                 const timestamp = key.answer_date;
@@ -190,7 +137,7 @@ function makeQuestion(res){
                     '                </div>\n' +
                     '                <div class="answer-ppt">\n' +
                     '                    <div class="profile-detail">\n' +
-                    '                        <img src="/resources/img/profileicon/0.png" alt="이미지" class="profile-image">\n' +
+                    '                        <img src="/resources/img/profileicon/' + key.profile_icon_id + '.png" alt="이미지" class="profile-image">\n' +
                     '                        <div class="profile-name" id="answerer_id">'+ key.lol_account +'</div>\n' +
                     '                        <div class="question-date" id="answer_date">\n' +
                     '                            <span class="vertical-bar"></span>\n' +
@@ -215,7 +162,6 @@ function makeQuestion(res){
 }
 /* 글 스크랩 */
 function my_scrape(question_id){
-    console.log(email);
     $.ajax({
         method : "POST",
         url : "/question/my_scrape",
@@ -339,5 +285,4 @@ function tag2_search(){
     if(tag2 == "") {
         alert("검색어를 입력해주세요!")
     }
-    console.log(tag2);
 }

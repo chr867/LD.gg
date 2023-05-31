@@ -14,9 +14,7 @@
     font-family: 'noto-sans-reg';
     src: url('/resources/fonts/Noto_Sans_KR/NotoSansKR-Regular.otf') format('truetype');
 }
-body {
-    color: blue;
-}
+
 .main-container-q {
     margin-bottom: 70px;
     font-family: 'noto-sans-medi';
