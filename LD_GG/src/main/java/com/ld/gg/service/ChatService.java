@@ -5,6 +5,7 @@ import com.ld.gg.dao.mentoringdao.MentiDAO;
 import com.ld.gg.dao.mentoringdao.MentorProfileDAO;
 import com.ld.gg.dto.MemberDto;
 import com.ld.gg.dto.chat.ChatListDto;
+import com.ld.gg.dto.chat.ChatUserDto;
 import com.ld.gg.dto.chat.ChatroomDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -153,12 +154,12 @@ public class ChatService {
 		Map<String, List<?>> map_mento_mate = new HashMap<>();
 
 		/* mentoring */
-		List<MemberDto> mentor_list = cd.get_mentor(email);
-		List<MemberDto> menti_list = cd.get_menti(email);
+		List<ChatUserDto> mentor_list = cd.get_mentor(email);
+		List<ChatUserDto> menti_list = cd.get_menti(email);
 
 		/* mate */
-		List<MemberDto> mateapp_list = cd.get_mateapp(email);
-		List<MemberDto> mate_list = cd.get_mate(email);
+		List<ChatUserDto> mateapp_list = cd.get_mateapp(email);
+		List<ChatUserDto> mate_list = cd.get_mate(email);
 
 		map_mento_mate.put("mentor_list", mentor_list);
 		map_mento_mate.put("menti_list", menti_list);

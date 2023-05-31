@@ -3,6 +3,7 @@ const email = $("#email").html().trim();
 const chat_room_seq = $("#chat_room_seq").html().trim();
 const chat_category = $("#chat_category").html().trim();
 const receive_user = $("#receive_user").html().trim();
+const profile_icon_id = $("#profile_icon_id").html().trim();
 
 console.log(email);
 console.log(chat_room_seq);
@@ -103,7 +104,7 @@ function showMessage(message){
 
 /* css control */
 function makeHeader(receive_user){
-    var hl = '<div class="profile-detail"><img src="/resources/img/profileicon/0.png" alt="이미지" class="profile-image"><div class="profile-name" id="mento_name">' + receive_user + '</div></div></div>';
+    var hl = '<div class="profile-detail"><img src="/resources/img/profileicon/' + profile_icon_id + '.png" alt="이미지" class="profile-image"><div class="profile-name" id="mento_name">' + receive_user + '</div></div></div>';
     $(".chatroom-header").html(hl);
 }
 function formattedDate(dateString){

@@ -38,7 +38,7 @@ public class ChatController {
 
     /* 채팅방 입장 시 */
     @GetMapping("/enter_chatroom")
-    public ModelAndView chatRoom(HttpServletRequest request, @RequestParam("chat_room_seq") int chatroomseq, @RequestParam("chat_category") int chat_category, @RequestParam("lol_account") String lol_account){
+    public ModelAndView chatRoom(HttpServletRequest request, @RequestParam("chat_room_seq") int chatroomseq, @RequestParam("chat_category") int chat_category, @RequestParam("lol_account") String lol_account, @RequestParam("profile_icon_id") String profile_icon_id){
         HttpSession session = request.getSession();
         String email = (String) session.getAttribute("email");
 
@@ -46,7 +46,7 @@ public class ChatController {
         System.out.println(chatroomseq);
         System.out.println(lol_account);
 
-        return new ModelAndView("/chat/chatRoom").addObject("email", email).addObject("chat_room_seq", chatroomseq).addObject("chat_category", chat_category).addObject("lol_account", lol_account);
+        return new ModelAndView("/chat/chatRoom").addObject("email", email).addObject("chat_room_seq", chatroomseq).addObject("chat_category", chat_category).addObject("lol_account", lol_account).addObject("profile_icon_id", profile_icon_id);
     }
 
     /* 실시간 채팅 */
