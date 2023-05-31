@@ -47,23 +47,60 @@
 <script src="/resources/js/main/loginSession.js" defer></script>
 <!-- 채팅 관련 JS-->
 <script src="/resources/js/main/chat.js" defer></script>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+	crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<!--SWEET-ALERT2 JS-->
+<script
+	src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<!--JQUERY-->
+<script src="https://code.jquery.com/jquery-3.6.3.js"
+	integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+	crossorigin="anonymous"></script>
+<!--AJAX-->
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!--JQUERY VALIDATE-->
+<script
+	src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.0/jquery.validate.min.js"></script>
+<!--sideBar CSS-->
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/main/sideBar.css">
+<!--header CSS-->
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/main/header.css">
+<!--footer CSS-->
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/main/footer.css">
+<!--loginModal CSS-->
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/main/loginModal.css">
+<!--로그인 및 세션관련 JS-->
+<script src="/resources/js/main/loginSession.js" defer></script>
+<!-- 채팅 관련 JS-->
+<script src="/resources/js/main/chat.js" defer></script>
 <!-- 차트 JS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
 <!-- jqGrid CSS -->
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/css/ui.jqgrid.min.css">
-
 <!-- jqGrid JS -->
 <script	src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/jquery.jqgrid.min.js"></script>
-	
-<link href = "/resources/css/summoner/summonerRank.css" rel = "stylesheet">
 
+<link href = "/resources/css/summoner/summonerRank.css" rel = "stylesheet">
 <style type="text/css">
 .main-container{
 	padding: 50px 50px 0px 100px;
 	box-sizing: border-box;
 }
 </style>
+<!-- 서머너 랭킹 CSS -->
+<link href = "/resources/css/summoner/summonerRank.css?after" rel = "stylesheet">
+
 </head>
 <body>
 	<%@ include file="../header.jsp"%>
@@ -80,9 +117,25 @@
 				</div>
 				<div class="game-filter" id="flex_rank">
 					<strong style="cursor: pointer">자유 랭크</strong>
+	
+<div id = "rank-main-container">
+		<div id="rank_tool">
+			<div class="flex-header-filter">
+				<div class="flex-header">
+					<div class="game-filter" id="solo_rank">
+						<strong style="cursor: pointer">솔로 랭크</strong>
+					</div>
+					<div class="game-filter" id="flex_rank">
+						<strong style="cursor: pointer">자유 랭크</strong>
+					</div>
+					<div class="game-filter" id="level">
+						<strong style="cursor: pointer">레벨</strong>
+					</div>
 				</div>
-				<div class="game-filter" id="level">
-					<strong style="cursor: pointer">레벨</strong>
+	
+				<div id="grid-wrapper">
+					<table id="summoner_rank_table"></table>
+					<div id="pager"></div>
 				</div>
 			</div>
 
@@ -90,10 +143,11 @@
 				<table id="summoner_rank_table"></table>
 				<div id="pager"></div>
 			</div>
-
 		</div>
 	</div>
 </div>
+</div>
+<!-- 	<%@ include file="../footer.jsp"%> -->
 
 	<script type="text/javascript">
 	$('#summoner_rank_table').jqGrid({
