@@ -50,7 +50,7 @@ matchId_count = pd.DataFrame(mu.mysql_execute_dict(f"SELECT match_id_substr FROM
 conn.close()
 print(f'매치아이디 갯수 : {len(matchId_count.match_id_substr.unique())}개')
 
-batch_size = 50000
+batch_size = 100000
 win_pick_lst_result = []
 ban_rate_lst_result = []
 meta_score_lst_result = []
@@ -293,6 +293,7 @@ learning_df = result_df.merge(ai_score_df,on=['championId', 'teamPosition'])
 learning_df = learning_df.merge(champion_info_df, on=['championId'])
 
 copy_df = learning_df.copy()
+# copy_df = copy_df[copy_df['pickRate'] >= 0.1]
 # -------------------------------------------------------------------------------------------------------------------
 # 필요한 컬럼만 선택
 selected_columns = ['winRate', 'pickRate', 'banRate', 'kda', 'totalDamageDealtToChampions', 'totalDamageTaken',
@@ -306,14 +307,14 @@ X_scaled = scaler.fit_transform(X)
 
 
 # K-means 클러스터링
-kmeans = KMeans(n_clusters=5, random_state=0)  # 클러스터의 수를 5으로 설정
+kmeans = KMeans(n_clusters=4, random_state=0)  # 클러스터의 수를 5으로 설정
 kmeans.fit(X_scaled)
 
 # 클러스터링 결과
 clusters = kmeans.labels_
 
 # 모델 저장
-joblib.dump(kmeans, 'championTierPredictionModel4.pkl')
+# joblib.dump(kmeans, 'championTierPredictionModel4.pkl')
 
 
 print('클러스터링 결과:', clusters)
@@ -391,54 +392,6 @@ plt.xlabel('Number of clusters')
 plt.ylabel('SSE')
 plt.show()
 # -------------------------------------------------------------------------------------------------------------------
-feature = ['winRate', 'pickRate', 'banRate', 'kda', 'totalDamageDealtToChampions',
-           'totalDamageTaken', 'timeCCingOthers', 'total_gold','ai_score','tier']
-
-# 지도학습으로 랜덤 포레스트 분류기 모델 사용
-
-# One-Hot Encoding
-# 머신러닝에 맞게 이진벡터 변환
-champion_tier_machine_learning = pd.get_dummies(champion_tier_machine_learning, columns=['teamPosition'])
-
-# 특성
-X = champion_tier_machine_learning.drop('tier', axis=1)  # 'tier' 열을 제외한 모든 열을 특성으로 사용
-# 레이블
-y = champion_tier_machine_learning['tier']  # 'tier' 열을 레이블로 사용
-
-# MinMaxScaler 정규화
-scaler = MinMaxScaler()
-X = scaler.fit_transform(X)
-
-# SMOTE 적용
-# OP티어와 1티어 클래스의 학습 데이터가 극단적으로 부족하여 클래스 불균형이 일어나 해소하기 위하여 이를 해결하기 위해
-# SMOTE를 이요하여 소수 클래스 샘플을 합성하여 데이터를 증강하는 과대표집 기법을 사용하여 문제 해결
-sm = SMOTE(k_neighbors=4, random_state=42)
-X_res, y_res = sm.fit_resample(X, y)
-
-# 학습 데이터와 테스트 데이터 분리
-X_train, X_test, y_train, y_test = train_test_split(X_res, y_res, test_size=0.2, random_state=42)
-
-# 랜덤 포레스트 분류기 학습
-model = RandomForestClassifier(n_estimators=100, random_state=42)
-model.fit(X_train, y_train)
-
-# 예측 및 평가
-y_pred = model.predict(X_test)
-print('정확성 : ', accuracy_score(y_test, y_pred))
-
-# 예측값(y_pred)과 실제값(y_test)을 이용해 정밀도, 재현율, F1 점수를 측정
-# F1 점수는 정밀도와 재현율의 조화 평균으로 계산
-# F1 점수는 0부터 1까지의 범위를 가지며, 1에 가까울수록 모델의 분류 성능이 우수하다는 것을 나타냄
-print(classification_report(y_test, y_pred))
-# Confusion Matrix
-print(confusion_matrix(y_test, y_pred))
-# 교차 검증
-scores = cross_val_score(model, X_res, y_res, cv=10)
-# 교차 검증 결과 출력
-print("교차 검증 결과 리스트:", scores)
-print("교차 검증 평균:", scores.mean())
-joblib.dump(model, 'championTierPredictionModel3.pkl')
-# -------------------------------------------------------------
 def insert_tier_data(x, conn):
     query = (
         f"INSERT INTO champion_tier (champion_id, team_position , win_rate ,"
