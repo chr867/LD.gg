@@ -46,6 +46,7 @@ $.ajax({
     },
     dataType : "json"
 }).done(function (resp){
+    console.log(resp);
     var allHTML = '';
     var mentoringHTML = '';
     var mateHTML = '';
@@ -70,7 +71,7 @@ $.ajax({
 })
 
 /* 채팅방 select, insert */
-function go_chat__(receiveemail, chat_category, lol_account){
+function go_chat__(receiveemail, chat_category, lol_account, profile_icon_id){
     $.ajax({
         url: "/chat/go_chat",
         method: "POST",
@@ -91,7 +92,7 @@ function go_chat__(receiveemail, chat_category, lol_account){
         }
         else{
             console.log(resp);
-            var url = "/chat/enter_chatroom?chat_room_seq=" + resp + "&chat_category=" + chat_category + "&lol_account=" + lol_account;
+            var url = "/chat/enter_chatroom?chat_room_seq=" + resp + "&chat_category=" + chat_category + "&lol_account=" + lol_account + "&profile_icon_id=" + profile_icon_id;
 
             var width = 520;
             var height = 600;
@@ -108,8 +109,8 @@ function makeLi(arr){
     var liHtml = '';
 
     arr.forEach((key, index) => {
-        liHtml += '<li><div class="profile-detail"><img src="/resources/img/profileicon/'+ index + '.png" alt="이미지" class="profile-image">';
-        liHtml += '<div class="profile-name" value="'+ key.email +'" onclick="go_chat__(' + "'" + key.email + "'" + ', 1, ' + "'" + key.lol_account + "'"  +')">' +  key.lol_account +'</div>';
+        liHtml += '<li><div class="profile-detail"><img src="/resources/img/profileicon/'+ key.profile_icon_id + '.png" alt="이미지" class="profile-image">';
+        liHtml += '<div class="profile-name" value="'+ key.email +'" onclick="go_chat__(' + "'" + key.email + "'" + ', 1, ' + "'" + key.lol_account + "', " + "'" + key.profile_icon_id + "'" +')">' +  key.lol_account +'</div>';
         if(index == 1){
             liHtml += '<div class="profile-msg">좋은 하루!</div>';
         }

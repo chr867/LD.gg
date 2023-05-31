@@ -27,6 +27,9 @@
 <div id="receive_user" hidden>
     ${lol_account}
 </div>
+<div id="profile_icon_id" hidden>
+    ${profile_icon_id}
+</div>
 <div class="chatroom-header">
     <div class="profile-detail">
     </div>
