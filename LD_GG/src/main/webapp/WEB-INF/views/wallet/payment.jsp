@@ -289,7 +289,6 @@
 				if (rsp.success) {
 					alert("결제가 완료되었습니다");
 					// 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
-					// jQuery로 HTTP 요청
 					console.log(rsp)
 					$.ajax({
 						url : "/wallet/payment/kakaopay/success",
@@ -408,7 +407,6 @@
 				  historyTr.append(dateTd, pointsTd, merchantIdTd, priceTd);
 				  $('.usageHistoryWindow').append(historyTr);
 				});
-			$('.usageHistoryWindow').html(historyTable);
 		}).fail(err=>{
 			console.log(err);
 		})

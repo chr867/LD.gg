@@ -10,9 +10,60 @@
 <script src="https://code.jquery.com/jquery-3.6.3.js"
 	integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
 	crossorigin="anonymous"></script>
+<!-- 대시보드 CSS -->
 <link href = "/resources/css/summoner/DashBoard.css?after" rel = "stylesheet">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+	crossorigin="anonymous">
+<!--BOOTSTRAP JavaScript-->
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+	crossorigin="anonymous">
+    </script>
+<!--SWEET-ALERT2 CSS-->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<!--SWEET-ALERT2 JS-->
+<script
+	src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<!--JQUERY-->
+<script src="https://code.jquery.com/jquery-3.6.3.js"
+	integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+	crossorigin="anonymous"></script>
+<!--AJAX-->
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!--JQUERY VALIDATE-->
+<script
+	src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.0/jquery.validate.min.js"></script>
+<!--sideBar CSS-->
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/main/sideBar.css">
+<!--header CSS-->
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/main/header.css">
+<!--footer CSS-->
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/main/footer.css">
+<!--loginModal CSS-->
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/main/loginModal.css">
+<!--로그인 및 세션관련 JS-->
+<script src="/resources/js/main/loginSession.js" defer></script>
+<!-- 채팅 관련 JS-->
+<script src="/resources/js/main/chat.js" defer></script>
+
 </head>
 <body>
+
+	<%@ include file="../header.jsp"%>
+	<%@ include file="../sidebar.jsp"%>
+<!-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+<div id = "main-container">
+	<div class = "flex-div">
 	<div class = "flex-dashboard">
 		<div class = "flex-my-profile">
 			<img alt="#" src="/resources/img/profileicon/${summoner.profile_icon_id}.png" class = "flex-profile-icon">
@@ -80,6 +131,9 @@
 			<div class = "flex-matchup-data"></div>
 		</div>
 	</div>
+	</div>
+</div>
+<%@ include file="../footer.jsp"%>
 	
 	<script type="text/javascript">
  	function loadingKdaData(){
@@ -163,42 +217,43 @@
  		      let champName = $('<span class="champName">' + res.champ_name + '</span>');
  		      champDiv.append(champImg, champName);
  		      
- 		      let winrate = 0;
- 		      if(res.wins === 0){
- 		    	  winrate = 0;
- 		      }else if(res.wins > 0 & res.losses > 0){
- 		    	  winrate = ((res.wins / res.losses) * 100).toFixed(2);
- 		      }else if(res.wins > 0 & res.losses === 0){
- 		    	  winrate = 100;
- 		      }
+ 		    let winrate = 0;
+ 		    if (res.wins === 0) {
+ 		      winrate = 0;
+ 		    } else if (res.wins > 0 && res.losses > 0) {
+ 		      winrate = (res.wins / (res.wins + res.losses) * 100).toFixed(2);
+ 		    } else if (res.wins > 0 && res.losses === 0) {
+ 		      winrate = 100;
+ 		    }
 
- 		      let winrateText = $('<span class="winrateText">' + winrate + '%</span>');
 
- 		      // 그래프 그리기
- 		      let canvas = $('<canvas></canvas>')[i];
- 		      let chartId = 'chart' + i; // 각 그래프를 구분하기 위한 고유 ID
- 		      canvas.id = chartId;
- 		      let ctx = canvas.getContext('2d');
+ 		    let winrateText = $('<span class="winrateText">' + winrate + '%</span>');
+
+ 		    // 그래프 그리기
+ 		    let canvas = $('<canvas></canvas>')[i];
+ 		    let chartId = 'chart' + i; // 각 그래프를 구분하기 위한 고유 ID
+ 		    canvas.id = chartId;
+ 		    let ctx = canvas.getContext('2d');
  		      
- 		     let myWins = res.wins;
- 		     let myLosses = res.losses;
+ 		    let myWins = res.wins;
+ 		    let myLosses = res.losses;
 
- 		     let winLabel = res.wins + '승';
- 		     let lossLabel = res.losses + '패';
+ 		    let winLabel = res.wins + '승';
+ 		    let lossLabel = res.losses + '패';
  		      
- 		     $(canvas).css({
+ 		    $(canvas).css({
  		    	  'max-width': '700px',
  		    	  'max-height': '40px'
- 		    	});
- 		      let myChart = new Chart(ctx,{
- 		    	  type : 'bar',
- 		    	  data : {
- 		    		  labels : ['승률'],
- 		    		  datasets : [
- 		    			  {label : '승리' , data : [myWins],
- 		    			  backgroundColor : ['rgba(54, 162, 235, 0.5)'],
- 		    			  borderColor : ['rgba(54, 162, 235, 0.5)'],
- 		    			  borderWidth : 1
+ 		    });
+ 		    let myChart = new Chart(ctx,{
+ 		      type : 'bar',
+ 		      data : {
+ 		    	labels : ['승률'],
+ 		    	datasets : [
+ 		    	  {label : '승리' , data : [myWins],
+ 		    	  backgroundColor : ['rgba(54, 162, 235, 0.5)'],
+ 		    	  borderColor : ['rgba(54, 162, 235, 0.5)'],
+ 		    	  borderWidth : 1
  		    		  }, {
  		    			 label : '패배' , data : [myLosses],
 		    			  backgroundColor : ['rgba(255, 99, 132, 0.5)'],
