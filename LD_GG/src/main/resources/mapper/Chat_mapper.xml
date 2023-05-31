@@ -64,7 +64,7 @@
 	<select id="get_mentor" parameterType="String" resultType="chatuser">
 		select distinct my_m.mentor_email as email, mem.lol_account as lol_account, si.profile_icon_id as profile_icon_id
 		from my_mentoring my_m
-				 join member mem on mem.email= my_m.menti_email
+				 join member mem on mem.email= my_m.mentor_email
 				 JOIN (
 			SELECT mem.lol_account, si.summoner_name, si.profile_icon_id
 			FROM summoner_info si
