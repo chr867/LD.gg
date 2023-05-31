@@ -453,7 +453,7 @@ function selectLane(team_position) {
         res.forEach(function(champion) {
         	championHTML += '<div class="champion">';
         	championHTML += '<img alt="' + champion.champion_kr_name + '" class="bg-image champion-img" src="/resources/img/champion_img/square/'
-            + champion.champion_img + '"/ onclick="selectChampion(\'' + champion.champion_kr_name + '\')">'; 
+            + champion.champion_img + '"/ onclick="selectChampion(\'' + champion.champion_id + '\')">'; 
         	championHTML += '</div>';
         });
 

@@ -19,4 +19,5 @@ public class QuestionDto {
     private String tag1;
     private String tag2;
     private String lol_account;
+    private String profile_icon_id;
 }

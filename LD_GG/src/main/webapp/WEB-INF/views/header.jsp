@@ -19,14 +19,13 @@
 <div id="session-summoner-icon" style="display: none">${sessionScope.summoner_icon}</div>
 <div id="error-check" style="display: none">${check}</div>
 <!----------------------------------------------------------------------------------------------------------------->
-<!-- 헤더 -->
+<div class="toast-container" id="toast-container" style="display: hidden">
+</div>
 <div class="chat-noti" style="display: none;">
 </div>
-<div class="toast-container" id="toast-container">
-</div>
+<!-- 헤더 -->
 <div class="header-container">
   <header>
-
     <div class="search-bar-box">
       <img src="/resources/img/logo/LD_logo_bluered.png" alt="" class="search-bar-logo">
       <input type="text" class="search-bar-input" placeholder="소환사명을 입력해주세요" autocomplete="off" onkeypress = "searchSummoner(event)">
@@ -84,7 +83,6 @@
         <button class="logout-button" onclick="logout()">LOGOUT</button>
       </form>
     </div>
-
   </header>
 </div>
 <!----------------------------------------------------------------------------------------------------------------->
@@ -166,6 +164,10 @@
     	}
     }
   </script>
+<div class="toast-container" id="toast-container" style="display: hidden">
+</div>
+<div class="chat-noti" style="display: none;">
+</div>
 </body>
 
 </html>

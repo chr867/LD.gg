@@ -1298,6 +1298,12 @@ box-sizing: border-box;
 	let selected_left_champion;
 	let selected_right_champion;
 
+	$('.select_lane .TOP').css('background-color', '#E4E6EF');
+	selected_lane = 'TOP';
+	selectLane('TOP');
+	
+	$('.select_tag .all').css('background-color', '#E4E6EF');
+	selected_tag = 'all';			
 
 	function go_mypage(){
 		location.href="/member/mypage"
@@ -1468,11 +1474,12 @@ function championList() {
 		});
 
 		$('.champions').html(championHTML);
+		
 	}).fail(err => {
 		console.log(err);
 	});
 }
-championList();
+selectLane('TOP');
 // 챔피언 리스트 끝
 
 // 라인 선택
@@ -1644,7 +1651,16 @@ async function recom_build() {
     } catch (error) {
       console.error(error);
     }
-  }
+  }else{
+		let msg = '';
+		if(!selected_left_champion){
+			msg += '[내 챔피언] '
+		}
+		if(!selected_right_champion){
+			msg += '[상대 챔피언] '
+		}
+		alert(msg + '을 선택해 주세요')
+	}
 }
 	// 빌드 추천 end
 

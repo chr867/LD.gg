@@ -61,28 +61,72 @@
 		select chat_send_user, chat_receive_user from chat_room where chat_room_seq = #{chat_room_seq}
 	</select>
 
-	<select id="get_mentor" parameterType="String" resultType="member">
-		select distinct my_m.mentor_email as email, mem.lol_account as lol_account
+	<select id="get_mentor" parameterType="String" resultType="chatuser">
+		select distinct my_m.mentor_email as email, mem.lol_account as lol_account, si.profile_icon_id as profile_icon_id
 		from my_mentoring my_m
-			join member mem on mem.email= my_m.menti_email
+				 join member mem on mem.email= my_m.mentor_email
+				 JOIN (
+			SELECT mem.lol_account, si.summoner_name, si.profile_icon_id
+			FROM summoner_info si
+					 JOIN member mem ON mem.lol_account = si.summoner_name
+					 JOIN (
+				SELECT summoner_name, MAX(revision_date) AS max_revision_date
+				FROM summoner_info
+				GROUP BY summoner_name
+			) latest_si ON si.summoner_name = latest_si.summoner_name AND si.revision_date = latest_si.max_revision_date
+			ORDER BY si.revision_date
+		) si ON mem.lol_account = si.summoner_name
 		where menti_email = #{email}
 	</select>
-	<select id="get_menti" parameterType="String" resultType="member">
-		select distinct my_m.menti_email as email, mem.lol_account as lol_account
+	<select id="get_menti" parameterType="String" resultType="chatuser">
+		select distinct my_m.menti_email as email, mem.lol_account as lol_account, si.profile_icon_id as profile_icon_id
 		from my_mentoring my_m
-			join member mem on mem.email= my_m.menti_email
+				 join member mem on mem.email= my_m.menti_email
+				 JOIN (
+			SELECT mem.lol_account, si.summoner_name, si.profile_icon_id
+			FROM summoner_info si
+					 JOIN member mem ON mem.lol_account = si.summoner_name
+					 JOIN (
+				SELECT summoner_name, MAX(revision_date) AS max_revision_date
+				FROM summoner_info
+				GROUP BY summoner_name
+			) latest_si ON si.summoner_name = latest_si.summoner_name AND si.revision_date = latest_si.max_revision_date
+			ORDER BY si.revision_date
+		) si ON mem.lol_account = si.summoner_name
 		where mentor_email = #{email}
 	</select>
-	<select id="get_mateapp" parameterType="String" resultType="member">
-		select distinct mate.mate_apply as email, mem.lol_account as lol_account
+	<select id="get_mateapp" parameterType="String" resultType="chatuser">
+		select distinct mate.mate_apply as email, mem.lol_account as lol_account, si.profile_icon_id as profile_icon_id
 		from mate_request mate
-			join member mem on mem.email = mate.mate_apply
+				 join member mem on mem.email = mate.mate_apply
+				 JOIN (
+			SELECT mem.lol_account, si.summoner_name, si.profile_icon_id
+			FROM summoner_info si
+					 JOIN member mem ON mem.lol_account = si.summoner_name
+					 JOIN (
+				SELECT summoner_name, MAX(revision_date) AS max_revision_date
+				FROM summoner_info
+				GROUP BY summoner_name
+			) latest_si ON si.summoner_name = latest_si.summoner_name AND si.revision_date = latest_si.max_revision_date
+			ORDER BY si.revision_date
+		) si ON mem.lol_account = si.summoner_name
 		where mate.email = #{email}
 	</select>
-	<select id="get_mate" parameterType="String" resultType="member">
-		select distinct mate.email as email, mem.lol_account as lol_account
+	<select id="get_mate" parameterType="String" resultType="chatuser">
+		select distinct mate.email as email, mem.lol_account as lol_account, si.profile_icon_id as profile_icon_id
 		from mate_request mate
-			join member mem on mem.email = mate.email
+				 join member mem on mem.email = mate.email
+				 JOIN (
+			SELECT mem.lol_account, si.summoner_name, si.profile_icon_id
+			FROM summoner_info si
+					 JOIN member mem ON mem.lol_account = si.summoner_name
+					 JOIN (
+				SELECT summoner_name, MAX(revision_date) AS max_revision_date
+				FROM summoner_info
+				GROUP BY summoner_name
+			) latest_si ON si.summoner_name = latest_si.summoner_name AND si.revision_date = latest_si.max_revision_date
+			ORDER BY si.revision_date
+		) si ON mem.lol_account = si.summoner_name
 		where mate.mate_apply = #{email}
 	</select>
 </mapper>
