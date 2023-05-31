@@ -243,7 +243,7 @@
 			<div class="champion-twpb-box">
 				<table>
 					<tr>
-						<th class="champion-twpb">Ai-Tier</th>
+						<th class="champion-twpb">티어</th>
 						<th class="champion-twpb">Ai-Score</th>
 						<th class="champion-twpb">승률</th>
 						<th class="champion-twpb">픽률</th>
