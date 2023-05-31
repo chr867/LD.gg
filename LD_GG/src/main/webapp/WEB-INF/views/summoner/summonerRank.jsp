@@ -3,23 +3,52 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>소환사 랭킹</title>
+<title>LD.GG</title>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
 	rel="stylesheet"
 	integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
 	crossorigin="anonymous">
-
+<!--BOOTSTRAP JavaScript-->
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+	crossorigin="anonymous">
+    </script>
+<!--SWEET-ALERT2 CSS-->
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<!--SWEET-ALERT2 JS-->
 <script
 	src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
-
+<!--JQUERY-->
 <script src="https://code.jquery.com/jquery-3.6.3.js"
 	integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
 	crossorigin="anonymous"></script>
-
+<!--AJAX-->
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!--JQUERY VALIDATE-->
+<script
+	src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.0/jquery.validate.min.js"></script>
+<!--sideBar CSS-->
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/main/sideBar.css">
+<!--header CSS-->
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/main/header.css">
+<!--footer CSS-->
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/main/footer.css">
+<!--loginModal CSS-->
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/main/loginModal.css">
+<!--로그인 및 세션관련 JS-->
+<script src="/resources/js/main/loginSession.js" defer></script>
+<!-- 채팅 관련 JS-->
+<script src="/resources/js/main/chat.js" defer></script>
+<!-- 차트 JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
 <!-- jqGrid CSS -->
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/css/ui.jqgrid.min.css">
@@ -28,14 +57,24 @@
 <script	src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/jquery.jqgrid.min.js"></script>
 	
 <link href = "/resources/css/summoner/summonerRank.css" rel = "stylesheet">
+
+<style type="text/css">
+.main-container{
+	padding: 50px 50px 0px 100px;
+	box-sizing: border-box;
+}
+</style>
 </head>
 <body>
-
+	<%@ include file="../header.jsp"%>
+	<%@ include file="../sidebar.jsp"%>
+	<%@ include file="../footer.jsp"%>
+	
 	<!-- 부모 div가 전체적으로 감싸안고, 그 밑으로 랭킹 정보를 테이블로 표현 -->
-
+<div class="main-container">
 	<div id="rank_tool">
 		<div class="flex-header-filter">
-			<header class="flex-header">
+			<div class="flex-header">
 				<div class="game-filter" id="solo_rank">
 					<strong style="cursor: pointer">솔로 랭크</strong>
 				</div>
@@ -45,7 +84,7 @@
 				<div class="game-filter" id="level">
 					<strong style="cursor: pointer">레벨</strong>
 				</div>
-			</header>
+			</div>
 
 			<div id="grid-wrapper">
 				<table id="summoner_rank_table"></table>
@@ -54,6 +93,7 @@
 
 		</div>
 	</div>
+</div>
 
 	<script type="text/javascript">
 	$('#summoner_rank_table').jqGrid({

@@ -28,7 +28,7 @@ from imblearn.over_sampling import SMOTE
 import joblib
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import StandardScaler
-
+# Pandas, Matplotlib, Seaborn, Scikit-learn, Numpy, SciPy, Imbalanced-learn, Plotly, XGBoost
 # # RIOT-API-KEY
 # riot_api_key = 'RGAPI-14667a4e-7c3c-45fa-ac8f-e53c7c3f5fe1'
 # pd.set_option('display.max_columns', None)
