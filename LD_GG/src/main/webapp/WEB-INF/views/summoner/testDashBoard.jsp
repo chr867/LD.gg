@@ -314,29 +314,30 @@
   		  let winsDiv = $('<div class = "winsDiv"></div>');
   		  let lossesDiv = $('<div class = "lossesDiv"></div>');
   		  let winrateDiv = $('<div class = "allWinrateDiv"></div>');
-  		  
-  		  let profileImg = $('<img class = "profileImg" src = "/resources/img/profileicon/'+o.profile_icon_id+'.png">');
-  		  let summonerNameText = $('<span class = "summonerNameText">'+sName+'</span>');
-  		  summonerNameDiv.append(profileImg, summonerNameText);
-  		  
-  		  let rankTierImg = $('<img class = "rankTierImg" src = "/resources/img/ranked-emblem/emblem-'+o.tier+'.png">');
-  		  let rankTierText = $('<span class = "rankTierText">'+o.tier+'</span>');
-  		  soloRankTierDiv.append(rankTierImg, rankTierText);
-  		  
-  		  let gamesText = $('<span class = "gamesText">'+summonerStats.games+'</span>');
-  		  gamesDiv.append(gamesText);
-  		  
-  		  let winsText = $('<span class = "winsText">'+summonerStats.wins+'</span>');
-  		  winsDiv.append(winsText);
-  		  
-  		  let lossesText = $('<span class = "lossesText">'+summonerStats.losses+'</span>');
-  		  lossesDiv.append(lossesText);
-  		  
-  		  let winrate = (summonerStats.wins / summonerStats.games) * 100; 
-  		  let winrateText = $('<span class = "winrateText">'+winrate+'%</span>');
-  		  winrateDiv.append(winrateText);
-  		  fullSummonerData.append(summonerNameDiv, soloRankTierDiv, gamesDiv, winsDiv, lossesDiv, winrateDiv);
-  		  allDataDiv.append(fullSummonerData);
+  		 if(o.tier != undefined){
+  			let profileImg = $('<img class = "profileImg" src = "/resources/img/profileicon/'+o.profile_icon_id+'.png">');
+    		  let summonerNameText = $('<span class = "summonerNameText">'+sName+'</span>');
+    		  summonerNameDiv.append(profileImg, summonerNameText);
+    		  
+    		  let rankTierImg = $('<img class = "rankTierImg" src = "/resources/img/ranked-emblem/emblem-'+o.tier+'.png">');
+    		  let rankTierText = $('<span class = "rankTierText">'+o.tier+'</span>');
+    		  soloRankTierDiv.append(rankTierImg, rankTierText);
+    		  
+    		  let gamesText = $('<span class = "gamesText">'+summonerStats.games+'</span>');
+    		  gamesDiv.append(gamesText);
+    		  
+    		  let winsText = $('<span class = "winsText">'+summonerStats.wins+'</span>');
+    		  winsDiv.append(winsText);
+    		  
+    		  let lossesText = $('<span class = "lossesText">'+summonerStats.losses+'</span>');
+    		  lossesDiv.append(lossesText);
+    		  
+    		  let winrate = (summonerStats.wins / summonerStats.games) * 100; 
+    		  let winrateText = $('<span class = "winrateText">'+winrate+'%</span>');
+    		  winrateDiv.append(winrateText);
+    		  fullSummonerData.append(summonerNameDiv, soloRankTierDiv, gamesDiv, winsDiv, lossesDiv, winrateDiv);
+    		  allDataDiv.append(fullSummonerData);
+  		  }
         }).fail(x=>{
       	  console.log(x);
         });
