@@ -296,7 +296,7 @@ margin:auto;
 			<hr>
 			<div class="d-flex justify-content-evenly">
 				<button class="col-5 btn btn-dark" id="apply-btn">수업신청</button>
-				<button class="col-5 btn btn-dark" id="chat-btn" onclick="go_chat__('${mentor_profile.mentor_email}', 1, '${mentor_profile.lol_account}')">1:1 상담</button>
+				<button class="col-5 btn btn-dark" id="chat-btn" onclick="go_chat__('${mentor_profile.mentor_email}', 1, '${mentor_profile.lol_account}', '${mentor_profile.profile_icon_id}')">1:1 상담</button>
 			</div>
 		</div>
 	</article>
@@ -984,31 +984,26 @@ margin:auto;
 			});
 	}
 
-	function go_chat__(receiveemail, chat_category, lol_account) {
-		console.log(receiveemail);
-		console.log(chat_category);
-		console.log(lol_account);
-		console.log('${sessionScope.email}');
+	/* 채팅방 select, insert */
+	function go_chat__(receiveemail, chat_category, lol_account, profile_icon_id){
 		$.ajax({
 			url: "/chat/go_chat",
 			method: "POST",
 			data: {
-				'chat_category': chat_category,
-				'chat_receive_user': receiveemail,
-				'chat_send_user': '${sessionScope.email}'
+				'chat_category' : chat_category,
+				'chat_receive_user' : receiveemail,
+				'chat_send_user' : "${member.email}"
 			},
-			dataType: "json"
-		}).done(function (resp) {
-			console.log(resp);
-
+			dataType : "json"
+		}).done(function(resp){
 			// res = 0 실패 => alert
 			// res = chat_room_seq => 팝업창으로 채팅방 열기
 
-			if (resp == 0) {
+			if(resp == 0) {
 				alert("잠시 후 다시 시도해주세요.");
-			} else {
-				console.log(resp);
-				var url = "/chat/enter_chatroom?chat_room_seq=" + resp + "&chat_category=" + chat_category + "&lol_account=" + lol_account;
+			}
+			else{
+				var url = "/chat/enter_chatroom?chat_room_seq=" + resp + "&chat_category=" + chat_category + "&lol_account=" + lol_account + "&profile_icon_id=" + profile_icon_id;
 
 				var width = 520;
 				var height = 600;
@@ -1016,7 +1011,7 @@ margin:auto;
 				var top = (window.innerHeight / 2) - (height / 2);
 				var popup = window.open(url, 'popupView', 'width=430, height=500, location=no, status=no, scrollbars=yes');
 			}
-		}).fail(function (err) {
+		}).fail(function (err){
 			console.log(err);
 		});
 	}
