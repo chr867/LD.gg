@@ -164,10 +164,35 @@
     	}
     }
   </script>
+  
 <div class="toast-container" id="toast-container" style="display: hidden">
 </div>
 <div class="chat-noti" style="display: none;">
 </div>
 </body>
+<script type="text/javascript">
+let check = ''
+check = ${check}
+if(check !=''){
+	loginReturnNumber(check);
+}
 
+//로그인 및 회원가입시 리턴되는 값 
+function loginReturnNumber(check) {
+	  if (check === 1) {
+	    Swal.fire({
+	      icon: 'success',
+	      title: '회원가입 성공',
+	      text: '로그인해주세요!!!'
+	    });
+	  } else if (check === 2) {
+	    Swal.fire({
+	      icon: 'error',
+	      title: '로그인 실패',
+	      text: '아이디 또는 비번 오류입니다!!'
+	    });
+	  }
+	}
+
+</script>
 </html>

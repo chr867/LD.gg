@@ -1,10 +1,6 @@
 $(document).ready(function() {
 	var summonerName = document.getElementById('session-summoner-name').innerText;
 	var userType = document.getElementById('session-user-type').innerText;
-/*	var check = document.getElementById('error-check').innerText;
-	if(check !=''){
-		loginReturnNumber(check);
-	}*/
 
   sessionCheck(summonerName, userType);
 });
@@ -59,23 +55,6 @@ function logout() {
 	document.querySelector('#logoutFrm').submit();
 	alert("로그아웃 되었습니다.");
 }
-
-//로그인 및 회원가입시 리턴되는 값 
-function loginReturnNumber(check) {
-	  if (check === 1) {
-	    Swal.fire({
-	      icon: 'success',
-	      title: '회원가입 성공',
-	      text: '로그인해주세요!!!'
-	    });
-	  } else if (check === 2) {
-	    Swal.fire({
-	      icon: 'error',
-	      title: '로그인 실패',
-	      text: '아이디 또는 비번 오류입니다!!'
-	    });
-	  }
-	}
 
 //회원가입 페이지 이동 메소드
 function join() {
