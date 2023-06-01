@@ -110,51 +110,15 @@
 <body>
 	<%@ include file="../header.jsp"%>
 	<%@ include file="../sidebar.jsp"%>
-<div id = "rank-main-container">
-	<!-- 부모 div가 전체적으로 감싸안고, 그 밑으로 랭킹 정보를 테이블로 표현 -->
-	<div class="main-container">
+	<%@ include file="../footer.jsp"%>
+	<div id="rank-main-container">
 		<div id="rank_tool">
-			<div class="flex-header-filter">
-				<div class="flex-header">
-					<div class="game-filter" id="solo_rank">
-						<strong style="cursor: pointer">솔로 랭크</strong>
-					</div>
-					<div class="game-filter" id="flex_rank">
-						<strong style="cursor: pointer">자유 랭크</strong>
-					</div>
-				</div>
-				<div id="rank-main-container">
-					<div id="rank_tool">
-						<div class="flex-header-filter">
-							<div class="flex-header">
-								<div class="game-filter" id="solo_rank">
-									<strong style="cursor: pointer">솔로 랭크</strong>
-								</div>
-								<div class="game-filter" id="flex_rank">
-									<strong style="cursor: pointer">자유 랭크</strong>
-								</div>
-								<div class="game-filter" id="level">
-									<strong style="cursor: pointer">레벨</strong>
-								</div>
-							</div>
-
-							<div id="grid-wrapper">
-								<table id="summoner_rank_table"></table>
-								<div id="pager"></div>
-							</div>
-						</div>
-
-						<div id="grid-wrapper">
-							<table id="summoner_rank_table"></table>
-							<div id="pager"></div>
-						</div>
-					</div>
-				</div>
+			<div id="grid-wrapper">
+				<table id="summoner_rank_table"></table>
+				<div id="pager"></div>
 			</div>
 		</div>
 	</div>
-  <%@ include file="../footer.jsp"%>
-  
 	<script type="text/javascript">
 	$('#summoner_rank_table').jqGrid({
 		url : "/summoner/rank/solo/loading/data.json",
@@ -227,7 +191,7 @@
 	} ]
 });
 
-		$('#solo_rank')
+/* 		$('#solo_rank')
 				.click(
 						function() {
 							$('#summoner_rank_table')
@@ -471,7 +435,7 @@
 														} ]
 											})
 						})
-		})
+		}) */
 						
 		function handleClick(summonerName) {
 		    let decodedSummonerName = decodeURIComponent(summonerName);
