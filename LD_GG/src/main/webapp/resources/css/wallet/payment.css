@@ -224,11 +224,13 @@
 	background-color: #fff;
 	width: 950px;
 	height : 550px;
+	max-height : 550px;
 	top: 50%; /* 중앙보다 약간 위로 이동 */
 	left: 50%;
 	transform: translate(-50%, -50%);
 	display : flex;
 	flex-direction : row;
+	overflow-y: auto;
 }
 
 .usageWindow{
