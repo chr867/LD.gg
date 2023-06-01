@@ -34,19 +34,7 @@ a{
  font-family: 'NanumSquareNeo-Variable';
 }
 
-html{
-      display:flex;
-      justify-content: center;
-}
-body {
-      image-rendering: -webkit-optimize-contrast; /* chrome */
-      background-image: url("/resources/img/mate/back.png");
-      background-size: 100%;
-      min-width: 1312px;
-      min-height: 1500px;
-      overflow-x: hidden;
-    }
-    
+   
 tr:not(:first-child) td:last-child{
 	padding-left: 0px;
 }    

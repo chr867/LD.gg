@@ -66,21 +66,15 @@
     font-weight: normal;
     font-style: normal;
 }
+
 *{
  font-family: 'NanumSquareNeo-Variable';
 }
+
 #bookmarkicon {
 	width: 40px; /* 버튼 이미지의 너비 */
 	height: 40px; /* 버튼 이미지의 높이 */
 }
-
-body {
-      image-rendering: -webkit-optimize-contrast; /* chrome */
-      background-image: url("/resources/img/mate/back.png");
-      background-size: 100%;
-      min-width: 1312px;
-      overflow-x: hidden;
-    }
 
 
 /*그리드 제목 */
