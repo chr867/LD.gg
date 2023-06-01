@@ -95,11 +95,6 @@ function showMessage(message) {
 /* css control */
 function formattedDate(dateString) {
     var date = new Date(dateString);
-
-    if(isNaN(date))
-    {
-
-    }
     var month = date.getMonth() + 1; // 월 가져오기
     var day = date.getDate(); // 일 가져오기
     var hours = date.getHours(); // 시간 가져오기

@@ -31,4 +31,6 @@ public interface QuestionDao {
     List<QuestionDto> select_tag_by_two(@Param("tag1") String tag1, @Param("tag2") String tag2);
 
     List<QuestionDto> select_tag_two(String tag2);
+
+    int my_unscrape(@Param("email") String email, @Param("questionId") int questionId);
 }

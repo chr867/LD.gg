@@ -11,13 +11,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequestMapping("/question")
 @RestController
 public class QuestionRestController {
-
     @Autowired
     QuestionService questionService;
 
@@ -34,6 +35,16 @@ public class QuestionRestController {
 
         return questionDtoList;
     }
+
+    @PostMapping("/select_list_test")
+    public Map<String, List<?>> select_list_test(String email){
+        Map<String, List<?>> question_map = new HashMap<>();
+
+        question_map = questionService.select_list_test(email);
+
+        return question_map;
+    }
+
 
     @PostMapping("/select_list")
     public List<QuestionDto> select_list(String email, int option){
@@ -113,5 +124,13 @@ public class QuestionRestController {
         }
 
         return questionDtoList;
+    }
+    @PostMapping("/my_unscrape")
+    public int my_unscrape(String email, int question_id){
+        System.out.println("my_unscrape : " + email + question_id);
+
+        int res = questionService.my_unscrape(email, question_id);
+
+        return res;
     }
 }
