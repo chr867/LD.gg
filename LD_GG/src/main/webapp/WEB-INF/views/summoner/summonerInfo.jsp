@@ -1709,6 +1709,7 @@
 	        $.each(response, function (i, syn) {
 	            if (syn.win === 1) {
 	                // 5. 'win' 내부에 res의 win 값이 true 인 데이터 수 만큼 div 태그 생성
+	                win.css('background-color', 'rgba(117, 199, 251, 0.5)');
 	                let winTeam = $('<div class="win_team"></div>');
 	                // 7. 각 'win_team' 내부에 작업할 내용
 	                // 7-1. div 태그 4개 생성. 각 div 태그의 class 속성에 'champ_info','kda_info','cs_ward_info','item_info' 부여.
@@ -1810,6 +1811,7 @@
 	                win.append(winTeam);
 	            } else {
 	                // 9. 'lose' 내부에 res의 win 값이 false 인 데이터 수 만큼 div 태그 생성 (위와 동일한 작업)
+	                lose.css('background-color', 'rgba(255, 56, 71, 0.5)');
 	                let loseTeam = $('<div class="lose_team"></div>');
 	                let champion = $('<div class="champion"><img class="flex-champion" src="/resources/img/champion_img/square/'+syn.champ_name+'.png"></div>');
 	                let champLevel = $('<span class="champ_level">'+syn.champ_level+'</span>');
