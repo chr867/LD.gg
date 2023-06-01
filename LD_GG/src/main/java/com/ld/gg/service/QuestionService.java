@@ -1,6 +1,7 @@
 package com.ld.gg.service;
 
 import com.ld.gg.dao.QuestionDao;
+import com.ld.gg.dto.chat.ChatUserDto;
 import com.ld.gg.dto.question.AnswerDto;
 import com.ld.gg.dto.question.QuestionDto;
 import com.ld.gg.dto.question.ScrapeDto;
@@ -8,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class QuestionService {
@@ -171,5 +174,29 @@ public class QuestionService {
         questionDtoList = qd.select_tag_two(tag2);
 
         return questionDtoList;
+    }
+
+    public Map<String, List<?>> select_list_test(String email) {
+        Map<String, List<?>> question_map = new HashMap<>();
+
+        /* mentoring */
+        List<QuestionDto> question_all = qd.select_list_all();
+        List<QuestionDto> question_scrape = qd.select_list_by_scrape(email);
+
+        question_map.put("question_all", question_all);
+        question_map.put("question_scrape", question_scrape);
+
+        return question_map;
+    }
+
+    public int my_unscrape(String email, int questionId) {
+        int res = qd.my_unscrape(email, questionId);
+
+        if(res <= 0){
+            System.out.println("스크랩 취소 실패!");
+        }
+        else System.out.println("스크랩 취소 성공!");
+
+        return res;
     }
 }

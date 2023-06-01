@@ -173,4 +173,7 @@
         where tag2 = #{tag2}
         order by question_id desc
     </select>
+    <delete id="my_unscrape">
+        delete from question_scrape where question_id = #{questionId} and email = #{email}
+    </delete>
 </mapper>
