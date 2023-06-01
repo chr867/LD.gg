@@ -38,13 +38,14 @@ public class MemberRestController {
     
     @PostMapping("/logout")
     public ModelAndView logout(HttpSession session, HttpServletRequest request) throws Exception {
+    	String referer = request.getHeader("Referer");
         String email = (String) session.getAttribute("email");
         if (email != null) {
             sessionListener.logout(email); // 세션 삭제
         }
         log.info("세션 무효화");
         session.invalidate(); // 세션 무효화
-        return new ModelAndView("redirect:/");
+        return new ModelAndView("redirect:" + referer);
     }
 	
 	@PostMapping("/join")
@@ -134,8 +135,9 @@ public class MemberRestController {
 	}
 	
 	@PostMapping("/change_usertype")
-	public boolean changeUserType(String email, String password, Integer user_type, HttpSession session) throws Exception{
+	public boolean changeUserType(String password, int user_type, HttpSession session) throws Exception{
 		log.info("유저타입 변경 시작");
+		String email = (String) session.getAttribute("email");
 		boolean result = ms.changeUserType(email,password,user_type);
 		log.info("회원전환 결과:"+result);
 		if(result) {

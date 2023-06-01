@@ -71,10 +71,9 @@ public class SessionListener implements HttpSessionListener {
 	        } else {
 	            sessions.put(email, session);
 	        }
-
 	        LocalDateTime loginTime = LocalDateTime.now();
 	        String ipAddress = request != null ? request.getRemoteAddr() : "";
-	        String requestURI = request != null ? request.getRequestURI() : "";
+	        String requestURI = request != null ? request.getHeader("Referer") : "";
 	        String httpMethod = request != null ? request.getMethod() : "";
 	        String userAgent = request != null ? request.getHeader("User-Agent") : "";
 
