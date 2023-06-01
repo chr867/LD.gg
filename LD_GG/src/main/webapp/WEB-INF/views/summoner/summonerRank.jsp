@@ -163,7 +163,7 @@
 	} ]
 });
 
-		$('#solo_rank')
+/*		$('#solo_rank')
 			.click(
 				function () {
 					$('#summoner_rank_table')
