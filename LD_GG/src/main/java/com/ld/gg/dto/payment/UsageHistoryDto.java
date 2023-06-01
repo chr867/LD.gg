@@ -11,4 +11,7 @@ public class UsageHistoryDto {
 	private int points_sent;
 	private String merchant_id;
 	private int price;
+	private String sender_id;
+	private String receiver_id;
+	private int points_received;
 }

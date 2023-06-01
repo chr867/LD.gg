@@ -46,4 +46,6 @@ public interface PaymentDao {
 
 	TradeDto updateTrade(TransactionHistoryDTO tx_history);
 
+	List<UsageHistoryDto> getMerchant(@Param("email") String email);
+
 }

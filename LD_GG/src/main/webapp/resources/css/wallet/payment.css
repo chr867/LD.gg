@@ -222,22 +222,19 @@
 #history-content {
 	position : absolute;
 	background-color: #fff;
-	width: 800px;
+	width: 950px;
+	height : 550px;
 	top: 50%; /* 중앙보다 약간 위로 이동 */
 	left: 50%;
 	transform: translate(-50%, -50%);
 	display : flex;
-	flex-direction : column;
-	justify-content : center;
-	align-items : center;
+	flex-direction : row;
 }
 
 .usageWindow{
-	width: 950px;
-    height : 70vh;
+	width: 475px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     background-color : white;
 }

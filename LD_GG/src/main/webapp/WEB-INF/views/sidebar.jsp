@@ -20,7 +20,6 @@
 					style="width: 40px; height: 40px;">
 			</div>
 			<div class="sidebar-menu" style="padding: 18px;">
-				<img src="" alt="">
 			</div>
 			<div class="sidebar-menu">
 				<img src="/resources/img/icon/free-icon-ranking-3162263.png" alt=""
@@ -35,6 +34,7 @@
 					alt="" class="side-bar-icon">
 			</div>
 			<!--     <div class="sidebar-menu">
+
       <img src="/resources/img/icon/free-icon-game-control-4315528.png"
            alt="" class="side-bar-icon">
     </div> -->

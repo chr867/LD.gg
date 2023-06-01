@@ -158,16 +158,25 @@
 	
 	<div id = "usageHistory">
 		<div id = "history-content">
+		
 			<table class="usageWindow">
 			  <thead>
 			    <tr class="usageCategory">
 			      <th class="usageMiniCategory">거래 날짜</th>
 			      <th class="usageMiniCategory">거래 금액</th>
-			      <th class="usageMiniCategory">구매 번호</th>
-			      <th class="usageMiniCategory">충전 금액</th>
 			    </tr>
 			  </thead>
 			  <tbody class="usageHistoryWindow"></tbody>
+			</table>
+			
+			<table class = "usageWindow">
+				<thead>
+					<tr class="usageCategory">
+						<th class="usageMiniCategory">구매 번호</th>
+			      		<th class="usageMiniCategory">충전 금액</th>
+					</tr>
+				</thead>
+				<tbody class = "merchantHistoryWindow"></tbody>
 			</table>
 			
 		</div>
@@ -392,13 +401,18 @@
 	
 	$('.flex-chargeTab').click(function(){
 		$("#usageHistory").fadeIn();
+		
+		let charge = "";
+		let merchant = "";
+		
 		$.ajax({
 			url : '/wallet/payment/getCharge',
 			method : 'post',
-			data : {email : holder_email}
+			data : {email : holder_email},
+			async : false
 		}).done(res=>{
 			console.log(res);
-			$.each(res, function(i, history){
+			/* $.each(res, function(i, history){
 				  let historyTr = $('<tr class="historyTr"></tr>');
 				  let dateTd = $('<td class="dateTd">'+history.tx_date+'</td>');
 				  let pointsTd = $('<td class="pointsTd">'+history.points_sent+'</td>');
@@ -406,10 +420,54 @@
 				  let priceTd = $('<td class="priceTd">'+history.price+'</td>');
 				  historyTr.append(dateTd, pointsTd, merchantIdTd, priceTd);
 				  $('.usageHistoryWindow').append(historyTr);
-				});
+				}); */
+			charge = res;
+		}).fail(err=>{
+			console.log(err);
+		});
+		
+		$.ajax({
+			url : '/wallet/payment/getMerchant',
+			method : 'post',
+			data : {email : holder_email},
+			async : false
+		}).done(res=>{
+			console.log(res);
+			merchant = res;
 		}).fail(err=>{
 			console.log(err);
 		})
+		
+		let chargeData = '';
+		$.each(charge, function(i, charge){
+			let chargeTr = $('<tr class="historyTr"></tr>');
+			let dateTd = "";
+			let pointsTd = "";
+		
+			if(charge.sender_id === holder_email){
+				dateTd = $('<td class="dateTd">'+charge.tx_date+'</td>');
+				pointsTd = $('<td class="pointsTd">신청료 : '+charge.points_sent+'</td>');
+				chargeTr.append(dateTd, pointsTd);
+				chargeData += chargeTr.prop('outerHTML');
+			}else{
+				dateTd = $('<td class="dateTd">'+charge.tx_date+'</td>');
+				pointsTd = $('<td class="pointsTd">받은 금액 : '+charge.points_received+'</td>');
+				chargeTr.append(dateTd, pointsTd);
+				chargeData += chargeTr.prop('outerHTML');
+			}
+		});
+		$('.usageHistoryWindow').html(chargeData);
+
+		let historyData = "";
+		$.each(merchant, function(j, merchant){
+			let historyTr = $('<tr class="historyTr"></tr>');
+			let merchantIdTd = $('<td class="merchantIdTd">'+merchant.merchant_id+'</td>');
+			let priceTd = $('<td class="priceTd">'+merchant.price+'</td>');
+			
+			historyTr.append(merchantIdTd, priceTd);
+			historyData += historyTr.prop('outerHTML');
+		});
+		$('.merchantHistoryWindow').html(historyData);
 	});
 	
 	window.addEventListener("click", function(event) {
