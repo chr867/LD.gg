@@ -51,4 +51,10 @@ public class PaymentRestController {
 		return uhd;
 	}
 	
+	@PostMapping("/payment/getMerchant")
+	public List<UsageHistoryDto> getMerchant(@RequestParam String email){
+		List<UsageHistoryDto> uhd = ps.getMerchant(email);
+		return uhd;
+	}
+	
 }

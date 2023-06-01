@@ -110,7 +110,7 @@
 <body>
 	<%@ include file="../header.jsp"%>
 	<%@ include file="../sidebar.jsp"%>
-
+<div id = "rank-main-container">
 	<!-- 부모 div가 전체적으로 감싸안고, 그 밑으로 랭킹 정보를 테이블로 표현 -->
 	<div class="main-container">
 		<div id="rank_tool">
@@ -153,93 +153,79 @@
 			</div>
 		</div>
 	</div>
-	<%@ include file="../footer.jsp"%>
-
+  <%@ include file="../footer.jsp"%>
+  
 	<script type="text/javascript">
-		$('#summoner_rank_table')
-				.jqGrid(
-						{
-							url : "/summoner/rank/solo/loading/data.json",
-							datatype : "json",
-							loadtext : '로딩중..',
-							sortable : true,
-							loadonce : true,
-							multiselect : false,
-							pager : '#pager',
-							rowNum : 100,
-							sortname : 'date',
-							sortorder : 'desc',
-							sorttype : "text",
-							width : 1000,
-							height : "fit-content",
-							pgbuttons : true, // 이전/다음 버튼 표시 여부
-							pgtext : null, // 페이징 정보(1 - 10 / 100) 표시 여부
-							viewrecords : false, // 레코드 수 표시 여부
-							recordpos : 'left', // 레코드 수 위치
-							pagerpos : 'center', // 페이징 버튼 위치
-							pginput : false, // 페이지 번호 입력칸 표시 여부
-							colNames : [ '소환사', '레벨', '티어', '승리', '패배',
-									'리그포인트', '승률' ],
-							colModel : [
-									{
-										name : 'summoner_name',
-										index : 'summoner_name',
-										width : 90,
-										key : true,
-										formatter : function(cellvalue,
-												options, rowObject) {
-											return "<div style = 'text-align : left;'><img style = 'display : inline' src='/resources/img/profileicon/" + rowObject.profile_icon_id + ".png'/>"
-													+ cellvalue;
-											"</div>"
-										},
-										cellattr : function(rowId, val,
-												rawObject) {
-											let decodeStr = (rawObject.summoner_name);
-											let summonerName = encodeURIComponent(decodeStr);
-											let decodedSummonerName = decodeURIComponent(summonerName);
-											return 'style= "margin : 0,0,0,30px; font-size: 12px; cursor : pointer; border-left: 0.1px solid #F0F0F0; border-right: none;" onclick="handleClick('
-													+ rowId
-													+ ', \''
-													+ summonerName + '\')"';
-										}
-									},
-									{
-										name : 's_level',
-										index : 's_level',
-										width : 20,
-										align : "center",
-										formatter : function(cellvalue,
-												options, rowObject) {
-											return '<span style="font-size: 12px;">'
-													+ cellvalue + '</span>';
-										}
-									}, {
-										name : 'tier',
-										index : 'tier',
-										width : 50,
-										align : "center"
-									}, {
-										name : 'wins',
-										index : 'wins',
-										width : 30,
-										align : "center"
-									}, {
-										name : 'losses',
-										index : 'losses',
-										width : 30,
-										align : "center"
-									}, {
-										name : 'lp',
-										index : 'lp',
-										width : 50,
-										align : "center"
-									}, {
-										name : 'winrate',
-										index : 'winrate',
-										width : 40,
-										align : "center"
-									} ]
-						});
+	$('#summoner_rank_table').jqGrid({
+		url : "/summoner/rank/solo/loading/data.json",
+		datatype : "json",
+		loadtext : '로딩중..',
+		sortable : true,
+		loadonce : true,
+		multiselect : false,
+		pager : '#pager',
+		rowNum : 100,
+		sortname : 'date',
+		sortorder : 'desc',
+		sorttype: "text",
+		width : 1000,
+		height : "fit-content",
+		pgbuttons : true, // 이전/다음 버튼 표시 여부
+		pgtext : null, // 페이징 정보(1 - 10 / 100) 표시 여부
+		viewrecords : false, // 레코드 수 표시 여부
+		recordpos : 'left', // 레코드 수 위치
+		pagerpos : 'center', // 페이징 버튼 위치
+		pginput : false, // 페이지 번호 입력칸 표시 여부
+		colNames : [ '소환사', '레벨', '티어', '승리', '패배', '리그포인트', '승률' ],
+		colModel : [{
+			name : 'summoner_name',
+			index : 'summoner_name',
+			width : 90,
+			key : true,
+			formatter : function(cellvalue, options, rowObject){
+				return "<div style = 'text-align : left;'><img style = 'display : inline' src='/resources/img/profileicon/" + rowObject.profile_icon_id + ".png'/>" + cellvalue;"</div>"
+			},
+			cellattr : function(rowId, val,	rawObject) {
+				let decodeStr = (rawObject.summoner_name);
+				let summonerName = encodeURIComponent(decodeStr);
+				let decodedSummonerName = decodeURIComponent(summonerName);
+				return 'style= "margin : 0,0,0,30px; font-size: 12px; cursor : pointer; border-left: 0.1px solid #F0F0F0; border-right: none;" onclick="handleClick(\'' + summonerName + '\')"';
+			}
+		}, {
+				name : 's_level',
+				index : 's_level',
+				width : 20,
+				align : "center",
+				formatter: function(cellvalue, options, rowObject) {
+				    return '<span style="font-size: 12px;">' + cellvalue + '</span>';
+				}
+		}, {
+				name : 'tier',
+				index : 'tier',
+				width : 50,
+				align : "center"
+		}, {
+				name : 'wins',
+				index : 'wins',
+				width : 30,
+				align : "center"
+		}, {
+				name : 'losses',
+				index : 'losses',
+				width : 30,
+				align : "center"
+		}, {
+				name : 'lp',
+				index : 'lp',
+				width : 50,
+				align : "center"
+		}, {
+				name : 'winrate',
+				index : 'winrate',
+				width : 40,
+				align : "center"
+	} ]
+});
 
 		$('#solo_rank')
 				.click(
@@ -485,13 +471,13 @@
 														} ]
 											})
 						})
-
-		function handleClick(rowId, summonerName) {
-			let decodedSummonerName = decodeURIComponent(summonerName);
-			let encodedSummonerName = encodeURIComponent(decodedSummonerName);
-			let redirectUrl = '/summoner/info?summoner_name='
-					+ encodedSummonerName;
-			location.href = redirectUrl;
+		})
+						
+		function handleClick(summonerName) {
+		    let decodedSummonerName = decodeURIComponent(summonerName);
+		    let encodedSummonerName = encodeURIComponent(decodedSummonerName);
+		    let redirectUrl = '/summoner/info?summoner_name=' + encodedSummonerName;
+		    location.href = redirectUrl;
 		}
 	</script>
 

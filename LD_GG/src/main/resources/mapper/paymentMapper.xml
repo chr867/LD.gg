@@ -67,10 +67,11 @@
 	</select>
 	
 	<select id="getCharge" resultType = "usage">
-		select tx_date, points_sent, price, merchant_id
-		from transaction_history th join paymentinfo p on
-		th.sender_id = p.email or th.receiver_id = p.email
-		where p.email = #{email};
+		select tx_date, points_sent, points_received, sender_id, receiver_id  from transaction_history where sender_id = #{email} or receiver_id = #{email};
+	</select>
+	
+	<select id="getMerchant" resultType = "usage">
+		select price, merchant_id from paymentinfo where email = #{email};
 	</select>
 
 </mapper>
