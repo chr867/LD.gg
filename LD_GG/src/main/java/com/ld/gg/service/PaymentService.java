@@ -129,4 +129,8 @@ public class PaymentService {
 		List<UsageHistoryDto> uhd = PD.getCharge(email);
 		return uhd;
 	}
+
+	public List<UsageHistoryDto> getMerchant(String email) {
+		return PD.getMerchant(email);
+	}
 }

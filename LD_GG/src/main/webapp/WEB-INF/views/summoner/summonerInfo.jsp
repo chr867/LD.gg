@@ -85,10 +85,6 @@
 
 		<div id="champ-stat">
 
-			<div id="champ_rank_filter"></div>
-
-			<div id="champ_position_filter"></div>
-
 			<div class = "flex-champ-div">
 				<div class = "flex-header">챔피언 통계</div>
 				<div class = "flex-category">
@@ -123,14 +119,6 @@
 			<div id="match_history">
 				<h3 id="history">매치 히스토리</h3>
 			</div>
-			<!-- 전적 정보 필터 -->
-
-
-<!-- 			<div class = "flex-summary-table">
-				<header class = "flex-summary-header">
-					<span>최근 20게임 전적 요약</span>
-				</header>
-			</div> -->
 			
 			<div class = "flex-summary-category">
 				
@@ -180,7 +168,7 @@
 		location.reload();
 	})
 	
- 	$.ajax({//소환사의 챔피언 통계 필터 버튼 생성(포지션별 픽률 높은 순으로 생성)
+/*  	$.ajax({//소환사의 챔피언 통계 필터 버튼 생성(포지션별 픽률 높은 순으로 생성)
 		method : 'get',
 		url : '/summoner/get_champ_position_filter',
 		data : {summoner_name : '${summoner.summoner_name}'}
@@ -241,7 +229,7 @@
 	$('#champ_position_filter').html(filterBtnDiv);
 	}).fail(err=>{
 		console.log(err);
-	});
+	}); */
 	
 	function getChampRecord(){
 		$.ajax({//소환사의 챔피언 통계
@@ -407,7 +395,7 @@
 		});
 	} 
 	
-	$('.champRecordFilterBtn').click(function(){
+/* 	$('.champRecordFilterBtn').click(function(){
 		if($(this).val() === 'all-btn'){
 			$.ajax({//소환사의 챔피언 통계
 				method: 'get',
@@ -567,9 +555,9 @@
 				console.log(err);
 			});
 		}
-	});
+	}); */
 	
-	function getMoreFilterRecord(champOffset){
+/* 	function getMoreFilterRecord(champOffset){
 		$('.champRecordFilterBtn').click(function(){
 			if($(this).val() === 'all-btn'){
 				$.ajax({//소환사의 챔피언 통계
@@ -733,7 +721,7 @@
 				});
 			}
 		});
-	}
+	} */
 	
  	 $.ajax({//최근 20전적 요약본
 		method : 'get',
@@ -1119,46 +1107,9 @@
 
 		                let summonerInfo = $('<div class = "syn-summoner-info"></div>');
 		                let summonerSpan = $('<span class = "syn-summoner-span"></span>');
-		                if(syn.tier === "challenger"){
-		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">C</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-		                	summonerSpan.append(summonerTierName);
-		                	summonerInfo.append(summonerSpan);
-		                }
-		                if(syn.tier === "grandmaster"){
-		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">GM</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-		                	summonerSpan.append(summonerTierName);
-		                	summonerInfo.append(summonerSpan);
-		                }
-		                if(syn.tier === "master"){
-		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">M</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-		                	summonerSpan.append(summonerTierName);
-		                	summonerInfo.append(summonerSpan);
-		                }
-		                if(syn.tier === "diamond"){
-		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">D</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-		                	summonerSpan.append(summonerTierName);
-		                	summonerInfo.append(summonerSpan);
-		                }
-		                if(syn.tier === "platinum"){
-		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">P</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-		                	summonerSpan.append(summonerTierName);
-		                	summonerInfo.append(summonerSpan);
-		                }
-		                if(syn.tier === "gold"){
-		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">G</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-		                	summonerSpan.append(summonerTierName);
-		                	summonerInfo.append(summonerSpan);
-		                }
-		                if(syn.tier === "silver"){
-		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">S</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-		                	summonerSpan.append(summonerTierName);
-		                	summonerInfo.append(summonerSpan);
-		                }
-		                if(syn.tier === "bronze"){
-		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">B</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-		                	summonerSpan.append(summonerTierName);
-		                	summonerInfo.append(summonerSpan);
-		                }
+	                	let summonerTierName = $('<span class = "syn-summoner-name"> '+syn.summoner_name+'</span>');
+	                	summonerSpan.append(summonerTierName);
+	                	summonerInfo.append(summonerSpan);
 		                
 		                
 		                // 6. 'champ_info', 'kda_info', 'cs_ward_info', 'item_info' 내부에 작업할 내용 추가
@@ -1240,46 +1191,9 @@
 		                
 		                let summonerInfo = $('<div class = "syn-summoner-info"></div>');
 		                let summonerSpan = $('<span class = "syn-summoner-span"></span>');
-		                if(syn.tier === "challenger"){
-		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">C</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-		                	summonerSpan.append(summonerTierName);
-		                	summonerInfo.append(summonerSpan);
-		                }
-		                if(syn.tier === "grandmaster"){
-		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">GM</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-		                	summonerSpan.append(summonerTierName);
-		                	summonerInfo.append(summonerSpan);
-		                }
-		                if(syn.tier === "master"){
-		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">M</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-		                	summonerSpan.append(summonerTierName);
-		                	summonerInfo.append(summonerSpan);
-		                }
-		                if(syn.tier === "diamond"){
-		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">D</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-		                	summonerSpan.append(summonerTierName);
-		                	summonerInfo.append(summonerSpan);
-		                }
-		                if(syn.tier === "platinum"){
-		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">P</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-		                	summonerSpan.append(summonerTierName);
-		                	summonerInfo.append(summonerSpan);
-		                }
-		                if(syn.tier === "gold"){
-		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">G</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-		                	summonerSpan.append(summonerTierName);
-		                	summonerInfo.append(summonerSpan);
-		                }
-		                if(syn.tier === "silver"){
-		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">S</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-		                	summonerSpan.append(summonerTierName);
-		                	summonerInfo.append(summonerSpan);
-		                }
-		                if(syn.tier === "bronze"){
-		                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">B</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-		                	summonerSpan.append(summonerTierName);
-		                	summonerInfo.append(summonerSpan);
-		                }
+	                	let summonerTierName = $('<span class = "syn-summoner-name"> '+syn.summoner_name+'</span>');
+	                	summonerSpan.append(summonerTierName);
+	                	summonerInfo.append(summonerSpan);
 
 		                champInfo.append(champion,spell,rune,summonerInfo);
 		                kdaInfo.append(kda);
@@ -1421,7 +1335,7 @@
 					record_team2_div.css('background-color', 'rgba(117, 199, 251, 0.3)');
 					let record_win_div = $('<div class = "record_win_div"></div>');
 					let record_win_strong = $('<strong class = "record_win_strong"></strong>');
-					let record_win_span = $('<span class = "record_win_span">승리</span>');
+					let record_win_span = $('<span class = "record_win_span" style = "color : #75C7FB">승리</span>');
 					record_win_strong.append(record_win_span);
 					//let record_game_mode = $('<span class = "record_game_mode">'+record.game_mode+'</span>');
 					let gameDuration = (record.game_duration / 60).toFixed(2);
@@ -1440,7 +1354,7 @@
 					record_team2_div.css('background-color', 'rgba(255, 56, 71, 0.3)');
 					let record_lose_div = $('<div class = "record_lose_div"></div>');
 					let record_lose_strong = $('<strong class = "record_lose_strong"></strong>');
-					let record_lose_span = $('<span class = "record_lose_span">패배</span>');
+					let record_lose_span = $('<span class = "record_lose_span style = "color : #FF3847"">패배</span>');
 					record_lose_strong.append(record_lose_span);
 					//let record_game_mode = $('<span class = "record_game_mode">'+record.game_mode+'</span>');
 					let gameDuration = (record.game_duration / 60).toFixed(2);
@@ -1600,46 +1514,9 @@
 
 			                let summonerInfo = $('<div class = "syn-summoner-info"></div>');
 			                let summonerSpan = $('<span class = "syn-summoner-span"></span>');
-			                if(syn.tier === "challenger"){
-			                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">C</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-			                	summonerSpan.append(summonerTierName);
-			                	summonerInfo.append(summonerSpan);
-			                }
-			                if(syn.tier === "grandmaster"){
-			                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">GM</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-			                	summonerSpan.append(summonerTierName);
-			                	summonerInfo.append(summonerSpan);
-			                }
-			                if(syn.tier === "master"){
-			                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">M</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-			                	summonerSpan.append(summonerTierName);
-			                	summonerInfo.append(summonerSpan);
-			                }
-			                if(syn.tier === "diamond"){
-			                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">D</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-			                	summonerSpan.append(summonerTierName);
-			                	summonerInfo.append(summonerSpan);
-			                }
-			                if(syn.tier === "platinum"){
-			                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">P</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-			                	summonerSpan.append(summonerTierName);
-			                	summonerInfo.append(summonerSpan);
-			                }
-			                if(syn.tier === "gold"){
-			                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">G</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-			                	summonerSpan.append(summonerTierName);
-			                	summonerInfo.append(summonerSpan);
-			                }
-			                if(syn.tier === "silver"){
-			                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">S</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-			                	summonerSpan.append(summonerTierName);
-			                	summonerInfo.append(summonerSpan);
-			                }
-			                if(syn.tier === "bronze"){
-			                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">B</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-			                	summonerSpan.append(summonerTierName);
-			                	summonerInfo.append(summonerSpan);
-			                }
+		                	let summonerTierName = $('<span class = "syn-summoner-name"> '+syn.summoner_name+'</span>');
+		                	summonerSpan.append(summonerTierName);
+		                	summonerInfo.append(summonerSpan);
 			                
 			                
 			                // 6. 'champ_info', 'kda_info', 'cs_ward_info', 'item_info' 내부에 작업할 내용 추가
@@ -1721,46 +1598,9 @@
 			                
 			                let summonerInfo = $('<div class = "syn-summoner-info"></div>');
 			                let summonerSpan = $('<span class = "syn-summoner-span"></span>');
-			                if(syn.tier === "challenger"){
-			                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">C</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-			                	summonerSpan.append(summonerTierName);
-			                	summonerInfo.append(summonerSpan);
-			                }
-			                if(syn.tier === "grandmaster"){
-			                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">GM</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-			                	summonerSpan.append(summonerTierName);
-			                	summonerInfo.append(summonerSpan);
-			                }
-			                if(syn.tier === "master"){
-			                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">M</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-			                	summonerSpan.append(summonerTierName);
-			                	summonerInfo.append(summonerSpan);
-			                }
-			                if(syn.tier === "diamond"){
-			                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">D</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-			                	summonerSpan.append(summonerTierName);
-			                	summonerInfo.append(summonerSpan);
-			                }
-			                if(syn.tier === "platinum"){
-			                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">P</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-			                	summonerSpan.append(summonerTierName);
-			                	summonerInfo.append(summonerSpan);
-			                }
-			                if(syn.tier === "gold"){
-			                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">G</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-			                	summonerSpan.append(summonerTierName);
-			                	summonerInfo.append(summonerSpan);
-			                }
-			                if(syn.tier === "silver"){
-			                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">S</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-			                	summonerSpan.append(summonerTierName);
-			                	summonerInfo.append(summonerSpan);
-			                }
-			                if(syn.tier === "bronze"){
-			                	let summonerTierName = $('<span class = "syn-summoner-text"><span class = "syn-summoner-tier">B</span><span class = "syn-summoner-name"> '+syn.summoner_name+'</span></span>');
-			                	summonerSpan.append(summonerTierName);
-			                	summonerInfo.append(summonerSpan);
-			                }
+		                	let summonerTierName = $('<span class = "syn-summoner-name"> '+syn.summoner_name+'</span>');
+		                	summonerSpan.append(summonerTierName);
+		                	summonerInfo.append(summonerSpan);
 
 			                champInfo.append(champion,spell,rune,summonerInfo);
 			                kdaInfo.append(kda);

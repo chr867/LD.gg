@@ -107,17 +107,6 @@
 	<%@ include file="../sidebar.jsp"%>
 	<%@ include file="../footer.jsp"%>
 	
-	<!-- 부모 div가 전체적으로 감싸안고, 그 밑으로 랭킹 정보를 테이블로 표현 -->
-<div class="main-container">
-	<div id="rank_tool">
-		<div class="flex-header-filter">
-			<div class="flex-header">
-				<div class="game-filter" id="solo_rank">
-					<strong style="cursor: pointer">솔로 랭크</strong>
-				</div>
-				<div class="game-filter" id="flex_rank">
-					<strong style="cursor: pointer">자유 랭크</strong>
-	
 <div id = "rank-main-container">
 		<div id="rank_tool">
 			<div class="flex-header-filter">
@@ -145,9 +134,6 @@
 			</div>
 		</div>
 	</div>
-</div>
-</div>
-<!-- 	<%@ include file="../footer.jsp"%> -->
 
 	<script type="text/javascript">
 	$('#summoner_rank_table').jqGrid({
@@ -183,7 +169,7 @@
 				let decodeStr = (rawObject.summoner_name);
 				let summonerName = encodeURIComponent(decodeStr);
 				let decodedSummonerName = decodeURIComponent(summonerName);
-				return 'style= "margin : 0,0,0,30px; font-size: 12px; cursor : pointer; border-left: 0.1px solid #F0F0F0; border-right: none;" onclick="handleClick('+ rowId + ', \'' + summonerName + '\')"';
+				return 'style= "margin : 0,0,0,30px; font-size: 12px; cursor : pointer; border-left: 0.1px solid #F0F0F0; border-right: none;" onclick="handleClick(\'' + summonerName + '\')"';
 			}
 		}, {
 				name : 's_level',
@@ -426,7 +412,7 @@
 						})
 		})
 						
-		function handleClick(rowId, summonerName) {
+		function handleClick(summonerName) {
 		    let decodedSummonerName = decodeURIComponent(summonerName);
 		    let encodedSummonerName = encodeURIComponent(decodedSummonerName);
 		    let redirectUrl = '/summoner/info?summoner_name=' + encodedSummonerName;

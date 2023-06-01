@@ -312,7 +312,6 @@ LIMIT 20 OFFSET #{offset};
 	ri2.rune_img as sub_rune,
 	si1.spell_en_name as spell1,
 	si2.spell_en_name as spell2,
-	LOWER(sr.tier) as tier,
 	kills,
 	deaths,
 	assists,
@@ -336,8 +335,6 @@ LIMIT 20 OFFSET #{offset};
 	rune_info as ri1 on main_rune1 = ri1.rune_id
 	inner join
 	rune_info as ri2 on sub_rune = ri2.rune_id
-	inner join
-	summoner_rank as sr on r.summoner_name = sr.summoner_name
 	where match_id = #{match_id};
 </select>
 
